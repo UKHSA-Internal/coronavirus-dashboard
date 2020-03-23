@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/126d4eaa-850a-454b-a5f0-e10693f7a570/resourceGroups/UKS-COVID19-PUB-DASH/providers/Microsoft.Web/sites/Covid19Static",
+  "appService.deploySubpath": "build"
+}

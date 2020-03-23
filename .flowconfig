@@ -1,0 +1,21 @@
+[ignore]
+<PROJECT_ROOT>/node_modules/fbjs/lib/partitionObjectByKey.*
+<PROJECT_ROOT>/node_modules/enzyme-matchers/src/.*
+<PROJECT_ROOT>/node_modules/jest-enzyme/src/.*
+<PROJECT_ROOT>/node_modules/stylelint/lib/.*
+<PROJECT_ROOT>/node_modules/babel-plugin-transform-react-remove-prop-types/src/index.js
+<PROJECT_ROOT>/node_modules/react-select/*
+<PROJECT_ROOT>/node_modules/mapbox-gl/*
+<PROJECT_ROOT>/node_modules/@mapbox/*
+
+[options]
+module.file_ext=.js
+module.file_ext=.json
+module.system.node.resolve_dirname=node_modules
+module.system.node.resolve_dirname=src
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
+esproposal.optional_chaining=enable
+
+[libs]
+types/
+flow-typed/
