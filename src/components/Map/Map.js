@@ -97,13 +97,13 @@ const Map: ComponentType<Props> = ({
         const addNhsRegionAndCountryCounts = (g, key) => ({
           ...g,
           features: g.features.map(f => {
-            const countryCount = ['Scotland', 'Wales', 'Northern Ireland'].includes(f.properties[key]) ? countryData?.[f.properties[key]]?.activeCases?.value ?? 0 : countryData?.['England']?.activeCases?.value ?? 0; 
+            const countryCount = ['Scotland', 'Wales', 'Northern Ireland'].includes(f.properties[key]) ? countryData?.[f.properties[key]]?.totalCases?.value ?? 0 : countryData?.['England']?.totalCases?.value ?? 0; 
             return {
               ...f,
               properties: {
                 ...f.properties,
                 countryCount,
-                nhsRegionCount: countryData?.[f.properties[key]]?.activeCases?.value ?? 0, 
+                nhsRegionCount: countryData?.[f.properties[key]]?.totalCases?.value ?? 0, 
                 name: f.properties[key],
               },
             }
@@ -117,7 +117,7 @@ const Map: ComponentType<Props> = ({
         const addLocalAuthCounts = (g, key) => ({
           ...g,
           features: g.features.map(f => {
-            const count = localAuthorityData?.[f.properties[key]]?.activeCases?.value ?? 0; 
+            const count = localAuthorityData?.[f.properties[key]]?.totalCases?.value ?? 0; 
             // const pop = population[f.properties.LAD13CD].pop; 
             // const rel = pop ? count / pop : 0;
             return {
@@ -136,7 +136,7 @@ const Map: ComponentType<Props> = ({
         // map.addSource('wales-auths', { 'type': 'geojson', 'data': addCounts(topojson.feature(walesTopo, walesTopo.objects.lad), 'LAD13NM', regionData)});
         // map.addSource('ni-auths', { 'type': 'geojson', 'data': addCounts(topojson.feature(niTopo, niTopo.objects.wpc), 'LGDNAME', regionData)});
 
-        const countryMax = max(Object.keys(countryData), d => countryData?.[d]?.activeCases?.value ?? 0);
+        const countryMax = max(Object.keys(countryData), d => countryData?.[d]?.totalCases?.value ?? 0);
         const nhsRegionMax = max(nhsRegionGeojson.features, d => d.properties.nhsRegionCount);
         const localAuthorityMax = max(englandGeojson.features, d => d.properties.count);
 
@@ -355,7 +355,7 @@ const Map: ComponentType<Props> = ({
                 'coordinates': [r.long, r.lat],
               },
               'properties': {
-                'count': data[r.name].activeCases.value,
+                'count': data[r.name].totalCases.value,
                 'name': r.name,
               },
             })),
