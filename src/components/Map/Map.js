@@ -155,7 +155,7 @@ const Map: ComponentType<Props> = ({
               ['linear'],
               ['get', 'countryCount'],
               0, 0,
-              countryMax, 1,
+              countryMax, 0.7,
             ],
           },
         });
