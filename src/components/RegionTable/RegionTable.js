@@ -68,11 +68,11 @@ const RegionTable: ComponentType<Props> = ({
             panel: {
               children: [
                 <Table
-                  head={[{ children: ['Country']}, { children: ['Total cases'], format: 'numeric' }, { children: ['Deaths'], format: 'numeric' }]}
+                  head={[{ children: ['Country']}, { children: ['Total cases'], format: 'numeric' }]}
                   rows={['England', 'Scotland', 'Wales', 'Northern Ireland'].sort().map(r => [
                     { children: [<Styles.Link onClick={handleOnCountryClick(r)} active={country === r} to={href(r, 'country')} className="govuk-link">{r}</Styles.Link>] },
                     { children: [countryData[r].totalCases.value], format: 'numeric' },
-                    { children: [countryData[r].deaths.value], format: 'numeric' }
+                    // { children: [countryData[r].deaths.value], format: 'numeric' }
                   ])}
                 />
               ],
@@ -84,11 +84,11 @@ const RegionTable: ComponentType<Props> = ({
             panel: {
               children: [
                 <Table
-                  head={[{ children: ['NHS region']}, { children: ['Total cases'], format: 'numeric' }, { children: ['Deaths'], format: 'numeric' }]}
+                  head={[{ children: ['NHS region']}, { children: ['Total cases'], format: 'numeric' }]}
                   rows={nhsRegionNames.sort().map(r => [
                     { children: [<Styles.Link onClick={handleOnNhsRegionClick(r)} active={nhsRegion === r} to={href(r, 'nhs-region')} className="govuk-link">{r}</Styles.Link>] },
                     { children: [nhsRegionData[r].totalCases.value], format: 'numeric' },
-                    { children: [nhsRegionData[r].deaths.value], format: 'numeric' }
+                    // { children: [nhsRegionData[r].deaths.value], format: 'numeric' }
                   ])}
                 />
               ],
@@ -100,11 +100,11 @@ const RegionTable: ComponentType<Props> = ({
             panel: {
               children: [
                 <Table
-                  head={[{ children: ['Local authority'] }, { children: ['Total cases'], format: 'numeric' }, { children: ['Deaths'], format: 'numeric' }]}
+                  head={[{ children: ['Local authority'] }, { children: ['Total cases'], format: 'numeric' }]}
                   rows={localAuthorityNames.sort().map(r => [
                     { children: [<Styles.Link onClick={handleOnLocalAuthorityClick(r)} active={localAuthority === r} to={href(r, 'local-authority')} className="govuk-link">{r}</Styles.Link>] },
                     { children: [localAuthorityData[r].totalCases.value], format: 'numeric' },
-                    { children: [localAuthorityData[r].deaths.value], format: 'numeric' }
+                    // { children: [localAuthorityData[r].deaths.value], format: 'numeric' }
                   ])}
                 />
               ],
