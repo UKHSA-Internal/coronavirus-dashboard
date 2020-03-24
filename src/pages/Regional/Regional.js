@@ -6,6 +6,7 @@ import type { ComponentType } from 'react';
 import useLoadData from 'hooks/useLoadData';
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
 import BigNumberBlock from 'components/BigNumberBlock';
+import BigNumber from 'components/BigNumber';
 import PageTitle from 'components/PageTitle';
 import RegionTable from 'components/RegionTable';
 import Map from 'components/Map';
@@ -50,7 +51,25 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
       />
       <div />
       <RegionTitle region="United Kingdom" lastUpdatedAt="" />
-      <BigNumberBlock data={overviewData?.['United Kingdom']} />
+      {/* <BigNumberBlock data={overviewData?.['United Kingdom']} /> */}
+      <BigNumber
+        caption="Total number of cases"
+        number={overviewData?.['United Kingdom']?.totalCases?.value ?? 0}
+        percentageChange={5}
+        subtext=""
+      />
+      <BigNumber
+        caption="Number of people who have recovered"
+        number={overviewData?.['United Kingdom']?.recovered?.value ?? 0}
+        percentageChange={0}
+        subtext=""
+      />
+      <BigNumber
+        caption="Number of people who have died"
+        number={overviewData?.['United Kingdom']?.deaths?.value ?? 0}
+        percentageChange={20}
+        subtext=""
+      />
       <RegionTable
         country={country}
         setCountry={setCountry}
@@ -78,7 +97,13 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
       {data && layout === 'desktop' && (
         <>
           <RegionTitle region={localAuthority || country} lastUpdatedAt="" />
-          <BigNumberBlock data={data} />
+          {/* <BigNumberBlock data={data} /> */}
+          <BigNumber
+            caption="Total number of cases"
+            number={data?.totalCases?.value ?? 0}
+            percentageChange={5}
+            subtext=""
+          />
           <CumulativeTotalCases dailyData={data?.dailyConfirmedCases ?? []} />
           <DailyConfirmedCases region={localAuthority || country} data={data?.dailyConfirmedCases ?? []} />
         </>

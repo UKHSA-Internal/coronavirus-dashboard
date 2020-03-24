@@ -6,6 +6,7 @@ import type { ComponentType } from 'react';
 import useLoadData from 'hooks/useLoadData';
 import PageTitle from 'components/PageTitle';
 import BigNumberBlock from 'components/BigNumberBlock';
+import BigNumber from 'components/BigNumber';
 import DailyConfirmedCases from 'components/DailyConfirmedCases';
 import CumulativeTotalCases from 'components/CumulativeTotalCases';
 import Disclaimer from 'components/Disclaimer';
@@ -23,6 +24,9 @@ const SingleRegion: ComponentType<Props> = ({ match: { params: { country, nhsReg
   const data = (() => {
     if (country) {
       return countryData?.[country];
+    }
+    if (nhsRegion) {
+      return nhsRegionData?.[nhsRegion];
     }
     if (localAuthority) {
       return localAuthorityData?.[localAuthority];
@@ -54,7 +58,13 @@ const SingleRegion: ComponentType<Props> = ({ match: { params: { country, nhsReg
       <div />
       {region && (
         <>
-          <BigNumberBlock data={data} />
+          {/* <BigNumberBlock data={data} /> */}
+          <BigNumber
+            caption="Total number of cases"
+            number={data?.totalCases?.value ?? 0}
+            percentageChange={5}
+            subtext=""
+          />
           <CumulativeTotalCases dailyData={data?.dailyConfirmedCases ?? []} />
           <DailyConfirmedCases region={region} data={data?.dailyConfirmedCases ?? []} />
         </>
