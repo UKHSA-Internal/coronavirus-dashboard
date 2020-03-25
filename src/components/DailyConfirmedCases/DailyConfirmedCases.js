@@ -10,11 +10,11 @@ import * as Styles from './DailyConfirmedCases.styles.js';
 const DailyConfirmedCases: ComponentType<Props> = ({ region, data }: Props) => {
   return (
     <Styles.Container>
-      <span className="govuk-heading-s">Number of new cases confirmed per day</span>
-      <Styles.Summary>
+      <span className="govuk-heading-s">Number of new cases per day</span>
+      {/* <Styles.Summary>
         <Styles.Circle />
         <span className="govuk-heading-s">{data.slice(-1)[0]?.value} new cases confirmed in {region} in the last 24 hours</span>
-      </Styles.Summary>
+      </Styles.Summary> */}
       <Styles.Chart>
         <Bar
           data={{

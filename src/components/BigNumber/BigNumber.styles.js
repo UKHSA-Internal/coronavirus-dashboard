@@ -7,7 +7,7 @@ export const Container: ComponentType<*> = (() => {
   return styled.div`
     display: flex;
     flex-direction: column;
-    border-top: 1px solid #0B0C0C;
+    border-top: 1px solid #b1b4b6;
     padding-top: 20px;
     grid-column: span 2;
   `;
@@ -23,7 +23,7 @@ export const Caption: ComponentType<*> = (() => {
 
 export const Number: ComponentType<*> = (() => {
   return styled.div`
-    font-size: 3rem;
+    font-size: 2.25rem;
     margin-bottom: 10px;
   `;
 })();

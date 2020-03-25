@@ -14,8 +14,8 @@ const App = () => {
   return (
     <>
       <Header
-        containerClassName="govuk-header__container--full-width"
-        navigationClassName="govuk-header__navigation--end"
+        // containerClassName="govuk-header__container--full-width"
+        // navigationClassName="govuk-header__navigation--end"
         serviceName="Track coronavirus (COVID-19)"
         serviceUrl="/overview"
       />

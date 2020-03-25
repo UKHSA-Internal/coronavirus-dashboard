@@ -46,14 +46,12 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
     <Styles.Container className="govuk-width-container">
       <PageTitle
         caption="Regional view"
-        title="Regional cases of coronavirus (COVID-19)"
+        title="Coronavirus (COVID-19) in the UK"
         subtitle={`Last updated ${new Date(overviewData.lastUpdatedAt).toGMTString()}`}
       />
-      <div />
-      <RegionTitle region="United Kingdom" lastUpdatedAt="" />
       {/* <BigNumberBlock data={overviewData?.['United Kingdom']} /> */}
       <BigNumber
-        caption="Total number of cases"
+        caption="Total number of UK cases"
         number={overviewData?.['United Kingdom']?.totalCases?.value ?? 0}
         percentageChange={5}
         subtext=""

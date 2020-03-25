@@ -8,6 +8,10 @@ export const Container: ComponentType<*> = (() => {
     grid-column: 1/-1;
     display: flex;
     flex-direction: column;
+
+    & > span {
+      font-weight: normal;
+    }
   `;
 })();
 

@@ -6,6 +6,6 @@ import type { ComponentType } from 'react';
 export const Container: ComponentType<*> = (() => {
   return styled.p`
     grid-column: 1/-1;
-    font-size: 0.7rem;
+    font-size: 1rem;
   `;
 })();

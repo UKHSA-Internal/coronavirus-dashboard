@@ -55,7 +55,6 @@ const SingleRegion: ComponentType<Props> = ({ match: { params: { country, nhsReg
         subtitle={`Last updated ${new Date(overviewData.lastUpdatedAt).toGMTString()}`}
         backUrl="/regional"
       />
-      <div />
       {region && (
         <>
           {/* <BigNumberBlock data={data} /> */}

@@ -7,10 +7,14 @@ export const Container: ComponentType<*> = (() => {
   return styled.div`
     display: flex;
     flex-direction: column;
-    grid-column: span 4;
+    grid-column: 1/-1;
 
     & .govuk-back-link {
       width: fit-content;
+    }
+
+    & a {
+      margin-bottom: 45px;
     }
 
     @media only screen and (max-width: 768px) {
@@ -22,6 +26,8 @@ export const Container: ComponentType<*> = (() => {
 export const Caption: ComponentType<*> = (() => {
   return styled.span`
     margin-bottom: 5px;
+    font-size: 16px;
+    color: #626a63;
   `;
 })();
 
