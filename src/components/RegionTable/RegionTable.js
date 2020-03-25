@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 import { Tabs, Table } from 'govuk-react-jsx';
@@ -20,9 +20,17 @@ const RegionTable: ComponentType<Props> = ({
   localAuthority,
   setLocalAuthority,
   localAuthorityData,
-  location: { push },
+  history: { push },
+  location: { hash },
 }: Props) => {
   const layout = useResponsiveLayout(768);
+
+  useEffect(() => {
+    const element = document.getElementById(`tab_${hash.replace('#', '')}`);
+    if (element) {
+      element.click();
+    }
+  }, [hash]);
 
   const handleOnLocalAuthorityClick = (r: string) => () => {
     if (layout === 'desktop') {

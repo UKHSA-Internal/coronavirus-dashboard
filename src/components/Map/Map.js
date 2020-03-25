@@ -111,6 +111,19 @@ const Map: ComponentType<Props> = ({
 
         map.addControl(new mapboxgl.NavigationControl({}), 'bottom-right');
 
+        map.on('zoom', () => {
+          const zoom = map.getZoom();
+          if (zoom >= zoomLayers.country.min && zoom < zoomLayers.country.max && hash !== '#countries') {
+            push(`${pathname}#countries`);
+          }
+          if (zoom >= zoomLayers.nhsRegion.min && zoom < zoomLayers.nhsRegion.max && hash !== '#nhs-regions') {
+            push(`${pathname}#nhs-regions`);
+          }
+          if (zoom >= zoomLayers.localAuthority.min && zoom < zoomLayers.localAuthority.max && hash !== '#local-authorities') {
+            push(`${pathname}#local-authorities`);
+          }
+        });
+
         const addNhsRegionAndCountryCounts = (g, key) => ({
           ...g,
           features: g.features.map(f => {
