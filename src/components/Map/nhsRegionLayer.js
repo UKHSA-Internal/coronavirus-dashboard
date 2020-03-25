@@ -42,7 +42,7 @@ const addNhsRegionLayer = async (map, nhsRegionData, onClick) => {
         type: 'Feature',
         properties: {
           name: c[0],
-          count: nhsRegionData?.[c[0]]?.totalCases?.value ?? 10,
+          count: nhsRegionData?.[c[0]]?.totalCases?.value ?? 0,
         },
         geometry: {
           type: 'Point',
