@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import type { ComponentType } from 'react';
+import { withRouter } from 'react-router';
 import mapboxgl from 'mapbox-gl';
 import axios from 'axios';
 import * as topojson from 'topojson';
@@ -25,10 +26,10 @@ const zoomLayers = {
   },
   nhsRegion: {
     min: 5,
-    max: 6,
+    max: 7,
   },
   localAuthority: {
-    min: 6,
+    min: 7,
     max: 22, // Default max
   },
 };
@@ -43,9 +44,25 @@ const Map: ComponentType<Props> = ({
   localAuthority,
   setLocalAuthority,
   localAuthorityData,
+  history: { push },
+  location: { pathname, hash },
 }: Props) => {
   const [map, setMap] = useState<?mapboxgl.Map>(null);
   const mapContainer = useRef(null);
+
+  useEffect(() => {
+    if (map){
+      if (hash === '#countries') {
+        map.zoomTo(zoomLayers.country.max - 0.5);
+      }
+      if (hash === '#nhs-regions') {
+        map.zoomTo(zoomLayers.nhsRegion.min);
+      }
+      if (hash === '#local-authorities') {
+        map.zoomTo(zoomLayers.localAuthority.min);
+      }
+    }
+  }, [hash, map]);
 
   useEffect(() => {
     if (map) {
@@ -140,42 +157,90 @@ const Map: ComponentType<Props> = ({
         const nhsRegionMax = max(nhsRegionGeojson.features, d => d.properties.nhsRegionCount);
         const localAuthorityMax = max(englandGeojson.features, d => d.properties.count);
 
-        // Layer 1 countries
+        map.addSource('countries-latlong', {
+          type: 'geojson',
+          data: {
+            type: "FeatureCollection",
+            features: [
+              ['England', [-1.1743, 52.3555]],
+              ['Scotland', [-4.2026, 56.4907]],
+              ['Wales', [-3.7837, 52.1307]],
+              ['Northern Ireland', [-6.4923, 54.7877]],
+            ].map(c => ({
+              type: 'Feature',
+              properties: {
+                count: countryData?.[c[0]]?.totalCases?.value ?? 0,
+              },
+              geometry: {
+                type: 'Point',
+                coordinates: c[1],
+              },
+            })),
+          },
+        });
         map.addLayer({
-          'id': 'countries-fill',
-          'type': 'fill',
-          'source': 'nhs-regions',
+          'id': 'countries-circle',
+          'type': 'circle',
+          'source': 'countries-latlong',
           'minzoom': zoomLayers.country.min,
           'maxzoom': zoomLayers.country.max,
           'layout': {},
           'paint': {
-            'fill-color': '#1D70B8',
-            'fill-opacity': [
+            'circle-color': '#1D70B8',
+            'circle-opacity': 0.6,
+            'circle-radius': [
               'interpolate',
               ['linear'],
-              ['get', 'countryCount'],
+              ['get', 'count'],
               0, 0,
-              countryMax, 0.7,
+              1, 5,
+              countryMax, 40,
             ],
           },
         });
 
         // Layer 2 nhs regions 
+        map.addSource('nhs-regions-latlong', {
+          type: 'geojson',
+          data: {
+            type: "FeatureCollection",
+            features: [
+              ['London', [-0.1278, 51.5074]],
+              ['Midlands', [-1.9718, 52.3449]],
+              ['South East', [-0.5596, 51.1781]],
+              ['North West', [-2.5945, 53.6221]],
+              ['North East and Yorkshire', [-1.9480, 54.9456]],
+              ['East of England', [0.1927, 52.1911]],
+              ['South West', [-3.9995, 50.7772]],
+            ].map(c => ({
+              type: 'Feature',
+              properties: {
+                count: nhsRegionData?.[c[0]]?.totalCases?.value ?? 10,
+              },
+              geometry: {
+                type: 'Point',
+                coordinates: c[1],
+              },
+            })),
+          },
+        });
         map.addLayer({
-          'id': 'nhs-regions-fill',
-          'type': 'fill',
-          'source': 'nhs-regions',
+          'id': 'nhs-regions-circles',
+          'type': 'circle',
+          'source': 'nhs-regions-latlong',
           'minzoom': zoomLayers.nhsRegion.min,
           'maxzoom': zoomLayers.nhsRegion.max,
           'layout': {},
           'paint': {
-            'fill-color': '#1D70B8',
-            'fill-opacity': [
+            'circle-color': '#1D70B8',
+            'circle-opacity': 0.6,
+            'circle-radius': [
               'interpolate',
               ['linear'],
-              ['get', 'nhsRegionCount'],
+              ['get', 'count'],
               0, 0,
-              nhsRegionMax, 1,
+              1, 5,
+              nhsRegionMax, 40,
             ],
           },
         });
@@ -196,21 +261,42 @@ const Map: ComponentType<Props> = ({
         });
 
         // Layer 3 local authorities 
+        map.addSource('england-latlong', {
+          type: 'geojson',
+          data: {
+            type: "FeatureCollection",
+            features: localAuthorities.map(la => {
+              const count = localAuthorityData?.[la.name]?.totalCases?.value ?? 0; 
+              return {
+                "type": "Feature",
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [la.long, la.lat],
+                },
+                "properties": {
+                  count,
+                },
+              }
+            }),
+          },
+        });
         map.addLayer({
-          'id': 'england-auths-fill',
-          'type': 'fill',
-          'source': 'england-auths',
+          'id': 'england-auths-circles',
+          'type': 'circle',
+          'source': 'england-latlong',
           'minzoom': zoomLayers.localAuthority.min,
           'maxzoom': zoomLayers.localAuthority.max,
           'layout': {},
           'paint': {
-            'fill-color': '#1D70B8',
-            'fill-opacity': [
+            'circle-color': '#1D70B8',
+            'circle-opacity': 0.6,
+            'circle-radius': [
               'interpolate',
               ['linear'],
               ['get', 'count'],
               0, 0,
-              localAuthorityMax, 1,
+              1, 5,
+              localAuthorityMax, 25,
             ],
           },
         });
@@ -227,6 +313,17 @@ const Map: ComponentType<Props> = ({
               'line-width': {
                 "stops": [[3, 0.5], [5, 1], [13, 3]]
               }
+          },
+        });
+        map.addLayer({
+          'id': 'england-auths-fill',
+          'type': 'fill',
+          'source': 'england-auths',
+          'minzoom': zoomLayers.localAuthority.min,
+          'maxzoom': zoomLayers.localAuthority.max,
+          'layout': {},
+          'paint': {
+            'fill-opacity': 0,
           },
         });
         map.on('click', 'england-auths-fill', e => {
@@ -395,4 +492,4 @@ const Map: ComponentType<Props> = ({
   );
 };
 
-export default Map;
+export default withRouter(Map);
