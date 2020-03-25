@@ -6,7 +6,7 @@ import { max } from 'd3-array';
 import zoomLayers from './zoomLayers';
 
 
-const addNhsRegionLayer = async (map, nhsRegionData) => {
+const addNhsRegionLayer = async (map, nhsRegionData, onClick) => {
   const { data: nhsRegionGeojsonRaw } = await axios.get('https://opendata.arcgis.com/datasets/42ab857359ae4acabfca44b97c0f99b3_0.geojson');
 
   const nhsRegionMax = max(Object.keys(nhsRegionData), d => nhsRegionData?.[d]?.totalCases?.value ?? 0);
@@ -17,7 +17,7 @@ const addNhsRegionLayer = async (map, nhsRegionData) => {
       ...f,
       properties: {
         ...f.properties,
-        count: nhsRegionData?.[f.properties[key]]?.totalCases?.value ?? 10, 
+        count: nhsRegionData?.[f.properties[key]]?.totalCases?.value ?? 0, 
         name: f.properties.name,
       },
     })),
@@ -41,6 +41,7 @@ const addNhsRegionLayer = async (map, nhsRegionData) => {
       ].map(c => ({
         type: 'Feature',
         properties: {
+          name: c[0],
           count: nhsRegionData?.[c[0]]?.totalCases?.value ?? 10,
         },
         geometry: {
@@ -86,6 +87,21 @@ const addNhsRegionLayer = async (map, nhsRegionData) => {
         20, 40,
       ],
     },
+  });
+
+  map.addLayer({
+    'id': 'nhs-regions-fill',
+    'type': 'fill',
+    'source': 'nhs-regions',
+    'minzoom': zoomLayers.nhsRegion.min,
+    'maxzoom': zoomLayers.nhsRegion.max,
+    'layout': {},
+    'paint': {
+      'fill-opacity': 0,
+    },
+  });
+  map.on('click', 'nhs-regions-fill', e => {
+    onClick(e.features[0].properties.name);
   });
 };
 

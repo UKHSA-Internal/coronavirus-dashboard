@@ -4,7 +4,7 @@ import { max } from 'd3-array';
 
 import zoomLayers from './zoomLayers';
 
-const addCountryLayer = (map, countryData) => {
+const addCountryLayer = (map, countryData, onClick) => {
   const countryMax = max(Object.keys(countryData), d => countryData?.[d]?.totalCases?.value ?? 0);
 
   map.addSource('countries-latlong', {
@@ -19,6 +19,7 @@ const addCountryLayer = (map, countryData) => {
       ].map(c => ({
         type: 'Feature',
         properties: {
+          name: c[0],
           count: countryData?.[c[0]]?.totalCases?.value ?? 0,
         },
         geometry: {
@@ -47,6 +48,10 @@ const addCountryLayer = (map, countryData) => {
         countryMax, 40,
       ],
     },
+  });
+
+  map.on('click', 'countries-circle', e => {
+    onClick(e.features[0].properties.name);
   });
 };
 

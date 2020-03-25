@@ -8,7 +8,7 @@ import zoomLayers from './zoomLayers';
 import localAuthorities from './localAuthorities';
 
 
-const addEnglandLocalAuthorityLayer = async (map, localAuthorityData) => {
+const addEnglandLocalAuthorityLayer = async (map, localAuthorityData, onClick) => {
   const { data: englandTopo } = await axios.get('https://martinjc.github.io/UK-GeoJSON/json/eng/topo_lad.json');
 
   const localAuthorityMax = max(Object.keys(localAuthorityData), d => localAuthorityData?.[d]?.totalCases?.value ?? 0);
@@ -40,6 +40,7 @@ const addEnglandLocalAuthorityLayer = async (map, localAuthorityData) => {
             coordinates: [la.long, la.lat],
           },
           properties: {
+            name: la.name,
             count: localAuthorityData?.[la.name]?.totalCases?.value ?? 0, 
           },
       })),
@@ -94,11 +95,9 @@ const addEnglandLocalAuthorityLayer = async (map, localAuthorityData) => {
       'fill-opacity': 0,
     },
   });
-  // map.on('click', 'england-auths-fill', e => {
-  //   setCountry(null);
-  //   setNhsRegion(null);
-  //   setLocalAuthority(e.features[0].properties.name);
-  // });
+  map.on('click', 'england-auths-fill', e => {
+    onClick(e.features[0].properties.name);
+  });
 };
 
 export default addEnglandLocalAuthorityLayer;

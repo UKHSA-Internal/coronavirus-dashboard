@@ -98,9 +98,21 @@ const Map: ComponentType<Props> = ({
           }
         });
 
-        addCountryLayer(map, countryData);
-        addNhsRegionLayer(map, nhsRegionData);
-        addEnglandLocalAuthorityLayer(map, localAuthorityData);
+        addCountryLayer(map, countryData, c => {
+          setCountry(c);
+          setNhsRegion(null);
+          setLocalAuthority(null);
+        });
+        addNhsRegionLayer(map, nhsRegionData, r => {
+          setCountry(null);
+          setNhsRegion(r);
+          setLocalAuthority(null);
+        });
+        addEnglandLocalAuthorityLayer(map, localAuthorityData, la => {
+          setCountry(null);
+          setNhsRegion(null);
+          setLocalAuthority(la);
+        });
       });
     };
 
