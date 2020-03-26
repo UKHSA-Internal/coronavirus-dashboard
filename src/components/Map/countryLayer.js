@@ -12,14 +12,14 @@ const addCountryLayer = (map, countryData, onClick) => {
     data: {
       type: "FeatureCollection",
       features: [
-        ['England', [-1.1743, 52.3555]],
+        ['E92000001', [-1.1743, 52.3555]],
         ['Scotland', [-4.2026, 56.4907]],
         ['Wales', [-3.7837, 52.1307]],
         ['Northern Ireland', [-6.4923, 54.7877]],
       ].map(c => ({
         type: 'Feature',
         properties: {
-          name: c[0],
+          name: countryData?.[c[0]]?.name?.value ?? 0,
           count: countryData?.[c[0]]?.totalCases?.value ?? 0,
         },
         geometry: {

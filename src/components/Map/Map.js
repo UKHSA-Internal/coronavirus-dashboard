@@ -8,7 +8,6 @@ import mapboxgl from 'mapbox-gl';
 
 import { MAPBOX_API_KEY } from 'config';
 import zoomLayers from './zoomLayers';
-import localAuthorities from './localAuthorities';
 import addCountryLayer from './countryLayer';
 import addNhsRegionLayer from './nhsRegionLayer';
 import addEnglandLocalAuthorityLayer from './englandLocalAuthorityLayer';
@@ -17,6 +16,7 @@ import type { Props } from './Map.types';
 import * as Styles from './Map.styles';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
+import axios from 'axios';
 
 const Map: ComponentType<Props> = ({
   country,
@@ -32,7 +32,24 @@ const Map: ComponentType<Props> = ({
   location: { pathname, hash },
 }: Props) => {
   const [map, setMap] = useState<?mapboxgl.Map>(null);
+  const [utlaCoordinates, setUtlaCoordinates] = useState({});
   const mapContainer = useRef(null);
+
+  useEffect(() => {
+     (async () => {
+      const { data } = await axios.get('https://opendata.arcgis.com/datasets/a917c123e49d436f90660ef6a9ceb5cc_0.geojson');
+      const c = data.features.reduce((acc, cur) => {
+        return {
+          ...acc,
+          [cur.properties.ctyua19cd]: {
+            long: cur.properties.long,
+            lat: cur.properties.lat,
+          },
+        };
+      }, {});
+      setUtlaCoordinates(c);
+    })();
+  }, []);
 
   useEffect(() => {
     if (map){
@@ -58,9 +75,9 @@ const Map: ComponentType<Props> = ({
         map.flyTo({center: [-4, 55], zoom: 5 });
       }
       if (localAuthority) {
-        const reg = localAuthorities.find(r => r.name === localAuthority);
-        if (reg) {
-          map.flyTo({center: [reg.long, reg.lat], zoom: 8 });
+        const la = utlaCoordinates[localAuthority];
+        if (la) {
+          map.flyTo({center: [la.long, la.lat], zoom: 8 });
         }
       }
     }

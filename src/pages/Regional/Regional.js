@@ -29,18 +29,7 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
     return null;
   }
 
-  const data = (() => {
-    if (country) {
-      return countryData?.[country];
-    }
-    if (nhsRegion) {
-      return nhsRegionData?.[nhsRegion];
-    }
-    if (localAuthority) {
-      return localAuthorityData?.[localAuthority];
-    }
-    return null;
-  })();
+  console.log(overviewData)
 
   return (
     <Styles.Container className="govuk-width-container">
@@ -52,22 +41,24 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
       {/* <BigNumberBlock data={overviewData?.['United Kingdom']} /> */}
       <BigNumber
         caption="Total number of UK cases"
-        number={overviewData?.['United Kingdom']?.totalCases?.value ?? 0}
+        number={overviewData?.K02000001?.totalCases?.value ?? 0}
         percentageChange={5}
         subtext=""
       />
       <BigNumber
         caption="Number of people who have recovered"
-        number={overviewData?.['United Kingdom']?.recovered?.value ?? 0}
+        number={overviewData?.K02000001?.recovered?.value ?? 0}
         percentageChange={0}
         subtext=""
       />
       <BigNumber
         caption="Number of people who have died"
-        number={overviewData?.['United Kingdom']?.deaths?.value ?? 0}
+        number={overviewData?.K02000001?.deaths?.value ?? 0}
         percentageChange={20}
         subtext=""
       />
+      <CumulativeTotalCases dailyData={overviewData?.K02000001?.dailyConfirmedCases ?? []} />
+      <DailyConfirmedCases data={overviewData?.K02000001?.dailyConfirmedCases ?? []} />
       <RegionTable
         country={country}
         setCountry={setCountry}
@@ -92,21 +83,7 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
           localAuthorityData={localAuthorityData}
         />
       )}
-      {data && layout === 'desktop' && (
-        <>
-          <RegionTitle region={localAuthority || country} lastUpdatedAt="" />
-          {/* <BigNumberBlock data={data} /> */}
-          <BigNumber
-            caption="Total number of cases"
-            number={data?.totalCases?.value ?? 0}
-            percentageChange={5}
-            subtext=""
-          />
-          <CumulativeTotalCases dailyData={data?.dailyConfirmedCases ?? []} />
-          <DailyConfirmedCases region={localAuthority || country} data={data?.dailyConfirmedCases ?? []} />
-        </>
-      )}
-      {layout === 'desktop' && <Disclaimer />}
+     {layout === 'desktop' && <Disclaimer />}
     </Styles.Container>
   );
 };

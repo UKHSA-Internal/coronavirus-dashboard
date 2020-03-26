@@ -1,15 +1,12 @@
 // @flow
 
 import axios from 'axios';
-import * as topojson from 'topojson';
 import { max } from 'd3-array';
 
 import zoomLayers from './zoomLayers';
-import localAuthorities from './localAuthorities';
-
 
 const addEnglandLocalAuthorityLayer = async (map, localAuthorityData, onClick) => {
-  const { data: englandTopo } = await axios.get('https://martinjc.github.io/UK-GeoJSON/json/eng/topo_lad.json');
+  const { data: englandGeojsonRaw } = await axios.get('https://opendata.arcgis.com/datasets/a917c123e49d436f90660ef6a9ceb5cc_0.geojson');
 
   const localAuthorityMax = max(Object.keys(localAuthorityData), d => localAuthorityData?.[d]?.totalCases?.value ?? 0);
 
@@ -25,23 +22,22 @@ const addEnglandLocalAuthorityLayer = async (map, localAuthorityData, onClick) =
     })),
   });
 
-  const englandGeojson = addCounts(topojson.feature(englandTopo, englandTopo.objects.lad));
+  const englandGeojson = addCounts(englandGeojsonRaw);
   map.addSource('england-auths', { 'type': 'geojson', 'data': englandGeojson });
-
 
   map.addSource('england-latlong', {
     type: 'geojson',
     data: {
       type: "FeatureCollection",
-      features: localAuthorities.map(la => ({
+      features: englandGeojson.features.map(la => ({
           type: 'Feature',
           geometry: {
             type: 'Point',
-            coordinates: [la.long, la.lat],
+            coordinates: [la.properties.long, la.properties.lat],
           },
           properties: {
-            name: la.name,
-            count: localAuthorityData?.[la.name]?.totalCases?.value ?? 0, 
+            name: la.properties.ctyua19nm,
+            count: localAuthorityData?.[la.properties.ctyua19cd]?.totalCases?.value ?? 0, 
           },
       })),
     },
