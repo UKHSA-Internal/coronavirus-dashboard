@@ -4,6 +4,17 @@ import { max } from 'd3-array';
 
 import zoomLayers from './zoomLayers';
 
+export const countryCoordinates = {
+  // England
+  E92000001: [-1.1743, 52.3555],
+  // Scotland
+  S92000003: [-4.2026, 56.4907],
+  // Wales
+  W92000004: [-3.7837, 52.1307],
+  // NI
+  N92000002: [-6.4923, 54.7877],
+};
+
 const addCountryLayer = (map, countryData, onClick) => {
   const countryMax = max(Object.keys(countryData), d => countryData?.[d]?.totalCases?.value ?? 0);
 
@@ -11,20 +22,15 @@ const addCountryLayer = (map, countryData, onClick) => {
     type: 'geojson',
     data: {
       type: "FeatureCollection",
-      features: [
-        ['E92000001', [-1.1743, 52.3555]],
-        ['Scotland', [-4.2026, 56.4907]],
-        ['Wales', [-3.7837, 52.1307]],
-        ['Northern Ireland', [-6.4923, 54.7877]],
-      ].map(c => ({
+      features: Object.keys(countryCoordinates).map(c => ({
         type: 'Feature',
         properties: {
-          name: countryData?.[c[0]]?.name?.value ?? 0,
-          count: countryData?.[c[0]]?.totalCases?.value ?? 0,
+          name: countryData?.[c]?.name?.value ?? 0,
+          count: countryData?.[c]?.totalCases?.value ?? 0,
         },
         geometry: {
           type: 'Point',
-          coordinates: c[1],
+          coordinates: countryCoordinates[c],
         },
       })),
     },

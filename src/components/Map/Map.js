@@ -8,8 +8,8 @@ import mapboxgl from 'mapbox-gl';
 
 import { MAPBOX_API_KEY } from 'config';
 import zoomLayers from './zoomLayers';
-import addCountryLayer from './countryLayer';
-import addNhsRegionLayer from './nhsRegionLayer';
+import addCountryLayer, { countryCoordinates } from './countryLayer';
+import addNhsRegionLayer, { nhsRegionCoordinates } from './nhsRegionLayer';
 import addEnglandLocalAuthorityLayer from './englandLocalAuthorityLayer';
 
 import type { Props } from './Map.types';
@@ -69,10 +69,10 @@ const Map: ComponentType<Props> = ({
   useEffect(() => {
     if (map) {
       if (country) {
-        map.flyTo({center: [-4, 55], zoom: 4.5 });
+        map.flyTo({center: countryCoordinates[country], zoom: 4.5 });
       }
       if (nhsRegion) {
-        map.flyTo({center: [-4, 55], zoom: 5 });
+        map.flyTo({center: nhsRegionCoordinates[nhsRegion], zoom: 5 });
       }
       if (localAuthority) {
         const la = utlaCoordinates[localAuthority];
