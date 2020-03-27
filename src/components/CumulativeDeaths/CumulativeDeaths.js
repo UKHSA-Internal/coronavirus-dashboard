@@ -4,13 +4,13 @@ import React from 'react';
 import type { ComponentType } from 'react';
 import { Line } from 'react-chartjs-2';
 
-import type { Props } from './CumulativeTotalCases.types';
-import * as Styles from './CumulativeTotalCases.styles';
+import type { Props } from './CumulativeDeaths.types';
+import * as Styles from './CumulativeDeaths.styles';
 
-const CumulativeTotalCases: ComponentType<Props> = ({ data }: Props) => {
+const CumulativeDeaths: ComponentType<Props> = ({ data }: Props) => {
   return (
     <Styles.Container>
-      <span className="govuk-heading-s">Total number of cases over time</span>
+      <span className="govuk-heading-s">Total number of deaths over time</span>
       <Styles.Chart>
         <Line
           data={{
@@ -62,4 +62,4 @@ const CumulativeTotalCases: ComponentType<Props> = ({ data }: Props) => {
   );
 };
 
-export default CumulativeTotalCases;
+export default CumulativeDeaths;

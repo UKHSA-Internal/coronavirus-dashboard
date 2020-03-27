@@ -13,6 +13,7 @@ import Map from 'components/Map';
 import RegionTitle from 'components/RegionTitle';
 import DailyConfirmedCases from 'components/DailyConfirmedCases';
 import CumulativeTotalCases from 'components/CumulativeTotalCases';
+import CumulativeDeaths from 'components/CumulativeDeaths';
 import Disclaimer from 'components/Disclaimer';
 
 import type { Props } from './Regional.types';
@@ -28,8 +29,6 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
   if (!overviewData || !countryData || !nhsRegionData || !localAuthorityData) {
     return null;
   }
-
-  console.log(overviewData)
 
   return (
     <Styles.Container className="govuk-width-container">
@@ -57,8 +56,9 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
         percentageChange={20}
         subtext=""
       />
-      <CumulativeTotalCases dailyData={overviewData?.K02000001?.dailyConfirmedCases ?? []} />
+      <CumulativeTotalCases data={overviewData?.K02000001?.dailyTotalConfirmedCases ?? []} />
       <DailyConfirmedCases data={overviewData?.K02000001?.dailyConfirmedCases ?? []} />
+      <CumulativeDeaths data={overviewData?.K02000001?.dailyDeaths ?? []} />
       <RegionTable
         country={country}
         setCountry={setCountry}
