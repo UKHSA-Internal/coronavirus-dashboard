@@ -3,14 +3,14 @@
 const zoomLayers = {
   country: {
     min: 0, // Default min
-    max: 5,
+    max: 6,
   },
   nhsRegion: {
-    min: 5,
-    max: 7,
+    min: 6,
+    max: 8,
   },
   localAuthority: {
-    min: 7,
+    min: 8,
     max: 22, // Default max
   },
 };

@@ -2,8 +2,8 @@
 
 import axios from 'axios';
 import { max } from 'd3-array';
-
-import zoomLayers from './zoomLayers';
+import { scaleLinear } from 'd3-scale';
+import L from 'leaflet';
 
 export const nhsRegionCoordinates = {
   // London
@@ -22,95 +22,44 @@ export const nhsRegionCoordinates = {
   E40000006: [-3.9995, 50.7772],
 };
 
-const addNhsRegionLayer = async (map, nhsRegionData, onClick) => {
-  const { data: nhsRegionGeojsonRaw } = await axios.get('https://opendata.arcgis.com/datasets/42ab857359ae4acabfca44b97c0f99b3_0.geojson');
+const addNhsRegionLayer = async (nhsRegionData: NhsRegionData) => {
+  const { data: nhsRegionGeojson } = await axios.get('https://opendata.arcgis.com/datasets/42ab857359ae4acabfca44b97c0f99b3_0.geojson');
 
   const nhsRegionMax = max(Object.keys(nhsRegionData), d => nhsRegionData?.[d]?.totalCases?.value ?? 0);
+  const radiusScale = scaleLinear().range([5, 40]).domain([1, nhsRegionMax]);
 
-  const addCounts = (g, key) => ({
-    ...g,
-    features: g.features.map(f => ({
-      ...f,
+  const circleLayer = L.geoJSON(
+    Object.keys(nhsRegionCoordinates).map(c => ({
+      type: 'Feature',
       properties: {
-        ...f.properties,
-        count: nhsRegionData?.[f.properties.nhser19cd]?.totalCases?.value ?? 0, 
-        name: f.properties.nhser19nm,
+        name: nhsRegionData?.[c]?.name?.value ?? 0,
+        count: nhsRegionData?.[c]?.totalCases?.value ?? 0,
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: nhsRegionCoordinates[c],
       },
     })),
-  });
+    {
+      pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
+        radius: feature.properties.count === 0 ? 0 : radiusScale(feature.properties.count),
+        fillColor: "#1D70B8",
+        fillOpacity: 0.6,
+        weight: 0,
+      }),
+    },
+  );
 
-  const nhsRegionGeojson = addCounts(nhsRegionGeojsonRaw, 'name');
-  map.addSource('nhs-regions', { 'type': 'geojson', 'data': nhsRegionGeojson });
-
-  map.addSource('nhs-regions-latlong', {
-    type: 'geojson',
-    data: {
-      type: "FeatureCollection",
-      features: Object.keys(nhsRegionCoordinates).map(c => ({
-        type: 'Feature',
-        properties: {
-          name: nhsRegionData?.[c]?.name?.value ?? 0,
-          count: nhsRegionData?.[c]?.totalCases?.value ?? 0,
-        },
-        geometry: {
-          type: 'Point',
-          coordinates: nhsRegionCoordinates[c],
-        },
-      })),
+  const boundryLayer = L.geoJSON(nhsRegionGeojson.features, {
+    style: {
+      color: '#0b0c0c',
+      weight: 1,
+      opacity: 0.7,
+      fillOpacity: 0,
     },
   });
 
-  map.addLayer({
-    'id': 'nhs-regions-boundries',
-    'type': 'line',
-    'source': 'nhs-regions',
-    'minzoom': zoomLayers.nhsRegion.min,
-    'maxzoom': zoomLayers.nhsRegion.max,
-    'layout': {},
-    'paint': {
-      'line-color': '#0b0c0c',
-      'line-opacity': 0.5,
-      'line-width': {
-        "stops": [[3, 0.5], [5, 1], [13, 3]]
-      },
-    },
-  });
-
-  map.addLayer({
-    'id': 'nhs-regions-circles',
-    'type': 'circle',
-    'source': 'nhs-regions-latlong',
-    'minzoom': zoomLayers.nhsRegion.min,
-    'maxzoom': zoomLayers.nhsRegion.max,
-    'layout': {},
-    'paint': {
-      'circle-color': '#1D70B8',
-      'circle-opacity': 0.6,
-      'circle-radius': [
-        'interpolate',
-        ['linear'],
-        ['get', 'count'],
-        0, 0,
-        1, 5,
-        nhsRegionMax, 40,
-      ],
-    },
-  });
-
-  map.addLayer({
-    'id': 'nhs-regions-fill',
-    'type': 'fill',
-    'source': 'nhs-regions',
-    'minzoom': zoomLayers.nhsRegion.min,
-    'maxzoom': zoomLayers.nhsRegion.max,
-    'layout': {},
-    'paint': {
-      'fill-opacity': 0,
-    },
-  });
-  map.on('click', 'nhs-regions-fill', e => {
-    onClick(e.features[0].properties.name);
-  });
+  return [circleLayer, boundryLayer];
 };
 
 export default addNhsRegionLayer;
