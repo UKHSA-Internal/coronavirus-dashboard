@@ -46,19 +46,19 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
       />
       <BigNumber
         caption="Number of people who have recovered"
-        number={overviewData?.K02000001?.recovered?.value ?? 0}
+        number={overviewData?.K02000001?.dailyTotalRecovered.slice(-1)[0]?.value ?? 0}
         percentageChange={0}
         subtext=""
       />
       <BigNumber
         caption="Number of people who have died"
-        number={overviewData?.K02000001?.deaths?.value ?? 0}
+        number={overviewData?.K02000001?.dailyTotalDeaths.slice(-1)[0]?.value ?? 0}
         percentageChange={20}
         subtext=""
       />
       <CumulativeTotalCases data={overviewData?.K02000001?.dailyTotalConfirmedCases ?? []} />
       <DailyConfirmedCases data={overviewData?.K02000001?.dailyConfirmedCases ?? []} />
-      <CumulativeDeaths data={overviewData?.K02000001?.dailyDeaths ?? []} />
+      <CumulativeDeaths data={overviewData?.K02000001?.dailyTotalDeaths ?? []} />
       <RegionTable
         country={country}
         setCountry={setCountry}
