@@ -32,6 +32,29 @@ const RegionTable: ComponentType<Props> = ({
     }
   }, [hash]);
 
+  useEffect(() => {
+    const containerId = (() => {
+      if (country) {
+        return 'country';
+      }
+      if (nhsRegion) {
+        return 'nhs-regions';
+      }
+      if (localAuthority) {
+        return 'local-authorities';
+      }
+      return '';
+    })();
+
+    const itemId = `table-link-${country || nhsRegion || localAuthority || null}`;
+
+    const container = document.getElementById(containerId);
+    const item = document.getElementById(itemId);
+    if (container && item && item.offsetParent) {
+      container.scrollTop = item.offsetParent.offsetTop - 10;
+    }
+  }, [country, nhsRegion, localAuthority]);
+
   const handleOnLocalAuthorityClick = (r: string) => () => {
     if (layout === 'desktop') {
       setLocalAuthority(r);
@@ -78,7 +101,6 @@ const RegionTable: ComponentType<Props> = ({
     return 0;
   };
 
-
   return (
     <Styles.Container>
       <Tabs
@@ -91,7 +113,7 @@ const RegionTable: ComponentType<Props> = ({
                 <Table
                   head={[{ children: ['Country']}, { children: ['Total cases'], format: 'numeric' }]}
                   rows={countryKeys.sort(sortFunc(countryData)).map(r => [
-                    { children: [<Styles.Link onClick={handleOnCountryClick(r)} active={country === r} to={href(r, 'country')} className="govuk-link">{countryData[r].name.value}</Styles.Link>] },
+                    { children: [<Styles.Link id={`table-link-${r}`} onClick={handleOnCountryClick(r)} active={country === r} to={href(r, 'country')} className="govuk-link">{countryData[r].name.value}</Styles.Link>] },
                     { children: [countryData[r].totalCases.value], format: 'numeric' },
                   ])}
                 />
@@ -106,7 +128,7 @@ const RegionTable: ComponentType<Props> = ({
                 <Table
                   head={[{ children: ['NHS region']}, { children: ['Total cases'], format: 'numeric' }]}
                   rows={nhsRegionKeys.sort(sortFunc(nhsRegionData)).map(r => [
-                    { children: [<Styles.Link onClick={handleOnNhsRegionClick(r)} active={nhsRegion === r} to={href(r, 'nhs-region')} className="govuk-link">{nhsRegionData[r].name.value}</Styles.Link>] },
+                    { children: [<Styles.Link id={`table-link-${r}`} onClick={handleOnNhsRegionClick(r)} active={nhsRegion === r} to={href(r, 'nhs-region')} className="govuk-link">{nhsRegionData[r].name.value}</Styles.Link>] },
                     { children: [nhsRegionData[r].totalCases.value], format: 'numeric' },
                   ])}
                 />
@@ -121,7 +143,7 @@ const RegionTable: ComponentType<Props> = ({
                 <Table
                   head={[{ children: ['Local authority'] }, { children: ['Total cases'], format: 'numeric' }]}
                   rows={localAuthorityKeys.sort(sortFunc(localAuthorityData)).map(r => [
-                    { children: [<Styles.Link onClick={handleOnLocalAuthorityClick(r)} active={localAuthority === r} to={href(r, 'local-authority')} className="govuk-link">{localAuthorityData[r].name.value}</Styles.Link>] },
+                    { children: [<Styles.Link id={`table-link-${r}`} onClick={handleOnLocalAuthorityClick(r)} active={localAuthority === r} to={href(r, 'local-authority')} className="govuk-link">{localAuthorityData[r].name.value}</Styles.Link>] },
                     { children: [localAuthorityData[r].totalCases.value], format: 'numeric' },
                   ])}
                 />

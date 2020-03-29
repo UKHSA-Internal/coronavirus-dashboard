@@ -1,17 +1,45 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { withRouter } from 'react-router';
 import axios from 'axios';
 import L from 'leaflet';
 
-import addCountryLayer, { countryCoordinates } from './countryLayer';
-import addNhsRegionLayer, { nhsRegionCoordinates } from './nhsRegionLayer';
-import addEnglandLocalAuthorityLayer from './englandLocalAuthorityLayer';
+import useCountryLayer from './countryLayer';
+import useNhsRegionLayer from './nhsRegionLayer';
+import useEnglandLocalAuthorityLayer from './englandLocalAuthorityLayer';
 import zoomLayers from './zoomLayers';
 
 import * as Styles from './Map.styles';
 
 import 'leaflet/dist/leaflet.css';
+
+const countryCoordinates = {
+  // England
+  E92000001: [52.3555, -1.1743],
+  // Scotland
+  S92000003: [56.4907, -4.2026],
+  // Wales
+  W92000004: [52.1307, -3.7837],
+  // NI
+  N92000002: [54.7877, -6.4923],
+};
+
+const nhsRegionCoordinates = {
+  // London
+  E40000003: [51.5074, -0.1278],
+  // Midlands
+  E40000008: [52.7, -1.4],
+  // South east
+  E40000005: [51.1781, -0.5596],
+  // North west
+  E40000010: [53.6221, -2.5945],
+  // North east and yorkshire
+  E40000009: [54, -1.2],
+  // East
+  E40000007: [52.1911, 0.1927],
+  // South west
+  E40000006: [50.7772, -3.9995],
+};
 
 const Map: ComponentType<Props> = ({
   country,
@@ -27,12 +55,50 @@ const Map: ComponentType<Props> = ({
   location: { pathname, hash },
 }: Props) => {
   const [map, setMap] = useState(null);
-  const [layerGroup, setLayerGroup] = useState(null);
-  const [countryLayers, setCountryLayers] = useState(null);
-  const [nhsRegionLayers, setNhsRegionLayers] = useState(null);
-  const [utlaLayers, setUtlaLayers] = useState(null);
   const [utlaCoordinates, setUtlaCoordinates] = useState({});
+  const layerGroup = useRef(null);
 
+  // Initialise map
+  useEffect(() => {
+    const initializeMap = () => {
+      const map = L.map('map', {
+        center: [55, -4],
+        zoom: 4.5, 
+        layers: [
+          L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
+            maxZoom: 20,
+            attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+          }),
+        ]
+      });
+
+      map.zoomControl.setPosition('bottomright');
+
+      layerGroup.current = L.layerGroup().addTo(map);
+      // setLayerGroup(layerGroup);
+
+      setMap(map);
+    };
+
+    if (!map) {
+      initializeMap();
+    }
+  }, []);
+
+  // Setup layers, updating layers is handled within the hooks
+  useCountryLayer(countryData, hash, layerGroup.current, country, nhsRegion, localAuthority);
+  useNhsRegionLayer(nhsRegionData, hash, layerGroup.current, country, nhsRegion, localAuthority, id => {
+    setCountry(null);
+    setNhsRegion(id);
+    setLocalAuthority(null);
+  });
+  useEnglandLocalAuthorityLayer(localAuthorityData, hash, layerGroup.current, country, nhsRegion, localAuthority, id => {
+    setCountry(null);
+    setNhsRegion(null);
+    setLocalAuthority(id);
+  });
+
+  // Load utla coordinates
   useEffect(() => {
      (async () => {
       const { data } = await axios.get('https://opendata.arcgis.com/datasets/a917c123e49d436f90660ef6a9ceb5cc_0.geojson');
@@ -49,59 +115,19 @@ const Map: ComponentType<Props> = ({
     })();
   }, []);
 
-  useEffect(() => {
-    const initializeMap = async () => {
-      const layers = await Promise.all([
-        addCountryLayer(countryData),
-        addNhsRegionLayer(nhsRegionData),
-        addEnglandLocalAuthorityLayer(localAuthorityData),
-      ]);
-      setCountryLayers(layers[0]);
-      setNhsRegionLayers(layers[1]);
-      setUtlaLayers(layers[2]);
-
-      const map = L.map('map', {
-        center: [55, -4],
-        zoom: 4.5, 
-        layers: [
-          L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-            maxZoom: 20,
-            attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-          }),
-        ]
-      });
-
-      map.zoomControl.setPosition('bottomright');
-
-      const layerGroup = L.layerGroup().addTo(map);
-      setLayerGroup(layerGroup);
-
-      setMap(map);
-    };
-
-    if (!map) {
-      initializeMap();
-    }
-  }, []);
-
+  // Setup zoom handler to add/remove layers
   useEffect(() => {
     (async () => {
       if (map) {
         const handleZoomend = () => {
           const zoom = map.getZoom();
           if (zoom >= zoomLayers.country.min && zoom < zoomLayers.country.max && hash !== '#countries') {
-            layerGroup.clearLayers();
-            countryLayers.map(l => layerGroup.addLayer(l));
             push(`${pathname}#countries`);
           }
           if (zoom >= zoomLayers.nhsRegion.min && zoom < zoomLayers.nhsRegion.max && hash !== '#nhs-regions') {
-            layerGroup.clearLayers();
-            nhsRegionLayers.map(l => layerGroup.addLayer(l));
             push(`${pathname}#nhs-regions`);
           }
           if (zoom >= zoomLayers.localAuthority.min && zoom < zoomLayers.localAuthority.max && hash !== '#local-authorities') {
-            layerGroup.clearLayers();
-            utlaLayers.map(l => layerGroup.addLayer(l));
             push(`${pathname}#local-authorities`);
           }
         };
@@ -111,8 +137,9 @@ const Map: ComponentType<Props> = ({
     })();
   }, [map, hash, pathname]);
 
+  // Set zoom when url hash changes
   useEffect(() => {
-    if (map){
+    if (map) {
       const zoom = map.getZoom();
       if ((zoom < zoomLayers.country.min || zoom >= zoomLayers.country.max) && hash === '#countries') {
         map.setZoom(zoomLayers.country.max - 1);
@@ -126,13 +153,14 @@ const Map: ComponentType<Props> = ({
     }
   }, [hash, map]);
 
+  // Fly to area when selected area changes
   useEffect(() => {
     if (map) {
       if (country) {
-        map.flyTo(countryCoordinates[country].reverse(), zoomLayers.country.max - 1, { animate: false });
+        map.flyTo(countryCoordinates[country], zoomLayers.country.max - 1, { animate: false });
       }
       if (nhsRegion) {
-        map.flyTo(nhsRegionCoordinates[nhsRegion].reverse(), zoomLayers.nhsRegion.min, { animate: false });
+        map.flyTo(nhsRegionCoordinates[nhsRegion], zoomLayers.nhsRegion.min, { animate: false });
       }
       if (localAuthority) {
         const la = utlaCoordinates[localAuthority];
