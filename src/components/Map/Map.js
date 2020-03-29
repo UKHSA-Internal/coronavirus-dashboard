@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { withRouter } from 'react-router';
 import axios from 'axios';
-import L from 'leaflet';
+import L, { layerGroup } from 'leaflet';
 
 import useCountryLayer from './countryLayer';
 import useNhsRegionLayer from './nhsRegionLayer';
@@ -56,7 +56,8 @@ const Map: ComponentType<Props> = ({
 }: Props) => {
   const [map, setMap] = useState(null);
   const [utlaCoordinates, setUtlaCoordinates] = useState({});
-  const layerGroup = useRef(null);
+  const [layerGroup, setLayerGroup] = useState(null);
+  // const layerGroup = useRef(null);
 
   // Initialise map
   useEffect(() => {
@@ -74,8 +75,8 @@ const Map: ComponentType<Props> = ({
 
       map.zoomControl.setPosition('bottomright');
 
-      layerGroup.current = L.layerGroup().addTo(map);
-      // setLayerGroup(layerGroup);
+      // layerGroup.current = L.layerGroup().addTo(map);
+      setLayerGroup(L.layerGroup().addTo(map));
 
       setMap(map);
     };
@@ -86,13 +87,13 @@ const Map: ComponentType<Props> = ({
   }, []);
 
   // Setup layers, updating layers is handled within the hooks
-  useCountryLayer(countryData, hash, layerGroup.current, country, nhsRegion, localAuthority);
-  useNhsRegionLayer(nhsRegionData, hash, layerGroup.current, country, nhsRegion, localAuthority, id => {
+  useCountryLayer(countryData, hash, layerGroup, country, nhsRegion, localAuthority);
+  useNhsRegionLayer(nhsRegionData, hash, layerGroup, country, nhsRegion, localAuthority, id => {
     setCountry(null);
     setNhsRegion(id);
     setLocalAuthority(null);
   });
-  useEnglandLocalAuthorityLayer(localAuthorityData, hash, layerGroup.current, country, nhsRegion, localAuthority, id => {
+  useEnglandLocalAuthorityLayer(localAuthorityData, hash, layerGroup, country, nhsRegion, localAuthority, id => {
     setCountry(null);
     setNhsRegion(null);
     setLocalAuthority(id);

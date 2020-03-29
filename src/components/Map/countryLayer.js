@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { max } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
-import L from 'leaflet';
+import L, { layerGroup } from 'leaflet';
 
 const countryCoordinates = {
   // England
@@ -50,7 +50,7 @@ const useCountryLayer = (countryData: CountryData, hash, layerGroup, country, nh
       layerGroup.clearLayers();
       layerGroup.addLayer(countryCircles);
     }
-  }, [hash, country, nhsRegion, localAuthority]);
+  }, [hash, country, nhsRegion, localAuthority, layerGroup]);
 
   return countryLayers;
 };
