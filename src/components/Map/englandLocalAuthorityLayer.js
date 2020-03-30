@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { max } from 'd3-array';
-import { scaleLinear } from 'd3-scale';
+import { scaleSqrt } from 'd3-scale';
 import L from 'leaflet';
 
 const useEnglandLocalAuthorityLayer = (localAuthorityData: LocalAuthorityData, hash, layerGroup, country, nhsRegion, localAuthority, onClick: Function) => {
@@ -21,7 +21,7 @@ const useEnglandLocalAuthorityLayer = (localAuthorityData: LocalAuthorityData, h
   useEffect(() => {
     if (englandGeojsonRaw) {
       const localAuthorityMax = max(Object.keys(localAuthorityData), d => localAuthorityData?.[d]?.totalCases?.value ?? 0);
-      const radiusScale = scaleLinear().range([5, 25]).domain([1, localAuthorityMax]);
+      const radiusScale = scaleSqrt().range([5, 25]).domain([1, localAuthorityMax]);
 
       const englandGeojson = englandGeojsonRaw.features.map(f => ({
           ...f,

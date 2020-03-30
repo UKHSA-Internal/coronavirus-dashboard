@@ -3,8 +3,8 @@
 
 import { useState, useEffect } from 'react';
 import { max } from 'd3-array';
-import { scaleLinear } from 'd3-scale';
-import L, { layerGroup } from 'leaflet';
+import { scaleSqrt } from 'd3-scale';
+import L from 'leaflet';
 
 const countryCoordinates = {
   // England
@@ -19,7 +19,7 @@ const countryCoordinates = {
 
 const useCountryLayer = (countryData: CountryData, hash, layerGroup, country, nhsRegion, localAuthority) => {
   const countryMax = max(Object.keys(countryData), d => countryData?.[d]?.totalCases?.value ?? 0);
-  const radiusScale = scaleLinear().range([5, 40]).domain([1, countryMax]);
+  const radiusScale = scaleSqrt().range([5, 40]).domain([1, countryMax]);
   const [countryLayers, setCountryLayers] = useState(null);
 
   useEffect(() => {

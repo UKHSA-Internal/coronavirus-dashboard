@@ -4,8 +4,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { max } from 'd3-array';
-import { scaleLinear } from 'd3-scale';
-import L, { layerGroup } from 'leaflet';
+import { scaleSqrt } from 'd3-scale';
+import L from 'leaflet';
 
 const nhsRegionCoordinates = {
   // London
@@ -38,7 +38,7 @@ const useNhsRegionLayer = (nhsRegionData: NhsRegionData, hash, layerGroup, count
   useEffect(() => {
     if (nhsRegionGeojsonRaw) {
       const nhsRegionMax = max(Object.keys(nhsRegionData), d => nhsRegionData?.[d]?.totalCases?.value ?? 0);
-      const radiusScale = scaleLinear().range([5, 40]).domain([1, nhsRegionMax]);
+      const radiusScale = scaleSqrt().range([5, 40]).domain([1, nhsRegionMax]);
 
       const nhsRegionGeojson = nhsRegionGeojsonRaw.features.map(f => ({
           ...f,
