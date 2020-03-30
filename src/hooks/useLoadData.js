@@ -18,7 +18,7 @@ const useLoadData = () => {
 
   useEffect(() => {
     // Fetch today's file, on 404 fallback by 1 day until a file is found
-    const makeCall = async (urlFunc, setFunc) => {
+    const makeCall = async (urlFunc, setFunc, massageFunc = d => d) => {
       let status = 404;
       let data = null;
       let date = new Date();
@@ -36,7 +36,7 @@ const useLoadData = () => {
         }
       } while (status === 404 && date > minDate);
       if (status === 200) {
-        setFunc(data);
+        setFunc(massageFunc(data));
       } else {
         // TODO handle error
       }     
@@ -44,7 +44,45 @@ const useLoadData = () => {
     makeCall(overviewBlobUrl, setOverviewData);
     makeCall(countryBlobUrl, setCountryData);
     makeCall(nhsRegionBlobUrl, setNhsRegionData);
-    makeCall(localAuthorityBlobUrl, setLocalAuthorityData);
+    makeCall(localAuthorityBlobUrl, setLocalAuthorityData, data => {
+      return Object.keys(data).reduce((acc, cur) => {
+        // City of london or Isles of Scilly
+        if (cur === 'E09000001' || cur === 'E06000053') {
+          return acc;
+        }
+
+        // Hackney 
+        if (cur === 'E09000012') {
+          return {
+            ...acc,
+            [cur]: {
+              ...data[cur],
+              totalCases: { value: data[cur].totalCases.value + (data?.['E09000001']?.totalCases?.value ?? 0) },
+              // TODO dailyConfirmedCases
+              // TODO dailyTotalConfirmedCases
+            },
+          };
+        }
+
+        // Cornwall
+        if (cur === 'E06000052') {
+          return {
+            ...acc,
+            [cur]: {
+              ...data[cur],
+              totalCases: { value: data[cur].totalCases.value + (data?.['E06000053']?.totalCases?.value ?? 0) },
+              // TODO dailyConfirmedCases
+              // TODO dailyTotalConfirmedCases
+            },
+          };
+        }
+
+        return {
+          ...acc,
+          [cur]: data[cur],
+        };
+      }, {})
+    });
   }, []);
 
   return [overviewData, countryData, nhsRegionData, localAuthorityData];
