@@ -20,7 +20,8 @@ export const Container: ComponentType<*> = (() => {
 
 export const NavList: ComponentType<*> = (() => {
   return styled.ul`
-    max-width: 960px;
+    max-width: 1100px; 
+    /* max-width: 960px; */
     margin-left: auto;
     margin-right: auto;
     position: relative;
