@@ -18,6 +18,8 @@ import Disclaimer from 'components/Disclaimer';
 
 import type { Props } from './Regional.types';
 import * as Styles from './Regional.styles';
+import LineChart from 'components/LineChart';
+import BarChart from '../../components/BarChart';
 
 const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
   const [country, setCountry] = useState(null);
@@ -83,6 +85,10 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
           localAuthorityData={localAuthorityData}
         />
       )}
+      <LineChart data={overviewData?.K02000001?.dailyTotalConfirmedCases ?? []} header="Total number of cases over time" />
+      <BarChart data={overviewData?.K02000001?.dailyConfirmedCases ?? []} header="Number of new cases per day" />
+      <LineChart data={overviewData?.K02000001?.dailyTotalDeaths ?? []} header="Total number of deaths over time" />
+      <BarChart data={overviewData?.K02000001?.dailyDeaths ?? []} header="Number of new deaths per day" />
      {layout === 'desktop' && <Disclaimer />}
     </Styles.Container>
   );

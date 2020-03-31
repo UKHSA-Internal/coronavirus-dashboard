@@ -5,12 +5,16 @@ import type { ComponentType } from 'react';
 
 export const Container: ComponentType<*> = (() => {
   return styled.div`
-    grid-column: 1/-1;
+    grid-column: span 3;
     display: flex;
     flex-direction: column;
 
     & > span {
       font-weight: normal;
+    }
+
+    @media only screen and (max-width: 768px) {
+      grid-column: 1/-1;
     }
   `;
 })();

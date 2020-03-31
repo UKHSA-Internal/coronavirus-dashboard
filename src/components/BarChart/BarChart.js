@@ -4,17 +4,13 @@ import React from 'react';
 import type { ComponentType } from 'react';
 import { Bar } from 'react-chartjs-2';
 
-import type { Props } from './DailyConfirmedCases.types.js';
-import * as Styles from './DailyConfirmedCases.styles.js';
+import type { Props } from './BarChart.types';
+import * as Styles from './BarChart.styles';
 
-const DailyConfirmedCases: ComponentType<Props> = ({ region, data }: Props) => {
+const BarChart: ComponentType<Props> = ({ header, data }: Props) => {
   return (
     <Styles.Container>
-      <span className="govuk-heading-s">Number of new cases per day</span>
-      {/* <Styles.Summary>
-        <Styles.Circle />
-        <span className="govuk-heading-s">{data.slice(-1)[0]?.value} new cases confirmed in {region} in the last 24 hours</span>
-      </Styles.Summary> */}
+      <span className="govuk-heading-s">{header}</span>
       <Styles.Chart>
         <Bar
           data={{
@@ -56,4 +52,4 @@ const DailyConfirmedCases: ComponentType<Props> = ({ region, data }: Props) => {
   );
 };
 
-export default DailyConfirmedCases;
+export default BarChart;

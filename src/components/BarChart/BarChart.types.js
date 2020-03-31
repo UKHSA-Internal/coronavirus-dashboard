@@ -1,7 +1,7 @@
 // @flow
 
 export type Props = {|
-  region: string,
+  header: string,
   data: Array<{ date: string, value: number }>, 
 |};
 
