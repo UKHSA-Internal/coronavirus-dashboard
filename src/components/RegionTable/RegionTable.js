@@ -138,11 +138,11 @@ const RegionTable: ComponentType<Props> = ({
           },
           {
             id: 'local-authorities',
-            label: 'Local authorities',
+            label: 'Upper tier local authorities',
             panel: {
               children: [
                 <Table
-                  head={[{ children: ['Local authority'] }, { children: ['Total cases'], format: 'numeric' }]}
+                  head={[{ children: ['UTLA'] }, { children: ['Total cases'], format: 'numeric' }]}
                   rows={localAuthorityKeys.sort(sortFunc(localAuthorityData)).map(r => [
                     { children: [<Styles.Link id={`table-link-${r}`} onClick={handleOnLocalAuthorityClick(r)} active={localAuthority === r} to={href(r, 'local-authority')} className="govuk-link">{localAuthorityData[r].name.value}</Styles.Link>] },
                     { children: [localAuthorityData[r].totalCases.value], format: 'numeric' },
