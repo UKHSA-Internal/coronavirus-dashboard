@@ -111,10 +111,11 @@ const RegionTable: ComponentType<Props> = ({
             panel: {
               children: [
                 <Table
-                  head={[{ children: ['Country']}, { children: ['Total cases'], format: 'numeric' }]}
+                  head={[{ children: ['Country']}, { children: ['Total cases'], format: 'numeric' }, { children: ['Deaths'], format: 'numeric' }]}
                   rows={countryKeys.sort(sortFunc(countryData)).map(r => [
                     { children: [<Styles.Link id={`table-link-${r}`} onClick={handleOnCountryClick(r)} active={country === r} to={href(r, 'country')} className="govuk-link">{countryData[r].name.value}</Styles.Link>] },
                     { children: [countryData[r].totalCases.value], format: 'numeric' },
+                    { children: [countryData[r].deaths.value], format: 'numeric' },
                   ])}
                 />
               ],
