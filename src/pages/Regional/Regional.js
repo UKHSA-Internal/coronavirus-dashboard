@@ -5,15 +5,10 @@ import type { ComponentType } from 'react';
 
 import useLoadData from 'hooks/useLoadData';
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
-import BigNumberBlock from 'components/BigNumberBlock';
 import BigNumber from 'components/BigNumber';
 import PageTitle from 'components/PageTitle';
 import RegionTable from 'components/RegionTable';
 import Map from 'components/Map';
-import RegionTitle from 'components/RegionTitle';
-import DailyConfirmedCases from 'components/DailyConfirmedCases';
-import CumulativeTotalCases from 'components/CumulativeTotalCases';
-import CumulativeDeaths from 'components/CumulativeDeaths';
 import Disclaimer from 'components/Disclaimer';
 
 import type { Props } from './Regional.types';
@@ -59,35 +54,37 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
         caption={`Number of UK deaths from yesterday (${overviewData?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.date})`}
         number={overviewData?.K02000001?.dailyDeaths.slice(-1)[0]?.value ?? 0}
       />
-      <RegionTable
-        country={country}
-        setCountry={setCountry}
-        countryData={countryData}
-        nhsRegion={nhsRegion}
-        setNhsRegion={setNhsRegion}
-        nhsRegionData={nhsRegionData}
-        localAuthority={localAuthority}
-        setLocalAuthority={setLocalAuthority}
-        localAuthorityData={localAuthorityData}
-      />
       {layout === 'desktop' && (
-        <Map
-          country={country}
-          setCountry={setCountry}
-          countryData={countryData}
-          nhsRegion={nhsRegion}
-          setNhsRegion={setNhsRegion}
-          nhsRegionData={nhsRegionData}
-          localAuthority={localAuthority}
-          setLocalAuthority={setLocalAuthority}
-          localAuthorityData={localAuthorityData}
-        />
+        <>
+          <RegionTable
+            country={country}
+            setCountry={setCountry}
+            countryData={countryData}
+            nhsRegion={nhsRegion}
+            setNhsRegion={setNhsRegion}
+            nhsRegionData={nhsRegionData}
+            localAuthority={localAuthority}
+            setLocalAuthority={setLocalAuthority}
+            localAuthorityData={localAuthorityData}
+          />
+          <Map
+            country={country}
+            setCountry={setCountry}
+            countryData={countryData}
+            nhsRegion={nhsRegion}
+            setNhsRegion={setNhsRegion}
+            nhsRegionData={nhsRegionData}
+            localAuthority={localAuthority}
+            setLocalAuthority={setLocalAuthority}
+            localAuthorityData={localAuthorityData}
+          />
+        </>
       )}
       <LineChart data={overviewData?.K02000001?.dailyTotalConfirmedCases ?? []} header="Total number of cases over time" />
       <BarChart data={overviewData?.K02000001?.dailyConfirmedCases ?? []} header="Number of new cases per day" />
       <LineChart data={overviewData?.K02000001?.dailyTotalDeaths ?? []} header="Total number of deaths over time" />
       <BarChart data={overviewData?.K02000001?.dailyDeaths ?? []} header="Number of new deaths per day" />
-     {layout === 'desktop' && <Disclaimer />}
+      <Disclaimer />
     </Styles.Container>
   );
 };
