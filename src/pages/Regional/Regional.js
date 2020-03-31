@@ -39,28 +39,26 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
         title="Coronavirus (COVID-19) in the UK"
         subtitle={`Last updated ${new Date(overviewData.lastUpdatedAt).toGMTString()}`}
       />
-      {/* <BigNumberBlock data={overviewData?.['United Kingdom']} /> */}
       <BigNumber
         caption="Total number of UK cases"
         number={overviewData?.K02000001?.totalCases?.value ?? 0}
-        percentageChange={5}
-        subtext=""
+      />
+      <BigNumber
+        caption="Number of people who have died in the UK"
+        number={overviewData?.K02000001?.deaths.value ?? 0}
       />
       <BigNumber
         caption="Number of people who have recovered"
-        number={overviewData?.K02000001?.dailyTotalRecovered.slice(-1)[0]?.value ?? 0}
-        percentageChange={0}
-        subtext=""
+        number={overviewData?.K02000001?.recovered.value ?? 0}
       />
       <BigNumber
-        caption="Number of people who have died"
-        number={overviewData?.K02000001?.dailyTotalDeaths.slice(-1)[0]?.value ?? 0}
-        percentageChange={20}
-        subtext=""
+        caption={`Number of UK cases from yesterday (${overviewData?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.date})`}
+        number={overviewData?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.value ?? 0}
       />
-      <CumulativeTotalCases data={overviewData?.K02000001?.dailyTotalConfirmedCases ?? []} />
-      <DailyConfirmedCases data={overviewData?.K02000001?.dailyConfirmedCases ?? []} />
-      <CumulativeDeaths data={overviewData?.K02000001?.dailyTotalDeaths ?? []} />
+      <BigNumber
+        caption={`Number of UK deaths from yesterday (${overviewData?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.date})`}
+        number={overviewData?.K02000001?.dailyDeaths.slice(-1)[0]?.value ?? 0}
+      />
       <RegionTable
         country={country}
         setCountry={setCountry}
