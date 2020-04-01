@@ -25,6 +25,7 @@ const BarChart: ComponentType<Props> = ({ header, data }: Props) => {
             maintainAspectRatio: false,
             scales: {
               xAxes: [{
+                offset: true,
                 type: 'time',
                 time: {
                   displayFormats: {
