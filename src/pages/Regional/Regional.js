@@ -43,11 +43,6 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
         number={overviewData?.K02000001?.deaths.value ?? 0}
       />
       <BigNumber
-        caption="Number of people who have recovered"
-        number={overviewData?.K02000001?.recovered.value ?? 0}
-        asterisk
-      />
-      <BigNumber
         caption={`Number of UK cases from yesterday (${overviewData?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.date})`}
         number={overviewData?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.value ?? 0}
       />
