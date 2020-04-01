@@ -8,20 +8,24 @@ import { scaleSqrt } from 'd3-scale';
 import L from 'leaflet';
 
 const nhsRegionCoordinates = {
-  // London
-  E40000003: [-0.1278, 51.5074],
-  // Midlands
-  E40000008: [-1.4, 52.7],
-  // South east
-  E40000005: [-0.5596, 51.1781],
+  // West midlands
+  E12000005: [-2.20358, 52.556969],
+  // East of england
+  E12000006: [0.504207, 52.24073],
   // North west
-  E40000010: [-2.5945, 53.6221],
-  // North east and yorkshire
-  E40000009: [-1.2, 54],
-  // East
-  E40000007: [0.1927, 52.1911],
+  E12000002: [-2.77239, 54.44944],
+  // East midlands
+  E12000004: [-0.84969, 52.795719],
   // South west
-  E40000006: [-3.9995, 50.7772],
+  E12000009: [-3.63346, 50.811192], 
+  // London
+  E12000007: [-0.30866, 51.492271], 
+  // Yorkshire and the humber
+  E12000003: [-1.28714, 53.93264],
+  // North east
+  E12000001: [-1.72888, 55.297009], 
+  // South east
+  E12000008: [-0.99311, 51.45097], 
 };
 
 const useNhsRegionLayer = (nhsRegionData: NhsRegionData, hash, layerGroup, country, nhsRegion, localAuthority, onClick: Function) => {
@@ -30,7 +34,7 @@ const useNhsRegionLayer = (nhsRegionData: NhsRegionData, hash, layerGroup, count
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get('https://c19pub.azureedge.net/nhsRegion.geojson');
+      const { data } = await axios.get('https://c19pub.azureedge.net/regions.geojson');
       setNhsRegionGeojsonRaw(data);
     })();
   }, []);
@@ -44,7 +48,7 @@ const useNhsRegionLayer = (nhsRegionData: NhsRegionData, hash, layerGroup, count
           ...f,
           properties: {
             ...f.properties,
-            id: f.properties.nhser19cd,
+            id: f.properties.rgn19cd,
           },
       }));
 

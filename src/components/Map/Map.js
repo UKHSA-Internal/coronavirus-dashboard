@@ -25,20 +25,24 @@ const countryCoordinates = {
 };
 
 const nhsRegionCoordinates = {
-  // London
-  E40000003: [51.5074, -0.1278],
-  // Midlands
-  E40000008: [52.7, -1.4],
-  // South east
-  E40000005: [51.1781, -0.5596],
+  // West midlands
+  E12000005: [52.556969, -2.20358],
+  // East of england
+  E12000006: [52.24073, 0.504207],
   // North west
-  E40000010: [53.6221, -2.5945],
-  // North east and yorkshire
-  E40000009: [54, -1.2],
-  // East
-  E40000007: [52.1911, 0.1927],
+  E12000002: [54.44944, -2.77239],
+  // East midlands
+  E12000004: [52.795719, -0.84969],
   // South west
-  E40000006: [50.7772, -3.9995],
+  E12000009: [50.811192, -3.63346], 
+  // London
+  E12000007: [51.492271, -0.30866], 
+  // Yorkshire and the humber
+  E12000003: [53.93264, -1.28714],
+  // North east
+  E12000001: [55.297009, -1.72888], 
+  // South east
+  E12000008: [51.45097, -0.99311], 
 };
 
 const Map: ComponentType<Props> = ({
