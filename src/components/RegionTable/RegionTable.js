@@ -63,16 +63,10 @@ const RegionTable: ComponentType<Props> = ({
     }
   }, [country, nhsRegion, localAuthority]);
 
-  const handleOnLocalAuthorityClick = (r: string) => () => {
-    if (layout === 'desktop') {
-      setLocalAuthority(r);
-      setCountry(null);
-    }
-  };
-
   const handleOnCountryClick = (r: string) => () => {
     if (layout === 'desktop') {
       setCountry(r);
+      setNhsRegion(null);
       setLocalAuthority(null);
     }
   };
@@ -82,6 +76,14 @@ const RegionTable: ComponentType<Props> = ({
       setCountry(null);
       setNhsRegion(r);
       setLocalAuthority(null);
+    }
+  };
+
+  const handleOnLocalAuthorityClick = (r: string) => () => {
+    if (layout === 'desktop') {
+      setCountry(null);
+      setNhsRegion(null);
+      setLocalAuthority(r);
     }
   };
 
