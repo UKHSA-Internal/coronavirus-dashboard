@@ -64,6 +64,10 @@ const Map: ComponentType<Props> = ({
     const initializeMap = () => {
       const map = L.map('map', {
         center: [55, -4],
+        maxBounds: [
+          [45, -6],
+          [65, 2],
+        ],
         zoom: 4.5, 
         layers: [
           // L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
