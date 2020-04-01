@@ -3,6 +3,8 @@
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
+import isIE from 'isIE';
+
 export const Container: ComponentType<*> = (() => {
   return styled.div`
     display: flex;
@@ -10,6 +12,10 @@ export const Container: ComponentType<*> = (() => {
     border-top: 1px solid #b1b4b6;
     padding-top: 20px;
     grid-column: span 2;
+
+    ${isIE() ? `
+      width: 32%;
+    ` : ''}
   `;
 })();
 

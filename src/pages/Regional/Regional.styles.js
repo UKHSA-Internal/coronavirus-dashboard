@@ -2,6 +2,7 @@
 
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
+import isIE from 'isIE';
 
 export const Container: ComponentType<*> = (() => {
   return styled.div`
@@ -16,6 +17,13 @@ export const Container: ComponentType<*> = (() => {
     @media only screen and (max-width: 768px) {
       grid-template-columns: repeat(2, 1fr);
     }
+
+    ${isIE() ? `
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    ` : ''}
   `;
 })();
 

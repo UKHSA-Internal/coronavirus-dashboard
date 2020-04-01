@@ -3,6 +3,8 @@
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
+import isIE from 'isIE';
+
 export const Container: ComponentType<*> = (() => {
   return styled.div`
     display: flex;
@@ -20,6 +22,10 @@ export const Container: ComponentType<*> = (() => {
     @media only screen and (max-width: 768px) {
       grid-column: span 2;
     }
+
+    ${isIE() ? `
+      width: 100%;
+    ` : ''}
   `;
 })();
 

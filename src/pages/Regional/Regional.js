@@ -10,13 +10,14 @@ import PageTitle from 'components/PageTitle';
 import RegionTable from 'components/RegionTable';
 import Map from 'components/Map';
 import Disclaimer from 'components/Disclaimer';
+import isIE from 'isIE';
 
 import type { Props } from './Regional.types';
 import * as Styles from './Regional.styles';
 import LineChart from 'components/LineChart';
 import BarChart from '../../components/BarChart';
 
-const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
+const Regional: ComponentType<Props> = ({}: Props) => {
   const [country, setCountry] = useState(null);
   const [nhsRegion, setNhsRegion] = useState(null);
   const [localAuthority, setLocalAuthority] = useState(null);
@@ -50,6 +51,7 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
         caption={`Number of UK deaths from yesterday (${overviewData?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.date})`}
         number={overviewData?.K02000001?.dailyDeaths.slice(-1)[0]?.value ?? 0}
       />
+      {isIE() && <div style={{ width: '68%' }} />}
       {layout === 'desktop' && (
         <>
           <RegionTable
@@ -85,4 +87,4 @@ const LocalAuthorityal: ComponentType<Props> = ({}: Props) => {
   );
 };
 
-export default LocalAuthorityal;
+export default Regional;
