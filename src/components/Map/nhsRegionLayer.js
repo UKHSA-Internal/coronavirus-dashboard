@@ -30,7 +30,7 @@ const useNhsRegionLayer = (nhsRegionData: NhsRegionData, hash, layerGroup, count
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get('https://opendata.arcgis.com/datasets/42ab857359ae4acabfca44b97c0f99b3_0.geojson');
+      const { data } = await axios.get('https://c19pub.azureedge.net/nhsRegion.geojson');
       setNhsRegionGeojsonRaw(data);
     })();
   }, []);
