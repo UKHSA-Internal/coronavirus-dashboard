@@ -13,6 +13,7 @@
     "node-sass": "^4.13.1",
     "numeral": "^2.0.6",
     "react": "^16.13.0",
+    "react-app-polyfill": "^1.0.6",
     "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.13.0",
     "react-leaflet": "^2.6.3",

@@ -7,6 +7,10 @@ import { initAll } from 'govuk-frontend'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import 'react-app-polyfill/ie9';
+import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
+
 import './index.scss';
 
 const GlobalStyles = createGlobalStyle`
