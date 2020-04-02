@@ -47,7 +47,7 @@ const RegionTable: ComponentType<Props> = ({
         return 'country';
       }
       if (nhsRegion) {
-        return 'nhs-regions';
+        return 'regions';
       }
       if (localAuthority) {
         return 'local-authorities';
@@ -127,12 +127,12 @@ const RegionTable: ComponentType<Props> = ({
             }
           },
           {
-            id: 'nhs-regions',
+            id: 'regions',
             label: 'Regions',
             panel: {
               children: [
                 <Table
-                  head={[{ children: ['NHS region']}, { children: ['Total cases'], format: 'numeric' }]}
+                  head={[{ children: ['Region']}, { children: ['Total cases'], format: 'numeric' }]}
                   rows={nhsRegionKeys.sort(sortFunc(nhsRegionData)).map(r => [
                     { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnNhsRegionClick(r)} active={nhsRegion === r}>{nhsRegionData[r].name.value}</LinkOrText>] },
                     { children: [numeral(nhsRegionData[r].totalCases.value).format('0,0')], format: 'numeric' },

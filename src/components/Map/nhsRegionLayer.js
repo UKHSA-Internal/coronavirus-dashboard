@@ -34,8 +34,8 @@ const useNhsRegionLayer = (nhsRegionData: NhsRegionData, hash, layerGroup, count
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get('https://c19pub.azureedge.net/regions.geojson');
-      // const { data } = await axios.get('https://opendata.arcgis.com/datasets/1b784deec90c46358c7a074aef8d3211_0.geojson');
+      // const { data } = await axios.get('https://c19pub.azureedge.net/regions.geojson');
+      const { data } = await axios.get('https://opendata.arcgis.com/datasets/1b784deec90c46358c7a074aef8d3211_0.geojson');
       setNhsRegionGeojsonRaw(data);
     })();
   }, []);
@@ -94,12 +94,12 @@ const useNhsRegionLayer = (nhsRegionData: NhsRegionData, hash, layerGroup, count
 
       setNhsRegionLayers([circleLayer, boundryLayer]);
 
-      if (layerGroup && hash === '#nhs-regions') {
+      if (layerGroup && hash === '#regions') {
         layerGroup.clearLayers();
         [circleLayer, boundryLayer].map(l => layerGroup.addLayer(l));
       }
     }
-  }, [JSON.stringify(nhsRegionGeojsonRaw), hash, country, nhsRegion, localAuthority]);
+  }, [JSON.stringify(nhsRegionGeojsonRaw), hash, country, nhsRegion, localAuthority, layerGroup]);
 
   return nhsRegionLayers;
 };
