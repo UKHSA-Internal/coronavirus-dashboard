@@ -4,8 +4,8 @@ import React from 'react';
 import type { ComponentType } from 'react';
 import { BackLink } from 'govuk-react-jsx';
 
-import type { Props } from './PageTitle.types.js';
-import * as Styles from './PageTitle.styles.js';
+import type { Props } from './PageTitle.types';
+import * as Styles from './PageTitle.styles';
 
 const PageTitle: ComponentType<Props> = ({ caption, title, subtitle, backUrl }: Props) => {
   return (
