@@ -23,7 +23,7 @@ export const Container: ComponentType<*> = (() => {
 export const Link: ComponentType<*> = (() => {
   const getColor = ({ active }) => active ? '#0B0C0C' : '#1D70B8';
   const getFontWeight = ({ active }) => active ? 'bold' : 400;
-  return styled(L)`
+  return styled.span`
     color: ${getColor};
     font-weight: ${getFontWeight};
     text-decoration: none;
