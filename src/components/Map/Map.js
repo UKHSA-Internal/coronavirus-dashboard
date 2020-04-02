@@ -68,16 +68,12 @@ const Map: ComponentType<Props> = ({
     const initializeMap = () => {
       const map = L.map('map', {
         center: [55, -4],
-        maxBounds: [
-          [45, -6],
-          [65, 2],
-        ],
+        // maxBounds: [
+        //   [45, -6],
+        //   [65, 2],
+        // ],
         zoom: 4.5, 
         layers: [
-          // L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-          //   maxZoom: 20,
-          //   attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-          // }),
           L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
             subdomains: 'abcd',
@@ -129,44 +125,6 @@ const Map: ComponentType<Props> = ({
       setUtlaCoordinates(c);
     })();
   }, []);
-
-  // Setup zoom handler to add/remove layers
-  useEffect(() => {
-    (async () => {
-      if (map) {
-        const handleZoomend = () => {
-          const zoom = map.getZoom();
-          if (zoom >= zoomLayers.country.min && zoom < zoomLayers.country.max && hash !== '#countries') {
-            push(`${pathname}#countries`);
-          }
-          if (zoom >= zoomLayers.nhsRegion.min && zoom < zoomLayers.nhsRegion.max && hash !== '#nhs-regions') {
-            push(`${pathname}#nhs-regions`);
-          }
-          if (zoom >= zoomLayers.localAuthority.min && zoom < zoomLayers.localAuthority.max && hash !== '#local-authorities') {
-            push(`${pathname}#local-authorities`);
-          }
-        };
-        map.on('zoomend', handleZoomend);
-        handleZoomend();
-      }
-    })();
-  }, [map, hash, pathname]);
-
-  // Set zoom when url hash changes
-  useEffect(() => {
-    if (map) {
-      const zoom = map.getZoom();
-      if ((zoom < zoomLayers.country.min || zoom >= zoomLayers.country.max) && hash === '#countries') {
-        map.setZoom(zoomLayers.country.max - 1);
-      }
-      if ((zoom < zoomLayers.nhsRegion.min || zoom >= zoomLayers.nhsRegion.max) && hash === '#nhs-regions') {
-        map.setZoom(zoomLayers.nhsRegion.min);
-      }
-      if ((zoom < zoomLayers.localAuthority.min || zoom >= zoomLayers.localAuthority.max) && hash === '#local-authorities') {
-        map.setZoom(zoomLayers.localAuthority.min);
-      }
-    }
-  }, [hash, map]);
 
   // Fly to area when selected area changes
   useEffect(() => {
