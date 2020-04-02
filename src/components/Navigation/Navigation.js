@@ -17,7 +17,7 @@ const Navigation: ComponentType<Props> = ({ location: { pathname }}: Props) => {
       <Styles.Container className="govuk-header__container--full-width">
         <Styles.NavList>
           <Styles.NavListItem active={!pathname.includes('about')}>
-            <Styles.Link className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/" dataTopnav="Overview">Need a title</Styles.Link>
+            <Styles.Link className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/" dataTopnav="Data dashboard">Data dashboard</Styles.Link>
           </Styles.NavListItem>
           <Styles.NavListItem active={pathname.includes('about')}>
             <Styles.Link className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/about" dataTopnav="Regional">About the data</Styles.Link>
@@ -30,7 +30,7 @@ const Navigation: ComponentType<Props> = ({ location: { pathname }}: Props) => {
     <Styles.Container className="govuk-header__container--full-width">
       <Styles.NavList>
         <Styles.NavListItem active={!pathname.includes('about') && !pathname.includes('region')}>
-          <Styles.Link className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/" dataTopnav="Overview">Need a title</Styles.Link>
+          <Styles.Link className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/" dataTopnav="Data dashboard">Data dashboard</Styles.Link>
         </Styles.NavListItem>
         <Styles.NavListItem active={pathname.includes('region')}>
           <Styles.Link className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/region" dataTopnav="Regional">Regional</Styles.Link>
