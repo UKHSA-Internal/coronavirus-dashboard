@@ -61,7 +61,6 @@ const Map: ComponentType<Props> = ({
   const [map, setMap] = useState(null);
   const [utlaCoordinates, setUtlaCoordinates] = useState({});
   const [layerGroup, setLayerGroup] = useState(null);
-  // const layerGroup = useRef(null);
 
   // Initialise map
   useEffect(() => {
@@ -84,7 +83,6 @@ const Map: ComponentType<Props> = ({
 
       map.zoomControl.setPosition('bottomright');
 
-      // layerGroup.current = L.layerGroup().addTo(map);
       setLayerGroup(L.layerGroup().addTo(map));
 
       setMap(map);
