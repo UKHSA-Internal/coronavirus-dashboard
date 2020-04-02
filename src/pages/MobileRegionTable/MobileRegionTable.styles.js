@@ -11,7 +11,7 @@ export const Container: ComponentType<*> = (() => {
     grid-row-gap: 60px;
     margin-top: 45px;
     margin-bottom: 40px;
-    max-width: 1130px;
+    max-width: 1045px;
 
     @media only screen and (max-width: 768px) {
       grid-template-columns: repeat(2, 1fr);
