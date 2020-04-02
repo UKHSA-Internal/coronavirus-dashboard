@@ -17,6 +17,19 @@ import * as Styles from './Regional.styles';
 import LineChart from 'components/LineChart';
 import BarChart from '../../components/BarChart';
 
+const formatAMPM = date => {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+};
+const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const formatDate = (d: Date) => `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()} ${formatAMPM(d)}`;
+
 const Regional: ComponentType<Props> = ({}: Props) => {
   const [country, setCountry] = useState(null);
   const [nhsRegion, setNhsRegion] = useState(null);
@@ -33,7 +46,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
       <PageTitle
         caption="Regional view"
         title="Coronavirus (COVID-19) in the UK"
-        subtitle={`Last updated ${new Date(overviewData.lastUpdatedAt).toGMTString()}`}
+        subtitle={`Last updated ${formatDate(new Date(overviewData.lastUpdatedAt))}`}
       />
       <BigNumber
         caption="Total number of UK cases"
