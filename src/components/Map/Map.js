@@ -94,7 +94,11 @@ const Map: ComponentType<Props> = ({
   }, []);
 
   // Setup layers, updating layers is handled within the hooks
-  useCountryLayer(countryData, hash, layerGroup, country, nhsRegion, localAuthority);
+  useCountryLayer(countryData, hash, layerGroup, country, nhsRegion, localAuthority, id => {
+    setCountry(id);
+    setNhsRegion(null);
+    setLocalAuthority(null);
+  });
   useNhsRegionLayer(nhsRegionData, hash, layerGroup, country, nhsRegion, localAuthority, id => {
     setCountry(null);
     setNhsRegion(id);
