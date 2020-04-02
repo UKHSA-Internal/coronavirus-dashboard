@@ -57,6 +57,7 @@ const useLoadData = () => {
             ...acc,
             [cur]: {
               ...data[cur],
+              name: 'Hackney and City of London',
               totalCases: { value: data[cur].totalCases.value + (data?.['E09000001']?.totalCases?.value ?? 0) },
               // TODO dailyConfirmedCases
               // TODO dailyTotalConfirmedCases
@@ -70,6 +71,7 @@ const useLoadData = () => {
             ...acc,
             [cur]: {
               ...data[cur],
+              name: 'Cornwall and Isles of Scilly',
               totalCases: { value: data[cur].totalCases.value + (data?.['E06000053']?.totalCases?.value ?? 0) },
               // TODO dailyConfirmedCases
               // TODO dailyTotalConfirmedCases
