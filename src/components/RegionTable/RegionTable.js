@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 import { Tabs, Table } from 'govuk-react-jsx';
+import numeral from 'numeral';
 
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
@@ -118,8 +119,8 @@ const RegionTable: ComponentType<Props> = ({
                   head={[{ children: ['Country']}, { children: ['Total cases'], format: 'numeric' }, { children: ['Deaths'], format: 'numeric' }]}
                   rows={countryKeys.sort(sortFunc(countryData)).map(r => [
                     { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnCountryClick(r)} active={country === r}>{countryData[r].name.value}</LinkOrText>] },
-                    { children: [countryData[r].totalCases.value], format: 'numeric' },
-                    { children: [countryData[r].deaths.value], format: 'numeric' },
+                    { children: [numeral(countryData[r].totalCases.value).format('0,0')], format: 'numeric' },
+                    { children: [numeral(countryData[r].deaths.value).format('0,0')], format: 'numeric' },
                   ])}
                 />
               ],
@@ -127,14 +128,14 @@ const RegionTable: ComponentType<Props> = ({
           },
           {
             id: 'nhs-regions',
-            label: 'NHS regions',
+            label: 'Regions',
             panel: {
               children: [
                 <Table
                   head={[{ children: ['NHS region']}, { children: ['Total cases'], format: 'numeric' }]}
                   rows={nhsRegionKeys.sort(sortFunc(nhsRegionData)).map(r => [
                     { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnNhsRegionClick(r)} active={nhsRegion === r}>{nhsRegionData[r].name.value}</LinkOrText>] },
-                    { children: [nhsRegionData[r].totalCases.value], format: 'numeric' },
+                    { children: [numeral(nhsRegionData[r].totalCases.value).format('0,0')], format: 'numeric' },
                   ])}
                 />
               ],
@@ -149,7 +150,7 @@ const RegionTable: ComponentType<Props> = ({
                   head={[{ children: ['UTLA'] }, { children: ['Total cases'], format: 'numeric' }]}
                   rows={localAuthorityKeys.sort(sortFunc(localAuthorityData)).map(r => [
                     { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnLocalAuthorityClick(r)} active={localAuthority === r}>{localAuthorityData[r].name.value}</LinkOrText>] },
-                    { children: [localAuthorityData[r].totalCases.value], format: 'numeric' },
+                    { children: [numeral(localAuthorityData[r].totalCases.value).format('0,0')], format: 'numeric' },
                   ])}
                 />
               ],
