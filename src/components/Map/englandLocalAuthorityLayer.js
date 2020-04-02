@@ -65,7 +65,7 @@ const useEnglandLocalAuthorityLayer = (localAuthorityData: LocalAuthorityData, h
           pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
             radius: feature.properties.count === 0 ? 0 : radiusScale(feature.properties.count),
             fillColor: "#1D70B8",
-            fillOpacity: 0.6,
+            fillOpacity: feature.properties.count === 0 ? 0 : 0.6,
             weight: 0,
           }),
         },
