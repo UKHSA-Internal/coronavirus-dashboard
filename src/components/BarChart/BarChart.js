@@ -37,7 +37,7 @@ const BarChart: ComponentType<Props> = ({ header, data }: Props) => {
                 },
                 ticks: {
                   autoSkip: true,
-                  maxTicksLimit: 20
+                  maxTicksLimit: 15,
                 },
               }],
               yAxes: [{
