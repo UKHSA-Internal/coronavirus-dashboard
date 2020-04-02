@@ -49,19 +49,19 @@ const Regional: ComponentType<Props> = ({}: Props) => {
         subtitle={`Last updated ${formatDate(new Date(overviewData.lastUpdatedAt))}`}
       />
       <BigNumber
-        caption="Total number of UK cases"
+        caption="Total number of lab-confirmed UK cases"
         number={overviewData?.K02000001?.totalCases?.value ?? 0}
       />
       <BigNumber
-        caption="Number of people who have died in the UK"
+        caption="Total number of COVID-19 associated UK deaths in hospital"
         number={overviewData?.K02000001?.deaths.value ?? 0}
       />
       <BigNumber
-        caption={`Number of UK cases from yesterday (${overviewData?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.date})`}
+        caption="Latest daily number of lab-confirmed UK cases"
         number={overviewData?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.value ?? 0}
       />
       <BigNumber
-        caption={`Number of UK deaths from yesterday (${overviewData?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.date})`}
+        caption="Latest daily number of COVID-19 associated UK deaths in hospital"
         number={overviewData?.K02000001?.dailyDeaths.slice(-1)[0]?.value ?? 0}
       />
       {isIE() && <div style={{ width: '68%' }} />}
