@@ -49,7 +49,7 @@ const useNhsRegionLayer = (nhsRegionData: NhsRegionData, hash, layerGroup, count
           ...f,
           properties: {
             ...f.properties,
-            id: f.properties.rgn19cd,
+            id: f.properties.rgn18cd,
           },
       }));
 
