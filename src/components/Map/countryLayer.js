@@ -83,7 +83,7 @@ const useCountryLayer = (countryData: CountryData, hash, layerGroup, country, nh
       );
       setCountryLayers([circleLayer, boundryLayer]);
 
-      if (layerGroup && hash === '#countries') {
+      if (layerGroup && (hash === '' || hash === '#countries')) {
         layerGroup.clearLayers();
         [circleLayer, boundryLayer].map(l => layerGroup.addLayer(l));
       }
