@@ -88,13 +88,13 @@ const RegionTable: ComponentType<Props> = ({
     }
   };
 
-  const { lastUpdatedAt: _, ...countries } = countryData;
+  const { lastUpdatedAt: _, disclaimer: __, ...countries } = countryData;
   const countryKeys = Object.keys(countries);
 
-  const { lastUpdatedAt: __, ...nhsRegions } = nhsRegionData;
+  const { lastUpdatedAt: ___, disclaimer: ____, ...nhsRegions } = nhsRegionData;
   const nhsRegionKeys = Object.keys(nhsRegions);
 
-  const { lastUpdatedAt: ___, ...localAuthories } = localAuthorityData;
+  const { lastUpdatedAt: _____, disclaimer: ______, ...localAuthories } = localAuthorityData;
   const localAuthorityKeys = Object.keys(localAuthories);
 
   const sortFunc = d => (a, b) => {
