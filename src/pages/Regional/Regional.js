@@ -110,7 +110,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
           <AltChartTable data={overviewData?.K02000001?.dailyDeaths ?? []} header="Daily number of COVID-19 associated UK deaths in hospital" valueName="Daily deaths" />
         </>
       )}
-      <Disclaimer />
+      <Disclaimer text={overviewData?.disclaimer} />
     </Styles.Container>
   );
 };
