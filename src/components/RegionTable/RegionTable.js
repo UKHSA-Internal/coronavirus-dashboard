@@ -14,7 +14,7 @@ import * as Styles from './RegionTable.styles';
 const LinkOrText = ({ children, ...props }) => {
   const layout = useResponsiveLayout(768);
   if (layout === 'desktop') {
-    return <Styles.Link {...props} className="govuk-link">{children}</Styles.Link>
+    return <Styles.Link {...props} role="button" tabIndex={0} href={null} className="govuk-link">{children}</Styles.Link>
   }
   return <span {...props}>{children}</span>;
 };
@@ -64,29 +64,30 @@ const RegionTable: ComponentType<Props> = ({
     }
   }, [country, nhsRegion, localAuthority]);
 
-  const handleOnCountryClick = (r: string) => () => {
-    if (layout === 'desktop') {
-      setCountry(r);
-      setNhsRegion(null);
-      setLocalAuthority(null);
+  const handleKeyDown = (type: 'countries' | 'regions' | 'utlas') => (r: string) => (event: SyntheticKeyboardEvent<*>) => {
+    console.log(event.key)
+    if (layout === 'desktop' && event.key === 'Enter') {
+      setCountry(type === 'countries' ? r : null);
+      setNhsRegion(type === 'regions' ? r : null);
+      setLocalAuthority(type === 'utlas' ? r : null);
     }
-  };
+  }
 
-  const handleOnNhsRegionClick = (r: string) => () => {
-    if (layout === 'desktop') {
-      setCountry(null);
-      setNhsRegion(r);
-      setLocalAuthority(null);
-    }
-  };
+  const handleOnCountryKeyDown = handleKeyDown('countries');
+  const handleOnNhsRegionKeyDown = handleKeyDown('regions');
+  const handleOnLocalAuthorityKeyDown = handleKeyDown('utlas');
 
-  const handleOnLocalAuthorityClick = (r: string) => () => {
+  const handleOnClick = (type: 'countries' | 'regions' | 'utlas') => (r: string) => () => {
     if (layout === 'desktop') {
-      setCountry(null);
-      setNhsRegion(null);
-      setLocalAuthority(r);
+      setCountry(type === 'countries' ? r : null);
+      setNhsRegion(type === 'regions' ? r : null);
+      setLocalAuthority(type === 'utlas' ? r : null);
     }
-  };
+  }
+
+  const handleOnCountryClick = handleOnClick('countries');
+  const handleOnNhsRegionClick = handleOnClick('regions');
+  const handleOnLocalAuthorityClick = handleOnClick('utlas');
 
   const { lastUpdatedAt: _, disclaimer: __, ...countries } = countryData;
   const countryKeys = Object.keys(countries);
@@ -118,7 +119,7 @@ const RegionTable: ComponentType<Props> = ({
                 <Table
                   head={[{ children: ['Country']}, { children: ['Total cases'], format: 'numeric' }, { children: ['Deaths'], format: 'numeric' }]}
                   rows={countryKeys.sort(sortFunc(countryData)).map(r => [
-                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnCountryClick(r)} active={country === r}>{countryData[r].name.value}</LinkOrText>] },
+                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnCountryClick(r)} onKeyPress={handleOnCountryKeyDown} active={country === r}>{countryData[r].name.value}</LinkOrText>] },
                     { children: [numeral(countryData[r].totalCases.value).format('0,0')], format: 'numeric' },
                     { children: [numeral(countryData[r].deaths.value).format('0,0')], format: 'numeric' },
                   ])}
@@ -134,7 +135,7 @@ const RegionTable: ComponentType<Props> = ({
                 <Table
                   head={[{ children: ['Region']}, { children: ['Total cases'], format: 'numeric' }]}
                   rows={nhsRegionKeys.sort(sortFunc(nhsRegionData)).map(r => [
-                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnNhsRegionClick(r)} active={nhsRegion === r}>{nhsRegionData[r].name.value}</LinkOrText>] },
+                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnNhsRegionClick(r)} onKeyPress={handleOnNhsRegionKeyDown} active={nhsRegion === r}>{nhsRegionData[r].name.value}</LinkOrText>] },
                     { children: [numeral(nhsRegionData[r].totalCases.value).format('0,0')], format: 'numeric' },
                   ])}
                 />
@@ -149,7 +150,7 @@ const RegionTable: ComponentType<Props> = ({
                 <Table
                   head={[{ children: ['UTLA'] }, { children: ['Total cases'], format: 'numeric' }]}
                   rows={localAuthorityKeys.sort(sortFunc(localAuthorityData)).map(r => [
-                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnLocalAuthorityClick(r)} active={localAuthority === r}>{localAuthorityData[r].name.value}</LinkOrText>] },
+                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnLocalAuthorityClick(r)} onKeyPress={handleOnLocalAuthorityKeyDown} active={localAuthority === r}>{localAuthorityData[r].name.value}</LinkOrText>] },
                     { children: [numeral(localAuthorityData[r].totalCases.value).format('0,0')], format: 'numeric' },
                   ])}
                 />

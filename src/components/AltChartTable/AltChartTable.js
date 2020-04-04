@@ -17,6 +17,7 @@ const AltChartTable: ComponentType<Props> = ({ header, valueName, data }: Props)
       <span className="govuk-heading-s">{header}</span>
       <Styles.Table>
         <Table
+          tabIndex={0}
           // caption={header}
           // captionClassName="govuk-heading-m"
           head={[{ children: ['Date']}, { children: [valueName], format: 'numeric' }]}
