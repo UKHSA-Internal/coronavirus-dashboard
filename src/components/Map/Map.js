@@ -67,10 +67,6 @@ const Map: ComponentType<Props> = ({
     const initializeMap = () => {
       const map = L.map('map', {
         center: [55, -4],
-        // maxBounds: [
-        //   [45, -6],
-        //   [65, 2],
-        // ],
         zoom: 4.5, 
         layers: [
           L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -104,7 +100,7 @@ const Map: ComponentType<Props> = ({
     setNhsRegion(id);
     setLocalAuthority(null);
   });
-  useEnglandLocalAuthorityLayer(localAuthorityData, hash, layerGroup, country, nhsRegion, localAuthority, id => {
+  useEnglandLocalAuthorityLayer(localAuthorityData, utlaCoordinates, hash, layerGroup, country, nhsRegion, localAuthority, id => {
     setCountry(null);
     setNhsRegion(null);
     setLocalAuthority(id);

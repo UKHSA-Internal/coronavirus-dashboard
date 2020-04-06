@@ -7,20 +7,21 @@ import { max } from 'd3-array';
 import { scaleSqrt } from 'd3-scale';
 import L from 'leaflet';
 
-const useEnglandLocalAuthorityLayer = (localAuthorityData: LocalAuthorityData, hash, layerGroup, country, nhsRegion, localAuthority, onClick: Function) => {
+const useEnglandLocalAuthorityLayer = (localAuthorityData: UtlaData, utlaCoordinates, hash, layerGroup, country, nhsRegion, localAuthority, onClick: Function) => {
   const [englandGeojsonRaw, setEnglandGeojsonRaw] = useState(null);
   const [utlaLayers, setUtlaLayers] = useState(null);
 
   useEffect(() => {
     (async () => {
       // const { data } = await axios.get('https://c19pub.azureedge.net/englandUTLA.geojson');
-      const { data } = await axios.get('https://opendata.arcgis.com/datasets/a917c123e49d436f90660ef6a9ceb5cc_0.geojson');
+      // const { data } = await axios.get('https://opendata.arcgis.com/datasets/a917c123e49d436f90660ef6a9ceb5cc_0.geojson');
+      const { data } = await axios.get('https://c19pub.azureedge.net/CountyUAs_cases.geojson?cachebust=123456');
       setEnglandGeojsonRaw(data);
     })();
   }, []);
 
   useEffect(() => {
-    if (englandGeojsonRaw) {
+    if (englandGeojsonRaw && utlaCoordinates) {
       const localAuthorityMax = max(Object.keys(localAuthorityData), d => localAuthorityData?.[d]?.totalCases?.value ?? 0);
       const radiusScale = scaleSqrt().range([5, 25]).domain([1, localAuthorityMax]);
 
@@ -28,7 +29,8 @@ const useEnglandLocalAuthorityLayer = (localAuthorityData: LocalAuthorityData, h
           ...f,
           properties: {
             ...f.properties,
-            id: f.properties.ctyua19cd,
+            // id: f.properties.ctyua19cd,
+            id: f.properties.GSS_CD,
           },
       }));
 
@@ -50,15 +52,14 @@ const useEnglandLocalAuthorityLayer = (localAuthorityData: LocalAuthorityData, h
       });
 
       const circleLayer = L.geoJSON(
-        englandGeojson.map(la => ({
+        Object.keys(utlaCoordinates).map(la => ({
           type: 'Feature',
           properties: {
-            name: la.properties.ctyua19nm,
-            count: localAuthorityData?.[la.properties.ctyua19cd]?.totalCases?.value ?? 0, 
+            count: localAuthorityData?.[la]?.totalCases?.value ?? 0, 
           },
           geometry: {
             type: 'Point',
-            coordinates: [la.properties.long, la.properties.lat],
+            coordinates: [utlaCoordinates[la].long, utlaCoordinates[la].lat],
           },
         })),
         {
@@ -74,11 +75,12 @@ const useEnglandLocalAuthorityLayer = (localAuthorityData: LocalAuthorityData, h
       setUtlaLayers([circleLayer, boundryLayer]);
 
       if (layerGroup && hash === '#local-authorities') {
+        console.log('HRE', hash)
         layerGroup.clearLayers();
         [circleLayer, boundryLayer].map(l => layerGroup.addLayer(l));
       }
     }
-  }, [JSON.stringify(englandGeojsonRaw), hash, country, nhsRegion, localAuthority]);
+  }, [JSON.stringify(englandGeojsonRaw), JSON.stringify(utlaCoordinates), hash, country, nhsRegion, localAuthority]);
 
   return utlaLayers;
 };
