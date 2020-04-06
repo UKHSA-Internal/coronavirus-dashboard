@@ -24,9 +24,9 @@ const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep
 const formatDate = (d: Date) => `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()} ${formatAMPM(d)}`;
 
 const MobileRegionTable: ComponentType<Props> = ({}: Props) => {
-  const [overviewData, countryData, nhsRegionData, localAuthorityData] = useLoadData();
+  const data = useLoadData();
 
-  if (!overviewData || !countryData || !nhsRegionData || !localAuthorityData) {
+  if (!data) {
     return null;
   }
 
@@ -35,12 +35,12 @@ const MobileRegionTable: ComponentType<Props> = ({}: Props) => {
       <PageTitle
         caption="Regional view"
         title="Coronavirus (COVID-19) in the UK"
-        subtitle={`Last updated ${formatDate(new Date(overviewData.lastUpdatedAt))}`}
+        subtitle={`Last updated ${formatDate(new Date(data?.lastUpdatedAt))}`}
       />
       <RegionTable
-        countryData={countryData}
-        nhsRegionData={nhsRegionData}
-        localAuthorityData={localAuthorityData}
+        countryData={data?.countries}
+        nhsRegionData={data?.regions}
+        localAuthorityData={data?.utlas}
       />
     </Styles.Container>
   );
