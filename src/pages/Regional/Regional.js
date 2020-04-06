@@ -96,10 +96,10 @@ const Regional: ComponentType<Props> = ({}: Props) => {
       <ViewAs view={view} setView={setView} />
       {view === 'chart' && (
         <>
-          <LineChart data={data?.overview?.K02000001?.dailyTotalConfirmedCases ?? []} header="Total number of lab-confirmed UK cases" />
-          <BarChart data={data?.overview?.K02000001?.dailyConfirmedCases ?? []} header="Daily number of lab-confirmed cases" />
-          <LineChart data={data?.overview?.K02000001?.dailyTotalDeaths ?? []} header="Total number of COVID-19 associated UK deaths in hospital" />
-          <BarChart data={data?.overview?.K02000001?.dailyDeaths ?? []} header="Daily number of COVID-19 associated UK deaths in hospital" />
+          <LineChart data={data ?.overview ?.K02000001 ?.dailyTotalConfirmedCases ?? []} header="Total number of lab-confirmed UK cases" tooltipText="cases" />
+          <BarChart data={data ?.overview ?.K02000001 ?.dailyConfirmedCases ?? []} header="Daily number of lab-confirmed cases" tooltipText="cases" />
+          <LineChart data={data ?.overview ?.K02000001 ?.dailyTotalDeaths ?? []} header="Total number of COVID-19 associated UK deaths in hospital" tooltipText="deaths" />
+          <BarChart data={data ?.overview ?.K02000001 ?.dailyDeaths ?? []} header="Daily number of COVID-19 associated UK deaths in hospital" tooltipText="deaths" />
         </>
       )}
       {view === 'table' && (
