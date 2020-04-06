@@ -26,9 +26,9 @@ const RegionTable: ComponentType<Props> = ({
   region,
   setRegion,
   regionData,
-  localAuthority,
-  setLocalAuthority,
-  localAuthorityData,
+  utla,
+  setUtla,
+  utlaData,
   history: { push },
   location: { hash },
 }: Props) => {
@@ -49,13 +49,13 @@ const RegionTable: ComponentType<Props> = ({
       if (region) {
         return 'regions';
       }
-      if (localAuthority) {
+      if (utla) {
         return 'local-authorities';
       }
       return '';
     })();
 
-    const itemId = `table-link-${country || region || localAuthority || ''}`;
+    const itemId = `table-link-${country || region || utla || ''}`;
 
     const container = document.getElementById(containerId);
     const item = document.getElementById(itemId);
@@ -63,36 +63,36 @@ const RegionTable: ComponentType<Props> = ({
       // $FlowFixMe
       container.scrollTop = item.offsetParent.offsetTop - 10;
     }
-  }, [country, region, localAuthority]);
+  }, [country, region, utla]);
 
   const handleKeyDown = (type: 'countries' | 'regions' | 'utlas') => (r: string) => (event: SyntheticKeyboardEvent<*>) => {
     console.log(event.key)
     if (layout === 'desktop' && event.key === 'Enter') {
       setCountry(type === 'countries' ? r : null);
       setRegion(type === 'regions' ? r : null);
-      setLocalAuthority(type === 'utlas' ? r : null);
+      setUtla(type === 'utlas' ? r : null);
     }
   }
 
   const handleOnCountryKeyDown = handleKeyDown('countries');
   const handleOnRegionKeyDown = handleKeyDown('regions');
-  const handleOnLocalAuthorityKeyDown = handleKeyDown('utlas');
+  const handleOnUtlaKeyDown = handleKeyDown('utlas');
 
   const handleOnClick = (type: 'countries' | 'regions' | 'utlas') => (r: string) => () => {
     if (layout === 'desktop') {
       setCountry(type === 'countries' ? r : null);
       setRegion(type === 'regions' ? r : null);
-      setLocalAuthority(type === 'utlas' ? r : null);
+      setUtla(type === 'utlas' ? r : null);
     }
   }
 
   const handleOnCountryClick = handleOnClick('countries');
   const handleOnRegionClick = handleOnClick('regions');
-  const handleOnLocalAuthorityClick = handleOnClick('utlas');
+  const handleOnUtlaClick = handleOnClick('utlas');
 
   const countryKeys = Object.keys(countryData);
   const regionKeys = Object.keys(regionData);
-  const localAuthorityKeys = Object.keys(localAuthorityData);
+  const utlaKeys = Object.keys(utlaData);
 
   const sortFunc = (d: CountryData | RegionData | UtlaData) => (a, b) => {
     const aValue = d?.[a]?.name?.value;
@@ -145,9 +145,9 @@ const RegionTable: ComponentType<Props> = ({
               children: [
                 <Table
                   head={[{ children: ['UTLA'] }, { children: ['Total cases'], format: 'numeric' }]}
-                  rows={localAuthorityKeys.sort(sortFunc(localAuthorityData)).map(r => [
-                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnLocalAuthorityClick(r)} onKeyPress={handleOnLocalAuthorityKeyDown} active={localAuthority === r}>{localAuthorityData[r].name.value}</LinkOrText>] },
-                    { children: [numeral(localAuthorityData[r].totalCases.value).format('0,0')], format: 'numeric' },
+                  rows={utlaKeys.sort(sortFunc(utlaData)).map(r => [
+                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnUtlaClick(r)} onKeyPress={handleOnUtlaKeyDown} active={utla === r}>{utlaData[r].name.value}</LinkOrText>] },
+                    { children: [numeral(utlaData[r].totalCases.value).format('0,0')], format: 'numeric' },
                   ])}
                 />
               ],

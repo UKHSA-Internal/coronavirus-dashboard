@@ -6,7 +6,7 @@ import L from 'leaflet';
 
 import useCountryLayer from './countryLayer';
 import useRegionLayer from './regionLayer';
-import useEnglandLocalAuthorityLayer from './englandLocalAuthorityLayer';
+import useUtlaLayer from './utlaLayer';
 import zoomLayers from './zoomLayers';
 
 import * as Styles from './Map.styles';
@@ -52,9 +52,9 @@ const Map: ComponentType<Props> = ({
   region,
   setRegion,
   regionData,
-  localAuthority,
-  setLocalAuthority,
-  localAuthorityData,
+  utla,
+  setUtla,
+  utlaData,
   history: { push },
   location: { pathname, hash },
 }: Props) => {
@@ -90,20 +90,20 @@ const Map: ComponentType<Props> = ({
   }, []);
 
   // Setup layers, updating layers is handled within the hooks
-  useCountryLayer(countryData, hash, layerGroup, country, region, localAuthority, id => {
+  useCountryLayer(countryData, hash, layerGroup, country, region, utla, id => {
     setCountry(id);
     setRegion(null);
-    setLocalAuthority(null);
+    setUtla(null);
   });
-  useRegionLayer(regionData, hash, layerGroup, country, region, localAuthority, id => {
+  useRegionLayer(regionData, hash, layerGroup, country, region, utla, id => {
     setCountry(null);
     setRegion(id);
-    setLocalAuthority(null);
+    setUtla(null);
   });
-  useEnglandLocalAuthorityLayer(localAuthorityData, hash, layerGroup, country, region, localAuthority, id => {
+  useUtlaLayer(utlaData, hash, layerGroup, country, region, utla, id => {
     setCountry(null);
     setRegion(null);
-    setLocalAuthority(id);
+    setUtla(id);
   });
 
   // Load utla coordinates
@@ -133,14 +133,14 @@ const Map: ComponentType<Props> = ({
       if (region) {
         map.flyTo(regionCoordinates[region], zoomLayers.region.min, { animate: false });
       }
-      if (localAuthority) {
-        const la = utlaCoordinates[localAuthority];
+      if (utla) {
+        const la = utlaCoordinates[utla];
         if (la) {
-          map.flyTo([la.lat, la.long], zoomLayers.localAuthority.min + 2, { animate: false });
+          map.flyTo([la.lat, la.long], zoomLayers.utla.min + 2, { animate: false });
         }
       }
     }
-  }, [country, region, localAuthority]);
+  }, [country, region, utla]);
 
   return <Styles.Map id="map" />;
 };

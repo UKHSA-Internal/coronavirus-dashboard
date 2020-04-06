@@ -35,7 +35,7 @@ const formatDate = (d: Date) => `${d.getDate()} ${monthNames[d.getMonth()]} ${d.
 const Regional: ComponentType<Props> = ({}: Props) => {
   const [country, setCountry] = useState(null);
   const [region, setRegion] = useState(null);
-  const [localAuthority, setLocalAuthority] = useState(null);
+  const [utla, setUtla] = useState(null);
   const [view, setView] = useState('chart');
   const data = useLoadData();
   const layout = useResponsiveLayout(768);
@@ -76,9 +76,9 @@ const Regional: ComponentType<Props> = ({}: Props) => {
             region={region}
             setRegion={setRegion}
             regionData={data?.regions}
-            localAuthority={localAuthority}
-            setLocalAuthority={setLocalAuthority}
-            localAuthorityData={data?.utlas}
+            utla={utla}
+            setUtla={setUtla}
+            utlaData={data?.utlas}
           />
           <Map
             country={country}
@@ -87,9 +87,9 @@ const Regional: ComponentType<Props> = ({}: Props) => {
             region={region}
             setRegion={setRegion}
             regionData={data?.regions}
-            localAuthority={localAuthority}
-            setLocalAuthority={setLocalAuthority}
-            localAuthorityData={data?.utlas}
+            utla={utla}
+            setUtla={setUtla}
+            utlaData={data?.utlas}
           />
         </>
       )}

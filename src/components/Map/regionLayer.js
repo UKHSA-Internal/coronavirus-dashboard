@@ -28,7 +28,7 @@ const regionCoordinates = {
   E12000008: [-0.99311, 51.45097], 
 };
 
-const useRegionLayer = (regionData: RegionData, hash, layerGroup, country, region, localAuthority, onClick: Function) => {
+const useRegionLayer = (regionData: RegionData, hash, layerGroup, country, region, utla, onClick: Function) => {
   const [regionGeojsonRaw, setRegionGeojsonRaw] = useState(null);
   const [regionLayers, setRegionLayers] = useState(null);
 
@@ -99,7 +99,7 @@ const useRegionLayer = (regionData: RegionData, hash, layerGroup, country, regio
         [circleLayer, boundryLayer].map(l => layerGroup.addLayer(l));
       }
     }
-  }, [JSON.stringify(regionGeojsonRaw), hash, country, region, localAuthority, layerGroup]);
+  }, [JSON.stringify(regionGeojsonRaw), hash, country, region, utla, layerGroup]);
 
   return regionLayers;
 };

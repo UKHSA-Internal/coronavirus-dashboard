@@ -7,7 +7,7 @@ import { max } from 'd3-array';
 import { scaleSqrt } from 'd3-scale';
 import L from 'leaflet';
 
-const useEnglandLocalAuthorityLayer = (localAuthorityData: UtlaData, hash, layerGroup, country, region, localAuthority, onClick: Function) => {
+const useUtlaLayer = (utlaData: UtlaData, hash, layerGroup, country, region, utla, onClick: Function) => {
   const [englandGeojsonRaw, setEnglandGeojsonRaw] = useState(null);
   const [utlaLayers, setUtlaLayers] = useState(null);
 
@@ -20,8 +20,8 @@ const useEnglandLocalAuthorityLayer = (localAuthorityData: UtlaData, hash, layer
 
   useEffect(() => {
     if (englandGeojsonRaw) {
-      const localAuthorityMax = max(Object.keys(localAuthorityData), d => localAuthorityData?.[d]?.totalCases?.value ?? 0);
-      const radiusScale = scaleSqrt().range([5, 25]).domain([1, localAuthorityMax]);
+      const utlaMax = max(Object.keys(utlaData), d => utlaData?.[d]?.totalCases?.value ?? 0);
+      const radiusScale = scaleSqrt().range([5, 25]).domain([1, utlaMax]);
 
       const englandGeojson = englandGeojsonRaw.features.map(f => ({
           ...f,
@@ -37,7 +37,7 @@ const useEnglandLocalAuthorityLayer = (localAuthorityData: UtlaData, hash, layer
           weight: 1,
           opacity: 0.7,
           fillColor: "#1D70B8",
-          fillOpacity: localAuthority === feature.properties.id ? 0.2 : 0,
+          fillOpacity: utla === feature.properties.id ? 0.2 : 0,
         }),
         onEachFeature: (feature, layer) => {
           layer.on({
@@ -52,7 +52,7 @@ const useEnglandLocalAuthorityLayer = (localAuthorityData: UtlaData, hash, layer
         englandGeojson.map(la => ({
           type: 'Feature',
           properties: {
-            count: localAuthorityData?.[la.properties.ctyua19cd]?.totalCases?.value ?? 0, 
+            count: utlaData?.[la.properties.ctyua19cd]?.totalCases?.value ?? 0, 
           },
           geometry: {
             type: 'Point',
@@ -77,9 +77,9 @@ const useEnglandLocalAuthorityLayer = (localAuthorityData: UtlaData, hash, layer
         [circleLayer, boundryLayer].map(l => layerGroup.addLayer(l));
       }
     }
-  }, [JSON.stringify(englandGeojsonRaw), hash, country, region, localAuthority]);
+  }, [JSON.stringify(englandGeojsonRaw), hash, country, region, utla]);
 
   return utlaLayers;
 };
 
-export default useEnglandLocalAuthorityLayer;
+export default useUtlaLayer;

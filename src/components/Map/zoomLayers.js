@@ -9,7 +9,7 @@ const zoomLayers = {
     min: 6,
     max: 8,
   },
-  localAuthority: {
+  utla: {
     min: 8,
     max: 22, // Default max
   },

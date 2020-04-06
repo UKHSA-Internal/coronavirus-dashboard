@@ -9,9 +9,9 @@ export type Props = {|
   region: string,
   setRegion: (region: string | null) => void,
   regionData: RegionData,
-  localAuthority: string,
-  setLocalAuthority: (utla: string | null) => void,
-  localAuthorityData: UtlaData,
+  utla: string,
+  setUtla: (utla: string | null) => void,
+  utlaData: UtlaData,
   history: { push: Function },
   location: Location,
 |};
