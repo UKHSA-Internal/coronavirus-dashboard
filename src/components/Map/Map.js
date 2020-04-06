@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
 import axios from 'axios';
-import L, { layerGroup } from 'leaflet';
+import L from 'leaflet';
 
 import useCountryLayer from './countryLayer';
 import useNhsRegionLayer from './nhsRegionLayer';
