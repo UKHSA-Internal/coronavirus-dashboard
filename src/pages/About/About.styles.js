@@ -13,9 +13,9 @@ export const Container: ComponentType<*> = (() => {
 })();
 
 export const SectionHeader: ComponentType<*> = (() => {
-  return styled.h3``;
+  return styled.h2``;
 })();
 
 export const Body: ComponentType<*> = (() => {
-  return styled.p``;
+  return styled.h3``;
 })();
