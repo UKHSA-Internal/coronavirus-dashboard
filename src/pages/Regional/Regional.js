@@ -37,10 +37,10 @@ const Regional: ComponentType<Props> = ({}: Props) => {
   const [nhsRegion, setNhsRegion] = useState(null);
   const [localAuthority, setLocalAuthority] = useState(null);
   const [view, setView] = useState('chart');
-  const [overviewData, countryData, nhsRegionData, localAuthorityData] = useLoadData();
+  const data = useLoadData();
   const layout = useResponsiveLayout(768);
 
-  if (!overviewData || !countryData || !nhsRegionData || !localAuthorityData) {
+  if (!data) {
     return null;
   }
 
@@ -48,23 +48,23 @@ const Regional: ComponentType<Props> = ({}: Props) => {
     <Styles.Container className="govuk-width-container">
       <PageTitle
         title="Coronavirus (COVID-19) in the UK"
-        subtitle={`Last updated ${formatDate(new Date(overviewData.lastUpdatedAt))}`}
+        subtitle={`Last updated ${formatDate(new Date(data?.lastUpdatedAt))}`}
       />
       <BigNumber
         caption="Total number of lab-confirmed UK cases"
-        number={overviewData?.K02000001?.totalCases?.value ?? 0}
+        number={data?.overview?.K02000001?.totalCases?.value ?? 0}
       />
       <BigNumber
         caption="Total number of COVID-19 associated UK deaths in hospital"
-        number={overviewData?.K02000001?.deaths.value ?? 0}
+        number={data?.overview?.K02000001?.deaths.value ?? 0}
       />
       <BigNumber
         caption="Latest daily number of lab-confirmed UK cases"
-        number={overviewData?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.value ?? 0}
+        number={data?.overview?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.value ?? 0}
       />
       <BigNumber
         caption="Latest daily number of COVID-19 associated UK deaths in hospital"
-        number={overviewData?.K02000001?.dailyDeaths.slice(-1)[0]?.value ?? 0}
+        number={data?.overview?.K02000001?.dailyDeaths.slice(-1)[0]?.value ?? 0}
       />
       {isIE() && <div style={{ width: '68%' }} />}
       {layout === 'desktop' && (
@@ -72,45 +72,45 @@ const Regional: ComponentType<Props> = ({}: Props) => {
           <RegionTable
             country={country}
             setCountry={setCountry}
-            countryData={countryData}
+            countryData={data?.countries}
             nhsRegion={nhsRegion}
             setNhsRegion={setNhsRegion}
-            nhsRegionData={nhsRegionData}
+            nhsRegionData={data?.regions}
             localAuthority={localAuthority}
             setLocalAuthority={setLocalAuthority}
-            localAuthorityData={localAuthorityData}
+            localAuthorityData={data?.utlas}
           />
           <Map
             country={country}
             setCountry={setCountry}
-            countryData={countryData}
+            countryData={data?.countries}
             nhsRegion={nhsRegion}
             setNhsRegion={setNhsRegion}
-            nhsRegionData={nhsRegionData}
+            nhsRegionData={data?.regions}
             localAuthority={localAuthority}
             setLocalAuthority={setLocalAuthority}
-            localAuthorityData={localAuthorityData}
+            localAuthorityData={data?.utlas}
           />
         </>
       )}
       <ViewAs view={view} setView={setView} />
       {view === 'chart' && (
         <>
-          <LineChart data={overviewData?.K02000001?.dailyTotalConfirmedCases ?? []} header="Total number of lab-confirmed UK cases" />
-          <BarChart data={overviewData?.K02000001?.dailyConfirmedCases ?? []} header="Daily number of lab-confirmed cases" />
-          <LineChart data={overviewData?.K02000001?.dailyTotalDeaths ?? []} header="Total number of COVID-19 associated UK deaths in hospital" />
-          <BarChart data={overviewData?.K02000001?.dailyDeaths ?? []} header="Daily number of COVID-19 associated UK deaths in hospital" />
+          <LineChart data={data?.overview?.K02000001?.dailyTotalConfirmedCases ?? []} header="Total number of lab-confirmed UK cases" />
+          <BarChart data={data?.overview?.K02000001?.dailyConfirmedCases ?? []} header="Daily number of lab-confirmed cases" />
+          <LineChart data={data?.overview?.K02000001?.dailyTotalDeaths ?? []} header="Total number of COVID-19 associated UK deaths in hospital" />
+          <BarChart data={data?.overview?.K02000001?.dailyDeaths ?? []} header="Daily number of COVID-19 associated UK deaths in hospital" />
         </>
       )}
       {view === 'table' && (
         <>
-          <AltChartTable data={overviewData?.K02000001?.dailyTotalConfirmedCases ?? []} header="Total number of lab-confirmed UK cases" valueName="Total cases" />
-          <AltChartTable data={overviewData?.K02000001?.dailyConfirmedCases ?? []} header="Daily number of lab-confirmed cases" valueName="Daily cases" />
-          <AltChartTable data={overviewData?.K02000001?.dailyTotalDeaths ?? []} header="Total number of COVID-19 associated UK deaths in hospital" valueName="Total deaths" />
-          <AltChartTable data={overviewData?.K02000001?.dailyDeaths ?? []} header="Daily number of COVID-19 associated UK deaths in hospital" valueName="Daily deaths" />
+          <AltChartTable data={data?.overview?.K02000001?.dailyTotalConfirmedCases ?? []} header="Total number of lab-confirmed UK cases" valueName="Total cases" />
+          <AltChartTable data={data?.overview?.K02000001?.dailyConfirmedCases ?? []} header="Daily number of lab-confirmed cases" valueName="Daily cases" />
+          <AltChartTable data={data?.overview?.K02000001?.dailyTotalDeaths ?? []} header="Total number of COVID-19 associated UK deaths in hospital" valueName="Total deaths" />
+          <AltChartTable data={data?.overview?.K02000001?.dailyDeaths ?? []} header="Daily number of COVID-19 associated UK deaths in hospital" valueName="Daily deaths" />
         </>
       )}
-      <Disclaimer text={overviewData?.disclaimer} />
+      <Disclaimer text={data?.disclaimer} />
     </Styles.Container>
   );
 };
