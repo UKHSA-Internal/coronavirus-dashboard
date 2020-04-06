@@ -34,7 +34,7 @@ const formatDate = (d: Date) => `${d.getDate()} ${monthNames[d.getMonth()]} ${d.
 
 const Regional: ComponentType<Props> = ({}: Props) => {
   const [country, setCountry] = useState(null);
-  const [nhsRegion, setNhsRegion] = useState(null);
+  const [region, setRegion] = useState(null);
   const [localAuthority, setLocalAuthority] = useState(null);
   const [view, setView] = useState('chart');
   const data = useLoadData();
@@ -73,9 +73,9 @@ const Regional: ComponentType<Props> = ({}: Props) => {
             country={country}
             setCountry={setCountry}
             countryData={data?.countries}
-            nhsRegion={nhsRegion}
-            setNhsRegion={setNhsRegion}
-            nhsRegionData={data?.regions}
+            region={region}
+            setRegion={setRegion}
+            regionData={data?.regions}
             localAuthority={localAuthority}
             setLocalAuthority={setLocalAuthority}
             localAuthorityData={data?.utlas}
@@ -84,9 +84,9 @@ const Regional: ComponentType<Props> = ({}: Props) => {
             country={country}
             setCountry={setCountry}
             countryData={data?.countries}
-            nhsRegion={nhsRegion}
-            setNhsRegion={setNhsRegion}
-            nhsRegionData={data?.regions}
+            region={region}
+            setRegion={setRegion}
+            regionData={data?.regions}
             localAuthority={localAuthority}
             setLocalAuthority={setLocalAuthority}
             localAuthorityData={data?.utlas}

@@ -5,7 +5,7 @@ import axios from 'axios';
 import L from 'leaflet';
 
 import useCountryLayer from './countryLayer';
-import useNhsRegionLayer from './nhsRegionLayer';
+import useRegionLayer from './regionLayer';
 import useEnglandLocalAuthorityLayer from './englandLocalAuthorityLayer';
 import zoomLayers from './zoomLayers';
 
@@ -24,7 +24,7 @@ const countryCoordinates = {
   N92000002: [54.7877, -6.4923],
 };
 
-const nhsRegionCoordinates = {
+const regionCoordinates = {
   // West midlands
   E12000005: [52.556969, -2.20358],
   // East of england
@@ -49,9 +49,9 @@ const Map: ComponentType<Props> = ({
   country,
   setCountry,
   countryData,
-  nhsRegion,
-  setNhsRegion,
-  nhsRegionData,
+  region,
+  setRegion,
+  regionData,
   localAuthority,
   setLocalAuthority,
   localAuthorityData,
@@ -90,19 +90,19 @@ const Map: ComponentType<Props> = ({
   }, []);
 
   // Setup layers, updating layers is handled within the hooks
-  useCountryLayer(countryData, hash, layerGroup, country, nhsRegion, localAuthority, id => {
+  useCountryLayer(countryData, hash, layerGroup, country, region, localAuthority, id => {
     setCountry(id);
-    setNhsRegion(null);
+    setRegion(null);
     setLocalAuthority(null);
   });
-  useNhsRegionLayer(nhsRegionData, hash, layerGroup, country, nhsRegion, localAuthority, id => {
+  useRegionLayer(regionData, hash, layerGroup, country, region, localAuthority, id => {
     setCountry(null);
-    setNhsRegion(id);
+    setRegion(id);
     setLocalAuthority(null);
   });
-  useEnglandLocalAuthorityLayer(localAuthorityData, utlaCoordinates, hash, layerGroup, country, nhsRegion, localAuthority, id => {
+  useEnglandLocalAuthorityLayer(localAuthorityData, hash, layerGroup, country, region, localAuthority, id => {
     setCountry(null);
-    setNhsRegion(null);
+    setRegion(null);
     setLocalAuthority(id);
   });
 
@@ -130,8 +130,8 @@ const Map: ComponentType<Props> = ({
       if (country) {
         map.flyTo(countryCoordinates[country], zoomLayers.country.max - 1, { animate: false });
       }
-      if (nhsRegion) {
-        map.flyTo(nhsRegionCoordinates[nhsRegion], zoomLayers.nhsRegion.min, { animate: false });
+      if (region) {
+        map.flyTo(regionCoordinates[region], zoomLayers.region.min, { animate: false });
       }
       if (localAuthority) {
         const la = utlaCoordinates[localAuthority];
@@ -140,7 +140,7 @@ const Map: ComponentType<Props> = ({
         }
       }
     }
-  }, [country, nhsRegion, localAuthority]);
+  }, [country, region, localAuthority]);
 
   return <Styles.Map id="map" />;
 };

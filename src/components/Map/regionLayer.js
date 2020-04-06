@@ -7,7 +7,7 @@ import { max } from 'd3-array';
 import { scaleSqrt } from 'd3-scale';
 import L from 'leaflet';
 
-const nhsRegionCoordinates = {
+const regionCoordinates = {
   // West midlands
   E12000005: [-2.20358, 52.556969],
   // East of england
@@ -28,24 +28,24 @@ const nhsRegionCoordinates = {
   E12000008: [-0.99311, 51.45097], 
 };
 
-const useNhsRegionLayer = (nhsRegionData: NhsRegionData, hash, layerGroup, country, nhsRegion, localAuthority, onClick: Function) => {
-  const [nhsRegionGeojsonRaw, setNhsRegionGeojsonRaw] = useState(null);
-  const [nhsRegionLayers, setNhsRegionLayers] = useState(null);
+const useRegionLayer = (regionData: RegionData, hash, layerGroup, country, region, localAuthority, onClick: Function) => {
+  const [regionGeojsonRaw, setRegionGeojsonRaw] = useState(null);
+  const [regionLayers, setRegionLayers] = useState(null);
 
   useEffect(() => {
     (async () => {
       // const { data } = await axios.get('https://c19pub.azureedge.net/regions.geojson');
       const { data } = await axios.get('https://opendata.arcgis.com/datasets/1b784deec90c46358c7a074aef8d3211_0.geojson');
-      setNhsRegionGeojsonRaw(data);
+      setRegionGeojsonRaw(data);
     })();
   }, []);
 
   useEffect(() => {
-    if (nhsRegionGeojsonRaw) {
-      const nhsRegionMax = max(Object.keys(nhsRegionData), d => nhsRegionData?.[d]?.totalCases?.value ?? 0);
-      const radiusScale = scaleSqrt().range([5, 40]).domain([1, nhsRegionMax]);
+    if (regionGeojsonRaw) {
+      const regionMax = max(Object.keys(regionData), d => regionData?.[d]?.totalCases?.value ?? 0);
+      const radiusScale = scaleSqrt().range([5, 40]).domain([1, regionMax]);
 
-      const nhsRegionGeojson = nhsRegionGeojsonRaw.features.map(f => ({
+      const regionGeojson = regionGeojsonRaw.features.map(f => ({
           ...f,
           properties: {
             ...f.properties,
@@ -53,13 +53,13 @@ const useNhsRegionLayer = (nhsRegionData: NhsRegionData, hash, layerGroup, count
           },
       }));
 
-      const boundryLayer = L.geoJSON(nhsRegionGeojson, {
+      const boundryLayer = L.geoJSON(regionGeojson, {
         style: feature => ({
           color: '#0b0c0c',
           weight: 1,
           opacity: 0.7,
           fillColor: "#1D70B8",
-          fillOpacity: nhsRegion === feature.properties.id ? 0.2 : 0,
+          fillOpacity: region === feature.properties.id ? 0.2 : 0,
         }),
         onEachFeature: (feature, layer) => {
           layer.on({
@@ -71,15 +71,15 @@ const useNhsRegionLayer = (nhsRegionData: NhsRegionData, hash, layerGroup, count
       });
 
       const circleLayer = L.geoJSON(
-        Object.keys(nhsRegionCoordinates).map(c => ({
+        Object.keys(regionCoordinates).map(c => ({
           type: 'Feature',
           properties: {
-            name: nhsRegionData?.[c]?.name?.value ?? 0,
-            count: nhsRegionData?.[c]?.totalCases?.value ?? 0,
+            name: regionData?.[c]?.name?.value ?? 0,
+            count: regionData?.[c]?.totalCases?.value ?? 0,
           },
           geometry: {
             type: 'Point',
-            coordinates: nhsRegionCoordinates[c],
+            coordinates: regionCoordinates[c],
           },
         })),
         {
@@ -92,16 +92,16 @@ const useNhsRegionLayer = (nhsRegionData: NhsRegionData, hash, layerGroup, count
         },
       );
 
-      setNhsRegionLayers([circleLayer, boundryLayer]);
+      setRegionLayers([circleLayer, boundryLayer]);
 
       if (layerGroup && hash === '#regions') {
         layerGroup.clearLayers();
         [circleLayer, boundryLayer].map(l => layerGroup.addLayer(l));
       }
     }
-  }, [JSON.stringify(nhsRegionGeojsonRaw), hash, country, nhsRegion, localAuthority, layerGroup]);
+  }, [JSON.stringify(regionGeojsonRaw), hash, country, region, localAuthority, layerGroup]);
 
-  return nhsRegionLayers;
+  return regionLayers;
 };
 
-export default useNhsRegionLayer;
+export default useRegionLayer;

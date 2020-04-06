@@ -39,7 +39,7 @@ const MobileRegionTable: ComponentType<Props> = ({}: Props) => {
       />
       <RegionTable
         countryData={data?.countries}
-        nhsRegionData={data?.regions}
+        regionData={data?.regions}
         localAuthorityData={data?.utlas}
       />
     </Styles.Container>

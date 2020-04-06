@@ -23,9 +23,9 @@ const RegionTable: ComponentType<Props> = ({
   country,
   setCountry,
   countryData,
-  nhsRegion,
-  setNhsRegion,
-  nhsRegionData,
+  region,
+  setRegion,
+  regionData,
   localAuthority,
   setLocalAuthority,
   localAuthorityData,
@@ -46,7 +46,7 @@ const RegionTable: ComponentType<Props> = ({
       if (country) {
         return 'country';
       }
-      if (nhsRegion) {
+      if (region) {
         return 'regions';
       }
       if (localAuthority) {
@@ -55,7 +55,7 @@ const RegionTable: ComponentType<Props> = ({
       return '';
     })();
 
-    const itemId = `table-link-${country || nhsRegion || localAuthority || ''}`;
+    const itemId = `table-link-${country || region || localAuthority || ''}`;
 
     const container = document.getElementById(containerId);
     const item = document.getElementById(itemId);
@@ -63,35 +63,35 @@ const RegionTable: ComponentType<Props> = ({
       // $FlowFixMe
       container.scrollTop = item.offsetParent.offsetTop - 10;
     }
-  }, [country, nhsRegion, localAuthority]);
+  }, [country, region, localAuthority]);
 
   const handleKeyDown = (type: 'countries' | 'regions' | 'utlas') => (r: string) => (event: SyntheticKeyboardEvent<*>) => {
     console.log(event.key)
     if (layout === 'desktop' && event.key === 'Enter') {
       setCountry(type === 'countries' ? r : null);
-      setNhsRegion(type === 'regions' ? r : null);
+      setRegion(type === 'regions' ? r : null);
       setLocalAuthority(type === 'utlas' ? r : null);
     }
   }
 
   const handleOnCountryKeyDown = handleKeyDown('countries');
-  const handleOnNhsRegionKeyDown = handleKeyDown('regions');
+  const handleOnRegionKeyDown = handleKeyDown('regions');
   const handleOnLocalAuthorityKeyDown = handleKeyDown('utlas');
 
   const handleOnClick = (type: 'countries' | 'regions' | 'utlas') => (r: string) => () => {
     if (layout === 'desktop') {
       setCountry(type === 'countries' ? r : null);
-      setNhsRegion(type === 'regions' ? r : null);
+      setRegion(type === 'regions' ? r : null);
       setLocalAuthority(type === 'utlas' ? r : null);
     }
   }
 
   const handleOnCountryClick = handleOnClick('countries');
-  const handleOnNhsRegionClick = handleOnClick('regions');
+  const handleOnRegionClick = handleOnClick('regions');
   const handleOnLocalAuthorityClick = handleOnClick('utlas');
 
   const countryKeys = Object.keys(countryData);
-  const nhsRegionKeys = Object.keys(nhsRegionData);
+  const regionKeys = Object.keys(regionData);
   const localAuthorityKeys = Object.keys(localAuthorityData);
 
   const sortFunc = (d: CountryData | RegionData | UtlaData) => (a, b) => {
@@ -130,9 +130,9 @@ const RegionTable: ComponentType<Props> = ({
               children: [
                 <Table
                   head={[{ children: ['Region']}, { children: ['Total cases'], format: 'numeric' }]}
-                  rows={nhsRegionKeys.sort(sortFunc(nhsRegionData)).map(r => [
-                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnNhsRegionClick(r)} onKeyPress={handleOnNhsRegionKeyDown} active={nhsRegion === r}>{nhsRegionData[r].name.value}</LinkOrText>] },
-                    { children: [numeral(nhsRegionData[r].totalCases.value).format('0,0')], format: 'numeric' },
+                  rows={regionKeys.sort(sortFunc(regionData)).map(r => [
+                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnRegionClick(r)} onKeyPress={handleOnRegionKeyDown} active={region === r}>{regionData[r].name.value}</LinkOrText>] },
+                    { children: [numeral(regionData[r].totalCases.value).format('0,0')], format: 'numeric' },
                   ])}
                 />
               ],

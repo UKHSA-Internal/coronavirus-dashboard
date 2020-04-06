@@ -5,7 +5,7 @@ const zoomLayers = {
     min: 0, // Default min
     max: 6,
   },
-  nhsRegion: {
+  region: {
     min: 6,
     max: 8,
   },

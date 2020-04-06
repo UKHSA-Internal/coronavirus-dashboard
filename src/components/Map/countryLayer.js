@@ -18,7 +18,7 @@ const countryCoordinates = {
   N92000002: [-6.4923, 54.7877],
 };
 
-const useCountryLayer = (countryData: CountryData, hash, layerGroup, country, nhsRegion, localAuthority, onClick) => {
+const useCountryLayer = (countryData: CountryData, hash, layerGroup, country, region, localAuthority, onClick) => {
   const [countryGeojsonRaw, setCountryGeojsonRaw] = useState(null);
   const [countryLayers, setCountryLayers] = useState(null);
 
@@ -88,7 +88,7 @@ const useCountryLayer = (countryData: CountryData, hash, layerGroup, country, nh
         [circleLayer, boundryLayer].map(l => layerGroup.addLayer(l));
       }
     }
-  }, [JSON.stringify(countryGeojsonRaw), hash, country, nhsRegion, localAuthority, layerGroup]);
+  }, [JSON.stringify(countryGeojsonRaw), hash, country, region, localAuthority, layerGroup]);
 
   return countryLayers;
 };
