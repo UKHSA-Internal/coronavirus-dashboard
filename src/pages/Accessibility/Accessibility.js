@@ -10,8 +10,8 @@ const Accessibility: ComponentType<Props> = ({}: Props) => {
   return (
     <Styles.Container className="govuk-width-container">
 
-      <h2 id="accessibility-statement-for-website-name">Accessibility statement for Track coronavirus (COVID-19)</h2>
-      <p>This accessibility statement applies to coronavirus.data.go.uk.</p>
+      <h2 id="accessibility-statement-for-website-name">Accessibility statement for Coronavirus (COVID-19) cases in the UK</h2>
+      <p>This accessibility statement applies to coronavirus.data.gov.uk.</p>
       <p>This website is run by Public Health England. We want as many people as possible to be able to use this website. For example, that means you should be able to:</p>
       <ul>
         <li>change colours, contrast levels and fonts</li>

@@ -23,7 +23,7 @@ const App = () => {
       <Header
         // containerClassName="govuk-header__container--full-width"
         // navigationClassName="govuk-header__navigation--end"
-        serviceName="Track coronavirus (COVID-19)"
+        serviceName="Coronavirus (COVID-19) cases in the UK"
         serviceUrl="/"
       />
       {layout === 'mobile' && <Navigation />}
