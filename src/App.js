@@ -24,7 +24,8 @@ const App = () => {
         // containerClassName="govuk-header__container--full-width"
         // navigationClassName="govuk-header__navigation--end"
         serviceName="Coronavirus (COVID-19) cases in the UK"
-        serviceUrl="/"
+        serviceUrlTo="/"
+        homepageUrlHref="https://gov.uk"
       />
       {layout === 'mobile' && <Navigation />}
       <Switch>

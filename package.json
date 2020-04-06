@@ -8,7 +8,7 @@
     "d3-array": "^2.4.0",
     "d3-scale": "^3.2.1",
     "govuk-frontend": "^3.6.0",
-    "govuk-react-jsx": "^1.5.0",
+    "govuk-react-jsx": "^2.0.0",
     "leaflet": "^1.6.0",
     "node-sass": "^4.13.1",
     "numeral": "^2.0.6",

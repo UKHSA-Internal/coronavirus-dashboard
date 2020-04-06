@@ -4811,10 +4811,10 @@ govuk-frontend@^3.6.0:
   resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.6.0.tgz#f0d1e6ec3c0eb33616adfdff28ff778fe518d085"
   integrity sha512-wTxufdY8vFvKJ2EmmQKmarrQ7n30kzg+vvqgGib2dawl7c5Wst8dffkEJQpy9Zs99TE/yEEFgj0VUO4GRUO22A==
 
-govuk-react-jsx@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/govuk-react-jsx/-/govuk-react-jsx-1.5.0.tgz#3ab4b6c5ff92b6774fbbdaa37eb00bd4e4bb3401"
-  integrity sha512-nfAKFPZVLMdlMpeOhKrb8xUqooPrPC/EukF4bFPo5Sc55rwtLeLuchavm6rHSf5NQt09hf7n/GGAW7TN8kwD8Q==
+govuk-react-jsx@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/govuk-react-jsx/-/govuk-react-jsx-2.0.0.tgz#e3207cc9304e2b291f6b4f5fbd1b3dd09d6a30de"
+  integrity sha512-sGF6/otrgKb6ht+RtcyWUNtH9XlKFVt8UWs0zzpFKH9s0Os4seV+ldTjx/26ti7YRBOiVNB0GHWQvyHLCAZ26A==
   dependencies:
     govuk-frontend "3.4.0"
     react "16"
