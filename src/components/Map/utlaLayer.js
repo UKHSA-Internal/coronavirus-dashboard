@@ -7,7 +7,7 @@ import { max } from 'd3-array';
 import { scaleSqrt } from 'd3-scale';
 import L from 'leaflet';
 
-const useUtlaLayer = (utlaData: UtlaData, hash, layerGroup, country, region, utla, onClick: Function) => {
+const useUtlaLayer = (utlaData: UtlaData, hash: string, layerGroup: L.LayerGroup, country: string, region: string, utla: string, onClick: Function) => {
   const [englandGeojsonRaw, setEnglandGeojsonRaw] = useState(null);
   const [utlaLayers, setUtlaLayers] = useState(null);
 

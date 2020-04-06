@@ -95,7 +95,9 @@ const RegionTable: ComponentType<Props> = ({
   const utlaKeys = Object.keys(utlaData);
 
   const sortFunc = (d: CountryData | RegionData | UtlaData) => (a, b) => {
+    // $FlowFixMe
     const aValue = d?.[a]?.name?.value;
+    // $FlowFixMe
     const bValue = d?.[b]?.name?.value;
 
     if (aValue < bValue) return -1;

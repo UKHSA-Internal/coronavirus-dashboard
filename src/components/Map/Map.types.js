@@ -1,11 +1,17 @@
 // @flow
 
+import type { Location } from 'react-router';
+
 export type Props = {|
-  region: string,
-  setRegion: (region: string) => void,
-  regionData: RegionData,
   country: string,
-  setCountry: (country: string) => void,
+  setCountry: (country: string | null) => void,
   countryData: CountryData, 
+  region: string,
+  setRegion: (region: string | null) => void,
+  regionData: RegionData,
+  utla: string,
+  setUtla: (utla: string | null) => void,
+  utlaData: UtlaData,
+  location: Location,
 |};
 

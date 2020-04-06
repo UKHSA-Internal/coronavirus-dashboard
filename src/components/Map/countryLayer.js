@@ -18,7 +18,7 @@ const countryCoordinates = {
   N92000002: [-6.4923, 54.7877],
 };
 
-const useCountryLayer = (countryData: CountryData, hash, layerGroup, country, region, utla, onClick) => {
+const useCountryLayer = (countryData: CountryData, hash: string, layerGroup: L.LayerGroup, country: string, region: string, utla: string, onClick: Function) => {
   const [countryGeojsonRaw, setCountryGeojsonRaw] = useState(null);
   const [countryLayers, setCountryLayers] = useState(null);
 
@@ -27,7 +27,6 @@ const useCountryLayer = (countryData: CountryData, hash, layerGroup, country, re
 
   useEffect(() => {
     (async () => {
-      // const { data } = await axios.get('https://c19pub.azureedge.net/countries.geojson');
       const { data } = await axios.get('https://opendata.arcgis.com/datasets/b789ba2f70fe45eb92402cee87092730_0.geojson');
       setCountryGeojsonRaw(data);
     })();

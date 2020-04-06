@@ -28,13 +28,12 @@ const regionCoordinates = {
   E12000008: [-0.99311, 51.45097], 
 };
 
-const useRegionLayer = (regionData: RegionData, hash, layerGroup, country, region, utla, onClick: Function) => {
+const useRegionLayer = (regionData: RegionData, hash: string, layerGroup: L.LayerGroup, country: string, region: string, utla: string, onClick: Function) => {
   const [regionGeojsonRaw, setRegionGeojsonRaw] = useState(null);
   const [regionLayers, setRegionLayers] = useState(null);
 
   useEffect(() => {
     (async () => {
-      // const { data } = await axios.get('https://c19pub.azureedge.net/regions.geojson');
       const { data } = await axios.get('https://opendata.arcgis.com/datasets/1b784deec90c46358c7a074aef8d3211_0.geojson');
       setRegionGeojsonRaw(data);
     })();

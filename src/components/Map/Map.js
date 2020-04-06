@@ -55,8 +55,7 @@ const Map: ComponentType<Props> = ({
   utla,
   setUtla,
   utlaData,
-  history: { push },
-  location: { pathname, hash },
+  location: { hash },
 }: Props) => {
   const [map, setMap] = useState(null);
   const [utlaCoordinates, setUtlaCoordinates] = useState({});
@@ -110,7 +109,6 @@ const Map: ComponentType<Props> = ({
   useEffect(() => {
      (async () => {
       const { data } = await axios.get('https://opendata.arcgis.com/datasets/a917c123e49d436f90660ef6a9ceb5cc_0.geojson');
-      // const { data } = await axios.get('https://c19pub.azureedge.net/englandUTLA.geojson');
       const c = data.features.reduce((acc, cur) => {
         return {
           ...acc,
