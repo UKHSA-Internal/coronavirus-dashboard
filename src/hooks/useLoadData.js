@@ -29,16 +29,16 @@ const useLoadData = () => {
           // TODO handle error
         }
       } while (status === 404 && date > minDate);
-      if (status === 200) {
+      if (status === 200 && data) {
         setFunc(massageFunc(data));
       } else {
         // TODO handle error
       }     
     };
-    makeCall(dataBlobUrl, setData, data => {
+    makeCall(dataBlobUrl, setData, (data: Data) => {
       return {
         ...data,
-        utlas: Object.keys(data.utlas).reduce((acc, cur) => {
+        utlas: Object.keys(data.utlas).reduce<UtlaData>((acc, cur) => {
           // City of london or Isles of Scilly
           if (cur === 'E09000001' || cur === 'E06000053') {
             return acc;
@@ -47,11 +47,13 @@ const useLoadData = () => {
           // Hackney 
           if (cur === 'E09000012') {
             return {
+              // $FlowFixMe
               ...acc,
+              // $FlowFixMe
               [cur]: {
                 ...data.utlas[cur],
                 name: { value: 'Hackney and City of London' },
-                totalCases: { value: data.utlas[cur].totalCases.value + (data?.['E09000001']?.totalCases?.value ?? 0) },
+                totalCases: { value: data.utlas[cur].totalCases.value + (data?.utlas?.['E09000001']?.totalCases?.value ?? 0) },
                 // TODO dailyConfirmedCases
                 // TODO dailyTotalConfirmedCases
               },
@@ -61,11 +63,13 @@ const useLoadData = () => {
           // Cornwall
           if (cur === 'E06000052') {
             return {
+              // $FlowFixMe
               ...acc,
+              // $FlowFixMe
               [cur]: {
                 ...data.utlas[cur],
                 name: { value: 'Cornwall and Isles of Scilly' },
-                totalCases: { value: data.utlas[cur].totalCases.value + (data?.['E06000053']?.totalCases?.value ?? 0) },
+                totalCases: { value: data.utlas[cur].totalCases.value + (data?.utlas?.['E06000053']?.totalCases?.value ?? 0) },
                 // TODO dailyConfirmedCases
                 // TODO dailyTotalConfirmedCases
               },

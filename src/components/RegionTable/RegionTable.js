@@ -55,11 +55,12 @@ const RegionTable: ComponentType<Props> = ({
       return '';
     })();
 
-    const itemId = `table-link-${country || nhsRegion || localAuthority || null}`;
+    const itemId = `table-link-${country || nhsRegion || localAuthority || ''}`;
 
     const container = document.getElementById(containerId);
     const item = document.getElementById(itemId);
     if (container && item && item.offsetParent) {
+      // $FlowFixMe
       container.scrollTop = item.offsetParent.offsetTop - 10;
     }
   }, [country, nhsRegion, localAuthority]);
@@ -89,16 +90,11 @@ const RegionTable: ComponentType<Props> = ({
   const handleOnNhsRegionClick = handleOnClick('regions');
   const handleOnLocalAuthorityClick = handleOnClick('utlas');
 
-  const { lastUpdatedAt: _, disclaimer: __, ...countries } = countryData;
-  const countryKeys = Object.keys(countries);
+  const countryKeys = Object.keys(countryData);
+  const nhsRegionKeys = Object.keys(nhsRegionData);
+  const localAuthorityKeys = Object.keys(localAuthorityData);
 
-  const { lastUpdatedAt: ___, disclaimer: ____, ...nhsRegions } = nhsRegionData;
-  const nhsRegionKeys = Object.keys(nhsRegions);
-
-  const { lastUpdatedAt: _____, disclaimer: ______, ...localAuthories } = localAuthorityData;
-  const localAuthorityKeys = Object.keys(localAuthories);
-
-  const sortFunc = d => (a, b) => {
+  const sortFunc = (d: CountryData | RegionData | UtlaData) => (a, b) => {
     const aValue = d?.[a]?.name?.value;
     const bValue = d?.[b]?.name?.value;
 

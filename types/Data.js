@@ -21,56 +21,98 @@ declare type HighLevelStats = {
   },
 };
 
-declare type DailyConfirmedCases = {
-  // Date format YYYY-MM-DD
-  dailyConfirmedCases: Array<{ date: string, value: number }>,
+type ChartData = Array<{ date: string, value: number }>; 
+
+declare type OverviewData = {
+  name: { value: string },
+  totalCases: {
+    value: number,
+  },
+  deaths: {
+    value: number,
+  },
+  dailyTotalConfirmedCases: ChartData,
+  dailyConfirmedCases: ChartData,
+  dailyTotalDeaths: ChartData,
+  dailyDeaths: ChartData,
 };
 
-declare type ExtraStatsAndChart = {
-  seriousness: {
-    mild: number,
-    severe: number,
-    critical: number,
+declare type SingleCountryData = {
+  name: { value: string },
+  totalCases: {
+    value: number,
   },
-  recovery: {
-    recovered: number,
-    deaths: number,
+  deaths: {
+    value: number,
   },
-  highRisk: {
-    percentageOfInfecteesWhoDie: number,
-    seriousIllness: number,
+  dailyTotalConfirmedCases: ChartData,
+  dailyConfirmedCases: ChartData,
+  dailyTotalDeaths: ChartData,
+  dailyDeaths: ChartData,
+};
+
+declare type CountryData = {
+  // England
+  E92000001: SingleCountryData,
+  // Scotland
+  S92000003: SingleCountryData,
+  // Wales
+  W92000004: SingleCountryData,
+  // NI
+  N92000002: SingleCountryData,
+};
+
+declare type SingleRegionData = {
+  name: { value: string },
+  totalCases: {
+    value: number,
   },
+  dailyTotalConfirmedCases: ChartData,
+  dailyConfirmedCases: ChartData,
+};
+
+declare type RegionData = {
+  // West midlands
+  E12000005: SingleRegionData,
+  // East of england
+  E12000006: SingleRegionData,
+  // North west
+  E12000002: SingleRegionData,
+  // East midlands
+  E12000004: SingleRegionData,
+  // South west
+  E12000009: SingleRegionData, 
+  // London
+  E12000007: SingleRegionData, 
+  // Yorkshire and the humber
+  E12000003: SingleRegionData,
+  // North east
+  E12000001: SingleRegionData, 
+  // South east
+  E12000008: SingleRegionData, 
+};
+
+declare type SingleUtlaData = {
+  name: { value: string },
+  totalCases: {
+    value: number,
+  },
+  dailyTotalConfirmedCases: ChartData,
+  dailyConfirmedCases: ChartData,
+};
+
+declare type UtlaData = {
+  [key: string]: SingleUtlaData,
 };
 
 declare type Data = {
   lastUpdatedAt: string,
-  UK: HighLevelStats & ExtraStatsAndChart,
-  England: HighLevelStats & DailyConfirmedCases,
-  Scotland: HighLevelStats & DailyConfirmedCases,
-  Wales: HighLevelStats & DailyConfirmedCases,
-  'Northern Ireland': HighLevelStats & DailyConfirmedCases,
-  [region: string]: HighLevelStats & DailyConfirmedCases,
-};
-
-declare type OverviewData = {
-  lastUpdatedAt: string,
-  'United Kingdom': HighLevelStats & ExtraStatsAndChart,
-};
-
-declare type CountryData = {
-  lastUpdatedAt: string,
-  England: HighLevelStats & DailyConfirmedCases,
-  Scotland: HighLevelStats & DailyConfirmedCases,
-  Wales: HighLevelStats & DailyConfirmedCases,
-  'Northern Ireland': HighLevelStats & DailyConfirmedCases,
-};
-
-declare type NhsRegionData = {
-  lastUpdatedAt: string,
-  [region: string]: HighLevelStats & DailyConfirmedCases,
-};
-
-declare type LocalAuthorityData = {
-  lastUpdatedAt: string,
-  [region: string]: HighLevelStats & DailyConfirmedCases,
+  disclaimer: string,
+  overview: {
+    // UK
+    K02000001: OverviewData,
+  },
+  countries: CountryData,
+  regions: RegionData,
+  utlas: UtlaData,
 };
