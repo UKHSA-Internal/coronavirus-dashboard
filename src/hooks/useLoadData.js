@@ -12,7 +12,7 @@ const useLoadData = () => {
 
   useEffect(() => {
     // Fetch today's file, on 404 fallback by 1 day until a file is found
-    const makeCall = async (urlFunc, setFunc) => {
+    const makeCall = async (urlFunc, setFunc, massageData) => {
       let status = 404;
       let data = null;
       let date = new Date();
@@ -30,14 +30,46 @@ const useLoadData = () => {
         }
       } while (status === 404 && date > minDate);
       if (status === 200 && data) {
-        setFunc(data);
+        // $FlowFixMe
+        setFunc(massageData(data));
       } else {
         // TODO handle error
       }     
     };
 
-    makeCall(dataBlobUrl, setData);
-  }, []);
+    makeCall(dataBlobUrl, setData, (d: Data) => {
+      return {	
+        ...d,	
+        utlas: Object.keys(d?.utlas ?? {}).reduce<UtlaData>((acc, cur) => {	
+          // Isles of Scilly	
+          if (cur === 'E06000053') {	
+            return acc;	
+          }
+
+          // Cornwall	
+          if (cur === 'E06000052') {	
+            return {	
+              // $FlowFixMe	
+              ...acc,	
+              // $FlowFixMe	
+              [cur]: {	
+                ...d?.utlas[cur],	
+                name: { value: 'Cornwall and Isles of Scilly' },	
+                totalCases: { value: d?.utlas[cur].totalCases.value + (d?.utlas?.['E06000053']?.totalCases?.value ?? 0) },	
+                // TODO dailyConfirmedCases	
+                // TODO dailyTotalConfirmedCases	
+              },	
+            };	
+          }	
+
+          return {	
+            ...acc,	
+            [cur]: d?.utlas[cur],	
+          };
+        }, {}),	
+      };
+    });
+  }, [data]);
 
   return data;
 };
