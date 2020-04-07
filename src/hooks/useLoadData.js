@@ -16,7 +16,7 @@ const useLoadData = () => {
       let status = 404;
       let data = null;
       let date = new Date();
-      const minDate = new Date('2020-03-20');
+      const minDate = new Date('2020-04-03');
       do {
         try {
           ({ data, status } = await axios.get(urlFunc(date), {
@@ -69,7 +69,7 @@ const useLoadData = () => {
         }, {}),	
       };
     });
-  }, [data]);
+  }, []);
 
   return data;
 };
