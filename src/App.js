@@ -12,7 +12,7 @@ import Navigation from 'components/Navigation';
 
 const F = props => <Footer
   {...props}
-  meta={{ items: [ { children: ['About the data'], href: '/about' }, { children: ['Accessibility'], href: '/accessibility' }], visuallyHiddenTitle: 'Items' }}
+  meta={{ items: [{ children: ['About the data'], href: '/about' }, { children: ['Accessibility'], href: '/accessibility' }], visuallyHiddenTitle: 'Items' }}
 />;
 
 const App = () => {
