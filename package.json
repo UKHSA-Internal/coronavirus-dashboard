@@ -20,7 +20,8 @@
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
-    "styled-components": "^5.0.1"
+    "styled-components": "^5.0.1",
+    "xmltojson": "^1.3.5"
   },
   "scripts": {
     "lint": "yarn flow",

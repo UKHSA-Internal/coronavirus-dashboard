@@ -2,43 +2,36 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import xmlToJSON from 'xmltojson';
 
-const formatDate = (d: Date) => `_${d.getFullYear()}${d.getMonth() + 1 < 10 ? '0' : ''}${d.getMonth() + 1}${d.getDate() < 10 ? '0' : ''}${d.getDate()}`;
+const dataBlobUrl = (blob: string) => `https://c19pub.azureedge.net/${blob}`;
+const listBucketUrl = 'https://publicdashacc.blob.core.windows.net/publicdata?restype=container&comp=list';
 
-const dataBlobUrl = (d: Date) => `https://c19pub.azureedge.net/data${formatDate(d)}.json`;
+const getLatestBlobName = async () => {
+  const { data } = await axios.get(listBucketUrl);
+  const jsonData = xmlToJSON.parseString(data);
+  const blobList = jsonData.EnumerationResults[0].Blobs[0].Blob;
+
+  const getBlobDate = b => new Date(b.Properties[0]['Last-Modified'][0]._text);
+  const mostRecentBlob = blobList.reduce((acc, cur) => {
+    if (!cur.Name[0]._text.startsWith('data_')) {
+      return acc;
+    }
+
+    return (getBlobDate(acc) > getBlobDate(cur)) ? acc : cur;
+  });
+
+  return mostRecentBlob.Name[0]._text;
+};
 
 const useLoadData = () => {
   const [data, setData] = useState<?Data>(null);
 
   useEffect(() => {
-    // Fetch today's file, on 404 fallback by 1 day until a file is found
-    const makeCall = async (urlFunc, setFunc, massageData) => {
-      let status = 404;
-      let data = null;
-      let date = new Date();
-      const minDate = new Date('2020-04-03');
-      do {
-        try {
-          ({ data, status } = await axios.get(urlFunc(date), {
-            validateStatus: status => {
-              return (status >= 200 && status < 300) || status === 404;
-            },
-          }));
-          date.setDate(date.getDate() - 1);
-        } catch (error) {
-          // TODO handle error
-        }
-      } while (status === 404 && date > minDate);
-      if (status === 200 && data) {
-        // $FlowFixMe
-        setFunc(massageData(data));
-      } else {
-        // TODO handle error
-      }     
-    };
-
-    makeCall(dataBlobUrl, setData, (d: Data) => {
-      return {	
+    const getData = async () => {
+      const latestBlobName = await getLatestBlobName();
+      const { data: d } = await axios.get(dataBlobUrl(latestBlobName));
+      const massagedData = {
         ...d,	
         utlas: Object.keys(d?.utlas ?? {}).reduce<UtlaData>((acc, cur) => {	
           // Isles of Scilly	
@@ -68,7 +61,10 @@ const useLoadData = () => {
           };
         }, {}),	
       };
-    });
+      setData(massagedData);
+    };
+
+    getData();
   }, []);
 
   return data;
