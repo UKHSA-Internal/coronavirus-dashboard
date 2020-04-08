@@ -1,6 +1,6 @@
 {
   "name": "covid-public",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "private": true,
   "homepage": "https://covid19static.azurewebsites.net/",
   "dependencies": {
