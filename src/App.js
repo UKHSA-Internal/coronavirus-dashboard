@@ -12,7 +12,17 @@ import Navigation from 'components/Navigation';
 
 const F = props => <Footer
   {...props}
-  meta={{ items: [{ children: ['About the data'], href: '/about' }, { children: ['Accessibility'], href: '/accessibility' }], visuallyHiddenTitle: 'Items' }}
+  meta={{
+    children: [
+      'For feeback email Public Health England at ',
+      <a className="govuk-footer__link" href="mailto:coronavirus-tracker@phe.gov.uk?Subject=Coronavirus%20dashboard%20feedback" rel="noopener noreferrer" target="_blank">coronavirus-tracker@phe.gov.uk</a>,
+    ],
+    items: [
+      { children: ['About the data'], href: '/about' },
+      { children: ['Accessibility'], href: '/accessibility' },
+    ],
+    visuallyHiddenTitle: 'Items',
+  }}
 />;
 
 const App = () => {

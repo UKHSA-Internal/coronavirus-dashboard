@@ -22,7 +22,7 @@ const Accessibility: ComponentType<Props> = ({}: Props) => {
       </ul>
       
       <h3 id="reporting-accessibility-problems-with-this-website">Reporting accessibility problems with this website</h3>
-      <p>We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, contact: [provide both details of how to report these issues to your organisation, and contact details for the unit or person responsible for dealing with these reports].</p>
+      <p>We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, contact Public Health England at <a href="mailto:coronavirus-tracker@phe.gov.uk?Subject=Coronavirus%20dashboard%20accessibility%20feedback" rel="noopener noreferrer" target="_blank">coronavirus-tracker@phe.gov.uk</a>.</p>
       
       <h3 id="enforcement-procedure">Enforcement procedure</h3>
       <p>The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018
@@ -36,7 +36,7 @@ const Accessibility: ComponentType<Props> = ({}: Props) => {
 
       <h2 id="preparation-of-this-accessibility-statement">Preparation of this accessibility statement</h2>
       <p>This statement was prepared on 3 April 2020. It was last reviewed on 3 April 2020.</p>
-      <p>This website was last tested on 3 April 2020. The test was carried out internally by Public Health England and NHSx.</p>
+      <p>This website was last tested on 3 April 2020. The test was carried out internally by Public Health England and NHSX.</p>
       
     </Styles.Container>
   );
