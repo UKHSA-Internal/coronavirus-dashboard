@@ -66,7 +66,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
       />
       <BigNumber
         caption="Latest daily number of lab-confirmed UK cases"
-        number={data?.countries?.E92000001?.dailyConfirmedCases.slice(-1)[0]?.value ?? 0}
+        number={data?.overview?.K02000001?.dailyConfirmedCases.slice(-1)[0]?.value ?? 0}
       />
       <BigNumber
         caption="Latest daily number of COVID-19 associated UK deaths in hospital"
@@ -103,16 +103,16 @@ const Regional: ComponentType<Props> = ({}: Props) => {
       <ViewAs view={view} setView={setView} />
       {view === 'chart' && (
         <>
-          <LineChart data={data ?.countries?.E92000001 ?.dailyTotalConfirmedCases ?? []} header="Total number of lab-confirmed UK cases" tooltipText="cases" />
-          <BarChart data={data ?.countries?.E92000001 ?.dailyConfirmedCases ?? []} header="Daily number of lab-confirmed cases" tooltipText="cases" />
+          <LineChart data={data ?.overview ?.K02000001 ?.dailyTotalConfirmedCases ?? []} header="Total number of lab-confirmed UK cases" tooltipText="cases" />
+          <BarChart data={data ?.overview ?.K02000001 ?.dailyConfirmedCases ?? []} header="Daily number of lab-confirmed cases" tooltipText="cases" />
           <LineChart data={data ?.overview ?.K02000001 ?.dailyTotalDeaths ?? []} header="Total number of COVID-19 associated UK deaths in hospital" tooltipText="deaths" />
           <BarChart data={data ?.overview ?.K02000001 ?.dailyDeaths ?? []} header="Daily number of COVID-19 associated UK deaths in hospital" tooltipText="deaths" />
         </>
       )}
       {view === 'table' && (
         <>
-          <AltChartTable data={data?.countries?.E92000001?.dailyTotalConfirmedCases ?? []} header="Total number of lab-confirmed UK cases" valueName="Total cases" />
-          <AltChartTable data={data?.countries?.E92000001?.dailyConfirmedCases ?? []} header="Daily number of lab-confirmed cases" valueName="Daily cases" />
+          <AltChartTable data={data?.overview?.K02000001?.dailyTotalConfirmedCases ?? []} header="Total number of lab-confirmed UK cases" valueName="Total cases" />
+          <AltChartTable data={data?.overview?.K02000001?.dailyConfirmedCases ?? []} header="Daily number of lab-confirmed cases" valueName="Daily cases" />
           <AltChartTable data={data?.overview?.K02000001?.dailyTotalDeaths ?? []} header="Total number of COVID-19 associated UK deaths in hospital" valueName="Total deaths" />
           <AltChartTable data={data?.overview?.K02000001?.dailyDeaths ?? []} header="Daily number of COVID-19 associated UK deaths in hospital" valueName="Daily deaths" />
         </>
