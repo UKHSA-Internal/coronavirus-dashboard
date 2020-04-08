@@ -94,7 +94,9 @@ export const downloadAsCSV = ({csv, headings=[], fileName}: DownloadAsCSVInterfa
     document.body.appendChild(a);
     a.addEventListener('click', clickHandler, false);
     a.href = url;
-    a.download = fileName;
+    a.download = fileName.toLowerCase().endsWith(".csv")
+        ? fileName
+        : `${fileName}.csv`;
     a.click();
 
 }; // downloadCSV
