@@ -14,13 +14,10 @@ import LineChart from 'components/LineChart';
 import BarChart from 'components/BarChart';
 import ViewAs from 'components/ViewAs';
 import AltChartTable from 'components/AltChartTable';
-import ExportAsCSV from "components/Export";
-
 import isIE from 'isIE';
 
 import type { Props } from './Regional.types';
 import * as Styles from './Regional.styles';
-
 
 const formatAMPM = date => {
   var hours = date.getHours();
@@ -96,10 +93,6 @@ const Regional: ComponentType<Props> = ({}: Props) => {
           />
         </>
       )}
-      <ExportAsCSV
-          data={ [overviewData, countryData, nhsRegionData, localAuthorityData] }
-          lastUpdate={ overviewData.lastUpdatedAt }
-      />
       <ViewAs view={view} setView={setView} />
       {view === 'chart' && (
         <>
