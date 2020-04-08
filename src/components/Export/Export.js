@@ -15,7 +15,7 @@ import React, { Component } from 'react';
 
 import { Container, Paragraph } from "./Export.styles";
 import { downloadAsCSV, formatDateAsUTC } from "./Export.utils";
-import type { ExportAsCSVProps } from "./Export.types";
+import type { ExportAsCSVProps, DataInterface } from "./Export.types";
 
 
 /**
@@ -26,15 +26,23 @@ import type { ExportAsCSVProps } from "./Export.types";
  *
  * Properties
  * ----------
- * @param filename
- * @param linkText
- * @param data
- * @param lastUpdate
+ * @param filename {string}    Name of the CSV file. [default: "data"]
+ * @param linkText {string}    Text to be shown for the download link.
+ *                             [default: "Download data as CSV"]
+ * @param data {DataInterface} Completed dataset, as downloaded from the server.
  */
-export default class ExportAsCSV extends Component<Props, ExportAsCSVProps> {
+export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
 
+    // Default substitutes.
     defaultFileName = 'data';
     defaultLinkText = 'Download data as CSV';
+
+    // PRIVATE: Index at which the date value is stored in each row.
+    // Also represents the index after which numeric data start in each row.
+    // Index: [0        , 1        , 2        , 3   , ...             ]
+    // Data:  [Area Name, Area Code, Area Type, Date, ...numeric data ]
+    #dateIndex = 3;
+
     categoryNames = {
         "dailyConfirmedCases": "Lab-confirmed cases",
         "dailyTotalConfirmedCases": "Cumulative lab-confirmed cases",
@@ -68,23 +76,32 @@ export default class ExportAsCSV extends Component<Props, ExportAsCSVProps> {
      */
     download = (event: React.MouseEvent<HTMLAnchorElement>): null => {
 
+        // Preventing the URL click event from triggering.
+        // The download event is triggered programmatically via `downloadAsCSV`.
         event.preventDefault();
 
         const
-            [overviewData={}, countryData={}, nhsRegionData={}, localAuthorityData={}] = this.props.data,
-            { lastUpdate="", fileName=this.defaultFileName } = this.props,
-            dateIndex = 3,
+            {
+                fileName=this.defaultFileName,
+                data: {
+                    overview={},
+                    countries={},
+                    regions={},
+                    utlas={},
+                    lastUpdatedAt=""
+                }
+            } = this.props,
             data = {
                 // Categorical value for area name: column data (JSON dataset)
-                Country: countryData,
-                "Country - UK": overviewData,
-                Region: nhsRegionData,
-                "Upper tier local authority": localAuthorityData
+                Country: countries,
+                "Country - UK": overview,
+                Region: regions,
+                "Upper tier local authority": utlas
             };
 
-        let outputName = lastUpdate === ""
+        let outputName = lastUpdatedAt === ""
             ? fileName
-            : `${fileName}_${formatDateAsUTC(new Date(lastUpdate))}`;
+            : `${fileName}_${formatDateAsUTC(new Date(lastUpdatedAt))}`;
 
         downloadAsCSV({
             csv:
@@ -94,7 +111,7 @@ export default class ExportAsCSV extends Component<Props, ExportAsCSVProps> {
                     // Concatenating all 2D arrays.
                     .reduce((accum, val) => accum.concat(val))
                     // Sorting by data (descending).
-                    .sort((a, b) => new Date(b[dateIndex]) - new Date(a[dateIndex])),
+                    .sort((a, b) => new Date(b[this.#dateIndex]) - new Date(a[this.#dateIndex])),
             fileName: outputName,
             headings: this.columnNames
         });
@@ -112,14 +129,10 @@ export default class ExportAsCSV extends Component<Props, ExportAsCSVProps> {
      */
     format(content: any, areaType: string): string|null {
 
-        if (Object.keys(content).length < 1) return null;
+        if ( Object.keys(content).length < 1 ) return null;
 
-        const
-            // [0        , 1        , 2        , 3   , ...]
-            // [Area Name, Area Code, Area Type, Date, ... ]
-            startingIndex: number = 3,
-            // Placeholder array for numeric values.
-            placeholder = Object.keys(this.categoryNames).map(() => null);
+        // Placeholder array for numeric values.
+        const placeholder = Object.keys(this.categoryNames).map(() => null);
 
         let
             results: Array<Array<string>> = [],
@@ -129,28 +142,28 @@ export default class ExportAsCSV extends Component<Props, ExportAsCSVProps> {
             countryResult = {};
 
         // Going through each key in JSON data.
-        for (const areaCode in content) {
+        for ( const areaCode in content ) {
             // If the key is ignored, move on.
-            if (!content.hasOwnProperty(areaCode) || this.ignoredFields.indexOf(areaCode) > -1) continue;
+            if ( !content.hasOwnProperty(areaCode) || this.ignoredFields.indexOf(areaCode) > -1 ) continue;
 
             name = content[areaCode].name.value;
             countryData = content[areaCode];
             countryResult = {};
-            index = startingIndex;
+            index = this.#dateIndex;
 
-            for (const column in this.categoryNames) {
+            for ( const column in this.categoryNames ) {
                 // If the column name doesn't exist in countryData, move on.
-                if (!countryData.hasOwnProperty(column) || this.ignoredColumns.indexOf(column) > -1) continue;
+                if ( !countryData.hasOwnProperty(column) || this.ignoredColumns.indexOf(column) > -1 ) continue;
 
                 index++;
 
                 // Going through the array of items in the current column.
                 // This is to ensure that we write at the same index for each column
                 // each time we switch columns in the previous iteration.
-                for (const item of countryData[column]) {
+                for ( const item of countryData[column] ) {
                     // If the data does no exist in countryResult, add it.
                     // The data will include the name, area code, area type, date, and placeholders.
-                    if (!countryResult.hasOwnProperty(item.date))
+                    if ( !countryResult.hasOwnProperty(item.date) )
                         countryResult[item.date] = [name, areaCode, areaType, item.date, ...placeholder];
 
                     countryResult[item.date][index] = item.value;

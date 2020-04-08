@@ -4,6 +4,8 @@
  * @param obj {any} The object whose type is to be defined.
  * @returns {string} Type of the object.
  */
+import type {DownloadAsCSVInterface} from "./Export.types";
+
 export const objectType = (obj: any): string => {
     switch (obj) {
         case null:
@@ -73,7 +75,7 @@ export const array2CsvLine = (arr: Array<any>, row: boolean=false): string => {
  * @param fileName {string} Name of the file to be downloaded.
  * @returns {null}
  */
-export const downloadAsCSV = ({csv, headings=[], fileName}: {csv: Array<Array<string>>, headings: Array<string>, fileName: string}): null => {
+export const downloadAsCSV = ({csv, headings=[], fileName}: DownloadAsCSVInterface): null => {
 
     const
         csvBlobHeader = { type: "text/csv;charset=utf-8" },
