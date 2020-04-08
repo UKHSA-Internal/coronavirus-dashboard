@@ -1,16 +1,3 @@
-/**
- * CSV Export Service for the GOV.UK dashboard.
- *
- * The service is intended to convert JSON data onto a CSV file, to be downloaded
- * upon request by the end user.
- *
- * Author:        Pouria Hadjibagheri <pouria.hadjibagheri@phe.gov.uk>
- * Created:       3 April 2020
- * License:       Open Government License v3.0
- * Contributors:  Pouria Hadjibagheri
- * Last update:   7 April 2020
- */
-
 import React, { Component } from 'react';
 
 import { Container, Paragraph } from "./Export.styles";
@@ -81,6 +68,7 @@ export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
         event.preventDefault();
 
         const
+            // Extracting data from the props.
             {
                 fileName=this.defaultFileName,
                 data: {
@@ -91,6 +79,8 @@ export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
                     lastUpdatedAt=""
                 }
             } = this.props,
+
+            // Constructing the JSON with categorical values.
             data = {
                 // Categorical value for area name: column data (JSON dataset)
                 Country: countries,
@@ -98,10 +88,6 @@ export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
                 Region: regions,
                 "Upper tier local authority": utlas
             };
-
-        let outputName = lastUpdatedAt === ""
-            ? fileName
-            : `${fileName}_${formatDateAsUTC(new Date(lastUpdatedAt))}`;
 
         downloadAsCSV({
             csv:
@@ -112,7 +98,12 @@ export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
                     .reduce((accum, val) => accum.concat(val))
                     // Sorting by data (descending).
                     .sort((a, b) => new Date(b[this.#dateIndex]) - new Date(a[this.#dateIndex])),
-            fileName: outputName,
+
+            fileName:
+                lastUpdatedAt === ""
+                    ? fileName
+                    : `${fileName}_${formatDateAsUTC(new Date(lastUpdatedAt))}`,
+
             headings: this.columnNames
         });
 
@@ -127,7 +118,7 @@ export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
      * - ignoredColumns
      * - ignoredFields
      */
-    format(content: any, areaType: string): string|null {
+    format(content: any, areaType: string): Array<Array<string|number|null>> | null {
 
         if ( Object.keys(content).length < 1 ) return null;
 
