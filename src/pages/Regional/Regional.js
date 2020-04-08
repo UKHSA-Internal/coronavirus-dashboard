@@ -24,8 +24,8 @@ import * as Styles from './Regional.styles';
 const formatAMPM = date => {
 
   let
-      hours = date.getUTCHours(),
-      minutes = date.getUTCMinutes(),
+      hours = date.getHours(),
+      minutes = date.getMinutes(),
       ampm = hours >= 12 ? 'pm' : 'am';
 
   hours = (hours % 12) || 12;
@@ -36,7 +36,7 @@ const formatAMPM = date => {
 };
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const formatDate = (d: Date) => `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()} ${formatAMPM(d)} GMT`;
+const formatDate = (d: Date) => `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()} ${formatAMPM(d)}`;
 
 const Regional: ComponentType<Props> = ({}: Props) => {
   const [country, setCountry] = useState(null);
