@@ -22,17 +22,21 @@ import type { Props } from './Regional.types';
 import * as Styles from './Regional.styles';
 
 const formatAMPM = date => {
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? 'pm' : 'am';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  minutes = minutes < 10 ? '0'+minutes : minutes;
-  var strTime = hours + ':' + minutes + ' ' + ampm;
-  return strTime;
+
+  let
+      hours = date.getUTCHours(),
+      minutes = date.getUTCMinutes(),
+      ampm = hours >= 12 ? 'pm' : 'am';
+
+  hours = (hours % 12) || 12;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  return `${hours}:${minutes} ${ampm}`
+
 };
+
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const formatDate = (d: Date) => `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()} ${formatAMPM(d)}`;
+const formatDate = (d: Date) => `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()} ${formatAMPM(d)} GMT`;
 
 const Regional: ComponentType<Props> = ({}: Props) => {
   const [country, setCountry] = useState(null);
