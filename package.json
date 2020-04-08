@@ -2,7 +2,7 @@
   "name": "covid-public",
   "version": "0.1.12",
   "private": true,
-  "homepage": "https://covid19static.azurewebsites.net/",
+  "homepage": "https://covid19stat.azureedge.net/",
   "dependencies": {
     "axios": "^0.19.2",
     "chart.js": "2.9.3",
