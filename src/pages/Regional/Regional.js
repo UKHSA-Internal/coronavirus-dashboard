@@ -14,6 +14,8 @@ import LineChart from 'components/LineChart';
 import BarChart from 'components/BarChart';
 import ViewAs from 'components/ViewAs';
 import AltChartTable from 'components/AltChartTable';
+import ExportAsCSV from "components/Export";
+
 import isIE from 'isIE';
 
 import type { Props } from './Regional.types';
@@ -97,6 +99,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
           />
         </>
       )}
+      <ExportAsCSV data={ data }/>
       <ViewAs view={view} setView={setView} />
       {view === 'chart' && (
         <>
