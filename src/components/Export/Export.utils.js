@@ -1,11 +1,11 @@
+import type {DownloadAsCSVInterface} from "./Export.types";
+
 /**
  * Determines the type of an object.
  *
  * @param obj {any} The object whose type is to be defined.
  * @returns {string} Type of the object.
  */
-import type {DownloadAsCSVInterface} from "./Export.types";
-
 export const objectType = (obj: any): string => {
     switch (obj) {
         case null:
