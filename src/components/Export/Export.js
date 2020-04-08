@@ -21,7 +21,7 @@ import type { ExportAsCSVProps, DataInterface } from "./Export.types";
 export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
 
     // Default substitutes.
-    defaultFileName = 'data';
+    defaultFileName = 'coronavirus-data';
     defaultLinkText = 'Download data as CSV';
 
     // PRIVATE: Index at which the date value is stored in each row.
@@ -75,8 +75,7 @@ export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
                     overview={},
                     countries={},
                     regions={},
-                    utlas={},
-                    lastUpdatedAt=""
+                    utlas={}
                 }
             } = this.props,
 
@@ -99,10 +98,7 @@ export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
                     // Sorting by data (descending).
                     .sort((a, b) => new Date(b[this.#dateIndex]) - new Date(a[this.#dateIndex])),
 
-            fileName:
-                lastUpdatedAt === ""
-                    ? fileName
-                    : `${fileName}_${formatDateAsUTC(new Date(lastUpdatedAt))}`,
+            fileName: fileName,
 
             headings: this.columnNames
         });

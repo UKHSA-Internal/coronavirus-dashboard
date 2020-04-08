@@ -100,33 +100,3 @@ export const downloadAsCSV = ({csv, headings=[], fileName}: DownloadAsCSVInterfa
     a.click();
 
 }; // downloadCSV
-
-
-/**
- * Convert a ``Date`` object into a formatted UTC string.
- *
- * Example: 2020-03-05T14_53_07UTC for 5 April 2020, 15:53:7 GMT+1
- *
- * @param d {Date}
- * @returns {string}
- */
-export const formatDateAsUTC = (d: Date): string => {
-
-    let date = {
-        day: d.getUTCDate(),
-        month: d.getUTCMonth(),
-        year: d.getUTCFullYear(),
-        hour: d.getUTCHours(),
-        minute: d.getUTCMinutes(),
-        second: d.getUTCSeconds()
-    };
-
-    for (const key in date) {
-        if (!date.hasOwnProperty(key)) continue;
-        date[key] = date[key] > 9 ? `${date[key]}` : `0${date[key]}`
-    }
-
-
-    return `${date.year}-${date.month}-${date.day}T${date.hour}_${date.minute}_${date.second}UTC`;
-
-}; // formatDateAsUTC
