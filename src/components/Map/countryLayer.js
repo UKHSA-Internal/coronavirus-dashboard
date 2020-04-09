@@ -27,7 +27,7 @@ const useCountryLayer = (countryData: CountryData, hash: string, layerGroup: L.L
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get('https://opendata.arcgis.com/datasets/92ebeaf3caa8458ea467ec164baeefa4_0.geojson');
+      const { data } = await axios.get('https://c19pub.azureedge.net/countries.geojson');
       setCountryGeojsonRaw(data);
     })();
   }, []);

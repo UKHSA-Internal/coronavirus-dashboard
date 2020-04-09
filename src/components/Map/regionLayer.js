@@ -34,7 +34,7 @@ const useRegionLayer = (regionData: RegionData, hash: string, layerGroup: L.Laye
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get('https://opendata.arcgis.com/datasets/bafeb380d7e34f04a3cdf1628752d5c3_0.geojson');
+      const { data } = await axios.get('https://c19pub.azureedge.net/regions.geojson');
       setRegionGeojsonRaw(data);
     })();
   }, []);

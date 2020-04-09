@@ -13,7 +13,7 @@ const useUtlaLayer = (utlaData: UtlaData, hash: string, layerGroup: L.LayerGroup
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get('https://opendata.arcgis.com/datasets/a917c123e49d436f90660ef6a9ceb5cc_0.geojson');
+      const { data } = await axios.get('https://c19pub.azureedge.net/utlas.geojson');
       setEnglandGeojsonRaw(data);
     })();
   }, []);
