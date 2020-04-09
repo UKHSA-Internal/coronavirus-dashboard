@@ -4,6 +4,7 @@ import { withRouter } from 'react-router';
 import axios from 'axios';
 import L from 'leaflet';
 
+import { AZURE_MAP_KEY } from 'config';
 import useCountryLayer from './countryLayer';
 import useRegionLayer from './regionLayer';
 import useUtlaLayer from './utlaLayer';
@@ -68,9 +69,16 @@ const Map: ComponentType<Props> = ({
         center: [55, -4],
         zoom: 4.5, 
         layers: [
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          })
+          // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          // })
+          L.tileLayer('https://atlas.microsoft.com/map/tile?subscription-key={subscriptionKey}&api-version=2.0&tilesetId={tilesetId}&zoom={z}&x={x}&y={y}&tileSize=256&language={language}&view={view}', {
+            attribution: `© ${new Date().getFullYear()} TomTom, Microsoft`,
+            subscriptionKey: AZURE_MAP_KEY,
+            tilesetId: 'microsoft.base.road',
+            language: 'en-GB',
+            view: 'Auto',
+          }),
         ]
       });
 
