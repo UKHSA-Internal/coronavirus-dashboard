@@ -24,8 +24,8 @@ import * as Styles from './Regional.styles';
 const formatAMPM = date => {
 
   let
-      hours = date.getHours(),
-      minutes = date.getMinutes(),
+      hours = date.getUTCHours(),
+      minutes = date.getUTCMinutes(),
       ampm = hours >= 12 ? 'pm' : 'am';
 
   hours = (hours % 12) || 12;
@@ -36,7 +36,15 @@ const formatAMPM = date => {
 };
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const formatDate = (d: Date) => `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()} ${formatAMPM(d)}`;
+const formatDate = (d: string="") => {
+
+    if (d === "") return "";
+
+    const date = new Date(d.toLowerCase().endsWith("z") ? d : `${d}Z`);
+
+    return `${date.getUTCDate()} ${monthNames[date.getUTCMonth()]} ${date.getUTCFullYear()}, ${formatAMPM(date)} GMT`;
+
+};
 
 const Regional: ComponentType<Props> = ({}: Props) => {
   const [country, setCountry] = useState(null);
@@ -58,7 +66,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
       />
       <PageTitle
         title="Coronavirus (COVID-19) in the UK"
-        subtitle={`Last updated ${formatDate(new Date(data?.lastUpdatedAt))}`}
+        subtitle={`Last updated ${formatDate(data?.lastUpdatedAt)}`}
       />
       <BigNumber
         caption="Total number of lab-confirmed UK cases"
