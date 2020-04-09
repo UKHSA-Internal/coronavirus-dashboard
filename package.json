@@ -1,6 +1,6 @@
 {
   "name": "covid-public",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "private": true,
   "homepage": "https://covid19stat.azureedge.net/",
   "dependencies": {
