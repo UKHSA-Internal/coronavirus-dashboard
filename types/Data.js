@@ -28,6 +28,9 @@ declare type OverviewData = {
   totalCases: {
     value: number,
   },
+  newCases: {
+    value: number,
+  },
   deaths: {
     value: number,
   },
