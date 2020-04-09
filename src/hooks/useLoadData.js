@@ -18,8 +18,12 @@ const getLatestBlobName = async () => {
       return acc;
     }
 
+    if (!acc) {
+      return cur;
+    }
+
     return (getBlobDate(acc) > getBlobDate(cur)) ? acc : cur;
-  });
+  }, null);
 
   return mostRecentBlob.Name[0]._text;
 };
