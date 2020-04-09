@@ -35,37 +35,7 @@ const useLoadData = () => {
     const getData = async () => {
       const latestBlobName = await getLatestBlobName();
       const { data: d } = await axios.get(dataBlobUrl(latestBlobName));
-      const massagedData = {
-        ...d,	
-        utlas: Object.keys(d?.utlas ?? {}).reduce<UtlaData>((acc, cur) => {	
-          // Isles of Scilly	
-          if (cur === 'E06000053') {	
-            return acc;	
-          }
-
-          // Cornwall	
-          if (cur === 'E06000052') {	
-            return {	
-              // $FlowFixMe	
-              ...acc,	
-              // $FlowFixMe	
-              [cur]: {	
-                ...d?.utlas[cur],	
-                name: { value: 'Cornwall and Isles of Scilly' },	
-                totalCases: { value: d?.utlas[cur].totalCases.value + (d?.utlas?.['E06000053']?.totalCases?.value ?? 0) },	
-                // TODO dailyConfirmedCases	
-                // TODO dailyTotalConfirmedCases	
-              },	
-            };	
-          }	
-
-          return {	
-            ...acc,	
-            [cur]: d?.utlas[cur],	
-          };
-        }, {}),	
-      };
-      setData(massagedData);
+      setData(d);
     };
 
     getData();
