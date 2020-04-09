@@ -65,12 +65,12 @@ const Regional: ComponentType<Props> = ({}: Props) => {
         number={data?.overview?.K02000001?.totalCases?.value ?? 0}
       />
       <BigNumber
-        caption="Total number of COVID-19 associated UK deaths in hospital"
-        number={data?.overview?.K02000001?.deaths.value ?? 0}
-      />
-      <BigNumber
         caption="Latest daily number of lab-confirmed UK cases"
         number={data?.overview?.K02000001?.newCases?.value ?? 0}
+      />
+      <BigNumber
+        caption="Total number of COVID-19 associated UK deaths in hospital"
+        number={data?.overview?.K02000001?.deaths.value ?? 0}
       />
       <BigNumber
         caption="Latest daily number of COVID-19 associated UK deaths in hospital"

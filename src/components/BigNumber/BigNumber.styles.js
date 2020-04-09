@@ -11,7 +11,7 @@ export const Container: ComponentType<*> = (() => {
     flex-direction: column;
     border-top: 1px solid #b1b4b6;
     padding-top: 20px;
-    grid-column: span 2;
+    grid-column: span 3;
 
     ${isIE() ? `
       width: 32%;
