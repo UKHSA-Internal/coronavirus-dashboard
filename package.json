@@ -2,7 +2,7 @@
   "name": "covid-public",
   "version": "0.1.20",
   "private": true,
-  "homepage": "https://covid19stat.azureedge.net/",
+  "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
     "axios": "^0.19.2",
     "chart.js": "2.9.3",
