@@ -9,6 +9,7 @@ import MobileRegionTable from 'pages/MobileRegionTable';
 import About from 'pages/About';
 import Accessibility from 'pages/Accessibility';
 import Navigation from 'components/Navigation';
+import CookieBanner from 'components/CookieBanner';
 
 const F = props => <Footer
   {...props}
@@ -30,6 +31,7 @@ const App = () => {
 
   return (
     <>
+      <CookieBanner />
       <Header
         // containerClassName="govuk-header__container--full-width"
         // navigationClassName="govuk-header__navigation--end"
