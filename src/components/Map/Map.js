@@ -71,6 +71,7 @@ const Map: ComponentType<Props> = ({
         zoom: 4.5, 
         layers: [
           L.mapboxGL({
+            attribution: "<a href=\"http://www.openstreetmap.org/about/\" target=\"_blank\">&copy; OpenStreetMap contributors</a>",
             style: 'https://c19tile.azureedge.net/style.json'
           })
         ]
