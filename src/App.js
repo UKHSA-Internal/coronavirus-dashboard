@@ -14,7 +14,7 @@ const F = props => <Footer
   {...props}
   meta={{
     children: [
-      'For feeback email Public Health England at ',
+      'For feedback email ',
       <a className="govuk-footer__link" href="mailto:coronavirus-tracker@phe.gov.uk?Subject=Coronavirus%20dashboard%20feedback" rel="noopener noreferrer" target="_blank">coronavirus-tracker@phe.gov.uk</a>,
     ],
     items: [
