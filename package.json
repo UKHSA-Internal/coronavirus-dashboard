@@ -11,6 +11,8 @@
     "govuk-frontend": "^3.6.0",
     "govuk-react-jsx": "^2.0.0",
     "leaflet": "^1.6.0",
+    "mapbox-gl": "^1.9.1",
+    "mapbox-gl-leaflet": "^0.0.12",
     "node-sass": "^4.13.1",
     "numeral": "^2.0.6",
     "react": "^16.13.0",
