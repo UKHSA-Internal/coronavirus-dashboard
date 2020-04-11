@@ -13,7 +13,10 @@ const About: ComponentType<Props> = ({}: Props) => {
       <PageTitle title="About the data" />
       <Styles.SectionHeader className="govuk-heading-m">Case count data</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
-        Tests for COVID-19 are performed by laboratories around the UK. The processes for reporting are carried out separately for England, Scotland, Wales and Northern Ireland. The overall UK daily and cumulative counts are aggregated by the Department for Health and Social Care (DHSC) from the counts for the four nations, and submitted to PHE to display on the dashboard.
+        Tests for COVID-19 are performed by laboratories around the UK. The processes for reporting are carried out separately for England, Scotland, Wales and Northern Ireland. The overall UK daily and cumulative counts are aggregated by the Department for Health and Social Care (DHSC) from the counts for the four countries, and submitted to PHE to display on the dashboard.
+        <br/>
+        <br/>
+        The case counts currently presented in the dashboard include only tests carried out as part of ‘pillar 1’ of the government’s mass testing programme, that is those tests carried out in PHE and NHS laboratories.  Information about the different pillars is available <a href="https://www.gov.uk/government/publications/coronavirus-covid-19-scaling-up-testing-programmes/coronavirus-covid-19-scaling-up-our-testing-programmes">here</a>.
         <br/>
         <br/>
         Details of the processes for assembling numbers of cases in the Devolved Administrations are available on their websites:
@@ -32,7 +35,7 @@ const About: ComponentType<Props> = ({}: Props) => {
         For the time series case count data shown for England in the charts and tables, and available to download for Regions and UTLAs, the lab-confirmed positive cases are plotted according to the day the first specimen was taken. Each day new cases are reported, but the dates from which they originate cover the previous few days. Hence there are few cases reported for the most recent date on the chart, but this does not mean the epidemic is tailing off – the cases for any day will build over the next few days. Data from five days ago or so can be considered complete. The data are constantly being revised, so data for previous days will change as data are revised. These are currently only available for England on this dashboard: data for the rest of the UK will be included as soon as possible. </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">Death count data</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
-        The processes for reporting deaths are also carried out separately for England, Scotland, Wales and Northern Ireland. The overall UK daily and cumulative counts are aggregated by the Department for Health and Social Care (DHSC) from the counts for the four nations, and submitted to PHE to display on the dashboard. The four component figures are not all taken from the same cut-off time each day.
+        The processes for reporting deaths are also carried out separately for England, Scotland, Wales and Northern Ireland. The overall UK daily and cumulative counts are aggregated by DHSC from the counts for the four countries, and submitted to PHE to display on the dashboard. The four component figures are not all taken from the same cut-off time each day.
         <br/>
         <br/>
         Details of the processes for assembling numbers of cases in the Devolved Administrations are available on their websites – links provided above.
@@ -46,6 +49,9 @@ const About: ComponentType<Props> = ({}: Props) => {
       <Styles.SectionHeader className="govuk-heading-m">Interpreting the maps</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
         The maps show counts of cases in each Upper Tier Local Authority (UTLA) area. UTLAs include counties and unitary authorities and vary enormously in population, from under 100,000 to over 1.4 million. Areas with larger populations would naturally have higher numbers of cases, even if the cases were completely evenly distributed around the country. In order to compare the numbers of cases between areas meaningfully it is necessary to calculate rates, but the comparisons would not have been robust when the numbers of cases in each area were small – rates will be shown as soon as possible.
+        <br/>
+        <br/>
+        Updated 10:45 11/04/2020
         <br/>
         <br/>
         Metadata developed with advice from the UK Statistics Authority
