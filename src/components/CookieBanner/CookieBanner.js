@@ -18,7 +18,6 @@ const CookieBanner: ComponentType<Props> = ({}: Props) => {
     const cookies = document.cookie.split(';');
     const cookiesPreferencesSet = cookies.find(c => c.trim().startsWith('cookies_preferences_set'))?.split('=')?.[1];
 
-    console.log (cookies, cookiesPreferencesSet)
     if (cookiesPreferencesSet === 'true') {
       const cookiesPolicyRaw = cookies.find(c => c.trim().startsWith('cookies_policy'))?.split('=')?.[1];
       if (cookiesPolicyRaw) {
