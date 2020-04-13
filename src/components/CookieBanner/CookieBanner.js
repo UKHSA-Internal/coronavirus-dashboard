@@ -57,28 +57,14 @@ const CookieBanner: ComponentType<Props> = ({}: Props) => {
       <div id="global-cookie-message" className="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet="" style={{ display: 'block' }}>
         <div className="gem-c-cookie-banner__wrapper govuk-width-container">
           <div className="govuk-grid-row">
-            <div className=" govuk-grid-column-two-thirds">
+            <div className="govuk-grid-column-two-thirds">
               <div className="gem-c-cookie-banner__message">
-                <span className="govuk-heading-m">Tell us whether you accept cookies</span>
-                <p className="govuk-body">We use cookies to collect information about how you use coronavirus.data.gov.uk. We use this information to make the website work as well as possible and improve government services.</p>
+                <h2 className="govuk-heading-m">Can we store analytics cookies on your device?</h2>
+                <p className="govuk-body">Analytics cookies help us understand how our website is being used.</p>
               </div>
-              <div className="gem-c-cookie-banner__buttons">
-                <div className="gem-c-cookie-banner__button gem-c-cookie-banner__button-accept govuk-grid-column-full govuk-grid-column-one-half-from-desktop">
-                  
-      
-      
-        <button className="gem-c-button govuk-button gem-c-button--inline" type="submit" data-module="track-click" data-accept-cookies="true" data-track-category="cookieBanner" data-track-action="Cookie banner accepted" onClick={handleAccept}>Accept all cookies</button>
-      
-      
-                </div>
-                <div className="gem-c-cookie-banner__button gem-c-cookie-banner__button-settings govuk-grid-column-full govuk-grid-column-one-half-from-desktop">
-                  
-      
-      
-        <button className="gem-c-button govuk-button gem-c-button--inline" type="submit" data-module="track-click" data-accept-cookies="false" data-track-category="cookieBanner" data-track-action="Cookie banner denied" onClick={handleDeny}>Reject all cookies</button>
-      
-      
-                </div>
+              <div className="gem-c-cookie-banner__buttons gem-c-cookie-banner__buttons--flex">
+                <button className="gem-c-button govuk-button gem-c-button--inline" type="submit" data-module="track-click" data-accept-cookies="true" data-track-category="cookieBanner" onClick={handleAccept}>Yes</button>
+                <button className="gem-c-button govuk-button gem-c-button--inline" type="submit" data-module="track-click" data-hide-cookie-banner="true" data-track-category="cookieBanner" onClick={handleDeny}>No</button>
               </div>
             </div>
           </div>
@@ -91,10 +77,8 @@ const CookieBanner: ComponentType<Props> = ({}: Props) => {
     return (
       <div id="global-cookie-message" className="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet="" style={{ display: 'block' }}>
         <div className="gem-c-cookie-banner__confirmation govuk-width-container" tabindex="-1">
-          <p className="gem-c-cookie-banner__confirmation-message">
-            You’ve accepted all cookies.
-          </p>
-          <button className="gem-c-cookie-banner__hide-button" data-hide-cookie-banner="true" data-module="track-click" data-track-category="cookieBanner" data-track-action="Hide cookie banner" onClick={handleHide}>Hide</button>
+          <p className="gem-c-cookie-banner__confirmation-message govuk-body">You’ve accepted all cookies.</p>
+          <button className="gem-c-cookie-banner__hide-button govuk-link" data-hide-cookie-banner="true" data-module="track-click" data-track-category="cookieBanner" data-track-action="Hide cookie banner" onClick={handleHide}>Hide</button>
         </div>
       </div>
     );
@@ -104,10 +88,8 @@ const CookieBanner: ComponentType<Props> = ({}: Props) => {
     return (
       <div id="global-cookie-message" className="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet="" style={{ display: 'block' }}>
         <div className="gem-c-cookie-banner__confirmation govuk-width-container" tabindex="-1">
-          <p className="gem-c-cookie-banner__confirmation-message">
-            You’ve rejected all cookies.
-          </p>
-          <button className="gem-c-cookie-banner__hide-button" data-hide-cookie-banner="true" data-module="track-click" data-track-category="cookieBanner" data-track-action="Hide cookie banner" onClick={handleHide}>Hide</button>
+          <p className="gem-c-cookie-banner__confirmation-message govuk-body">You’ve rejected all cookies.</p>
+          <button className="gem-c-cookie-banner__hide-button govuk-link" data-hide-cookie-banner="true" data-module="track-click" data-track-category="cookieBanner" data-track-action="Hide cookie banner" onClick={handleHide}>Hide</button>
         </div>
       </div>
     );

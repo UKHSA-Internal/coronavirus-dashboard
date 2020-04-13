@@ -19,6 +19,26 @@ body {
       max-width: 1045px;
     }
   }
+
+  & .gem-c-cookie-banner {
+    padding: 20px 0;
+  }
+
+  & .gem-c-cookie-banner__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+
+  & .gem-c-button {
+    flex-grow: 1;
+    flex-basis: 10rem;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    display: inline-block;
+    width: auto;
+    vertical-align: baseline;
+  }
 }
 
 code {
