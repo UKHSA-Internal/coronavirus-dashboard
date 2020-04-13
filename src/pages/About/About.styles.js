@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
 export const Container: ComponentType<*> = (() => {
-  return styled.div`
+  return styled.main`
     display: flex;
     flex-direction: column;
     margin-top: 45px;
@@ -17,5 +17,5 @@ export const SectionHeader: ComponentType<*> = (() => {
 })();
 
 export const Body: ComponentType<*> = (() => {
-  return styled.h3``;
+  return styled.p``;
 })();

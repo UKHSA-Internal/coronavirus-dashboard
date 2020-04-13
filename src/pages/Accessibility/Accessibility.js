@@ -10,7 +10,7 @@ const Accessibility: ComponentType<Props> = ({}: Props) => {
   return (
     <Styles.Container className="govuk-width-container">
 
-      <h2 id="accessibility-statement-for-website-name">Accessibility statement for Coronavirus (COVID-19) cases in the UK</h2>
+      <h1 id="accessibility-statement-for-website-name">Accessibility statement for Coronavirus (COVID-19) cases in the UK</h1>
       <p>This accessibility statement applies to coronavirus.data.gov.uk.</p>
       <p>This website is run by Public Health England. We want as many people as possible to be able to use this website. For example, that means you should be able to:</p>
       <ul>
@@ -21,7 +21,7 @@ const Accessibility: ComponentType<Props> = ({}: Props) => {
         <li>listen to most of the website using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)</li>
       </ul>
 
-      <h3 id="how-accessible-this-website-is">How accessible this website is</h3>
+      <h2 id="how-accessible-this-website-is">How accessible this website is</h2>
       <p>We know some parts of this website are not fully accessible:</p>
       <ul>
         <li>page regions not identified with ARIA landmarks</li>
@@ -38,10 +38,10 @@ const Accessibility: ComponentType<Props> = ({}: Props) => {
         <li>region page is missing footer content on mobile view</li>
       </ul>
       
-      <h3 id="reporting-accessibility-problems-with-this-website">Reporting accessibility problems with this website</h3>
+      <h2 id="reporting-accessibility-problems-with-this-website">Reporting accessibility problems with this website</h2>
       <p>We’re always looking to improve the accessibility of this website. If you find any problems not listed on this page or think we’re not meeting accessibility requirements, contact Public Health England at <a href="mailto:coronavirus-tracker@phe.gov.uk?Subject=Coronavirus%20dashboard%20accessibility%20feedback" rel="noopener noreferrer" target="_blank">coronavirus-tracker@phe.gov.uk</a>.</p>
       
-      <h3 id="enforcement-procedure">Enforcement procedure</h3>
+      <h2 id="enforcement-procedure">Enforcement procedure</h2>
       <p>The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018
 (the ‘accessibility regulations’). If you’re not happy with how we respond to your complaint, <a rel="external" href="https://www.equalityadvisoryservice.com/" class="govuk-link">contact the Equality Advisory and Support Service (EASS)</a>.</p>
       
