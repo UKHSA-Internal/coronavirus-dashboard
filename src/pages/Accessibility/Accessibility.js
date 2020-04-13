@@ -25,7 +25,6 @@ const Accessibility: ComponentType<Props> = ({}: Props) => {
       <p>We know some parts of this website are not fully accessible:</p>
       <ul>
         <li>page regions not identified with ARIA landmarks</li>
-        <li>the heading hierarchy is incorrectly structured</li>
         <li>page titles are not descriptive on about the data and accessibility statement pages</li>
         <li>rendering issues bbserved zooming text only/increasing font size</li>
         <li>two dimensional scrolling is present at 1280px width and 400% zoom</li>
@@ -55,7 +54,6 @@ const Accessibility: ComponentType<Props> = ({}: Props) => {
       <p>The content listed below is non-accessible for the following reasons.</p>
       <h3 id="non-compliance-with-the-accessibility-regulations">Non-compliance with the accessibility regulations</h3>
       <p>Page regions not identified with ARIA landmarks. This fails WCAG 2.1 success criterion 1.3.1 (Info and Relationships).</p>
-      <p>The heading hierarchy is incorrectly structured. This fails WCAG 2.1 success criterion 2.4.1 (Bypass Blocks).</p>
       <p>Page titles are not descriptive on about the data and accessibipty statement pages. This fails WCAG 2.1 success criterion 2.4.2 (Page Titled).</p>
       <p>Rendering issues bbserved zooming text only/increasing font size. This fails WCAG 2.1 success criterion 1.4.4 (Resize Text).</p>
       <p>Two dimensional scrolpng is present at 1280px width and 400% zoom. This fails WCAG 2.1 success criterion 1.4.10 (Reflow).</p>
