@@ -27,7 +27,6 @@ const Accessibility: ComponentType<Props> = ({}: Props) => {
         <li>page regions not identified with ARIA landmarks</li>
         <li>page titles are not descriptive on about the data and accessibility statement pages</li>
         <li>rendering issues bbserved zooming text only/increasing font size</li>
-        <li>two dimensional scrolling is present at 1280px width and 400% zoom</li>
         <li>headings and labels do not describe a topic or purpose</li>
         <li>map is included twice in tab order</li>
         <li>UTLA meaning not clear</li>
@@ -56,7 +55,6 @@ const Accessibility: ComponentType<Props> = ({}: Props) => {
       <p>Page regions not identified with ARIA landmarks. This fails WCAG 2.1 success criterion 1.3.1 (Info and Relationships).</p>
       <p>Page titles are not descriptive on about the data and accessibipty statement pages. This fails WCAG 2.1 success criterion 2.4.2 (Page Titled).</p>
       <p>Rendering issues bbserved zooming text only/increasing font size. This fails WCAG 2.1 success criterion 1.4.4 (Resize Text).</p>
-      <p>Two dimensional scrolpng is present at 1280px width and 400% zoom. This fails WCAG 2.1 success criterion 1.4.10 (Reflow).</p>
       <p>Headings and labels do not describe a topic or purpose. This fails WCAG 2.1 success criterion 2.4.6 (Headings and Labels).</p>
       <p>The map is included twice in tab order. This fails WCAG 2.1 success criterion 1.1.1 (Non-text Content) and 2.4.3 (Focus Order).</p>
       <p>UTLA meaning not clear. This fails WCAG 2.1 success criterion 1.3.1 (Info and Relationships).</p>
