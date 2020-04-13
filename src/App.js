@@ -17,6 +17,12 @@ const F = props => <Footer
     children: [
       'For feedback email ',
       <a className="govuk-footer__link" href="mailto:coronavirus-tracker@phe.gov.uk?Subject=Coronavirus%20dashboard%20feedback" rel="noopener noreferrer" target="_blank">coronavirus-tracker@phe.gov.uk</a>,
+      <br/>,
+      <br/>,
+      'Developed by ',
+      <a className="govuk-footer__link" href="https://www.gov.uk/government/organisations/public-health-england" target="_blank" rel="noopener noreferrer">PHE</a>,
+      ' and ',
+      <a className="govuk-footer__link" href="https://www.nhsx.nhs.uk/" target="_blank" rel="noopener noreferrer">NHSX</a>,
     ],
     items: [
       { children: ['About the data'], href: '/about' },
