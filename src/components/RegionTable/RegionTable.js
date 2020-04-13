@@ -66,7 +66,6 @@ const RegionTable: ComponentType<Props> = ({
   }, [country, region, utla]);
 
   const handleKeyDown = (type: 'countries' | 'regions' | 'utlas') => (r: string) => (event: SyntheticKeyboardEvent<*>) => {
-    console.log(event.key)
     if (layout === 'desktop' && event.key === 'Enter') {
       setCountry(type === 'countries' ? r : null);
       setRegion(type === 'regions' ? r : null);

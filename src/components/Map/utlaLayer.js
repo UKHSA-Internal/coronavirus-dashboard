@@ -72,7 +72,6 @@ const useUtlaLayer = (utlaData: UtlaData, hash: string, layerGroup: L.LayerGroup
       setUtlaLayers([circleLayer, boundryLayer]);
 
       if (layerGroup && hash === '#local-authorities') {
-        console.log('HRE', hash)
         layerGroup.clearLayers();
         [circleLayer, boundryLayer].map(l => layerGroup.addLayer(l));
       }
