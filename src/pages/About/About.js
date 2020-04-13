@@ -16,17 +16,17 @@ const About: ComponentType<Props> = ({}: Props) => {
         Tests for COVID-19 are performed by laboratories around the UK. The processes for reporting are carried out separately for England, Scotland, Wales and Northern Ireland. The overall UK daily and cumulative counts are aggregated by the Department for Health and Social Care (DHSC) from the counts for the four countries, and submitted to PHE to display on the dashboard.
         <br/>
         <br/>
-        The case counts currently presented in the dashboard include only tests carried out as part of ‘pillar 1’ of the government’s mass testing programme, that is those tests carried out in PHE and NHS laboratories.  Information about the different pillars is available <a href="https://www.gov.uk/government/publications/coronavirus-covid-19-scaling-up-testing-programmes/coronavirus-covid-19-scaling-up-our-testing-programmes">here</a>.
+        The case counts currently presented in the dashboard include only tests carried out as part of ‘pillar 1’ of the government’s mass testing programme, that is those tests carried out in PHE and NHS laboratories.  Information about the different pillars is available <a href="https://www.gov.uk/government/publications/coronavirus-covid-19-scaling-up-testing-programmes/coronavirus-covid-19-scaling-up-our-testing-programmes" target="_blank" rel="noopener noreferrer">here</a>.
         <br/>
         <br/>
         Details of the processes for assembling numbers of cases in the Devolved Administrations are available on their websites:
         <br/>
         <br/>
-        <a href="https://www.gov.scot/coronavirus-covid-19/">Scotland</a>
+        <a href="https://www.gov.scot/coronavirus-covid-19/" target="_blank" rel="noopener noreferrer">Scotland</a>
         <br/>
-        <a href="https://covid19-phwstatement.nhs.wales/">Wales</a>
+        <a href="https://covid19-phwstatement.nhs.wales/" target="_blank" rel="noopener noreferrer">Wales</a>
         <br/>
-        <a href="https://www.publichealth.hscni.net/publications/covid-19-surveillance-reports">Northern Ireland</a>
+        <a href="https://www.publichealth.hscni.net/publications/covid-19-surveillance-reports" target="_blank" rel="noopener noreferrer">Northern Ireland</a>
         <br/>
         <br/>
         In England, the results of tests are submitted by the laboratories to PHE through the Second Generation Surveillance System (SGSS). Confirmed positive cases are matched to ONS geographical area codes using the home postcode of the person tested as supplied by the laboratory information systems. Duplicate tests for the same person are removed. Cases are aggregated to Upper Tier Local Authority (UTLA) and Region level and presented in the table and on the map. Some cases cannot be matched to a geographical area due to absence or delayed receipt of postcode information – hence the UTLA and Region counts do not sum to the England total. Cumulative case counts include patients who are currently unwell, have recovered and those that have died. Total published counts for individual UTLAs can occasionally go down from one day to the next as data are further revised. Any cases in people who have not been tested are not included in the confirmed case count.
