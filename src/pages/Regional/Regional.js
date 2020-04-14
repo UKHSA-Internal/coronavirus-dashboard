@@ -107,7 +107,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
           />
         </>
       )}
-      <ExportAsCSV data={ data }/>
+      {/* <ExportAsCSV data={ data }/> */}
       <ViewAs view={view} setView={setView} />
       {view === 'chart' && (
         <>
