@@ -4,6 +4,8 @@ import { withRouter } from 'react-router';
 import axios from 'axios';
 import L from 'leaflet';
 
+import ErrorBoundary from 'components/ErrorBoundary';
+
 import useCountryLayer from './countryLayer';
 import useRegionLayer from './regionLayer';
 import useUtlaLayer from './utlaLayer';
@@ -141,7 +143,11 @@ const Map: ComponentType<Props> = ({
     }
   }, [country, region, utla]);
 
-  return <Styles.Map id="map" />;
+  return (
+    <ErrorBoundary>
+      <Styles.Map id="map" />
+    </ErrorBoundary>
+  );
 };
 
 export default withRouter(Map);
