@@ -12,6 +12,19 @@ const deleteCookies = () => {
   document.cookie = "_gat= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=.data.gov.uk";
 };
 
+const setCookies = () => {
+  window.ga('create', 'UA-161400643-1', 'auto');
+  window.ga('set', 'anonymizeIp', true);
+  window.ga('set', 'allowAdFeatures', false);
+  window.ga('create', 'UA-145652997-1', 'auto', 'govuk_shared', {'allowLinker': true});
+  window.ga('govuk_shared.require', 'linker');
+  window.ga('govuk_shared.set', 'anonymizeIp', true);
+  window.ga('govuk_shared.set', 'allowAdFeatures', false);
+  window.ga('govuk_shared.linker:autoLink', ['www.gov.uk', 'coronavirus.data.gov.uk']);
+  window.ga('send', 'pageview');
+  window.ga('govuk_shared.send', 'pageview')
+};
+
 const CookieBanner: ComponentType<Props> = ({}: Props) => {
   const [cookieState, setCookieState] = useState('unread');
 
@@ -26,6 +39,8 @@ const CookieBanner: ComponentType<Props> = ({}: Props) => {
 
         if (!cookiesPolicy.usage) {
           deleteCookies();
+        } else {
+          setCookies();
         }
       }
       setCookieState('set');
@@ -38,6 +53,7 @@ const CookieBanner: ComponentType<Props> = ({}: Props) => {
   const handleAccept = () => {
     document.cookie = 'cookies_preferences_set=true';
     document.cookie = 'cookies_policy={"essential":true,"usage":true}';
+    setCookies();
     setCookieState('accept');
   };
 
