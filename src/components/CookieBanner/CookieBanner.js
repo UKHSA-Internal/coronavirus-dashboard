@@ -20,7 +20,7 @@ const setCookies = () => {
   window.ga('govuk_shared.require', 'linker');
   window.ga('govuk_shared.set', 'anonymizeIp', true);
   window.ga('govuk_shared.set', 'allowAdFeatures', false);
-  window.ga('govuk_shared.linker:autoLink', ['www.gov.uk', 'coronavirus.data.gov.uk']);
+  window.ga('govuk_shared.linker:autoLink', ['www.gov.uk']);
   window.ga('send', 'pageview');
   window.ga('govuk_shared.send', 'pageview')
 };
