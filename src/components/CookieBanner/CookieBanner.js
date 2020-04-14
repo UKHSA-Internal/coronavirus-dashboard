@@ -84,17 +84,6 @@ const CookieBanner: ComponentType<Props> = ({}: Props) => {
     );
   }
 
-  if (cookieState === 'deny') {
-    return (
-      <div id="global-cookie-message" className="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet="" style={{ display: 'block' }}>
-        <div className="gem-c-cookie-banner__confirmation govuk-width-container" tabindex="-1">
-          <p className="gem-c-cookie-banner__confirmation-message govuk-body">You’ve rejected all cookies.</p>
-          <button className="gem-c-cookie-banner__hide-button govuk-link" data-hide-cookie-banner="true" data-module="track-click" data-track-category="cookieBanner" data-track-action="Hide cookie banner" onClick={handleHide}>Hide</button>
-        </div>
-      </div>
-    );
-  }
-
   return null;
 };
 
