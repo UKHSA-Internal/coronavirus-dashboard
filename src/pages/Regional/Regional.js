@@ -61,10 +61,6 @@ const Regional: ComponentType<Props> = ({}: Props) => {
   return (
     <Styles.Container className="govuk-width-container">
       <PageTitle
-        title="IN DEVELOPMENT"
-        subtitle="This page is in development. The numbers shown are not accurate."
-      />
-      <PageTitle
         title="Coronavirus (COVID-19) in the UK"
         subtitle={`Last updated ${formatDate(data?.lastUpdatedAt)}`}
       />
