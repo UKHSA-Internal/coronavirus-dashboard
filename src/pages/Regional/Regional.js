@@ -14,7 +14,7 @@ import LineChart from 'components/LineChart';
 import BarChart from 'components/BarChart';
 import ViewAs from 'components/ViewAs';
 import AltChartTable from 'components/AltChartTable';
-import ExportAsCSV from "components/Export";
+import { ExportCasesAsCSV, ExportDeathsAsCSV } from "components/Export";
 
 import isIE from 'isIE';
 
@@ -108,6 +108,8 @@ const Regional: ComponentType<Props> = ({}: Props) => {
         </>
       )}
       {/* <ExportAsCSV data={ data }/> */}
+      <ExportCasesAsCSV data={ data }/>
+      <ExportDeathsAsCSV data={ data }/>
       <ViewAs view={view} setView={setView} />
       {view === 'chart' && (
         <>

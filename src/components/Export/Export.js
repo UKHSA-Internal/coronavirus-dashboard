@@ -18,7 +18,7 @@ import type { ExportAsCSVProps, DataInterface } from "./Export.types";
  *                             [default: "Download data as CSV"]
  * @param data {DataInterface} Completed dataset, as downloaded from the server.
  */
-export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
+export class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
 
     // Default substitutes.
     defaultFileName = 'coronavirus-data';
@@ -56,6 +56,45 @@ export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
         "totalCases",
         "deaths"
     ];
+    includedData = [
+        "overview",
+        "countries",
+        "regions",
+        "utlas"
+    ];
+    replacementNames = {
+        // Categorical value for area name: column data (JSON dataset)
+        countries: "Country",
+        overview: "Country - UK",
+        regions: "Region",
+        utlas: "Upper tier local authority"
+    };
+
+    /**
+     * Processes the data, and replaces the the names using the
+     * `replacementNames` class property.
+     *
+     * @returns {{}} Processed data.
+     */
+    getData() {
+
+        const { data } = this.props;
+
+        let results = {};
+
+        for ( const dataName in data ) {
+
+            if ( data.hasOwnProperty(dataName) && this.includedData.indexOf(dataName) > -1 ) {
+                console.log(data[dataName]);
+                results[this.replacementNames[dataName]] = data[dataName]
+
+            }
+
+        }
+
+        return results
+
+    } // getData
 
     /**
      * Retrieves data from the hook, constructs a CSV blob
@@ -68,25 +107,8 @@ export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
         event.preventDefault();
 
         const
-            // Extracting data from the props.
-            {
-                fileName=this.defaultFileName,
-                data: {
-                    overview={},
-                    countries={},
-                    regions={},
-                    utlas={}
-                }
-            } = this.props,
-
-            // Constructing the JSON with categorical values.
-            data = {
-                // Categorical value for area name: column data (JSON dataset)
-                Country: countries,
-                "Country - UK": overview,
-                Region: regions,
-                "Upper tier local authority": utlas
-            };
+            data = this.getData(),
+            { fileName=this.defaultFileName } = this.props;
 
         downloadAsCSV({
             csv:
@@ -184,3 +206,91 @@ export default class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
     } // render
 
 } // ExportAsCSV
+
+
+export class ExportCasesAsCSV extends ExportAsCSV {
+
+    defaultFileName = 'coronavirus-cases';
+    defaultLinkText = 'Download cases data as CSV';
+    categoryNames = {
+        "dailyConfirmedCases": "Lab-confirmed cases",
+        "dailyTotalConfirmedCases": "Cumulative lab-confirmed cases",
+    };
+    columnNames = [
+        "Area name",
+        "Area code",
+        "Area type",
+        "Date",
+        "Daily lab-confirmed cases",
+        "Cumulative lab-confirmed cases",
+    ];
+    includedData = [
+        "countries",
+        "regions",
+        "utlas"
+    ];
+
+    /**
+     * Filters the super class format method to only include data from
+     * Scotland, Northern Ireland, Wales and the United Kingdom.
+     *
+     * @param content
+     * @param areaType
+     * @returns {Array<string|number|null>[]}
+     */
+    format(content: any, areaType: string): Array<Array<string|number|null>> | null {
+
+        let areaNameIndex = this.columnNames.indexOf("Area name"),
+            excludedAreaNames = ["Scotland", "Northern Ireland", "Wales", "UK"];
+
+        return super
+            .format(content, areaType)
+            .filter(item => excludedAreaNames.indexOf(item[areaNameIndex]) < 0)
+
+    } // format
+
+} // ExportCasesAsCSV
+
+
+export class ExportDeathsAsCSV extends ExportAsCSV {
+
+    defaultFileName = 'coronavirus-deaths';
+    defaultLinkText = 'Download deaths data as CSV';
+    categoryNames = {
+        "dailyDeaths": "Daily hospital deaths",
+        "dailyTotalDeaths": "Cumulative hospital deaths"
+    };
+    columnNames = [
+        "Area name",
+        "Area code",
+        "Area type",
+        "Date",
+        "Daily hospital deaths",
+        "Cumulative hospital deaths"
+    ];
+    includedData = [
+        "overview",
+        "countries",
+    ];
+
+    /**
+     * Filters the super class format method to only include country data.
+     *
+     * @param content
+     * @param areaType
+     * @returns {Array<string|number|null>[]}
+     */
+    format(content: any, areaType: string): Array<Array<string|number|null>> | null {
+
+        let areaTypeIndex = this.columnNames.indexOf("Area type");
+
+        return super
+            .format(content, areaType)
+            .filter(item =>
+                item[areaTypeIndex] === this.replacementNames.countries ||
+                item[areaTypeIndex] === this.replacementNames.overview
+            )
+
+    } // format
+
+} // ExportDeathsAsCSV

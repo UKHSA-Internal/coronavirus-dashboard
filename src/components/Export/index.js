@@ -12,5 +12,4 @@
  *
  * Copyright (c) 2020, Public Health England.
  */
-
-export { default } from "./Export";
+export { ExportCasesAsCSV, ExportDeathsAsCSV, ExportAsCSV } from './Export.js'
