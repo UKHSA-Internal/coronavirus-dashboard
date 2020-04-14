@@ -11,6 +11,12 @@ import * as Styles from './AltChartTable.styles';
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const formatDate = (d: Date) => `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
 
+const sortFunc = (a, b) => {
+  if (new Date(a.date).getTime() < new Date(b.date).getTime()) return 1;
+  if (new Date(a.date).getTime() > new Date(b.date).getTime()) return -1;
+  return 0;
+};
+
 const AltChartTable: ComponentType<Props> = ({ header, valueName, data }: Props) => {
   return (
     <Styles.Container>
@@ -21,7 +27,7 @@ const AltChartTable: ComponentType<Props> = ({ header, valueName, data }: Props)
           // caption={header}
           // captionClassName="govuk-heading-m"
           head={[{ children: ['Date']}, { children: [valueName], format: 'numeric' }]}
-          rows={data.map(d => [
+          rows={data.sort(sortFunc).map(d => [
             { children: [formatDate(new Date(d.date))] },
             { children: [numeral(d.value).format('0,0')], format: 'numeric' },
           ])}
