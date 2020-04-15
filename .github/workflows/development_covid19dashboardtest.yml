@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@development
+    - uses: actions/checkout@master
 
     - name: Set up Node.js version
       uses: actions/setup-node@v1
