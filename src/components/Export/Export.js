@@ -220,7 +220,7 @@ export class ExportCasesAsCSV extends ExportAsCSV {
         "Area name",
         "Area code",
         "Area type",
-        "Date",
+        "Specimen date",
         "Daily lab-confirmed cases",
         "Cumulative lab-confirmed cases",
     ];
@@ -264,7 +264,7 @@ export class ExportDeathsAsCSV extends ExportAsCSV {
         "Area name",
         "Area code",
         "Area type",
-        "Date",
+        "Reporting date",
         "Daily hospital deaths",
         "Cumulative hospital deaths"
     ];
