@@ -25,7 +25,6 @@ const F = props => <Footer
       <a className="govuk-footer__link" href="https://www.nhsx.nhs.uk/" target="_blank" rel="noopener noreferrer">NHSX</a>,
     ],
     items: [
-      { children: ['About the data'], href: '/about' },
       { children: ['Accessibility'], href: '/accessibility' },
     ],
     visuallyHiddenTitle: 'Items',
@@ -45,7 +44,7 @@ const App = () => {
         serviceUrlTo="/"
         homepageUrlHref="https://gov.uk"
       />
-      {layout === 'mobile' && <Navigation />}
+      <Navigation />
       <Switch>
         <Route path="/region" component={MobileRegionTable} />
         <Route path="/about" component={About} />
