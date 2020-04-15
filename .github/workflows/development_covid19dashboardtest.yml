@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@development
 
     - name: Set up Node.js version
       uses: actions/setup-node@v1
@@ -27,7 +27,9 @@ jobs:
         yarn install
       
     - name: Build yarn
-      run: yarn run build
+      env:
+        CI: false
+      run: arn run build
 
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v1
