@@ -24,7 +24,7 @@ jobs:
       run: |
         npm -g install yarn
         npm install
-        npm run build --if-present
+        yarn run build
 
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v1
