@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - covid19dashboardtest
+name: Build and deploy Node.js app to Azure Web App - covid19-test-dashboard
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@master
@@ -18,18 +18,24 @@ jobs:
     - name: Set up Node.js version
       uses: actions/setup-node@v1
       with:
-        node-version: '12.x'
+        node-version: '12.13.0'
 
-    - name: npm install and build
+    - name: Install dependencies
       run: |
-        npm -g install yarn
+        npm install -g yarn
         npm install
+        yarn install
+        
+    - name: Build yarn
+      env:
+        CI: false
+      run: |
         yarn run build
 
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v1
       with:
-        app-name: 'covid19dashboardtest'
+        app-name: 'covid19-test-dashboard'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_3de5e1a09efb4f61b5ae8ad72c1907e0 }}
-        package: .
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_1d62fadaa82244249a304ce75ba33dde }}
+        package: ./build
