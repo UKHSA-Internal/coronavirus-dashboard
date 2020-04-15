@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 import { Container, Paragraph } from "./Export.styles";
-import { downloadAsCSV, formatDateAsUTC } from "./Export.utils";
-import type { ExportAsCSVProps, DataInterface } from "./Export.types";
+import { downloadAsCSV } from "./Export.utils";
+import type { ExportAsCSVProps, RestructuredDataInterface } from "./Export.types";
 
 
 /**
@@ -74,9 +74,9 @@ export class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
      * Processes the data, and replaces the the names using the
      * `replacementNames` class property.
      *
-     * @returns {{}} Processed data.
+     * @returns {RestructuredDataInterface} Processed data.
      */
-    getData() {
+    getData(): RestructuredDataInterface {
 
         const { data } = this.props;
 
@@ -85,7 +85,7 @@ export class ExportAsCSV extends Component<ExportAsCSVProps, {}> {
         for ( const dataName in data ) {
 
             if ( data.hasOwnProperty(dataName) && this.includedData.indexOf(dataName) > -1 ) {
-                console.log(data[dataName]);
+
                 results[this.replacementNames[dataName]] = data[dataName]
 
             }
