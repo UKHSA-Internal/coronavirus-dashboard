@@ -35,8 +35,6 @@ interface ContentInterface {
 
 export interface DataInterface {
 
-    lastUpdatedAt: string,
-    disclaimer:    string,
     overview:      ContentInterface,
     countries:     ContentInterface,
     regions:       ContentInterface,
@@ -44,6 +42,13 @@ export interface DataInterface {
 
 } // DataInterface
 
+
+export interface RestructuredDataInterface {
+    "Country"?:                     ContentInterface,
+    "Country - UK"?:                ContentInterface,
+    "Region"?:                      ContentInterface,
+    "Upper tier local authority"?:  ContentInterface
+}
 
 export interface ExportAsCSVProps {
 
