@@ -16,7 +16,7 @@ const About: ComponentType<Props> = ({}: Props) => {
         COVID-19 cases are identified by taking specimens from people and sending these specimens to laboratories around the UK to be tested.  If the test is positive, this is a referred to as a lab-confirmed case.
         <br/>
         <br/>
-        There are separate reporting processes for England, Scotland, Wales and Northern Ireland.  Each country provides data based on tests carried out in NHS (and PHE) laboratories.  These represent 'pillar 1' of the Government's mass testing programme.  The Department for Health and Social Care (DHSC) combines the counts from the four countries, and adds data from tests carried out by commercial partners ('pillar 2' of the mass-testing programme) to give daily and total (cumulative) counts of lab-confirmed cases.  These are submitted to Public Health England (PHE) to display on the dashboard.
+        There are separate reporting processes for England, Scotland, Wales and Northern Ireland.  Each country provides data based on tests carried out in NHS (and PHE) laboratories.  These represent 'pillar 1' of the Government's mass testing programme.  The Department for Health and Social Care (DHSC) combines the counts from the four countries, and adds data from tests carried out by commercial partners ('pillar 2' of the mass-testing programme) to give daily and total (cumulative) counts of lab-confirmed cases.  These are submitted to Public Health England (PHE) to display on the dashboard.  The four figures are not all taken from the same cut-off time: England and Scotland counts are as at 09:00 on the day of publication; Wales counts are as at 07:00 the day of publication; Northern Ireland counts are from different times on the day of publication.  The exact time of the Northern Ireland data extract is given on the <a href="https://www.publichealth.hscni.net/news/covid-19-coronavirus#what-is-the-situation-in-northern-ireland" target="_blank" rel="noopener noreferrer">Northern Ireland Public Health Agency</a> website.
         <br/>
         <br/>
         The UK total is not the sum of the four country totals as the pillar 2 cases cannot currently be included in the country totals.  All other data on this website are based only on cases detected through pillar 1.  Information about the different pillars is available on <a href="https://www.gov.uk/government/publications/coronavirus-covid-19-scaling-up-testing-programmes/coronavirus-covid-19-scaling-up-our-testing-programmes" target="_blank" rel="noopener noreferrer">GOV.UK</a>.
@@ -37,19 +37,25 @@ const About: ComponentType<Props> = ({}: Props) => {
         In England, laboratories submit test results to PHE through the Second Generation Surveillance System (SGSS).  Cases received from laboratories by 00:30 are included in the counts published that day.  Confirmed positive cases are matched to ONS geographical area codes using the home postcode of the person tested.  Postcodes are supplied by the laboratory information systems.
         <br/>
         <br/>
-        Duplicate tests for the same person are removed - the first positive specimen date is used as the specimen date for that person.
+        Duplicate tests for the same person are removed.  The first positive specimen date is used as the specimen date for that person.
         <br/>
         <br/>
         Cases are aggregated to Upper Tier Local Authority (UTLA) and Region level and shown in the table and on the map.  UTLAs include Counties, Unitary Authorities, Metropolitan Districts and London Boroughs.  Some cases cannot be matched to a geographical area because postcode information is missing or received late.  This is why the UTLA and Region counts do not add up to the England total.
         <br/>
         <br/>
-        Cumulative case counts include patients who are currently unwell, those have recovered and those that have died.  Total UTLA counts shown on this website can occasionally go down from one day to the next as data are revised.  Cases in people who have not been tested are not included in the confirmed case counts.
+        Cumulative case counts include patients who are currently unwell, those have recovered and those that have died.
+        <br/>
+        <br/>
+        Total UTLA counts shown on this website can occasionally go down from one day to the next as data are revised.
+        <br/>
+        <br/>
+        Cases in people who have not been tested are not included in the confirmed case counts.
         <br/>
         <br/>  
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">Interpreting the maps</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
-        The maps show counts of cases in each Country, Region and Upper Tier Local Authority (UTLA) area.  The areas of the circles on the map are proportional to the counts.  UTLAs include counties and unitary authorities and vary enormously in population size, from under 100,000 to over 1.4 million.  Areas with larger populations would naturally have higher numbers of cases, even if the cases were evenly distributed around the country.
+        The maps show counts of cases in each Country, Region and UTLA area.  The areas of the circles on the map are proportional to the counts.  UTLAs vary enormously in population size, from under 100,000 to over 1.4 million.  Areas with larger populations would naturally have higher numbers of cases, even if the cases were evenly distributed around the country.
         <br/>
         <br/>
         To compare the numbers of cases between areas meaningfully it is necessary to calculate rates.  These will be added to this website as soon as possible.
@@ -61,16 +67,16 @@ const About: ComponentType<Props> = ({}: Props) => {
         Daily case counts are shown in charts and tables, and can be downloaded for Regions and UTLAs as a csv file.  They are currently only available for England on this website.  Data for the rest of the UK will be included as soon as possible.
         <br/>  
         <br/>
-        Lab-confirmed positive cases are attributed to the day the first specimen was taken from the person being tested (the specimen date).  Each day new cases are reported, but the dates they originate from cover the previous few days.  Because of this, there are few cases reported for the most recent date on the chart, but this does not mean the epidemic is tailing off.  The cases shown for recent days will build over the next few days.  Data from around five days ago can be considered complete.  Data for recent days are constantly being revised as more information becomes available.
+        Lab-confirmed positive cases are attributed to the day the first specimen was taken from the person being tested (the specimen date).  Each day new cases are reported, but the dates they originate from cover the previous few days.  Because of this, there are few cases reported for the most recent date on the chart, but this does not mean the epidemic is tailing off.  Data from around five days ago can be considered complete.  Data for recent days are constantly being revised as more information becomes available.
        <br/>  
        <br/>
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">Total and daily deaths in UK hospitals</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
-        There are separate reporting processes for England, Scotland, Wales and Northern Ireland.  The Department for Health and Social Care (DHSC) combines these four counts to give the overall UK daily and total (cumulative) counts.  DHSC submits the counts to PHE to display on this website.  The four figures are not all taken from the same cut-off time each day: England and Wales counts are as at 17:00 the day before publication; Scotland counts are as at 09:00 the day before publication; Northern Ireland counts are as at 09:15 the day before publication.  
+        There are separate reporting processes for England, Scotland, Wales and Northern Ireland.  DHSC combines these four counts to give the overall UK daily and total (cumulative) counts.  DHSC submits the counts to PHE to display on this website.  The four figures are not all taken from the same cut-off time: England and Wales counts are as at 17:00 the day before publication; Scotland counts are as at 09:00 the day before publication; Northern Ireland counts are as at 09:15 the day before publication.  
         <br/>
         <br/>
-        Details of the processes for counting deaths in the devolved administrations are available on their websites – links provided in the Total and daily UK cases section on this page.
+        Details of the processes for counting deaths in the devolved administrations are available on their websites.  Links provided in the 'Total and daily UK cases' section on this page.
         <br/>
         <br/>
       </Styles.Body>
@@ -88,7 +94,7 @@ const About: ComponentType<Props> = ({}: Props) => {
         Deaths are shown in charts and tables according to the day they were reported, not the day they occurred.  They can be downloaded as csv file.      
         <br/>
         <br/>
-        Updated 15:30 15/04/2020
+        Updated 16:35 15/04/2020
         <br/>
         <br/>
         Metadata developed with advice from the UK Statistics Authority
