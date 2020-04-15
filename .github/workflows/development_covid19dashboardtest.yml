@@ -29,12 +29,16 @@ jobs:
     - name: Build yarn
       env:
         CI: false
-      run: yarn run build
+      run: |
+        yarn run build
 
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v1
       with:
         app-name: 'covid19dashboardtest'
-        slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_3de5e1a09efb4f61b5ae8ad72c1907e0 }}
         package: ./build
+        
+    - name: logout
+      run: |
+        az logout
