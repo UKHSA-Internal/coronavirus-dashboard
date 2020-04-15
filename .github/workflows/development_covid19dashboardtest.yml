@@ -20,11 +20,11 @@ jobs:
       with:
         node-version: '12.x'
 
-    - name: npm install and build
-      run: |
-        npm -g install yarn
-        npm install
-        yarn run build
+    - name: Install dependencies
+      run: yarn --frozen-lockfile
+      
+    - name: npm build
+      run: yarn run build
 
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v1
