@@ -24,9 +24,9 @@ import * as Styles from './Regional.styles';
 const formatAMPM = date => {
 
   let
-      hours = date.getUTCHours(),
-      minutes = date.getUTCMinutes(),
-      ampm = hours >= 12 ? 'pm' : 'am';
+    hours = date.getUTCHours(),
+    minutes = date.getUTCMinutes(),
+    ampm = hours >= 12 ? 'pm' : 'am';
 
   hours = (hours % 12) || 12;
   minutes = minutes < 10 ? `0${minutes}` : minutes;
@@ -36,17 +36,17 @@ const formatAMPM = date => {
 };
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const formatDate = (d: string="") => {
+const formatDate = (d: string = "") => {
 
-    if (d === "") return "";
+  if (d === "") return "";
 
-    const date = new Date(d.toLowerCase().endsWith("z") ? d : `${d}Z`);
+  const date = new Date(d.toLowerCase().endsWith("z") ? d : `${d}Z`);
 
-    return `${date.getUTCDate()} ${monthNames[date.getUTCMonth()]} ${date.getUTCFullYear()}, ${formatAMPM(date)} GMT`;
+  return `${date.getUTCDate()} ${monthNames[date.getUTCMonth()]} ${date.getUTCFullYear()}, ${formatAMPM(date)} GMT`;
 
 };
 
-const Regional: ComponentType<Props> = ({}: Props) => {
+const Regional: ComponentType<Props> = ({ }: Props) => {
   const [country, setCountry] = useState(null);
   const [region, setRegion] = useState(null);
   const [utla, setUtla] = useState(null);
@@ -56,6 +56,14 @@ const Regional: ComponentType<Props> = ({}: Props) => {
 
   if (!data) {
     return null;
+  }
+
+  // Chart and table titles
+  const titles = {
+    totalCases: 'Total number of lab-confirmed cases in England by specimen date',
+    dailyCases: 'Daily number of lab-confirmed cases in England by specimen date',
+    totalDeaths: 'Total number of COVID-19 associated UK deaths by date reported',
+    dailyDeaths: 'Daily number of COVID-19 associated UK deaths by date reported'
   }
 
   return (
@@ -107,24 +115,23 @@ const Regional: ComponentType<Props> = ({}: Props) => {
           />
         </>
       )}
-      {/* <ExportAsCSV data={ data }/> */}
-      <ExportCasesAsCSV data={ data }/>
-      <ExportDeathsAsCSV data={ data }/>
+      <ExportCasesAsCSV data={data} />
+      <ExportDeathsAsCSV data={data} />
       <ViewAs view={view} setView={setView} />
       {view === 'chart' && (
         <>
-          <LineChart data={data?.countries?.E92000001?.dailyTotalConfirmedCases ?? []} header="Total number of lab-confirmed England cases" tooltipText="cases" />
-          <BarChart data={data?.countries?.E92000001?.dailyConfirmedCases ?? []} header="Daily number of lab-confirmed England cases" tooltipText="cases" />
-          <LineChart data={data?.overview?.K02000001?.dailyTotalDeaths ?? []} header="Total number of COVID-19 associated UK deaths in hospital" tooltipText="deaths" />
-          <BarChart data={data?.overview?.K02000001?.dailyDeaths ?? []} header="Daily number of COVID-19 associated UK deaths in hospital" tooltipText="deaths" />
+          <LineChart data={data?.countries?.E92000001?.dailyTotalConfirmedCases ?? []} header={titles.totalCases} tooltipText="cases" />
+          <BarChart data={data?.countries?.E92000001?.dailyConfirmedCases ?? []} header={titles.dailyCases} tooltipText="cases" />
+          <LineChart data={data?.overview?.K02000001?.dailyTotalDeaths ?? []} header={titles.totalDeaths} tooltipText="deaths" />
+          <BarChart data={data?.overview?.K02000001?.dailyDeaths ?? []} header={titles.dailyDeaths} tooltipText="deaths" />
         </>
       )}
       {view === 'table' && (
         <>
-          <AltChartTable data={data?.countries?.E92000001?.dailyTotalConfirmedCases ?? []} header="Total number of lab-confirmed England cases" valueName="Total cases" />
-          <AltChartTable data={data?.countries?.E92000001?.dailyConfirmedCases ?? []} header="Daily number of lab-confirmed England cases" valueName="Daily cases" />
-          <AltChartTable data={data?.overview?.K02000001?.dailyTotalDeaths ?? []} header="Total number of COVID-19 associated UK deaths in hospital" valueName="Total deaths" />
-          <AltChartTable data={data?.overview?.K02000001?.dailyDeaths ?? []} header="Daily number of COVID-19 associated UK deaths in hospital" valueName="Daily deaths" />
+          <AltChartTable data={data?.countries?.E92000001?.dailyTotalConfirmedCases ?? []} header={titles.totalCases} valueName="Total cases" />
+          <AltChartTable data={data?.countries?.E92000001?.dailyConfirmedCases ?? []} header={titles.dailyCases} valueName="Daily cases" />
+          <AltChartTable data={data?.overview?.K02000001?.dailyTotalDeaths ?? []} header={titles.totalDeaths} valueName="Total deaths" />
+          <AltChartTable data={data?.overview?.K02000001?.dailyDeaths ?? []} header={titles.dailyDeaths} valueName="Daily deaths" />
         </>
       )}
       <Disclaimer text={data?.disclaimer} />
