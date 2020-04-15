@@ -44,6 +44,12 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                 gridLines: {
                   drawBorder: false,
                 },
+                ticks: {
+                  beginAtZero: true,
+                  userCallback: function(value, index, values) {
+                    return value.toLocaleString();
+                  },
+                },
               }],
             },
             tooltips: {
