@@ -40,7 +40,7 @@ const About: ComponentType<Props> = ({}: Props) => {
         Duplicate tests for the same person are removed.  The first positive specimen date is used as the specimen date for that person.
         <br/>
         <br/>
-        Cases are aggregated to Upper Tier Local Authority (UTLA) and Region level and shown in the table and on the map.  UTLAs include Counties, Unitary Authorities, Metropolitan Districts and London Boroughs.  Some cases cannot be matched to a geographical area because postcode information is missing or received late.  This is why the UTLA and Region counts do not add up to the England total.
+        Cases are aggregated to Upper Tier Local Authority (UTLA) and Region level and shown in the table and on the map.  UTLAs include Counties, Unitary Authorities, Metropolitan Districts and London Boroughs.  Some cases cannot be matched to a geographical area because postcode information is missing or received late.  This is why the UTLA and Region counts do not add up to the England total.  Data for Cornwall and Isles of Scilly are combined because Isles of Scilly has a population of less than 10,000 and fewer than 5 cases.
         <br/>
         <br/>
         Cumulative case counts include patients who are currently unwell, those have recovered and those that have died.
