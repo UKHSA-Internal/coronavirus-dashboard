@@ -105,7 +105,7 @@ const About: ComponentType<Props> = ({}: Props) => {
         Deaths are shown in charts and tables according to the day they were reported, not the day they occurred.  They can be downloaded as a csv file.      
         <br/>
         <br/>
-        Updated 5pm 16 April 2020
+        Updated 6pm 16 April 2020
         <br/>
         <br/>
         Metadata developed with advice from the UK Statistics Authority
