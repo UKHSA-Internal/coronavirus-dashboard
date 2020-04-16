@@ -21,13 +21,13 @@ Please refrain from either committing your contributions to the `master` branch 
 All contributions should be made to the `development` branch, and should ideally adhere the following protocol:
 
 - Create a branch off of the `development` branch. 
-- Commit you contributions to the new branch.
+- Commit your contributions to the new branch.
 - When complete, create a pull request for your branch to be merged with the `development` branch. Please describe your
   changes in the pull request.
 
 > **NOTE:** Please use meaningful commit messages.
 
-Once merged, the changes will automatically trigger a new build (Continuous Integration), which in turn update the 
+Once merged, the changes will automatically trigger a new build (Continuous Integration), which in turn updates the 
 test server. Once complete, the changes will be reviewed by the testing team. 
 
 **If approved**, the `development` branch will then be merged with `master` branch, which is regularly built and deployed 
