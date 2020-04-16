@@ -46,6 +46,26 @@ const formatDate = (d: string = "") => {
 
 };
 
+/**
+ * Extracts the number of deaths from the latest date included in
+ * the data, under: ``data.overview.K02000001.dailyDeaths``
+ * @param data
+ * @returns {number} Latest number of deaths or 0.
+ */
+const getLatestDailyDeaths = (data: any): number => {
+
+    const defaultDate = '0000.00.00';
+
+    try {
+        return data?.overview?.K02000001?.dailyDeaths?.sort((a, b) =>
+            new Date(b?.date ?? defaultDate) - new Date(a?.date ?? defaultDate)
+        )[0]?.value ?? 0
+    } catch (e) {
+        return 0
+    }
+
+}; // getLatestDailyDeaths
+
 const Regional: ComponentType<Props> = ({ }: Props) => {
   const [country, setCountry] = useState(null);
   const [region, setRegion] = useState(null);
@@ -64,7 +84,7 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
     dailyCases: 'Daily number of lab-confirmed cases in England by specimen date',
     totalDeaths: 'Total number of COVID-19 associated UK deaths by date reported',
     dailyDeaths: 'Daily number of COVID-19 associated UK deaths by date reported'
-  }
+  };
 
   return (
     <Styles.Container className="govuk-width-container">
@@ -86,7 +106,7 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
       />
       <BigNumber
         caption="Latest daily number of COVID-19 associated UK deaths in hospital"
-        number={data?.overview?.K02000001?.dailyDeaths?.slice(-1)[0]?.value ?? 0}
+        number={getLatestDailyDeaths(data)}
       />
       {isIE() && <div style={{ width: '68%' }} />}
       {layout === 'desktop' && (
