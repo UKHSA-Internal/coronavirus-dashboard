@@ -16,10 +16,10 @@ const About: ComponentType<Props> = ({}: Props) => {
         COVID-19 cases are identified by taking specimens from people and sending these specimens to laboratories around the UK to be tested.  If the test is positive, this is a referred to as a lab-confirmed case.
         <br/>
         <br/>
-        There are separate reporting processes for England, Scotland, Wales and Northern Ireland.  Each country provides data based on tests carried out in NHS (and PHE) laboratories.  These represent 'pillar 1' of the Government's mass testing programme.  The Department for Health and Social Care (DHSC) combines the counts from the four countries, and adds data from tests carried out by commercial partners ('pillar 2' of the mass-testing programme) to give daily and total (cumulative) counts of lab-confirmed cases.  These are submitted to Public Health England (PHE) to display on the dashboard.  The four figures are not all taken from the same cut-off time: England and Scotland counts are as at 09:00 on the day of publication; Wales counts are as at 07:00 the day of publication; Northern Ireland counts are from different times on the day of publication.  The exact time of the Northern Ireland data extract is given on the <a href="https://www.publichealth.hscni.net/news/covid-19-coronavirus#what-is-the-situation-in-northern-ireland" target="_blank" rel="noopener noreferrer">Northern Ireland Public Health Agency</a> website.
+        There are separate reporting processes for England, Scotland, Wales and Northern Ireland.  Each nation provides data based on tests carried out in NHS (and PHE) laboratories.  These represent 'pillar 1' of the Government's mass testing programme.  The Department for Health and Social Care (DHSC) combines the counts from the 4 nations, and adds data from tests carried out by commercial partners ('pillar 2' of the mass-testing programme) to give daily and total (cumulative) counts of lab-confirmed cases.  These are submitted to Public Health England (PHE) to display on the dashboard.  The 4 figures are not all taken from the same cut-off time: England and Scotland counts are as at 9am on the day of publication; Wales counts are as at 7am on the day of publication; Northern Ireland counts are from different times on the day of publication.  The exact time of the Northern Ireland data extract is given on the <a href="https://www.publichealth.hscni.net/news/covid-19-coronavirus#what-is-the-situation-in-northern-ireland" target="_blank" rel="noopener noreferrer">Northern Ireland Public Health Agency</a> website.
         <br/>
         <br/>
-        The UK total is not the sum of the four country totals as the pillar 2 cases cannot currently be included in the country totals.  All other data on this website are based only on cases detected through pillar 1.  Information about the different pillars is available on <a href="https://www.gov.uk/government/publications/coronavirus-covid-19-scaling-up-testing-programmes/coronavirus-covid-19-scaling-up-our-testing-programmes" target="_blank" rel="noopener noreferrer">GOV.UK</a>.
+        The UK total is not the sum of the 4 nation totals as the pillar 2 cases cannot currently be included in the nation totals.  All other data on this website are based only on cases detected through pillar 1.  Information about the different pillars is available on <a href="https://www.gov.uk/government/publications/coronavirus-covid-19-scaling-up-testing-programmes/coronavirus-covid-19-scaling-up-our-testing-programmes" target="_blank" rel="noopener noreferrer">GOV.UK</a>.
         <br/>
         <br/>
         Details of the processes for counting cases in the devolved administrations are available on their websites:
@@ -34,7 +34,7 @@ const About: ComponentType<Props> = ({}: Props) => {
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">England cases</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
-        In England, laboratories submit test results to PHE through the Second Generation Surveillance System (SGSS).  Cases received from laboratories by 00:30 are included in the counts published that day.  Confirmed positive cases are matched to ONS geographical area codes using the home postcode of the person tested.  Postcodes are supplied by the laboratory information systems.
+        In England, laboratories submit test results to PHE through the Second Generation Surveillance System (SGSS).  Cases received from laboratories by 12:30am are included in the counts published that day.  Confirmed positive cases are matched to ONS geographical area codes using the home postcode of the person tested.  Postcodes are supplied by the laboratory information systems.
         <br/>
         <br/>
         Duplicate tests for the same person are removed.  The first positive specimen date is used as the specimen date for that person.
@@ -67,13 +67,24 @@ const About: ComponentType<Props> = ({}: Props) => {
         Daily case counts are shown in charts and tables, and can be downloaded for Regions and UTLAs as a csv file.  They are currently only available for England on this website.  Data for the rest of the UK will be included as soon as possible.
         <br/>  
         <br/>
-        Lab-confirmed positive cases are attributed to the day the first specimen was taken from the person being tested (the specimen date).  Each day new cases are reported, but the dates they originate from cover the previous few days.  Because of this, there are few cases reported for the most recent date on the chart, but this does not mean the epidemic is tailing off.  Data from around five days ago can be considered complete.  Data for recent days are constantly being revised as more information becomes available.
-       <br/>  
-       <br/>
+        Lab-confirmed positive cases are attributed to the day the first specimen was taken from the person being tested (the specimen date).  Each day new cases are reported, but the dates they originate from cover the previous few days.  Because of this, there are few cases reported for the most recent date on the chart, but this does not mean the epidemic is tailing off.  Data from around 5 days ago can be considered complete.  Data for recent days are constantly being revised as more information becomes available.
+        <br/> 
+        <br/> 
+      </Styles.Body>
+      <Styles.SectionHeader className="govuk-heading-m">Note on the change in the way the dates are attributed</Styles.SectionHeader>
+      <Styles.Body className="govuk-body">
+        <br/>
+        <br/> 
+        Data were previously shown by reporting date. The reporting date is the date that PHE published the data, which would normally be one day after the laboratory submitted the data to PHE.  In many cases labs submit data in batches, so there may be no cases for a week and then a large number on one day.  This is not helpful for analysing the incidence of COVID-19 over time.
+        <br/>  
+        <br/>
+        The data are now shown by the date the specimen was taken from the person being tested.  This gives a much more useful analysis of the progression of cases over time.  It does mean that the latest days’ figures are always incomplete, and only data from five days or more ago can be considered complete.
+        <br/>
+        <br/>
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">Total and daily deaths in UK hospitals</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
-        There are separate reporting processes for England, Scotland, Wales and Northern Ireland.  DHSC combines these four counts to give the overall UK daily and total (cumulative) counts.  DHSC submits the counts to PHE to display on this website.  The four figures are not all taken from the same cut-off time: England and Wales counts are as at 17:00 the day before publication; Scotland counts are as at 09:00 the day before publication; Northern Ireland counts are as at 09:15 the day before publication.  
+        There are separate reporting processes for England, Scotland, Wales and Northern Ireland.  DHSC combines these 4 counts to give the overall UK daily and total (cumulative) counts.  DHSC submits the counts to PHE to display on this website.  The 4 figures are not all taken from the same cut-off time: England and Wales counts are as at 5pm on the day before publication; Scotland counts are as at 9am on the day before publication; Northern Ireland counts are as at 9:15am on the day before publication.  
         <br/>
         <br/>
         Details of the processes for counting deaths in the devolved administrations are available on their websites.  Links provided in the 'Total and daily UK cases' section on this page.
@@ -82,7 +93,7 @@ const About: ComponentType<Props> = ({}: Props) => {
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">England deaths in hospitals</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
-        The figures currently shown for England are deaths in NHS-commissioned services of patients who have tested positively for COVID-19.  These include private provides currently providing NHS services.  Deaths are reported by the services to NHS England.  NHS England extracts data at 17:00 each day and these are the basis for the death counts reported on this website the following day.  After validation, the total number of deaths in England is published by NHS England and sent to DHSC.
+        The figures currently shown for England are deaths in NHS-commissioned services of patients who have tested positively for COVID-19.  These include private provides currently providing NHS services.  Deaths are reported by the services to NHS England.  NHS England extracts data at 5pm each day and these are the basis for the death counts reported on this website the following day.  After validation, the total number of deaths in England is published by NHS England and sent to DHSC.
         <br/>
         <br/>
         Deaths outside NHS services are not currently included in these counts.  Deaths of people who have tested positively for COVID-19 could in some cases be due to a different cause.
@@ -91,10 +102,10 @@ const About: ComponentType<Props> = ({}: Props) => {
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">Deaths over time</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
-        Deaths are shown in charts and tables according to the day they were reported, not the day they occurred.  They can be downloaded as csv file.      
+        Deaths are shown in charts and tables according to the day they were reported, not the day they occurred.  They can be downloaded as a csv file.      
         <br/>
         <br/>
-        Updated 16:35 15/04/2020
+        Updated 5pm 16 April 2020
         <br/>
         <br/>
         Metadata developed with advice from the UK Statistics Authority
