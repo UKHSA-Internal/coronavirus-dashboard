@@ -66,11 +66,6 @@ const About: ComponentType<Props> = ({}: Props) => {
                            rel={"noopener noreferrer"}>Public Health Wales coronavirus information</a>
                     </li>
                     <li>
-                        <a href={"https://covid19-phwstatement.nhs.wales/"}
-                           target={"_blank"}
-                           rel={"noopener noreferrer"}>Public Health Wales coronavirus information</a>
-                    </li>
-                    <li>
                         <a href={"https://www.publichealth.hscni.net/publications/covid-19-surveillance-reports"}
                            className={"govuk-link"}
                            target={"_blank"}
