@@ -54,15 +54,15 @@ const formatDate = (d: string = "") => {
  */
 const getLatestDailyDeaths = (data: any): number => {
 
-    const defaultDate = '0000.00.00';
+  const defaultDate = '0000.00.00';
 
-    try {
-        return data?.overview?.K02000001?.dailyDeaths?.sort((a, b) =>
-            new Date(b?.date ?? defaultDate) - new Date(a?.date ?? defaultDate)
-        )[0]?.value ?? 0
-    } catch (e) {
-        return 0
-    }
+  try {
+    return data?.overview?.K02000001?.dailyDeaths?.sort((a, b) =>
+      new Date(b?.date ?? defaultDate) - new Date(a?.date ?? defaultDate)
+    )[0]?.value ?? 0
+  } catch (e) {
+    return 0
+  }
 
 }; // getLatestDailyDeaths
 
@@ -82,8 +82,8 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
   const titles = {
     totalCases: 'Total number of lab-confirmed cases in England by specimen date',
     dailyCases: 'Daily number of lab-confirmed cases in England by specimen date',
-    totalDeaths: 'Total number of COVID-19 associated UK deaths by date reported',
-    dailyDeaths: 'Daily number of COVID-19 associated UK deaths by date reported'
+    totalDeaths: 'Total number of COVID-19 associated UK deaths in hospital by date reported',
+    dailyDeaths: 'Daily number of COVID-19 associated UK deaths in hospital by date reported'
   };
 
   return (
