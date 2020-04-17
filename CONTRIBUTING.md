@@ -7,7 +7,7 @@ This document contains the protocol and workflow for contributions to the **Coro
 ## Repository
 The GitHub repository consists of 2 primary branches:
 - The `master` branch
-- The `development` branch
+- The `development` branch [Default branch]
 
 ### Master branch
 The `master` branch is the base - anything that is committed to the `master` branch is considered final, and are deployed 
