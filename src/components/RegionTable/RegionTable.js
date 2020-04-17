@@ -110,13 +110,13 @@ const RegionTable: ComponentType<Props> = ({
         items={[
           {
             id: 'countries',
-            label: 'Countries',
+            label: 'Nations',
             panel: {
               children: [
-                <Table
-                  head={[{ children: ['Country']}, { children: ['Total cases'], format: 'numeric' }, { children: ['Deaths'], format: 'numeric' }]}
+                <Table key='countries'
+                  head={[{ children: ['Nation'] }, { children: ['Total cases'], format: 'numeric' }, { children: ['Deaths'], format: 'numeric' }]}
                   rows={countryKeys.sort(sortFunc(countryData)).map(r => [
-                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnCountryClick(r)} onKeyPress={handleOnCountryKeyDown} active={country === r}>{countryData[r].name.value}</LinkOrText>] },
+                    { children: [<LinkOrText id={`table-link-${r}`} key={`table-link-${r}`} onClick={handleOnCountryClick(r)} onKeyPress={handleOnCountryKeyDown} active={country === r}>{countryData[r].name.value}</LinkOrText>] },
                     { children: [numeral(countryData[r].totalCases.value).format('0,0')], format: 'numeric' },
                     { children: [numeral(countryData[r].deaths.value).format('0,0')], format: 'numeric' },
                   ])}
@@ -129,10 +129,10 @@ const RegionTable: ComponentType<Props> = ({
             label: 'Regions',
             panel: {
               children: [
-                <Table
-                  head={[{ children: ['Region']}, { children: ['Total cases'], format: 'numeric' }]}
+                <Table key='regions'
+                  head={[{ children: ['Region'] }, { children: ['Total cases'], format: 'numeric' }]}
                   rows={regionKeys.sort(sortFunc(regionData)).map(r => [
-                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnRegionClick(r)} onKeyPress={handleOnRegionKeyDown} active={region === r}>{regionData[r].name.value}</LinkOrText>] },
+                    { children: [<LinkOrText id={`table-link-${r}`} key={`table-link-${r}`} onClick={handleOnRegionClick(r)} onKeyPress={handleOnRegionKeyDown} active={region === r}>{regionData[r].name.value}</LinkOrText>] },
                     { children: [numeral(regionData[r].totalCases.value).format('0,0')], format: 'numeric' },
                   ])}
                 />
@@ -144,10 +144,10 @@ const RegionTable: ComponentType<Props> = ({
             label: 'Upper tier local authorities',
             panel: {
               children: [
-                <Table
+                <Table key='local-authorities'
                   head={[{ children: ['UTLA'] }, { children: ['Total cases'], format: 'numeric' }]}
                   rows={utlaKeys.sort(sortFunc(utlaData)).map(r => [
-                    { children: [<LinkOrText id={`table-link-${r}`} onClick={handleOnUtlaClick(r)} onKeyPress={handleOnUtlaKeyDown} active={utla === r}>{utlaData[r].name.value}</LinkOrText>] },
+                    { children: [<LinkOrText id={`table-link-${r}`} key={`table-link-${r}`} onClick={handleOnUtlaClick(r)} onKeyPress={handleOnUtlaKeyDown} active={utla === r}>{utlaData[r].name.value}</LinkOrText>] },
                     { children: [numeral(utlaData[r].totalCases.value).format('0,0')], format: 'numeric' },
                   ])}
                 />
