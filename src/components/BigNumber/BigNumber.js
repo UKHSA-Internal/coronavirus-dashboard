@@ -7,18 +7,12 @@ import numeral from 'numeral';
 import type { Props } from './BigNumber.types.js';
 import * as Styles from './BigNumber.styles.js';
 
-const BigNumber: ComponentType<Props> = ({ caption, number, description, percentageChange, subtext, asterisk }: Props) => {
+const BigNumber: ComponentType<Props> = ({ caption, number, description, asterisk }: Props) => {
   return (
     <Styles.Container>
-      <Styles.Caption className="govuk-caption-l">{caption}</Styles.Caption>
+      <Styles.Caption className="govuk-heading-m">{caption}</Styles.Caption>
       <Styles.Number className="govuk-heading-l">{numeral(number).format('0,0')}{asterisk ? '*' : ''}</Styles.Number>
       <Styles.Caption className="govuk-!-font-size-16">{description}</Styles.Caption>
-
-      {/* <Styles.PercentageChange className="govuk-body">
-        {percentageChange}%&nbsp;
-        <Styles.Triangle percentageChange={percentageChange} />
-      </Styles.PercentageChange>
-      <Styles.Subtext className="govuk-body">{subtext}</Styles.Subtext> */}
     </Styles.Container>
   );
 };
