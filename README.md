@@ -1,10 +1,8 @@
-# Dashboard for tracking Coronavirus (COVID-19) across the UK
+This is the source code for the [Coronavirus Dashboard](https://coronavirus.data.gov.uk) service.
 
-## Development
+## Development and contribution
 
-To run locally `yarn start`.
+Please read the [contributions guide](https://github.com/PublicHealthEngland/coronavirus-dashboard/blob/master/CONTRIBUTING.md) for additional information.
 
-Before building a production build update the version number in package.json.
-This will change the built filenames to enable cache busting. 
-
-To build a production build `yarn build`.
+## Credits
+This service is developed and maintained by [NHSX](https://www.nhsx.nhs.uk/) and [Public Health England](https://www.gov.uk/government/organisations/public-health-england).
