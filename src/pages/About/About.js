@@ -29,8 +29,6 @@ const About: ComponentType<Props> = ({}: Props) => {
         <a href="https://covid19-phwstatement.nhs.wales/" target="_blank" rel="noopener noreferrer">Public Health Wales coronavirus information</a>
         <br/>
         <a href="https://www.publichealth.hscni.net/publications/covid-19-surveillance-reports" target="_blank" rel="noopener noreferrer">Northern Ireland Public Health Agency coronavirus information</a>
-        <br/>
-        <br/>
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">England cases</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
@@ -50,8 +48,6 @@ const About: ComponentType<Props> = ({}: Props) => {
       </Styles.Body>
       <Styles.Body className="govuk-body">
         Cases in people who have not been tested are not included in the confirmed case counts.
-        <br/>
-        <br/>  
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">Interpreting the maps</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
@@ -59,8 +55,6 @@ const About: ComponentType<Props> = ({}: Props) => {
       </Styles.Body>
       <Styles.Body className="govuk-body">
         To compare the numbers of cases between areas meaningfully it is necessary to calculate rates.  These will be added to this website as soon as possible.
-        <br/>  
-        <br/>
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">Cases over time</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
@@ -68,8 +62,6 @@ const About: ComponentType<Props> = ({}: Props) => {
       </Styles.Body>
       <Styles.Body className="govuk-body">
         Lab-confirmed positive cases are attributed to the day the first specimen was taken from the person being tested (the specimen date).  Each day new cases are reported, but the dates they originate from cover the previous few days.  Because of this, there are few cases reported for the most recent date on the chart, but this does not mean the epidemic is tailing off.  Data from around 5 days ago can be considered complete.  Data for recent days are constantly being revised as more information becomes available.
-        <br/> 
-        <br/> 
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">Note on the change in the way the dates are attributed</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
@@ -77,8 +69,6 @@ const About: ComponentType<Props> = ({}: Props) => {
       </Styles.Body>
       <Styles.Body className="govuk-body">
         The data are now shown by the date the specimen was taken from the person being tested.  This gives a much more useful analysis of the progression of cases over time.  It does mean that the latest days’ figures are always incomplete, and only data from five days or more ago can be considered complete.
-        <br/>
-        <br/>
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">Total and daily deaths in UK hospitals</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
@@ -86,8 +76,6 @@ const About: ComponentType<Props> = ({}: Props) => {
       </Styles.Body>
       <Styles.Body className="govuk-body">
         Details of the processes for counting deaths in the devolved administrations are available on their websites.  Links provided in the 'Total and daily UK cases' section on this page.
-        <br/>
-        <br/>
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">England deaths in hospitals</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
@@ -95,8 +83,6 @@ const About: ComponentType<Props> = ({}: Props) => {
       </Styles.Body>
       <Styles.Body className="govuk-body">
         Deaths outside NHS services are not currently included in these counts.  Deaths of people who have tested positively for COVID-19 could in some cases be due to a different cause.
-        <br/>
-        <br/>
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">Deaths over time</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
