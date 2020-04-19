@@ -95,18 +95,22 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
       <BigNumber
         caption="Total number of lab-confirmed UK cases"
         number={data?.overview?.K02000001?.totalCases?.value ?? 0}
+        description={ 'Includes tests carried out by commercial partners which are not included in the country totals' }
       />
       <BigNumber
-        caption="Latest daily number of lab-confirmed UK cases"
+        caption="Daily number of lab-confirmed UK cases"
         number={data?.overview?.K02000001?.newCases?.value ?? 0}
+        description={ "Number of new cases reported today" }
       />
       <BigNumber
         caption="Total number of COVID-19 associated UK deaths in hospital"
         number={data?.overview?.K02000001?.deaths.value ?? 0}
+        description={ "Deaths of patients in hospitals who have tested positive for COVID-19" }
       />
       <BigNumber
-        caption="Latest daily number of COVID-19 associated UK deaths in hospital"
+        caption="Daily number of COVID-19 associated UK deaths in hospital"
         number={getLatestDailyDeaths(data)}
+        description={ "Number of new deaths reported today" }
       />
       {isIE() && <div style={{ width: '68%' }} />}
       {layout === 'desktop' && (
