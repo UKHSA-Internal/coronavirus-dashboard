@@ -2,10 +2,11 @@
 
 import React, { useEffect } from 'react';
 import type { ComponentType } from 'react';
-import { withRouter } from 'react-router';
-import { Tabs, Table } from 'govuk-react-jsx';
+import { Tabs } from 'govuk-react-jsx/govuk/components/tabs';
+import { Table } from 'govuk-react-jsx/govuk/components/table';
 import numeral from 'numeral';
 
+import useHash from 'hooks/useHash';
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
 import type { Props } from './RegionTable.types';
@@ -29,9 +30,8 @@ const RegionTable: ComponentType<Props> = ({
   utla,
   setUtla,
   utlaData,
-  history: { push },
-  location: { hash },
 }: Props) => {
+  const hash = useHash();
   const layout = useResponsiveLayout(768);
 
   useEffect(() => {
@@ -160,4 +160,4 @@ const RegionTable: ComponentType<Props> = ({
   );
 };
 
-export default withRouter(RegionTable);
+export default RegionTable;

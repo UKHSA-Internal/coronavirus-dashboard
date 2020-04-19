@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { withRouter } from 'react-router';
 import axios from 'axios';
 import L from 'leaflet';
 
+import useHash from 'hooks/useHash';
 import ErrorBoundary from 'components/ErrorBoundary';
 
 import useCountryLayer from './countryLayer';
@@ -59,8 +59,8 @@ const Map: ComponentType<Props> = ({
   utla,
   setUtla,
   utlaData,
-  location: { hash },
 }: Props) => {
+  const hash = useHash();
   const [map, setMap] = useState(null);
   const [utlaCoordinates, setUtlaCoordinates] = useState({});
   const [layerGroup, setLayerGroup] = useState(null);
@@ -150,4 +150,4 @@ const Map: ComponentType<Props> = ({
   );
 };
 
-export default withRouter(Map);
+export default Map;

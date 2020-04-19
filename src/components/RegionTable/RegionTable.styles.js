@@ -2,7 +2,6 @@
 
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
-import { Link as L } from 'react-router-dom';
 
 export const Container: ComponentType<*> = (() => {
   return styled.div`

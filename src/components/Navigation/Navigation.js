@@ -2,14 +2,13 @@
 
 import React from 'react';
 import type { ComponentType } from 'react';
-import { withRouter } from 'react-router';
 
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
 import type { Props } from './Navigation.types';
 import * as Styles from './Navigation.styles';
 
-const Navigation: ComponentType<Props> = ({ location: { pathname }}: Props) => {
+const Navigation: ComponentType<Props> = ({ pathname }: Props) => {
   const layout = useResponsiveLayout(768);
 
   if (layout === 'desktop') {
@@ -43,4 +42,4 @@ const Navigation: ComponentType<Props> = ({ location: { pathname }}: Props) => {
   );
 };
 
-export default withRouter(Navigation);
+export default Navigation;
