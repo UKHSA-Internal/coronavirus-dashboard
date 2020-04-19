@@ -23,12 +23,11 @@ const About: ComponentType<Props> = ({}: Props) => {
       </Styles.Body>
       <Styles.Body className="govuk-body">
         Details of the processes for counting cases in the devolved administrations are available on their websites:
-        <br/>
-        <a href="https://www.gov.scot/coronavirus-covid-19/" target="_blank" rel="noopener noreferrer">Scottish Government coronavirus information</a>
-        <br/>
-        <a href="https://covid19-phwstatement.nhs.wales/" target="_blank" rel="noopener noreferrer">Public Health Wales coronavirus information</a>
-        <br/>
-        <a href="https://www.publichealth.hscni.net/publications/covid-19-surveillance-reports" target="_blank" rel="noopener noreferrer">Northern Ireland Public Health Agency coronavirus information</a>
+        <ul>
+        <li><a href="https://www.gov.scot/coronavirus-covid-19/" target="_blank" rel="noopener noreferrer">Scottish Government coronavirus information</a>
+        <li><a href="https://covid19-phwstatement.nhs.wales/" target="_blank" rel="noopener noreferrer">Public Health Wales coronavirus information</a>
+        <li><a href="https://www.publichealth.hscni.net/publications/covid-19-surveillance-reports" target="_blank" rel="noopener noreferrer">Northern Ireland Public Health Agency coronavirus information</a>
+        </ul>
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">England cases</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
