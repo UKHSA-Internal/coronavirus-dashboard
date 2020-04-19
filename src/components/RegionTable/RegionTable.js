@@ -7,7 +7,6 @@ import { Table } from 'govuk-react-jsx/govuk/components/table';
 import numeral from 'numeral';
 
 import useHash from 'hooks/useHash';
-import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
 import type { Props } from './RegionTable.types';
 import * as Styles from './RegionTable.styles';
@@ -33,7 +32,6 @@ const RegionTable: ComponentType<Props> = ({
   utlaData,
 }: Props) => {
   const hash = useHash();
-  const layout = useResponsiveLayout(768);
 
   useEffect(() => {
     const element = document.getElementById(`tab_${hash.replace('#', '')}`);
@@ -67,7 +65,7 @@ const RegionTable: ComponentType<Props> = ({
   }, [country, region, utla]);
 
   const handleKeyDown = (type: 'countries' | 'regions' | 'utlas') => (r: string) => (event: SyntheticKeyboardEvent<*>) => {
-    if (layout === 'desktop' && event.key === 'Enter') {
+    if (setCountry && setRegion && setUtla && event.key === 'Enter') {
       setCountry(type === 'countries' ? r : null);
       setRegion(type === 'regions' ? r : null);
       setUtla(type === 'utlas' ? r : null);
@@ -79,7 +77,7 @@ const RegionTable: ComponentType<Props> = ({
   const handleOnUtlaKeyDown = handleKeyDown('utlas');
 
   const handleOnClick = (type: 'countries' | 'regions' | 'utlas') => (r: string) => () => {
-    if (layout === 'desktop') {
+    if (setCountry && setRegion && setUtla) {
       setCountry(type === 'countries' ? r : null);
       setRegion(type === 'regions' ? r : null);
       setUtla(type === 'utlas' ? r : null);
