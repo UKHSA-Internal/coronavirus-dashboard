@@ -18,6 +18,16 @@ export const Container: ComponentType<*> = (() => {
   `;
 })();
 
+export const HideOnDesktop: ComponentType<*> = (() => {
+  return styled.div`
+    width: 100%;
+
+    @media only screen and (min-width: 768px) {
+      display: none;
+    }
+  `;
+})();
+
 export const NavList: ComponentType<*> = (() => {
   return styled.ul`
     max-width: 1015px;
