@@ -17,8 +17,6 @@ import NoScriptChartTables from 'components/NoScriptChartTables';
 import NoScriptMapTables from 'components/NoScriptMapTables';
 import { ExportCasesAsCSV, ExportDeathsAsCSV } from "components/Export";
 
-import isIE from 'isIE';
-
 import type { Props } from './Regional.types';
 import * as Styles from './Regional.styles';
 
@@ -108,7 +106,6 @@ const Regional: ComponentType<Props> = ({ pageContext: { data }}: Props) => {
           caption="Latest daily number of COVID-19 associated UK deaths in hospital"
           number={getLatestDailyDeaths(data)}
         />
-        {isIE() && <div style={{ width: '68%' }} />}
         <Styles.HideOnMobile>
           <RegionTable
             country={country}
