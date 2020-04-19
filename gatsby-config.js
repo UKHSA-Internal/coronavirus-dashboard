@@ -19,17 +19,9 @@ module.exports = {
         components: path.join(__dirname, 'src/components'),
         hooks: path.join(__dirname, 'src/hooks'),
         isIE: path.join(__dirname, 'src/isIE.js'),
+        addIECss: path.join(__dirname, 'src/addIECss.js'),
       }
     },
-    // {
-    //   resolve: `gatsby-source-filesystem`,
-    //   options: {
-    //     name: `images`,
-    //     path: `${__dirname}/src/images`,
-    //   },
-    // },
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
