@@ -19,7 +19,7 @@ export const Container: ComponentType<*> = (() => {
   `;
 })();
 
-export const Link: ComponentType<*> = (() => {
+export const DesktopName: ComponentType<*> = (() => {
   const getColor = ({ active }) => active ? '#0B0C0C' : '#1D70B8';
   const getFontWeight = ({ active }) => active ? 'bold' : 400;
   return styled.button`
@@ -30,6 +30,18 @@ export const Link: ComponentType<*> = (() => {
 
     &:visited {
       color: ${getColor} !important; 
+    }
+
+    @media only screen and (max-width: 768px) {
+      display: none;
+    }
+  `;
+})();
+
+export const MobileName: ComponentType<*> = (() => {
+  return styled.span`
+    @media only screen and (min-width: 768px) {
+      display: none;
     }
   `;
 })();

@@ -13,11 +13,12 @@ import type { Props } from './RegionTable.types';
 import * as Styles from './RegionTable.styles';
 
 const LinkOrText = ({ children, ...props }) => {
-  const layout = useResponsiveLayout(768);
-  if (layout === 'desktop') {
-    return <Styles.Link {...props} role="button" tabIndex={0} href={null} className="govuk-link">{children}</Styles.Link>
-  }
-  return <span {...props}>{children}</span>;
+  return (
+    <>
+      <Styles.DesktopName {...props} role="button" tabIndex={0} href={null} className="govuk-link">{children}</Styles.DesktopName>
+      <Styles.MobileName {...props}>{children}</Styles.MobileName>
+    </>
+  );
 };
 
 const RegionTable: ComponentType<Props> = ({
