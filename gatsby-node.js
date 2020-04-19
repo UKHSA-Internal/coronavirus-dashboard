@@ -44,12 +44,16 @@ exports.createPages = async ({ actions: { createPage } }) => {
   createPage({
     path: `/about`,
     component: require.resolve("./src/layouts/About/About.js"),
-    context: { },
   });
 
   createPage({
     path: `/accessibility`,
     component: require.resolve("./src/layouts/Accessibility/Accessibility.js"),
-    context: { },
+  });
+
+  createPage({
+    path: `/region`,
+    component: require.resolve("./src/layouts/MobileRegionTable/MobileRegionTable.js"),
+    context: { data },
   });
 }
