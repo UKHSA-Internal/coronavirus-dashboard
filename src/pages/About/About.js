@@ -73,8 +73,6 @@ const About: ComponentType<Props> = ({}: Props) => {
       </Styles.Body>
       <Styles.SectionHeader className="govuk-heading-m">Note on the change in the way the dates are attributed</Styles.SectionHeader>
       <Styles.Body className="govuk-body">
-        <br/>
-        <br/> 
         Data were previously shown by reporting date. The reporting date is the date that PHE published the data, which would normally be one day after the laboratory submitted the data to PHE.  In many cases labs submit data in batches, so there may be no cases for a week and then a large number on one day.  This is not helpful for analysing the incidence of COVID-19 over time.
         <br/>  
         <br/>
