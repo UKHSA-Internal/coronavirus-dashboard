@@ -2,15 +2,17 @@ const path = require('path');
 
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    title: `Tracking Coronavirus (COVID-19)`,
+    description: `GOV.UK Coronavirus dashboard`,
+    siteUrl: 'https://coronavirus.data.gov.uk',
   },
   plugins: [
     'gatsby-plugin-flow',
     `gatsby-plugin-react-helmet`,
     'gatsby-plugin-sass',
     'gatsby-plugin-styled-components',
+    `gatsby-plugin-favicon`,
+    'gatsby-plugin-robots-txt',
     {
       resolve: 'gatsby-plugin-root-import',
       options: {
@@ -18,20 +20,19 @@ module.exports = {
         pages: path.join(__dirname, 'src/layouts'),
         components: path.join(__dirname, 'src/components'),
         hooks: path.join(__dirname, 'src/hooks'),
-        isIE: path.join(__dirname, 'src/isIE.js'),
         addIECss: path.join(__dirname, 'src/addIECss.js'),
       }
     },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `Tracking Coronavirus (COVID-19)`,
+        short_name: `covid-19-tracking`,
         start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
-        display: `minimal-ui`,
-        // icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        background_color: `#ffffff`,
+        theme_color: `#000000`,
+        icon: `src/favicon.png`,
+        display: "standalone",
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
