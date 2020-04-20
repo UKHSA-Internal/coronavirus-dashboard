@@ -8,6 +8,10 @@ export const Container: ComponentType<*> = (() => {
     grid-column: 1/4;
     height: 600px;
 
+    @media only screen and (max-width: 768px) {
+      height: unset;
+    }
+
     & .govuk-tabs__panel {
       max-height: 485px;
       overflow: auto;
