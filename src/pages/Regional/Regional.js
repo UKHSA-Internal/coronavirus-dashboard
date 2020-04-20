@@ -95,7 +95,7 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
       <BigNumber
         caption="Total number of lab-confirmed UK cases"
         number={data?.overview?.K02000001?.totalCases?.value ?? 0}
-        description={ 'Includes tests carried out by commercial partners which are not included in the country totals' }
+        description={ 'Includes tests carried out by commercial partners which are not included in the 4 National totals' }
       />
       <BigNumber
         caption="Daily number of lab-confirmed UK cases"
