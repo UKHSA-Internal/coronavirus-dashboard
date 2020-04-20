@@ -1,7 +1,6 @@
 import { initAll } from 'govuk-frontend'
 
 import './src/index.scss';
-import 'govuk-frontend/govuk/all.scss';
 
 initAll();
 
