@@ -72,7 +72,7 @@ const Map: ComponentType<Props> = ({
         center: [55.7, -3.7],
         zoom: 5.4,
         minZoom: 5.4,
-        maxZoom: 11,
+        maxZoom: 12,
         layers: [
           L.mapboxGL({
             attribution: "<a href=\"http://www.openstreetmap.org/about/\" target=\"_blank\">&copy; OpenStreetMap contributors</a>",
