@@ -14,7 +14,7 @@ import LineChart from 'components/LineChart';
 import BarChart from 'components/BarChart';
 import ViewAs from 'components/ViewAs';
 import AltChartTable from 'components/AltChartTable';
-import { ExportCasesAsCSV, ExportDeathsAsCSV } from "components/Export";
+import ExportLink from "components/Export";
 
 import isIE from 'isIE';
 
@@ -95,7 +95,7 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
       <BigNumber
         caption="Total number of lab-confirmed UK cases"
         number={data?.overview?.K02000001?.totalCases?.value ?? 0}
-        description={ 'Includes tests carried out by commercial partners which are not included in the country totals' }
+        description={ 'Includes tests carried out by commercial partners which are not included in the 4 National totals' }
       />
       <BigNumber
         caption="Daily number of lab-confirmed UK cases"
@@ -139,8 +139,15 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
           />
         </>
       )}
-      <ExportCasesAsCSV data={data} />
-      <ExportDeathsAsCSV data={data} />
+      {/* FixMe: Change URL to relative before deployment to production. */}
+      <ExportLink
+          uri={ "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv" }
+          label={ "Download cases data as CSV" }
+      />
+      <ExportLink
+          uri={ "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv" }
+          label={ "Download deaths data as CSV" }
+      />
       <ViewAs view={view} setView={setView} />
       {view === 'chart' && (
         <>
