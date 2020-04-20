@@ -35,6 +35,7 @@ export const HideOnMobile: ComponentType<*> = (() => {
     grid-template-columns: repeat(6, 1fr);
     grid-column-gap: 30px;
     grid-row-gap: 60px;
+    width: 100%;
 
     @media only screen and (max-width: 768px) {
       display: none;
