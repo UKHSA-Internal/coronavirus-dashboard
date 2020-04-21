@@ -90,7 +90,7 @@ const CookieBanner: ComponentType<Props> = ({ }: Props) => {
     return (
       <div id="global-cookie-message" className="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet="" style={{ display: 'block' }}>
         <div className="gem-c-cookie-banner__confirmation govuk-width-container" tabindex="-1">
-          <p className="gem-c-cookie-banner__confirmation-message govuk-body">You’ve accepted all cookies.</p>
+          <p className="gem-c-cookie-banner__confirmation-message govuk-body">You’ve accepted all cookies. You can <a href="/cookies" className="govuk-link">change your cookie settings</a> at any time.</p>
           <button className="gem-c-cookie-banner__hide-button govuk-link" data-hide-cookie-banner="true" data-module="track-click" data-track-category="cookieBanner" data-track-action="Hide cookie banner" onClick={handleHide}>Hide</button>
         </div>
       </div>
@@ -99,7 +99,7 @@ const CookieBanner: ComponentType<Props> = ({ }: Props) => {
 
   if (cookieState === 'set-cookie-preferences') {
     return (
-      <Redirect to="/Cookies" />
+      <Redirect to="/cookies" />
     );
   }
 

@@ -97,7 +97,7 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
         We use Google Analytics to measure how you use the website so we can improve it based on user needs. Google Analytics sets cookies that store anonymised information about:
       </p>
 
-      <ul className="cookie-settings__list">
+      <ul className={"govuk-body"}>
         <li>how you got to the site</li>
         <li>the pages you visit on data.gov.uk, and how long you spend on each page</li>
         <li>what you click on while you're visiting the site</li>
@@ -112,7 +112,7 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
         These are the Google Analytics cookies we’ll use:
       </p>
 
-      <div className="table-wrapper">
+      <div className={"govuk-body"}>
         <table>
           <thead>
             <tr>
@@ -133,18 +133,20 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
 
       <div className="govuk-radios">
         <div className="gem-c-radio govuk-radios__item">
-          <input type="radio" name="cookies-usage" id="radio-c6a408c0-0" value="on" className="govuk-radios__input" defaultChecked onClick={() => setCookieState('set')} />
+          <input type="radio" name="cookies-usage" id="radio-c6a408c0-0" value="on" className="govuk-radios__input" onClick={() => setCookieState('set')} />
           <label htmlFor="radio-c6a408c0-0" className="gem-c-label govuk-label govuk-radios__label">
             Use cookies that measure my website use
           </label>
         </div>
         <div className="gem-c-radio govuk-radios__item">
-          <input type="radio" name="cookies-usage" id="radio-c6a408c0-1" value="off" className="govuk-radios__input" onClick={() => setCookieState('unset')} />
+          <input type="radio" name="cookies-usage" id="radio-c6a408c0-1" value="off" className="govuk-radios__input" defaultChecked onClick={() => setCookieState('unset')} />
           <label htmlFor="radio-c6a408c0-1" className="gem-c-label govuk-label govuk-radios__label">
             Do not use cookies that measure my website use
           </label>
         </div>
       </div>
+
+      <p className={"govuk-body"}></p>
 
       <Styles.SectionHeader className={"govuk-heading-m"}>
         Strictly necessary cookies
