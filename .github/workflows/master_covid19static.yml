@@ -39,4 +39,4 @@ jobs:
         app-name: 'covid19static'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_ee1e6b471f6e4800932ff51b6bbebcfc }}
-        package: ./build
+        package: ./public
