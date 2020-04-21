@@ -98,7 +98,7 @@ const CookieBanner: ComponentType<Props> = ({ }: Props) => {
   }
 
   if (cookieState === 'set-cookie-preferences') {
-    window.location = "/cookies";
+    location.assign("/cookies");
   }
 
   return null;
