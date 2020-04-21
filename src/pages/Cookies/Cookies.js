@@ -2,11 +2,15 @@
 
 import React, { useState } from 'react';
 import type { ComponentType } from 'react';
-import { Redirect } from 'react-router';
 
 import type { Props } from './Cookies.types';
 import * as Styles from './Cookies.styles';
 import PageTitle from 'components/PageTitle';
+
+const deleteCookies = () => {
+  document.cookie = "_ga= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=.data.gov.uk";
+  document.cookie = "_gid= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=.data.gov.uk";
+};
 
 const setCookies = () => {
   window.ga('create', 'UA-161400643-1', 'auto');
@@ -22,24 +26,54 @@ const setCookies = () => {
 };
 
 const Cookies: ComponentType<Props> = ({ }: Props) => {
-  const [cookieState, setCookieState] = useState('unread');
+  const [cookieState, setCookieState] = useState('unset');
 
   const handleAccept = () => {
+    console.log(cookieState);
+
+    if (cookieState === 'set') {
+      document.cookie = 'cookies_policy={"essential":true,"usage":true}';
+      setCookies();
+    } else {
+      document.cookie = 'cookies_policy={"essential":true,"usage":false}';
+      deleteCookies();
+    }
+
     document.cookie = 'cookies_preferences_set=true';
-    document.cookie = 'cookies_policy={"essential":true,"usage":true}';
-    setCookies();
     setCookieState('accept');
   };
 
   if (cookieState === 'accept') {
-    return (
-      <Redirect to="/" />
-    );
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
   }
+
+  const getCookiesUpdatedText = () => {
+    if (cookieState === 'accept') {
+      return (
+        <div className="cookie-settings__confirmation" data-cookie-confirmation="true">
+          <section className="gem-c-notice govuk-!-margin-bottom-8" aria-label="Notice" aria-live="polite" role="region">
+            <h2 className="gem-c-notice__title">Cookies on data.gov.uk</h2>
+            <p className={"govuk-body"}>Your cookie settings were saved</p>
+          </section>
+        </div>
+      );
+    } else {
+      return (
+        ''
+      );
+    }
+  };
 
   return (
     <Styles.Container className={"govuk-width-container"}>
+
+      {getCookiesUpdatedText()}
+
       <PageTitle title={"Cookies"} />
+
       <p className={"govuk-body"}>
         Cookies are files saved on your phone, tablet or computer when you visit a website.
       </p>
@@ -61,12 +95,14 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
 
       <p className={"govuk-body"}>
         We use Google Analytics to measure how you use the website so we can improve it based on user needs. Google Analytics sets cookies that store anonymised information about:
-        <ul className="cookie-settings__list">
-          <li>how you got to the site</li>
-          <li>the pages you visit on data.gov.uk, and how long you spend on each page</li>
-          <li>what you click on while you're visiting the site</li>
-        </ul>
       </p>
+
+      <ul className="cookie-settings__list">
+        <li>how you got to the site</li>
+        <li>the pages you visit on data.gov.uk, and how long you spend on each page</li>
+        <li>what you click on while you're visiting the site</li>
+      </ul>
+
 
       <p className={"govuk-body"}>
         We do not allow Google to use or share the data about how you use this site.
@@ -76,31 +112,39 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
         These are the Google Analytics cookies we’ll use:
       </p>
 
-      <p className={"govuk-body"}>
-        <div className="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Purpose</th>
-                <th>Expires</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>_ga, _gid</td>
-                <td>These help us count how many people visit data.gov.uk by tracking if you’ve visited before</td>
-                <td>_ga 2 years<br />_gid 24 hours</td>
-              </tr>
-              <tr>
-                <td>_gat</td>
-                <td>Used to manage the rate at which page view requests are made</td>
-                <td>10 minutes</td>
-              </tr>
-            </tbody>
-          </table>
+      <div className="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Purpose</th>
+              <th>Expires</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>_ga,<br />_gid</td>
+              <td>These help us count how many people visit data.gov.uk by tracking if you’ve visited before</td>
+              <td>_ga 2 years<br />_gid 24 hours</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="govuk-radios">
+        <div className="gem-c-radio govuk-radios__item">
+          <input type="radio" name="cookies-usage" id="radio-c6a408c0-0" value="on" className="govuk-radios__input" defaultChecked onClick={() => setCookieState('set')} />
+          <label htmlFor="radio-c6a408c0-0" className="gem-c-label govuk-label govuk-radios__label">
+            Use cookies that measure my website use
+          </label>
         </div>
-      </p>
+        <div className="gem-c-radio govuk-radios__item">
+          <input type="radio" name="cookies-usage" id="radio-c6a408c0-1" value="off" className="govuk-radios__input" onClick={() => setCookieState('unset')} />
+          <label htmlFor="radio-c6a408c0-1" className="gem-c-label govuk-label govuk-radios__label">
+            Do not use cookies that measure my website use
+          </label>
+        </div>
+      </div>
 
       <Styles.SectionHeader className={"govuk-heading-m"}>
         Strictly necessary cookies

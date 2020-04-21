@@ -54,6 +54,18 @@ body {
       cursor: pointer
     }
   }
+
+  & .gem-c-notice {
+    color: #0b0c0c;
+    padding: 15px;
+    margin-bottom: 30px;
+    clear: both;
+    border: 5px solid #1d70b8;
+
+    & h2 {
+      margin-bottom: 20px;
+    }
+  }
 }
 
 code {

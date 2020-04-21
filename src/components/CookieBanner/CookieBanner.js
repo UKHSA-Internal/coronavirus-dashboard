@@ -10,7 +10,6 @@ import type { Props } from './CookieBanner.types.js';
 const deleteCookies = () => {
   document.cookie = "_ga= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=.data.gov.uk";
   document.cookie = "_gid= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=.data.gov.uk";
-  document.cookie = "_gat= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=.data.gov.uk";
 };
 
 const setCookies = () => {
