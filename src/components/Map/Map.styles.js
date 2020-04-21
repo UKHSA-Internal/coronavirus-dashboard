@@ -1,9 +1,9 @@
 // @flow
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { ComponentType } from 'react';
 
-import isIE from 'isIE';
+import addIECss from 'addIECss';
 
 export const Map: ComponentType<*> = (() => {
   return styled.div`
@@ -12,8 +12,8 @@ export const Map: ComponentType<*> = (() => {
     width: 100%;
     border: 1px solid #0B0C0C;
 
-    ${isIE() ? `
+    ${addIECss(css`
       width: 48%;
-    ` : ''}
+    `)}
   `;
 })();
