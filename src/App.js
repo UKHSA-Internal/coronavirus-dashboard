@@ -3,11 +3,10 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 import { Header, Footer } from 'govuk-react-jsx';
 
-import useResponsiveLayout from 'hooks/useResponsiveLayout';
-import Regional from 'pages/Regional';
-import MobileRegionTable from 'pages/MobileRegionTable';
-import About from 'pages/About';
-import Accessibility from 'pages/Accessibility';
+import Regional from 'layouts/Regional';
+import MobileRegionTable from 'layouts/MobileRegionTable';
+import About from 'layouts/About';
+import Accessibility from 'layouts/Accessibility';
 import Navigation from 'components/Navigation';
 import CookieBanner from 'components/CookieBanner';
 
@@ -32,14 +31,10 @@ const F = props => <Footer
 />;
 
 const App = () => {
-  const layout = useResponsiveLayout(768);
-
   return (
     <>
       <CookieBanner />
       <Header
-        // containerClassName="govuk-header__container--full-width"
-        // navigationClassName="govuk-header__navigation--end"
         serviceName="Coronavirus (COVID-19) cases in the UK"
         serviceUrlTo="/"
         homepageUrlHref="https://gov.uk"

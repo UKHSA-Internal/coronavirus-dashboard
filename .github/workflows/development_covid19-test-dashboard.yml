@@ -22,15 +22,15 @@ jobs:
 
     - name: Install dependencies
       run: |
-        npm install -g yarn
         npm install
         yarn install
         
-    - name: Build yarn
+    - name: Build
       env:
         CI: false
+        BASE_URL: https://coronavirus-staging.data.gov.uk/ 
       run: |
-        yarn run build
+        npm run build
 
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v1
