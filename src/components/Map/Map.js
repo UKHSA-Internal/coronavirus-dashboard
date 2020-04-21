@@ -38,15 +38,15 @@ const regionCoordinates = {
   // East midlands
   E12000004: [52.795719, -0.84969],
   // South west
-  E12000009: [50.811192, -3.63346], 
+  E12000009: [50.811192, -3.63346],
   // London
-  E12000007: [51.492271, -0.30866], 
+  E12000007: [51.492271, -0.30866],
   // Yorkshire and the humber
   E12000003: [53.93264, -1.28714],
   // North east
-  E12000001: [55.297009, -1.72888], 
+  E12000001: [55.297009, -1.72888],
   // South east
-  E12000008: [51.45097, -0.99311], 
+  E12000008: [51.45097, -0.99311],
 };
 
 const Map: ComponentType<Props> = ({
@@ -69,8 +69,10 @@ const Map: ComponentType<Props> = ({
   useEffect(() => {
     const initializeMap = () => {
       const map = L.map('map', {
-        center: [55, -4],
-        zoom: 4.5, 
+        center: [55.7, -3.7],
+        zoom: 5.4,
+        minZoom: 5.4,
+        maxZoom: 12,
         layers: [
           L.mapboxGL({
             attribution: "<a href=\"http://www.openstreetmap.org/about/\" target=\"_blank\">&copy; OpenStreetMap contributors</a>",

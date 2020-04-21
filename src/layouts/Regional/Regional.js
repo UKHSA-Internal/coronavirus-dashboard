@@ -15,7 +15,7 @@ import ViewAs from 'components/ViewAs';
 import AltChartTable from 'components/AltChartTable';
 import NoScriptChartTables from 'components/NoScriptChartTables';
 import NoScriptMapTables from 'components/NoScriptMapTables';
-import { ExportCasesAsCSV, ExportDeathsAsCSV } from "components/Export";
+import ExportLink from "components/Export";
 
 import type { Props } from './Regional.types';
 import * as Styles from './Regional.styles';
@@ -93,18 +93,22 @@ const Regional: ComponentType<Props> = ({ pageContext: { data }}: Props) => {
         <BigNumber
           caption="Total number of lab-confirmed UK cases"
           number={data?.overview?.K02000001?.totalCases?.value ?? 0}
+          description={ 'Includes tests carried out by commercial partners which are not included in the 4 National totals' }
         />
         <BigNumber
-          caption="Latest daily number of lab-confirmed UK cases"
+          caption="Daily number of lab-confirmed UK cases"
           number={data?.overview?.K02000001?.newCases?.value ?? 0}
+          description={ "Number of new cases reported today" }
         />
         <BigNumber
           caption="Total number of COVID-19 associated UK deaths in hospital"
           number={data?.overview?.K02000001?.deaths.value ?? 0}
+          description={ "Deaths of patients in hospitals who have tested positive for COVID-19" }
         />
         <BigNumber
-          caption="Latest daily number of COVID-19 associated UK deaths in hospital"
+          caption="Daily number of COVID-19 associated UK deaths in hospital"
           number={getLatestDailyDeaths(data)}
+          description={ "Number of new deaths reported today" }
         />
         <Styles.HideOnMobile>
           <RegionTable
@@ -135,8 +139,14 @@ const Regional: ComponentType<Props> = ({ pageContext: { data }}: Props) => {
             utlaData={data?.utlas}
           />
         </Styles.HideOnMobile>
-        <ExportCasesAsCSV data={data} />
-        <ExportDeathsAsCSV data={data} />
+        <ExportLink
+          uri={ "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv" }
+          label={ "Download cases data as CSV" }
+        />
+        <ExportLink
+          uri={ "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv" }
+          label={ "Download deaths data as CSV" }
+        />
         <ViewAs view={view} setView={setView} />
         {view === 'chart' && (
           <>
@@ -154,7 +164,7 @@ const Regional: ComponentType<Props> = ({ pageContext: { data }}: Props) => {
             <AltChartTable data={data?.overview?.K02000001?.dailyDeaths ?? []} header={titles.dailyDeaths} valueName="Daily deaths" />
           </>
         )}
-      <NoScriptChartTables data={data} />
+        <NoScriptChartTables data={data} />
         <Disclaimer text={data?.disclaimer} />
       </Styles.Container>
     </Layout>
