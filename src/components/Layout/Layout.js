@@ -15,6 +15,7 @@ const Layout: ComponentType<Props> = ({ pathname, children }: Props) => {
   return (
     <>
       <Helmet>
+        <base href={process.env.BASE_URL} />
         <script>
           {`
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
