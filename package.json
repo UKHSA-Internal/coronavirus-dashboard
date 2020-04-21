@@ -31,6 +31,7 @@
     "react-dom": "^16.13.1",
     "react-helmet": "^6.0.0",
     "styled-components": "^5.1.0",
+    "webpack": "^4.42.1",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
@@ -49,5 +50,8 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": [">0.25%", "not dead"]
+  "browserslist": [
+    ">0.25%",
+    "not dead"
+  ]
 }

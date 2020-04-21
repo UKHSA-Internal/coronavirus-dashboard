@@ -7,6 +7,7 @@ import Regional from 'layouts/Regional';
 import MobileRegionTable from 'layouts/MobileRegionTable';
 import About from 'layouts/About';
 import Accessibility from 'layouts/Accessibility';
+import Cookies from 'layouts/Cookies';
 import Navigation from 'components/Navigation';
 import CookieBanner from 'components/CookieBanner';
 

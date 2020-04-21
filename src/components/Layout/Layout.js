@@ -43,6 +43,7 @@ const Layout: ComponentType<Props> = ({ pathname, children }: Props) => {
           ],
           items: [
             { children: ['Accessibility'], href: '/accessibility' },
+            { children: ['Cookies'], href: '/cookies' },
           ],
           visuallyHiddenTitle: 'Items',
         }}

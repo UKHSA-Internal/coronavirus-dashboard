@@ -52,6 +52,11 @@ exports.createPages = async ({ actions: { createPage } }) => {
   });
 
   createPage({
+    path: `/cookies`,
+    component: require.resolve("./src/layouts/Cookies/Cookies.js"),
+  });
+
+  createPage({
     path: `/region`,
     component: require.resolve("./src/layouts/MobileRegionTable/MobileRegionTable.js"),
     context: { data },

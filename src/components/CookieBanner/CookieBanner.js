@@ -98,9 +98,7 @@ const CookieBanner: ComponentType<Props> = ({ }: Props) => {
   }
 
   if (cookieState === 'set-cookie-preferences') {
-    return (
-      <Redirect to="/cookies" />
-    );
+    window.location = "/cookies";
   }
 
   return null;
