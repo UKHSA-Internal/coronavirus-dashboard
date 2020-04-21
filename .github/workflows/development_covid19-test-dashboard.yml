@@ -29,6 +29,7 @@ jobs:
     - name: Build yarn
       env:
         CI: false
+        BASE_URL: https://coronavirus-staging.data.gov.uk/ 
       run: |
         yarn run build
 
