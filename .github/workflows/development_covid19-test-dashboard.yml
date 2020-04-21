@@ -38,4 +38,4 @@ jobs:
         app-name: 'covid19-test-dashboard'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_1d62fadaa82244249a304ce75ba33dde }}
-        package: ./build
+        package: ./public
