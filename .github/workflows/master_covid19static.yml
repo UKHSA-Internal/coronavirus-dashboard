@@ -22,7 +22,7 @@ jobs:
     
     - name: Install dependencies
       run: |
-        npm install -g yarn
+        npm install -g gatsby
         npm install
         yarn install
         
@@ -31,7 +31,7 @@ jobs:
         CI: false
         BASE_URL: https://coronavirus.data.gov.uk/ 
       run: |
-        yarn run build
+        gatsby build
 
 
     - name: 'Deploy to Azure Web App'
