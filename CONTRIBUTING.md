@@ -77,15 +77,15 @@ To run the code locally:
 - Run the following commands to install:
 
 ```bash
-npm install -g yarn
+npm install
 yarn install
 ```
 - Run the following command to run the service:
 ```bash
-yarn start
+npm run start
 ```
 
 To build the service on your local machine, run the following command:
 ```bash
-yarn build
+npmr run build
 ```
