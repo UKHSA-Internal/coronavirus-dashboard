@@ -5,10 +5,6 @@ name: Build and deploy Node.js app to Azure Web App - covid19static
 
 on:
   release:
-    types: 
-      - published
-      - unpublished
-      - deleted
     branches:
       - master
 
@@ -26,15 +22,15 @@ jobs:
     
     - name: Install dependencies
       run: |
+        npm install -g yarn
         npm install
         yarn install
         
     - name: Build yarn
       env:
         CI: false
-        BASE_URL: https://coronavirus.data.gov.uk/ 
       run: |
-        npm run build
+        yarn run build
 
 
     - name: 'Deploy to Azure Web App'
@@ -43,4 +39,4 @@ jobs:
         app-name: 'covid19static'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_ee1e6b471f6e4800932ff51b6bbebcfc }}
-        package: ./public
+        package: ./build

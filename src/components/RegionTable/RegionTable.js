@@ -2,22 +2,21 @@
 
 import React, { useEffect } from 'react';
 import type { ComponentType } from 'react';
-import { Tabs } from 'govuk-react-jsx/govuk/components/tabs';
-import { Table } from 'govuk-react-jsx/govuk/components/table';
+import { withRouter } from 'react-router';
+import { Tabs, Table } from 'govuk-react-jsx';
 import numeral from 'numeral';
 
-import useHash from 'hooks/useHash';
+import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
 import type { Props } from './RegionTable.types';
 import * as Styles from './RegionTable.styles';
 
 const LinkOrText = ({ children, ...props }) => {
-  return (
-    <>
-      <Styles.DesktopName {...props} role="button" tabIndex={0} href={null} className="govuk-link">{children}</Styles.DesktopName>
-      <Styles.MobileName {...props}>{children}</Styles.MobileName>
-    </>
-  );
+  const layout = useResponsiveLayout(768);
+  if (layout === 'desktop') {
+    return <Styles.Link {...props} role="button" tabIndex={0} href={null} className="govuk-link">{children}</Styles.Link>
+  }
+  return <span {...props}>{children}</span>;
 };
 
 const RegionTable: ComponentType<Props> = ({
@@ -30,8 +29,10 @@ const RegionTable: ComponentType<Props> = ({
   utla,
   setUtla,
   utlaData,
+  history: { push },
+  location: { hash },
 }: Props) => {
-  const hash = useHash();
+  const layout = useResponsiveLayout(768);
 
   useEffect(() => {
     const element = document.getElementById(`tab_${hash.replace('#', '')}`);
@@ -65,7 +66,7 @@ const RegionTable: ComponentType<Props> = ({
   }, [country, region, utla]);
 
   const handleKeyDown = (type: 'countries' | 'regions' | 'utlas') => (r: string) => (event: SyntheticKeyboardEvent<*>) => {
-    if (setCountry && setRegion && setUtla && event.key === 'Enter') {
+    if (layout === 'desktop' && event.key === 'Enter') {
       setCountry(type === 'countries' ? r : null);
       setRegion(type === 'regions' ? r : null);
       setUtla(type === 'utlas' ? r : null);
@@ -77,7 +78,7 @@ const RegionTable: ComponentType<Props> = ({
   const handleOnUtlaKeyDown = handleKeyDown('utlas');
 
   const handleOnClick = (type: 'countries' | 'regions' | 'utlas') => (r: string) => () => {
-    if (setCountry && setRegion && setUtla) {
+    if (layout === 'desktop') {
       setCountry(type === 'countries' ? r : null);
       setRegion(type === 'regions' ? r : null);
       setUtla(type === 'utlas' ? r : null);
@@ -159,4 +160,4 @@ const RegionTable: ComponentType<Props> = ({
   );
 };
 
-export default RegionTable;
+export default withRouter(RegionTable);
