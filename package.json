@@ -1,13 +1,24 @@
 {
   "name": "covid-public",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
+    "@loadable/component": "^5.12.0",
     "axios": "^0.19.2",
+    "babel-plugin-styled-components": "^1.10.7",
     "chart.js": "2.9.3",
     "d3-array": "^2.4.0",
     "d3-scale": "^3.2.1",
+    "gatsby": "^2.20.25",
+    "gatsby-image": "^2.3.1",
+    "gatsby-plugin-favicon": "^3.1.6",
+    "gatsby-plugin-flow": "^1.2.2",
+    "gatsby-plugin-manifest": "^2.3.3",
+    "gatsby-plugin-offline": "^3.1.2",
+    "gatsby-plugin-react-helmet": "^3.2.1",
+    "gatsby-plugin-robots-txt": "^1.5.0",
+    "gatsby-plugin-styled-components": "^3.2.3",
     "govuk-frontend": "^3.6.0",
     "govuk-react-jsx": "^2.0.0",
     "leaflet": "^1.6.0",
@@ -15,39 +26,28 @@
     "mapbox-gl-leaflet": "^0.0.12",
     "node-sass": "^4.13.1",
     "numeral": "^2.0.6",
-    "react": "^16.13.0",
-    "react-app-polyfill": "^1.0.6",
+    "react": "^16.13.1",
     "react-chartjs-2": "^2.9.0",
-    "react-dom": "^16.13.0",
-    "react-router": "^5.1.2",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0",
-    "styled-components": "^5.0.1",
-    "xmltojson": "^1.3.5"
+    "react-dom": "^16.13.1",
+    "react-helmet": "^6.0.0",
+    "styled-components": "^5.1.0",
+    "xml2js": "^0.4.23"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.120.1",
+    "gatsby-plugin-root-import": "^2.0.5",
+    "gatsby-plugin-sass": "^2.2.3",
+    "node-sass": "^4.13.1"
   },
   "scripts": {
     "lint": "yarn flow",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "gatsby build",
+    "start": "gatsby develop",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "flow-bin": "^0.120.1"
-  }
+  "browserslist": [">0.25%", "not dead"]
 }

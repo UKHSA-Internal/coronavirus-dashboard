@@ -47,6 +47,26 @@ Implement documentations and typing interfaces where appropriate.
 
 Where possible, please address all warnings that are highlighted during local compilations.
 
+## Adding a new page
+To add a new page to the site an entry should be added to `gatsby-node.js`.
+```javascript
+  createPage({
+    path: `/`, // The url path to render this page
+    component: require.resolve("path-to-page-component"), // The react component to render the page
+    context: { }, // This object is passed to the component as the prop "pageContext"
+  });
+```
+
+## Writing client side javascript
+This site is built using [Gatsby](https://www.gatsbyjs.org/) to generate static HTML/JS/CSS.
+However some of the features on the site rely on access to the browser document.
+These features use [@loadable/component](https://www.npmjs.com/package/@loadable/component) to lazy load the component.
+An example can be seen [here](https://github.com/PublicHealthEngland/coronavirus-dashboard/blob/development/src/components/RegionTable/index.js).
+
+
+Components using client side javascript will not be available in browsers with javascript disabled.
+An alternative view of the data should be provided with a `noscript` tag where applicable.
+An example can be seen [here](https://github.com/PublicHealthEngland/coronavirus-dashboard/tree/development/src/components/NoScriptMapTables).
 
 ## Local run and build
 
@@ -57,16 +77,15 @@ To run the code locally:
 - Run the following commands to install:
 
 ```bash
-npm install -g yarn
 npm install
 yarn install
 ```
 - Run the following command to run the service:
 ```bash
-yarn run start
+npm run start
 ```
 
 To build the service on your local machine, run the following command:
 ```bash
-yarn run build
+npmr run build
 ```
