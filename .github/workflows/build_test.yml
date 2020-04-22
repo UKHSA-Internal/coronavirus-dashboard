@@ -7,10 +7,17 @@ on:
   push:
     branches:
       - development
+  
   pull_request:
     branches: 
       - development
       - master
+  
+  repository_dispatch:
+    types: 
+      - Updated
+    branches:
+      - development
 
 jobs:
   build:
