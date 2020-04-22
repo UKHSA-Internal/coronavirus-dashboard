@@ -142,10 +142,14 @@ const Regional: ComponentType<Props> = ({ pageContext: { data }}: Props) => {
         <ExportLink
           uri={ "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv" }
           label={ "Download cases data as CSV" }
+          shouldBeTracked={ true }
+          dataType={ "cases" }
         />
         <ExportLink
           uri={ "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv" }
           label={ "Download deaths data as CSV" }
+          shouldBeTracked={ true }
+          dataType={ "deaths" }
         />
         <ViewAs view={view} setView={setView} />
         {view === 'chart' && (
