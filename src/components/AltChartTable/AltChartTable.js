@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { ComponentType } from 'react';
-import { Table } from 'govuk-react-jsx/govuk/components/table';
+import { Table } from 'govuk-react-jsx';
 import numeral from 'numeral';
 
 import type { Props } from './AltChartTable.types';

@@ -1,5 +1,1 @@
-import Loadable from "@loadable/component";
-
-const Map = Loadable(() => import("./Map"))
-
-export default Map; 
+export { default } from './Map';
