@@ -12,12 +12,6 @@ on:
     branches: 
       - development
       - master
-  
-  repository_dispatch:
-    types: 
-      - Updated
-    branches:
-      - development
 
 jobs:
   build:
