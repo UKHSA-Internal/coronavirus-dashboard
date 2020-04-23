@@ -8,6 +8,7 @@ import Regional from 'pages/Regional';
 import MobileRegionTable from 'pages/MobileRegionTable';
 import About from 'pages/About';
 import Accessibility from 'pages/Accessibility';
+import Cookies from 'pages/Cookies';
 import Navigation from 'components/Navigation';
 import CookieBanner from 'components/CookieBanner';
 
@@ -26,6 +27,7 @@ const F = props => <Footer
     ],
     items: [
       { children: ['Accessibility'], href: '/accessibility' },
+      { children: ['Cookies'], href: '/cookies' }
     ],
     visuallyHiddenTitle: 'Items',
   }}
@@ -49,6 +51,7 @@ const App = () => {
         <Route path="/region" component={MobileRegionTable} />
         <Route path="/about" component={About} />
         <Route path="/accessibility" component={Accessibility} />
+        <Route path="/cookies" component={Cookies} />
         <Route path="/" component={Regional} />
         <Redirect to="/" />
       </Switch>
@@ -56,6 +59,7 @@ const App = () => {
         <Route path="/" exact component={F} />
         <Route path="/about" exact component={F} />
         <Route path="/accessibility" exact component={F} />
+        <Route path="/cookies" exact component={F} />
       </Switch>
     </>
   );
