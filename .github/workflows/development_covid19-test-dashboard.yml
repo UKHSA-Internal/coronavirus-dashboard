@@ -22,15 +22,15 @@ jobs:
 
     - name: Install dependencies
       run: |
+        npm install -g yarn
         npm install
         yarn install
         
-    - name: Build
+    - name: Build yarn
       env:
         CI: false
-        BASE_URL: https://coronavirus-staging.data.gov.uk/ 
       run: |
-        npm run build
+        yarn run build
 
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v1
@@ -38,4 +38,4 @@ jobs:
         app-name: 'covid19-test-dashboard'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_1d62fadaa82244249a304ce75ba33dde }}
-        package: ./public
+        package: ./build

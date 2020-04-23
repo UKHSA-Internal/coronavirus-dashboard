@@ -1,5 +1,1 @@
-import Loadable from "@loadable/component";
-
-const ViewAs = Loadable(() => import("./ViewAs"))
-
-export default ViewAs; 
+export { default } from './ViewAs';

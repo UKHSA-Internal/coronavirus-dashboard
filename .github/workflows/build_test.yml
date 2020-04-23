@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - development
+  
   pull_request:
     branches: 
       - development
@@ -35,4 +36,3 @@ jobs:
         BASE_URL: https://coronavirus-staging.data.gov.uk/ 
       run: |
         npm run build
-
