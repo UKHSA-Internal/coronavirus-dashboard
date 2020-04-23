@@ -10,7 +10,7 @@ const useLoadData = () => {
 
     useEffect(() => {
         const getData = async () => {
-            const {data: d} = await axios.get(latestDataUrl);
+            const {data: d} = await axios.get(latestDataUrl, {crossDomain: true});
             setData(d);
         };
 
