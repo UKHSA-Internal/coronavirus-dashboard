@@ -14,7 +14,7 @@ import LineChart from 'components/LineChart';
 import BarChart from 'components/BarChart';
 import ViewAs from 'components/ViewAs';
 import AltChartTable from 'components/AltChartTable';
-import ExportLink from "components/Export";
+import ExportLinks from "components/Export";
 import moment from "moment";
 
 import isIE from 'isIE';
