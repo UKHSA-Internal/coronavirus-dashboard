@@ -124,14 +124,20 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
         </>
       )}
       {/* FixMe: Change URL to relative before deployment to production. */}
-      <ExportLink
-          uri={ "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv" }
-          label={ "Download cases data as CSV" }
-      />
-      <ExportLink
-          uri={ "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv" }
-          label={ "Download deaths data as CSV" }
-      />
+      <ExportLinks data={{
+          cases: {
+              csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv",
+              json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-cases_latest.json",
+              shouldBeTracked: true,
+              dataType: "cases"
+          },
+          deaths: {
+              csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv",
+              json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-deaths_latest.json",
+              shouldBeTracked: true,
+              dataType: "deaths"
+          }
+      }}/>
       <ViewAs view={view} setView={setView} />
       {view === 'chart' && (
         <>

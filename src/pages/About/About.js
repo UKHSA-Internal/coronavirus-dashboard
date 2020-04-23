@@ -1,16 +1,16 @@
 // @flow
 
 import React from 'react';
-import type {ComponentType} from 'react';
+import type { ComponentType } from 'react';
 
-import type {Props} from './About.types';
+import type { Props } from './About.types';
 import * as Styles from './About.styles';
 import PageTitle from 'components/PageTitle';
 
-const About: ComponentType<Props> = ({}: Props) => {
+const About: ComponentType<Props> = ({ }: Props) => {
     return (
         <Styles.Container className={"govuk-width-container"}>
-            <PageTitle title={"About the data"}/>
+            <PageTitle title={"About the data"} />
             <Styles.SectionHeader className={"govuk-heading-m"}>
                 Total and daily UK cases
             </Styles.SectionHeader>
@@ -31,9 +31,9 @@ const About: ComponentType<Props> = ({}: Props) => {
                 Wales counts are as at 7am on the day of publication; Northern Ireland counts are from different times
                 on the day of publication. The exact time of the Northern Ireland data extract is given on the&nbsp;
                 <a href={"https://www.publichealth.hscni.net/news/covid-19-coronavirus#what-is-the-situation-in-northern-ireland"}
-                   target={"_blank"}
-                   className={"govuk-link"}
-                   rel={"noopener noreferrer"}>Northern Ireland Public Health Agency</a>&nbsp;website.
+                    target={"_blank"}
+                    className={"govuk-link"}
+                    rel={"noopener noreferrer"}>Northern Ireland Public Health Agency</a>&nbsp;website.
             </p>
             <p className={'govuk-body'}>
                 The UK total is not the sum of the 4 nation totals as the pillar 2 cases cannot currently be included in
@@ -42,37 +42,37 @@ const About: ComponentType<Props> = ({}: Props) => {
                 Information
                 about the different pillars is available on&nbsp;
                 <a href={"https://www.gov.uk/government/publications/coronavirus-covid-19-scaling-up-testing-programmes/coronavirus-covid-19-scaling-up-our-testing-programmes"}
-                   target={"_blank"}
-                   className={"govuk-link"}
-                   rel={"noopener noreferrer"}>GOV.UK</a>.
+                    target={"_blank"}
+                    className={"govuk-link"}
+                    rel={"noopener noreferrer"}>GOV.UK</a>.
             </p>
             <p className={'govuk-body'}>
                 Details of the processes for counting cases in the devolved administrations are available on their
                 websites:
             </p>
-            <p className={'govuk-body'}>
+            <div className={'govuk-body'}>
                 <ul className="govuk-list">
                     <li>
                         <a href={"https://www.gov.scot/coronavirus-covid-19/"}
-                           className={"govuk-link"}
-                           target={"_blank"}
-                           rel={"noopener noreferrer"}>Scottish Government coronavirus information</a>
+                            className={"govuk-link"}
+                            target={"_blank"}
+                            rel={"noopener noreferrer"}>Scottish Government coronavirus information</a>
                     </li>
                     <li>
                         <a href={"https://covid19-phwstatement.nhs.wales/"}
-                           className={"govuk-link"}
-                           target={"_blank"}
-                           rel={"noopener noreferrer"}>Public Health Wales coronavirus information</a>
+                            className={"govuk-link"}
+                            target={"_blank"}
+                            rel={"noopener noreferrer"}>Public Health Wales coronavirus information</a>
                     </li>
                     <li>
                         <a href={"https://www.publichealth.hscni.net/publications/covid-19-surveillance-reports"}
-                           className={"govuk-link"}
-                           target={"_blank"}
-                           rel={"noopener noreferrer"}>Northern Ireland Public Health Agency coronavirus
+                            className={"govuk-link"}
+                            target={"_blank"}
+                            rel={"noopener noreferrer"}>Northern Ireland Public Health Agency coronavirus
                             information</a>
                     </li>
                 </ul>
-            </p>
+            </div>
 
             <Styles.SectionHeader className={"govuk-heading-m"}>
                 England cases
@@ -147,7 +147,7 @@ const About: ComponentType<Props> = ({}: Props) => {
                 submit data in batches, so there may be no cases for a week and then a large number on one day. This is
                 not helpful for analysing the incidence of COVID-19 over time.
             </p>
-            <p className={ "govuk-body govuk-body govuk-!-margin-bottom-8" }>
+            <p className={"govuk-body govuk-body govuk-!-margin-bottom-8"}>
                 The data are now shown by the date the specimen was taken from the person being tested. This gives a
                 much more useful analysis of the progression of cases over time. It does mean that the latest days’
                 figures are always incomplete, and only data from five days or more ago can be considered complete.
@@ -190,7 +190,7 @@ const About: ComponentType<Props> = ({}: Props) => {
                 Deaths are shown in charts and tables according to the day they were reported, not the day they
                 occurred. They can be downloaded as a csv file.
             </p>
-            <hr className={"govuk-section-break govuk-section-break--l"}/>
+            <hr className={"govuk-section-break govuk-section-break--l"} />
 
             <p className={"govuk-body-s"}>
                 Updated 6pm 16 April 2020
