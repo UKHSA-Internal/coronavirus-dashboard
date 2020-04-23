@@ -23,7 +23,7 @@ const useCountryLayer = (countryData: CountryData, hash: string, layerGroup: L.L
   const [countryLayers, setCountryLayers] = useState(null);
 
   const countryMax = max(Object.keys(countryData), d => countryData?.[d]?.totalCases?.value ?? 0);
-  const radiusScale = scaleSqrt().range([5, 40]).domain([1, countryMax]);
+  const radiusScale = scaleSqrt().range([0, 40]).domain([0, countryMax]);
 
   useEffect(() => {
     (async () => {

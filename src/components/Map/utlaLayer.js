@@ -21,7 +21,7 @@ const useUtlaLayer = (utlaData: UtlaData, hash: string, layerGroup: L.LayerGroup
   useEffect(() => {
     if (englandGeojsonRaw) {
       const utlaMax = max(Object.keys(utlaData), d => utlaData?.[d]?.totalCases?.value ?? 0);
-      const radiusScale = scaleSqrt().range([5, 25]).domain([1, utlaMax]);
+      const radiusScale = scaleSqrt().range([0, 25]).domain([0, utlaMax]);
 
       const englandGeojson = englandGeojsonRaw.features.map(f => ({
           ...f,
@@ -52,7 +52,7 @@ const useUtlaLayer = (utlaData: UtlaData, hash: string, layerGroup: L.LayerGroup
         englandGeojson.map(la => ({
           type: 'Feature',
           properties: {
-            count: utlaData?.[la.properties.ctyua19cd]?.totalCases?.value ?? 0, 
+            count: utlaData?.[la.properties.ctyua19cd]?.totalCases?.value ?? 0,
           },
           geometry: {
             type: 'Point',
