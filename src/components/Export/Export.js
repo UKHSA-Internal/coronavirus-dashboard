@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Container, Paragraph } from "./Export.styles";
-
 interface downloads {
     cases: {
         csv: string,
@@ -17,24 +16,36 @@ interface downloads {
     }
 }
 
+const dataTypes = {
+    cases: 'cases',
+    deaths: 'deaths'
+}
+
+const fileTypes = {
+    csv: 'csv',
+    json: 'json'
+}
+
+const googleAnalyticsDataKeys = {
+    csvCasesDownloadCount: 'csvCasesDownloadCount',
+    csvDeathsDownloadCount: 'csvDeathsDownloadCount',
+    jsonCasesDownloadCount: 'jsonCasesDownloadCount',
+    jsonDeathsDownloadCount: 'jsonDeathsDownloadCount'
+}
+
 const ExportLinks = ({ data }: { data: downloads }): any => {
 
-    const trackClick = (dataType) => {
-        let gaDataKey = '';
+    const trackClick = (dataType, fileType) => {
         let downloadCount = 0;
 
-        // Identify data key
-        switch (dataType) {
-            case 'cases':
-                gaDataKey = 'csvCasesDownloadCount';
-                break;
+        // Identify google analytics data key
+        const gaDataKey = getDataKey(dataType, fileType);
 
-            case 'deaths':
-                gaDataKey = 'csvDeathsDownloadCount';
-                break;
-
-            default:
-                return;
+        // Unable to find the data key, log the error to the console
+        // and terminate further execution
+        if (gaDataKey === '') {
+            console.log('Unable to record download count. Either dataType or fileType is invalid');
+            return;
         }
 
         // Initialise google analytics
@@ -50,7 +61,26 @@ const ExportLinks = ({ data }: { data: downloads }): any => {
             downloadCount = downloadCount + 1;
             // Set data key value
             window.ga('set', gaDataKey, downloadCount);
+
+            console.log(tracker);
         });
+    }
+
+    const getDataKey = (dataType, fileType) => {
+        switch (dataType) {
+            case dataTypes.cases:
+                return fileType === fileTypes.csv
+                    ? googleAnalyticsDataKeys.csvCasesDownloadCount
+                    : googleAnalyticsDataKeys.jsonCasesDownloadCount;
+
+            case dataTypes.deaths:
+                return fileType === fileTypes.csv
+                    ? googleAnalyticsDataKeys.csvDeathsDownloadCount
+                    : googleAnalyticsDataKeys.jsonDeathsDownloadCount;
+
+            default:
+                return '';
+        }
     }
 
     return <Container>
@@ -60,7 +90,7 @@ const ExportLinks = ({ data }: { data: downloads }): any => {
                     Download the latest <strong className={ "govuk-!-font-weight-bold" }>{ label }</strong> data as&nbsp;
                         {
                             data[label].shouldBeTracked ?
-                            <a href={ data[label].csv } onClick={ () => trackClick(data[label].dataType) }
+                            <a href={ data[label].csv } onClick={ () => trackClick(data[label].dataType, fileTypes.csv) }
                                 className={ "govuk-link govuk-link--no-visited-state" }>
                                 CSV
                             </a> :
@@ -70,10 +100,18 @@ const ExportLinks = ({ data }: { data: downloads }): any => {
                             </a>
                         }
                         &nbsp;or&nbsp;
-                        <a href={ data[label].json }
-                            className={ "govuk-link govuk-link--no-visited-state" }>
-                            JSON
-                        </a>
+
+                        {
+                            data[label].shouldBeTracked ?
+                            <a href={ data[label].json } onClick={ () => trackClick(data[label].dataType, fileTypes.json) }
+                                className={ "govuk-link govuk-link--no-visited-state" }>
+                                JSON
+                            </a> :
+                            <a href={ data[label].json }
+                                className={ "govuk-link govuk-link--no-visited-state" }>
+                                JSON
+                            </a>
+                        }
                 </Paragraph>
             )
         }
