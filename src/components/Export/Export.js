@@ -23,9 +23,9 @@ const ExportLink = ({ uri, label, shouldBeTracked, dataType }: { uri: string, la
         }
 
         // Initialise google analytics
-        ga('create', 'UA-161400643-1', 'auto');
+        window.ga('create', 'UA-161400643-1', 'auto');
         
-        ga(function (tracker) {  
+        window.ga(function (tracker) {  
             // Get data key value
             downloadCount = Number(tracker.get(gaDataKey));
             if (isNaN(downloadCount)) {
@@ -34,9 +34,7 @@ const ExportLink = ({ uri, label, shouldBeTracked, dataType }: { uri: string, la
             // Increment count
             downloadCount = downloadCount + 1;
             // Set data key value
-            ga('set', gaDataKey, downloadCount);
-
-            console.log(tracker);
+            window.ga('set', gaDataKey, downloadCount);
         });
     }
 
@@ -45,10 +43,10 @@ const ExportLink = ({ uri, label, shouldBeTracked, dataType }: { uri: string, la
             <Paragraph>
                 {
                     shouldBeTracked ?
-                        <a href={uri} onClick={trackClick}
-                            className={"govuk-link"}>{label}</a> :
+                        <a href={ uri } onClick={ trackClick }
+                            className={ "govuk-link" }>{ label }</a> :
                         <a href={uri}
-                            className={"govuk-link"}>{label}</a>
+                            className={ "govuk-link" }>{ label }</a>
                 }
             </Paragraph>
         </Container>
