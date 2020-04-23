@@ -1,9 +1,9 @@
 // @flow
 
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
-import addIECss from 'addIECss';
+import isIE from 'isIE';
 
 export const Container: ComponentType<*> = (() => {
   return styled.div`
@@ -13,9 +13,9 @@ export const Container: ComponentType<*> = (() => {
     padding-top: 20px;
     grid-column: span 3;
 
-    ${addIECss(css`
-      width: 48%;
-    `)}
+    ${isIE() ? `
+      width: 32%;
+    ` : ''}
   `;
 })();
 

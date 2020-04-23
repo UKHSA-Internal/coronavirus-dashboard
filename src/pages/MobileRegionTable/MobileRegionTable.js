@@ -3,7 +3,7 @@
 import React from 'react';
 import type { ComponentType } from 'react';
 
-import Layout from 'components/Layout';
+import useLoadData from 'hooks/useLoadData';
 import PageTitle from 'components/PageTitle';
 import RegionTable from 'components/RegionTable';
 
@@ -23,26 +23,26 @@ const formatAMPM = date => {
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const formatDate = (d: Date) => `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()} ${formatAMPM(d)}`;
 
-const MobileRegionTable: ComponentType<Props> = ({ pageContext: { data }}: Props) => {
+const MobileRegionTable: ComponentType<Props> = ({}: Props) => {
+  const data = useLoadData();
+
   if (!data) {
     return null;
   }
 
   return (
-    <Layout pathname="/region">
-      <Styles.Container className="govuk-width-container">
-        <PageTitle
-          caption="Regional view"
-          title="Coronavirus (COVID-19) in the UK"
-          subtitle={`Last updated ${formatDate(new Date(data?.lastUpdatedAt))}`}
-        />
-        <RegionTable
-          countryData={data?.countries}
-          regionData={data?.regions}
-          utlaData={data?.utlas}
-        />
-      </Styles.Container>
-    </Layout>
+    <Styles.Container className="govuk-width-container">
+      <PageTitle
+        caption="Regional view"
+        title="Coronavirus (COVID-19) in the UK"
+        subtitle={`Last updated ${formatDate(new Date(data?.lastUpdatedAt))}`}
+      />
+      <RegionTable
+        countryData={data?.countries}
+        regionData={data?.regions}
+        utlaData={data?.utlas}
+      />
+    </Styles.Container>
   );
 };
 
