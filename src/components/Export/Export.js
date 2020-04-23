@@ -26,8 +26,8 @@ const ExportLinks = ({ data }: { data: downloads }): any => {
                         </a>&nbsp;or&nbsp;
                         <a href={ data[label].json }
                            className={ "govuk-link govuk-link--no-visited-state" }>
-                        JSON
-                    </a>
+                            JSON
+                        </a>
                     </Paragraph>
             )
         }
