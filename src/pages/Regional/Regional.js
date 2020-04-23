@@ -15,36 +15,13 @@ import BarChart from 'components/BarChart';
 import ViewAs from 'components/ViewAs';
 import AltChartTable from 'components/AltChartTable';
 import ExportLink from "components/Export";
+import moment from "moment";
 
 import isIE from 'isIE';
 
 import type { Props } from './Regional.types';
 import * as Styles from './Regional.styles';
 
-const formatAMPM = date => {
-
-  let
-    hours = date.getUTCHours(),
-    minutes = date.getUTCMinutes(),
-    ampm = hours >= 12 ? 'pm' : 'am';
-
-  hours = (hours % 12) || 12;
-  minutes = minutes < 10 ? `0${minutes}` : minutes;
-
-  return `${hours}:${minutes} ${ampm}`
-
-};
-
-const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const formatDate = (d: string = "") => {
-
-  if (d === "") return "";
-
-  const date = new Date(d.toLowerCase().endsWith("z") ? d : `${d}Z`);
-
-  return `${date.getUTCDate()} ${monthNames[date.getUTCMonth()]} ${date.getUTCFullYear()}, ${formatAMPM(date)} GMT`;
-
-};
 
 /**
  * Extracts the number of deaths from the latest date included in
@@ -65,6 +42,13 @@ const getLatestDailyDeaths = (data: any): number => {
   }
 
 }; // getLatestDailyDeaths
+
+
+const timestamp = (data): string =>
+    data.hasOwnProperty("lastUpdatedAt")
+        ? moment(data.lastUpdatedAt).format("D MMM YYYY, hh:mm a")
+        : "";
+
 
 const Regional: ComponentType<Props> = ({ }: Props) => {
   const [country, setCountry] = useState(null);
@@ -90,7 +74,7 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
     <Styles.Container className="govuk-width-container">
       <PageTitle
         title="Coronavirus (COVID-19) in the UK"
-        subtitle={`Last updated ${formatDate(data?.lastUpdatedAt)}`}
+        subtitle={`Last updated ${timestamp(data)}`}
       />
       <BigNumber
         caption="Total number of lab-confirmed UK cases"
