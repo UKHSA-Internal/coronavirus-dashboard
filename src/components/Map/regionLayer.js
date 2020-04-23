@@ -17,15 +17,15 @@ const regionCoordinates = {
   // East midlands
   E12000004: [-0.84969, 52.795719],
   // South west
-  E12000009: [-3.63346, 50.811192], 
+  E12000009: [-3.63346, 50.811192],
   // London
-  E12000007: [-0.30866, 51.492271], 
+  E12000007: [-0.30866, 51.492271],
   // Yorkshire and the humber
   E12000003: [-1.28714, 53.93264],
   // North east
-  E12000001: [-1.72888, 55.297009], 
+  E12000001: [-1.72888, 55.297009],
   // South east
-  E12000008: [-0.99311, 51.45097], 
+  E12000008: [-0.99311, 51.45097],
 };
 
 const useRegionLayer = (regionData: RegionData, hash: string, layerGroup: L.LayerGroup, country: string, region: string, utla: string, onClick: Function) => {
@@ -42,7 +42,7 @@ const useRegionLayer = (regionData: RegionData, hash: string, layerGroup: L.Laye
   useEffect(() => {
     if (regionGeojsonRaw) {
       const regionMax = max(Object.keys(regionData), d => regionData?.[d]?.totalCases?.value ?? 0);
-      const radiusScale = scaleSqrt().range([5, 40]).domain([1, regionMax]);
+      const radiusScale = scaleSqrt().range([0, 40]).domain([0, regionMax]);
 
       const regionGeojson = regionGeojsonRaw.features.map(f => ({
           ...f,
