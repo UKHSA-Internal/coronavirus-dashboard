@@ -145,7 +145,7 @@ const RegionTable: ComponentType<Props> = ({
             panel: {
               children: [
                 <Table key='local-authorities'
-                  head={[{ children: ['UTLA'] }, { children: ['Total cases'], format: 'numeric' }]}
+                       head={[{ children: [<abbr title={ "Upper tier local authority" }>UTLA</abbr>] }, { children: ['Total cases'], format: 'numeric' }]}
                   rows={utlaKeys.sort(sortFunc(utlaData)).map(r => [
                     { children: [<LinkOrText id={`table-link-${r}`} key={`table-link-${r}`} onClick={handleOnUtlaClick(r)} onKeyPress={handleOnUtlaKeyDown} active={utla === r}>{utlaData[r].name.value}</LinkOrText>] },
                     { children: [numeral(utlaData[r].totalCases.value).format('0,0')], format: 'numeric' },
