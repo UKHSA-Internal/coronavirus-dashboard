@@ -58,17 +58,17 @@ const ExportLinks = ({ data }: { data: downloads }): any => {
             Object.keys(data).map(label =>
                 <Paragraph key={ label } className={ "govuk-body govuk-!-font-size-16" }>
                     Download the latest <strong className={ "govuk-!-font-weight-bold" }>{ label }</strong> data as&nbsp;
-
-                        data[label].shouldBeTracked ?
-                        <a href={ data[label].csv } onClick={ trackClick(data[label].dataType) }
-                            className={ "govuk-link govuk-link--no-visited-state" }>
-                            CSV
-                        </a> :
-                        <a href={ data[label].csv }
-                            className={ "govuk-link govuk-link--no-visited-state" }>
-                            CSV
-                        </a>
-
+                        {
+                            data[label].shouldBeTracked ?
+                            <a href={ data[label].csv } onClick={ () => trackClick(data[label].dataType) }
+                                className={ "govuk-link govuk-link--no-visited-state" }>
+                                CSV
+                            </a> :
+                            <a href={ data[label].csv }
+                                className={ "govuk-link govuk-link--no-visited-state" }>
+                                CSV
+                            </a>
+                        }
                         &nbsp;or&nbsp;
                         <a href={ data[label].json }
                             className={ "govuk-link govuk-link--no-visited-state" }>

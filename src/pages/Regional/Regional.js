@@ -151,7 +151,7 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
               csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv",
               json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-deaths_latest.json",
               shouldBeTracked: true,
-              dataType: "cases"
+              dataType: "deaths"
           }
       }}/>
       <ViewAs view={view} setView={setView} />
