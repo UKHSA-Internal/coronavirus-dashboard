@@ -14,7 +14,7 @@ import LineChart from 'components/LineChart';
 import BarChart from 'components/BarChart';
 import ViewAs from 'components/ViewAs';
 import AltChartTable from 'components/AltChartTable';
-import ExportLink from "components/Export";
+import ExportLinks from "components/Export";
 
 import isIE from 'isIE';
 
@@ -140,18 +140,20 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
         </>
       )}
       {/* FixMe: Change URL to relative before deployment to production. */}
-      <ExportLink
-          uri={ "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv" }
-          label={ "Download cases data as CSV" }
-          shouldBeTracked={ true }
-          dataType={ "cases" }
-      />
-      <ExportLink
-          uri={ "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv" }
-          label={ "Download deaths data as CSV" }
-          shouldBeTracked={ true }
-          dataType={ "deaths" }
-      />
+      <ExportLinks data={{
+          cases: {
+              csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv",
+              json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-cases_latest.json",
+              shouldBeTracked: true,
+              dataType: "cases"
+          },
+          deaths: {
+              csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv",
+              json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-deaths_latest.json",
+              shouldBeTracked: true,
+              dataType: "cases"
+          }
+      }}/>
       <ViewAs view={view} setView={setView} />
       {view === 'chart' && (
         <>
