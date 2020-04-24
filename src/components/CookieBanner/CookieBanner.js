@@ -8,8 +8,8 @@ import { Redirect } from 'react-router';
 import type { Props } from './CookieBanner.types.js';
 
 const deleteCookies = () => {
-  document.cookie = "_ga= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=.data.gov.uk";
-  document.cookie = "_gid= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=.data.gov.uk";
+  document.cookie = '_ga= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=.data.gov.uk';
+  document.cookie = '_gid= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=.data.gov.uk';
 };
 
 const setCookies = () => {
@@ -45,14 +45,17 @@ const CookieBanner: ComponentType<Props> = ({ }: Props) => {
       }
       setCookieState('set');
     } else {
-      document.cookie = 'cookies_policy={"essential":true,"usage":false}';
       setCookieState('unset');
     }
   }, []);
 
   const handleAccept = () => {
-    document.cookie = 'cookies_preferences_set=true';
-    document.cookie = 'cookies_policy={"essential":true,"usage":true}';
+    let cookieExpiryDate = new Date();
+    cookieExpiryDate.setDate(cookieExpiryDate.getDate() + 365);
+
+    document.cookie = 'cookies_preferences_set=true; expires=' + cookieExpiryDate;
+    document.cookie = 'cookies_policy={"essential":true,"usage":true}; expires=' + cookieExpiryDate;
+
     setCookies();
     setCookieState('accept');
   };

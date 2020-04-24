@@ -1,10 +1,10 @@
 // @flow
 
-import React, {useState} from 'react';
-import type {ComponentType} from 'react';
+import React, { useState } from 'react';
+import type { ComponentType } from 'react';
 
 import PageTitle from 'components/PageTitle';
-import type {Props} from './Cookies.types';
+import type { Props } from './Cookies.types';
 import * as Styles from './Cookies.styles';
 
 const deleteCookies = () => {
@@ -16,7 +16,7 @@ const setCookies = () => {
     window.ga('create', 'UA-161400643-1', 'auto');
     window.ga('set', 'anonymizeIp', true);
     window.ga('set', 'allowAdFeatures', false);
-    window.ga('create', 'UA-145652997-1', 'auto', 'govuk_shared', {'allowLinker': true});
+    window.ga('create', 'UA-145652997-1', 'auto', 'govuk_shared', { 'allowLinker': true });
     window.ga('govuk_shared.require', 'linker');
     window.ga('govuk_shared.set', 'anonymizeIp', true);
     window.ga('govuk_shared.set', 'allowAdFeatures', false);
@@ -25,21 +25,26 @@ const setCookies = () => {
     window.ga('govuk_shared.send', 'pageview')
 };
 
-const Cookies: ComponentType<Props> = ({}: Props) => {
+const Cookies: ComponentType<Props> = ({ }: Props) => {
     const [cookieState, setCookieState] = useState('unset');
 
     const handleAccept = () => {
+        let cookieExpiryDate = new Date();
+        cookieExpiryDate.setDate(cookieExpiryDate.getDate() + 365);
+
         if (cookieState === 'set') {
-            document.cookie = 'cookies_policy={"essential":true,"usage":true}';
+            document.cookie = 'cookies_policy={"essential":true,"usage":true}; expires=' + cookieExpiryDate;
             setCookies();
         } else {
-            document.cookie = 'cookies_policy={"essential":true,"usage":false}';
+            document.cookie = 'cookies_policy={"essential":true,"usage":false}; expires=' + cookieExpiryDate;
             deleteCookies();
         }
 
-        document.cookie = 'cookies_preferences_set=true';
+        document.cookie = 'cookies_preferences_set=true; expires=' + cookieExpiryDate;
         setCookieState('accept');
     };
+
+
 
     if (cookieState === 'accept') {
         window.scrollTo({
@@ -53,7 +58,7 @@ const Cookies: ComponentType<Props> = ({}: Props) => {
             return (
                 <div className="cookie-settings__confirmation" data-cookie-confirmation="true">
                     <section className="gem-c-notice govuk-!-margin-bottom-8" aria-label="Notice" aria-live="polite"
-                             role="region">
+                        role="region">
                         <h2 className="gem-c-notice__title">Cookies on data.gov.uk</h2>
                         <p className={"govuk-body"}>Your cookie settings were saved</p>
                     </section>
@@ -71,7 +76,7 @@ const Cookies: ComponentType<Props> = ({}: Props) => {
 
             {getCookiesUpdatedText()}
 
-            <PageTitle title={"Cookies"}/>
+            <PageTitle title={"Cookies"} />
 
             <p className={"govuk-body"}>
                 Cookies are files saved on your phone, tablet or computer when you visit a website.
@@ -98,7 +103,7 @@ const Cookies: ComponentType<Props> = ({}: Props) => {
                 Google Analytics sets cookies that store anonymised information about:
             </p>
 
-            <div className={ "govuk-body" }>
+            <div className={"govuk-body"}>
                 <ul className="govuk-list govuk-list--bullet">
                     <li>how you got to the site</li>
                     <li>the pages you visit on data.gov.uk, and how long you spend on each page</li>
@@ -118,21 +123,21 @@ const Cookies: ComponentType<Props> = ({}: Props) => {
             <div className={"govuk-body govuk-!-margin-bottom-8"}>
                 <table>
                     <thead className={"govuk-table__head"}>
-                    <tr className={"govuk-table__row"}>
-                        <th scope={"col"} className={"govuk-table__header"}>Name</th>
-                        <th scope="col" className={"govuk-table__header govuk-!-width-two-third"}>Purpose</th>
-                        <th scope={"col"} className={"govuk-table__header"}>Expires</th>
-                    </tr>
+                        <tr className={"govuk-table__row"}>
+                            <th scope={"col"} className={"govuk-table__header"}>Name</th>
+                            <th scope="col" className={"govuk-table__header govuk-!-width-two-third"}>Purpose</th>
+                            <th scope={"col"} className={"govuk-table__header"}>Expires</th>
+                        </tr>
                     </thead>
                     <tbody className={"govuk-table__body"}>
-                    <tr className={"govuk-table__row"}>
-                        <td className={"govuk-table__cell"}>_ga,<br/>_gid</td>
-                        <td className={"govuk-table__cell"}>These help us count how many people visit data.gov.uk by
+                        <tr className={"govuk-table__row"}>
+                            <td className={"govuk-table__cell"}>_ga,<br />_gid</td>
+                            <td className={"govuk-table__cell"}>These help us count how many people visit data.gov.uk by
                             tracking if you’ve visited before
                         </td>
-                        <td className={"govuk-table__cell"} style={{minWidth: `100px`}}>_ga 2 years,<br/>_gid 24 hours
+                            <td className={"govuk-table__cell"} style={{ minWidth: `100px` }}>_ga 2 years,<br />_gid 24 hours
                         </td>
-                    </tr>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -141,14 +146,14 @@ const Cookies: ComponentType<Props> = ({}: Props) => {
                 <div className="govuk-radios">
                     <div className="gem-c-radio govuk-radios__item">
                         <input type="radio" name="cookies-usage" id="radio-c6a408c0-0" value="on"
-                               className="govuk-radios__input" onClick={() => setCookieState('set')}/>
+                            className="govuk-radios__input" onClick={() => setCookieState('set')} />
                         <label htmlFor="radio-c6a408c0-0" className="gem-c-label govuk-label govuk-radios__label">
                             Use cookies that measure my website use
                         </label>
                     </div>
                     <div className="gem-c-radio govuk-radios__item">
                         <input type="radio" name="cookies-usage" id="radio-c6a408c0-1" value="off"
-                               className="govuk-radios__input" defaultChecked onClick={() => setCookieState('unset')}/>
+                            className="govuk-radios__input" defaultChecked onClick={() => setCookieState('unset')} />
                         <label htmlFor="radio-c6a408c0-1" className="gem-c-label govuk-label govuk-radios__label">
                             Do not use cookies that measure my website use
                         </label>
@@ -170,9 +175,9 @@ const Cookies: ComponentType<Props> = ({}: Props) => {
 
             <p className={"govuk-body"}>
                 <button className="gem-c-button govuk-button"
-                        type="submit" data-module="track-click"
-                        data-accept-cookies="true" data-track-category="cookies"
-                        onClick={handleAccept}>
+                    type="submit" data-module="track-click"
+                    data-accept-cookies="true" data-track-category="cookies"
+                    onClick={handleAccept}>
                     Save changes
                 </button>
             </p>
