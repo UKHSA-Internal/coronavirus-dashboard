@@ -61,7 +61,7 @@ const RegionTable: ComponentType<Props> = ({
     const item = document.getElementById(itemId);
     if (container && item && item.offsetParent) {
       // $FlowFixMe
-      container.scrollTop = item.offsetParent.offsetTop - 10;
+      container.scrollTop = item.offsetParent.offsetTop - 50;
     }
   }, [country, region, utla]);
 
@@ -145,7 +145,7 @@ const RegionTable: ComponentType<Props> = ({
             panel: {
               children: [
                 <Table key='local-authorities'
-                       head={[{ children: [<abbr title={ "Upper tier local authority" }>UTLA</abbr>] }, { children: ['Total cases'], format: 'numeric' }]}
+                       head={[{ children: [<abbr key={ `abbr_0` } title={ "Upper tier local authority" }>UTLA</abbr>] }, { children: ['Total cases'], format: 'numeric' }]}
                   rows={utlaKeys.sort(sortFunc(utlaData)).map(r => [
                     { children: [<LinkOrText id={`table-link-${r}`} key={`table-link-${r}`} onClick={handleOnUtlaClick(r)} onKeyPress={handleOnUtlaKeyDown} active={utla === r}>{utlaData[r].name.value}</LinkOrText>] },
                     { children: [numeral(utlaData[r].totalCases.value).format('0,0')], format: 'numeric' },
