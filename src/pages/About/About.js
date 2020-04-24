@@ -191,11 +191,19 @@ const About: ComponentType<Props> = ({ }: Props) => {
             <Styles.SectionHeader className={"govuk-heading-m"}>
                 Deaths over time
             </Styles.SectionHeader>
-            <p className={"govuk-body"}>
+            <p className={'govuk-body govuk-body govuk-!-margin-bottom-8'}>
                 Deaths are shown in charts and tables according to the day they were reported, not the day they
                 occurred. They can be downloaded as a csv file.
             </p>
-            <hr className={"govuk-section-break govuk-section-break--l"} />
+
+            <Styles.SectionHeader className={"govuk-heading-m"}>
+                Tests over time
+            </Styles.SectionHeader>
+            <p className={"govuk-body"}>
+                Test data is reported by DHSC. Tests are shown in charts and tables according to the day on which they were
+                carried out. Data earlier than 21 April excludes tests in Northern Ireland.
+            </p>
+            <hr className={"govuk-section-break govuk-section-break--l"}/>
 
             <p className={"govuk-body-s"}>
                 Updated 2:35pm 26 April 2020

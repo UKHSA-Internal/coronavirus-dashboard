@@ -47,6 +47,12 @@ export const Charts = ({data, titles, descriptions}: ChartsProps): ReactNode => 
                 header={ titles.dailyDeaths }
                 tooltipText="deaths"
             />
+
+            <BarChart
+                data={ overview?.K02000001?.dailyTests ?? [] }
+                header={ titles.dailyTests }
+                tooltipText="tests"
+            />
         </Fragment>
 
 }; // charts

@@ -18,6 +18,7 @@ declare export type OverviewData = {
     dailyConfirmedCases: ChartData,
     dailyTotalDeaths: ChartData,
     dailyDeaths: ChartData,
+    dailyTests: ChartData
 };
 
 

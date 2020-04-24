@@ -199,6 +199,12 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
             header={ titles.dailyDeaths }
             valueName="Daily deaths"
         />
+
+        <AltChartTable
+            data={ overview?.K02000001?.dailyTests ?? [] }
+            header={ titles.dailyTests }
+            valueName="Daily tests"
+        />
     </Fragment>
 
 }; // tables
