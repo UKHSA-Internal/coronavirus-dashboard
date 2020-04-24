@@ -46,7 +46,7 @@ const getLatestDailyDeaths = (data: any): number => {
 
 const timestamp = (data): string =>
     data.hasOwnProperty("lastUpdatedAt")
-        ? moment(data.lastUpdatedAt).format("D MMM YYYY, hh:mm a")
+        ? moment(data.lastUpdatedAt).format("D MMM YYYY, h:mma")
         : "";
 
 
