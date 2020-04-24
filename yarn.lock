@@ -4551,11 +4551,6 @@ flatten@^1.0.2:
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.3.tgz#c1283ac9f27b368abc1e36d1ff7b04501a30356b"
   integrity sha512-dVsPA/UwQ8+2uoFe5GHtiBMu48dWLTdsuEd7CKGlZlD78r1TTWBvDuFaFGKCo/ZfEr95Uk56vZoX86OsHkUeIg==
 
-floatthead@^2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/floatthead/-/floatthead-2.1.4.tgz#3c6678ac6e28e55a5d2f3fc261d33b59210c9827"
-  integrity sha512-ddQOHZGah8zZebLGTxICF1W8T5BiiVQio2ur9lqSIGEUJSa7vb7CI8sVEsXQ+KfXScBQWwI9ViAMFKq9YYlS+w==
-
 flow-bin@^0.120.1:
   version "0.120.1"
   resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.120.1.tgz#ab051d6df71829b70a26a2c90bb81f9d43797cae"
