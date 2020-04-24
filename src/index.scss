@@ -102,3 +102,18 @@ button {
     padding: 0;
   }
 }
+
+// Sticky table headers
+thead.govuk-table__head th{
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+}
+
+// No gap at top of list to prevent list bleedthrough above thead
+.js-enabled .govuk-tabs__panel {
+    padding-top: 0;
+}
+.js-enabled .govuk-tabs__panel  .govuk-table__header {
+    padding-top: 20px;
+}
