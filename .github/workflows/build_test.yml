@@ -1,0 +1,38 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Build test for pull and push requests
+
+on:
+  push:
+    branches:
+      - development
+  
+  pull_request:
+    branches: 
+      - development
+      - master
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Set up Node.js version
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.13.0'
+
+    - name: Install dependencies
+      run: |
+        npm install
+        yarn install
+        
+    - name: Build
+      env:
+        CI: false
+        BASE_URL: https://coronavirus-staging.data.gov.uk/ 
+      run: |
+        npm run build

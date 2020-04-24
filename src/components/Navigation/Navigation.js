@@ -16,7 +16,7 @@ const Navigation: ComponentType<Props> = ({ location: { pathname }}: Props) => {
     return (
       <Styles.Container className="govuk-header__container--full-width">
         <Styles.NavList>
-          <Styles.NavListItem active={!pathname.includes('about') && !pathname.includes('region')}>
+          <Styles.NavListItem active={pathname === '/'}>
             <Styles.Link className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/" dataTopnav="Data dashboard">Data dashboard</Styles.Link>
           </Styles.NavListItem>
           <Styles.NavListItem active={pathname.includes('about')}>

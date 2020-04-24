@@ -54,6 +54,18 @@ body {
       cursor: pointer
     }
   }
+
+  & .gem-c-notice {
+    color: #0b0c0c;
+    padding: 15px;
+    margin-bottom: 30px;
+    clear: both;
+    border: 5px solid #1d70b8;
+
+    & h2 {
+      margin-bottom: 20px;
+    }
+  }
 }
 
 code {
@@ -89,4 +101,19 @@ button {
     border: 0;
     padding: 0;
   }
+}
+
+// Sticky table headers
+thead.govuk-table__head th{
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+}
+
+// No gap at top of list to prevent list bleedthrough above thead
+.js-enabled .govuk-tabs__panel {
+    padding-top: 0;
+}
+.js-enabled .govuk-tabs__panel  .govuk-table__header {
+    padding-top: 20px;
 }
