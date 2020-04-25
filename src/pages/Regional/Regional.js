@@ -10,10 +10,6 @@ import PageTitle from 'components/PageTitle';
 import RegionTable from 'components/RegionTable';
 import Map from 'components/Map';
 import Disclaimer from 'components/Disclaimer';
-import LineChart from 'components/LineChart';
-import BarChart from 'components/BarChart';
-import ViewAs from 'components/ViewAs';
-import AltChartTable from 'components/AltChartTable';
 import ExportLinks from "components/Export";
 import moment from "moment";
 
@@ -21,6 +17,7 @@ import isIE from 'isIE';
 
 import type { Props } from './Regional.types';
 import * as Styles from './Regional.styles';
+import {ChartTable} from "components/AltChartTable/ChartTable";
 
 
 /**
@@ -54,21 +51,16 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
   const [country, setCountry] = useState(null);
   const [region, setRegion] = useState(null);
   const [utla, setUtla] = useState(null);
-  const [view, setView] = useState('chart');
   const data = useLoadData();
   const layout = useResponsiveLayout(768);
 
   if (!data) {
-    return null;
+      return <Styles.Container className="govuk-width-container">
+          <p className={ "govuk-body govuk-!-font-size-24" } style={{ gridColumn: "1/-1" }}>
+              The website is loading. Please wait&hellip;
+          </p>
+      </Styles.Container>
   }
-
-  // Chart and table titles
-  const titles = {
-    totalCases: 'Total number of lab-confirmed cases in England by specimen date',
-    dailyCases: 'Daily number of lab-confirmed cases in England by specimen date',
-    totalDeaths: 'Total number of COVID-19 associated UK deaths in hospital by date reported',
-    dailyDeaths: 'Daily number of COVID-19 associated UK deaths in hospital by date reported'
-  };
 
   return (
     <Styles.Container className="govuk-width-container">
@@ -138,23 +130,9 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
               dataType: "deaths"
           }
       }}/>
-      <ViewAs view={view} setView={setView} />
-      {view === 'chart' && (
-        <>
-          <LineChart data={data?.countries?.E92000001?.dailyTotalConfirmedCases ?? []} header={titles.totalCases} tooltipText="cases" />
-          <BarChart data={data?.countries?.E92000001?.dailyConfirmedCases ?? []} header={titles.dailyCases} tooltipText="cases" />
-          <LineChart data={data?.overview?.K02000001?.dailyTotalDeaths ?? []} header={titles.totalDeaths} tooltipText="deaths" />
-          <BarChart data={data?.overview?.K02000001?.dailyDeaths ?? []} header={titles.dailyDeaths} tooltipText="deaths" />
-        </>
-      )}
-      {view === 'table' && (
-        <>
-          <AltChartTable data={data?.countries?.E92000001?.dailyTotalConfirmedCases ?? []} header={titles.totalCases} valueName="Total cases" />
-          <AltChartTable data={data?.countries?.E92000001?.dailyConfirmedCases ?? []} header={titles.dailyCases} valueName="Daily cases" />
-          <AltChartTable data={data?.overview?.K02000001?.dailyTotalDeaths ?? []} header={titles.totalDeaths} valueName="Total deaths" />
-          <AltChartTable data={data?.overview?.K02000001?.dailyDeaths ?? []} header={titles.dailyDeaths} valueName="Daily deaths" />
-        </>
-      )}
+
+      <ChartTable data={ data }/>
+
       <Disclaimer text={data?.disclaimer} />
     </Styles.Container>
   );
