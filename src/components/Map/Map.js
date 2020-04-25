@@ -49,6 +49,12 @@ const regionCoordinates = {
   E12000008: [51.45097, -0.99311], 
 };
 
+function glAvailable () {
+  var canvas = document.createElement("canvas");
+  var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+  return (gl && gl instanceof WebGLRenderingContext);
+}
+
 const Map: ComponentType<Props> = ({
   country,
   setCountry,
@@ -88,7 +94,7 @@ const Map: ComponentType<Props> = ({
       setMap(map);
     };
 
-    if (!map) {
+    if (!map && glAvailable()) {
       initializeMap();
     }
   }, []);
