@@ -54,9 +54,18 @@ declare type SingleCountryData = {
   dailyDeaths: ChartData,
 };
 
+
+interface EnglandData extends SingleCountryData {
+    previouslyReportedDailyCases: ChartData,
+    changeInDailyCases: ChartData,
+    previouslyReportedDailyTotalCases: ChartData,
+    changeInDailyTotalCases: ChartData
+} // EnglandData
+
+
 declare type CountryData = {
   // England
-  E92000001: SingleCountryData,
+  E92000001: EnglandData,
   // Scotland
   S92000003: SingleCountryData,
   // Wales
