@@ -50,9 +50,27 @@ const regionCoordinates = {
 };
 
 function glAvailable () {
-  var canvas = document.createElement("canvas");
-  var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-  return (gl && gl instanceof WebGLRenderingContext);
+  if (!window.WebGLRenderingContext) {
+    // WebGL is not supported
+    return false;
+  }
+  // WebGL is supported
+  var canvas = document.createElement("canvas"),
+    names = ["webgl2", "webgl", "experimental-webgl", "moz-webgl", "webkit-3d"],
+    context = false;
+
+  for (var i = 0; i < names.length; i++) {
+    try {
+      context = canvas.getContext(names[i]);
+      if (context && typeof context.getParameter == "function") {
+        // WebGL is enabled
+        return true;
+      }
+    }
+    catch (e) {}
+  }
+  // WebGL is disabled
+  return false;
 }
 
 const Map: ComponentType<Props> = ({
