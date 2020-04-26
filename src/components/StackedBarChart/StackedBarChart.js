@@ -30,7 +30,7 @@ const getBarChartData = ({previous, change}) => {
         labels: previousSorted.map(d => d.date),
         datasets: [
             {
-                label: "Previous report",
+                label: "Previously reported",
                 backgroundColor: '#249184',
                 data: previousSorted.map(d => d.value)
             },
@@ -49,6 +49,10 @@ const getBarChartOptions = (tooltipText) => {
 
     return {
         maintainAspectRatio: false,
+        legend: {
+            display: true,
+            position: 'bottom'
+        },
         scales: {
             xAxes: [{
                 offset: true,
@@ -163,9 +167,8 @@ const StackedBarChart: ComponentType<Props> = ({header, tooltipText, data, descr
             <span className="govuk-heading-s">{header}</span>
             <Styles.Chart>
                 <Bar
-                    data={getBarChartData(data)}
-                    legend={{display: true}}
-                    options={getBarChartOptions(tooltipText)}
+                    data={ getBarChartData(data) }
+                    options={ getBarChartOptions(tooltipText) }
                 />
             </Styles.Chart>
 
