@@ -1,9 +1,9 @@
 // @flow
 
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
-import addIECss from 'addIECss';
+import isIE from 'isIE';
 
 export const Container: ComponentType<*> = (() => {
   return styled.div`
@@ -19,17 +19,22 @@ export const Container: ComponentType<*> = (() => {
       grid-column: 1/-1;
     }
 
-    ${addIECss(css`
+    ${isIE() ? `
       width: 48%;
-    `)}
+    ` : ''}
   `;
 })();
 
-export const Chart : ComponentType<*> = (() => {
+export const Table: ComponentType<*> = (() => {
   return styled.div`
-    height: 250px;
-    margin-top: 15px;
-    position: relative;
-    left: -8px;
+    height: 300px;
+    overflow: auto;
+  `;
+})();
+
+
+export const P: ComponentType<*> = (() => {
+  return styled.p`
+    margin-left: 2em;
   `;
 })();

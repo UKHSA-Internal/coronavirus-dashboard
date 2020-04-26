@@ -1,9 +1,9 @@
 // @flow
 
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
-import addIECss from 'addIECss';
+import isIE from 'isIE';
 
 export const Container: ComponentType<*> = (() => {
   return styled.div`
@@ -14,14 +14,14 @@ export const Container: ComponentType<*> = (() => {
     & > span {
       font-weight: normal;
     }
-
+    
     @media only screen and (max-width: 768px) {
       grid-column: 1/-1;
     }
 
-    ${addIECss(css`
+    ${isIE() ? `
       width: 48%;
-    `)}
+    ` : ''}
   `;
 })();
 
@@ -31,5 +31,11 @@ export const Chart : ComponentType<*> = (() => {
     margin-top: 15px;
     position: relative;
     left: -8px;
+  `;
+})();
+
+export const P: ComponentType<*> = (() => {
+  return styled.p`
+    margin-left: 2em;
   `;
 })();

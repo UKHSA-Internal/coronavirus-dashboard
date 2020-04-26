@@ -10,7 +10,7 @@ export const Container: ComponentType<*> = (() => {
     display: flex;
     flex-direction: row;
     align-items: center;
-    grid-column: 1/-1;
+    grid-column: 2/-2;
 
     & .govuk-form-group {
       margin-bottom: 0;
