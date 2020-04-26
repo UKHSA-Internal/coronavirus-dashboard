@@ -21,24 +21,24 @@ const About: ComponentType<Props> = ({ }: Props) => {
             </p>
 
             <p className={'govuk-body'}>
-                There are separate reporting processes for England, Scotland, Wales and Northern Ireland. Each nation
+                There are separate reporting processes for England, Scotland, Wales and Northern Ireland. Each Nation
                 provides data based on tests carried out in NHS (and PHE) laboratories. These represent 'pillar 1' of
                 the Government's mass testing programme. The Department for Health and Social Care (DHSC) combines the
-                counts from the 4 nations, and adds data from tests carried out by commercial partners ('pillar 2' of
+                counts from the 4 Nations, and adds data from tests carried out by commercial partners ('pillar 2' of
                 the mass-testing programme) to give daily and total (cumulative) counts of lab-confirmed cases. These
                 are submitted to Public Health England (PHE) to display on the dashboard. The 4 figures are not all
                 taken from the same cut-off time: England and Scotland counts are as at 9am on the day of publication;
                 Wales counts are as at 7am on the day of publication; Northern Ireland counts are from different times
                 on the day of publication. The exact time of the Northern Ireland data extract is given on the&nbsp;
-                <a href={"https://www.publichealth.hscni.net/news/covid-19-coronavirus#what-is-the-situation-in-northern-ireland"}
+                <a href={"https://www.health-ni.gov.uk/"}
                     target={"_blank"}
                     className={"govuk-link"}
-                    rel={"noopener noreferrer"}>Northern Ireland Public Health Agency</a>&nbsp;website.
+                    rel={"noopener noreferrer"}>Northern Ireland Deaprtment of Health</a>&nbsp;website.
             </p>
             <p className={'govuk-body'}>
-                The UK total is not the sum of the 4 nation totals as the pillar 2 cases cannot currently be included in
+                The UK total is not the sum of the 4 National totals as the pillar 2 cases cannot currently be included in
                 the
-                nation totals. All other data on this website are based only on cases detected through pillar 1.
+                National totals. All other data on this website are based only on cases detected through pillar 1.
                 Information
                 about the different pillars is available on&nbsp;
                 <a href={"https://www.gov.uk/government/publications/coronavirus-covid-19-scaling-up-testing-programmes/coronavirus-covid-19-scaling-up-our-testing-programmes"}
@@ -65,10 +65,10 @@ const About: ComponentType<Props> = ({ }: Props) => {
                             rel={"noopener noreferrer"}>Public Health Wales coronavirus information</a>
                     </li>
                     <li>
-                        <a href={"https://www.publichealth.hscni.net/publications/covid-19-surveillance-reports"}
+                        <a href={"https://www.health-ni.gov.uk/"}
                             className={"govuk-link"}
                             target={"_blank"}
-                            rel={"noopener noreferrer"}>Northern Ireland Public Health Agency coronavirus
+                            rel={"noopener noreferrer"}>Northern Ireland Department of Health coronavirus
                             information</a>
                     </li>
                 </ul>
@@ -126,16 +126,21 @@ const About: ComponentType<Props> = ({ }: Props) => {
             </Styles.SectionHeader>
             <p className={'govuk-body'}>
                 Daily case counts are shown in charts and tables, and can be downloaded for Regions and UTLAs as a csv
-                file. They are currently only available for England on this website. Data for the rest of the UK will be
-                included as soon as possible.
+                file or in json format. They are currently only available for England on this website. Data for the rest of the UK                 will be included when supplied by the devolved administrations.
             </p>
-            <p className={'govuk-body govuk-body govuk-!-margin-bottom-8'}>
+            <p className={'govuk-body'}>
                 Lab-confirmed positive cases are attributed to the day the first specimen was taken from the person
                 being tested (the specimen date). Each day new cases are reported, but the dates they originate from
                 cover the previous few days. Because of this, there are few cases reported for the most recent date on
                 the chart, but this does not mean the epidemic is tailing off. Data from around 5 days ago can be
                 considered complete. Data for recent days are constantly being revised as more information becomes
                 available.
+            </p>
+            <p className={'govuk-body'}>
+                The new cases reported in the most recent daily update are shown by the black section of the bars.  The lower                     sections of the bars represent cases previously reported.  This shows how the new cases reported relate to                         specimens taken over the last few days, with the occasional tests coming in with longer delays.
+            </p>
+            <p className={'govuk-body govuk-body govuk-!-margin-bottom-8'}>
+                In the csv and json download files, the total daily cases and cumulative cases by specimen date are provided for                   England, each Region and UTLA.  A breakdown of both the daily cases and the cumulative cases is provided to show                   the previously reported figures (ie those that were published on the previous day) and the overnight change.  As                   in the England chart, this shows how the new cases reported relate to specimens taken over the last few days, with                 the occasional tests coming in with longer delays.  Negative changes indicate cases being removed or corrected as                 the data are continually checked and cleaned.
             </p>
 
             <Styles.SectionHeader className="govuk-heading-m">
