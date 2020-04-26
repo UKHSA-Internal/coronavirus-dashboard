@@ -56,9 +56,9 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
 
   if (!data) {
       return <Styles.Container className="govuk-width-container">
-          <p className={ "govuk-body govuk-!-font-size-24" } style={{ gridColumn: "1/-1" }}>
+          <Styles.P className={ "govuk-body govuk-!-font-size-24" }>
               The website is loading. Please wait&hellip;
-          </p>
+          </Styles.P>
       </Styles.Container>
   }
 
