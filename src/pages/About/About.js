@@ -103,7 +103,7 @@ const About: ComponentType<Props> = ({ }: Props) => {
                 Total UTLA counts shown on this website can occasionally go down from one day to the next as data are
                 revised.
             </p>
-            <p className={'govuk-body'}>
+            <p className={'govuk-body govuk-body govuk-!-margin-bottom-8'}>
                 Cases in people who have not been tested are not included in the confirmed case counts.
             </p>
 
@@ -116,7 +116,7 @@ const About: ComponentType<Props> = ({ }: Props) => {
                 million. Areas with larger populations would naturally have higher numbers of cases, even if the cases
                 were evenly distributed around the country.
             </p>
-            <p className={'govuk-body'}>
+            <p className={'govuk-body govuk-body govuk-!-margin-bottom-8'}>
                 To compare the numbers of cases between areas meaningfully it is necessary to calculate rates. These
                 will be added to this website as soon as possible.
             </p>
@@ -139,7 +139,7 @@ const About: ComponentType<Props> = ({ }: Props) => {
             <p className={'govuk-body'}>
                 The new cases reported in the most recent daily update are shown by the black section of the bars.  The lower                     sections of the bars represent cases previously reported.  This shows how the new cases reported relate to                         specimens taken over the last few days, with the occasional tests coming in with longer delays.
             </p>
-            <p className={'govuk-body'}>
+            <p className={'govuk-body govuk-body govuk-!-margin-bottom-8'}>
                 In the csv and json download files, the total daily cases and cumulative cases by specimen date are provided for                   England, each Region and UTLA.  A breakdown of both the daily cases and the cumulative cases is provided to show                   the previously reported figures (ie those that were published on the previous day) and the overnight change.  As                   in the England chart, this shows how the new cases reported relate to specimens taken over the last few days, with                 the occasional tests coming in with longer delays.  Negative changes indicate cases being removed or corrected as                 the data are continually checked and cleaned.
             </p>
 
@@ -152,7 +152,7 @@ const About: ComponentType<Props> = ({ }: Props) => {
                 submit data in batches, so there may be no cases for a week and then a large number on one day. This is
                 not helpful for analysing the incidence of COVID-19 over time.
             </p>
-            <p className={"govuk-body"}>
+            <p className={"govuk-body govuk-body govuk-!-margin-bottom-8"}>
                 The data are now shown by the date the specimen was taken from the person being tested. This gives a
                 much more useful analysis of the progression of cases over time. It does mean that the latest days’
                 figures are always incomplete, and only data from five days or more ago can be considered complete.
@@ -168,7 +168,7 @@ const About: ComponentType<Props> = ({ }: Props) => {
                 Wales counts are as at 5pm on the day before publication; Scotland counts are as at 9am on the day
                 before publication; Northern Ireland counts are as at 9:15am on the day before publication.
             </p>
-            <p className={'govuk-body'}>
+            <p className={'govuk-body govuk-body govuk-!-margin-bottom-8'}>
                 Details of the processes for counting deaths in the devolved administrations are available on their
                 websites. Links provided in the 'Total and daily UK cases' section on this page.
             </p>
@@ -183,7 +183,7 @@ const About: ComponentType<Props> = ({ }: Props) => {
                 basis for the death counts reported on this website the following day. After validation, the total
                 number of deaths in England is published by NHS England and sent to DHSC.
             </p>
-            <p className={'govuk-body'}>
+            <p className={'govuk-body govuk-body govuk-!-margin-bottom-8'}>
                 Deaths outside NHS services are not currently included in these counts. Deaths of people who have tested
                 positively for COVID-19 could in some cases be due to a different cause.
             </p>
