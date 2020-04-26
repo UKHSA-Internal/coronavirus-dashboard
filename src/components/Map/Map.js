@@ -50,27 +50,28 @@ const regionCoordinates = {
 };
 
 function glAvailable () {
-  if (!window.WebGLRenderingContext) {
-    // WebGL is not supported
-    return false;
-  }
+  if (!window.WebGLRenderingContext) 
+    return false; // WebGL is not supported
+  
   // WebGL is supported
-  var canvas = document.createElement("canvas"),
-    names = ["webgl2", "webgl", "experimental-webgl", "moz-webgl", "webkit-3d"],
+  const 
+    canvas = document.createElement("canvas"),
+    drivers = ["webgl2", "webgl", "experimental-webgl", "moz-webgl", "webkit-3d"],
     context = false;
 
-  for (var i = 0; i < names.length; i++) {
+  for ( const driverName of drivers ) {
     try {
-      context = canvas.getContext(names[i]);
-      if (context && typeof context.getParameter == "function") {
-        // WebGL is enabled
-        return true;
-      }
-    }
-    catch (e) {}
+      
+      context = canvas.getContext(driverName);
+      
+      if (context && typeof context.getParameter == "function") 
+        return true;  // WebGL is enabled
+      
+    } catch (e) {}
   }
-  // WebGL is disabled
-  return false;
+  
+  return false;  // WebGL is disabled
+  
 }
 
 const Map: ComponentType<Props> = ({
