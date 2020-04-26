@@ -15,6 +15,10 @@ export const Container: ComponentType<*> = (() => {
       font-weight: normal;
     }
 
+    @media only screen and (max-width: 768px) {
+      grid-column: 1/-1;
+    }
+
     ${isIE() ? `
       width: 48%;
     ` : ''}
