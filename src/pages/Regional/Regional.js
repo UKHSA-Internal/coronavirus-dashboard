@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import type { ComponentType } from 'react';
+import moment from "moment";
 
 import useLoadData from 'hooks/useLoadData';
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
@@ -11,9 +12,6 @@ import RegionTable from 'components/RegionTable';
 import Map from 'components/Map';
 import Disclaimer from 'components/Disclaimer';
 import ExportLinks from "components/Export";
-import moment from "moment";
-
-import isIE from 'isIE';
 
 import type { Props } from './Regional.types';
 import * as Styles from './Regional.styles';
@@ -88,7 +86,6 @@ const Regional: ComponentType<Props> = ({ }: Props) => {
         number={getLatestDailyDeaths(data)}
         description={ "Number of new deaths reported today" }
       />
-      {isIE() && <div style={{ width: '68%' }} />}
       {layout === 'desktop' && (
         <>
           <RegionTable
