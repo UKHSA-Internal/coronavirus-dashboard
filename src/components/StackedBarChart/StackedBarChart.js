@@ -4,8 +4,8 @@ import React from 'react';
 import type {ComponentType} from 'react';
 import {Bar} from 'react-chartjs-2';
 
-import type {Props} from './BarChart.types';
-import * as Styles from './BarChart.styles';
+import type {Props} from './StackedBarChart.types';
+import * as Styles from './StackedBarChart.styles';
 
 import numeral from 'numeral';
 
@@ -157,7 +157,7 @@ const getBarChartOptions = (tooltipText) => {
 
 };
 
-const StackedBarChart: ComponentType<Props> = ({header, tooltipText, data}: Props) => {
+const StackedBarChart: ComponentType<Props> = ({header, tooltipText, data, description=null}: Props) => {
     return (
         <Styles.Container>
             <span className="govuk-heading-s">{header}</span>
@@ -168,6 +168,9 @@ const StackedBarChart: ComponentType<Props> = ({header, tooltipText, data}: Prop
                     options={getBarChartOptions(tooltipText)}
                 />
             </Styles.Chart>
+
+            { description ? <Styles.P>{ description }</Styles.P> : null }
+
         </Styles.Container>
     );
 };

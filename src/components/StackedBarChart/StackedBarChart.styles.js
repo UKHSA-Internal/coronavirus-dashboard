@@ -33,3 +33,9 @@ export const Chart : ComponentType<*> = (() => {
     left: -8px;
   `;
 })();
+
+export const P: ComponentType<*> = (() => {
+  return styled.p`
+    margin-left: 2em;
+  `;
+})();
