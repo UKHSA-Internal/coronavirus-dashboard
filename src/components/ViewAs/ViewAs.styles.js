@@ -19,5 +19,9 @@ export const Container: ComponentType<*> = (() => {
     ${addIECss(css`
       width: 100%;
     `)}
+    
+    @media only screen and (max-width: 768px) {
+      grid-column: 1/-1;
+    }
   `;
 })();
