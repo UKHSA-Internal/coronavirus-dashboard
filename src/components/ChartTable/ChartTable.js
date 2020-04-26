@@ -30,7 +30,7 @@ const TableDescriptions: TitleOrDescriptionValues = {
 const ChartDescriptions: TitleOrDescriptionValues = {
 
     totalCases: null,
-    dailyCases: 'Confirmed cases and change from previously reported figures. New cases are attributed to the day the specimen was taken.',
+    dailyCases: 'Total confirmed cases showing those previously reported and newly added cases separately. New cases are attributed to the day the specimen was taken.',
     totalDeaths: null,
     dailyDeaths: null
 

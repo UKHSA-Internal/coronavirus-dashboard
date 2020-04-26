@@ -35,7 +35,7 @@ const getBarChartData = ({previous, change}) => {
                 data: previousSorted.map(d => d.value)
             },
             {
-                label: "Change",
+                label: "Newly reported",
                 backgroundColor: '#034e46',
                 data: change.sort(sortFunc).map(d => d.value > 0 ? d.value : 0)
             }
