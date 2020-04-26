@@ -66,7 +66,7 @@ const EnglandDailyTotalCasesStructure = {
         },
         {
             key: 'changeInDailyTotalCases',
-            headings: { value: 'Difference', type: 'numeric' },
+            headings: { value: 'Change', type: 'numeric' },
             type: 'numeric',
             formatter: numeral,
             format: '0,0',
@@ -74,7 +74,7 @@ const EnglandDailyTotalCasesStructure = {
         },
         {
             key: 'dailyTotalConfirmedCases',
-            headings: { value: 'Confirmed total cases', type: 'numeric' },
+            headings: { value: 'Total confirmed cases', type: 'numeric' },
             type: 'numeric',
             formatter: numeral,
             format: '0,0',
@@ -108,7 +108,7 @@ const EnglandDailyCasesStructure = {
         },
         {
             key: 'changeInDailyCases',
-            headings: { value: 'Difference', type: 'numeric' },
+            headings: { value: 'Change', type: 'numeric' },
             type: 'numeric',
             formatter: numeral,
             format: '0,0',
