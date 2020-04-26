@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
 import { initAll } from 'govuk-frontend'
 
 import App from './App';
@@ -13,23 +12,11 @@ import 'react-app-polyfill/stable';
 
 import './index.scss';
 
-const GlobalStyles = createGlobalStyle`
-  body {
-    font-family: "GDS Transport", Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    background-color: #fff;
-    color: #0b0c0c;
-  }
-`;
-
 initAll()
 
 ReactDOM.render(
     <Router>
-      <>
-        <GlobalStyles />
-        <App />
-      </>
+      <App />
     </Router>,
   document.getElementById('root'),
 );

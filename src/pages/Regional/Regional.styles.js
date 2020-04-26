@@ -1,8 +1,9 @@
 // @flow
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { ComponentType } from 'react';
-import isIE from 'isIE';
+
+import addIECss from 'addIECss';
 
 export const Container: ComponentType<*> = (() => {
   return styled.div`
@@ -18,12 +19,12 @@ export const Container: ComponentType<*> = (() => {
       grid-template-columns: repeat(2, 1fr);
     }
 
-    ${isIE() ? `
+    ${addIECss(css`
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       flex-wrap: wrap;
-    ` : ''}
+    `)}
   `;
 })();
 

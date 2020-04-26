@@ -3,11 +3,11 @@ $govuk-assets-path: "~govuk-frontend/govuk/assets/";
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "GDS Transport", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-ononesx-font-smoothing: grayscale;
+  background-color: #fff;
+  color: #0b0c0c;
 
   & .govuk-header {
     border-color: #1d70b8;
