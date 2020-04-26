@@ -33,7 +33,7 @@ const About: ComponentType<Props> = ({ }: Props) => {
                 <a href={"https://www.health-ni.gov.uk/"}
                     target={"_blank"}
                     className={"govuk-link"}
-                    rel={"noopener noreferrer"}>Northern Ireland Deaprtment of Health</a>&nbsp;website.
+                    rel={"noopener noreferrer"}>Northern Ireland Department of Health</a>&nbsp;website.
             </p>
             <p className={'govuk-body'}>
                 The UK total is not the sum of the 4 National totals as the pillar 2 cases cannot currently be included in
@@ -126,7 +126,7 @@ const About: ComponentType<Props> = ({ }: Props) => {
             </Styles.SectionHeader>
             <p className={'govuk-body'}>
                 Daily case counts are shown in charts and tables, and can be downloaded for Regions and UTLAs as a csv
-                file or in json format. They are currently only available for England on this website. Data for the rest of the UK                 will be included when supplied by the devolved administrations.
+                file or in json format. They are currently only available for England on this website. Data for the rest of the UK will be included when supplied by the devolved administrations.
             </p>
             <p className={'govuk-body'}>
                 Lab-confirmed positive cases are attributed to the day the first specimen was taken from the person
@@ -137,10 +137,10 @@ const About: ComponentType<Props> = ({ }: Props) => {
                 available.
             </p>
             <p className={'govuk-body'}>
-                The new cases reported in the most recent daily update are shown by the black section of the bars.  The lower                     sections of the bars represent cases previously reported.  This shows how the new cases reported relate to                         specimens taken over the last few days, with the occasional tests coming in with longer delays.
+                The new cases reported in the most recent daily update are shown by the upper, dark section of the bars.  The lower sections of the bars represent cases previously reported.  This shows how the new cases reported relate to specimens taken over the last few days, with the occasional tests coming in with longer delays.
             </p>
             <p className={'govuk-body govuk-body govuk-!-margin-bottom-8'}>
-                In the csv and json download files, the total daily cases and cumulative cases by specimen date are provided for                   England, each Region and UTLA.  A breakdown of both the daily cases and the cumulative cases is provided to show                   the previously reported figures (ie those that were published on the previous day) and the overnight change.  As                   in the England chart, this shows how the new cases reported relate to specimens taken over the last few days, with                 the occasional tests coming in with longer delays.  Negative changes indicate cases being removed or corrected as                 the data are continually checked and cleaned.
+                In the csv and json download files, the total daily cases and cumulative cases by specimen date are provided for England, each Region and UTLA.  A breakdown of both the daily cases and the cumulative cases is provided to show the previously reported figures (ie those that were published on the previous day) and the overnight change.  As in the England chart, this shows how the new cases reported relate to specimens taken over the last few days, with the occasional tests coming in with longer delays.  Negative changes indicate cases being removed or corrected as the data are continually checked and cleaned.
             </p>
 
             <Styles.SectionHeader className="govuk-heading-m">
@@ -198,7 +198,7 @@ const About: ComponentType<Props> = ({ }: Props) => {
             <hr className={"govuk-section-break govuk-section-break--l"} />
 
             <p className={"govuk-body-s"}>
-                Updated 6pm 16 April 2020
+                Updated 2:35pm 26 April 2020
             </p>
 
             <p className={"govuk-body-s"}>
