@@ -169,7 +169,13 @@ const StackedBarChart: ComponentType<Props> = ({header, tooltipText, data, descr
                 />
             </Styles.Chart>
 
-            { description ? <Styles.P>{ description }</Styles.P> : null }
+            {
+                description
+                    ? <Styles.P className={ "govuk-body govuk-!-font-size-14 govuk-!-margin-top-5" }>
+                        { description }
+                    </Styles.P>
+                    : null
+            }
 
         </Styles.Container>
     );
