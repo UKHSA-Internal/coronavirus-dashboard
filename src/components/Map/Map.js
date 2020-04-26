@@ -38,40 +38,41 @@ const regionCoordinates = {
   // East midlands
   E12000004: [52.795719, -0.84969],
   // South west
-  E12000009: [50.811192, -3.63346], 
+  E12000009: [50.811192, -3.63346],
   // London
-  E12000007: [51.492271, -0.30866], 
+  E12000007: [51.492271, -0.30866],
   // Yorkshire and the humber
   E12000003: [53.93264, -1.28714],
   // North east
-  E12000001: [55.297009, -1.72888], 
+  E12000001: [55.297009, -1.72888],
   // South east
-  E12000008: [51.45097, -0.99311], 
+  E12000008: [51.45097, -0.99311],
 };
 
 function glAvailable () {
-  if (!window.WebGLRenderingContext) 
+  if (!window.WebGLRenderingContext)
     return false; // WebGL is not supported
-  
+
   // WebGL is supported
-  const 
+  const
     canvas = document.createElement("canvas"),
-    drivers = ["webgl2", "webgl", "experimental-webgl", "moz-webgl", "webkit-3d"],
-    context = false;
+    drivers = ["webgl2", "webgl", "experimental-webgl", "moz-webgl", "webkit-3d"];
+
+  let context = false;
 
   for ( const driverName of drivers ) {
     try {
-      
+
       context = canvas.getContext(driverName);
-      
-      if (context && typeof context.getParameter == "function") 
+
+      if (context && typeof context.getParameter == "function")
         return true;  // WebGL is enabled
-      
+
     } catch (e) {}
   }
-  
+
   return false;  // WebGL is disabled
-  
+
 }
 
 const Map: ComponentType<Props> = ({
