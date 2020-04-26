@@ -14,7 +14,7 @@ export const Container: ComponentType<*> = (() => {
     & > span {
       font-weight: normal;
     }
-
+    
     @media only screen and (max-width: 768px) {
       grid-column: 1/-1;
     }
@@ -31,5 +31,11 @@ export const Chart : ComponentType<*> = (() => {
     margin-top: 15px;
     position: relative;
     left: -8px;
+  `;
+})();
+
+export const P: ComponentType<*> = (() => {
+  return styled.p`
+    margin-left: 2em;
   `;
 })();

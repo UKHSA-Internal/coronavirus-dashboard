@@ -25,11 +25,16 @@ export const Container: ComponentType<*> = (() => {
   `;
 })();
 
-export const Chart : ComponentType<*> = (() => {
+export const Table: ComponentType<*> = (() => {
   return styled.div`
-    height: 250px;
-    margin-top: 15px;
-    position: relative;
-    left: -8px;
+    height: 300px;
+    overflow: auto;
+  `;
+})();
+
+
+export const P: ComponentType<*> = (() => {
+  return styled.p`
+    margin-left: 2em;
   `;
 })();

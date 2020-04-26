@@ -7,7 +7,7 @@ import isIE from 'isIE';
 
 export const Container: ComponentType<*> = (() => {
   return styled.div`
-    grid-column: span 3;
+    grid-column: 2/-2;
     display: flex;
     flex-direction: column;
 
