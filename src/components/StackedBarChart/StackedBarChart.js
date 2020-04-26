@@ -35,7 +35,7 @@ const getBarChartData = ({previous, change}) => {
                 data: previousSorted.map(d => d.value)
             },
             {
-                label: "Current report",
+                label: "Change",
                 backgroundColor: '#034e46',
                 data: change.sort(sortFunc).map(d => d.value > 0 ? d.value : 0)
             }
@@ -164,7 +164,7 @@ const StackedBarChart: ComponentType<Props> = ({header, tooltipText, data, descr
             <Styles.Chart>
                 <Bar
                     data={getBarChartData(data)}
-                    legend={{display: false}}
+                    legend={{display: true}}
                     options={getBarChartOptions(tooltipText)}
                 />
             </Styles.Chart>
