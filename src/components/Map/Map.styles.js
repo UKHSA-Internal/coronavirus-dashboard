@@ -1,9 +1,9 @@
 // @flow
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { ComponentType } from 'react';
 
-import isIE from 'isIE';
+import addIECss from 'addIECss';
 
 export const Map: ComponentType<*> = (() => {
   return styled.div`
@@ -12,8 +12,32 @@ export const Map: ComponentType<*> = (() => {
     width: 100%;
     border: 1px solid #0B0C0C;
 
-    ${isIE() ? `
+    ${addIECss(css`
       width: 48%;
-    ` : ''}
+    `)}
+  `;
+})();
+
+export const Container: ComponentType<*> = (() => {
+  return styled.div`
+    display: grid;
+    height: 600px;
+
+    ${addIECss(css`
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    `)}
+  `;
+})();
+
+export const P: ComponentType<*> = (() => {
+  return styled.p`
+    margin: 2em;
+    align-self: center;
+    justify-self: center;
   `;
 })();
