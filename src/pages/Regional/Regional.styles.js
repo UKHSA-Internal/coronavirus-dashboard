@@ -30,7 +30,7 @@ export const Container: ComponentType<*> = (() => {
 
 export const P: ComponentType<*> = (() => {
   return styled.p`
-    grid-column: span 1/-1
+    grid-column: 1/-1; 
   `;
 })();
 
