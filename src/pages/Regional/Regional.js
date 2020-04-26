@@ -17,7 +17,7 @@ import isIE from 'isIE';
 
 import type { Props } from './Regional.types';
 import * as Styles from './Regional.styles';
-import {ChartTable} from "components/AltChartTable/ChartTable";
+import ChartTable from "components/ChartTable";
 
 
 /**
