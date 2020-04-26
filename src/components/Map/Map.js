@@ -49,6 +49,31 @@ const regionCoordinates = {
   E12000008: [51.45097, -0.99311], 
 };
 
+function glAvailable () {
+  if (!window.WebGLRenderingContext) 
+    return false; // WebGL is not supported
+  
+  // WebGL is supported
+  const 
+    canvas = document.createElement("canvas"),
+    drivers = ["webgl2", "webgl", "experimental-webgl", "moz-webgl", "webkit-3d"],
+    context = false;
+
+  for ( const driverName of drivers ) {
+    try {
+      
+      context = canvas.getContext(driverName);
+      
+      if (context && typeof context.getParameter == "function") 
+        return true;  // WebGL is enabled
+      
+    } catch (e) {}
+  }
+  
+  return false;  // WebGL is disabled
+  
+}
+
 const Map: ComponentType<Props> = ({
   country,
   setCountry,
@@ -88,7 +113,7 @@ const Map: ComponentType<Props> = ({
       setMap(map);
     };
 
-    if (!map) {
+    if (!map && glAvailable()) {
       initializeMap();
     }
   }, []);
