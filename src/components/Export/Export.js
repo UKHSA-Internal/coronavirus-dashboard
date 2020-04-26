@@ -97,11 +97,13 @@ const ExportLinks = ({ data }: { data: downloads }): any => {
                                 ? <a href={ data[label].csv }
                                      download={ `coronavirus-${label}_latest.csv` }
                                      target={ "_blank" }
+                                     rel={ "noopener noreferrer" }
                                      onClick={ () => trackClick(data[label].dataType, fileTypes.csv) }
                                      className={ "govuk-link govuk-link--no-visited-state" }>CSV</a>
                                 : <a href={ data[label].csv }
                                      download={ `coronavirus-${label}_latest.csv` }
                                      target={ "_blank" }
+                                     rel={ "noopener noreferrer" }
                                      className={ "govuk-link govuk-link--no-visited-state" }>CSV</a>
                         }
                         &nbsp;or&nbsp;
@@ -110,11 +112,13 @@ const ExportLinks = ({ data }: { data: downloads }): any => {
                                 ? <a href={ data[label].json }
                                      onClick={ () => trackClick(data[label].dataType, fileTypes.json) }
                                      target={ "_blank" }
+                                     rel={ "noopener noreferrer" }
                                      download={ `coronavirus-${label}_latest.json` }
                                      className={ "govuk-link govuk-link--no-visited-state" }>JSON</a>
                                 : <a href={ data[label].json }
                                      download={ `coronavirus-${label}_latest.json` }
                                      target={ "_blank" }
+                                     rel={ "noopener noreferrer" }
                                      className={ "govuk-link govuk-link--no-visited-state" }>JSON</a>
                         }
                 </Paragraph>
