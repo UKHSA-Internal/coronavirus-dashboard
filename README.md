@@ -1,3 +1,6 @@
+![Build test for pull and push requests](https://github.com/PublicHealthEngland/coronavirus-dashboard/workflows/Build%20test%20for%20pull%20and%20push%20requests/badge.svg)
+
+
 This is the source code for the [Coronavirus Dashboard](https://coronavirus.data.gov.uk) service.
 
 ## Development and contribution
