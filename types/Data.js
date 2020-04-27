@@ -38,8 +38,9 @@ declare export type SingleCountryData = {
 
 declare export type PreviousData = {
     previouslyReportedDailyCases: ChartData,
+    previouslyReportedDailyCasesAdjusted: ChartData,
     changeInDailyCases: ChartData,
-    previouslyReportedDailyTotalCases: ChartData,
+    previouslyReportedDailyTotalCasesAdjusted: ChartData,
     changeInDailyTotalCases: ChartData
 }; // EnglandData
 

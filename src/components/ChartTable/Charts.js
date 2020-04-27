@@ -28,7 +28,7 @@ export const Charts = ({data, titles, descriptions}: ChartsProps): ReactNode => 
 
             <StackedBarChart
                 data={ {
-                    previous: countries?.E92000001?.previouslyReportedDailyCases ?? [],
+                    previous: countries?.E92000001?.previouslyReportedDailyCasesAdjusted ?? [],
                     change: countries?.E92000001?.changeInDailyCases ?? [],
                 } }
                 header={ titles.dailyCases }
