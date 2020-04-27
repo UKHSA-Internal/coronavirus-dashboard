@@ -22,6 +22,9 @@ const useLoadData = () => {
   // of the data source.
   if (data) {
     data["overview"]["K02000001"]["dailyTests"] = [
+      { "date": "2020-04-25", "value": 29058 },
+      { "date": "2020-04-24", "value": 28760 },
+      { "date": "2020-04-23", "value": 28532 },
       { "date": "2020-04-22", "value": 23560 },
       { "date": "2020-04-21", "value": 22814 },
       { "date": "2020-04-20", "value": 18206 },
