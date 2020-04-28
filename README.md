@@ -7,6 +7,9 @@ This is the source code for the [Coronavirus Dashboard](https://coronavirus.data
 
 We welcome contributions by everyone. Please read the [contributions guide](https://github.com/PublicHealthEngland/coronavirus-dashboard/blob/master/CONTRIBUTING.md) for additional information.
 
+### How can I help?
+We have a [public project management board](https://github.com/orgs/PublicHealthEngland/projects/1) that shows outstanding issues to which everyone can contribute. Pick a ticket, assign it to yourself and move it to the **Doing** column, and you will be all set to start. Let us know if you need additional information. We are ready to help.
+
 ## Cloning the code for re-deployment
 
 ### If your service isn’t on GOV.UK
