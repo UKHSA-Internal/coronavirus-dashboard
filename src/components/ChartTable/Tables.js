@@ -25,6 +25,19 @@ const sortFunc = (a, b) => {
 }; // sortFunc
 
 
+const ageSexSort = (a, b) => {
+
+    const
+        ageA = parseInt(/^(\d+).*$/.exec(a.age)[1]),
+        ageB = parseInt(/^(\d+).*$/.exec(b.age)[1]);
+
+    if ( ageA > ageB ) return 1;
+
+    return ageA < ageB ? -1 : 0
+
+}; // ageSexSort
+
+
 const EnglandDailyCasesStructure = ({ titles, descriptions }: TitleOrDescription): TableStructure => ({
     metadata: [
         {
@@ -60,6 +73,7 @@ const EnglandDailyCasesStructure = ({ titles, descriptions }: TitleOrDescription
             valueGetter: (d) => d.value
         }
     ],
+    sortFunc: sortFunc,
     extra: {
         intro: titles.dailyCases,
         description: descriptions.dailyCases,
@@ -102,6 +116,7 @@ const EnglandDailyTotalCasesStructure = ({ titles, descriptions }: TitleOrDescri
             valueGetter: (d) => d.value
         }
     ],
+    sortFunc: sortFunc,
     extra: {
         intro: titles.totalCases,
         description: descriptions.totalCases,
@@ -115,7 +130,7 @@ const EnglandAgeSexStructure = ({ titles, descriptions }: TitleOrDescription): T
             key: 'maleCases',
             headings: { value: 'Age group', type: 'string' },
             type: 'string',
-            formatter: (v) => (r) => v.replace(/_/, r),
+            formatter: (v) => ({ format: (r) => v.replace(/_/g, r) }),
             format: ' ',
             valueGetter: (d) => d.age.replace(/_/, ' ')
         },
@@ -136,6 +151,7 @@ const EnglandAgeSexStructure = ({ titles, descriptions }: TitleOrDescription): T
             valueGetter: (d) => d.value
         }
     ],
+    sortFunc: ageSexSort,
     extra: {
         intro: titles.ageSex,
         description: descriptions.ageSex
@@ -147,7 +163,7 @@ const EnglandTable = ({ englandData, structure }: EnglandTableProps): React.Reac
 
     const
         dataKeys = structure.metadata.map(item => item.key),
-        dataArray = zip(...dataKeys.map(key => englandData[key].sort(sortFunc)));
+        dataArray = zip(...dataKeys.map(key => englandData[key].sort(structure.sortFunc)));
 
     return <Styles.Container>
         {

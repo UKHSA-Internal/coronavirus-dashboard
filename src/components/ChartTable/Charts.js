@@ -8,6 +8,20 @@ import type { ChartsProps } from "./ChartTable.types";
 import CategoricalBarChart from "../CategoricalBarChart/CategoricalBarChart";
 
 
+const ageSexSort = (a, b) => {
+
+    const
+        ageA = parseInt(/^(\d+).*$/.exec(a.age)[1]),
+        ageB = parseInt(/^(\d+).*$/.exec(b.age)[1]);
+
+    if ( ageA > ageB ) return 1;
+
+    return ageA < ageB ? -1 : 0
+
+}; // ageSexSort
+
+
+
 /**
  * Produces the charts.
  *
@@ -55,11 +69,11 @@ export const Charts = ({data, titles, descriptions}: ChartsProps): ReactNode => 
                         data={ {
                             categoryLabels: ["Male", "Female"],
                             data: [
-                                countries?.E92000001?.maleCases ?? [],
-                                countries?.E92000001?.femaleCases ?? [],
+                                (countries?.E92000001?.maleCases ?? []).sort(ageSexSort),
+                                (countries?.E92000001?.femaleCases ?? []).sort(ageSexSort),
                             ],
                             colors: ["#367E93", "#0a495a"],
-                            columnLabelGetter: d => d.age.replace(/_/, ' ')
+                            columnLabelGetter: d => d.age.replace(/_/g, ' ')
                         } }
                         tooltip={ '' }
                     />
