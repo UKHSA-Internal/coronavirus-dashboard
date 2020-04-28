@@ -29,18 +29,20 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
     const [cookieState, setCookieState] = useState('unset');
 
     const handleAccept = () => {
-        let cookieExpiryDate = new Date();
-        cookieExpiryDate.setDate(cookieExpiryDate.getDate() + 365);
+        const
+            today = new Date(),
+            [year, month, day] = [today.getFullYear(), today.getMonth(), today.getDate()],
+            cookieExpiryDate = new Date(year + 1, month, day).toUTCString();
 
         if (cookieState === 'set') {
-            document.cookie = `cookies_policy=${encodeURIComponent('{"essential":true,"usage":true}')}; expires=${cookieExpiryDate}`;
+            document.cookie = `cookies_policy=${encodeURIComponent('{"essential":true,"usage":true}')}; expires=${cookieExpiryDate};`;
             setCookies();
         } else {
-            document.cookie = `cookies_policy=${encodeURIComponent('{"essential":true,"usage":false}')}; expires=${cookieExpiryDate}`;
+            document.cookie = `cookies_policy=${encodeURIComponent('{"essential":true,"usage":false}')}; expires=${cookieExpiryDate};`;
             deleteCookies();
         }
 
-        document.cookie = 'cookies_preferences_set=true; expires=' + cookieExpiryDate;
+        document.cookie = `cookies_preferences_set=true; expires=${cookieExpiryDate};`
         setCookieState('accept');
     };
 
@@ -54,7 +56,8 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
     }
 
     const getCookiesUpdatedText = () => {
-        if (cookieState === 'accept') {
+
+        if (cookieState === 'accept')
             return (
                 <div className="cookie-settings__confirmation" data-cookie-confirmation="true">
                     <section className="gem-c-notice govuk-!-margin-bottom-8" aria-label="Notice" aria-live="polite"
@@ -64,11 +67,9 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
                     </section>
                 </div>
             );
-        } else {
-            return (
-                ''
-            );
-        }
+
+        return null
+
     };
 
     return (
