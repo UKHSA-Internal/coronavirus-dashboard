@@ -62,20 +62,14 @@ const getBarChartOptions = (tooltipText) => {
         scales: {
             xAxes: [{
                 offset: true,
-                // type: 'time',
-                // time: {
-                //     displayFormats: {
-                //         quarter: 'MMM YYYY'
-                //     },
-                // },
                 gridLines: {
                     display: false,
                 },
                 stacked: false,
                 ticks: {
-                    autoSkip: true,
+                    autoSkip: false,
                     maxTicksLimit: 15,
-                },
+                }
             }],
             yAxes: [{
                 gridLines: {

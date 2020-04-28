@@ -16,6 +16,7 @@ declare export type TableStructure = {
         formatter?: moment | numeral,
         format?: string
     }>,
+    sortFunc: () => any,
     extra?: {
         intro?: string,
         description?: string,
