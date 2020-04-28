@@ -35,6 +35,20 @@ export const Charts = ({data, titles, descriptions}: ChartsProps): ReactNode => 
         const { overview = {}, countries = {} } = data;
 
         return <Fragment>
+            <CategoricalBarChart
+                header={ titles.ageSex }
+                data={ {
+                    categoryLabels: ["Male", "Female"],
+                    data: [
+                        (countries?.E92000001?.maleCases ?? []).sort(ageSexSort),
+                        (countries?.E92000001?.femaleCases ?? []).sort(ageSexSort),
+                    ],
+                    colors: ["#367E93", "#0a495a"],
+                    columnLabelGetter: d => d.age.replace(/_/g, ' ')
+                } }
+                tooltip={ '' }
+            />
+
             <LineChart data={ countries?.E92000001?.dailyTotalConfirmedCases ?? [] }
                        header={ titles.totalCases }
                        tooltipText="cases"
@@ -61,24 +75,6 @@ export const Charts = ({data, titles, descriptions}: ChartsProps): ReactNode => 
                 header={ titles.dailyDeaths }
                 tooltipText="deaths"
             />
-
-            {
-                countries?.E92000001?.maleCases?.length ?? 0 > 0
-                    ? <CategoricalBarChart
-                        header={ titles.ageSex }
-                        data={ {
-                            categoryLabels: ["Male", "Female"],
-                            data: [
-                                (countries?.E92000001?.maleCases ?? []).sort(ageSexSort),
-                                (countries?.E92000001?.femaleCases ?? []).sort(ageSexSort),
-                            ],
-                            colors: ["#367E93", "#0a495a"],
-                            columnLabelGetter: d => d.age.replace(/_/g, ' ')
-                        } }
-                        tooltip={ '' }
-                    />
-                    : null
-            }
         </Fragment>
 
 }; // charts

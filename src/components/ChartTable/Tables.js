@@ -223,6 +223,15 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
         <EnglandTable
             englandData={ england }
             structure={
+                EnglandAgeSexStructure({
+                    titles: titles,
+                    descriptions: descriptions
+                }) }
+        />
+
+        <EnglandTable
+            englandData={ england }
+            structure={
                 EnglandDailyTotalCasesStructure({
                     titles: titles,
                     descriptions: descriptions
@@ -249,19 +258,6 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
             header={ titles.dailyDeaths }
             valueName="Daily deaths"
         />
-
-        {
-            england?.maleCases?.length ?? 0 > 0
-                ? <EnglandTable
-                    englandData={ england }
-                    structure={
-                        EnglandAgeSexStructure({
-                            titles: titles,
-                            descriptions: descriptions
-                        }) }
-                />
-            : null
-        }
     </Fragment>
 
 }; // tables
