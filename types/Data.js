@@ -46,8 +46,8 @@ declare export type PreviousData = {
 
 
 declare export type EnglandData = ChartData & PreviousData & {
-    femaleCases: Array<{age: string, value: number}>,
-    maleCases: Array<{age: string, value: number}>
+    femaleCases: Array<{age: string, value: string}>,
+    maleCases: Array<{age: string, value: string}>
 }; // EnglandData
 
 
