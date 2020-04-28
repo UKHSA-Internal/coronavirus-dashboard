@@ -1,4 +1,5 @@
 $govuk-assets-path: "~govuk-frontend/govuk/assets/";
+$govuk-page-width: 1045px;
 @import "node_modules/govuk-frontend/govuk/all";
 
 body {
@@ -11,13 +12,6 @@ body {
 
   & .govuk-header {
     border-color: #1d70b8;
-    padding-left: 15px;
-
-    & .govuk-header__container {
-      margin-right: auto;
-      margin-left: auto;
-      max-width: 1045px;
-    }
   }
 
   & .gem-c-cookie-banner {
