@@ -58,7 +58,7 @@ export const Charts = ({data, titles, descriptions}: ChartsProps): ReactNode => 
                                 countries?.E92000001?.maleCases ?? [],
                                 countries?.E92000001?.femaleCases ?? [],
                             ],
-                            colors: ["#799FC6", "#d5d5d5"],
+                            colors: ["#367E93", "#0a495a"],
                             columnLabelGetter: d => d.age.replace(/_/, ' ')
                         } }
                         tooltip={ '' }

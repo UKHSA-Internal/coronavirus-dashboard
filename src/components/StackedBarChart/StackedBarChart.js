@@ -31,12 +31,12 @@ const getBarChartData = ({previous, change}) => {
         datasets: [
             {
                 label: "Previously reported",
-                backgroundColor: '#249184',
+                backgroundColor: '#367E93',
                 data: previousSorted.map(d => d.value)
             },
             {
                 label: "Newly reported",
-                backgroundColor: '#034e46',
+                backgroundColor: '#0a495a',
                 data: change.sort(sortFunc).map(d => d.value > 0 ? d.value : 0)
             }
         ]

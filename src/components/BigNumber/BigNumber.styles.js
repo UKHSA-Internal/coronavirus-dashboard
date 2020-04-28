@@ -31,6 +31,7 @@ export const Number: ComponentType<*> = (() => {
   return styled.div`
     font-size: 2.25rem;
     margin-bottom: 10px;
+    color: #367E93;
   `;
 })();
 

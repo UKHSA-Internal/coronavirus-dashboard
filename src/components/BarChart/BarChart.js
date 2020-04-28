@@ -16,7 +16,7 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
           data={{
             labels: data.map(d => d.date),
             datasets: [{
-              backgroundColor: '#249184',
+              backgroundColor: '#367E93',
               data: data.map(d => d.value),
             }]
           }}
