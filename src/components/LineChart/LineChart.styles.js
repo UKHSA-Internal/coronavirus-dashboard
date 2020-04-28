@@ -20,7 +20,7 @@ export const Container: ComponentType<*> = (() => {
     }
 
     ${addIECss(css`
-      width: 48%;
+      width: 80%;
     `)}
   `;
 })();

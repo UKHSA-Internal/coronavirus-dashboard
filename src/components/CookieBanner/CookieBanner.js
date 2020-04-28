@@ -35,7 +35,7 @@ const CookieBanner: ComponentType<Props> = ({ }: Props) => {
     if (cookiesPreferencesSet === 'true') {
       const cookiesPolicyRaw = cookies.find(c => c.trim().startsWith('cookies_policy'))?.split('=')?.[1];
       if (cookiesPolicyRaw) {
-        const cookiesPolicy = JSON.parse(cookiesPolicyRaw);
+        const cookiesPolicy = JSON.parse(decodeURIComponent(cookiesPolicyRaw));
 
         if (!cookiesPolicy.usage) {
           deleteCookies();
@@ -49,16 +49,25 @@ const CookieBanner: ComponentType<Props> = ({ }: Props) => {
     }
   }, []);
 
+
   const handleAccept = () => {
-    let cookieExpiryDate = new Date();
-    cookieExpiryDate.setDate(cookieExpiryDate.getDate() + 365);
+      const
+          today = new Date(),
+          [year, month, day] = [today.getFullYear(), today.getMonth(), today.getDate()],
+          cookieExpiryDate = new Date(year + 1, month, day).toUTCString();
 
-    document.cookie = 'cookies_preferences_set=true; expires=' + cookieExpiryDate;
-    document.cookie = 'cookies_policy={"essential":true,"usage":true}; expires=' + cookieExpiryDate;
+      if (cookieState === 'set') {
+          document.cookie = `cookies_policy=${encodeURIComponent('{"essential":true,"usage":true}')}; expires=${cookieExpiryDate};`;
+          setCookies();
+      } else {
+          document.cookie = `cookies_policy=${encodeURIComponent('{"essential":true,"usage":false}')}; expires=${cookieExpiryDate};`;
+          deleteCookies();
+      }
 
-    setCookies();
-    setCookieState('accept');
+      document.cookie = `cookies_preferences_set=true; expires=${cookieExpiryDate};`
+      setCookieState('accept');
   };
+
 
   const handleSetCookiePreferences = () => {
     setCookieState('set-cookie-preferences');

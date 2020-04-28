@@ -25,6 +25,19 @@ const sortFunc = (a, b) => {
 }; // sortFunc
 
 
+const ageSexSort = (a, b) => {
+
+    const
+        ageA = parseInt(/^(\d+).*$/.exec(a.age)[1]),
+        ageB = parseInt(/^(\d+).*$/.exec(b.age)[1]);
+
+    if ( ageA > ageB ) return 1;
+
+    return ageA < ageB ? -1 : 0
+
+}; // ageSexSort
+
+
 const EnglandDailyCasesStructure = ({ titles, descriptions }: TitleOrDescription): TableStructure => ({
     metadata: [
         {
@@ -60,6 +73,7 @@ const EnglandDailyCasesStructure = ({ titles, descriptions }: TitleOrDescription
             valueGetter: (d) => d.value
         }
     ],
+    sortFunc: sortFunc,
     extra: {
         intro: titles.dailyCases,
         description: descriptions.dailyCases,
@@ -102,6 +116,7 @@ const EnglandDailyTotalCasesStructure = ({ titles, descriptions }: TitleOrDescri
             valueGetter: (d) => d.value
         }
     ],
+    sortFunc: sortFunc,
     extra: {
         intro: titles.totalCases,
         description: descriptions.totalCases,
@@ -109,11 +124,46 @@ const EnglandDailyTotalCasesStructure = ({ titles, descriptions }: TitleOrDescri
 }); // EnglandDailyTotalCasesStructure
 
 
+const EnglandAgeSexStructure = ({ titles, descriptions }: TitleOrDescription): TableStructure => ({
+    metadata: [
+        {
+            key: 'maleCases',
+            headings: { value: 'Age group', type: 'string' },
+            type: 'string',
+            formatter: (v) => ({ format: (r) => v.replace(/_/g, r) }),
+            format: ' ',
+            valueGetter: (d) => d.age.replace(/_/, ' ')
+        },
+        {
+            key: 'maleCases',
+            headings: { value: 'Male cases', type: 'numeric' },
+            type: 'numeric',
+            formatter: numeral,
+            format: '0,0',
+            valueGetter: (d) => d.value
+        },
+        {
+            key: 'femaleCases',
+            headings: { value: 'Female cases', type: 'numeric' },
+            type: 'numeric',
+            formatter: numeral,
+            format: '0,0',
+            valueGetter: (d) => d.value
+        }
+    ],
+    sortFunc: ageSexSort,
+    extra: {
+        intro: titles.ageSex,
+        description: descriptions.ageSex
+    }
+}); // englandDailyCasesStructure
+
+
 const EnglandTable = ({ englandData, structure }: EnglandTableProps): React.ReactNode => {
 
     const
         dataKeys = structure.metadata.map(item => item.key),
-        dataArray = zip(...dataKeys.map(key => englandData[key].sort(sortFunc)));
+        dataArray = zip(...dataKeys.map(key => englandData[key].sort(structure.sortFunc)));
 
     return <Styles.Container>
         {
@@ -170,6 +220,15 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
         england: EnglandData = countries?.E92000001 ?? [];
 
     return <Fragment>
+        <EnglandTable
+            englandData={ england }
+            structure={
+                EnglandAgeSexStructure({
+                    titles: titles,
+                    descriptions: descriptions
+                }) }
+        />
+
         <EnglandTable
             englandData={ england }
             structure={

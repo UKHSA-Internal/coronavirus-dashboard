@@ -42,10 +42,13 @@ declare export type PreviousData = {
     changeInDailyCases: ChartData,
     previouslyReportedDailyTotalCasesAdjusted: ChartData,
     changeInDailyTotalCases: ChartData
+};
+
+
+declare export type EnglandData = ChartData & PreviousData & {
+    femaleCases: Array<{age: string, value: string}>,
+    maleCases: Array<{age: string, value: string}>
 }; // EnglandData
-
-
-declare export type EnglandData = ChartData & PreviousData;
 
 
 declare export type CountryData = {

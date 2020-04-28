@@ -1,13 +1,14 @@
 // @flow
 
+import type { ComponentType } from 'react';
 import React from 'react';
-import type {ComponentType} from 'react';
-import {Bar} from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 
-import type {Props} from './StackedBarChart.types';
-import * as Styles from './StackedBarChart.styles';
+import type { CategoricalBarChartType, ChartProps } from './CategoricalBarChart.types';
+import * as Styles from './CategoricalBarChart.styles';
 
 import numeral from 'numeral';
+import { zip } from 'pythonic';
 
 
 const sortFunc = (a, b) => {
@@ -22,32 +23,37 @@ const sortFunc = (a, b) => {
 
 };
 
-const getBarChartData = ({previous, change}) => {
 
-    const previousSorted = previous.sort(sortFunc)
+const getBarChartData = ({ data, categoryLabels, colors, columnLabelGetter }: CategoricalBarChartType) => {
 
-    return {
-        labels: previousSorted.map(d => d.date),
-        datasets: [
-            {
-                label: "Previously reported",
-                backgroundColor: '#367E93',
-                data: previousSorted.map(d => d.value)
-            },
-            {
-                label: "Newly reported",
-                backgroundColor: '#0a495a',
-                data: change.sort(sortFunc).map(d => d.value > 0 ? d.value : 0)
-            }
-        ]
-    }
+    if (data.length < 2 || (data.length === categoryLabels.length && data.length === colors.length)) {
 
-};
+        for ( let index = 0; index < data.length; index++ ) {
+
+            data[index] = data[index].sort(sortFunc)
+
+        }
+
+        return {
+            labels: data[0].map(d => columnLabelGetter(d)),
+            datasets: zip(data, categoryLabels, colors).map(item => ({
+                data: item[0].map(d => d.value),
+                label: item[1],
+                backgroundColor: item[2],
+            }))
+        }
+
+    } // if
+
+    throw new Error("data, labels, and colors must have the same length.")
+
+}; // getBarChartData
 
 
 const getBarChartOptions = (tooltipText) => {
 
     return {
+        barValueSpacing: 20,
         maintainAspectRatio: false,
         legend: {
             display: true,
@@ -56,26 +62,20 @@ const getBarChartOptions = (tooltipText) => {
         scales: {
             xAxes: [{
                 offset: true,
-                type: 'time',
-                time: {
-                    displayFormats: {
-                        quarter: 'MMM YYYY'
-                    },
-                },
                 gridLines: {
                     display: false,
                 },
-                stacked: true,
+                stacked: false,
                 ticks: {
-                    autoSkip: true,
+                    autoSkip: false,
                     maxTicksLimit: 15,
-                },
+                }
             }],
             yAxes: [{
                 gridLines: {
                     drawBorder: false,
                 },
-                stacked: true,
+                stacked: false,
                 ticks: {
                     beginAtZero: true,
                     userCallback: function (value, index, values) {
@@ -116,13 +116,7 @@ const getBarChartOptions = (tooltipText) => {
                         bodyLines = tooltipModel.body.map(getBody);
                     let innerHtml = '<thead>';
                     titleLines.forEach(function (title) {
-                        innerHtml += '<tr><th style="text-align: left;">'
-                            + new Intl.DateTimeFormat('en-GB', {
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit'
-                            }).format(new Date(title))
-                            + '</th></tr>';
+                        innerHtml += `<tr><th style="text-align: left;">${title}</th></tr>`;
                     });
                     innerHtml += '</thead><tbody>';
 
@@ -161,7 +155,9 @@ const getBarChartOptions = (tooltipText) => {
 
 };
 
-const StackedBarChart: ComponentType<Props> = ({header, tooltipText, data, description=null}: Props) => {
+
+const CategoricalBarChart: ComponentType<ChartProps> = ({header, tooltipText, data, description=null}: ChartProps) => {
+
     return (
         <Styles.Container>
             <span className="govuk-heading-s">{header}</span>
@@ -182,6 +178,8 @@ const StackedBarChart: ComponentType<Props> = ({header, tooltipText, data, descr
 
         </Styles.Container>
     );
-};
 
-export default StackedBarChart;
+}; // CategoricalBarChart
+
+
+export default CategoricalBarChart;

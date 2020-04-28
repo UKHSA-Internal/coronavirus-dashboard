@@ -4,8 +4,22 @@ import LineChart from "components/LineChart";
 import StackedBarChart from "components/StackedBarChart";
 import BarChart from "components/BarChart";
 
-import type { Data } from "types/Data";
 import type { ChartsProps } from "./ChartTable.types";
+import CategoricalBarChart from "../CategoricalBarChart/CategoricalBarChart";
+
+
+const ageSexSort = (a, b) => {
+
+    const
+        ageA = parseInt(/^(\d+).*$/.exec(a.age)[1]),
+        ageB = parseInt(/^(\d+).*$/.exec(b.age)[1]);
+
+    if ( ageA > ageB ) return 1;
+
+    return ageA < ageB ? -1 : 0
+
+}; // ageSexSort
+
 
 
 /**
@@ -21,6 +35,20 @@ export const Charts = ({data, titles, descriptions}: ChartsProps): ReactNode => 
         const { overview = {}, countries = {} } = data;
 
         return <Fragment>
+            <CategoricalBarChart
+                header={ titles.ageSex }
+                data={ {
+                    categoryLabels: ["Male", "Female"],
+                    data: [
+                        (countries?.E92000001?.maleCases ?? []).sort(ageSexSort),
+                        (countries?.E92000001?.femaleCases ?? []).sort(ageSexSort),
+                    ],
+                    colors: ["#367E93", "#0a495a"],
+                    columnLabelGetter: d => d.age.replace(/_/g, ' ')
+                } }
+                tooltip={ '' }
+            />
+
             <LineChart data={ countries?.E92000001?.dailyTotalConfirmedCases ?? [] }
                        header={ titles.totalCases }
                        tooltipText="cases"
