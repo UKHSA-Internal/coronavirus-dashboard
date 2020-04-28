@@ -33,10 +33,10 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
         cookieExpiryDate.setDate(cookieExpiryDate.getDate() + 365);
 
         if (cookieState === 'set') {
-            document.cookie = 'cookies_policy={"essential":true,"usage":true}; expires=' + cookieExpiryDate;
+            document.cookie = `cookies_policy=${encodeURIComponent('{"essential":true,"usage":true}')}; expires=${cookieExpiryDate}`;
             setCookies();
         } else {
-            document.cookie = 'cookies_policy={"essential":true,"usage":false}; expires=' + cookieExpiryDate;
+            document.cookie = `cookies_policy=${encodeURIComponent('{"essential":true,"usage":false}')}; expires=${cookieExpiryDate}`;
             deleteCookies();
         }
 

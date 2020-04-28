@@ -35,7 +35,7 @@ const CookieBanner: ComponentType<Props> = ({ }: Props) => {
     if (cookiesPreferencesSet === 'true') {
       const cookiesPolicyRaw = cookies.find(c => c.trim().startsWith('cookies_policy'))?.split('=')?.[1];
       if (cookiesPolicyRaw) {
-        const cookiesPolicy = JSON.parse(cookiesPolicyRaw);
+        const cookiesPolicy = JSON.parse(decodeURIComponent(cookiesPolicyRaw));
 
         if (!cookiesPolicy.usage) {
           deleteCookies();
