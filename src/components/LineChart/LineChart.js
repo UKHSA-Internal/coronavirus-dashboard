@@ -18,16 +18,16 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
             labels: data.map(d => d.date),
             datasets: [{
               borderWidth: 2,
-              borderColor: '#249184',
-              pointBorderColor: '#249184',
+              borderColor: '#367E93',
+              pointBorderColor: '#367E93',
               pointBackgroundColor: '#fff',
-              pointBorderWidth: 3,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: '#249184',
-              pointHoverBorderColor: '#249184',
+              pointBorderWidth: 1,
+              pointHoverRadius: 3,
+              pointHoverBackgroundColor: '#367E93',
+              pointHoverBorderColor: '#367E93',
               pointHoverBorderWidth: 5,
               pointRadius: 1,
-              pointHitRadius: 10,
+              pointHitRadius: 5,
               data: data.map(d => d.value),
             }]
           }}

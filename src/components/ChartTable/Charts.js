@@ -4,8 +4,8 @@ import LineChart from "components/LineChart";
 import StackedBarChart from "components/StackedBarChart";
 import BarChart from "components/BarChart";
 
-import type { Data } from "types/Data";
 import type { ChartsProps } from "./ChartTable.types";
+import CategoricalBarChart from "../CategoricalBarChart/CategoricalBarChart";
 
 
 /**
@@ -47,6 +47,24 @@ export const Charts = ({data, titles, descriptions}: ChartsProps): ReactNode => 
                 header={ titles.dailyDeaths }
                 tooltipText="deaths"
             />
+
+            {
+                countries?.E92000001?.maleCases?.length ?? 0 > 0
+                    ? <CategoricalBarChart
+                        header={ titles.ageSex }
+                        data={ {
+                            categoryLabels: ["Male", "Female"],
+                            data: [
+                                countries?.E92000001?.maleCases ?? [],
+                                countries?.E92000001?.femaleCases ?? [],
+                            ],
+                            colors: ["#367E93", "#0a495a"],
+                            columnLabelGetter: d => d.age.replace(/_/, ' ')
+                        } }
+                        tooltip={ '' }
+                    />
+                    : null
+            }
         </Fragment>
 
 }; // charts

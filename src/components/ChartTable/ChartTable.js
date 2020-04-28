@@ -13,7 +13,8 @@ const titles: TitleOrDescriptionValues = {
     totalCases: 'Total number of lab-confirmed cases in England by specimen date',
     dailyCases: 'Daily number of lab-confirmed cases in England by specimen date',
     totalDeaths: 'Total number of COVID-19 associated UK deaths in hospital by date reported',
-    dailyDeaths: 'Daily number of COVID-19 associated UK deaths in hospital by date reported'
+    dailyDeaths: 'Daily number of COVID-19 associated UK deaths in hospital by date reported',
+    ageSex: 'Total number of lab-confirmed cases in England by age and sex',
 
 }; // titles
 
@@ -23,7 +24,8 @@ const TableDescriptions: TitleOrDescriptionValues = {
     totalCases: 'Total confirmed cases and change from previously reported figures. New cases are attributed to the day the specimen was taken.',
     dailyCases: 'Confirmed cases and change from previously reported figures. New cases are attributed to the day the specimen was taken.',
     totalDeaths: null,
-    dailyDeaths: null
+    dailyDeaths: null,
+    ageSex: null
 
 }; // titles
 
@@ -32,7 +34,8 @@ const ChartDescriptions: TitleOrDescriptionValues = {
     totalCases: null,
     dailyCases: 'Total confirmed cases showing those previously reported and newly added cases separately. New cases are attributed to the day the specimen was taken.',
     totalDeaths: null,
-    dailyDeaths: null
+    dailyDeaths: null,
+    ageSex: null
 
 }; // titles
 
