@@ -7,6 +7,7 @@ import BarChart from "components/BarChart";
 import type { ChartsProps } from "./ChartTable.types";
 import CategoricalBarChart from "../CategoricalBarChart/CategoricalBarChart";
 
+// FixMe: Needs to be replaced with real data.
 const sampleData = {
     male: [
         {value: 10,  category: 'under 5 years'},
@@ -79,7 +80,8 @@ export const Charts = ({data, titles, descriptions}: ChartsProps): ReactNode => 
                 header={ "Sex breakdown" }
                 data={{
                     categoryLabels: ["Male", "Female"],
-                    data: sampleData,
+                    // FixMe: Needs to be replaced with real data.
+                    data: Object.keys(sampleData).map(key => sampleData[key]),
                     colors: ["#799FC6", "#d5d5d5"],
                     columnLabelGetter: d => d.category
                 }}
