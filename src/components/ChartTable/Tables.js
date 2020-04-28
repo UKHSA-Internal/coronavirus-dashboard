@@ -109,6 +109,40 @@ const EnglandDailyTotalCasesStructure = ({ titles, descriptions }: TitleOrDescri
 }); // EnglandDailyTotalCasesStructure
 
 
+const EnglandAgeSexStructure = ({ titles, descriptions }: TitleOrDescription): TableStructure => ({
+    metadata: [
+        {
+            key: 'maleCases',
+            headings: { value: 'Age group', type: 'string' },
+            type: 'string',
+            formatter: (v) => (r) => v.replace(/_/, r),
+            format: ' ',
+            valueGetter: (d) => d.age.replace(/_/, ' ')
+        },
+        {
+            key: 'maleCases',
+            headings: { value: 'Male cases', type: 'numeric' },
+            type: 'numeric',
+            formatter: numeral,
+            format: '0,0',
+            valueGetter: (d) => d.value
+        },
+        {
+            key: 'femaleCases',
+            headings: { value: 'Female cases', type: 'numeric' },
+            type: 'numeric',
+            formatter: numeral,
+            format: '0,0',
+            valueGetter: (d) => d.value
+        }
+    ],
+    extra: {
+        intro: titles.ageSex,
+        description: descriptions.ageSex
+    }
+}); // englandDailyCasesStructure
+
+
 const EnglandTable = ({ englandData, structure }: EnglandTableProps): React.ReactNode => {
 
     const
@@ -199,6 +233,19 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
             header={ titles.dailyDeaths }
             valueName="Daily deaths"
         />
+
+        {
+            england?.maleCases?.length ?? 0 > 0
+                ? <EnglandTable
+                    englandData={ england }
+                    structure={
+                        EnglandAgeSexStructure({
+                            titles: titles,
+                            descriptions: descriptions
+                        }) }
+                />
+            : null
+        }
     </Fragment>
 
 }; // tables
