@@ -21,7 +21,7 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
               borderColor: '#367E93',
               pointBorderColor: '#367E93',
               pointBackgroundColor: '#fff',
-              pointBorderWidth: 1,
+              pointBorderWidth: 3,
               pointHoverRadius: 3,
               pointHoverBackgroundColor: '#367E93',
               pointHoverBorderColor: '#367E93',
