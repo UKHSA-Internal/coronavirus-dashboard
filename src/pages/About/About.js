@@ -96,6 +96,11 @@ const About: ComponentType<Props> = ({ }: Props) => {
                 cases.
             </p>
             <p className={'govuk-body'}>
+                The ages and sexes of the people who have tested positive are shown in a chart and table. Date of birth
+                and/or sex are missing from some records.  This is why the age and sex counts do not add up to the 
+                England total. Clicking on 'Male' or 'Female' in the chart legend selects which data are shown.
+            </p>
+            <p className={'govuk-body'}>
                 Cumulative case counts include patients who are currently unwell, those have recovered and those that
                 have died.
             </p>
@@ -137,7 +142,7 @@ const About: ComponentType<Props> = ({ }: Props) => {
                 available.
             </p>
             <p className={'govuk-body'}>
-                The new cases reported in the most recent daily update are shown by the upper, dark section of the bars.  The lower sections of the bars represent cases previously reported.  This shows how the new cases reported relate to specimens taken over the last few days, with the occasional tests coming in with longer delays.
+                The new cases reported in the most recent daily update are shown by the upper, dark section of the bars.  The lower sections of the bars represent cases previously reported.  This shows how the new cases reported relate to specimens taken over the last few days, with the occasional tests coming in with longer delays. Clicking on 'Previously reported' or 'Newly reported' in the chart legend selects which data are shown.
             </p>
             <p className={'govuk-body govuk-body govuk-!-margin-bottom-8'}>
                 In the csv and json download files, the total daily cases and cumulative cases by specimen date are provided for England, each Region and UTLA.  A breakdown of both the daily cases and the cumulative cases is provided to show the previously reported figures (ie those that were published on the previous day) and the overnight change.  As in the England chart, this shows how the new cases reported relate to specimens taken over the last few days, with the occasional tests coming in with longer delays.  Negative changes indicate cases being removed or corrected as the data are continually checked and cleaned.
