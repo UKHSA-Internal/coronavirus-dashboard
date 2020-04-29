@@ -1,3 +1,15 @@
 // @flow
 
-export type Props = {||};
+export interface AboutState {
+
+    loading: true,
+    data: string
+
+} // ArchiveState
+
+
+export interface AboutProps {
+
+    value: string
+
+} // ArchiveProps

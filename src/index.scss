@@ -111,3 +111,35 @@ thead.govuk-table__head th{
 .js-enabled .govuk-tabs__panel  .govuk-table__header {
     padding-top: 20px;
 }
+
+
+.about {
+  & p {
+    @extend .govuk-body;
+  }
+
+  & h2 {
+    @extend .govuk-heading-m;
+    margin-top: 12px;
+  }
+
+  & h3 {
+    @extend .govuk-heading-s;
+    margin-top: 6px;
+  }
+
+  & a {
+    @extend .govuk-link;
+  }
+
+  & ul {
+    @extend .govuk-list;
+    @extend .govuk-list--bullet;
+  }
+
+  & hr {
+    @extend .govuk-section-break;
+    @extend .govuk-section-break--l;
+  }
+
+}

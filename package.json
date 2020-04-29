@@ -1,6 +1,6 @@
 {
   "name": "covid-public",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
@@ -24,7 +24,8 @@
     "react-scripts": "3.4.0",
     "styled-components": "^5.0.1",
     "moment": "^2.24.0",
-    "pythonic": "^2.0.3"
+    "pythonic": "^2.0.3",
+    "react-markdown": "^4.3.1"
   },
   "scripts": {
     "lint": "yarn flow",
