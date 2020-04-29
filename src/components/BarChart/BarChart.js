@@ -8,17 +8,32 @@ import * as moment from 'moment';
 import type { Props } from './BarChart.types';
 import * as Styles from './BarChart.styles';
 
+const sortFunc = (a, b) => {
+
+  const
+    dateA = new Date(a.date),
+    dateB = new Date(b.date);
+
+  if (dateA < dateB) return -1;
+
+  return dateA > dateB ? 1 : 0
+
+};
+
 const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) => {
+
+  const dataSorted = data.sort(sortFunc);
+
   return (
     <Styles.Container>
       <span className="govuk-heading-s">{header}</span>
       <Styles.Chart>
         <Bar
           data={{
-            labels: data.map(d => d.date),
+            labels: dataSorted.map(d => d.date),
             datasets: [{
               backgroundColor: '#367E93',
-              data: data.map(d => d.value),
+              data: dataSorted.map(d => d.value),
             }]
           }}
           legend={{ display: false }}
@@ -27,19 +42,13 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
             scales: {
               xAxes: [{
                 offset: true,
-                type: 'time',
-                time: {
-                  displayFormats: {
-                    quarter: 'MMM YYYY'
-                  },
-                },
                 gridLines: {
                   display: false,
                 },
                 ticks: {
                   autoSkip: false,
                   userCallback: function (value, index, values) {
-                    const lastValue = data[index];
+                    const lastValue = dataSorted[index];
                     const label = moment(lastValue.date).format('MMM DD');
                     let valuesLength = values.length - 1;
                     let period = Math.round(valuesLength / 10);

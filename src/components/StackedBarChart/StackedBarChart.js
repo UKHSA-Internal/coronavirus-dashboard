@@ -1,43 +1,30 @@
 // @flow
 
 import React from 'react';
-import type {ComponentType} from 'react';
-import {Bar} from 'react-chartjs-2';
+import type { ComponentType } from 'react';
+import { Bar } from 'react-chartjs-2';
+import * as moment from 'moment';
 
-import type {Props} from './StackedBarChart.types';
+import type { Props } from './StackedBarChart.types';
 import * as Styles from './StackedBarChart.styles';
 
 import numeral from 'numeral';
 
 
-const sortFunc = (a, b) => {
-
-    const
-        dateA = new Date(a.date),
-        dateB = new Date(b.date);
-
-    if (dateA < dateB) return 1;
-
-    return dateA > dateB ? -1 : 0
-
-};
-
-const getBarChartData = ({previous, change}) => {
-
-    const previousSorted = previous.sort(sortFunc)
+const getBarChartData = ({ previous, change }) => {
 
     return {
-        labels: previousSorted.map(d => d.date),
+        labels: previous.map(d => d.date),
         datasets: [
             {
                 label: "Previously reported",
                 backgroundColor: '#367E93',
-                data: previousSorted.map(d => d.value)
+                data: previous.map(d => d.value)
             },
             {
                 label: "Newly reported",
                 backgroundColor: '#0a495a',
-                data: change.sort(sortFunc).map(d => d.value > 0 ? d.value : 0)
+                data: change.map(d => d.value > 0 ? d.value : 0)
             }
         ]
     }
@@ -56,19 +43,25 @@ const getBarChartOptions = (tooltipText) => {
         scales: {
             xAxes: [{
                 offset: true,
-                type: 'time',
-                time: {
-                    displayFormats: {
-                        quarter: 'MMM YYYY'
-                    },
-                },
                 gridLines: {
                     display: false,
                 },
                 stacked: true,
                 ticks: {
-                    autoSkip: true,
-                    maxTicksLimit: 15,
+                    autoSkip: false,
+                    userCallback: function (value, index, values) {
+                        const label = moment(value).format('MMM DD');
+                        let valuesLength = values.length - 1;
+                        let period = Math.round(valuesLength / 10);
+
+                        if (index % period === 0 && index <= valuesLength - (period / 2)) {
+                            return label;
+                        }
+
+                        if (index === valuesLength) {
+                            return label;
+                        }
+                    }
                 },
             }],
             yAxes: [{
@@ -161,21 +154,21 @@ const getBarChartOptions = (tooltipText) => {
 
 };
 
-const StackedBarChart: ComponentType<Props> = ({header, tooltipText, data, description=null}: Props) => {
+const StackedBarChart: ComponentType<Props> = ({ header, tooltipText, data, description = null }: Props) => {
     return (
         <Styles.Container>
             <span className="govuk-heading-s">{header}</span>
             <Styles.Chart>
                 <Bar
-                    data={ getBarChartData(data) }
-                    options={ getBarChartOptions(tooltipText) }
+                    data={getBarChartData(data)}
+                    options={getBarChartOptions(tooltipText)}
                 />
             </Styles.Chart>
 
             {
                 description
-                    ? <Styles.P className={ "govuk-body govuk-!-font-size-14 govuk-!-margin-top-5" }>
-                        { description }
+                    ? <Styles.P className={"govuk-body govuk-!-font-size-14 govuk-!-margin-top-5"}>
+                        {description}
                     </Styles.P>
                     : null
             }
