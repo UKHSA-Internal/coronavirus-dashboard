@@ -14,12 +14,6 @@ export const Container: ComponentType<*> = (() =>
 
 )();
 
-export const SectionHeader: ComponentType<*> = (() =>
-
-  styled.h2``
-
-)();
-
 export const Body: ComponentType<*> = (() =>
 
   styled.p``
