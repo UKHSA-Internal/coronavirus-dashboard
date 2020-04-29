@@ -5,6 +5,8 @@ import type { ComponentType } from 'react';
 
 import moment from "moment";
 
+import { Link } from 'react-router-dom';
+
 import useLoadData from 'hooks/useLoadData';
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
 import BigNumber from 'components/BigNumber';
@@ -86,10 +88,10 @@ const Regional: ComponentType<Props> = ({}: Props) => {
                 <p className={ "govuk-body" }>
                     The way COVID-19 deaths are reported has changed.
                     For details see the&nbsp;
-                    <a href={ '/about' }
-                       className={ "govuk-link govuk-link--no-visited-state" }>
+                    <Link to={ '/about' }
+                          className={ "govuk-link govuk-link--no-visited-state" }>
                     About the data
-                    </a>&nbsp;page.
+                    </Link>&nbsp;page.
                 </p>
             </Announcement>
 
