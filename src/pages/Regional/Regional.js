@@ -45,10 +45,10 @@ const getLatestDailyDeaths = (data: any): number => {
 
 
 const BigNumberTitles = {
-    ukCases: "Total number of COVID-19 associated UK deaths",
-    dailyUkCases: "Daily number of COVID-19 associated UK deaths",
-    ukDeaths: "Total number of COVID-19 associated UK deaths in hospital",
-    dailyUkDeaths: "Daily number of COVID-19 associated UK deaths in hospital"
+    ukCases: "Total number of lab-confirmed UK cases",
+    dailyUkCases: "Daily number of lab-confirmed UK cases",
+    ukDeaths: "Total number of COVID-19 associated UK deaths",
+    dailyUkDeaths: "Daily number of COVID-19 associated UK deaths",
 }
 
 const BigNumberDescriptions = {

@@ -14,7 +14,6 @@ export const Container: ComponentType<*> = (() =>
 
 )();
 
-
 export const Body: ComponentType<*> = (() =>
 
   styled.p``
