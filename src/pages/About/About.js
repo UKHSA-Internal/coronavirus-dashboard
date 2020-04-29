@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 import toc from "remark-toc";
 import slug from "remark-slug";
