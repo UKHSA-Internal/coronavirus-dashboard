@@ -1,0 +1,189 @@
+import React, { Component, Fragment } from "react";
+
+import axios from "axios";
+import { zip } from "pythonic";
+import moment from "moment";
+
+import { Container, DownloadLink } from "./Archive.style";
+import type {
+    ArchiveData, ArchiveState, ArchiveProps,
+    DateGroupedArchiveData, RegExExtractArchiveData
+} from "./Archive.types"
+
+
+const [URL, FORMAT, CATEGORY, YEAR, MONTH, DAY] = [0, 1, 2, 3, 4, 5];
+
+
+const sortFunc = (a, b) => a < b ? 1 : a > b ? -1 : 0;
+
+
+const capitalize = (s: string) => s && s[0].toUpperCase() + s.slice(1);
+
+
+const getSortedPaths = (iterator) => {
+
+    let
+        data = [],
+        thisNode = iterator.iterateNext();
+
+    do {
+
+        data.push(thisNode.textContent);
+        thisNode = iterator.iterateNext();
+
+    } while (thisNode)
+
+    return data.sort(sortFunc);
+
+}; // getSortedPaths
+
+
+const aggregateByCategory = (data: Array<ArchiveData>, category: string, categoryKey: string="category"): Array<ArchiveData> => {
+
+    categoryKey = categoryKey.toLowerCase();
+
+    return data.filter(d => (d?.[categoryKey]?.toLowerCase() ?? "") === category)
+
+}; // aggregateByCategory
+
+
+const groupByDate = (data: Array<Array<RegExExtractArchiveData, RegExExtractArchiveData>>): DateGroupedArchiveData => {
+
+    let
+        contents = {}, // Stores data following aggregation by date.
+        rowData, // Temp for aggregation.
+        date; // Temp for current date.
+
+    // Aggregation by date.
+    for ( const row of zip(...data) ) {
+
+        rowData = row.map(item => ({
+            date: `${item[YEAR]}-${item[MONTH]}-${item[DAY]}`,
+            url: item[URL],
+            category: item[CATEGORY],
+            format: item[FORMAT]
+        }));
+
+        date = rowData[0].date
+        contents[date] = [...(contents?.[date] ?? []),  ...rowData]
+
+    }
+
+    return contents
+
+}; // aggregateByDate
+
+
+const getByFormat = (data: Array<ArchiveData>, format: string, formatKey: string="format"): ArchiveData => {
+
+    format = format.toLowerCase();
+
+    for (const item of data)
+        if ( (item?.[formatKey]?.toLowerCase() ?? "") === format ) return item
+
+}; // getByFormat
+
+
+const getTableCells = (data: Array<ArchiveData>) => {
+
+    const
+        deaths = aggregateByCategory(data, "deaths"),
+        cases = aggregateByCategory(data, "cases"),
+        cellData = [
+            getByFormat(cases, "csv"),
+            getByFormat(cases, "json"),
+            getByFormat(deaths, "csv"),
+            getByFormat(deaths, "json")
+        ];
+
+    return <Fragment>
+        <td className={ "govuk-table__cell" }>{ moment(cellData[0].date).format("ddd, DD MMM YYYY") }</td>
+        {
+            cellData.map(d =>
+                <td key={ `${d.date}_${d.category}_${d.format}` }
+                    className={ "govuk-table__cell" }>
+                    <DownloadLink href={ d.url }
+                       className={ 'govuk-link' }
+                       download={ `coronavirus-${d.category}_${d.date}.${d.format}` }>
+                        { capitalize(d.category) } as { d.format.toUpperCase() }
+                    </DownloadLink>
+                </td>
+            )
+        }
+    </Fragment>
+
+} // getTableCells
+
+
+export default class Archive extends Component<ArchiveProps, {}> {
+
+    #url = "https://publicdashacc.blob.core.windows.net/downloads?restype=container&comp=list"
+
+    state: ArchiveState = {
+        loading: false,
+        data: []
+    };
+
+    getData = async () => {
+
+        const
+            { data } = await axios.get(this.#url, { responseType: 'document' }),
+            nameParser = /^(\w+)\/dated\/coronavirus-(\w+)_(\d{4})(\d{2})(\d{2}).*$/,
+            fileTypes = ["csv", "json"],
+            contents = fileTypes
+                .map(f => document.evaluate(
+                    `//Blob/Name[starts-with(text(), '${f}/dated')]`,
+                    data, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null
+                ))
+                .map(getSortedPaths)
+                .map(item => item.map( v => nameParser.exec(v) ));
+
+        this.setState({
+            data: groupByDate(contents),
+            loading: false
+        })
+
+    }; // getList
+
+    componentDidMount(): void {
+
+        this.setState({loading: true}, this.getData)
+
+    } // componentDidMount
+
+    display() {
+
+        const { loading, data } = this.state;
+
+        if ( loading ) return <p>Loading</p>
+
+        return <table className={ "govuk-table" }>
+            <thead className={ "govuk-table__head" }>
+                <tr className={ "govuk-table__row" }>
+                    <th scope={ "col" } className={ "govuk-table__header app-custom-class" }>Date</th>
+                    <th colSpan={ 4 } className={ "govuk-table__header app-custom-class" }>Downloads</th>
+                </tr>
+            </thead>
+            <tbody className={ "govuk-table__body" }>
+            {
+                Object.keys(data).map(date =>
+                    <tr key={ `archive-${date}` } className={ "govuk-table__row" }>
+                        { getTableCells(data[date]) }
+                    </tr>
+                )
+            }
+            </tbody>
+        </table>
+
+    } // display
+
+    render(): React.ReactNode {
+
+        return <Container className={"govuk-width-container"}>
+            <h1>Archive</h1>
+            { this.display() }
+        </Container>
+
+    } // render
+
+} // Archive

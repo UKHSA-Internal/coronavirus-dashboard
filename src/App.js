@@ -7,6 +7,7 @@ import useResponsiveLayout from 'hooks/useResponsiveLayout';
 import Regional from 'pages/Regional';
 import MobileRegionTable from 'pages/MobileRegionTable';
 import About from 'pages/About';
+import Archive from "pages/Archive";
 import Accessibility from 'pages/Accessibility';
 import Cookies from 'pages/Cookies';
 import Navigation from 'components/Navigation';
@@ -52,6 +53,7 @@ const App = () => {
         <Route path="/about" component={About} />
         <Route path="/accessibility" component={Accessibility} />
         <Route path="/cookies" component={Cookies} />
+        <Route path="/archive" component={Archive} />
         <Route path="/" component={Regional} />
         <Redirect to="/" />
       </Switch>
@@ -60,6 +62,7 @@ const App = () => {
         <Route path="/about" exact component={F} />
         <Route path="/accessibility" exact component={F} />
         <Route path="/cookies" exact component={F} />
+        <Route path="/archive" exact  component={ F } />
       </Switch>
     </>
   );
