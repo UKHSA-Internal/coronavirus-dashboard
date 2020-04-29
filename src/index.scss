@@ -1,10 +1,10 @@
 $govuk-assets-path: "~govuk-frontend/govuk/assets/";
 $govuk-page-width: 1045px;
+$govuk-font-family: "GDS Transport", Arial, sans-serif;
 @import "node_modules/govuk-frontend/govuk/all";
 
 body {
   margin: 0;
-  font-family: "GDS Transport", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-ononesx-font-smoothing: grayscale;
   background-color: #fff;
