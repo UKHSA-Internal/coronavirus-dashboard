@@ -38,11 +38,10 @@ export default class About extends Component<AboutProps, {}> {
 
         const { loading, data } = this.state;
 
-        if ( loading ) return <p>Loading...</p>
+        if ( loading ) return <p>Loading&hellip;</p>
 
         return <Fragment>
-                        <PageTitle title={"About the data"} />
-            <h2 className={"govuk-heading-m"}>
+            <h2>
                 Total and daily UK cases
             </h2>
             <p>
@@ -207,6 +206,7 @@ export default class About extends Component<AboutProps, {}> {
     render(): React$Node {
 
         return <Styles.Container className={"govuk-width-container about"}>
+            <PageTitle title={"About the data"} />
             { this.display() }
         </Styles.Container>
 
