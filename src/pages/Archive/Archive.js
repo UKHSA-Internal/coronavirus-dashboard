@@ -3,8 +3,13 @@ import React, { Component, Fragment } from "react";
 import axios from "axios";
 import { zip } from "pythonic";
 import moment from "moment";
+import { Link } from 'react-router-dom';
 
-import { Container, DownloadLink } from "./Archive.style";
+import {
+    Container, DownloadLink, Table, TableContainer,
+    SectionHeader, BodyCell, HeadCell
+} from "./Archive.style";
+
 import type {
     ArchiveData, ArchiveState, ArchiveProps,
     DateGroupedArchiveData, RegExExtractArchiveData
@@ -84,7 +89,7 @@ const getByFormat = (data: Array<ArchiveData>, format: string, formatKey: string
 }; // getByFormat
 
 
-const getTableCells = (data: Array<ArchiveData>) => {
+const getTableCells = (data: Array<ArchiveData>, isFirst: boolean=false) => {
 
     const
         deaths = aggregateByCategory(data, "deaths"),
@@ -97,17 +102,24 @@ const getTableCells = (data: Array<ArchiveData>) => {
         ];
 
     return <Fragment>
-        <td className={ "govuk-table__cell" }>{ moment(cellData[0].date).format("ddd, DD MMM YYYY") }</td>
+        <BodyCell className={ `govuk-table__cell` }>
+            { moment(cellData[0].date).format("ddd, DD MMM YYYY") }&nbsp;
+            {
+                isFirst
+                    ? <strong className="govuk-tag">Latest</strong>
+                    : null
+            }
+        </BodyCell>
         {
             cellData.map(d =>
-                <td key={ `${d.date}_${d.category}_${d.format}` }
-                    className={ "govuk-table__cell" }>
+                <BodyCell key={ `${d.date}_${d.category}_${d.format}` }
+                          className={ `govuk-table__cell` }>
                     <DownloadLink href={ d.url }
                        className={ 'govuk-link' }
                        download={ `coronavirus-${d.category}_${d.date}.${d.format}` }>
                         { capitalize(d.category) } as { d.format.toUpperCase() }
                     </DownloadLink>
-                </td>
+                </BodyCell>
             )
         }
     </Fragment>
@@ -155,32 +167,53 @@ export default class Archive extends Component<ArchiveProps, {}> {
 
         const { loading, data } = this.state;
 
-        if ( loading ) return <p>Loading</p>
+        if ( loading ) return <p className={ "govuk-body" }>Loading&hellip;</p>
 
-        return <table className={ "govuk-table" }>
-            <thead className={ "govuk-table__head" }>
-                <tr className={ "govuk-table__row" }>
-                    <th scope={ "col" } className={ "govuk-table__header app-custom-class" }>Date</th>
-                    <th colSpan={ 4 } className={ "govuk-table__header app-custom-class" }>Downloads</th>
-                </tr>
-            </thead>
-            <tbody className={ "govuk-table__body" }>
-            {
-                Object.keys(data).map(date =>
-                    <tr key={ `archive-${date}` } className={ "govuk-table__row" }>
-                        { getTableCells(data[date]) }
+        return <TableContainer>
+            <Table className={ "govuk-table" }>
+                <thead className={ "govuk-table__head" }>
+                    <tr className={ "govuk-table__row" }>
+                        <HeadCell scope={ "col" } className={ "govuk-table__header app-custom-class" }>Date</HeadCell>
+                        <HeadCell colSpan={ 4 } className={ "govuk-table__header app-custom-class" }>Downloads</HeadCell>
                     </tr>
-                )
-            }
-            </tbody>
-        </table>
+                </thead>
+                <tbody className={ "govuk-table__body" }>
+                {
+                    Object.keys(data).map((date, index) =>
+                        <tr key={ `archive-${date}` }
+                            className={ "govuk-table__row" }>
+                            { getTableCells(data[date], index === 0) }
+                        </tr>
+                    )
+                }
+                </tbody>
+            </Table>
+        </TableContainer>
 
     } // display
 
     render(): React.ReactNode {
 
         return <Container className={"govuk-width-container"}>
-            <h1>Archive</h1>
+            <SectionHeader className={ "govuk-heading-l" }>
+                Archive
+            </SectionHeader>
+            <p className={ "govuk-body" }>
+                This page provides links to data previously published on the dashboard.
+                These files include data that have been superseded because errors have
+                been found.  For corrected up-to-date series of daily data, use the
+                “latest” downloads below.
+            </p>
+            <p className={ "govuk-body" }>
+                Files for deaths dated 28 April 2020 and earlier include the data for
+                England based only on hospital deaths reported by NHS England.  Files
+                dated 29 April 2020 onwards include deaths for England calculated by PHE
+                from multiple sources. See the&nbsp;
+                <Link to={ "/about" }
+                      className={ "govuk-link govuk-link--no-visited-state" }>
+                    About the data
+                </Link>&nbsp;for details.
+            </p>
             { this.display() }
         </Container>
 
