@@ -15,6 +15,15 @@ export const Container: ComponentType<*> = (() => {
 
     @media only screen and (max-width: 768px) {
       grid-template-columns: repeat(2, 1fr);
+
+      .govuk-tabs__panel {
+        max-height: 75vh;
+        padding: 0em 1em;
+      }
+
+      .govuk-table__header {
+        padding-top: 0px !important;
+      }
     }
   `;
 })();
