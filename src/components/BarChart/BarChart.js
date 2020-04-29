@@ -3,6 +3,7 @@
 import React from 'react';
 import type { ComponentType } from 'react';
 import { Bar } from 'react-chartjs-2';
+import * as moment from 'moment';
 
 import type { Props } from './BarChart.types';
 import * as Styles from './BarChart.styles';
@@ -36,8 +37,21 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                   display: false,
                 },
                 ticks: {
-                  autoSkip: true,
-                  maxTicksLimit: 15,
+                  autoSkip: false,
+                  userCallback: function (value, index, values) {
+                    const lastValue = data[index];
+                    const label = moment(lastValue.date).format('MMM DD');
+                    let valuesLength = values.length - 1;
+                    let period = Math.round(valuesLength / 10);
+
+                    if (index % period === 0 && index <= valuesLength - (period / 2)) {
+                      return label;
+                    }
+
+                    if (index === valuesLength) {
+                      return label;
+                    }
+                  }
                 },
               }],
               yAxes: [{
@@ -46,7 +60,7 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                 },
                 ticks: {
                   beginAtZero: true,
-                  userCallback: function(value, index, values) {
+                  userCallback: function (value, index, values) {
                     return value.toLocaleString();
                   },
                 },

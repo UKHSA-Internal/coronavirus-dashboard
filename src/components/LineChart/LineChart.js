@@ -3,6 +3,7 @@
 import React from 'react';
 import type { ComponentType } from 'react';
 import { Line } from 'react-chartjs-2';
+import * as moment from 'moment';
 
 import type { Props } from './LineChart.types';
 import * as Styles from './LineChart.styles';
@@ -36,18 +37,25 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
             maintainAspectRatio: false,
             scales: {
               xAxes: [{
-                type: 'time',
-                time: {
-                  displayFormats: {
-                    quarter: 'MMM YYYY'
-                  },
-                },
                 gridLines: {
                   display: false,
                 },
                 ticks: {
-                  autoSkip: true,
-                  maxTicksLimit: 15
+                  autoSkip: false,
+                  userCallback: function (value, index, values) {
+                    const lastValue = data[index];
+                    const label = moment(lastValue.date).format('MMM DD');
+                    let valuesLength = values.length - 1;
+                    let period = Math.round(valuesLength / 10);
+
+                    if (index % period === 0 && index <= valuesLength - (period / 2)) {
+                      return label;
+                    }
+
+                    if (index === valuesLength) {
+                      return label;
+                    }
+                  }
                 },
               }],
               yAxes: [{
@@ -56,7 +64,7 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
                 },
                 ticks: {
                   beginAtZero: true,
-                  userCallback: function(value, index, values) {
+                  userCallback: function (value, index, values) {
                     return value.toLocaleString();
                   },
                 },
