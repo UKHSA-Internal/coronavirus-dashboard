@@ -40,6 +40,21 @@ const getLatestDailyDeaths = (data: any): number => {
 }; // getLatestDailyDeaths
 
 
+const BigNumberTitles = {
+    ukCases: "Total number of lab-confirmed UK cases",
+    dailyUkCases: "Daily number of lab-confirmed UK cases",
+    ukDeaths: "Total number of COVID-19 associated UK deaths in hospital",
+    dailyUkDeaths: "Daily number of COVID-19 associated UK deaths in hospital"
+}
+
+const BigNumberDescriptions = {
+    ukCases: 'Includes tests carried out by commercial partners which are not included in the 4 National totals',
+    dailyUkCases: "Number of new cases reported today",
+    ukDeaths: "Deaths of patients in hospitals who have tested positive for COVID-19",
+    dailyUkDeaths: "Number of new deaths reported today"
+}
+
+
 const timestamp = (data): string =>
     data.hasOwnProperty("lastUpdatedAt")
         ? moment(data.lastUpdatedAt).format("D MMM YYYY, h:mma")
@@ -61,12 +76,32 @@ const Regional: ComponentType<Props> = ({}: Props) => {
         </Styles.Container>
     }
 
+    if (new Date(2020, 3, 28, 23, 0, 0) < new Date(data.lastUpdatedAt)) {
+
+        BigNumberTitles.ukDeaths = "Total number of COVID-19 associated UK deaths";
+        BigNumberTitles.dailyUkDeaths = "Daily number of COVID-19 associated UK deaths";
+
+        BigNumberDescriptions.ukDeaths = "Deaths of people who have had a positive test result confirmed by a Public Health or NHS laboratory";
+        BigNumberDescriptions.dailyUkDeaths = "Number of new deaths reported today";
+
+    }
+
+
     return (
         <Styles.Container className="govuk-width-container">
 
             <Announcement firstDisplayDate={ { year: 2020, month: 4, day: 27 } }
                           lastDisplayDate={ { year: 2020, month: 5, day: 1 } }>
-                <p className={ "govuk-body" }>
+                { new Date(2020, 3, 28, 23, 0, 0) < new Date(data.lastUpdatedAt)
+                    ? <p className={ "govuk-body" }>
+                        The way COVID-19 deaths are reported has changed.
+                        For details see the&nbsp;
+                        <a href={ '/about' }
+                           className={ "govuk-link govuk-link--no-visited-state" }>
+                        About the data
+                        </a>&nbsp;page.
+                    </p>
+                    : <p className={ "govuk-body" }>
                     The way COVID-19 deaths are reported is changing.
                     For details see the&nbsp;
                     <a href={ 'https://www.ons.gov.uk/news/statementsandletters/thedifferentusesoffiguresondeathsfromcovid19publishedbydhscandtheons' }
@@ -75,7 +110,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
                        target={ "_blank" }>
                         ONS website
                     </a>.
-                </p>
+                </p>}
             </Announcement>
 
             <PageTitle
@@ -83,24 +118,24 @@ const Regional: ComponentType<Props> = ({}: Props) => {
                 subtitle={ `Last updated ${ timestamp(data) }` }
             />
             <BigNumber
-                caption="Total number of lab-confirmed UK cases"
+                caption={ BigNumberTitles.ukCases }
                 number={ data?.overview?.K02000001?.totalCases?.value ?? 0 }
-                description={ 'Includes tests carried out by commercial partners which are not included in the 4 National totals' }
+                description={ BigNumberDescriptions.ukCases }
             />
             <BigNumber
-                caption="Daily number of lab-confirmed UK cases"
+                caption={ BigNumberTitles.dailyUkCases }
                 number={ data?.overview?.K02000001?.newCases?.value ?? 0 }
-                description={ "Number of new cases reported today" }
+                description={ BigNumberDescriptions.dailyUkCases }
             />
             <BigNumber
-                caption="Total number of COVID-19 associated UK deaths in hospital"
+                caption={ BigNumberTitles.ukDeaths }
                 number={ data?.overview?.K02000001?.deaths.value ?? 0 }
-                description={ "Deaths of patients in hospitals who have tested positive for COVID-19" }
+                description={BigNumberDescriptions.ukDeaths }
             />
             <BigNumber
-                caption="Daily number of COVID-19 associated UK deaths in hospital"
+                caption={ BigNumberTitles.dailyUkDeaths }
                 number={ getLatestDailyDeaths(data) }
-                description={ "Number of new deaths reported today" }
+                description={ BigNumberDescriptions.dailyUkDeaths }
             />
             { layout === 'desktop' && (
                 <>

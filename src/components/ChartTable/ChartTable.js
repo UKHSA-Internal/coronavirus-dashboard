@@ -64,6 +64,13 @@ export default class ChartTable extends Component<ChartTableProps, {}> {
             { view } = this.state,
             { data } = this.props;
 
+        if (new Date(2020, 3, 28, 23, 0, 0) < new Date(data.lastUpdatedAt)) {
+
+            titles.totalDeaths = 'Total number of COVID-19 associated UK deaths by date reported';
+            titles.dailyDeaths = 'Daily number of COVID-19 associated UK deaths by date reported';
+
+        }
+
         return <Fragment>
             <ViewAs view={ view } setView={ value => this.setState({ view: value }) }/>
             {
