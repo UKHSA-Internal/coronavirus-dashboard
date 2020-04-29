@@ -1,5 +1,5 @@
-import type { Data, EnglandData } from "types/Data";
-import React, { Fragment, ReactNode } from "react";
+import type { EnglandData } from "types/Data";
+import React, { Fragment } from "react";
 import AltChartTable from "components/AltChartTable";
 
 import moment from "moment";
