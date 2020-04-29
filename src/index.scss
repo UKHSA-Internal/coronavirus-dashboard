@@ -120,7 +120,7 @@ thead.govuk-table__head th{
 
   & h2 {
     @extend .govuk-heading-m;
-    margin-top: 8px;
+    margin-top: 12px;
   }
 
   & h3 {
@@ -134,6 +134,7 @@ thead.govuk-table__head th{
 
   & ul {
     @extend .govuk-list;
+    @extend .govuk-list--bullet;
   }
 
   & hr {
