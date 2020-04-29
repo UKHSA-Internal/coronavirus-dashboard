@@ -95,7 +95,7 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
 
                   let innerHtml = '<thead>';
                   titleLines.forEach(function (title) {
-                    innerHtml += '<tr><th style="text-align: left;">'
+                    innerHtml += '<tr><th class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0" style="text-align: left; color: #fff; font-size: 12px;">'
                       + new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(title))
                       + '</th></tr>';
                   });
@@ -103,12 +103,9 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
 
                   bodyLines.forEach(function (body, i) {
                     const val = parseInt(body).toLocaleString();
-                    const colors = tooltipModel.labelColors[i];
-                    let style = 'background:' + colors.backgroundColor;
-                    style += '; border-color:' + colors.borderColor;
-                    style += '; border-width: 2px';
-                    const span = '<span style="' + style + '"></span>';
-                    innerHtml += '<tr><td>' + span + val + ' ' + [tooltipText] + '</td></tr>';
+                    const style = `border-width: 2px; color: #fff; font-size: 12px;`;
+                    const span = '<span class="govuk-body govuk-!-margin-0" style="' + style + '">' + val +  ' ' + [tooltipText] + '</span>';
+                    innerHtml += '<tr><td>' + span  + '</td></tr>';
                   });
                   innerHtml += '</tbody>';
 
