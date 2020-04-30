@@ -49,6 +49,7 @@ const getBarChartOptions = (tooltipText) => {
                 stacked: true,
                 ticks: {
                     fontSize: 14,
+                    fontColor: '#1A2B2B',
                     autoSkip: false,
                     userCallback: function (value, index, values) {
                         const label = moment(value).format('MMM DD');
@@ -72,6 +73,7 @@ const getBarChartOptions = (tooltipText) => {
                 stacked: true,
                 ticks: {
                     fontSize: 14,
+                    fontColor: '#1A2B2B',
                     beginAtZero: true,
                     userCallback: function (value, index, values) {
                         return value.toLocaleString();

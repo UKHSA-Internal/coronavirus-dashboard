@@ -47,6 +47,7 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                 },
                 ticks: {
                   fontSize: 14,
+                  fontColor: '#1A2B2B',
                   autoSkip: false,
                   userCallback: function (value, index, values) {
                     const lastValue = dataSorted[index];
@@ -70,6 +71,7 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                 },
                 ticks: {
                   fontSize: 14,
+                  fontColor: '#1A2B2B',
                   beginAtZero: true,
                   userCallback: function (value, index, values) {
                     return value.toLocaleString();
