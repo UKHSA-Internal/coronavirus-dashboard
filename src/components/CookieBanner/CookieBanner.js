@@ -3,7 +3,6 @@
 
 import React, { useState, useEffect } from 'react';
 import type { ComponentType } from 'react';
-import { Redirect } from 'react-router';
 
 import type { Props } from './CookieBanner.types.js';
 
