@@ -20,7 +20,7 @@ While you can use the patterns, your site or service must not:
 - identify itself as being part of GOV.UK
 - use the crown or GOV.UK logotype in the header
 - use the GDS Transport typeface
--vsuggest that it’s an official UK government website if it is not
+- suggest that it’s an official UK government website if it is not
 
 These things are there to provide a consistent identity and navigation between GOV.UK and the sites and transactional services that hang off it. If your service isn’t on GOV.UK, there’s no need to maintain that identity - in fact, you might confuse or mislead people if you do.
 

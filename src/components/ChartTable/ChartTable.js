@@ -12,8 +12,8 @@ const titles: TitleOrDescriptionValues = {
 
     totalCases: 'Total number of lab-confirmed cases in England by specimen date',
     dailyCases: 'Daily number of lab-confirmed cases in England by specimen date',
-    totalDeaths: 'Total number of COVID-19 associated UK deaths in hospital by date reported',
-    dailyDeaths: 'Daily number of COVID-19 associated UK deaths in hospital by date reported',
+    totalDeaths: 'Total number of COVID-19 associated UK deaths by date reported',
+    dailyDeaths: 'Daily number of COVID-19 associated UK deaths by date reported',
     ageSex: 'Total number of lab-confirmed cases in England by age and sex',
 
 }; // titles
@@ -63,13 +63,6 @@ export default class ChartTable extends Component<ChartTableProps, {}> {
         const
             { view } = this.state,
             { data } = this.props;
-
-        if (new Date(2020, 3, 28, 23, 0, 0) < new Date(data.lastUpdatedAt)) {
-
-            titles.totalDeaths = 'Total number of COVID-19 associated UK deaths by date reported';
-            titles.dailyDeaths = 'Daily number of COVID-19 associated UK deaths by date reported';
-
-        }
 
         return <Fragment>
             <ViewAs view={ view } setView={ value => this.setState({ view: value }) }/>

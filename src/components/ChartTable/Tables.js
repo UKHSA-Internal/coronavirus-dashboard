@@ -159,11 +159,11 @@ const EnglandAgeSexStructure = ({ titles, descriptions }: TitleOrDescription): T
 }); // englandDailyCasesStructure
 
 
-const EnglandTable = ({ englandData, structure }: EnglandTableProps): React.ReactNode => {
+export const GenericTable = ({ data, structure }: EnglandTableProps): React.ReactNode => {
 
     const
         dataKeys = structure.metadata.map(item => item.key),
-        dataArray = zip(...dataKeys.map(key => englandData[key].sort(structure.sortFunc)));
+        dataArray = zip(...dataKeys.map(key => data[key].sort(structure.sortFunc)));
 
     return <Styles.Container>
         {
@@ -220,8 +220,8 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
         england: EnglandData = countries?.E92000001 ?? [];
 
     return <Fragment>
-        <EnglandTable
-            englandData={ england }
+        <GenericTable
+            data={ england }
             structure={
                 EnglandAgeSexStructure({
                     titles: titles,
@@ -229,8 +229,8 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
                 }) }
         />
 
-        <EnglandTable
-            englandData={ england }
+        <GenericTable
+            data={ england }
             structure={
                 EnglandDailyTotalCasesStructure({
                     titles: titles,
@@ -238,8 +238,8 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
                 }) }
         />
 
-        <EnglandTable
-            englandData={ england }
+        <GenericTable
+            data={ england }
             structure={
                 EnglandDailyCasesStructure({
                     titles: titles,

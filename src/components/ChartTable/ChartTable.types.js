@@ -27,7 +27,7 @@ declare export type TableStructure = {
 
 declare export type EnglandTableProps = {
 
-    englandData: EnglandData,
+    data: EnglandData,
     structure: TableStructure
 
 } // EnglandTableProps

@@ -2,7 +2,10 @@
 
 import React, { useState } from 'react';
 import type { ComponentType } from 'react';
+
 import moment from "moment";
+
+import { Link } from 'react-router-dom';
 
 import useLoadData from 'hooks/useLoadData';
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
@@ -12,11 +15,12 @@ import RegionTable from 'components/RegionTable';
 import Map from 'components/Map';
 import Disclaimer from 'components/Disclaimer';
 import ExportLinks from "components/Export";
+import Announcement from "components/Announcement";
+import ChartTable from "components/ChartTable";
+
 
 import type { Props } from './Regional.types';
 import * as Styles from './Regional.styles';
-import ChartTable from "components/ChartTable";
-import Announcement from "../../components/Announcement/Announcement";
 
 
 /**
@@ -43,14 +47,14 @@ const getLatestDailyDeaths = (data: any): number => {
 const BigNumberTitles = {
     ukCases: "Total number of lab-confirmed UK cases",
     dailyUkCases: "Daily number of lab-confirmed UK cases",
-    ukDeaths: "Total number of COVID-19 associated UK deaths in hospital",
-    dailyUkDeaths: "Daily number of COVID-19 associated UK deaths in hospital"
+    ukDeaths: "Total number of COVID-19 associated UK deaths",
+    dailyUkDeaths: "Daily number of COVID-19 associated UK deaths",
 }
 
 const BigNumberDescriptions = {
     ukCases: 'Includes tests carried out by commercial partners which are not included in the 4 National totals',
     dailyUkCases: "Number of new cases reported today",
-    ukDeaths: "Deaths of patients in hospitals who have tested positive for COVID-19",
+    ukDeaths: "Deaths of people who have had a positive test result confirmed by a Public Health or NHS laboratory",
     dailyUkDeaths: "Number of new deaths reported today"
 }
 
@@ -76,41 +80,19 @@ const Regional: ComponentType<Props> = ({}: Props) => {
         </Styles.Container>
     }
 
-    if (new Date(2020, 3, 28, 23, 0, 0) < new Date(data.lastUpdatedAt)) {
-
-        BigNumberTitles.ukDeaths = "Total number of COVID-19 associated UK deaths";
-        BigNumberTitles.dailyUkDeaths = "Daily number of COVID-19 associated UK deaths";
-
-        BigNumberDescriptions.ukDeaths = "Deaths of people who have had a positive test result confirmed by a Public Health or NHS laboratory";
-        BigNumberDescriptions.dailyUkDeaths = "Number of new deaths reported today";
-
-    }
-
-
     return (
         <Styles.Container className="govuk-width-container">
 
             <Announcement firstDisplayDate={ { year: 2020, month: 4, day: 27 } }
                           lastDisplayDate={ { year: 2020, month: 5, day: 1 } }>
-                { new Date(2020, 3, 28, 23, 0, 0) < new Date(data.lastUpdatedAt)
-                    ? <p className={ "govuk-body" }>
-                        The way COVID-19 deaths are reported has changed.
-                        For details see the&nbsp;
-                        <a href={ '/about' }
-                           className={ "govuk-link govuk-link--no-visited-state" }>
-                        About the data
-                        </a>&nbsp;page.
-                    </p>
-                    : <p className={ "govuk-body" }>
-                    The way COVID-19 deaths are reported is changing.
+                <p className={ "govuk-body" }>
+                    The way COVID-19 deaths are reported has changed.
                     For details see the&nbsp;
-                    <a href={ 'https://www.ons.gov.uk/news/statementsandletters/thedifferentusesoffiguresondeathsfromcovid19publishedbydhscandtheons' }
-                       className={ "govuk-link govuk-link--no-visited-state" }
-                       rel={ "noopener noreferrer" }
-                       target={ "_blank" }>
-                        ONS website
-                    </a>.
-                </p>}
+                    <Link to={ '/about' }
+                          className={ "govuk-link govuk-link--no-visited-state" }>
+                    About the data
+                    </Link>&nbsp;page.
+                </p>
             </Announcement>
 
             <PageTitle
