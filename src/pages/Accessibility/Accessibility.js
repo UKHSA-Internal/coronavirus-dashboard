@@ -33,10 +33,10 @@ export default class Accessibility extends Component<AccessibilityProps, {}> {
                 .use(slug)
                 .use(externalLink)
                 .use(html).process(data, (err, text) =>
-                this.setState({
-                    data: err ? data : String(text),
-                    loading: false
-                })
+                    this.setState({
+                        data: err ? data : String(text),
+                        loading: false
+                    })
             );
 
     }; // getData
