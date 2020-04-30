@@ -45,7 +45,5 @@ export const Title: ComponentType<*> = (() => {
 })();
 
 export const Subtitle: ComponentType<*> = (() => {
-  return styled.span`
-    font-size: 1.19rem;
-  `;
+  return styled.span``;
 })();

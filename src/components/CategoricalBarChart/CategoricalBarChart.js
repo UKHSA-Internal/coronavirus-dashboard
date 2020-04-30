@@ -67,6 +67,8 @@ const getBarChartOptions = (tooltipText) => {
                 },
                 stacked: false,
                 ticks: {
+                    fontSize: 14,
+                    fontColor: '#1A2B2B',
                     autoSkip: false,
                     maxTicksLimit: 15,
                 }
@@ -77,6 +79,8 @@ const getBarChartOptions = (tooltipText) => {
                 },
                 stacked: false,
                 ticks: {
+                    fontSize: 14,
+                    fontColor: '#1A2B2B',
                     beginAtZero: true,
                     userCallback: function (value, index, values) {
                         return value.toLocaleString();
@@ -116,7 +120,7 @@ const getBarChartOptions = (tooltipText) => {
                         bodyLines = tooltipModel.body.map(getBody);
                     let innerHtml = '<thead>';
                     titleLines.forEach(function (title) {
-                        innerHtml += `<tr><th style="text-align: left;">${title}</th></tr>`;
+                        innerHtml += `<tr><th class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0" style="text-align: left; color: #fff; font-size: 14px;">${title}</th></tr>`;
                     });
                     innerHtml += '</thead><tbody>';
 
@@ -126,10 +130,9 @@ const getBarChartOptions = (tooltipText) => {
                             number = numeral(/\d+/.exec(val)[0]).format('0,0'),
                             text = /[^\d]+/.exec(val)[0].trim(),
                             contentText = `${text} ${number}`,
-                            colors = tooltipModel.labelColors[i],
-                            style = `background: ${colors.backgroundColor} !important; border-color: ${colors.borderColor}; border-width: 2px;`;
+                            style = `border-width: 2px; color: #fff; font-size: 14px;`;
 
-                        innerHtml += `<tr><td><span style=${style}/>${contentText} ${[tooltipText]}</td></tr>`;
+                        innerHtml += `<tr><td><span class="govuk-body govuk-!-margin-0" style="${style}"/>${contentText} ${[tooltipText]}</td></tr>`;
                     });
                     innerHtml += '</tbody>';
 
@@ -145,7 +148,6 @@ const getBarChartOptions = (tooltipText) => {
                 tooltipEl.style.position = 'absolute';
                 tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
                 tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
-                tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px';
                 tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px';
                 tooltipEl.style.pointerEvents = 'none';
             }

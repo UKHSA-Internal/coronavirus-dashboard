@@ -12,7 +12,7 @@ const BigNumber: ComponentType<Props> = ({ caption, number, description, asteris
     <Styles.Container>
       <Styles.Caption className="govuk-heading-m">{caption}</Styles.Caption>
       <Styles.Number className="govuk-heading-l">{numeral(number).format('0,0')}{asterisk ? '*' : ''}</Styles.Number>
-      <Styles.Caption className="govuk-!-font-size-16">{description}</Styles.Caption>
+      <Styles.Caption className="govuk-body govuk-!-font-size-16 govuk-!-margin-bottom-1">{description}</Styles.Caption>
     </Styles.Container>
   );
 };

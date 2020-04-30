@@ -47,7 +47,5 @@ export const Triangle: ComponentType<*> = (() => {
 })();
 
 export const Subtext: ComponentType<*> = (() => {
-  return styled.span`
-    margin-bottom: 0;
-  `;
+  return styled.span``;
 })();

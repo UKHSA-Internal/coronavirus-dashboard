@@ -114,7 +114,7 @@ const getTableCells = (data: Array<ArchiveData>, isFirst: boolean=false) => {
             cellData.map(d =>
                 <BodyCell key={ `${d.date}_${d.category}_${d.format}` }
                           className={ `govuk-table__cell` }>
-                    <DownloadLink href={ d.url }
+                    <DownloadLink href={ `/downloads/${d.url}` }
                        className={ 'govuk-link' }
                        download={ `coronavirus-${d.category}_${d.date}.${d.format}` }>
                         { capitalize(d.category) } as { d.format.toUpperCase() }

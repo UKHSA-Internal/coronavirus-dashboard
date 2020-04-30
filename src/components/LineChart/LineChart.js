@@ -3,6 +3,7 @@
 import React from 'react';
 import type { ComponentType } from 'react';
 import { Line } from 'react-chartjs-2';
+import * as moment from 'moment';
 
 import type { Props } from './LineChart.types';
 import * as Styles from './LineChart.styles';
@@ -36,18 +37,27 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
             maintainAspectRatio: false,
             scales: {
               xAxes: [{
-                type: 'time',
-                time: {
-                  displayFormats: {
-                    quarter: 'MMM YYYY'
-                  },
-                },
                 gridLines: {
                   display: false,
                 },
                 ticks: {
-                  autoSkip: true,
-                  maxTicksLimit: 15
+                  fontSize: 14,
+                  fontColor: '#1A2B2B',
+                  autoSkip: false,
+                  userCallback: function (value, index, values) {
+                    const lastValue = data[index];
+                    const label = moment(lastValue.date).format('MMM DD');
+                    let valuesLength = values.length - 1;
+                    let period = Math.round(valuesLength / 10);
+
+                    if (index % period === 0 && index <= valuesLength - (period / 2)) {
+                      return label;
+                    }
+
+                    if (index === valuesLength) {
+                      return label;
+                    }
+                  }
                 },
               }],
               yAxes: [{
@@ -55,8 +65,10 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
                   drawBorder: false,
                 },
                 ticks: {
+                  fontSize: 14,
+                  fontColor: '#1A2B2B',
                   beginAtZero: true,
-                  userCallback: function(value, index, values) {
+                  userCallback: function (value, index, values) {
                     return value.toLocaleString();
                   },
                 },
@@ -95,7 +107,7 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
 
                   let innerHtml = '<thead>';
                   titleLines.forEach(function (title) {
-                    innerHtml += '<tr><th style="text-align: left;">'
+                    innerHtml += '<tr><th class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0" style="text-align: left; color: #fff; font-size: 14px;">'
                       + new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(title))
                       + '</th></tr>';
                   });
@@ -103,12 +115,9 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
 
                   bodyLines.forEach(function (body, i) {
                     const val = parseInt(body).toLocaleString();
-                    const colors = tooltipModel.labelColors[i];
-                    let style = 'background:' + colors.backgroundColor;
-                    style += '; border-color:' + colors.borderColor;
-                    style += '; border-width: 2px';
-                    const span = '<span style="' + style + '"></span>';
-                    innerHtml += '<tr><td>' + span + val + ' ' + [tooltipText] + '</td></tr>';
+                    const style = `border-width: 2px; color: #fff; font-size: 14px;`;
+                    const span = '<span class="govuk-body govuk-!-margin-0" style="' + style + '">' + val +  ' ' + [tooltipText] + '</span>';
+                    innerHtml += '<tr><td>' + span  + '</td></tr>';
                   });
                   innerHtml += '</tbody>';
 
@@ -124,7 +133,6 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
                 tooltipEl.style.position = 'absolute';
                 tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
                 tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
-                tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px';
                 tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px';
                 tooltipEl.style.pointerEvents = 'none';
               }
