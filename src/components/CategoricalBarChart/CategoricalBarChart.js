@@ -67,6 +67,7 @@ const getBarChartOptions = (tooltipText) => {
                 },
                 stacked: false,
                 ticks: {
+                    fontSize: 14,
                     autoSkip: false,
                     maxTicksLimit: 15,
                 }
@@ -77,6 +78,7 @@ const getBarChartOptions = (tooltipText) => {
                 },
                 stacked: false,
                 ticks: {
+                    fontSize: 14,
                     beginAtZero: true,
                     userCallback: function (value, index, values) {
                         return value.toLocaleString();
@@ -145,7 +147,7 @@ const getBarChartOptions = (tooltipText) => {
                 tooltipEl.style.position = 'absolute';
                 tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
                 tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
-                tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px';
+                tooltipEl.style.fontSize = '14px';
                 tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px';
                 tooltipEl.style.pointerEvents = 'none';
             }

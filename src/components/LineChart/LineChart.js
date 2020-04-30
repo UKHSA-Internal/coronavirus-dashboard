@@ -46,6 +46,7 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
                   display: false,
                 },
                 ticks: {
+                  fontSize: 14,
                   autoSkip: true,
                   maxTicksLimit: 15
                 },
@@ -55,6 +56,7 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
                   drawBorder: false,
                 },
                 ticks: {
+                  fontSize: 14,
                   beginAtZero: true,
                   userCallback: function(value, index, values) {
                     return value.toLocaleString();
@@ -124,7 +126,7 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
                 tooltipEl.style.position = 'absolute';
                 tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
                 tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
-                tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px';
+                tooltipEl.style.fontSize = '14px';
                 tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px';
                 tooltipEl.style.pointerEvents = 'none';
               }
