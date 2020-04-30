@@ -68,6 +68,7 @@ const getBarChartOptions = (tooltipText) => {
                 stacked: false,
                 ticks: {
                     fontSize: 14,
+                    fontColor: '#1A2B2B',
                     autoSkip: false,
                     maxTicksLimit: 15,
                 }
@@ -79,6 +80,7 @@ const getBarChartOptions = (tooltipText) => {
                 stacked: false,
                 ticks: {
                     fontSize: 14,
+                    fontColor: '#1A2B2B',
                     beginAtZero: true,
                     userCallback: function (value, index, values) {
                         return value.toLocaleString();
