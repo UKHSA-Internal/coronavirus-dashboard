@@ -3,21 +3,37 @@
 import React from 'react';
 import type { ComponentType } from 'react';
 import { Bar } from 'react-chartjs-2';
+import * as moment from 'moment';
 
 import type { Props } from './BarChart.types';
 import * as Styles from './BarChart.styles';
 
+const sortFunc = (a, b) => {
+
+  const
+    dateA = new Date(a.date),
+    dateB = new Date(b.date);
+
+  if (dateA < dateB) return -1;
+
+  return dateA > dateB ? 1 : 0
+
+};
+
 const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) => {
+
+  const dataSorted = data.sort(sortFunc);
+
   return (
     <Styles.Container>
       <span className="govuk-heading-s">{header}</span>
       <Styles.Chart>
         <Bar
           data={{
-            labels: data.map(d => d.date),
+            labels: dataSorted.map(d => d.date),
             datasets: [{
               backgroundColor: '#367E93',
-              data: data.map(d => d.value),
+              data: dataSorted.map(d => d.value),
             }]
           }}
           legend={{ display: false }}
@@ -26,19 +42,26 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
             scales: {
               xAxes: [{
                 offset: true,
-                type: 'time',
-                time: {
-                  displayFormats: {
-                    quarter: 'MMM YYYY'
-                  },
-                },
                 gridLines: {
                   display: false,
                 },
                 ticks: {
                   fontSize: 14,
-                  autoSkip: true,
-                  maxTicksLimit: 15,
+                  autoSkip: false,
+                  userCallback: function (value, index, values) {
+                    const lastValue = dataSorted[index];
+                    const label = moment(lastValue.date).format('MMM DD');
+                    let valuesLength = values.length - 1;
+                    let period = Math.round(valuesLength / 10);
+
+                    if (index % period === 0 && index <= valuesLength - (period / 2)) {
+                      return label;
+                    }
+
+                    if (index === valuesLength) {
+                      return label;
+                    }
+                  }
                 },
               }],
               yAxes: [{
@@ -48,7 +71,7 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                 ticks: {
                   fontSize: 14,
                   beginAtZero: true,
-                  userCallback: function(value, index, values) {
+                  userCallback: function (value, index, values) {
                     return value.toLocaleString();
                   },
                 },
@@ -87,7 +110,7 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
 
                   let innerHtml = '<thead>';
                   titleLines.forEach(function (title) {
-                    innerHtml += '<tr><th style="text-align: left;">'
+                    innerHtml += '<tr><th class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0" style="text-align: left; color: #fff; font-size: 12px;">'
                       + new Intl.DateTimeFormat('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(title))
                       + '</th></tr>';
                   });
@@ -95,12 +118,9 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
 
                   bodyLines.forEach(function (body, i) {
                     const val = parseInt(body).toLocaleString();
-                    const colors = tooltipModel.labelColors[i];
-                    let style = 'background:' + colors.backgroundColor;
-                    style += '; border-color:' + colors.borderColor;
-                    style += '; border-width: 2px';
-                    const span = '<span style="' + style + '"></span>';
-                    innerHtml += '<tr><td>' + span + val + ' ' + [tooltipText] + '</td></tr>';
+                    const style = `border-width: 2px; color: #fff; font-size: 12px;`;
+                    const span = '<span class="govuk-body govuk-!-margin-0" style="' + style + '">' + val +  ' ' + [tooltipText] + '</span>';
+                    innerHtml += '<tr><td>' + span  + '</td></tr>';
                   });
                   innerHtml += '</tbody>';
 

@@ -3,7 +3,6 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 import { Header, Footer } from 'govuk-react-jsx';
 
-import useResponsiveLayout from 'hooks/useResponsiveLayout';
 import Regional from 'pages/Regional';
 import MobileRegionTable from 'pages/MobileRegionTable';
 import About from 'pages/About';
@@ -40,7 +39,6 @@ const F = props => <Footer
 />;
 
 const App = () => {
-    const layout = useResponsiveLayout(768);
 
     return (
         <>

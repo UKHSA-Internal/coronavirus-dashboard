@@ -17,7 +17,7 @@ const PageTitle: ComponentType<Props> = ({ caption, title, subtitle, backUrl }: 
         </BackLink>
       )}
       <Styles.Title className="govuk-heading-xl">{title}</Styles.Title>
-      <Styles.Subtitle>{subtitle}</Styles.Subtitle>
+      <Styles.Subtitle className="govuk-body govuk-!-margin-bottom-0">{subtitle}</Styles.Subtitle>
     </Styles.Container>
   );
 };
