@@ -11,6 +11,7 @@ import Accessibility from 'pages/Accessibility';
 import Cookies from 'pages/Cookies';
 import Navigation from 'components/Navigation';
 import CookieBanner from 'components/CookieBanner';
+import BackToTop from 'components/BackToTop';
 
 const F = props => <Footer
     { ...props }
@@ -51,6 +52,7 @@ const App = () => {
                 homepageUrlHref="https://gov.uk"
             />
             <Navigation/>
+            <BackToTop mode="overlay"/>
             <Switch>
                 <Route path="/region" component={ MobileRegionTable }/>
                 <Route path="/about" component={ About }/>
@@ -60,6 +62,7 @@ const App = () => {
                 <Route path="/" component={ Regional }/>
                 <Redirect to="/"/>
             </Switch>
+            <BackToTop mode="inline"/>
             <Switch>
                 <Route path="/" exact component={ F }/>
                 <Route path="/about" exact component={ F }/>
