@@ -42,27 +42,20 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
             scales: {
               xAxes: [{
                 offset: true,
+                type: 'time',
                 gridLines: {
                   display: false,
+                },
+                time: {
+                    displayFormats: {
+                        quarter: 'MMM YYYY'
+                    },
                 },
                 ticks: {
                   fontSize: 14,
                   fontColor: '#1A2B2B',
-                  autoSkip: false,
-                  userCallback: function (value, index, values) {
-                    const lastValue = dataSorted[index];
-                    const label = moment(lastValue.date).format('MMM DD');
-                    let valuesLength = values.length - 1;
-                    let period = Math.round(valuesLength / 10);
-
-                    if (index % period === 0 && index <= valuesLength - (period / 2)) {
-                      return label;
-                    }
-
-                    if (index === valuesLength) {
-                      return label;
-                    }
-                  }
+                  autoSkip: true,
+                  maxTicksLimit: 15
                 },
               }],
               yAxes: [{

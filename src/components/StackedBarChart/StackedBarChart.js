@@ -11,20 +11,35 @@ import * as Styles from './StackedBarChart.styles';
 import numeral from 'numeral';
 
 
+const sortFunc = (a, b) => {
+
+    const
+        dateA = new Date(a.date),
+        dateB = new Date(b.date);
+
+    if (dateA < dateB) return 1;
+
+    return dateA > dateB ? -1 : 0
+
+};
+
+
 const getBarChartData = ({ previous, change }) => {
 
+    const previousSorted = previous.sort(sortFunc)
+
     return {
-        labels: previous.map(d => d.date),
+        labels: previousSorted.map(d => d.date),
         datasets: [
             {
                 label: "Previously reported",
                 backgroundColor: '#367E93',
-                data: previous.map(d => d.value)
+                data: previousSorted.map(d => d.value)
             },
             {
                 label: "Newly reported",
                 backgroundColor: '#0a495a',
-                data: change.map(d => d.value > 0 ? d.value : 0)
+                data: change.sort(sortFunc).map(d => d.value > 0 ? d.value : 0)
             }
         ]
     }
@@ -43,6 +58,12 @@ const getBarChartOptions = (tooltipText) => {
         scales: {
             xAxes: [{
                 offset: true,
+                type: 'time',
+                time: {
+                    displayFormats: {
+                        quarter: 'MMM YYYY'
+                    },
+                },
                 gridLines: {
                     display: false,
                 },
@@ -50,20 +71,8 @@ const getBarChartOptions = (tooltipText) => {
                 ticks: {
                     fontSize: 14,
                     fontColor: '#1A2B2B',
-                    autoSkip: false,
-                    userCallback: function (value, index, values) {
-                        const label = moment(value).format('MMM DD');
-                        let valuesLength = values.length - 1;
-                        let period = Math.round(valuesLength / 10);
-
-                        if (index % period === 0 && index <= valuesLength - (period / 2)) {
-                            return label;
-                        }
-
-                        if (index === valuesLength) {
-                            return label;
-                        }
-                    }
+                    maxTicksLimit: 15,
+                    autoSkip: true,
                 },
             }],
             yAxes: [{
