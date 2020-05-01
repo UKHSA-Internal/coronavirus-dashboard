@@ -143,7 +143,7 @@ export default class Archive extends Component<ArchiveProps, {}> {
             nameParser = /^(\w+)\/dated\/coronavirus-(\w+)_(\d{4})(\d{2})(\d{2}).*$/,
             fileTypes = ["csv", "json"],
             contents = fileTypes
-                .map(f => data.evaluate(
+                .map(f => document.evaluate(
                     `//Blob/Name[starts-with(text(), '${f}/dated')]`,
                     data, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null
                 ))
