@@ -52,7 +52,10 @@ const App = () => {
                 homepageUrlHref="https://gov.uk"
             />
             <Navigation/>
-            <BackToTop mode="overlay"/>
+            <Switch>
+                <Route path="/about" exact render={()=>(<BackToTop mode="overlay"/>)} />
+                <Route path="/" exact render={()=>(<BackToTop mode="overlay"/>)} />
+            </Switch>
             <Switch>
                 <Route path="/region" component={ MobileRegionTable }/>
                 <Route path="/about" component={ About }/>
@@ -62,7 +65,10 @@ const App = () => {
                 <Route path="/" component={ Regional }/>
                 <Redirect to="/"/>
             </Switch>
-            <BackToTop mode="inline"/>
+            <Switch>
+                <Route path="/about" exact render={()=>(<BackToTop mode="inline"/>)} />
+                <Route path="/" exact render={()=>(<BackToTop mode="inline"/>)} />
+            </Switch>
             <Switch>
                 <Route path="/" exact component={ F }/>
                 <Route path="/about" exact component={ F }/>
