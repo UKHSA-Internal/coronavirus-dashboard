@@ -113,7 +113,14 @@ thead.govuk-table__head th{
 }
 
 
-.about .markdown {
+
+.about .markdown,
+.accessibility .markdown {
+
+  #table-of-contents {
+    @extend .govuk-heading-m;
+  }
+
   & p {
     @extend .govuk-body;
 
