@@ -6,6 +6,7 @@ import { Bar } from 'react-chartjs-2';
 
 import type { CategoricalBarChartType, ChartProps } from './CategoricalBarChart.types';
 import * as Styles from './CategoricalBarChart.styles';
+import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
 import numeral from 'numeral';
 import { zip } from 'pythonic';
@@ -50,7 +51,7 @@ const getBarChartData = ({ data, categoryLabels, colors, columnLabelGetter }: Ca
 }; // getBarChartData
 
 
-const getBarChartOptions = (tooltipText) => {
+const getBarChartOptions = (tooltipText, mobileView: boolean) => {
 
     return {
         barValueSpacing: 20,
@@ -63,13 +64,15 @@ const getBarChartOptions = (tooltipText) => {
             xAxes: [{
                 offset: true,
                 gridLines: {
-                    display: false,
+                    display: true,
                 },
                 stacked: false,
                 ticks: {
-                    fontSize: 14,
+                    minRotation: 45,
+                    fontSize: mobileView ? 11 : 14,
                     fontColor: '#1A2B2B',
                     autoSkip: false,
+                    minTicksLimit: 8,
                     maxTicksLimit: 15,
                 }
             }],
@@ -160,13 +163,15 @@ const getBarChartOptions = (tooltipText) => {
 
 const CategoricalBarChart: ComponentType<ChartProps> = ({header, tooltipText, data, description=null}: ChartProps) => {
 
+    const mobileView = useResponsiveLayout(500)  === "mobile"
+
     return (
         <Styles.Container>
             <span className="govuk-heading-s">{header}</span>
             <Styles.Chart>
                 <Bar
                     data={ getBarChartData(data) }
-                    options={ getBarChartOptions(tooltipText) }
+                    options={ getBarChartOptions(tooltipText, mobileView) }
                 />
             </Styles.Chart>
 
