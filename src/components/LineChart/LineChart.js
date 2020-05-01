@@ -2,11 +2,14 @@
 
 import React from 'react';
 import type { ComponentType } from 'react';
+
 import { Line } from 'react-chartjs-2';
 import * as moment from 'moment';
+import useResponsiveLayout from "hooks/useResponsiveLayout";
 
 import type { Props } from './LineChart.types';
 import * as Styles from './LineChart.styles';
+
 
 const dateSortFunc = (a, b) => {
 
@@ -20,6 +23,8 @@ const dateSortFunc = (a, b) => {
 
 
 const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) => {
+
+  const mobileView = useResponsiveLayout(500)  === "mobile"
 
   return (
     <Styles.Container>
@@ -54,9 +59,11 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
                   display: true,
                 },
                 ticks: {
-                  fontSize: 14,
+                  minRotation: 45,
+                  fontSize: mobileView ? 11 : 14,
                   fontColor: '#1A2B2B',
-                  autoSkip: true,
+                  autoSkip: false,
+                  minTicksLimit: 10,
                   maxTicksLimit: 15
                 },
               }],

@@ -7,6 +7,7 @@ import * as moment from 'moment';
 
 import type { Props } from './BarChart.types';
 import * as Styles from './BarChart.styles';
+import useResponsiveLayout from "hooks/useResponsiveLayout";
 
 const sortFunc = (a, b) => {
 
@@ -22,7 +23,9 @@ const sortFunc = (a, b) => {
 
 const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) => {
 
-  const dataSorted = data.sort(sortFunc);
+  const
+      dataSorted = data.sort(sortFunc),
+      mobileView = useResponsiveLayout(500)  === "mobile";
 
   return (
     <Styles.Container>
@@ -44,7 +47,7 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                 offset: true,
                 type: 'time',
                 gridLines: {
-                  display: false,
+                  display: true,
                 },
                 time: {
                     displayFormats: {
@@ -52,9 +55,11 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                     },
                 },
                 ticks: {
-                  fontSize: 14,
+                  minRotation: 45,
+                  fontSize: mobileView ? 11 : 14,
                   fontColor: '#1A2B2B',
                   autoSkip: true,
+                  minTicksLimit: 10,
                   maxTicksLimit: 15
                 },
               }],

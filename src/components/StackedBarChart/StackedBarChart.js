@@ -9,6 +9,7 @@ import type { Props } from './StackedBarChart.types';
 import * as Styles from './StackedBarChart.styles';
 
 import numeral from 'numeral';
+import useResponsiveLayout from "../../hooks/useResponsiveLayout";
 
 
 const sortFunc = (a, b) => {
@@ -47,7 +48,7 @@ const getBarChartData = ({ previous, change }) => {
 };
 
 
-const getBarChartOptions = (tooltipText) => {
+const getBarChartOptions = (tooltipText, mobileView) => {
 
     return {
         maintainAspectRatio: false,
@@ -65,12 +66,14 @@ const getBarChartOptions = (tooltipText) => {
                     },
                 },
                 gridLines: {
-                    display: false,
+                    display: true,
                 },
                 stacked: true,
                 ticks: {
-                    fontSize: 14,
+                    minRotation: 45,
+                    fontSize: mobileView ? 11 : 14,
                     fontColor: '#1A2B2B',
+                    minTicksLimit: 10,
                     maxTicksLimit: 15,
                     autoSkip: true,
                 },
@@ -166,13 +169,16 @@ const getBarChartOptions = (tooltipText) => {
 };
 
 const StackedBarChart: ComponentType<Props> = ({ header, tooltipText, data, description = null }: Props) => {
+
+    const mobileView = useResponsiveLayout(500)  === "mobile";
+
     return (
         <Styles.Container>
             <span className="govuk-heading-s">{header}</span>
             <Styles.Chart>
                 <Bar
                     data={getBarChartData(data)}
-                    options={getBarChartOptions(tooltipText)}
+                    options={getBarChartOptions(tooltipText, mobileView)}
                 />
             </Styles.Chart>
 
