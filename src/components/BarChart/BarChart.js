@@ -7,7 +7,6 @@ import * as moment from 'moment';
 
 import type { Props } from './BarChart.types';
 import * as Styles from './BarChart.styles';
-import useResponsiveLayout from "hooks/useResponsiveLayout";
 
 const sortFunc = (a, b) => {
 
@@ -23,9 +22,7 @@ const sortFunc = (a, b) => {
 
 const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) => {
 
-  const
-      dataSorted = data.sort(sortFunc),
-      mobileView = useResponsiveLayout(500)  === "mobile";
+  const dataSorted = data.sort(sortFunc);
 
   return (
     <Styles.Container>
@@ -45,22 +42,27 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
             scales: {
               xAxes: [{
                 offset: true,
-                type: 'time',
                 gridLines: {
-                  display: true,
-                },
-                time: {
-                    displayFormats: {
-                        quarter: 'MMM YYYY'
-                    },
+                  display: false,
                 },
                 ticks: {
-                  minRotation: 45,
-                  fontSize: mobileView ? 11 : 14,
+                  fontSize: 14,
                   fontColor: '#1A2B2B',
                   autoSkip: false,
-                  minTicksLimit: 8,
-                  maxTicksLimit: 15
+                  userCallback: function (value, index, values) {
+                    const lastValue = dataSorted[index];
+                    const label = moment(lastValue.date).format('MMM DD');
+                    let valuesLength = values.length - 1;
+                    let period = Math.round(valuesLength / 10);
+
+                    if (index % period === 0 && index <= valuesLength - (period / 2)) {
+                      return label;
+                    }
+
+                    if (index === valuesLength) {
+                      return label;
+                    }
+                  }
                 },
               }],
               yAxes: [{

@@ -1,15 +1,4 @@
 // @flow
 
-export interface AccessibilityState {
+export type Props = {||};
 
-    loading: true,
-    data: string
-
-} // ArchiveState
-
-
-export interface AccessibilityProps {
-
-    value: string
-
-} // ArchiveProps
