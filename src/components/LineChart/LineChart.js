@@ -8,6 +8,17 @@ import * as moment from 'moment';
 import type { Props } from './LineChart.types';
 import * as Styles from './LineChart.styles';
 
+const dateSortFunc = (a, b) => {
+
+    const
+        dateA = new Date(a.date),
+        dateB = new Date(b.date);
+
+    return dateA < dateB ? 1 : dateA > dateB || 0;
+
+}; // sortFunc
+
+
 const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) => {
 
   return (
@@ -37,27 +48,16 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
             maintainAspectRatio: false,
             scales: {
               xAxes: [{
+                offset: true,
+                type: 'time',
                 gridLines: {
-                  display: false,
+                  display: true,
                 },
                 ticks: {
                   fontSize: 14,
                   fontColor: '#1A2B2B',
-                  autoSkip: false,
-                  userCallback: function (value, index, values) {
-                    const lastValue = data[index];
-                    const label = moment(lastValue.date).format('MMM DD');
-                    let valuesLength = values.length - 1;
-                    let period = Math.round(valuesLength / 10);
-
-                    if (index % period === 0 && index <= valuesLength - (period / 2)) {
-                      return label;
-                    }
-
-                    if (index === valuesLength) {
-                      return label;
-                    }
-                  }
+                  autoSkip: true,
+                  maxTicksLimit: 15
                 },
               }],
               yAxes: [{

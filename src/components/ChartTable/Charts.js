@@ -21,6 +21,16 @@ const ageSexSort = (a, b) => {
 }; // ageSexSort
 
 
+const dateSortFunc = (a, b) => {
+
+    const
+        dateA = new Date(a.date),
+        dateB = new Date(b.date);
+
+    return dateA < dateB ? 1 : dateA > dateB || 0;
+
+}; // sortFunc
+
 
 /**
  * Produces the charts.
@@ -49,15 +59,16 @@ export const Charts = ({data, titles, descriptions}: ChartsProps): ReactNode => 
                 tooltip={ '' }
             />
 
-            <LineChart data={ countries?.E92000001?.dailyTotalConfirmedCases ?? [] }
-                       header={ titles.totalCases }
-                       tooltipText="cases"
+            <LineChart
+                data={ (countries?.E92000001?.dailyTotalConfirmedCases ?? []).sort(dateSortFunc) }
+                header={ titles.totalCases }
+                tooltipText="cases"
             />
 
             <StackedBarChart
                 data={ {
-                    previous: countries?.E92000001?.previouslyReportedDailyCasesAdjusted ?? [],
-                    change: countries?.E92000001?.changeInDailyCases ?? [],
+                    previous: (countries?.E92000001?.previouslyReportedDailyCasesAdjusted ?? []).sort(dateSortFunc),
+                    change: (countries?.E92000001?.changeInDailyCases ?? []).sort(dateSortFunc),
                 } }
                 header={ titles.dailyCases }
                 tooltipText="cases"
@@ -65,13 +76,13 @@ export const Charts = ({data, titles, descriptions}: ChartsProps): ReactNode => 
             />
 
             <LineChart
-                data={ overview?.K02000001?.dailyTotalDeaths ?? [] }
+                data={ (overview?.K02000001?.dailyTotalDeaths ?? []).sort(dateSortFunc) }
                 header={ titles.totalDeaths }
                 tooltipText="deaths"
             />
 
             <BarChart
-                data={ overview?.K02000001?.dailyDeaths ?? [] }
+                data={ (overview?.K02000001?.dailyDeaths ?? []).sort(dateSortFunc) }
                 header={ titles.dailyDeaths }
                 tooltipText="deaths"
             />
