@@ -12,7 +12,7 @@ export const Container: ComponentType<*> = (() => {
     grid-column-gap: 30px;
     grid-row-gap: 60px;
     margin-top: 45px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     max-width: 1045px;
 
     @media only screen and (max-width: 768px) {

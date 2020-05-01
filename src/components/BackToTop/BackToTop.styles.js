@@ -8,12 +8,18 @@ export const OverlayContainer: ComponentType<*> = (() => {
   return styled.div`
   position: fixed;
   bottom: 0;
-  width: 100vw;
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
   background: white;
   z-index: 1234567;
    `;
 })();
 
 export const InlineContainer: ComponentType<*> = (() => {
-  return styled.div``;
+  return styled.div`
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  `;
 })();

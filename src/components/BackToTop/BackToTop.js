@@ -8,35 +8,33 @@ import * as Styles from './BackToTop.styles';
 
 import useBackToTopOverlayVisible from 'hooks/useBackToTopOverlayVisible';
 
+const BackToTopLink: ComponentType<Props> = () => {
+  return (
+    <div class="govuk-width-container">
+      <a class="govuk-link govuk-link--no-visited-state" href="#top">
+        <svg role="presentation" focusable="false" class="back-to-top" xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 13 17">
+          <path fill="currentColor" d="M6.5 0L0 6.5 1.4 8l4-4v12.7h2V4l4.3 4L13 6.4z"></path>
+        </svg>Back to top
+      </a>
+    </div>
+  );
+};
+
 const BackToTop: ComponentType<Props> = ({ mode }: Props) => {
   const visible = useBackToTopOverlayVisible('footer');
   if (mode === 'overlay'){
-    if (visible) {
       return (
-        <Styles.OverlayContainer>
-            <a class="govuk-link" href="#top">Back to Top</a>
+        <Styles.OverlayContainer  style={{opacity: visible ? 1 : 0}}>
+          <BackToTopLink />
         </Styles.OverlayContainer>
       );
-    } else {
-      return (
-        <Styles.OverlayContainer>
-        </Styles.OverlayContainer>
-      );
-    }
   } else {
-    if (visible) {
       return (
-        <Styles.InlineContainer>
-        </Styles.InlineContainer>
-      );  
-    } else {
-      return (
-        <Styles.InlineContainer>
-            <a class="govuk-link" href="#top">Back to Top</a>
+        <Styles.InlineContainer style={{opacity: visible ? 0 : 1}}>
+          <BackToTopLink />
         </Styles.InlineContainer>
       );  
     }
-  }
 };
 
 export default BackToTop;
