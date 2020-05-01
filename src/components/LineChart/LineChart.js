@@ -62,8 +62,8 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
                   minRotation: 45,
                   fontSize: mobileView ? 11 : 14,
                   fontColor: '#1A2B2B',
-                  autoSkip: false,
-                  minTicksLimit: 10,
+                  autoSkip: true,
+                  minTicksLimit: 8,
                   maxTicksLimit: 15
                 },
               }],
