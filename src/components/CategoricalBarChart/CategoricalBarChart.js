@@ -25,25 +25,6 @@ const sortFunc = (a, b) => {
 };
 
 
-// const isMobile = ( breakpoint: number ): boolean => {
-//
-//     const [width, setWidth] = useState(window.innerWidth)
-//
-//     useEffect(() => {
-//
-//     const handleResize = () => setWidth(window.innerWidth)
-//
-//         window.addEventListener('resize', handleResize)
-//
-//         return () => { window.removeEventListener('resize', handleResize) }
-//
-//     }, [])
-//
-//     return width > breakpoint;
-//
-// };
-
-
 const getBarChartData = ({ data, categoryLabels, colors, columnLabelGetter }: CategoricalBarChartType) => {
 
     if (data.length < 2 || (data.length === categoryLabels.length && data.length === colors.length)) {
