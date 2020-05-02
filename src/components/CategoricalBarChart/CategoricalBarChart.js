@@ -9,7 +9,6 @@ import * as Styles from './CategoricalBarChart.styles';
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
 import numeral from 'numeral';
-import { zip } from 'pythonic';
 
 
 const sortFunc = (a, b) => {
@@ -29,19 +28,21 @@ const getBarChartData = ({ data, categoryLabels, colors, columnLabelGetter }: Ca
 
     if (data.length < 2 || (data.length === categoryLabels.length && data.length === colors.length)) {
 
+        let datasets = [];
         for ( let index = 0; index < data.length; index++ ) {
 
             data[index] = data[index].sort(sortFunc)
 
+            datasets[index] = {
+                data: data[index].map(d => d.value),
+                label: categoryLabels[index],
+                backgroundColor: colors[index],
+            };
         }
 
         return {
             labels: data[0].map(d => columnLabelGetter(d)),
-            datasets: zip(data, categoryLabels, colors).map(item => ({
-                data: item[0].map(d => d.value),
-                label: item[1],
-                backgroundColor: item[2],
-            }))
+            datasets: datasets,
         }
 
     } // if

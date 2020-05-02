@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 
 import axios from "axios";
-import { zip } from "pythonic";
 import moment from "moment";
 import { Link } from 'react-router-dom';
 
@@ -60,7 +59,8 @@ const groupByDate = (data: Array<Array<RegExExtractArchiveData, RegExExtractArch
         date; // Temp for current date.
 
     // Aggregation by date.
-    for ( const row of zip(...data) ) {
+    for ( let index = 0; index < data[0].length; index++ ) {
+        const row = [ data[0][index], data[1][index] ];
 
         rowData = row.map(item => ({
             date: `${item[YEAR]}-${item[MONTH]}-${item[DAY]}`,
