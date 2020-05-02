@@ -53,7 +53,6 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
             maintainAspectRatio: false,
             scales: {
               xAxes: [{
-                offset: true,
                 type: 'time',
                 gridLines: {
                   display: true,
