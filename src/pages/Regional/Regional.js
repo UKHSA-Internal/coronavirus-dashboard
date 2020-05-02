@@ -128,7 +128,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
                 description={ BigNumberDescriptions.ukCases }
             />
             <BigNumber
-                caption={ BigNumberTitles.ukCases  }
+                caption={ BigNumberTitles.dailyUkCases  }
                 number={ data?.overview?.K02000001?.newCases?.value ?? 0 }
                 description={ formatStr(BigNumberDescriptions.dailyUkCases, {date: lastDataUpdate})  }
             />
@@ -138,7 +138,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
                 description={BigNumberDescriptions.ukDeaths }
             />
             <BigNumber
-                caption={ BigNumberTitles.dailyUkCases  }
+                caption={ BigNumberTitles.dailyUkDeaths  }
                 number={ latestDeaths?.value ?? 0 }
                 description={ formatStr(BigNumberDescriptions.dailyUkDeaths, {date: lastDataUpdate}) }
             />
