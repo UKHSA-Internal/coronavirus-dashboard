@@ -31,7 +31,7 @@ const MobileRegionTable: ComponentType<Props> = ({}: Props) => {
   }
 
   return (
-    <Styles.Container className="govuk-width-container">
+    <Styles.Container className="govuk-width-container" role="main">
       <PageTitle
         caption="Regional view"
         title="Coronavirus (COVID-19) in the UK"

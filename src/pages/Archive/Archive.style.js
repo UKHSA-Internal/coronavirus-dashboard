@@ -3,7 +3,7 @@ import addIECss from "addIECss";
 
 export const Container: ComponentType<*> = (() =>
 
-      styled.div`
+      styled.main`
         grid-column: 1/-1;
         display: flex;
         flex-direction: column;

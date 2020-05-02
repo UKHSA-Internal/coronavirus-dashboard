@@ -194,7 +194,7 @@ export default class Archive extends Component<ArchiveProps, {}> {
 
     render(): React.ReactNode {
 
-        return <Container className={"govuk-width-container"}>
+        return <Container className={"govuk-width-container"} role="main">
             <SectionHeader className={ "govuk-heading-l" }>
                 Archive
             </SectionHeader>
