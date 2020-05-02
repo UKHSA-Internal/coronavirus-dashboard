@@ -13,7 +13,7 @@ const titles: TitleOrDescriptionValues = {
     totalCases: 'Total number of lab-confirmed cases in England by specimen date',
     dailyCases: 'Daily number of lab-confirmed cases in England by specimen date',
     totalDeaths: 'Total number of COVID-19 associated UK deaths by date reported',
-    dailyDeaths: 'Daily number of COVID-19 associated UK deaths by date reported',
+    dailyDeaths: 'Daily additional COVID-19 associated UK deaths by date reported',
     ageSex: 'Total number of lab-confirmed cases in England by age and sex',
 
 }; // titles
