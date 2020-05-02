@@ -223,15 +223,6 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
         <GenericTable
             data={ england }
             structure={
-                EnglandAgeSexStructure({
-                    titles: titles,
-                    descriptions: descriptions
-                }) }
-        />
-
-        <GenericTable
-            data={ england }
-            structure={
                 EnglandDailyTotalCasesStructure({
                     titles: titles,
                     descriptions: descriptions
@@ -242,6 +233,15 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
             data={ england }
             structure={
                 EnglandDailyCasesStructure({
+                    titles: titles,
+                    descriptions: descriptions
+                }) }
+        />
+
+        <GenericTable
+            data={ england }
+            structure={
+                EnglandAgeSexStructure({
                     titles: titles,
                     descriptions: descriptions
                 }) }
