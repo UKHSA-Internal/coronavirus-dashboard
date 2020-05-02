@@ -59,7 +59,6 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                   fontSize: mobileView ? 11 : 14,
                   fontColor: '#1A2B2B',
                   autoSkip: false,
-                  minTicksLimit: 8,
                   maxTicksLimit: 15
                 },
               }],

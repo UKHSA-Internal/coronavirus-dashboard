@@ -73,7 +73,6 @@ const getBarChartOptions = (tooltipText, mobileView) => {
                     minRotation: 45,
                     fontSize: mobileView ? 11 : 14,
                     fontColor: '#1A2B2B',
-                    minTicksLimit: 8,
                     maxTicksLimit: 15,
                     autoSkip: false,
                 },
