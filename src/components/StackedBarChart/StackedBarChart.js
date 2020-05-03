@@ -49,6 +49,8 @@ const getBarChartData = ({ previous, change }) => {
 
 
 const getBarChartOptions = (tooltipText, mobileView) => {
+    
+    const labelFontSize = mobileView ? 11 : 14;
 
     return {
         maintainAspectRatio: false,
@@ -71,9 +73,8 @@ const getBarChartOptions = (tooltipText, mobileView) => {
                 stacked: true,
                 ticks: {
                     minRotation: 45,
-                    fontSize: mobileView ? 11 : 14,
+                    fontSize: labelFontSize,
                     fontColor: '#1A2B2B',
-                    minTicksLimit: 8,
                     maxTicksLimit: 15,
                     autoSkip: false,
                 },
@@ -84,7 +85,7 @@ const getBarChartOptions = (tooltipText, mobileView) => {
                 },
                 stacked: true,
                 ticks: {
-                    fontSize: 14,
+                    fontSize: labelFontSize,
                     fontColor: '#1A2B2B',
                     beginAtZero: true,
                     userCallback: function (value, index, values) {

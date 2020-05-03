@@ -52,6 +52,8 @@ const getBarChartData = ({ data, categoryLabels, colors, columnLabelGetter }: Ca
 
 
 const getBarChartOptions = (tooltipText, mobileView: boolean) => {
+    
+    const labelFontSize = mobileView ? 11 : 14;
 
     return {
         barValueSpacing: 20,
@@ -69,10 +71,9 @@ const getBarChartOptions = (tooltipText, mobileView: boolean) => {
                 stacked: false,
                 ticks: {
                     minRotation: 45,
-                    fontSize: mobileView ? 11 : 14,
+                    fontSize: labelFontSize,
                     fontColor: '#1A2B2B',
                     autoSkip: false,
-                    minTicksLimit: 8,
                     maxTicksLimit: 15,
                 }
             }],
