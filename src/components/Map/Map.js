@@ -110,7 +110,7 @@ const Map: ComponentType<Props> = ({
             });
             const canvas = mapbox.getCanvas();
             if (canvas) {
-                canvas.setAttribute('aria-label', 'Heat map showing number of coronavirus cases by region in the UK');
+                canvas.setAttribute('aria-label', 'Map showing number of COVID-19 cases by nation, region, or local authority in the UK');
             }
 
             map.zoomControl.setPosition('bottomright');
