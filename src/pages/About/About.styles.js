@@ -9,7 +9,7 @@ export const Container: ComponentType<*> = (() =>
     display: flex;
     flex-direction: column;
     margin-top: 45px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
   `
 
 )();
