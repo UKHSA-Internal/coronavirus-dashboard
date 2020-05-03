@@ -83,7 +83,7 @@ const getBarChartOptions = (tooltipText, mobileView: boolean) => {
                 },
                 stacked: false,
                 ticks: {
-                    fontSize: 14,
+                    fontSize: labelFontSize,
                     fontColor: '#1A2B2B',
                     beginAtZero: true,
                     userCallback: function (value, index, values) {
