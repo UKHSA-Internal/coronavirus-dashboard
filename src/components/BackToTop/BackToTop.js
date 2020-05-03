@@ -20,6 +20,16 @@ const BackToTopLink: ComponentType<Props> = () => {
   );
 };
 
+/**
+ * A govuk style back-to-top link component.
+ *
+ * This component can either appear as an 'overlay' stuck to the bottom of the
+ * screen hovering over the content, or as an 'inline' link that sits between
+ * other components in the vertical page flow.
+ *
+ * @param {string} mode Either 'overlay' or 'inline' to choose which style to
+ * display this component.
+ */
 const BackToTop: ComponentType<Props> = ({ mode }: Props) => {
   const visible = useBackToTopOverlayVisible('footer');
   if (mode === 'overlay'){

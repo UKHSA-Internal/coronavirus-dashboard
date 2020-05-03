@@ -18,6 +18,9 @@ ReactDOM.render(
     <Router>
       <App />
     </Router>,
+
+  // Bind via a class selector, to leave the element's id available for in-page
+  // navigation.
   document.querySelector('.app-root'),
 );
 

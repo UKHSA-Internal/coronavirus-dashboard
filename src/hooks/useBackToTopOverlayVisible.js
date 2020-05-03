@@ -1,5 +1,15 @@
 import { useState, useEffect } from 'react';
 
+/**
+ * Overlay style back-to-top links should only be visible once you've scrolled
+ * down the page a bit, but not once you've reached the footer.
+ *
+ * @param {string} footerSelector A 'footer', '.footer' or '#footer' format
+ * string to find the footer element.
+ *
+ * @returns {boolean} Whether an 'overlay' style back-to-top link should be
+ * visible.
+ */
 const useBackToTopOverlayVisible = (footerSelector) => {
   const [visible, setVisible] = useState(false)
   useEffect(() => {
