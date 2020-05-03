@@ -25,7 +25,8 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
 
   const
       dataSorted = data.sort(sortFunc),
-      mobileView = useResponsiveLayout(500)  === "mobile";
+      mobileView = useResponsiveLayout(500)  === "mobile",
+      labelFontSize = mobileView ? 11 : 14;
 
   return (
     <Styles.Container>
@@ -56,7 +57,7 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                 },
                 ticks: {
                   minRotation: 45,
-                  fontSize: mobileView ? 11 : 14,
+                  fontSize: labelFontSize,
                   fontColor: '#1A2B2B',
                   autoSkip: false,
                   maxTicksLimit: 15
@@ -67,7 +68,7 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                   drawBorder: false,
                 },
                 ticks: {
-                  fontSize: 14,
+                  fontSize: labelFontSize,
                   fontColor: '#1A2B2B',
                   beginAtZero: true,
                   userCallback: function (value, index, values) {
