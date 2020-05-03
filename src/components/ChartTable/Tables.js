@@ -1,5 +1,4 @@
-import type { EnglandData } from "types/Data";
-import React, { Fragment } from "react";
+import React, { Fragment, ReactNode } from "react";
 import AltChartTable from "components/AltChartTable";
 
 import moment from "moment";
@@ -9,7 +8,10 @@ import { zip } from "pythonic";
 import * as Styles from "./ChartTable.styles";
 import { Table } from "govuk-react-jsx";
 
-import type { EnglandTableProps, TablesProps, TableStructure, TitleOrDescription } from "./ChartTable.types"
+import type {
+    EnglandTableProps, TablesProps,
+    TableStructure, TitleOrDescription
+} from "./ChartTable.types"
 
 
 const sortFunc = (a, b) => {
@@ -215,13 +217,14 @@ export const GenericTable = ({ data, structure }: EnglandTableProps): React.Reac
  */
 export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode => {
 
-    const
-        { overview = {}, countries = {} } = data,
-        england: EnglandData = countries?.E92000001 ?? [];
+    const {
+        overview: { K02000001: UnitedKingdom = {} },
+        countries: { E92000001: England = {} }
+    } = data;
 
     return <Fragment>
         <GenericTable
-            data={ england }
+            data={ England }
             structure={
                 EnglandDailyTotalCasesStructure({
                     titles: titles,
@@ -230,7 +233,7 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
         />
 
         <GenericTable
-            data={ england }
+            data={ England }
             structure={
                 EnglandDailyCasesStructure({
                     titles: titles,
@@ -239,7 +242,7 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
         />
 
         <GenericTable
-            data={ england }
+            data={ England }
             structure={
                 EnglandAgeSexStructure({
                     titles: titles,
@@ -248,13 +251,13 @@ export const Tables = ({ data, titles, descriptions }: TablesProps): ReactNode =
         />
 
         <AltChartTable
-            data={ overview?.K02000001?.dailyTotalDeaths ?? [] }
+            data={ UnitedKingdom?.dailyTotalDeaths ?? [] }
             header={ titles.totalDeaths }
             valueName="Total deaths"
         />
 
         <AltChartTable
-            data={ overview?.K02000001?.dailyDeaths ?? [] }
+            data={ UnitedKingdom?.dailyDeaths ?? [] }
             header={ titles.dailyDeaths }
             valueName="Daily deaths"
         />

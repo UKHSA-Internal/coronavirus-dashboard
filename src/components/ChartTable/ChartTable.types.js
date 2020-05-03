@@ -1,6 +1,7 @@
 import moment from "moment";
 import numeral from "numeral";
-import type { Data, EnglandData } from "types/Data";
+
+import type { CountryData, Data } from "types/Data";
 
 
 declare export type TableStructure = {
@@ -9,16 +10,16 @@ declare export type TableStructure = {
         key: string,
         headings: {
             value: string,
-            type: string
+            type:  string
         },
-        valueGetter: (string) => string | number,
-        type: string,
-        formatter?: moment | numeral,
-        format?: string
+        valueGetter: (string) => string | number | Date | moment,
+        type:        string,
+        formatter?:  moment | numeral | (d: any) => number | string,
+        format?:     string
     }>,
     sortFunc: () => any,
     extra?: {
-        intro?: string,
+        intro?:       string,
         description?: string,
     }
 
@@ -27,7 +28,7 @@ declare export type TableStructure = {
 
 declare export type EnglandTableProps = {
 
-    data: EnglandData,
+    data:      CountryData.E92000001,
     structure: TableStructure
 
 } // EnglandTableProps
@@ -49,18 +50,18 @@ export interface CharTableState {
 
 declare export type TitleOrDescriptionValues = {
 
-    totalCases: string,
-    dailyCases: string,
+    totalCases:  string,
+    dailyCases:  string,
     totalDeaths: string,
     dailyDeaths: string
-    ageSex: string
+    ageSex:      string
 
 } // TitleOrDescriptionValues
 
 
 declare export type TitleOrDescription = {
 
-    titles: TitleOrDescriptionValues,
+    titles:       TitleOrDescriptionValues,
     descriptions: TitleOrDescriptionValues
 
 } // TitleOrDescription

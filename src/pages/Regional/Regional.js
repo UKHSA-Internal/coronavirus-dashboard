@@ -19,7 +19,7 @@ import Announcement from "components/Announcement";
 import ChartTable from "components/ChartTable";
 
 
-import type { Props } from './Regional.types';
+import type { Props, ReplacementsType } from './Regional.types';
 import * as Styles from './Regional.styles';
 
 
@@ -43,10 +43,6 @@ const getLatestDailyDeaths = (data: any): number => {
 
 }; // getLatestDailyDeaths
 
-
-declare type ReplacementsType = {
-    [string]: string
-}
 
 const formatStr = (s: string,  replacements: ReplacementsType): string  => {
 
