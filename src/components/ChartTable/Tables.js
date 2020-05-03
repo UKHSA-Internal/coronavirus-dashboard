@@ -4,7 +4,7 @@ import AltChartTable from "components/AltChartTable";
 import moment from "moment";
 import numeral from "numeral";
 
-import { zip } from "pythonic";
+import { transpose } from "d3-array";
 import * as Styles from "./ChartTable.styles";
 import { Table } from "govuk-react-jsx";
 
@@ -165,7 +165,7 @@ export const GenericTable = ({ data, structure }: EnglandTableProps): React.Reac
 
     const
         dataKeys = structure.metadata.map(item => item.key),
-        dataArray = zip(...dataKeys.map(key => data[key].sort(structure.sortFunc)));
+        dataArray = transpose(dataKeys.map(key => data[key].sort(structure.sortFunc)));
 
     return <Styles.Container>
         {
