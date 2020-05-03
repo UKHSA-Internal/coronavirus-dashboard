@@ -25,7 +25,7 @@ const dateSortFunc = (a, b) => {
 const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) => {
 
   const 
-      mobileView = useResponsiveLayout(500)  === "mobile"
+      mobileView = useResponsiveLayout(500)  === "mobile",
       labelFontSize = mobileView ? 11 : 14;
         
 
