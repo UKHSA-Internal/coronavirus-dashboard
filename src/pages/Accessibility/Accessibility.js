@@ -59,7 +59,7 @@ export default class Accessibility extends Component<AccessibilityProps, {}> {
 
     render(): React$Node {
 
-        return <Styles.Container className={"govuk-width-container accessibility"}>
+        return <Styles.Container className={"govuk-width-container accessibility"} role="main">
             { this.display() }
         </Styles.Container>
 

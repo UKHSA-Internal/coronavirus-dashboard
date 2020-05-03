@@ -73,7 +73,7 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
     };
 
     return (
-        <Styles.Container className={"govuk-width-container"}>
+        <Styles.Container className={"govuk-width-container"} role="main">
 
             {getCookiesUpdatedText()}
 
