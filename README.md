@@ -1,6 +1,6 @@
 # Coronavirus (COVID-19) in the UK
 
-![Build test for pull and push requests](https://github.com/PublicHealthEngland/coronavirus-dashboard/workflows/Build%20test%20for%20pull%20and%20push%20requests/badge.svg) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/publichealthengland/coronavirus-dashboard) ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/publichealthengland/coronavirus-dashboard/development) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/publichealthengland/coronavirus-dashboard)
+![Build test for pull and push requests](https://github.com/PublicHealthEngland/coronavirus-dashboard/workflows/Build%20test%20for%20pull%20and%20push%20requests/badge.svg) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/publichealthengland/coronavirus-dashboard) ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/publichealthengland/coronavirus-dashboard/development) ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/publichealthengland/coronavirus-dashboard)
 
 
 
