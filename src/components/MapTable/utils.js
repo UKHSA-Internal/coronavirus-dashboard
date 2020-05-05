@@ -96,8 +96,7 @@ export class Data implements DataObjectType {
 
     constructor(data: any, pData: PopulationDataType) {
 
-        this.pData = pData;
-
+        console.log(pData)
         const
             [DATA_VALUES, RATE_DATA] = [0, 1],
             dataValues = Object
@@ -105,7 +104,7 @@ export class Data implements DataObjectType {
                 .map(d => ({ key: d,  value: this.#valueGetter(d, data) })),
             rateData = dataValues.map(({key, value}) => ({
                 key: key,
-                value: (value / this.#getPopulationFor(value)) * RatePerPopulation
+                value: (value / this.#getPopulationFor(key, pData)) * RatePerPopulation
             }));
 
         this.valuesData = transpose([dataValues, rateData])
@@ -130,9 +129,9 @@ export class Data implements DataObjectType {
 
     } // constructor
 
-    #getPopulationFor = (id: string): number => {
+    #getPopulationFor = (id: string, pData: PopulationDataType): number => {
 
-        return this.pData?.[id] ?? 1
+        return pData?.[id] ?? 1
 
     }; // getPopulationFor
 
