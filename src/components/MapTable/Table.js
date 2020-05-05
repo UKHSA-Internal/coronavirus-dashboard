@@ -1,4 +1,4 @@
-import React, { Component, S, SS } from 'react';
+import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -106,7 +106,7 @@ export class Table extends Component<TableProps, {}> {
 
     } // componentDidMount
 
-    componentDidUpdate(prevProps: Readonly<TableProps>, prevState: Readonly<TableState>, snapshot: SS): void {
+    componentDidUpdate(prevProps: Readonly<TableProps>, prevState: Readonly<TableState>, snapshot: any): void {
 
         const
             { hash } = this.props,
