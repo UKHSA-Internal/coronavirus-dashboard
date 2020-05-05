@@ -96,7 +96,7 @@ export class Map extends Component<MapProps, {}> {
 
     }; // getGeoData
 
-    componentDidUpdate(prevProps: Readonly<MapProps>, prevState: Readonly<MapState>, snapshot: SS): void {
+    componentDidUpdate(prevProps: Readonly<MapProps>, prevState: Readonly<MapState>, snapshot: any): void {
 
         if ( prevProps.geoKey !== this.props.geoKey && !this.props.geoData) {
             this.setState({
