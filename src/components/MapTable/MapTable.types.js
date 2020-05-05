@@ -74,8 +74,6 @@ declare export type MainContentType = Array<MainContentItem>;
 
 declare export type DataObjectType = {
 
-    rawData: any,
-    pData: any,
     rateData: {
         key: string,
         value: number
@@ -177,6 +175,7 @@ export interface MapTableState {
 
 declare export type MapTableProps = {
 
+    isMobile: boolean,
     children: Component,
     locations: {
         hash: string,
