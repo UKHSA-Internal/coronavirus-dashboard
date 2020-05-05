@@ -72,7 +72,7 @@ export class MapTable extends Component<MapTableProps, {}> {
                 geoData,
                 loading
             } = this.state,
-            { children, location } = this.props,
+            { children, location, isMobile = false } = this.props,
             hash = location.hash !== ""
                 ? location.hash
                 : utils.createHash({category: category, map: viewMapAs}),
@@ -121,42 +121,45 @@ export class MapTable extends Component<MapTableProps, {}> {
                 { children }
             </Styles.ChildrenContainer>
 
-            <Styles.MapViewOption>
-                <Styles.TabContainer>
-                    <div className={ "govuk-tabs" } data-module={ "govuk-tabs" }>
-                        <ul className="govuk-tabs__list">
-                            <li className={ `govuk-tabs__list-item ${ parsedHash.map === "rate" ? 'govuk-tabs__list-item--selected' : '' }` }>
-                                <Link className={ "govuk-tabs__tab" }
-                                      to={ `#category=${category}&map=rate` }
-                                      onClick={ () => this.setState({ viewMapAs: "rate" }) }>
-                                    { "Rate" }
-                                </Link>
-                            </li>
-                            <li className={ `govuk-tabs__list-item ${ parsedHash.map === "case" ? 'govuk-tabs__list-item--selected' : '' }` }>
-                                <Link className={ "govuk-tabs__tab" }
-                                      to={ `#category=${parsedHash.category}&map=case` }
-                                      onClick={ () => this.setState({ viewMapAs: "case" }) }>
-                                    { "Total cases" }
-                                </Link>
-                            </li>
-                        </ul>
-                        <div className={ `govuk-tabs__panel` }>
-                            <Map { ...contentData }
-                                 data={ data?.[parsedHash.category] ?? null }
-                                 hash={ hash }
-                                 geoData={ geoData?.[parsedHash.category] ?? null }
-                                 isRate={ parsedHash.map === "rate" }
-                                 mapObjectSetter={ () => this.mapObjectSetter() }
-                                 geoDataSetter={ data => this.setState(prevState => ({
-                                     geoData: {
-                                         ...prevState.geoData,
-                                         [parsedHash.category]: data
-                                     }
-                                 })) }/>
+            { isMobile
+                ? null
+                : <Styles.MapViewOption>
+                    <Styles.TabContainer>
+                        <div className={ "govuk-tabs" } data-module={ "govuk-tabs" }>
+                            <ul className="govuk-tabs__list">
+                                <li className={ `govuk-tabs__list-item ${ parsedHash.map === "rate" ? 'govuk-tabs__list-item--selected' : '' }` }>
+                                    <Link className={ "govuk-tabs__tab" }
+                                          to={ `#category=${ category }&map=rate` }
+                                          onClick={ () => this.setState({ viewMapAs: "rate" }) }>
+                                        { "Rate" }
+                                    </Link>
+                                </li>
+                                <li className={ `govuk-tabs__list-item ${ parsedHash.map === "case" ? 'govuk-tabs__list-item--selected' : '' }` }>
+                                    <Link className={ "govuk-tabs__tab" }
+                                          to={ `#category=${ parsedHash.category }&map=case` }
+                                          onClick={ () => this.setState({ viewMapAs: "case" }) }>
+                                        { "Total cases" }
+                                    </Link>
+                                </li>
+                            </ul>
+                            <div className={ `govuk-tabs__panel` }>
+                                <Map { ...contentData }
+                                     data={ data?.[parsedHash.category] ?? null }
+                                     hash={ hash }
+                                     geoData={ geoData?.[parsedHash.category] ?? null }
+                                     isRate={ parsedHash.map === "rate" }
+                                     mapObjectSetter={ () => this.mapObjectSetter() }
+                                     geoDataSetter={ data => this.setState(prevState => ({
+                                         geoData: {
+                                             ...prevState.geoData,
+                                             [parsedHash.category]: data
+                                         }
+                                     })) }/>
+                            </div>
                         </div>
-                    </div>
-                </Styles.TabContainer>
-            </Styles.MapViewOption>
+                    </Styles.TabContainer>
+                </Styles.MapViewOption>
+            }
         </Styles.MainContainer>
 
 

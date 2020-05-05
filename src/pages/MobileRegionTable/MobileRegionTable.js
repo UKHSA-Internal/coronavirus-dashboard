@@ -5,7 +5,8 @@ import type { ComponentType } from 'react';
 
 import useLoadData from 'hooks/useLoadData';
 import PageTitle from 'components/PageTitle';
-import RegionTable from 'components/RegionTable';
+// import RegionTable from 'components/RegionTable';
+import MapTable from "components/MapTable";
 
 import type { Props } from './MobileRegionTable.types';
 import * as Styles from './MobileRegionTable.styles';
@@ -37,11 +38,11 @@ const MobileRegionTable: ComponentType<Props> = ({}: Props) => {
         title="Coronavirus (COVID-19) in the UK"
         subtitle={`Last updated ${formatDate(new Date(data?.lastUpdatedAt))}`}
       />
-      <RegionTable
-        countryData={data?.countries}
-        regionData={data?.regions}
-        utlaData={data?.utlas}
-      />
+      <MapTable isMobile={ true }/>
+      {/*  countryData={data?.countries}*/}
+      {/*  regionData={data?.regions}*/}
+      {/*  utlaData={data?.utlas}*/}
+      {/*/>*/}
     </Styles.Container>
   );
 };
