@@ -3,14 +3,13 @@ import type { ComponentType } from 'react';
 
 export const Container: ComponentType<*> = (() => {
   return styled.div`
-    grid-column: 1 / span 6;
+    grid-column: 1 / 2;
+    // grid-row: 9;
     justify-self: end;
-    margin-top: -2em;
     text-align: right;
     
     @media only screen and (max-width: 768px) {
       justify-self: start;
-      grid-column: 1 / span 2;
       margin-top: auto;
       text-align: left;
     }
