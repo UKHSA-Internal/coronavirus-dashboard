@@ -30,7 +30,7 @@ You should also use the brand logo and font of your organisation.
 
 Please consult the [GOV.UK Service Manual](https://www.gov.uk/service-manual/design/making-your-service-look-like-govuk#if-your-service-isnt-on-govuk) for additional information.
 
-### If you are re-deploying the service website
+### If you are re-deploying the website as a service
 
 Please only clone our `master` branch for redeployment. All other contents, data, and branches that are either outside of the `master` branch or not otherwise used as a part of it - i.e. the associating assets - are copyrighted materials and therefore excluded from the MIT license until they receieve the necessary approvals to be merged.
 
