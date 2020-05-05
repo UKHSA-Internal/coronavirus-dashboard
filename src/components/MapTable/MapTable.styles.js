@@ -6,6 +6,7 @@ import type { ComponentType } from 'react';
 
 import addIECss from 'addIECss';
 
+
 export const Map: ComponentType<*> = (() => {
 
     return styled.div`
@@ -64,6 +65,11 @@ export const MainContainer: ComponentType<*> = (() => {
     grid-template-columns: repeat(2, 1fr);
     grid-column-gap: .5rem;
     grid-template-rows: 660px 1fr;
+    
+    @media only screen and (max-width: 768px) {
+        grid-template-rows: 660px 1fr auto;
+        grid-row: 2/4;
+    }
 
     ${ addIECss(css`
       display: flex;
@@ -81,25 +87,22 @@ export const TabContainer: ComponentType<*> = (() => {
     return styled.div`
     grid-column: 1;
     grid-row: 1/-1;
-    // height: 600px;
 
     @media only screen and (max-width: 768px) {
       height: unset;
+      grid-column: 1/-1;
     }
-    
+
     & .govuk-tabs__panel {
-      min-height: 620px;
+      height: 630px;
+      overflow: auto;
       
-      & a {
+       & a {
         text-decoration: none;
       }
-    }
-
-    & .govuk-tabs__panel {
-      max-height: 485px;
-      overflow: auto;
 
       @media only screen and (max-width: 768px) {
+        width: 100%;
         max-height: none;
       }
     }
@@ -114,6 +117,8 @@ export const ChildrenContainer: ComponentType<*> = (() => {
 
     @media only screen and (max-width: 768px) {
       height: unset;
+      grid-column: 1;
+      grid-row: 3;
     }
   `;
 })();
@@ -137,17 +142,3 @@ export const MapViewOption: ComponentType<*> = (() => {
   `;
 })();
 
-export const Link: ComponentType<*> = (() => {
-    const getColor = ({ active }) => active ? '#0B0C0C' : '#1D70B8';
-    const getFontWeight = ({ active }) => active ? 'bold' : 400;
-    return styled.button`
-    color: ${ getColor };
-    font-weight: ${ getFontWeight };
-    text-decoration: none;
-    cursor: pointer;
-
-    &:visited {
-      color: ${ getColor } !important; 
-    }
-  `;
-})();
