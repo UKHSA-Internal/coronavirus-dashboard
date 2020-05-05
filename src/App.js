@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react';
+import React,  { Fragment } from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 import { Header, Footer } from 'govuk-react-jsx';
 
@@ -11,24 +11,43 @@ import Accessibility from 'pages/Accessibility';
 import Cookies from 'pages/Cookies';
 import Navigation from 'components/Navigation';
 import CookieBanner from 'components/CookieBanner';
+import BackToTop from 'components/BackToTop';
+
+
+const FooterContents = () => {
+
+    return <Fragment>
+        <p className={ "govuk-footer__meta-custom" }>
+            For feedback email&nbsp;
+            <a className="govuk-footer__link"
+               href="mailto:coronavirus-tracker@phe.gov.uk?Subject=Coronavirus%20dashboard%20feedback"
+               rel="noopener noreferrer"
+               target="_blank"
+            >coronavirus-tracker@phe.gov.uk</a>
+        </p>
+        <p className={ "govuk-footer__meta-custom" }>
+            Developed by&nbsp;
+            <a className="govuk-footer__link"
+               href="https://www.gov.uk/government/organisations/public-health-england"
+               target="_blank"
+               rel="noopener noreferrer"
+            >PHE</a>
+            &nbsp;and&nbsp;
+            <a className="govuk-footer__link"
+               href="https://www.nhsx.nhs.uk/"
+               target="_blank"
+               rel="noopener noreferrer"
+            >NHSX</a>
+        </p>
+    </Fragment>
+
+}; // FooterContents
+
 
 const F = props => <Footer
     { ...props }
     meta={ {
-        children: [
-            'For feedback email ',
-            <a className="govuk-footer__link"
-               href="mailto:coronavirus-tracker@phe.gov.uk?Subject=Coronavirus%20dashboard%20feedback"
-               rel="noopener noreferrer" target="_blank">coronavirus-tracker@phe.gov.uk</a>,
-            <br/>,
-            <br/>,
-            'Developed by ',
-            <a className="govuk-footer__link" href="https://www.gov.uk/government/organisations/public-health-england"
-               target="_blank" rel="noopener noreferrer">PHE</a>,
-            ' and ',
-            <a className="govuk-footer__link" href="https://www.nhsx.nhs.uk/" target="_blank"
-               rel="noopener noreferrer">NHSX</a>,
-        ],
+        children: <FooterContents/>,
         items: [
             { children: ['Archive'], href: '/archive' },
             { children: ['Accessibility'], href: '/accessibility' },
@@ -37,6 +56,7 @@ const F = props => <Footer
         visuallyHiddenTitle: 'Items',
     } }
 />;
+
 
 const App = () => {
 
@@ -51,6 +71,15 @@ const App = () => {
                 homepageUrlHref="https://gov.uk"
             />
             <Navigation/>
+
+            {/* We only want back-to-top links on the main & about pages. */}
+            <Switch>
+                {/* These back-to-top links are the 'overlay' style that stays
+                    on screen as we scroll. */}
+                <Route path="/about" exact render={()=>(<BackToTop mode="overlay"/>)} />
+                <Route path="/" exact render={()=>(<BackToTop mode="overlay"/>)} />
+            </Switch>
+
             <Switch>
                 <Route path="/region" component={ MobileRegionTable }/>
                 <Route path="/about" component={ About }/>
@@ -60,6 +89,15 @@ const App = () => {
                 <Route path="/" component={ Regional }/>
                 <Redirect to="/"/>
             </Switch>
+
+            {/* We only want back-to-top links on the main & about pages. */}
+            <Switch>
+                {/* These back-to-top links are the 'inline' style that sits
+                    statically between the end of the content and the footer. */}
+                <Route path="/about" exact render={()=>(<BackToTop mode="inline"/>)} />
+                <Route path="/" exact render={()=>(<BackToTop mode="inline"/>)} />
+            </Switch>
+
             <Switch>
                 <Route path="/" exact component={ F }/>
                 <Route path="/about" exact component={ F }/>
@@ -70,5 +108,6 @@ const App = () => {
         </>
     );
 }
+
 
 export default App;

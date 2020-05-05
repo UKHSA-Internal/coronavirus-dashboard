@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
 export const Container: ComponentType<*> = (() => {
-  return styled.div`
+  return styled.main`
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-column-gap: 30px;

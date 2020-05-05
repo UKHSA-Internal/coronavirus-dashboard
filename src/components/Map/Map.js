@@ -95,18 +95,23 @@ const Map: ComponentType<Props> = ({
     // Initialise map
     useEffect(() => {
         const initializeMap = () => {
+            const mapbox = L.mapboxGL({
+                attribution: '<a href="http://www.openstreetmap.org/about/" target="_blank">&copy; OpenStreetMap contributors</a>',
+                style: 'https://c19tile.azureedge.net/style.json'
+            });
             const map = L.map('map', {
                 center: [55.7, -3.7],
                 zoom: 5.4,
                 minZoom: 5.4,
                 maxZoom: 12,
                 layers: [
-                    L.mapboxGL({
-                        attribution: "<a href=\"http://www.openstreetmap.org/about/\" target=\"_blank\">&copy; OpenStreetMap contributors</a>",
-                        style: 'https://c19tile.azureedge.net/style.json'
-                    })
+                    mapbox
                 ]
             });
+            const canvas = mapbox.getCanvas();
+            if (canvas) {
+                canvas.setAttribute('aria-label', 'Map showing number of COVID-19 cases by nation, region, or local authority in the UK');
+            }
 
             map.zoomControl.setPosition('bottomright');
 

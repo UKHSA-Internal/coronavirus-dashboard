@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 
 import axios from "axios";
-import { zip } from "pythonic";
+import { transpose } from "d3-array";
 import moment from "moment";
 import { Link } from 'react-router-dom';
 
@@ -60,7 +60,7 @@ const groupByDate = (data: Array<Array<RegExExtractArchiveData, RegExExtractArch
         date; // Temp for current date.
 
     // Aggregation by date.
-    for ( const row of zip(...data) ) {
+    for ( const row of transpose(data) ) {
 
         rowData = row.map(item => ({
             date: `${item[YEAR]}-${item[MONTH]}-${item[DAY]}`,
@@ -194,7 +194,7 @@ export default class Archive extends Component<ArchiveProps, {}> {
 
     render(): React.ReactNode {
 
-        return <Container className={"govuk-width-container"}>
+        return <Container className={"govuk-width-container"} role="main">
             <SectionHeader className={ "govuk-heading-l" }>
                 Archive
             </SectionHeader>

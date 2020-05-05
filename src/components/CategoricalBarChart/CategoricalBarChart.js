@@ -9,7 +9,7 @@ import * as Styles from './CategoricalBarChart.styles';
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
 import numeral from 'numeral';
-import { zip } from 'pythonic';
+import { transpose } from "d3-array";
 
 
 const sortFunc = (a, b) => {
@@ -37,7 +37,7 @@ const getBarChartData = ({ data, categoryLabels, colors, columnLabelGetter }: Ca
 
         return {
             labels: data[0].map(d => columnLabelGetter(d)),
-            datasets: zip(data, categoryLabels, colors).map(item => ({
+            datasets: transpose([data, categoryLabels, colors]).map(item => ({
                 data: item[0].map(d => d.value),
                 label: item[1],
                 backgroundColor: item[2],
@@ -52,6 +52,8 @@ const getBarChartData = ({ data, categoryLabels, colors, columnLabelGetter }: Ca
 
 
 const getBarChartOptions = (tooltipText, mobileView: boolean) => {
+    
+    const labelFontSize = mobileView ? 11 : 14;
 
     return {
         barValueSpacing: 20,
@@ -69,10 +71,9 @@ const getBarChartOptions = (tooltipText, mobileView: boolean) => {
                 stacked: false,
                 ticks: {
                     minRotation: 45,
-                    fontSize: mobileView ? 11 : 14,
+                    fontSize: labelFontSize,
                     fontColor: '#1A2B2B',
                     autoSkip: false,
-                    minTicksLimit: 8,
                     maxTicksLimit: 15,
                 }
             }],
@@ -82,7 +83,7 @@ const getBarChartOptions = (tooltipText, mobileView: boolean) => {
                 },
                 stacked: false,
                 ticks: {
-                    fontSize: 14,
+                    fontSize: labelFontSize,
                     fontColor: '#1A2B2B',
                     beginAtZero: true,
                     userCallback: function (value, index, values) {

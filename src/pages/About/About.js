@@ -59,7 +59,7 @@ export default class About extends Component<AboutProps, {}> {
 
     render(): React$Node {
 
-        return <Styles.Container className={"govuk-width-container about"}>
+        return <Styles.Container className={"govuk-width-container about"} role="main">
             { this.display() }
         </Styles.Container>
 

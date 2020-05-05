@@ -18,7 +18,10 @@ ReactDOM.render(
     <Router>
       <App />
     </Router>,
-  document.getElementById('root'),
+
+  // Bind via a class selector, to leave the element's id available for in-page
+  // navigation.
+  document.querySelector('.app-root'),
 );
 
 // If you want your app to work offline and load faster, you can change

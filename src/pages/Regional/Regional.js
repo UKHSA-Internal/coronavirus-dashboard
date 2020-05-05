@@ -19,7 +19,7 @@ import Announcement from "components/Announcement";
 import ChartTable from "components/ChartTable";
 
 
-import type { Props } from './Regional.types';
+import type { Props, ReplacementsType } from './Regional.types';
 import * as Styles from './Regional.styles';
 
 
@@ -44,10 +44,6 @@ const getLatestDailyDeaths = (data: any): number => {
 }; // getLatestDailyDeaths
 
 
-declare type ReplacementsType = {
-    [string]: string
-}
-
 const formatStr = (s: string,  replacements: ReplacementsType): string  => {
 
     for (const key in replacements) {
@@ -55,7 +51,7 @@ const formatStr = (s: string,  replacements: ReplacementsType): string  => {
         if (!replacements.hasOwnProperty(key)) continue
 
         s = s.replace(`\{${key}\}`, replacements?.[key] ??  "")
-        console.log(key, s)
+
     }
 
     return s
@@ -92,7 +88,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
     const layout = useResponsiveLayout(768);
 
     if ( !data ) {
-        return <Styles.Container className="govuk-width-container">
+        return <Styles.Container className="govuk-width-container" role="main">
             <Styles.P className={ "govuk-body govuk-!-font-size-24" }>
                 The website is loading. Please wait&hellip;
             </Styles.P>
@@ -104,7 +100,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
         lastDataUpdate = moment(latestDeaths?.date ?? "0000-00-00").format("dddd D  MMMM YYYY");
 
     return (
-        <Styles.Container className="govuk-width-container">
+        <Styles.Container className="govuk-width-container" role="main">
 
             <Announcement firstDisplayDate={ { year: 2020, month: 4, day: 27 } }
                           lastDisplayDate={ { year: 2020, month: 5, day: 1 } }>
