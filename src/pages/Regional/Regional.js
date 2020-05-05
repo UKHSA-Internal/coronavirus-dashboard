@@ -1,23 +1,20 @@
 // @flow
 
-import React, { useState } from 'react';
+import React from 'react';
 import type { ComponentType } from 'react';
+import { Link } from 'react-router-dom';
 
 import moment from "moment";
-
-import { Link } from 'react-router-dom';
 
 import useLoadData from 'hooks/useLoadData';
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
 import BigNumber from 'components/BigNumber';
 import PageTitle from 'components/PageTitle';
-import RegionTable from 'components/RegionTable';
-import Map from 'components/Map';
 import Disclaimer from 'components/Disclaimer';
 import ExportLinks from "components/Export";
 import Announcement from "components/Announcement";
 import ChartTable from "components/ChartTable";
-
+import MapTable from "components/MapTable";
 
 import type { Props, ReplacementsType } from './Regional.types';
 import * as Styles from './Regional.styles';
@@ -81,9 +78,6 @@ const timestamp = (data): string =>
 
 
 const Regional: ComponentType<Props> = ({}: Props) => {
-    const [country, setCountry] = useState(null);
-    const [region, setRegion] = useState(null);
-    const [utla, setUtla] = useState(null);
     const data = useLoadData();
     const layout = useResponsiveLayout(768);
 
@@ -138,48 +132,25 @@ const Regional: ComponentType<Props> = ({}: Props) => {
                 number={ latestDeaths?.value ?? 0 }
                 description={ formatStr(BigNumberDescriptions.dailyUkDeaths, {date: lastDataUpdate}) }
             />
-            { layout === 'desktop' && (
-                <>
-                    <RegionTable
-                        country={ country }
-                        setCountry={ setCountry }
-                        countryData={ data?.countries }
-                        region={ region }
-                        setRegion={ setRegion }
-                        regionData={ data?.regions }
-                        utla={ utla }
-                        setUtla={ setUtla }
-                        utlaData={ data?.utlas }
-                    />
-                    <Map
-                        country={ country }
-                        setCountry={ setCountry }
-                        countryData={ data?.countries }
-                        region={ region }
-                        setRegion={ setRegion }
-                        regionData={ data?.regions }
-                        utla={ utla }
-                        setUtla={ setUtla }
-                        utlaData={ data?.utlas }
-                    />
-                </>
-            ) }
-            {/* FixMe: Change URL to relative before deployment to production. */ }
-            <ExportLinks data={ {
-                cases: {
-                    csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv",
-                    json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-cases_latest.json",
-                    shouldBeTracked: true,
-                    dataType: "cases"
-                },
-                deaths: {
-                    csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv",
-                    json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-deaths_latest.json",
-                    shouldBeTracked: true,
-                    dataType: "deaths"
-                }
-            } }/>
-
+            { layout === 'desktop'
+                ? <MapTable>
+                    <ExportLinks data={ {
+                        cases: {
+                            csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv",
+                            json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-cases_latest.json",
+                            shouldBeTracked: true,
+                            dataType: "cases"
+                        },
+                        deaths: {
+                            csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv",
+                            json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-deaths_latest.json",
+                            shouldBeTracked: true,
+                            dataType: "deaths"
+                        }
+                    } }/>
+                </MapTable>
+                : null
+            }
             <ChartTable data={ data }/>
 
             <Disclaimer text={ data?.disclaimer }/>
