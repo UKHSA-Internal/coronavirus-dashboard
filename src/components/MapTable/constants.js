@@ -13,13 +13,13 @@ export const Content: MainContentType = [
         headings: [
             {
                 label: 'Nation',
-                format: 'string', getter: ({ name }) => name
+                format: 'string', getter: ({ name }) => name,
+                keyGetter: ({ key }) => key.replace('#', '')
             },
             {
                 label: <Fragment>Total&nbsp;cases</Fragment>,
                 format: 'numeric',
-                getter: item => numeral(item.rawData.value).format("0,0"),
-                keyGetter: ({ key }) => key.replace('#', '')
+                getter: item => numeral(item.rawData.value).format("0,0")
             },
             {
                 label: 'Rate',
@@ -44,13 +44,13 @@ export const Content: MainContentType = [
             {
                 label: 'Region',
                 format: 'string',
-                getter: ({ name }) => name
+                getter: ({ name }) => name,
+                keyGetter: ({ key }) => key.replace('#', '')
             },
             {
                 label: <Fragment>Total&nbsp;cases</Fragment>,
                 format: 'numeric',
-                getter: item => numeral(item.rawData.value).format("0,0"),
-                keyGetter: ({ key }) => key.replace('#', '')
+                getter: item => numeral(item.rawData.value).format("0,0")
             },
             {
                 label: 'Rate',
@@ -75,13 +75,13 @@ export const Content: MainContentType = [
         headings: [
             {
                 label: "Upper tier local authority",
-                format: 'string', getter: ({ name }) => name
+                format: 'string', getter: ({ name }) => name,
+                keyGetter: ({ key }) => key.replace('#', '')
             },
             {
                 label: <Fragment>Total&nbsp;cases</Fragment>,
                 format: 'numeric',
-                getter: item => numeral(item.rawData.value).format("0,0"),
-                keyGetter: ({ key }) => key.replace('#', '')
+                getter: item => numeral(item.rawData.value).format("0,0")
             },
             {
                 label: 'Rate',
@@ -107,13 +107,13 @@ export const Content: MainContentType = [
             {
                 label: "Lower tier local authority",
                 format: 'string',
-                getter: ({ name }) => name
+                getter: ({ name }) => name,
+                keyGetter: ({ key }) => key.replace('#', '')
             },
             {
                 label: <Fragment>Total&nbsp;cases</Fragment>,
                 format: 'numeric',
-                getter: item => numeral(item.rawData.value).format("0,0"),
-                keyGetter: ({ key }) => key.replace('#', '')
+                getter: item => numeral(item.rawData.value).format("0,0")
             },
             {
                 label: 'Rate',
