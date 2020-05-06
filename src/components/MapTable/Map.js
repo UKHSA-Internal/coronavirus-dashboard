@@ -201,7 +201,7 @@ export class Map extends Component<MapProps, {}> {
                     fillColor: colour,
                     fillOpacity: isRate
                         ? shadeScale(data.getByKey(p.id)?.rateData?.value ?? 0)
-                        : parsedHash?.area ?? -1 === p.id ? .2 : 0,
+                        : (parsedHash?.area ?? -1) === p.id ? .2 : 0,
                 }),
                 onEachFeature: (feature, layer) => {
                     layer.on({
