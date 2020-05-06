@@ -19,7 +19,7 @@ export const Content: MainContentType = [
                 label: <Fragment>Total&nbsp;cases</Fragment>,
                 format: 'numeric',
                 getter: item => numeral(item.rawData.value).format("0,0"),
-                keyGetter: ({ key }) => key
+                keyGetter: ({ key }) => key.replace('#', '')
             },
             {
                 label: 'Rate',
@@ -50,7 +50,7 @@ export const Content: MainContentType = [
                 label: <Fragment>Total&nbsp;cases</Fragment>,
                 format: 'numeric',
                 getter: item => numeral(item.rawData.value).format("0,0"),
-                keyGetter: ({ key }) => key
+                keyGetter: ({ key }) => key.replace('#', '')
             },
             {
                 label: 'Rate',
@@ -81,7 +81,7 @@ export const Content: MainContentType = [
                 label: <Fragment>Total&nbsp;cases</Fragment>,
                 format: 'numeric',
                 getter: item => numeral(item.rawData.value).format("0,0"),
-                keyGetter: ({ key }) => key
+                keyGetter: ({ key }) => key.replace('#', '')
             },
             {
                 label: 'Rate',
@@ -113,11 +113,12 @@ export const Content: MainContentType = [
                 label: <Fragment>Total&nbsp;cases</Fragment>,
                 format: 'numeric',
                 getter: item => numeral(item.rawData.value).format("0,0"),
-                keyGetter: ({ key }) => key
+                keyGetter: ({ key }) => key.replace('#', '')
             },
             {
                 label: 'Rate',
-                format: 'numeric', getter: (item) => numeral(item.rateData.value).format("0,0.0")
+                format: 'numeric',
+                getter: (item) => numeral(item.rateData.value).format("0,0.0")
             }
         ],
         sortFunc: '',
