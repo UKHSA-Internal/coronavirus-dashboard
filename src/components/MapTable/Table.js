@@ -43,14 +43,8 @@ const Td = ({ headings, hash, data }) => {
                        className={ `govuk-table__cell govuk-table__cell--${ format }` }>
                 {
                     (index === 0 && valueId !== (parsedHash?.area ?? ""))
-                        ? <LinkOrText
-
-                            id={ hashPrepped.substring(1) }
-                            // onClick={handleOnCountryClick(r)}
-                            // onKeyPress={handleOnCountryKeyDown}
-                            hash={ hashPrepped }
-                            // active={ hash === hashPrepped }
-                        >
+                        ? <LinkOrText id={ hashPrepped.substring(1) }
+                                      hash={ hashPrepped }>
                             { getter(data) }
                         </LinkOrText>
                         : getter(data)
