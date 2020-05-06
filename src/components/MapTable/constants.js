@@ -78,7 +78,7 @@ export const Content: MainContentType = [
         geo: 'ltlas.geojson',
         geoKey: "lad19",
         maxCircleRadius: 15,
-        blobColour: "#b8601d",
+        blobColour: "#ea0b0b",
         zoom: {
             min: 10, // Default min
             max: 26,
