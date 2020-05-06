@@ -12,7 +12,6 @@ export const Map: ComponentType<*> = (() => {
     return styled.div`
     grid-column: 1;
     grid-row: 1;
-    border: 1px solid #0B0C0C;
     height: 590px;
     width: 520px;
     ${ addIECss(css`
