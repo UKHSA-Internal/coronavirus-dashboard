@@ -1,6 +1,6 @@
 {
   "name": "covid-public",
-  "version": "1.5.5",
+  "version": "1.5.5-env-test-1",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
