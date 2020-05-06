@@ -91,8 +91,6 @@ export class MapTable extends Component<MapTableProps, {}> {
             parsedHash = utils.getParams(hash),
             contentData = Content.filter(item => item.textLabel === parsedHash.category)[0];
 
-
-
         if (loading) return <Styles.P>Loading&hellip;</Styles.P>
 
         return <Styles.MainContainer>
