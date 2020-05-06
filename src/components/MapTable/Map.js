@@ -156,7 +156,7 @@ export class Map extends Component<MapProps, {}> {
             parsedHash = utils.getParams(hash),
             rgb = utils.hexToRgb(blobColour),
             colour = isRate
-                ? `rgba(${rgb.r},${rgb.g},${rgb.b},0.8)`
+                ? `rgba(${rgb.r},${rgb.g},${rgb.b},.9)`
                 : `rgba(${rgb.r},${rgb.g},${rgb.b},1)`;
 
         if (data && !loading && map && layerGroup ) {

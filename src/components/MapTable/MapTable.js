@@ -130,8 +130,11 @@ export class MapTable extends Component<MapTableProps, {}> {
             </Styles.TabContainer>
 
             <Styles.ChildrenContainer>
-                <Description
-                    text={ `Rates per ${ numeral(RatePerPopulation).format("0,0") } resident population.` }
+                <Description text={
+                    `Darker shades have higher rates.
+                    ${parsedHash.map === "rate"
+                        ? ` Rates per ${ numeral(RatePerPopulation).format("0,0") } resident population.`
+                        : ""}` }
                 />
                 { children }
             </Styles.ChildrenContainer>
@@ -155,13 +158,6 @@ export class MapTable extends Component<MapTableProps, {}> {
                                           onClick={ () => this.setState({ viewMapAs: "case" }) }>
                                         { "Total cases" }
                                     </Link>
-                                </li>
-                                <li>
-                                    <Description
-                                        className={ "above" }
-                                        show={ parsedHash.map === "rate" }
-                                        text={ "Areas with darker shading have higher rates." }
-                                    />
                                 </li>
                             </ul>
                             <div className={ `govuk-tabs__panel` }>
