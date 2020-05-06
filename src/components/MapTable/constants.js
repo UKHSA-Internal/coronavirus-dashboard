@@ -33,7 +33,7 @@ export const Content: MainContentType = [
         geo: "countries.geojson",
         geoKey: "ctry19",
         maxCircleRadius: 40,
-        blobColour: "#55042a",
+        blobColour: "#651db8",
         zoom: {
             min: 0, // Default min
             max: 5,
@@ -65,7 +65,7 @@ export const Content: MainContentType = [
         geo: "regions.geojson",
         geoKey: "rgn18",
         maxCircleRadius: 30,
-        blobColour: "#066347",
+        blobColour: "#651db8",
         zoom: {
             min: 6, // Default min
             max: 8,
@@ -128,7 +128,7 @@ export const Content: MainContentType = [
         geo: 'ltlas.geojson',
         geoKey: "lad19",
         maxCircleRadius: 15,
-        blobColour: "#ea0b0b",
+        blobColour: "#651db8",
         zoom: {
             min: 10, // Default min
             max: 26,
