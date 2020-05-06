@@ -131,7 +131,7 @@ export class MapTable extends Component<MapTableProps, {}> {
 
             <Styles.ChildrenContainer>
                 <Description
-                    text={ `Rate is per ${ numeral(RatePerPopulation).format("0,0") } population.` }
+                    text={ `Rates per ${ numeral(RatePerPopulation).format("0,0") } resident population.` }
                 />
                 { children }
             </Styles.ChildrenContainer>
@@ -160,7 +160,7 @@ export class MapTable extends Component<MapTableProps, {}> {
                                     <Description
                                         className={ "above" }
                                         show={ parsedHash.map === "rate" }
-                                        text={ "Darker colour represents a higher rate." }
+                                        text={ "Areas with darker shading have higher rates." }
                                     />
                                 </li>
                             </ul>
