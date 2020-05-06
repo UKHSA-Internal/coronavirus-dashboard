@@ -50,7 +50,7 @@ export const Description: ComponentType<*> = (() => {
 
 
 export const Number: ComponentType<*> = (() => {
-    return styled.h2`
+    return styled.span`
     margin-bottom: 10px;
     color: #367E93;
   `;
