@@ -60,7 +60,6 @@ export const MainContainer: ComponentType<*> = (() => {
 
     return styled.section`
     grid-column: 1/-1;
-    grid-row: 4/8;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-column-gap: .5rem;
