@@ -35,8 +35,8 @@ export const Content: MainContentType = [
         maxCircleRadius: 40,
         blobColour: "#367E93",
         zoom: {
-            min: 0, // Default min
-            max: 5,
+            min: 1, // Default min
+            max: 7,
         }
     },
     {
