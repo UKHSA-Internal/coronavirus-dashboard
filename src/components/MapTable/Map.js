@@ -209,17 +209,19 @@ export class Map extends Component<MapProps, {}> {
 
             if (!isRate) {
                 const blobs = L.geoJSON(
-                    geoData.map(({ properties: p, properties: { [areaCodeKey]: key } }) => ({
-                        type: 'Feature',
-                        properties: {
-                            name: data?.[key]?.name?.value ?? 0,
-                            count: data.getByKey(key)?.[isRate ? "rateData" : "rawData"]?.value ?? 0
-                        },
-                        geometry: {
-                            type: 'Point',
-                            coordinates: [p.long, p.lat],
-                        },
-                    })),
+                    geoData
+                        .filter(({ properties: { [areaCodeKey]: key } }) => isRate || ((data.getByKey(key)?.rawData?.value ?? 0) > 0))
+                        .map(({ properties: p, properties: { [areaCodeKey]: key } }) => ({
+                            type: 'Feature',
+                            properties: {
+                                name: data?.[key]?.name?.value ?? 0,
+                                count: data.getByKey(key)?.[isRate ? "rateData" : "rawData"]?.value ?? 0
+                            },
+                            geometry: {
+                                type: 'Point',
+                                coordinates: [p.long, p.lat],
+                            },
+                        })),
                     {
                         pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
                             radius: feature.properties.count === 0 ? 0 : radiusScale(feature.properties.count),
@@ -227,8 +229,9 @@ export class Map extends Component<MapProps, {}> {
                             fillOpacity: 0.4,
                             weight: 0,
                         }),
-                    },
+                    }
                 );
+
                 layerGroup.addLayer(blobs)
             }
 
