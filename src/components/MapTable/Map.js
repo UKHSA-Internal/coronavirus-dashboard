@@ -42,10 +42,13 @@ export class Map extends Component<MapProps, {}> {
         const
             mapbox = L.mapboxGL({
                 attribution: '<a href="http://www.openstreetmap.org/about/" target="_blank" rel="noopener noreferrer">&copy; OpenStreetMap contributors</a>',
-                style: 'https://c19tile.azureedge.net/style.json'
+                style: this.#baseUrl + 'style.json'
             }),
+            bounds = new L.LatLngBounds(new L.LatLng(52.5, -6.5), new L.LatLng(58.8, 1)),
+            maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -8.5), new L.LatLng(61, 2)),
             map = L.map('map', {
-                center: [55.7, -3.7],
+                center: bounds.getCenter(),
+                maxBounds: maxBounds,
                 zoom: 5.4,
                 minZoom: 5.4,
                 maxZoom: 12,
