@@ -71,23 +71,28 @@ const BigNumberDescriptions = {
 }
 
 
-const timestamp = (data): string =>
+export const timestamp = (data): string =>
     data.hasOwnProperty("lastUpdatedAt")
         ? moment(data.lastUpdatedAt).format("dddd D MMMM YYYY [at] h:mma")
         : "";
+
+
+export const MainLoading = () => {
+
+    return <Styles.Container className="govuk-width-container" role="main">
+        <Styles.P className={ "govuk-body govuk-!-font-size-24" }>
+            The website is loading. Please wait&hellip;
+        </Styles.P>
+    </Styles.Container>
+
+}; // MainLoading
 
 
 const Regional: ComponentType<Props> = ({}: Props) => {
     const data = useLoadData();
     const layout = useResponsiveLayout(768);
 
-    if ( !data ) {
-        return <Styles.Container className="govuk-width-container" role="main">
-            <Styles.P className={ "govuk-body govuk-!-font-size-24" }>
-                The website is loading. Please wait&hellip;
-            </Styles.P>
-        </Styles.Container>
-    }
+    if ( !data ) return <MainLoading/>;
 
     const
         latestDeaths = getLatestDailyDeaths(data),
