@@ -42,6 +42,7 @@ const getBlobOptions =  (data, geoData, areaCodeKey) => {
 export class Map extends Component<MapProps, {}> {
 
     #baseUrl = 'https://c19pub.azureedge.net/assets/geo/';
+    #mapStyleUrl = 'https://c19pub.azureedge.net/assets/map/style_v1.json'
     #areaCodeSuffix = "cd";
 
     state: MapState = {
@@ -60,7 +61,7 @@ export class Map extends Component<MapProps, {}> {
         const
             mapbox = L.mapboxGL({
                 attribution: '<a href="http://www.openstreetmap.org/about/" target="_blank" rel="noopener noreferrer">&copy; OpenStreetMap contributors</a>',
-                style: this.#baseUrl + 'style.json'
+                style: this.#mapStyleUrl
             }),
             bounds = new L.LatLngBounds(new L.LatLng(52.5, -6.5), new L.LatLng(58.8, 1)),
             maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -8.5), new L.LatLng(61, 2)),
