@@ -249,7 +249,7 @@ export class Map extends Component<MapProps, {}> {
                 const
                     flyCoords = geoData
                         .filter(({ properties: { [areaCodeKey]: key = "" }}) =>
-                            utils.prepAsKey(key === parsedHash.area)
+                            utils.prepAsKey(key) === parsedHash.area
                         )
                         .pop();
 
