@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 
 import axios from "axios";
+import 'mapbox-gl-leaflet';
 import L from "leaflet";
 import { max } from "d3-array";
 import { scaleLinear, scaleSqrt } from "d3-scale";
 
 import ErrorBoundary from "components/ErrorBoundary";
 
+import 'leaflet/dist/leaflet.css';
 import * as Styles from "./MapTable.styles";
+
 import * as utils from "./utils";
 import { OverrideCoordinates } from "./constants";
+
 import type {
     MapState,
     MapProps
