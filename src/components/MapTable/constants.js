@@ -11,9 +11,21 @@ export const RatePerPopulation = 100000;
 export const Content: MainContentType = [
     {
         headings: [
-            { label: 'Nation', format: 'string', getter: ({ name }) => name },
-            { label: <Fragment>Total&nbsp;cases</Fragment>, format: 'numeric', getter: item => numeral(item.rawData.value).format("0,0") },
-            { label: 'Rate', format: 'numeric', getter: (item) => numeral(item.rateData.value).format("0,0.0") }
+            {
+                label: 'Nation',
+                format: 'string', getter: ({ name }) => name
+            },
+            {
+                label: <Fragment>Total&nbsp;cases</Fragment>,
+                format: 'numeric',
+                getter: item => numeral(item.rawData.value).format("0,0"),
+                keyGetter: ({ key }) => key
+            },
+            {
+                label: 'Rate',
+                format: 'numeric',
+                getter: (item) => numeral(item.rateData.value).format("0,0.0")
+            }
         ],
         label: "Nations",
         textLabel: "nations",
@@ -29,9 +41,22 @@ export const Content: MainContentType = [
     },
     {
         headings: [
-            { label: 'Region', format: 'string', getter: ({ name }) => name },
-            { label: <Fragment>Total&nbsp;cases</Fragment>, format: 'numeric', getter: item => numeral(item.rawData.value).format("0,0") },
-            { label: 'Rate', format: 'numeric', getter: (item) => numeral(item.rateData.value).format("0,0.0") }
+            {
+                label: 'Region',
+                format: 'string',
+                getter: ({ name }) => name
+            },
+            {
+                label: <Fragment>Total&nbsp;cases</Fragment>,
+                format: 'numeric',
+                getter: item => numeral(item.rawData.value).format("0,0"),
+                keyGetter: ({ key }) => key
+            },
+            {
+                label: 'Rate',
+                format: 'numeric',
+                getter: (item) => numeral(item.rateData.value).format("0,0.0")
+            }
         ],
         sortFunc: '',
         label: "Regions",
@@ -48,9 +73,21 @@ export const Content: MainContentType = [
     },
     {
         headings: [
-            { label: "Upper tier local authority", format: 'string', getter: ({ name }) => name },
-            { label: <Fragment>Total&nbsp;cases</Fragment>, format: 'numeric', getter: item => numeral(item.rawData.value).format("0,0") },
-            { label: 'Rate', format: 'numeric', getter: (item) => numeral(item.rateData.value).format("0,0.0") }
+            {
+                label: "Upper tier local authority",
+                format: 'string', getter: ({ name }) => name
+            },
+            {
+                label: <Fragment>Total&nbsp;cases</Fragment>,
+                format: 'numeric',
+                getter: item => numeral(item.rawData.value).format("0,0"),
+                keyGetter: ({ key }) => key
+            },
+            {
+                label: 'Rate',
+                format: 'numeric',
+                getter: (item) => numeral(item.rateData.value).format("0,0.0")
+            }
         ],
         sortFunc: '',
         label: 'UTLA',
@@ -67,9 +104,21 @@ export const Content: MainContentType = [
     },
     {
         headings: [
-            { label: "Lower tier local authority", format: 'string', getter: ({ name }) => name },
-            { label: <Fragment>Total&nbsp;cases</Fragment>, format: 'numeric', getter: item => numeral(item.rawData.value).format("0,0") },
-            { label: 'Rate', format: 'numeric', getter: (item) => numeral(item.rateData.value).format("0,0.0") }
+            {
+                label: "Lower tier local authority",
+                format: 'string',
+                getter: ({ name }) => name
+            },
+            {
+                label: <Fragment>Total&nbsp;cases</Fragment>,
+                format: 'numeric',
+                getter: item => numeral(item.rawData.value).format("0,0"),
+                keyGetter: ({ key }) => key
+            },
+            {
+                label: 'Rate',
+                format: 'numeric', getter: (item) => numeral(item.rateData.value).format("0,0.0")
+            }
         ],
         sortFunc: '',
         label: 'LTLA',
