@@ -31,18 +31,22 @@ const LinkOrText = ({ children, hash, ...props }) => {
 
 const Td = ({ headings, hash, data }) => {
 
-    return headings.map(({ getter, format }, index) => {
+    return headings.map(({ getter, format, keyGetter=getter }, index) => {
 
         const
-            value = getter(data),
-            valueId = utils.prepAsKey(value),
+            key = keyGetter(data),
+            keyId = utils.prepAsKey(key),
             parsedHash = utils.getParams(hash),
-            hashPrepped = utils.createHash({category: parsedHash.category, map: parsedHash.map, area: valueId});
+            hashPrepped = utils.createHash({
+                category: parsedHash.category,
+                map: parsedHash.map,
+                area: keyId
+            });
 
-            return <td key={ `cell-${ index }` }
+            return <td key={ `cell-${ keyId }` }
                        className={ `govuk-table__cell govuk-table__cell--${ format }` }>
                 {
-                    (index === 0 && valueId !== (parsedHash?.area ?? ""))
+                    (index === 0 && keyId !== (parsedHash?.area ?? ""))
                         ? <LinkOrText id={ hashPrepped.substring(1) }
                                       hash={ hashPrepped }>
                             { getter(data) }

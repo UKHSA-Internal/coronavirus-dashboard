@@ -152,18 +152,17 @@ export class Map extends Component<MapProps, {}> {
 
         const
             { hash, maxCircleRadius, blobColour, geoKey, zoom, data, isRate } = this.props,
-            { geoData, loading, map, layerGroup } = this.state,
+            { geoData, loading, map, layerGroup, glStatus } = this.state,
             parsedHash = utils.getParams(hash),
             rgb = utils.hexToRgb(blobColour),
             colour = isRate
                 ? `rgba(${rgb.r},${rgb.g},${rgb.b},.9)`
                 : `rgba(${rgb.r},${rgb.g},${rgb.b},1)`;
 
-        if (data && !loading && map && layerGroup ) {
+        if ( data && !loading && map && layerGroup && glStatus ) {
 
             const
                 areaCodeKey = `${geoKey}${this.#areaCodeSuffix}`,
-                areaNameKey = `${geoKey}${this.#areaNameSuffix}`,
                 maxValue = max(
                     data.values,
                     isRate ? (d => d.rateData.value) : (d => d.rawData.value)
@@ -190,8 +189,8 @@ export class Map extends Component<MapProps, {}> {
                                 parent = document.getElementById(parsedHash.category),
                                 id =  utils.createHash({
                                     category: parsedHash.category,
-                                    map: parsedHash.map, area:
-                                    data.getByKey(feature.properties.id).name
+                                    map: parsedHash.map,
+                                    area: feature.properties.id
                                 }),
                                 element = document.getElementById(id.substring(1));
 
@@ -233,15 +232,21 @@ export class Map extends Component<MapProps, {}> {
             layerGroup.addLayer(boundryLayer)
 
             if ( parsedHash.hasOwnProperty("area") ) {
+
                 const flyCoords = geoData.filter(item =>
-                    utils.prepAsKey(item.properties[areaNameKey]) === parsedHash.area
+                    utils.prepAsKey(item.properties?.[areaCodeKey] ?? "") === parsedHash.area
                 ).pop();
 
-                map.flyTo(
-                    [flyCoords.properties.lat, flyCoords.properties.long],
-                    zoom.max,
-                    { animate: false }
-                );
+                try {
+                    map.flyTo(
+                        [flyCoords.properties.lat, flyCoords.properties.long],
+                        zoom.max,
+                        { animate: false }
+                    );
+                } catch (e) {
+                    console.warn(`No ${parsedHash.category} with code ${parsedHash.area}.`)
+                }
+
             }
 
         }
