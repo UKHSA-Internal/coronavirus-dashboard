@@ -244,7 +244,7 @@ export class Map extends Component<MapProps, {}> {
                         { animate: false }
                     );
                 } catch (e) {
-                    console.warn(`No ${parsedHash.category} with code ${parsedHash.area}.`)
+                    console.warn(`No "${parsedHash.category}" with code "#${parsedHash.area}".`)
                 }
 
             }
