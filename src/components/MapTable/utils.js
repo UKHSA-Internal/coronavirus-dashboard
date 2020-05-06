@@ -96,7 +96,6 @@ export class Data implements DataObjectType {
 
     constructor(data: any, pData: PopulationDataType) {
 
-        console.log(pData)
         const
             [DATA_VALUES, RATE_DATA] = [0, 1],
             dataValues = Object
