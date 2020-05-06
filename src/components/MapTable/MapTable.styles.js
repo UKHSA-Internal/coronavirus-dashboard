@@ -85,7 +85,7 @@ export const MainContainer: ComponentType<*> = (() => {
 
 export const TabContainer: ComponentType<*> = (() => {
     return styled.div`
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1/-1;
 
     @media only screen and (max-width: 768px) {
