@@ -67,7 +67,7 @@ export const MainContainer: ComponentType<*> = (() => {
     grid-template-rows: 660px 1fr;
     
     @media only screen and (max-width: 768px) {
-        grid-template-rows: 660px 1fr auto;
+        grid-template-rows: auto 660px auto;
         grid-row: 2/4;
     }
 
@@ -85,12 +85,13 @@ export const MainContainer: ComponentType<*> = (() => {
 
 export const TabContainer: ComponentType<*> = (() => {
     return styled.div`
-    grid-column: 1;
+    grid-column: 2;
     grid-row: 1/-1;
 
     @media only screen and (max-width: 768px) {
       height: unset;
       grid-column: 1/-1;
+      grid-row: 2/-1;
     }
 
     & .govuk-tabs__panel {
@@ -102,7 +103,6 @@ export const TabContainer: ComponentType<*> = (() => {
       }
 
       @media only screen and (max-width: 768px) {
-        width: 100%;
         max-height: none;
       }
     }
@@ -113,12 +113,11 @@ export const ChildrenContainer: ComponentType<*> = (() => {
     return styled.div`
     grid-column: 2;
     grid-row: 2;
-    // height: 600px;
 
     @media only screen and (max-width: 768px) {
       height: unset;
-      grid-column: 1;
-      grid-row: 3;
+      grid-column: 1/-1;
+      grid-row: 1;
     }
   `;
 })();
