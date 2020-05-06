@@ -101,7 +101,9 @@ export class Map extends Component<MapProps, {}> {
         if ( prevProps.geoKey !== this.props.geoKey && !this.props.geoData) {
             this.setState({
                     loading: true,
-                    ...prevState.glStatus && !prevState.map ? this.initializeMap() : {}
+                    ...prevState.glStatus && !prevState.map
+                        ? this.initializeMap()
+                        : {}
                 },
                 this.getGeoData
             );
@@ -116,7 +118,9 @@ export class Map extends Component<MapProps, {}> {
 
         this.setState(prevState => ({
                 loading: true,
-                ...prevState.glStatus && !prevState.map ? this.initializeMap() : {}
+                ...prevState.glStatus && !prevState.map
+                    ? this.initializeMap()
+                    : {}
             }),
             this.getGeoData
         );
@@ -127,8 +131,7 @@ export class Map extends Component<MapProps, {}> {
 
         const { loading, glStatus } = this.state;
 
-        if ( loading )
-            return <Styles.P>Loading...</Styles.P>
+        if ( loading ) return <Styles.P>Loading...</Styles.P>
 
         if ( !glStatus )
             return  <Styles.P>
@@ -226,9 +229,15 @@ export class Map extends Component<MapProps, {}> {
             layerGroup.addLayer(boundryLayer)
 
             if ( parsedHash.hasOwnProperty("area") ) {
-                const flyCoords = geoData.filter(item => utils.prepAsKey(item.properties[areaNameKey]) === parsedHash.area)[0];
+                const flyCoords = geoData.filter(item =>
+                    utils.prepAsKey(item.properties[areaNameKey]) === parsedHash.area
+                ).pop();
 
-                map.flyTo([flyCoords.properties.lat, flyCoords.properties.long], zoom.max, { animate: false });
+                map.flyTo(
+                    [flyCoords.properties.lat, flyCoords.properties.long],
+                    zoom.max,
+                    { animate: false }
+                );
             }
 
         }
