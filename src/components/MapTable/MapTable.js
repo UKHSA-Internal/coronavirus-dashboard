@@ -3,19 +3,31 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import axios from 'axios';
-import 'mapbox-gl-leaflet';
-
-import 'leaflet/dist/leaflet.css';
+import numeral from "numeral";
 
 import { Map } from "./Map";
 import { Table } from "./Table";
 import { Content } from "./constants";
+import { RatePerPopulation } from "./constants";
 import * as utils from "./utils";
+
 import * as Styles from './MapTable.styles';
+
 import type {
     MapTableState,
     MapTableProps
 } from "./MapTable.types";
+
+
+const Description = ({ text, show = true, ...props }): React.ReactNode => {
+
+    return !show
+        ? null
+        : <Styles.Description { ...props }>
+            { text }
+        </Styles.Description>
+
+}; // Footnote
 
 
 export class MapTable extends Component<MapTableProps, {}> {
@@ -118,6 +130,9 @@ export class MapTable extends Component<MapTableProps, {}> {
             </Styles.TabContainer>
 
             <Styles.ChildrenContainer>
+                <Description
+                    text={ `Rate is per ${ numeral(RatePerPopulation).format("0,0") } population.` }
+                />
                 { children }
             </Styles.ChildrenContainer>
 
@@ -140,6 +155,13 @@ export class MapTable extends Component<MapTableProps, {}> {
                                           onClick={ () => this.setState({ viewMapAs: "case" }) }>
                                         { "Total cases" }
                                     </Link>
+                                </li>
+                                <li>
+                                    <Description
+                                        className={ "above" }
+                                        show={ parsedHash.map === "rate" }
+                                        text={ "Darker colour represents a higher rate." }
+                                    />
                                 </li>
                             </ul>
                             <div className={ `govuk-tabs__panel` }>
