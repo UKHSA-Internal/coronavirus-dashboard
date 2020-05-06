@@ -114,22 +114,17 @@ declare export type TableProps = {
 }; // TableProps
 
 
-declare export type GeoDataType = {
-
-    feature: Array<{
-        properties: {
-            [string]: {
-                lat: number,
-                long: number
-            },
-            [string]: any
+declare export type GeoDataType = Array<{
+    properties: {
+        [string]: {
+            lat: number,
+            long: number
         },
-        id?: string,
         [string]: any
-    }>,
+    },
+    id?: string,
     [string]: any
-
-}; // GeoDataType
+}>; // GeoDataType
 
 
 export interface MapState {

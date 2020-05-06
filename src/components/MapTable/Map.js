@@ -20,11 +20,29 @@ import type {
 } from "MapTable.types"
 
 
+const getBlobOptions =  (data, geoData, areaCodeKey) => {
+
+    return geoData
+            .filter(({ properties: { [areaCodeKey]: key } }) => (data.getByKey(key)?.rawData?.value ?? 0) > 0)
+            .map(({ properties: p, properties: { [areaCodeKey]: key } }) => ({
+                type: 'Feature',
+                properties: {
+                    name: data?.[key]?.name?.value ?? 0,
+                    count: data.getByKey(key)?.rawData?.value ?? 0
+                },
+                geometry: {
+                    type: 'Point',
+                    coordinates: [p.long, p.lat],
+                },
+            }))
+
+}; // getBlobOptions
+
+
 export class Map extends Component<MapProps, {}> {
 
     #baseUrl = 'https://c19pub.azureedge.net/assets/geo/';
     #areaCodeSuffix = "cd";
-    #areaNameSuffix = "nm";
 
     state: MapState = {
 
@@ -190,7 +208,7 @@ export class Map extends Component<MapProps, {}> {
                         click: () => {
                             const
                                 parent = document.getElementById(parsedHash.category),
-                                id =  utils.createHash({
+                                id = utils.createHash({
                                     category: parsedHash.category,
                                     map: parsedHash.map,
                                     area: feature.properties.id
@@ -208,27 +226,16 @@ export class Map extends Component<MapProps, {}> {
             });
 
             if (!isRate) {
-                const blobs = L.geoJSON(
-                    geoData
-                        .filter(({ properties: { [areaCodeKey]: key } }) => isRate || ((data.getByKey(key)?.rawData?.value ?? 0) > 0))
-                        .map(({ properties: p, properties: { [areaCodeKey]: key } }) => ({
-                            type: 'Feature',
-                            properties: {
-                                name: data?.[key]?.name?.value ?? 0,
-                                count: data.getByKey(key)?.[isRate ? "rateData" : "rawData"]?.value ?? 0
-                            },
-                            geometry: {
-                                type: 'Point',
-                                coordinates: [p.long, p.lat],
-                            },
-                        })),
-                    {
-                        pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
-                            radius: feature.properties.count === 0 ? 0 : radiusScale(feature.properties.count),
-                            fillColor: blobColour,
-                            fillOpacity: 0.4,
-                            weight: 0,
-                        }),
+                const
+                    blobOptions = getBlobOptions(data, geoData, areaCodeKey),
+                    blobs = L.geoJSON(blobOptions, {
+                        pointToLayer:
+                            (feature, latlng) => L.circleMarker(latlng, {
+                                radius: feature.properties.count && radiusScale(feature.properties.count),
+                                fillColor: blobColour,
+                                fillOpacity: 0.4,
+                                weight: 0,
+                            }),
                     }
                 );
 
@@ -239,9 +246,12 @@ export class Map extends Component<MapProps, {}> {
 
             if ( parsedHash.hasOwnProperty("area") ) {
 
-                const flyCoords = geoData.filter(item =>
-                    utils.prepAsKey(item.properties?.[areaCodeKey] ?? "") === parsedHash.area
-                ).pop();
+                const
+                    flyCoords = geoData
+                        .filter(({ properties: { [areaCodeKey]: key = "" }}) =>
+                            utils.prepAsKey(key === parsedHash.area)
+                        )
+                        .pop();
 
                 try {
                     map.flyTo(
