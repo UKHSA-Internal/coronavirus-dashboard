@@ -21,10 +21,10 @@ const backToTopClickHandler = event => {
 const BackToTopLink: ComponentType<Props> = () => {
 
     return <div className={ "govuk-width-container" }>
-        <a className={ "govuk-link govuk-link--no-visited-state" }
-           role={ "button" }
-           href={ "" }
-           onClick={ backToTopClickHandler }>
+        <Styles.Link className={ "govuk-link govuk-link--no-visited-state" }
+                     role={ "button" }
+                     href={ "" }
+                     onClick={ backToTopClickHandler }>
             <svg role={ "presentation" }
                  focusable={ "false" }
                  className={ "back-to-top" }
@@ -36,7 +36,7 @@ const BackToTopLink: ComponentType<Props> = () => {
                       d={ "M6.5 0L0 6.5 1.4 8l4-4v12.7h2V4l4.3 4L13 6.4z" }/>
             </svg>
             Back to top
-        </a>
+        </Styles.Link>
     </div>
 
 }; // BackToTopLink
