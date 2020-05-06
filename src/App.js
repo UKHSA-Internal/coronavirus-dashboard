@@ -99,6 +99,7 @@ const App = () => {
             </Switch>
 
             <Switch>
+                <Route path="/region" component={ F }/>
                 <Route path="/" exact component={ F }/>
                 <Route path="/about" exact component={ F }/>
                 <Route path="/accessibility" exact component={ F }/>
