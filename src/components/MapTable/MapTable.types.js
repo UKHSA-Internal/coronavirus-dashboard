@@ -43,7 +43,7 @@ declare export type HeadingType = {
     label: string,
     format: string,
     getter: (ValuesDataType) => string,
-    keyGetter: (ValuesDataType) => string
+    keyGetter?: (ValuesDataType) => string
 
 } // HeadingType
 
