@@ -32,7 +32,7 @@ export const Container: ComponentType<*> = (() => {
 
 
 export const Caption: ComponentType<*> = (() => {
-    return styled.span`
+    return styled.h2`
     margin-bottom: 5px;
     color: black;
     font-size: 20px;
@@ -42,14 +42,15 @@ export const Caption: ComponentType<*> = (() => {
 
 
 export const Description: ComponentType<*> = (() => {
-    return styled.span`
+    return styled.p`
+    margin: 0;
     color: #626a6e;
   `;
 })();
 
 
 export const Number: ComponentType<*> = (() => {
-    return styled.div`
+    return styled.h2`
     margin-bottom: 10px;
     color: #367E93;
   `;

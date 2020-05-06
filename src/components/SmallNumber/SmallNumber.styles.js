@@ -40,7 +40,7 @@ export const Caption: ComponentType<*> = (() => {
 
 
 export const Number: ComponentType<*> = (() => {
-  return styled.h3`
+  return styled.span`
     margin-bottom: 10px;
     color: #367E93;
   `;
