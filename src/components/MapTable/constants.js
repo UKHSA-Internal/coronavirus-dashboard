@@ -14,8 +14,6 @@ export const Content: MainContentType = [
             { label: 'Nation', format: 'string', getter: ({ name }) => name },
             { label: <Fragment>Total&nbsp;cases</Fragment>, format: 'numeric', getter: item => numeral(item.rawData.value).format("0,0") },
             { label: 'Rate', format: 'numeric', getter: (item) => numeral(item.rateData.value).format("0,0.0") }
-            // TODO: Add this separately.
-            // { label: 'Deaths', format: 'numeric', getter: item => numeral(item?.deaths?.value).format("0,0") }
         ],
         label: "Nations",
         textLabel: "nations",
