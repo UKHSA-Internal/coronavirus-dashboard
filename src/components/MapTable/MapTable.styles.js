@@ -94,7 +94,7 @@ export const TabContainer: ComponentType<*> = (() => {
     }
 
     & .govuk-tabs__panel {
-      height: 630px;
+      height: 670px;
       overflow: auto;
       
        & a {
@@ -140,5 +140,36 @@ export const MapViewOption: ComponentType<*> = (() => {
       height: unset;
     }
   `;
+})();
+
+
+export const Description: ComponentType<*> = (() => {
+
+    const Node = styled.p`
+        margin: 2em;
+        align-self: center;
+        justify-self: center;
+        margin: 0;
+        color: #626a6e;
+        
+        &:last-of-type:not(.above) {
+            margin-bottom: 1rem;
+        }
+        
+        &.above {
+            display: flex;
+            justify-content: flex-end;        
+            padding-top: 14px;
+            padding-bottom: 16px;
+            padding-left: 19px;
+            align-items: center;
+        }
+    `;
+
+    return ({ className = "", children = null, ...props }) =>
+        <Node { ...props } className={ className + " govuk-body govuk-!-font-size-16" }>
+            { children }
+        </Node>
+
 })();
 
