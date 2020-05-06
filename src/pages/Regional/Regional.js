@@ -8,7 +8,7 @@ import moment from "moment";
 
 import useLoadData from 'hooks/useLoadData';
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
-import BigNumber from 'components/BigNumber';
+import { BigNumber, BigNumberContainer } from 'components/BigNumber';
 import PageTitle from 'components/PageTitle';
 import Disclaimer from 'components/Disclaimer';
 import ExportLinks from "components/Export";
@@ -18,6 +18,7 @@ import MapTable from "components/MapTable";
 
 import type { Props, ReplacementsType } from './Regional.types';
 import * as Styles from './Regional.styles';
+import { SmallNumber, SmallNumberContainer } from "components/SmallNumber";
 
 
 /**
@@ -89,14 +90,21 @@ export const MainLoading = () => {
 
 
 const Regional: ComponentType<Props> = ({}: Props) => {
-    const data = useLoadData();
-    const layout = useResponsiveLayout(768);
+    const
+        data = useLoadData(),
+        layout = useResponsiveLayout(768);
 
     if ( !data ) return <MainLoading/>;
 
     const
         latestDeaths = getLatestDailyDeaths(data),
-        lastDataUpdate = moment(latestDeaths?.date ?? "0000-00-00").format("dddd D  MMMM YYYY");
+        lastDataUpdate = moment(latestDeaths?.date ?? "0000-00-00").format("dddd D  MMMM YYYY"),
+        countryDeaths = Object
+            .keys(data?.countries)
+            .map(key => ({
+                name: data?.countries?.[key]?.name?.value ?? "",
+                value: data?.countries?.[key]?.deaths?.value ?? 0
+            }));
 
     return (
         <Styles.Container className="govuk-width-container" role="main">
@@ -117,26 +125,40 @@ const Regional: ComponentType<Props> = ({}: Props) => {
                 title="Coronavirus (COVID-19) in the UK"
                 subtitle={ `Last updated on ${ timestamp(data) }` }
             />
-            <BigNumber
-                caption={ BigNumberTitles.ukCases }
-                number={ data?.overview?.K02000001?.totalCases?.value ?? 0 }
-                description={ BigNumberDescriptions.ukCases }
-            />
-            <BigNumber
-                caption={ BigNumberTitles.dailyUkCases  }
-                number={ data?.overview?.K02000001?.newCases?.value ?? 0 }
-                description={ formatStr(BigNumberDescriptions.dailyUkCases, {date: lastDataUpdate})  }
-            />
-            <BigNumber
-                caption={ BigNumberTitles.ukDeaths }
-                number={ data?.overview?.K02000001?.deaths.value ?? 0 }
-                description={BigNumberDescriptions.ukDeaths }
-            />
-            <BigNumber
-                caption={ BigNumberTitles.dailyUkDeaths  }
-                number={ latestDeaths?.value ?? 0 }
-                description={ formatStr(BigNumberDescriptions.dailyUkDeaths, {date: lastDataUpdate}) }
-            />
+
+            <BigNumberContainer>
+                <BigNumber
+                    caption={ BigNumberTitles.ukCases }
+                    number={ data?.overview?.K02000001?.totalCases?.value ?? 0 }
+                    description={ BigNumberDescriptions.ukCases }
+                />
+                <BigNumber
+                    caption={ BigNumberTitles.dailyUkCases  }
+                    number={ data?.overview?.K02000001?.newCases?.value ?? 0 }
+                    description={ formatStr(BigNumberDescriptions.dailyUkCases, {date: lastDataUpdate})  }
+                />
+                <BigNumber
+                    caption={ BigNumberTitles.ukDeaths }
+                    number={ data?.overview?.K02000001?.deaths.value ?? 0 }
+                    description={BigNumberDescriptions.ukDeaths }
+                />
+                <BigNumber
+                    caption={ BigNumberTitles.dailyUkDeaths  }
+                    number={ latestDeaths?.value ?? 0 }
+                    description={ formatStr(BigNumberDescriptions.dailyUkDeaths, {date: lastDataUpdate}) }
+                />
+            </BigNumberContainer>
+
+            <SmallNumberContainer heading={ "Total number by nation" } caption={ "COVID-19 associated deaths" }>
+                {
+                    countryDeaths.map(({ name, value }) =>
+                        <SmallNumber key={ `SmallNumber-${name}` }
+                                     caption={ name }
+                                     number={ value }/>
+                    )
+                }
+            </SmallNumberContainer>
+
             { layout === 'desktop'
                 ? <MapTable>
                     <ExportLinks data={ {
