@@ -158,9 +158,8 @@ export const Description: ComponentType<*> = (() => {
         &.above {
             display: flex;
             justify-content: flex-end;        
-            padding-top: 14px;
-            padding-bottom: 16px;
-            padding-left: 19px;
+            padding-top: 5px;
+            padding-left: 10px;
             align-items: center;
         }
     `;
