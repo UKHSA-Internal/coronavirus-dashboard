@@ -84,13 +84,14 @@ export class MapTable extends Component<MapTableProps, {}> {
                 geoData,
                 loading
             } = this.state,
-            { children, location, isMobile = false } = this.props,
-            hash = location.hash !== ""
-                ? location.hash
+            { children, isMobile = false, history: { location: { hash: locHash = "" } } } = this.props,
+            hash = locHash !== ""
+                ? locHash
                 : utils.createHash({category: category, map: viewMapAs}),
             parsedHash = utils.getParams(hash),
             contentData = Content.filter(item => item.textLabel === parsedHash.category)[0];
 
+        // console.log(history)
         if (loading) return <Styles.P>Loading&hellip;</Styles.P>
 
         return <Styles.MainContainer>
