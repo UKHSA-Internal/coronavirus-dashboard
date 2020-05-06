@@ -23,7 +23,7 @@ export const Content: MainContentType = [
         geo: "countries.geojson",
         geoKey: "ctry19",
         maxCircleRadius: 40,
-        blobColour: "#b81db5",
+        blobColour: "#55042a",
         zoom: {
             min: 0, // Default min
             max: 5,
