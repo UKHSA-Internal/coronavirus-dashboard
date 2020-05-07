@@ -115,7 +115,8 @@ thead.govuk-table__head th{
 
 
 .about .markdown,
-.accessibility .markdown {
+.accessibility .markdown,
+.disclaimer .markdown {
 
   #table-of-contents {
     @extend .govuk-heading-m;
@@ -190,6 +191,12 @@ thead.govuk-table__head th{
     @extend .govuk-section-break--l;
   }
 
+}
+
+.disclaimer .markdown {
+  & * {
+    font-size: .8rem !important;
+  }
 }
 
 svg.back-to-top {
