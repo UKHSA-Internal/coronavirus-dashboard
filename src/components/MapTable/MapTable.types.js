@@ -135,6 +135,7 @@ export interface MapState {
     loading: boolean
     geoData: GeoDataType | null
     glStatus: boolean
+    centrePoint: [number, number] | null
 
 } // MapState
 
@@ -150,7 +151,8 @@ declare export type MapProps = {
     blobColour: string,
     zoom: ZoomData,
     data: DataObjectType | null,
-    isRate: boolean
+    isRate: boolean,
+    children: any
 
 }; // MapProps
 
@@ -164,7 +166,8 @@ export interface MapTableState {
     populationData: any  | null
     geoData: any | null
     loading: boolean
-    mapObject: any
+    mapObject: any,
+    hash: string
 
 } // MapTableState
 
@@ -173,8 +176,11 @@ declare export type MapTableProps = {
 
     isMobile: boolean,
     children: Component,
-    locations: {
-        hash: string,
+    history: {
+        locations: {
+            hash: string,
+            [string]: any
+        },
         [string]: any
     }
 

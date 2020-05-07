@@ -21,6 +21,7 @@ export const Map: ComponentType<*> = (() => {
 
 })();
 
+
 export const Container: ComponentType<*> = (() => {
     return styled.div`
     display: grid;
@@ -37,6 +38,7 @@ export const Container: ComponentType<*> = (() => {
     `) }
   `;
 })();
+
 
 export const P: ComponentType<*> = (() => {
 
@@ -81,6 +83,7 @@ export const MainContainer: ComponentType<*> = (() => {
 
 })();
 
+
 export const TabContainer: ComponentType<*> = (() => {
     return styled.div`
     grid-column: 1;
@@ -107,6 +110,7 @@ export const TabContainer: ComponentType<*> = (() => {
   `;
 })();
 
+
 export const ChildrenContainer: ComponentType<*> = (() => {
     return styled.div`
     grid-column: 2;
@@ -119,6 +123,7 @@ export const ChildrenContainer: ComponentType<*> = (() => {
     }
   `;
 })();
+
 
 export const MapViewOption: ComponentType<*> = (() => {
     return styled.div`
@@ -137,6 +142,20 @@ export const MapViewOption: ComponentType<*> = (() => {
       height: unset;
     }
   `;
+})();
+
+
+export const ResetLink: ComponentType<*> = (() => {
+
+    return styled.a`
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 2px 5px;
+    z-index: 987654321;
+    background: rgba(255, 255, 255, .5);
+  `;
+
 })();
 
 

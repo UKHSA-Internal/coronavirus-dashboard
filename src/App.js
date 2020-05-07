@@ -76,8 +76,8 @@ const App = () => {
             <Switch>
                 {/* These back-to-top links are the 'overlay' style that stays
                     on screen as we scroll. */}
-                <Route path="/about" exact render={()=>(<BackToTop mode="overlay"/>)} />
-                <Route path="/" exact render={()=>(<BackToTop mode="overlay"/>)} />
+                <Route path="/about" exact render={ () => <BackToTop mode={ "overlay" }/> } />
+                <Route path="/" exact render={ () => <BackToTop mode={ "overlay" }/> } />
             </Switch>
 
             <Switch>
@@ -94,8 +94,8 @@ const App = () => {
             <Switch>
                 {/* These back-to-top links are the 'inline' style that sits
                     statically between the end of the content and the footer. */}
-                <Route path="/about" exact render={()=>(<BackToTop mode="inline"/>)} />
-                <Route path="/" exact render={()=>(<BackToTop mode="inline"/>)} />
+                <Route path="/about" exact render={ () => <BackToTop mode="inline"/> } />
+                <Route path="/" exact render={ () => <BackToTop mode="inline"/>  } />
             </Switch>
 
             <Switch>

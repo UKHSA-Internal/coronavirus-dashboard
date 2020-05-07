@@ -53,6 +53,7 @@ export class Map extends Component<MapProps, {}> {
         loading: true,
         geoData: null,
         glStatus: utils.glAvailable(),
+        centrePoint: null
 
     }; // state
 
@@ -65,8 +66,9 @@ export class Map extends Component<MapProps, {}> {
             }),
             bounds = new L.LatLngBounds(new L.LatLng(52.5, -6.5), new L.LatLng(58.8, 1)),
             maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -8.5), new L.LatLng(61, 2)),
+            centrePoint =  bounds.getCenter(),
             map = L.map('map', {
-                center: bounds.getCenter(),
+                center: centrePoint,
                 maxBounds: maxBounds,
                 zoom: 5.4,
                 minZoom: 5.4,
@@ -86,7 +88,8 @@ export class Map extends Component<MapProps, {}> {
         return {
             map: map,
             layerGroup: L.layerGroup().addTo(map),
-            canvas: canvas
+            canvas: canvas,
+            centrePoint: centrePoint
         }
 
     }; // initializeMap
@@ -173,8 +176,8 @@ export class Map extends Component<MapProps, {}> {
     render(): React.ReactNode {
 
         const
-            { hash, maxCircleRadius, blobColour, geoKey, zoom, data, isRate } = this.props,
-            { geoData, loading, map, layerGroup, glStatus } = this.state,
+            { hash, maxCircleRadius, blobColour, geoKey, zoom, data, isRate, children } = this.props,
+            { geoData, loading, map, layerGroup, glStatus, centrePoint } = this.state,
             parsedHash = utils.getParams(hash),
             rgb = utils.hexToRgb(blobColour),
             colour = isRate
@@ -264,13 +267,17 @@ export class Map extends Component<MapProps, {}> {
                     console.warn(`No "${parsedHash.category}" with code "#${parsedHash.area}".`)
                 }
 
+            } else {
+
+                map.flyTo(centrePoint, 5.4, { animate: false })
+
             }
 
         }
 
         return <ErrorBoundary>
             { this.display() }
-            <Styles.Map id={ "map" }/>
+            <Styles.Map id={ "map" }>{ children }</Styles.Map>
         </ErrorBoundary>
 
     } // render

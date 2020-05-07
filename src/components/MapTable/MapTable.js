@@ -43,7 +43,8 @@ export class MapTable extends Component<MapTableProps, {}> {
         populationData: null,
         geoData: null,
         loading: false,
-        mapObject: null
+        mapObject: null,
+        hash: ""
 
     } // state
 
@@ -60,6 +61,26 @@ export class MapTable extends Component<MapTableProps, {}> {
         this.setState({ loading: true }, this.getPopulationData)
 
     } // componentDidMount
+
+    componentDidUpdate(prevProps: Readonly<MapTableProps>, prevState: Readonly<MapTableState>, snapshot: any): void {
+
+        const
+            {
+                category="nations",
+                viewMapAs="rate",
+                hash: prevHash = ""
+            } = prevState,
+            { history: { location: { hash: currentHash = "" } } } = this.props,
+            defaultHash = utils.createHash(prevHash),
+            hash = currentHash
+                ? utils.getParams(currentHash)
+                : {category: category, map: viewMapAs};
+
+        // Updates the URL and the state to re-render the components
+        if ( currentHash !== prevHash && !utils.objectsAreEqual(hash, defaultHash) )
+            this.setState({ hash: currentHash })
+
+    } // componentDidUpdate
 
     setCategory  = (category: string): void  => {
 
@@ -82,16 +103,18 @@ export class MapTable extends Component<MapTableProps, {}> {
                 viewMapAs = "rate",
                 populationData,
                 geoData,
-                loading
+                loading,
+                hash: locHash = "",
             } = this.state,
-            { children, isMobile = false, history: { location: { hash: locHash = "" } } } = this.props,
+            { children, isMobile = false } = this.props,
             hash = locHash !== ""
                 ? locHash
                 : utils.createHash({category: category, map: viewMapAs}),
             parsedHash = utils.getParams(hash),
-            contentData = Content.filter(item => item.textLabel === parsedHash.category)[0];
+            contentData = Content.filter(item => item.textLabel === parsedHash.category)[0],
+            resetHash = utils.createHash({ category: parsedHash.category, map: parsedHash.map });
 
-        // console.log(history)
+
         if (loading) return <Styles.P>Loading&hellip;</Styles.P>
 
         return <Styles.MainContainer>
@@ -142,7 +165,7 @@ export class MapTable extends Component<MapTableProps, {}> {
 
             { isMobile
                 ? null
-                : <Styles.MapViewOption>
+                : <Styles.MapViewOption id={ resetHash.substring(1) }>
                     <Styles.TabContainer>
                         <div className={ "govuk-tabs" } data-module={ "govuk-tabs" }>
                             <ul className="govuk-tabs__list">
@@ -173,7 +196,16 @@ export class MapTable extends Component<MapTableProps, {}> {
                                              ...prevState.geoData,
                                              [parsedHash.category]: data
                                          }
-                                     })) }/>
+                                     })) }>
+                                    <Styles.ResetLink
+                                        href={ `${resetHash}` }
+                                        onClick={ () => this.setState({ hash: resetHash }) }
+                                        className={ "govuk-link govuk-link--no-visited-state" }
+                                        role={ "button" }
+                                    >
+                                        Reset map
+                                    </Styles.ResetLink>
+                                </Map>
                             </div>
                         </div>
                     </Styles.TabContainer>

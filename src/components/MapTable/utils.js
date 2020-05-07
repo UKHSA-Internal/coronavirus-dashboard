@@ -92,6 +92,26 @@ export const createHash = ( kwargs: URIParameters ): string => {
 } // createHash
 
 
+export const objectsAreEqual = (...objects): boolean => {
+
+    const
+        keys = Object.keys(objects[0]),
+        nItems = keys.length;
+
+    // Check number of props
+    if ( !objects.every(item => Object.keys(item).length === nItems) ) return false;
+
+    // Check value equivalence
+    for ( const key of keys )
+        if ( !objects.every( item => item[key] === objects[0][key] ) )
+            return false;
+
+    return true
+
+}; // objectsAreEqual
+
+
+
 export class Data implements DataObjectType {
 
     constructor(data: any, pData: PopulationDataType) {
