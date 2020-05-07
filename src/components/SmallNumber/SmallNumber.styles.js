@@ -1,9 +1,8 @@
 // @flow
 
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
-import addIECss from 'addIECss';
 
 export const Container: ComponentType<*> = (() => {
   return styled.div`
@@ -22,10 +21,6 @@ export const Container: ComponentType<*> = (() => {
     @media only screen and (max-width: 768px) {
         margin-right: 0
     }
-
-    ${addIECss(css`
-      width: 48%;
-    `)}
   `;
 })();
 
