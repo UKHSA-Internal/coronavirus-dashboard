@@ -113,6 +113,19 @@ thead.govuk-table__head th{
 }
 
 
+.about,
+.accessibility{
+  width: 50%;
+
+  @media only screen and (max-width: 1105px) {
+    width: 80%;
+  }
+
+  @media only screen and (max-width: 640px) {
+    width: 100%
+  }
+
+}
 
 .about .markdown,
 .accessibility .markdown,
