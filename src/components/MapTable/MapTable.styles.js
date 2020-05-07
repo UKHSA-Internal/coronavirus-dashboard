@@ -14,27 +14,12 @@ export const Map: ComponentType<*> = (() => {
     grid-row: 1;
     height: 580px;
     width: 520px;
+    
     ${ addIECss(css`
       width: 48%;
     `) }
   `;
 
-})();
-
-
-export const Container: ComponentType<*> = (() => {
-    return styled.div`
-    display: grid;
-
-    ${ addIECss(css`
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-    `) }
-  `;
 })();
 
 
@@ -69,6 +54,10 @@ export const MainContainer: ComponentType<*> = (() => {
     &>* {
         flex-grow: 1;
         max-width: 50%;
+        
+        ${ addIECss(css`
+          width: 48%;
+        `) }
     }
     
     @media only screen and (max-width: 768px) {
