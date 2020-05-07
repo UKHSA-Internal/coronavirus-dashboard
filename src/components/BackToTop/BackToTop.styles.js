@@ -23,3 +23,11 @@ export const InlineContainer: ComponentType<*> = (() => {
   margin-bottom: 40px;
   `;
 })();
+
+
+export const Link: ComponentType<*> = (() => {
+  return styled.a`
+  background: rgba(255, 255, 255, .8); 
+  padding: .5em .5em 2em .5em; 
+  `;
+})();

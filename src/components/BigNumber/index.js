@@ -1,1 +1,1 @@
-export { default } from './BigNumber';
+export { BigNumberContainer, BigNumber } from './BigNumber';

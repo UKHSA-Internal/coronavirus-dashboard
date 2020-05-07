@@ -8,17 +8,39 @@ import * as Styles from './BackToTop.styles';
 
 import useBackToTopOverlayVisible from 'hooks/useBackToTopOverlayVisible';
 
+
+const backToTopClickHandler = event => {
+
+    event.preventDefault();
+
+    window.scrollTo(0, 0);
+
+}; // backToTopClickHandler
+
+
 const BackToTopLink: ComponentType<Props> = () => {
-  return (
-    <div class="govuk-width-container">
-      <a class="govuk-link govuk-link--no-visited-state" href="#top">
-        <svg role="presentation" focusable="false" class="back-to-top" xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 13 17">
-          <path fill="currentColor" d="M6.5 0L0 6.5 1.4 8l4-4v12.7h2V4l4.3 4L13 6.4z"></path>
-        </svg>Back to top
-      </a>
+
+    return <div className={ "govuk-width-container" }>
+        <Styles.Link className={ "govuk-link govuk-link--no-visited-state" }
+                     role={ "button" }
+                     href={ "" }
+                     onClick={ backToTopClickHandler }>
+            <svg role={ "presentation" }
+                 focusable={ "false" }
+                 className={ "back-to-top" }
+                 xmlns={ "http://www.w3.org/2000/svg" }
+                 width={ "13" }
+                 height={ "17" }
+                 viewBox={ "0 0 13 17" }>
+                <path fill={ "currentColor" }
+                      d={ "M6.5 0L0 6.5 1.4 8l4-4v12.7h2V4l4.3 4L13 6.4z" }/>
+            </svg>
+            Back to top
+        </Styles.Link>
     </div>
-  );
-};
+
+}; // BackToTopLink
+
 
 /**
  * A govuk style back-to-top link component.
@@ -31,20 +53,24 @@ const BackToTopLink: ComponentType<Props> = () => {
  * display this component.
  */
 const BackToTop: ComponentType<Props> = ({ mode }: Props) => {
-  const visible = useBackToTopOverlayVisible('footer');
-  if (mode === 'overlay'){
-      return (
-        <Styles.OverlayContainer  style={{opacity: visible ? 1 : 0}}>
-          <BackToTopLink />
+
+    const visible = useBackToTopOverlayVisible('footer');
+
+    if ( mode === 'overlay' ) {
+
+        return<Styles.OverlayContainer style={ { opacity: visible ? 1 : 0 } }>
+            <BackToTopLink/>
         </Styles.OverlayContainer>
-      );
-  } else {
-      return (
-        <Styles.InlineContainer style={{opacity: visible ? 0 : 1}}>
-          <BackToTopLink />
+
+    } else {
+
+        return <Styles.InlineContainer style={ { opacity: visible ? 0 : 1 } }>
+            <BackToTopLink/>
         </Styles.InlineContainer>
-      );  
+
     }
-};
+
+}; // BackToTop
+
 
 export default BackToTop;
