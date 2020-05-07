@@ -80,6 +80,7 @@ export const MainContainer: ComponentType<*> = (() => {
     return styled.section`
     grid-column: 1/-1;
     display: block;
+    width: 100%;
     `
 
 })();
