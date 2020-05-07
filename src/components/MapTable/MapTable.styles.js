@@ -64,6 +64,7 @@ export const MainContainer: ComponentType<*> = (() => {
     align-content: stretch;
     align-items: stretch;
     height: 750px;
+    width: 100%;
     
     &>* {
         flex-grow: 1;

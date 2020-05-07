@@ -13,6 +13,7 @@ export const Container: ComponentType<*> = (() => {
     grid-column: span 1;
     flex-grow: 1;
     margin-right: 1rem;
+    width: 100%;
     
     &:last-of-type {
         margin-right: 0
