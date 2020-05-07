@@ -206,7 +206,7 @@ export class MapTable extends Component<MapTableProps, {}> {
                         <Styles.ChildrenContainer>
                 <Description text={
                     `Rates per ${ numeral(RatePerPopulation).format("0,0") } resident population.
-                    ${parsedHash.map === "rate"
+                    ${!isMobile && parsedHash.map === "rate"
                         ? ` Darker shades have higher rates.` 
                         : ""}` }
                 />
