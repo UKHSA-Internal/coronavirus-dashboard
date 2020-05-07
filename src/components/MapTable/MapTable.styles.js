@@ -11,11 +11,6 @@ export const Map: ComponentType<*> = (() => {
 
     return styled.div`
     height: 580px;
-    width: 520px;
-    
-    ${ addIECss(css`
-      width: 48%;
-    `) }
   `;
 
 })();
