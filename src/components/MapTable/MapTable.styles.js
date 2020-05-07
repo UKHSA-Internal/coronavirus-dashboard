@@ -67,14 +67,15 @@ export const MainContainer: ComponentType<*> = (() => {
     
     &>* {
         flex-grow: 1;
+        max-width: 50%;
     }
     
     @media only screen and (max-width: 768px) {
         flex-direction: column-reverse;
         
-        
         &>* {
             flex-grow: unset;
+            max-width: 100%;
         }
         height: 620px;
     }
