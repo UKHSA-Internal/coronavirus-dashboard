@@ -36,6 +36,7 @@ export const P: ComponentType<*> = (() => {
 export const MainContainer: ComponentType<*> = (() => {
 
     return styled.section`
+    // grid-row: 5;
     display: flex;
     flex-direction: row;
     grid-column: 1/-1;
@@ -54,13 +55,14 @@ export const MainContainer: ComponentType<*> = (() => {
     }
     
     @media only screen and (max-width: 768px) {
+        display: block;
         flex-direction: column-reverse;
         
         &>* {
-            flex-grow: unset;
+            display: block;
             max-width: 100%;
         }
-        height: 620px;
+        height: 570px;
     }
   `
 
@@ -84,6 +86,7 @@ export const TabContainer: ComponentType<*> = (() => {
       }
 
       @media only screen and (max-width: 768px) {
+        height: 400px;
         max-height: none;
       }
     }
