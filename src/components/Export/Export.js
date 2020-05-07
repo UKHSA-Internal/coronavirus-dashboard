@@ -46,7 +46,7 @@ const ExportLinks = ({ data }: { data: downloads }): any => {
         // Unable to find the data key, log the error to the console
         // and terminate further execution
         if (gaDataKey === '') {
-            console.log('Unable to record download count. Either dataType or fileType is invalid');
+            console.warn('Unable to record download count. Either dataType or fileType is invalid');
             return;
         }
 
@@ -95,15 +95,15 @@ const ExportLinks = ({ data }: { data: downloads }): any => {
                         {
                             data[label].shouldBeTracked
                                 ? <a href={ data[label].csv }
-                                     download={ `coronavirus-${label}_latest.csv` }
+                                     rel="noopener noreferrer"
                                      target={ "_blank" }
-                                     rel={ "noopener noreferrer" }
+                                     download={ `coronavirus-${label}_latest.csv` }
                                      onClick={ () => trackClick(data[label].dataType, fileTypes.csv) }
                                      className={ "govuk-link govuk-link--no-visited-state" }>CSV</a>
                                 : <a href={ data[label].csv }
-                                     download={ `coronavirus-${label}_latest.csv` }
+                                     rel="noopener noreferrer"
                                      target={ "_blank" }
-                                     rel={ "noopener noreferrer" }
+                                     download={ `coronavirus-${label}_latest.csv` }
                                      className={ "govuk-link govuk-link--no-visited-state" }>CSV</a>
                         }
                         &nbsp;or&nbsp;
@@ -112,13 +112,13 @@ const ExportLinks = ({ data }: { data: downloads }): any => {
                                 ? <a href={ data[label].json }
                                      onClick={ () => trackClick(data[label].dataType, fileTypes.json) }
                                      target={ "_blank" }
-                                     rel={ "noopener noreferrer" }
+                                     rel="noopener noreferrer"
                                      download={ `coronavirus-${label}_latest.json` }
                                      className={ "govuk-link govuk-link--no-visited-state" }>JSON</a>
                                 : <a href={ data[label].json }
                                      download={ `coronavirus-${label}_latest.json` }
                                      target={ "_blank" }
-                                     rel={ "noopener noreferrer" }
+                                     rel="noopener noreferrer"
                                      className={ "govuk-link govuk-link--no-visited-state" }>JSON</a>
                         }
                 </Paragraph>
