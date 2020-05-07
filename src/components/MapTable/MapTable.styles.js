@@ -10,8 +10,6 @@ import addIECss from 'addIECss';
 export const Map: ComponentType<*> = (() => {
 
     return styled.div`
-    grid-column: 1;
-    grid-row: 1;
     height: 580px;
     width: 520px;
     
@@ -113,6 +111,7 @@ export const ChildrenContainer: ComponentType<*> = (() => {
 export const MapViewOption: ComponentType<*> = (() => {
     return styled.div`
     height: 640px;
+    width: 520px;
     `;
 })();
 
