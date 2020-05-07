@@ -69,15 +69,6 @@ export const MainContainer: ComponentType<*> = (() => {
         }
         height: 620px;
     }
-
-    ${ addIECss(css`
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      flex-wrap: no-wrap;
-      justify-content: center;
-      align-items: flex-start;
-    `) }
   `
 
 })();

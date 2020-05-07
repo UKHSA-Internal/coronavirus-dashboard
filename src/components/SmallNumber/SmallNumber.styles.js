@@ -10,15 +10,13 @@ export const Container: ComponentType<*> = (() => {
     flex-direction: column;
     border-top: 1px solid #b1b4b6;
     padding-top: 20px;
-    grid-column: span 1;
     flex-grow: 1;
     margin-right: 1rem;
-    width: 100%;
-    
+
     &:last-of-type {
         margin-right: 0
     }
-    
+
     @media only screen and (max-width: 768px) {
         margin-right: 0
     }
@@ -68,6 +66,7 @@ export const Children: ComponentType<*> = (() => {
     flex-direction: row;
     align-items: stretch;
     justify-content: space-between;
+    // width: 100%;
     margin-top: 1rem;
     
     @media only screen and (max-width: 768px) {
@@ -80,9 +79,7 @@ export const MainContainer: ComponentType<*> = (() => {
 
     return styled.section`
     grid-column: 1/-1;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    display: block;
     `
 
 })();
