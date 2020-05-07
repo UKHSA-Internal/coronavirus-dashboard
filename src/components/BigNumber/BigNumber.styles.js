@@ -14,10 +14,6 @@ export const Container: ComponentType<*> = (() => {
     grid-column: span 1;
     margin-bottom: 2rem;
     
-    &:nth-child(n+1) {
-        margin-right: 3rem; 
-    }
-    
     @media only screen and (max-width: 768px) {
         &:nth-child(n+1) {
             margin-right: 0; 
@@ -72,15 +68,23 @@ export const MainContainer: ComponentType<*> = (() => {
 
 export const Children: ComponentType<*> = (() => {
   return styled.div`
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-column: 1/-1;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    &>* {
+        width: 48%;
+    }
   
     @media only screen and (max-width: 768px) {
-        display: flex;
-        flex-direction: row;
         align-items: stretch;
-        justify-content: space-between;
         flex-direction: column;
+        
+        &>* {
+            width: 100%;
+        }
     }
   `;
 })();

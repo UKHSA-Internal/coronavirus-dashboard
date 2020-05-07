@@ -11,11 +11,6 @@ export const Container: ComponentType<*> = (() => {
     border-top: 1px solid #b1b4b6;
     padding-top: 20px;
     flex-grow: 1;
-    margin-right: 1rem;
-
-    &:last-of-type {
-        margin-right: 0
-    }
 
     @media only screen and (max-width: 768px) {
         margin-right: 0
@@ -66,11 +61,27 @@ export const Children: ComponentType<*> = (() => {
     flex-direction: row;
     align-items: stretch;
     justify-content: space-between;
-    // width: 100%;
     margin-top: 1rem;
     
+    &>* {
+      &:nth-child(n+1) {
+        margin-left: 2em;
+      }
+       
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+    
     @media only screen and (max-width: 768px) {
+        align-items: stretch;
         flex-direction: column;
+        
+        &>*,
+        &>*:nth-child(n+1) {
+            width: 100%;
+            margin-left: 0;
+        }
     }
   `;
 })();
