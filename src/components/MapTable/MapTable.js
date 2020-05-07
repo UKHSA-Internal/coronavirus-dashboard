@@ -153,15 +153,7 @@ export class MapTable extends Component<MapTableProps, {}> {
                 </div>
             </Styles.TabContainer>
 
-            <Styles.ChildrenContainer>
-                <Description text={
-                    `Rates per ${ numeral(RatePerPopulation).format("0,0") } resident population.
-                    ${parsedHash.map === "rate"
-                        ? ` Darker shades have higher rates.` 
-                        : ""}` }
-                />
-                { children }
-            </Styles.ChildrenContainer>
+            <Styles.RightContainer>
 
             { isMobile
                 ? null
@@ -211,8 +203,17 @@ export class MapTable extends Component<MapTableProps, {}> {
                     </Styles.TabContainer>
                 </Styles.MapViewOption>
             }
+                        <Styles.ChildrenContainer>
+                <Description text={
+                    `Rates per ${ numeral(RatePerPopulation).format("0,0") } resident population.
+                    ${parsedHash.map === "rate"
+                        ? ` Darker shades have higher rates.` 
+                        : ""}` }
+                />
+                { children }
+            </Styles.ChildrenContainer>
+            </Styles.RightContainer>
         </Styles.MainContainer>
-
 
     } // render
 

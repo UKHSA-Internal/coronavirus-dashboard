@@ -12,7 +12,7 @@ export const Map: ComponentType<*> = (() => {
     return styled.div`
     grid-column: 1;
     grid-row: 1;
-    height: 590px;
+    height: 580px;
     width: 520px;
     ${ addIECss(css`
       width: 48%;
@@ -25,8 +25,6 @@ export const Map: ComponentType<*> = (() => {
 export const Container: ComponentType<*> = (() => {
     return styled.div`
     display: grid;
-    min-height: 500px;
-    max-height: 600px;
 
     ${ addIECss(css`
       display: flex;
@@ -60,24 +58,34 @@ export const P: ComponentType<*> = (() => {
 export const MainContainer: ComponentType<*> = (() => {
 
     return styled.section`
+    display: flex;
+    flex-direction: row;
     grid-column: 1/-1;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-column-gap: .5rem;
-    grid-template-rows: 660px 1fr;
+    align-content: stretch;
+    align-items: stretch;
+    height: 750px;
+    
+    &>* {
+        flex-grow: 1;
+    }
     
     @media only screen and (max-width: 768px) {
-        grid-template-rows: auto 660px auto;
-        grid-row: 2/4;
+        flex-direction: column-reverse;
+        
+        
+        &>* {
+            flex-grow: unset;
+        }
+        height: 620px;
     }
 
     ${ addIECss(css`
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: space-between;
-      flex-wrap: wrap;
+      flex-wrap: no-wrap;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
     `) }
   `
 
@@ -86,9 +94,6 @@ export const MainContainer: ComponentType<*> = (() => {
 
 export const TabContainer: ComponentType<*> = (() => {
     return styled.div`
-    grid-column: 1;
-    grid-row: 1/-1;
-
     @media only screen and (max-width: 768px) {
       height: unset;
       grid-column: 1/-1;
@@ -96,7 +101,7 @@ export const TabContainer: ComponentType<*> = (() => {
     }
 
     & .govuk-tabs__panel {
-      height: 670px;
+      height: 650px;
       overflow: auto;
       
        & a {
@@ -113,13 +118,11 @@ export const TabContainer: ComponentType<*> = (() => {
 
 export const ChildrenContainer: ComponentType<*> = (() => {
     return styled.div`
-    grid-column: 2;
-    grid-row: 2;
+    display: flex;
+    flex-direction: column;
 
     @media only screen and (max-width: 768px) {
       height: unset;
-      grid-column: 1/-1;
-      grid-row: 1;
     }
   `;
 })();
@@ -127,19 +130,24 @@ export const ChildrenContainer: ComponentType<*> = (() => {
 
 export const MapViewOption: ComponentType<*> = (() => {
     return styled.div`
-    grid-column: 2;
-    grid-row: 1;
-    grid-template-rows: 1fr;
-    grid-template-columns: 1fr;
-    
+    height: 640px;
+    `;
+})();
+
+export const RightContainer: ComponentType<*> = (() => {
+    return styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+    flex-grow: 1;
+
     & .govuk-tabs__panel {
-      height: 100%;
-      min-height: 590px;
+      height: 580px;
       padding: 0;
     }
     
     @media only screen and (max-width: 768px) {
-      height: unset;
+      max-height: 50px;
     }
   `;
 })();
