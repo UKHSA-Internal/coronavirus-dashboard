@@ -13,13 +13,13 @@ import type { Props } from './MobileRegionTable.types';
 import * as Styles from './MobileRegionTable.styles';
 
 
-const MobileRegionTable: ComponentType<Props> = ({}: Props) => {
+const MobileRegionTable: ComponentType<Props> = ({ ...props }: Props) => {
     const data = useLoadData();
 
     if ( !data ) return <MainLoading/>;
 
     return (
-        <Styles.Container className="govuk-width-container" role="main">
+        <Styles.Container { ...props } className="govuk-width-container" role="main">
             <PageTitle
                 caption="Regional view"
                 title="Coronavirus (COVID-19) in the UK"
