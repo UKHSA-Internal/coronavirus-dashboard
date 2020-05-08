@@ -26,7 +26,7 @@ const sortFunc = (a, b) => {
 const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) => {
 
     const
-        dataSorted = fillDateGaps(data),//.sort(sortFunc),
+        dataSorted = fillDateGaps(data),
         mobileView = useResponsiveLayout(500) === "mobile",
         labelFontSize = mobileView ? 11 : 14;
 
