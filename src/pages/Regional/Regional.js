@@ -73,8 +73,8 @@ const BigNumberDescriptions = {
 
 
 export const timestamp = (data): string =>
-    data.hasOwnProperty("lastUpdatedAt")
-        ? moment(data.lastUpdatedAt).format("dddd D MMMM YYYY [at] h:mma")
+    data.hasOwnProperty("metadata")
+        ? moment(data?.metadata?.lastUpdatedAt).format("dddd D MMMM YYYY [at] h:mma")
         : "";
 
 
@@ -180,7 +180,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
             }
             <ChartTable data={ data }/>
 
-            <Disclaimer text={ data?.disclaimer }/>
+            <Disclaimer text={ data?.metadata?.disclaimer ?? "" }/>
         </Styles.Container>
     );
 };

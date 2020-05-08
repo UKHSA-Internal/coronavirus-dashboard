@@ -3,7 +3,7 @@
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 
-const latestDataUrl = 'https://c19downloads.azureedge.net/downloads/data/data_latest.json';
+const latestDataUrl = 'https://c19downloads.azureedge.net/downloads/data/landing.json';
 
 const useLoadData = () => {
     const [data, setData] = useState<?Data>(null);
