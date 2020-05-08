@@ -1,7 +1,6 @@
 // @flow
 
 import React, { Component } from 'react';
-import type { ComponentType } from 'react';
 
 import slug from "remark-slug";
 import html from "remark-html";
@@ -11,6 +10,7 @@ import externalLink from "remark-external-links";
 import type { Props } from './Disclaimer.types';
 import * as Styles from './Disclaimer.styles';
 import toc from "remark-toc";
+
 
 export default class Disclaimer extends Component<Props, {}> {
 
