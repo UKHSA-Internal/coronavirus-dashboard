@@ -26,7 +26,7 @@ const getBarChartData = ({ previous, change }) => {
         labels: previousSorted.map(d => d.date),
         datasets: [
             {
-                label: "Moving average of the total",
+                label: "Rolling average of the total",
                 data: movingAverage(sum, 7),
                 type: 'line',
                 fill: false,

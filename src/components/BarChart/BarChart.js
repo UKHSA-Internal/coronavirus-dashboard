@@ -30,7 +30,7 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                         labels: dataSorted.map(d => d.date),
                         datasets: [
                             {
-                                label: "Moving average",
+                                label: "Rolling average",
                                 data: movingAverage(dataSorted.map(d => d.value), 7),
                                 type: 'line',
                                 fill: false,
