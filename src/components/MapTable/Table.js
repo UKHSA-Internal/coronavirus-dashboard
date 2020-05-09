@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -65,10 +65,28 @@ const SortIcon = ({ headingId, sortBy, updater }) => {
 
     const direction = sortBy.field !== headingId || !sortBy.ascending;
 
-    return <Sort href={ "" } role={ "button" } onClick={ event => updater(event, headingId, direction) }>
+    return <Sort htmlType={ "button" } onClick={ event => updater(event, headingId, direction) }>
         { sortBy.field !== headingId
-            ? <CaretUpDown/>
-            : direction ? <CaretUp/> : <CaretDown/> }
+            ? <Fragment>
+                <CaretUpDown/>
+                <span className={ "sr-only" }>
+                    Unsorted column - Apply ascending sort.
+                </span>
+            </Fragment>
+            : direction
+                ? <Fragment>
+                    <CaretUp/>
+                    <span className={ "sr-only" }>
+                        Sorted column  (descending) - Apply ascending sort.
+                    </span>
+                </Fragment>
+                : <Fragment>
+                    <CaretDown/>
+                    <span className={ "sr-only" }>
+                        Sorted column (ascending) - Apply descending sort.
+                    </span>
+                </Fragment>
+        }
     </Sort>
 
 }; // SortIcon

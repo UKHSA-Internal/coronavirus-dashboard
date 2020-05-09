@@ -133,7 +133,7 @@ export const TableHeadingCell = (() => {
 
 export const Sort: ComponentType<*> = (() => {
 
-    return styled.a`
+    return styled.button`
     display: block;
     height: 15px;
     margin-left: 5px;
