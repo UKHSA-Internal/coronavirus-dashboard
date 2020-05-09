@@ -3,7 +3,7 @@
 import React from 'react';
 import type { ComponentType } from 'react';
 
-import { ArrowUp } from "common/icons";
+import { ArrowUp } from "common/Icons";
 import * as Styles from './BackToTop.styles';
 import type { Props } from './BackToTop.types';
 
