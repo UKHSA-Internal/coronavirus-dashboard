@@ -40,6 +40,7 @@ declare export type ValuesDataType = {
 
 declare export type HeadingType = {
 
+    id: string
     label: string,
     format: string,
     getter: (ValuesDataType) => string,
@@ -95,21 +96,27 @@ declare export type PopulationDataType = {
 
 export interface TableState {
 
-    loading: boolean
-    data: any | null
-    populationData: PopulationDataType | null
-
+    state: {
+        loading: boolean
+        data: any | null
+        populationData: PopulationDataType | null,
+    }
 } // TableState
 
 
 declare export type TableProps = {
 
-    headings: HeadingType,
+    headings: Array<HeadingType>,
     hash: string,
     populationData: PopulationDataType,
     url: string,
     data: DataObjectType,
     dataSetter: (d: any) => void,
+    sortBy: {
+        field: string,
+        ascending: boolean
+    },
+    sortUpdate: (string, string, boolean) => void
 
 }; // TableProps
 
@@ -167,7 +174,13 @@ export interface MapTableState {
     geoData: any | null
     loading: boolean
     mapObject: any,
-    hash: string
+    hash: string,
+    tableSort: {
+        [string]: {
+            field: string,
+            ascending: boolean
+        }
+    }
 
 } // MapTableState
 
