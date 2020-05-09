@@ -111,6 +111,37 @@ export const ChildrenContainer: ComponentType<*> = (() => {
 })();
 
 
+export const TableHeadingCell = (() => {
+
+    return styled.span`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    &.numeric {
+        justify-content: flex-end;
+    }
+    
+    &.string,
+    &.date {
+        justify-content: flex-start;
+    }
+    `
+
+})();
+
+
+export const Sort: ComponentType<*> = (() => {
+
+    return styled.a`
+    display: block;
+    height: 15px;
+    margin-left: 5px;
+    `
+
+})();
+
+
 export const MapViewOption: ComponentType<*> = (() => {
     return styled.div`
     height: 640px;
