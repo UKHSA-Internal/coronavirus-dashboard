@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+import { CaretUp, CaretDown, CaretUpDown } from "common/Icons";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 
 import * as utils from "./utils";
-import * as Styles from "./MapTable.styles";
+import { P, TableHeadingCell, Sort } from "./MapTable.styles";
 import type {
     TableState,
     TableProps
@@ -60,6 +61,19 @@ const Td = ({ headings, hash, data }) => {
 }; // Td
 
 
+const SortIcon = ({ headingId, sortBy, updater }) => {
+
+    const direction = sortBy.field !== headingId || !sortBy.ascending;
+
+    return <Sort href={ "" } role={ "button" } onClick={ event => updater(event, headingId, direction) }>
+        { sortBy.field !== headingId
+            ? <CaretUpDown/>
+            : direction ? <CaretUp/> : <CaretDown/> }
+    </Sort>
+
+}; // SortIcon
+
+
 export class Table extends Component<TableProps, {}> {
 
     #baseUrl = 'https://c19downloads.azureedge.net/downloads/data/';
@@ -71,7 +85,7 @@ export class Table extends Component<TableProps, {}> {
         loading: true,
         data: null,
         populationData: null
-    }
+    } // state
 
     getData = async () => {
 
@@ -107,15 +121,16 @@ export class Table extends Component<TableProps, {}> {
     componentDidUpdate(prevProps: Readonly<TableProps>, prevState: Readonly<TableState>, snapshot: any): void {
 
         const
-            { hash } = this.props,
-            prevHash = utils.getParams(prevProps.hash),
-            newHash = utils.getParams(hash);
+            { hash: thisHash,  data } = this.props,
+            { hash: prevHash } = prevProps,
+            lastHash = utils.getParams(prevHash),
+            newHash = utils.getParams(thisHash);
 
-        if ( prevHash.category !== newHash.category && this.props.data ) {
+        if ( lastHash.category !== newHash.category && data ) {
 
-            this.setState({data: this.props.data})
+            this.setState({data: data})
 
-        } else if ( prevHash.category !== newHash.category && !this.props.data ) {
+        } else if ( lastHash.category !== newHash.category && !data ) {
 
             this.setState({ loading: true }, this.getData)
 
@@ -127,19 +142,39 @@ export class Table extends Component<TableProps, {}> {
 
         const
             { loading, data } = this.state,
-            { headings = [], hash=null, populationData } = this.props;
+            {
+                headings=[],
+                hash=null,
+                populationData,
+                sortBy,
+                sortUpdate,
+            } = this.props,
+            ascending = sortBy.ascending ? 1 : -1;
 
-        if ( loading || !hash || !populationData  || !data ) return <Styles.P>Loading...</Styles.P>
+        if ( loading || !hash || !populationData  || !data ) return <P>Loading...</P>
+
+        const sortFunc = ({ [sortBy.field]: a }, { [sortBy.field]: b }) => {
+            a = a?.value ?? a;
+            b = b?.value ?? b;
+            return ((a > b) || -((a < b) || 0)) * ascending
+        };
+        const dt = [...data.values].sort(sortFunc)
 
         return <table className={ 'govuk-table' }>
             <thead className={ 'govuk-table__head' }>
                 <tr className={ 'govuk-table__row' }>
                     {
-                        headings.map((heading, index) =>
-                            <th key={ `heading-${ index }` }
+                        headings.map(({ id, format, label }, index) =>
+                            <th key={ `heading-${ id }-${ index }` }
                                 scope={ "col" }
-                                className={ `govuk-table__header govuk-table__header--${ heading.format }` }>
-                                { heading.label }
+                                id={ id }
+                                className={ `govuk-table__header govuk-table__header--${ format }` }>
+                                <TableHeadingCell className={ format }>
+                                    { label }
+                                    <SortIcon headingId={ id }
+                                              sortBy={ sortBy }
+                                              updater={ sortUpdate }/>
+                                </TableHeadingCell>
                             </th>
                         )
                     }
@@ -147,7 +182,7 @@ export class Table extends Component<TableProps, {}> {
             </thead>
             <tbody className={ 'govuk-table__body' }>
             {
-                data.values.map(item =>
+                dt.map(item =>
                     <tr key={ `row-${ item.key }` } className={ 'govuk-table__row' }>
                         <Td headings={ headings }
                             data={ item }
