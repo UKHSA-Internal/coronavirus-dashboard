@@ -12,16 +12,20 @@ export const Content: MainContentType = [
     {
         headings: [
             {
+                id: "name",
                 label: 'Nation',
-                format: 'string', getter: ({ name }) => name,
+                format: 'string',
+                getter: ({ name }) => name,
                 keyGetter: ({ key }) => key.replace('#', '')
             },
             {
+                id: "rawData",
                 label: <Fragment>Total&nbsp;cases</Fragment>,
                 format: 'numeric',
                 getter: item => numeral(item.rawData.value).format("0,0")
             },
             {
+                id: "rateData",
                 label: 'Rate',
                 format: 'numeric',
                 getter: (item) => numeral(item.rateData.value).format("0,0.0")
@@ -42,23 +46,25 @@ export const Content: MainContentType = [
     {
         headings: [
             {
+                id: "name",
                 label: 'Region',
                 format: 'string',
                 getter: ({ name }) => name,
                 keyGetter: ({ key }) => key.replace('#', '')
             },
             {
+                id: "rawData",
                 label: <Fragment>Total&nbsp;cases</Fragment>,
                 format: 'numeric',
                 getter: item => numeral(item.rawData.value).format("0,0")
             },
             {
+                id: "rateData",
                 label: 'Rate',
                 format: 'numeric',
                 getter: (item) => numeral(item.rateData.value).format("0,0.0")
             }
         ],
-        sortFunc: '',
         label: "Regions",
         textLabel: "regions",
         url: "regions_latest.json",
@@ -74,22 +80,25 @@ export const Content: MainContentType = [
     {
         headings: [
             {
+                id: "name",
                 label: "Upper tier local authority",
-                format: 'string', getter: ({ name }) => name,
+                format: 'string',
+                getter: ({ name }) => name,
                 keyGetter: ({ key }) => key.replace('#', '')
             },
             {
+                id: "rawData",
                 label: <Fragment>Total&nbsp;cases</Fragment>,
                 format: 'numeric',
                 getter: item => numeral(item.rawData.value).format("0,0")
             },
             {
+                id: "rateData",
                 label: 'Rate',
                 format: 'numeric',
                 getter: (item) => numeral(item.rateData.value).format("0,0.0")
             }
         ],
-        sortFunc: '',
         label: 'UTLA',
         textLabel: "utlas",
         url: "utlas_latest.json",
@@ -105,23 +114,25 @@ export const Content: MainContentType = [
     {
         headings: [
             {
+                id: "name",
                 label: "Lower tier local authority",
                 format: 'string',
                 getter: ({ name }) => name,
                 keyGetter: ({ key }) => key.replace('#', '')
             },
             {
+                id: "rawData",
                 label: <Fragment>Total&nbsp;cases</Fragment>,
                 format: 'numeric',
                 getter: item => numeral(item.rawData.value).format("0,0")
             },
             {
+                id: "rateData",
                 label: 'Rate',
                 format: 'numeric',
                 getter: (item) => numeral(item.rateData.value).format("0,0.0")
             }
         ],
-        sortFunc: '',
         label: 'LTLA',
         textLabel: "ltlas",
         url: "ltlas_latest.json",
