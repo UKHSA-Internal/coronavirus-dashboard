@@ -83,16 +83,9 @@ export class MapTable extends Component<MapTableProps, {}> {
 
     } // componentDidUpdate
 
-    setCategory  = (category: string): void  => {
-
-        this.setState({ category: category })
-
-    }; // setCategory
-
-    // FixMe
     tabClickHandler = (event, category: string): void => {
 
-        this.setCategory(category)
+         this.setState({ category: category })
 
     }; // tabClickHandler
 
