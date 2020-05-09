@@ -24,7 +24,7 @@ const setCookies = () => {
   window.ga('govuk_shared.send', 'pageview')
 };
 
-const CookieBanner: ComponentType<Props> = ({ }: Props) => {
+const CookieBanner: ComponentType<Props> = ({ ...props }: Props) => {
   const [cookieState, setCookieState] = useState('unread');
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const CookieBanner: ComponentType<Props> = ({ }: Props) => {
 
   if (cookieState === 'unset') {
     return (
-      <div id="global-cookie-message" className="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet="" style={{ display: 'block' }}>
+      <div { ...props } id="global-cookie-message" className="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet="" style={{ display: 'block' }}>
         <div className="gem-c-cookie-banner__wrapper govuk-width-container">
           <div className="govuk-grid-row">
             <div className="govuk-grid-column-two-thirds">
@@ -99,7 +99,7 @@ const CookieBanner: ComponentType<Props> = ({ }: Props) => {
 
   if (cookieState === 'accept') {
     return (
-      <div id="global-cookie-message" className="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet="" style={{ display: 'block' }}>
+      <div { ...props } id="global-cookie-message" className="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet="" style={{ display: 'block' }}>
         <div className="gem-c-cookie-banner__confirmation govuk-width-container" tabIndex="-1">
           <p className="gem-c-cookie-banner__confirmation-message govuk-body">You’ve accepted all cookies. You can <a href="/cookies" className="govuk-link">change your cookie settings</a> at any time.</p>
           <button className="gem-c-cookie-banner__hide-button govuk-link" data-hide-cookie-banner="true" data-module="track-click" data-track-category="cookieBanner" data-track-action="Hide cookie banner" onClick={handleHide}>Hide</button>

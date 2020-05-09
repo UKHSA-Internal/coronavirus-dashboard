@@ -60,8 +60,7 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
         if (cookieState === 'accept')
             return (
                 <div className="cookie-settings__confirmation" data-cookie-confirmation="true">
-                    <section className="gem-c-notice govuk-!-margin-bottom-8" aria-label="Notice" aria-live="polite"
-                        role="region">
+                    <section className="gem-c-notice govuk-!-margin-bottom-8" aria-label="Notice" aria-live="polite">
                         <h2 className="gem-c-notice__title">Cookies on data.gov.uk</h2>
                         <p className={"govuk-body"}>Your cookie settings were saved</p>
                     </section>
