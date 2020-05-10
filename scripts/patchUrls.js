@@ -10,6 +10,10 @@ const
 const extractEnvVars = () => {
     if (process.env.hasOwnProperty("BUILD_ENV")) return {}
 
+    const productionVars = {
+        MAIN_CDN: "c19pub.azureedge.net",
+        DOWNLOADS_CDN: "c19downloads.azureedge.net"
+    };
 
     switch (process.env.BUILD_ENV) {
 
@@ -18,22 +22,24 @@ const extractEnvVars = () => {
                 MAIN_CDN: "c19pub.azureedgedev.net",
                 DOWNLOADS_CDN: "c19downloadsdev.azureedge.net"
             }
+
         case "staging":
             return {
                 MAIN_CDN: "c19pub.azureedgestaging.net",
                 DOWNLOADS_CDN: "c19downloadsstaging.azureedge.net"
             }
+
         case "production":
-            return {
-                MAIN_CDN: "c19pub.azureedge.net",
-                DOWNLOADS_CDN: "c19downloads.azureedge.net"
-            }
+            return productionVars
+
         default:
-            return {}
+            return process.env.NODE_ENV === "production"
+            ? productionVars
+            :{}
 
     }
 
-}
+}; // extractEnvVars
 
 
 const Replacements = {
