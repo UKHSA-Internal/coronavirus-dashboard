@@ -29,6 +29,9 @@ jobs:
     - name: Build yarn
       env:
         CI: false
+        MAIN_CDN: c19pub.azureedge.net
+        DOWNLOADS_CDN: c19downloads.azureedge.net
+        NODE_ENV: 'production'  
       run: |
         yarn run build
 
