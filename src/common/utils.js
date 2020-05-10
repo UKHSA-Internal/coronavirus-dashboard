@@ -1,16 +1,15 @@
 import moment from "moment";
 import { max, min } from "d3-array";
 
-const isNumber = subject => typeof subject === 'number'
+
+const isNumeric = subject => typeof subject === 'number'
 
 
-const sortFunc = (a, b) => {
+export const sortByDate = (a, b) => {
 
     const
         dateA = new Date(a),
         dateB = new Date(b);
-
-    // if (dateA < dateB) return 1;
 
     return (dateA < dateB) || -((dateA > dateB) || 0)
 
@@ -26,7 +25,7 @@ const dateRange = (startDate, stopDate): Array<string> => {
 
     let currentDate = moment(startDate);
 
-    for (let index = 0; index <= days; index ++) {
+    for ( let index = 0; index <= days; index ++ ) {
         dateArray[index] = currentDate.format('YYYY-MM-DD');
         currentDate = currentDate.add(1, 'days');
     }
@@ -38,17 +37,21 @@ const dateRange = (startDate, stopDate): Array<string> => {
 
 export const fillDateGaps = (data: Array<any>, defaultValue: number = 0): Array<any> => {
 
-    const groupedByDate = {};
+    const
+        dateMin = min(data, d => d.date),
+        dateMax = max(data, d => d.date),
+        groupedByDate = data.reduce((acc, { date, value }) => {
+            acc[date] = value;
+            return acc
+        }, {})
 
-    for (const { date, value } of data) 
-        groupedByDate[date] = value;
 
-    for (const date of dateRange(min(data, d => d.date), max(data, d => d.date)))
+    for (const date of dateRange(dateMin, dateMax))
         groupedByDate[date] = groupedByDate?.[date] ?? defaultValue;
 
     return Object
         .keys(groupedByDate)
-        .sort(sortFunc)
+        .sort(sortByDate)
         .map(date => ({
             date: date,
             value: groupedByDate[date]
@@ -63,6 +66,8 @@ export const fillDateGaps = (data: Array<any>, defaultValue: number = 0): Array<
  * Courtesy of `kaelzhang`_, under MIT License.
  *
  * .. _kaelzhang: https://github.com/kaelzhang/moving-averages
+ *
+ * With alterations and optimisation by Pouria Hadjibagheri.
  *
  * @param data { Array<number> } Array of numbers
  * @param size { number } Size of the moving window
@@ -83,7 +88,7 @@ export const movingAverage = ( data: number[], size: number ): number[] => {
     for ( ; i < length && counter < prepare; i++ ) {
         datum = data[i]
 
-        if ( isNumber(datum) ) {
+        if ( isNumeric(datum) ) {
             sum += datum;
             counter++
         }
@@ -92,11 +97,10 @@ export const movingAverage = ( data: number[], size: number ): number[] => {
     for ( ; i < length; i++ ) {
         datum = data[i]
 
-        if ( isNumber(datum) )
+        if ( isNumeric(datum) )
             sum += datum;
 
-
-        if ( isNumber(data[i - size]) )
+        if ( isNumeric(data[i - size]) )
             sum -= data[i - size];
 
         ret[i] = sum / size
