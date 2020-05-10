@@ -94,7 +94,7 @@ const SortIcon = ({ headingId, sortBy, updater }) => {
 
 export class Table extends Component<TableProps, {}> {
 
-    #baseUrl = 'https://c19downloads.azureedge.net/downloads/data/';
+    #baseUrl = `https://${ process?.env?.REACT_APP_DOWNLOADS_CDN ?? "{{DOWNLOADS_CDN}}" }/downloads/data/`;
     #excluded = [
         "metadata"
     ]

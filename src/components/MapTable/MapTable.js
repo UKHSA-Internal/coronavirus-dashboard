@@ -32,7 +32,7 @@ const Description = ({ text, show = true, ...props }): React.ReactNode => {
 
 export class MapTable extends Component<MapTableProps, {}> {
 
-    #populationData = 'https://c19pub.azureedge.net/assets/population/population.json';
+    #populationData = `https://${ process?.env?.REACT_APP_MAIN_CDN ?? "{{MAIN_CDN}}" }/assets/population/population.json`;
 
     state: MapTableState = {
 
