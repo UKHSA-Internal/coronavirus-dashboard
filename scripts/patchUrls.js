@@ -73,9 +73,10 @@ const main = async () => {
             stream.on("finish", resolve);
             stream.on("error", reject);
         });
-        await fs.unlinkSync(file);
-        await fs.copyFileSync(tmpFile, file);
-        await fs.unlinkSync(tmpFile);
+
+        fs.unlinkSync(file);
+        fs.copyFileSync(tmpFile, file);
+        fs.unlinkSync(tmpFile);
 
     }
 
