@@ -62,31 +62,25 @@ const main = async () => {
         const tmpFile = `${ file }.tmp`;
 
         await new Promise((resolve, reject) => {
-            let stream = fs.createReadStream(file);
-
-            for ( const varName in Replacements ) {
-
-                if ( !process.env.hasOwnProperty(varName) ) continue;
-
-                const varValue = process.env[varName];
-
-                stream = stream.pipe(
-                    replaceStream(`{{${varName}}}`, varValue)
+            const stream = Object
+                .keys(Replacements)
+                .reduce((stream, key) =>
+                    stream.pipe( replaceStream(`{{${key}}}`, Replacements[key]) ),
+                    fs.createReadStream(file)
                 )
+                .pipe(fs.createWriteStream(tmpFile));
 
-            }
-
-            stream.pipe(fs.createWriteStream(tmpFile));
             stream.on("finish", resolve);
             stream.on("error", reject);
         });
-        fs.unlinkSync(file);
-        fs.copyFileSync(tmpFile, file);
-        fs.unlinkSync(tmpFile);
+        await fs.unlinkSync(file);
+        await fs.copyFileSync(tmpFile, file);
+        await fs.unlinkSync(tmpFile);
 
     }
 
-};
+}; // main
+
 
 main().catch(err => {
     console.error(err);
