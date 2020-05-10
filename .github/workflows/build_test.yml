@@ -33,9 +33,10 @@ jobs:
     - name: Build
       env:
         CI: false
+        BUILD_ENV: 'development' 
         MAIN_CDN: c19pubdev.azureedge.net
         DOWNLOADS_CDN: c19downloadsdev.azureedge.net
-        NODE_ENV: 'development'  
+        NODE_ENV: 'production'  
         BASE_URL: https://coronavirus-staging.data.gov.uk/ 
       run: |
         npm run build

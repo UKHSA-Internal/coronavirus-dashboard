@@ -29,6 +29,7 @@ jobs:
     - name: Build yarn
       env:
         CI: false
+        BUILD_ENV: 'production'
         MAIN_CDN: c19pub.azureedge.net
         DOWNLOADS_CDN: c19downloads.azureedge.net
         NODE_ENV: 'production'  
