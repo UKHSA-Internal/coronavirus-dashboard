@@ -48,7 +48,7 @@ const formatStr = (s: string,  replacements: ReplacementsType): string  => {
 
         if (!replacements.hasOwnProperty(key)) continue
 
-        s = s.replace(`\{${key}\}`, replacements?.[key] ??  "")
+        s = s.replace(`{${key}}`, replacements?.[key] ??  "")
 
     }
 
