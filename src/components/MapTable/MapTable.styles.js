@@ -137,6 +137,8 @@ export const Sort: ComponentType<*> = (() => {
     display: block;
     height: 15px;
     margin-left: 5px;
+    outline: none;
+    cursor: pointer;
     `
 
 })();
