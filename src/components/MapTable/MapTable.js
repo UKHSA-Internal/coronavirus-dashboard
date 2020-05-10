@@ -96,7 +96,7 @@ export class MapTable extends Component<MapTableProps, {}> {
         this.setState(prevState => ({
             tableSort: {
                 ...prevState.tableSort,
-                [utils.getParams(prevState.hash).category]: {
+                [utils.getParams(prevState.hash)?.category ?? prevState.category]: {
                     field: field,
                     ascending: ascending
                 }
@@ -201,7 +201,6 @@ export class MapTable extends Component<MapTableProps, {}> {
                                      hash={ hash }
                                      geoData={ geoData?.[parsedHash.category] ?? null }
                                      isRate={ parsedHash.map === "rate" }
-                                     mapObjectSetter={ () => this.mapObjectSetter() }
                                      geoDataSetter={ data => this.setState(prevState => ({
                                          geoData: {
                                              ...prevState.geoData,
