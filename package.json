@@ -28,12 +28,13 @@
     "remark-toc": "^7.0.0",
     "remark-slug": "^6.0.0",
     "remark-html": "^11.0.1",
-    "remark-external-links": "^6.0.0"
+    "remark-external-links": "^6.0.0",
+    "replacestream": "^4.0.3"
   },
   "scripts": {
     "lint": "yarn flow",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && node scripts/patchUrls.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
