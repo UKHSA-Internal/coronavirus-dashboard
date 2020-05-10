@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react';
 import axios from 'axios';
 
 
-const latestDataUrl = `https://${ process.env?.REACT_APP_DOWNLOADS_CDN ?? "{{DOWNLOADS_CDN}}" }/downloads/data/landing.json`;
+const latestDataUrl = `https://${ process?.env?.REACT_APP_DOWNLOADS_CDN ?? "{{DOWNLOADS_CDN}}" }/downloads/data/landing.json`;
 
 
 const useLoadData = () => {
