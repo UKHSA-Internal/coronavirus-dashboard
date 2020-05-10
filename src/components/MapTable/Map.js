@@ -55,8 +55,8 @@ const OpenStreetMapAttrib = () => {
 
 export class Map extends Component<MapProps, {}> {
 
-    #baseUrl = `https://${ process.env?.REACT_APP_MAIN_CDN ?? "{{MAIN_CDN}}" }/assets/geo/`;
-    #mapStyleUrl = `https://${ process.env?.REACT_APP_MAIN_CDN ?? "{{MAIN_CDN}}" }/assets/map/style_v2.json`;
+    #baseUrl = `https://${ process?.env?.REACT_APP_MAIN_CDN ?? "{{MAIN_CDN}}" }/assets/geo/`;
+    #mapStyleUrl = `https://${ process?.env?.REACT_APP_MAIN_CDN ?? "{{MAIN_CDN}}" }/assets/map/style_v2.json`;
     #areaCodeSuffix = "cd";
 
     state: MapState = {

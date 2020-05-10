@@ -6,9 +6,38 @@ const
     replaceStream = require("replacestream");
 
 
+
+const extractEnvVars = () => {
+    if (process.env.hasOwnProperty("BUILD_ENV")) return {}
+
+
+    switch (process.env.BUILD_ENV) {
+
+        case "development":
+            return {
+                MAIN_CDN: "c19pub.azureedgedev.net",
+                DOWNLOADS_CDN: "c19downloadsdev.azureedge.net"
+            }
+        case "staging":
+            return {
+                MAIN_CDN: "c19pub.azureedgestaging.net",
+                DOWNLOADS_CDN: "c19downloadsstaging.azureedge.net"
+            }
+        case "production":
+            return {
+                MAIN_CDN: "c19pub.azureedge.net",
+                DOWNLOADS_CDN: "c19downloads.azureedge.net"
+            }
+        default:
+            return {}
+
+    }
+
+}
+
+
 const Replacements = {
-    MAIN_CDN: "c19pub.azureedge.net",
-    DOWNLOADS_CDN: "c19downloads.azureedge.net",
+    ...extractEnvVars(),
     ...process.env
 };
 
