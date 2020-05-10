@@ -15,6 +15,7 @@ import ExportLinks from "components/Export";
 import Announcement from "components/Announcement";
 import ChartTable from "components/ChartTable";
 import MapTable from "components/MapTable";
+import URLs from "common/urls";
 
 import type { Props, ReplacementsType } from './Regional.types';
 import * as Styles from './Regional.styles';
@@ -163,14 +164,14 @@ const Regional: ComponentType<Props> = ({}: Props) => {
                 ? <MapTable>
                     <ExportLinks data={ {
                         cases: {
-                            csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv",
-                            json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-cases_latest.json",
+                            csv: URLs.latestCases.csv,
+                            json: URLs.latestCases.json,
                             shouldBeTracked: true,
                             dataType: "cases"
                         },
                         deaths: {
-                            csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv",
-                            json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-deaths_latest.json",
+                            csv: URLs.latestDeaths.csv,
+                            json: URLs.latestDeaths.json,
                             shouldBeTracked: true,
                             dataType: "deaths"
                         }

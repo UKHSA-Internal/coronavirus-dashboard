@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import numeral from "numeral";
 
+import URLs from "common/urls";
+
 import { Map } from "./Map";
 import { Table } from "./Table";
 import { Content } from "./constants";
@@ -32,7 +34,7 @@ const Description = ({ text, show = true, ...props }): React.ReactNode => {
 
 export class MapTable extends Component<MapTableProps, {}> {
 
-    #populationData = `https://${ process?.env?.REACT_APP_MAIN_CDN ?? "{{MAIN_CDN}}" }/assets/population/population.json`;
+    #populationData = URLs.populationData;
 
     state: MapTableState = {
 

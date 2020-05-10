@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 import { CaretUp, CaretDown, CaretUpDown } from "common/Icons";
+import URLs from "common/urls";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 
 import * as utils from "./utils";
@@ -94,7 +95,7 @@ const SortIcon = ({ headingId, sortBy, updater }) => {
 
 export class Table extends Component<TableProps, {}> {
 
-    #baseUrl = `https://${ process?.env?.REACT_APP_DOWNLOADS_CDN ?? "{{DOWNLOADS_CDN}}" }/downloads/data/`;
+    #baseUrl = URLs.baseData;
     #excluded = [
         "metadata"
     ]
