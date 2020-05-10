@@ -44,7 +44,8 @@ export class MapTable extends Component<MapTableProps, {}> {
         geoData: null,
         loading: false,
         mapObject: null,
-        hash: ""
+        hash: "",
+        tableSort: {}
 
     } // state
 
@@ -82,17 +83,27 @@ export class MapTable extends Component<MapTableProps, {}> {
 
     } // componentDidUpdate
 
-    setCategory  = (category: string): void  => {
+    tabClickHandler = (event, category: string): void => {
 
-        this.setState({ category: category })
-
-    }; // setCategory
-
-    tabClickHandler = (event, category) => {
-
-        this.setCategory(category)
+         this.setState({ category: category })
 
     }; // tabClickHandler
+
+    tableSortHandler = (event: any, field: string, ascending: boolean): void => {
+
+        event.preventDefault();
+
+        this.setState(prevState => ({
+            tableSort: {
+                ...prevState.tableSort,
+                [utils.getParams(prevState.hash).category]: {
+                    field: field,
+                    ascending: ascending
+                }
+            }
+        }))
+
+    }; // tableSortHandler
 
     render(): React.ReactNode {
 
@@ -105,13 +116,14 @@ export class MapTable extends Component<MapTableProps, {}> {
                 geoData,
                 loading,
                 hash: locHash = "",
+                tableSort
             } = this.state,
             { children, isMobile = false } = this.props,
             hash = locHash !== ""
                 ? locHash
                 : utils.createHash({category: category, map: viewMapAs}),
             parsedHash = utils.getParams(hash),
-            contentData = Content.filter(item => item.textLabel === parsedHash.category)[0],
+            contentData = Content.filter(item => item.textLabel === parsedHash.category).pop(),
             resetHash = utils.createHash({ category: parsedHash.category, map: parsedHash.map });
 
 
@@ -139,6 +151,13 @@ export class MapTable extends Component<MapTableProps, {}> {
                     <div className={ `govuk-tabs__panel` } id={ parsedHash.category }>
                         <Table{ ...contentData }
                               hash={ hash }
+                              sortBy={
+                                  tableSort?.[parsedHash.category] ?? {
+                                      field: contentData.headings?.[0]?.id ?? "",
+                                      ascending: true
+                                  }
+                              }
+                              sortUpdate={ this.tableSortHandler }
                               populationData={ populationData }
                               data={ data?.[parsedHash.category] ?? null }
                               dataSetter={ (data) => this.setState(prevState => ({
