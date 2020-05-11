@@ -27,7 +27,11 @@ const getBarChartData = ({ previous, change }) => {
         datasets: [
             {
                 label: "Rolling average of the total",
-                data: movingAverage(sum, 7),
+                data: [
+                    NaN, NaN, NaN, NaN, NaN, NaN,
+                    ...movingAverage(sum, 7).slice(3, -3),
+                    NaN, NaN, NaN
+                ],
                 type: 'line',
                 fill: false,
                 borderColor: "#323d13",
@@ -36,6 +40,7 @@ const getBarChartData = ({ previous, change }) => {
                 order: 0,
                 pointHoverRadius: 0
             },
+
             {
                 label: "Previously reported",
                 backgroundColor: '#62a3b3',
