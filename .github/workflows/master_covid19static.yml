@@ -26,7 +26,6 @@ jobs:
         npm install
         yarn install
 
-
     # NOTE: Do NOT use trailing slashes in the URLs.
     # ATTENTION: `BASE_URL` must have the HTTP(S) protocol, but other URLs must not.
     - name: Build yarn
