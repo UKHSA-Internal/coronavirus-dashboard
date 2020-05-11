@@ -58,7 +58,7 @@ export default class ChartTable extends Component<ChartTableProps, {}> {
      *
      * @returns { ReactNode }
      */
-    render(): React.ReactNode {
+    render(): ReactNode {
 
         const
             { view } = this.state,
