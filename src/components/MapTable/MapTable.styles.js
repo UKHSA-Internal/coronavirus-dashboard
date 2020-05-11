@@ -136,6 +136,7 @@ export const Sort: ComponentType<*> = (() => {
     return styled.button`
     display: block;
     height: 15px;
+    width: 10px;
     margin-left: 5px;
     outline: none;
     cursor: pointer;
