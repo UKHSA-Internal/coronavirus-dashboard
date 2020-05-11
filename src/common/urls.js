@@ -1,20 +1,32 @@
+const {
+    process: {
+        env: {
+            REACT_APP_MAIN_CDN      = "%MAIN_CDN%",
+            REACT_APP_DOWNLOADS_CDN = "%DOWNLOADS_CDN%",
+            REACT_APP_BASE_URL      = "%BASE_URL%"
+        }
+    }
+} = process;
+
+
+
 const URLs = {
 
-    populationData: `https://${ process?.env?.REACT_APP_MAIN_CDN ?? "%MAIN_CDN%" }/assets/population/population.json`,
-    baseData:       `https://${ process?.env?.REACT_APP_DOWNLOADS_CDN ?? "%DOWNLOADS_CDN%" }/downloads/data/`,
-    baseGeo:        `https://${ process?.env?.REACT_APP_MAIN_CDN ?? "%MAIN_CDN%" }/assets/geo/`,
-    mapStyle:       `https://${ process?.env?.REACT_APP_MAIN_CDN ?? "%MAIN_CDN%" }/assets/map/style_v2.json`,
-    landingData:    `https://${ process?.env?.REACT_APP_DOWNLOADS_CDN ?? "%DOWNLOADS_CDN%" }/downloads/data/landing.json`,
+    populationData: `https://${ REACT_APP_MAIN_CDN      }/assets/population/population.json`,
+    baseData:       `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/data/`,
+    baseGeo:        `https://${ REACT_APP_MAIN_CDN      }/assets/geo/`,
+    mapStyle:       `https://${ REACT_APP_MAIN_CDN      }/assets/map/style_v2.json`,
+    landingData:    `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/data/landing.json`,
     latestCases: {
-        csv:  `https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv`,
-        json: `https://coronavirus.data.gov.uk/downloads/json/coronavirus-cases_latest.json`
+        csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-cases_latest.csv`,
+        json: `${ REACT_APP_BASE_URL }/downloads/json/coronavirus-cases_latest.json`
     },
     latestDeaths: {
-        csv:  `https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv`,
-        json: `https://coronavirus.data.gov.uk/downloads/json/coronavirus-deaths_latest.json`
+        csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-deaths_latest.csv`,
+        json: `${ REACT_APP_BASE_URL }/downloads/json/coronavirus-deaths_latest.json`
     },
-    archiveList: `https://${ process?.env?.REACT_APP_DOWNLOADS_CDN ?? "%DOWNLOADS_CDN%" }/downloads?restype=container&comp=list`,
-    baseUrl: `${ process?.env?.REACT_APP_BASE_URL ?? "%BASE_URL%"}`
+    archiveList: `https://${ REACT_APP_DOWNLOADS_CDN }/downloads?restype=container&comp=list`,
+    baseUrl:     REACT_APP_BASE_URL
 };
 
 
