@@ -13,6 +13,8 @@ const
  *       Either the `BUILD_ENV` should be set to one of `development`, `staging`
  *       or `production`; or `NODE_ENV` must be set to `production`.
  *
+ * NOTE: Do **NOT** use trailing slashes in the URL.
+ *
  * @returns { {}|{DOWNLOADS_CDN: string, BASE_URL: string, MAIN_CDN: string} }
  */
 const extractEnvVars = () => {
@@ -31,14 +33,14 @@ const extractEnvVars = () => {
     switch (process.env?.BUILD_ENV) {
         case "development":
             return {
-                BASE_URL: "https://covid19statdev.azureedge.net/",
+                BASE_URL: "https://covid19statdev.azureedge.net",
                 MAIN_CDN: "c19pub.azureedgedev.net",
                 DOWNLOADS_CDN: "c19downloadsdev.azureedge.net"
             }
 
         case "staging":
             return {
-                BASE_URL: "https://Covid19StaticStaging.azureedge.net/",
+                BASE_URL: "https://Covid19StaticStaging.azureedge.net",
                 MAIN_CDN: "c19pub.azureedgestaging.net",
                 DOWNLOADS_CDN: "c19downloadsstaging.azureedge.net"
             }
