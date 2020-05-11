@@ -1,12 +1,10 @@
-const {
-    process: {
-        env: {
-            REACT_APP_MAIN_CDN      = "%MAIN_CDN%",
-            REACT_APP_DOWNLOADS_CDN = "%DOWNLOADS_CDN%",
-            REACT_APP_BASE_URL      = "%BASE_URL%"
-        }
-    }
-} = process;
+const
+    env = process?.env ?? {},
+    {
+        REACT_APP_MAIN_CDN      = "%MAIN_CDN%",
+        REACT_APP_DOWNLOADS_CDN = "%DOWNLOADS_CDN%",
+        REACT_APP_BASE_URL      = "%BASE_URL%"
+    } = env;
 
 
 
