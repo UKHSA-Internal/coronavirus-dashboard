@@ -9,11 +9,13 @@ const
 /**
  * Default variables.
  *
- * NOTE: The behaviour of  this function depends on two environment variables:
- *       Either the `BUILD_ENV` should be set to one of `development`, `staging`
- *       or `production`; or `NODE_ENV` must be set to `production`.
+ * .. note:: The behaviour of  this function depends on two environment variables:
+ *           Either the `BUILD_ENV` should be set to one of `development`, `staging`
+ *           or `production`; or `NODE_ENV` must be set to `production`.
  *
- * NOTE: Do **NOT** use trailing slashes in the URL.
+ * .. note:: Do **NOT** use trailing slashes in the URL.
+ *
+ * .. attention:: `BASE_URL` must have the HTTP(S) protocol, but other URLs must not.
  *
  * @returns { {}|{DOWNLOADS_CDN: string, BASE_URL: string, MAIN_CDN: string} }
  */
