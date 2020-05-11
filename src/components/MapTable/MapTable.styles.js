@@ -140,6 +140,10 @@ export const Sort: ComponentType<*> = (() => {
     margin-left: 5px;
     outline: none;
     cursor: pointer;
+    
+    &:last-of-type {
+        padding-right: 20px;
+    }
     `
 
 })();
