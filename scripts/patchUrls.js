@@ -27,7 +27,6 @@ const extractEnvVars = () => {
         DOWNLOADS_CDN: "c19downloads.azureedge.net"
     };
 
-
     if ( process.env.NODE_ENV === "production" && !process.env.hasOwnProperty("BUILD_ENV"))
         return  prod;
 
@@ -56,12 +55,6 @@ const extractEnvVars = () => {
     }
 
 }; // extractEnvVars
-
-
-const Replacements = {
-    ...extractEnvVars(),
-    ...process.env
-};
 
 
 /**
@@ -96,7 +89,11 @@ const main = async () => {
 
     const
         directory = path.join(__dirname, "..", "build"),
-        files = getFiles(directory);
+        files = getFiles(directory),
+        Replacements = {
+            ...extractEnvVars(),
+            ...process.env
+        };
 
     for ( const file of files ) {
 
@@ -107,9 +104,9 @@ const main = async () => {
                 .keys(Replacements)
                 .reduce((stream, key) =>
                     stream
-                        .pipe(replaceStream(`%${ key }%`), Replacements[key])
+                        .pipe(replaceStream(`%${ key }%`, Replacements[key]))
                         .pipe(replaceStream(`%REACT_APP_${ key }%`, Replacements[key])),
-                        fs.createReadStream(file)
+                    fs.createReadStream(file)
                 )
                 .pipe(fs.createWriteStream(tmpFile));
 
