@@ -25,11 +25,7 @@ const extractEnvVars = () => {
 
 
     if ( process.env.NODE_ENV === "production" && !process.env.hasOwnProperty("BUILD_ENV"))
-        return  {
-            BASE_URL: "https://coronavirus.data.gov.uk",
-            MAIN_CDN: "c19pub.azureedge.net",
-            DOWNLOADS_CDN: "c19downloads.azureedge.net"
-        };
+        return  prod;
 
 
     switch (process.env?.BUILD_ENV) {
