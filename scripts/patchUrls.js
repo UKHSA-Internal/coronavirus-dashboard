@@ -6,36 +6,52 @@ const
     replaceStream = require("replacestream");
 
 
-
+/**
+ * Default variables.
+ *
+ * NOTE: The behaviour of  this function depends on two environment variables:
+ *       Either the `BUILD_ENV` should be set to one of `development`, `staging`
+ *       or `production`; or `NODE_ENV` must be set to `production`.
+ *
+ * @returns { {}|{DOWNLOADS_CDN: string, BASE_URL: string, MAIN_CDN: string} }
+ */
 const extractEnvVars = () => {
-    if (process.env.hasOwnProperty("BUILD_ENV")) return {}
 
-    const productionVars = {
+    const prod = {
+        BASE_URL: "https://coronavirus.data.gov.uk",
         MAIN_CDN: "c19pub.azureedge.net",
         DOWNLOADS_CDN: "c19downloads.azureedge.net"
     };
 
-    switch (process.env.BUILD_ENV) {
 
+    if ( process.env.NODE_ENV === "production" && !process.env.hasOwnProperty("BUILD_ENV"))
+        return  {
+            BASE_URL: "https://coronavirus.data.gov.uk",
+            MAIN_CDN: "c19pub.azureedge.net",
+            DOWNLOADS_CDN: "c19downloads.azureedge.net"
+        };
+
+
+    switch (process.env?.BUILD_ENV) {
         case "development":
             return {
+                BASE_URL: "https://covid19statdev.azureedge.net/",
                 MAIN_CDN: "c19pub.azureedgedev.net",
                 DOWNLOADS_CDN: "c19downloadsdev.azureedge.net"
             }
 
         case "staging":
             return {
+                BASE_URL: "https://Covid19StaticStaging.azureedge.net/",
                 MAIN_CDN: "c19pub.azureedgestaging.net",
                 DOWNLOADS_CDN: "c19downloadsstaging.azureedge.net"
             }
 
         case "production":
-            return productionVars
+            return prod
 
         default:
-            return process.env.NODE_ENV === "production"
-            ? productionVars
-            :{}
+            return {}
 
     }
 
@@ -48,14 +64,39 @@ const Replacements = {
 };
 
 
+/**
+ * Extracts ".js" and ".html" files in `directory` and its subdirectories
+ * and returns an array of absolute paths.
+ *
+ * @param directory { string }
+ * @returns { string[] }
+ */
+const getFiles = (directory) =>  {
+
+    return fs
+        .readdirSync(directory, { withFileTypes: true })
+        .reduce((acc, item) => [
+            ...acc,
+            ...item.isDirectory()
+                ? getFiles(path.join(directory, item.name))
+                : [ path.join(directory, item.name) ]
+        ], [])
+        .filter(file => /\.(js|html)$/i.exec(file))
+
+}; // getFiles
+
+
+/**
+ * Replaces placeholders formatted as `%key%` with environment
+ * variables defined using the same key.
+ *
+ * @returns {  Promise<void> }
+ */
 const main = async () => {
 
-    const directory = path.join(__dirname, "..", "build", "static", "js");
-
-    const files = fs
-        .readdirSync(directory)
-        .filter(file => file.endsWith(".js"))
-        .map(fileName => path.join(directory, fileName));
+    const
+        directory = path.join(__dirname, "..", "build"),
+        files = getFiles(directory);
 
     for ( const file of files ) {
 
@@ -65,8 +106,10 @@ const main = async () => {
             const stream = Object
                 .keys(Replacements)
                 .reduce((stream, key) =>
-                    stream.pipe( replaceStream(`{{${key}}}`, Replacements[key]) ),
-                    fs.createReadStream(file)
+                    stream
+                        .pipe(replaceStream(`%${ key }%`), Replacements[key])
+                        .pipe(replaceStream(`%REACT_APP_${ key }%`, Replacements[key])),
+                        fs.createReadStream(file)
                 )
                 .pipe(fs.createWriteStream(tmpFile));
 
