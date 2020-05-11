@@ -32,7 +32,7 @@ const extractEnvVars = () => {
         return  prod;
 
 
-    switch (process.env?.BUILD_ENV) {
+    switch (process.env.BUILD_ENV) {
         case "development":
             return {
                 BASE_URL: "https://covid19statdev.azureedge.net",
