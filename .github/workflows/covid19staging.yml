@@ -1,0 +1,46 @@
+name: Build and deploy Node.js app to Azure Web App - Covid19StaticSTAGING
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Set up Node.js version
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.13.0'
+
+    - name: Install dependencies
+      run: |
+        npm install -g yarn
+        npm install
+        yarn install
+
+    # NOTE: Do NOT use trailing slashes in the URLs.
+    # ATTENTION: `BASE_URL` must have the HTTP(S) protocol, but other URLs must not.
+    - name: Build yarn
+      env:
+        CI: false
+        BUILD_ENV: staging
+        BASE_URL: https://Covid19StaticStaging.azureedge.net
+        MAIN_CDN: c19pub.azureedgestaging.net
+        DOWNLOADS_CDN: c19downloadsstaging.azureedge.net
+        NODE_ENV: production
+
+      run: |
+        yarn run build
+
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v1
+      with:
+        app-name: 'Covid19StaticSTAGING'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppServiceDev }}
+        package: ./build
