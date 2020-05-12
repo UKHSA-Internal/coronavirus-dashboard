@@ -223,7 +223,7 @@ export class MapTable extends Component<MapTableProps, {}> {
                     </Styles.TabContainer>
                 </Styles.MapViewOption>
             }
-                        <Styles.ChildrenContainer>
+            <Styles.ChildrenContainer>
                 <Description text={
                     `Rates per ${ numeral(RatePerPopulation).format("0,0") } resident population.
                     ${!isMobile && parsedHash.map === "rate"
