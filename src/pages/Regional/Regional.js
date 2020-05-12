@@ -90,6 +90,22 @@ export const MainLoading = () => {
 }; // MainLoading
 
 
+const Exports= () => <ExportLinks data={ {
+    cases: {
+        csv: URLs.latestCases.csv,
+        json: URLs.latestCases.json,
+        shouldBeTracked: true,
+        dataType: "cases"
+    },
+    deaths: {
+        csv: URLs.latestDeaths.csv,
+        json: URLs.latestDeaths.json,
+        shouldBeTracked: true,
+        dataType: "deaths"
+    }
+} }/>; // Exports
+
+
 const Regional: ComponentType<Props> = ({}: Props) => {
     const
         data = useLoadData(),
@@ -159,25 +175,10 @@ const Regional: ComponentType<Props> = ({}: Props) => {
                     )
                 }
             </SmallNumberContainer>
-
-            { layout === 'desktop'
-                ? <MapTable>
-                    <ExportLinks data={ {
-                        cases: {
-                            csv: URLs.latestCases.csv,
-                            json: URLs.latestCases.json,
-                            shouldBeTracked: true,
-                            dataType: "cases"
-                        },
-                        deaths: {
-                            csv: URLs.latestDeaths.csv,
-                            json: URLs.latestDeaths.json,
-                            shouldBeTracked: true,
-                            dataType: "deaths"
-                        }
-                    } }/>
-                </MapTable>
-                : null
+            {
+                layout === 'desktop'
+                    ? <MapTable><Exports/></MapTable>
+                    : <Styles.FullWidth><Exports/></Styles.FullWidth>
             }
             <ChartTable data={ data }/>
 
