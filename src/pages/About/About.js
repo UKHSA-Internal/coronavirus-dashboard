@@ -10,6 +10,8 @@ import externalLink from "remark-external-links";
 
 import axios from "axios";
 
+import URLs from "common/urls";
+
 import type { AboutProps, AboutState } from './About.types';
 import * as Styles from './About.styles';
 
@@ -17,7 +19,7 @@ import * as Styles from './About.styles';
 
 export default class About extends Component<AboutProps, {}> {
 
-    #url = "https://c19pub.azureedge.net/assets/about.md"
+    #url = URLs.about;
 
     state: AboutState = {
         loading: false,

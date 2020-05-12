@@ -10,6 +10,8 @@ import externalLink from "remark-external-links";
 
 import axios from "axios";
 
+import URLs from "common/urls";
+
 import type { AccessibilityState, AccessibilityProps } from './Accessibility.types';
 import * as Styles from './Accessibility.styles';
 
@@ -17,7 +19,7 @@ import * as Styles from './Accessibility.styles';
 
 export default class Accessibility extends Component<AccessibilityProps, {}> {
 
-    #url = "https://c19pub.azureedge.net/assets/accessibility.md"
+    #url = URLs.accessibility;
 
     state: AccessibilityState = {
         loading: false,
