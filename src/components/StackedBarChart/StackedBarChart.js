@@ -99,7 +99,7 @@ const getBarChartOptions = (tooltipText, mobileView) => {
                 gridLines: {
                     drawBorder: false,
                 },
-                // stacked: true,
+                stacked: true,
                 ticks: {
                     fontSize: labelFontSize,
                     fontColor: '#1A2B2B',
