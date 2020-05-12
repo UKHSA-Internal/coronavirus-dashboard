@@ -25,10 +25,18 @@ jobs:
         npm install -g yarn
         npm install
         yarn install
-        
+
+    # NOTE: Do NOT use trailing slashes in the URLs.
+    # ATTENTION: `BASE_URL` must have the HTTP(S) protocol, but other URLs must not.
     - name: Build yarn
       env:
         CI: false
+        BUILD_ENV: development
+        BASE_URL: https://covid19statdev.azureedge.net
+        MAIN_CDN: c19pubdev.azureedge.net
+        DOWNLOADS_CDN: c19downloadsdev.azureedge.net
+        NODE_ENV: production
+
       run: |
         yarn run build
 

@@ -77,6 +77,7 @@ const App = () => {
                 {/* These back-to-top links are the 'overlay' style that stays
                     on screen as we scroll. */}
                 <Route path="/about" exact render={ () => <BackToTop mode={ "overlay" }/> } />
+                <Route path="/accessibility" exact render={ () => <BackToTop mode={ "overlay" }/> } />
                 <Route path="/" exact render={ () => <BackToTop mode={ "overlay" }/> } />
             </Switch>
 

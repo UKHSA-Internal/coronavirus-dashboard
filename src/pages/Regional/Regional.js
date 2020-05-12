@@ -15,6 +15,7 @@ import ExportLinks from "components/Export";
 import Announcement from "components/Announcement";
 import ChartTable from "components/ChartTable";
 import MapTable from "components/MapTable";
+import URLs from "common/urls";
 
 import type { Props, ReplacementsType } from './Regional.types';
 import * as Styles from './Regional.styles';
@@ -48,7 +49,7 @@ const formatStr = (s: string,  replacements: ReplacementsType): string  => {
 
         if (!replacements.hasOwnProperty(key)) continue
 
-        s = s.replace(`\{${key}\}`, replacements?.[key] ??  "")
+        s = s.replace(`{${key}}`, replacements?.[key] ??  "")
 
     }
 
@@ -73,8 +74,8 @@ const BigNumberDescriptions = {
 
 
 export const timestamp = (data): string =>
-    data.hasOwnProperty("lastUpdatedAt")
-        ? moment(data.lastUpdatedAt).format("dddd D MMMM YYYY [at] h:mma")
+    data.hasOwnProperty("metadata")
+        ? moment(data?.metadata?.lastUpdatedAt).format("dddd D MMMM YYYY [at] h:mma")
         : "";
 
 
@@ -87,6 +88,22 @@ export const MainLoading = () => {
     </Styles.Container>
 
 }; // MainLoading
+
+
+const Exports= () => <ExportLinks data={ {
+    cases: {
+        csv: URLs.latestCases.csv,
+        json: URLs.latestCases.json,
+        shouldBeTracked: true,
+        dataType: "cases"
+    },
+    deaths: {
+        csv: URLs.latestDeaths.csv,
+        json: URLs.latestDeaths.json,
+        shouldBeTracked: true,
+        dataType: "deaths"
+    }
+} }/>; // Exports
 
 
 const Regional: ComponentType<Props> = ({}: Props) => {
@@ -158,29 +175,14 @@ const Regional: ComponentType<Props> = ({}: Props) => {
                     )
                 }
             </SmallNumberContainer>
-
-            { layout === 'desktop'
-                ? <MapTable>
-                    <ExportLinks data={ {
-                        cases: {
-                            csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv",
-                            json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-cases_latest.json",
-                            shouldBeTracked: true,
-                            dataType: "cases"
-                        },
-                        deaths: {
-                            csv: "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-deaths_latest.csv",
-                            json: "https://coronavirus.data.gov.uk/downloads/json/coronavirus-deaths_latest.json",
-                            shouldBeTracked: true,
-                            dataType: "deaths"
-                        }
-                    } }/>
-                </MapTable>
-                : null
+            {
+                layout === 'desktop'
+                    ? <MapTable><Exports/></MapTable>
+                    : <Styles.FullWidth><Exports/></Styles.FullWidth>
             }
             <ChartTable data={ data }/>
 
-            <Disclaimer text={ data?.disclaimer }/>
+            <Disclaimer text={ data?.metadata?.disclaimer ?? "" }/>
         </Styles.Container>
     );
 };

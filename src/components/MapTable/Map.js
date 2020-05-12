@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDomServer from 'react-dom/server'
 
 import axios from "axios";
 import 'mapbox-gl-leaflet';
@@ -7,6 +8,7 @@ import { max } from "d3-array";
 import { scaleLinear, scaleSqrt } from "d3-scale";
 
 import ErrorBoundary from "components/ErrorBoundary";
+import URLs from "common/urls";
 
 import 'leaflet/dist/leaflet.css';
 import * as Styles from "./MapTable.styles";
@@ -39,10 +41,23 @@ const getBlobOptions =  (data, geoData, areaCodeKey) => {
 }; // getBlobOptions
 
 
+const OpenStreetMapAttrib = () => {
+
+    return <a
+        href={ "http://www.openstreetmap.org/about/" }
+        target={ "_blank" }
+        rel={ "noopener noreferrer" }
+    >
+        &copy; OpenStreetMap contributors
+    </a>
+
+}; // OpenStreetMapAttrib
+
+
 export class Map extends Component<MapProps, {}> {
 
-    #baseUrl = 'https://c19pub.azureedge.net/assets/geo/';
-    #mapStyleUrl = 'https://c19pub.azureedge.net/assets/map/style_v1.json'
+    #baseUrl = URLs.baseGeo;
+    #mapStyleUrl = URLs.mapStyle;
     #areaCodeSuffix = "cd";
 
     state: MapState = {
@@ -61,7 +76,7 @@ export class Map extends Component<MapProps, {}> {
 
         const
             mapbox = L.mapboxGL({
-                attribution: '<a href="http://www.openstreetmap.org/about/" target="_blank" rel="noopener noreferrer">&copy; OpenStreetMap contributors</a>',
+                attribution: ReactDomServer.renderToStaticMarkup(<OpenStreetMapAttrib/>),
                 style: this.#mapStyleUrl
             }),
             bounds = new L.LatLngBounds(new L.LatLng(52.5, -6.5), new L.LatLng(58.8, 1)),
@@ -197,7 +212,7 @@ export class Map extends Component<MapProps, {}> {
 
             layerGroup.clearLayers();
 
-            const boundryLayer = L.geoJSON(geoData, {
+            const boundaryLayer = L.geoJSON(geoData, {
                 style: ({ properties: p }) => ({
                     color: '#0b0c0c',
                     weight: isRate ? .2 : .6,
@@ -246,7 +261,7 @@ export class Map extends Component<MapProps, {}> {
                 layerGroup.addLayer(blobs)
             }
 
-            layerGroup.addLayer(boundryLayer)
+            layerGroup.addLayer(boundaryLayer)
 
             if ( parsedHash.hasOwnProperty("area") ) {
 

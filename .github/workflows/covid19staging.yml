@@ -1,10 +1,7 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy Node.js app to Azure Web App - covid19static
+name: Build and deploy Node.js app to Azure Web App - Covid19StaticSTAGING
 
 on:
-  release:
+  push:
     branches:
       - master
 
@@ -19,7 +16,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.13.0'
-    
+
     - name: Install dependencies
       run: |
         npm install -g yarn
@@ -31,20 +28,19 @@ jobs:
     - name: Build yarn
       env:
         CI: false
-        BUILD_ENV: production
-        BASE_URL: https://coronavirus.data.gov.uk
-        MAIN_CDN: c19pub.azureedge.net
-        DOWNLOADS_CDN: c19downloads.azureedge.net
+        BUILD_ENV: staging
+        BASE_URL: https://Covid19StaticStaging.azureedge.net
+        MAIN_CDN: c19pub.azureedgestaging.net
+        DOWNLOADS_CDN: c19downloadsstaging.azureedge.net
         NODE_ENV: production
 
       run: |
         yarn run build
 
-
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v1
       with:
-        app-name: 'covid19static'
+        app-name: 'Covid19StaticSTAGING'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppServiceProd }}
+        publish-profile: ${{ secrets.AzureAppServiceStaging }}
         package: ./build

@@ -59,18 +59,15 @@ export const glAvailable = (): boolean => {
 
 export const getParams = (uri: string): URIParameters => {
 
-    let results = {};
-
-    uri
+    return uri
         .replace("#", "")
         .split("&")
         .filter(item => item.indexOf("=") > -1)
-        .map(item => {
+        .reduce((acc, item) => {
             const [key, value] = item.split("=");
-            results[key] = value
-        })
-
-    return results
+            acc[key] = value
+            return acc
+        }, {})
 
 }; // getParams
 

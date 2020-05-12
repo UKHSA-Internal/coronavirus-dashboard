@@ -29,6 +29,15 @@ export const Container: ComponentType<*> = (() => {
 })();
 
 
+export const FullWidth: ComponentType<*> = (() => {
+
+  return styled.div`
+  grid-column: 1/-1;
+  `
+
+})(); // FullWidth
+
+
 export const P: ComponentType<*> = (() => {
   return styled.p`
     grid-column: 1/-1; 

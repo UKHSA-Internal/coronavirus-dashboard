@@ -14,17 +14,15 @@ import type {
 } from "./ChartTable.types"
 
 
-const sortFunc = (a, b) => {
+const sortByDate = (a, b) => {
 
     const
         dateA = new Date(a.date),
         dateB = new Date(b.date);
 
-    if ( dateA < dateB ) return 1;
+    return (dateA < dateB) || -((dateA > dateB) || 0)
 
-    return dateA > dateB ? -1 : 0
-
-}; // sortFunc
+}; // sortByDate
 
 
 const ageSexSort = (a, b) => {
@@ -75,7 +73,7 @@ const EnglandDailyCasesStructure = ({ titles, descriptions }: TitleOrDescription
             valueGetter: (d) => d.value
         }
     ],
-    sortFunc: sortFunc,
+    sortFunc: sortByDate,
     extra: {
         intro: titles.dailyCases,
         description: descriptions.dailyCases,
@@ -118,7 +116,7 @@ const EnglandDailyTotalCasesStructure = ({ titles, descriptions }: TitleOrDescri
             valueGetter: (d) => d.value
         }
     ],
-    sortFunc: sortFunc,
+    sortFunc: sortByDate,
     extra: {
         intro: titles.totalCases,
         description: descriptions.totalCases,

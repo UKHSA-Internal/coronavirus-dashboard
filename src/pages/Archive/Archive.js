@@ -5,6 +5,8 @@ import { transpose } from "d3-array";
 import moment from "moment";
 import { Link } from 'react-router-dom';
 
+import URLs from "common/urls";
+
 import {
     Container, DownloadLink, Table, TableContainer,
     SectionHeader, BodyCell, HeadCell
@@ -129,7 +131,7 @@ const getTableCells = (data: Array<ArchiveData>, isFirst: boolean=false) => {
 
 export default class Archive extends Component<ArchiveProps, {}> {
 
-    #url = "https://publicdashacc.blob.core.windows.net/downloads?restype=container&comp=list"
+    #url = URLs.archiveList
 
     state: ArchiveState = {
         loading: false,

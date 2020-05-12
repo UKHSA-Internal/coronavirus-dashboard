@@ -1,16 +1,17 @@
 // @flow
 
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const latestDataUrl = 'https://c19downloads.azureedge.net/downloads/data/data_latest.json';
+import URLs from "common/urls";
+
 
 const useLoadData = () => {
     const [data, setData] = useState<?Data>(null);
 
     useEffect(() => {
         const getData = async () => {
-            const {data: d} = await axios.get(latestDataUrl);
+            const {data: d} = await axios.get(URLs.landingData);
             setData(d);
         };
 

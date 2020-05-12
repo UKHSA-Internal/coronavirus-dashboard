@@ -4,7 +4,11 @@
 
 
 
-This is the source code for the [Coronavirus Dashboard](https://coronavirus.data.gov.uk) service.
+This is the main source code for the [Coronavirus Dashboard](https://coronavirus.data.gov.uk) service.
+
+There are two additional repositories associated with this project:
+- The [Pipeline ETL repository](https://github.com/PublicHealthEngland/coronavirus-dashboard-pipeline-etl) for data transformation.
+- The [Terraform repository](https://github.com/PublicHealthEngland/coronavirus-dashboard-terraform) for building the test, staging and deployment environments.
 
 ## Development and contribution
 
