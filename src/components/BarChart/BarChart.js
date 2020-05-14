@@ -32,7 +32,7 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                             // REMOVED PENDING FORMAL RELEASE
                             {
                                 label: "Rolling average",
-                                data: movingAverage(dataSorted.map(d => d.value), 7),
+                                data: [NaN, NaN, NaN, ...movingAverage(dataSorted.map(d => d.value), 7), ],
                                 type: 'line',
                                 fill: false,
                                 borderColor: "#323d13",
