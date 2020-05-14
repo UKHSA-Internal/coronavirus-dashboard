@@ -14,6 +14,7 @@ import URLs from "common/urls";
 
 import type { AboutProps, AboutState } from './About.types';
 import * as Styles from './About.styles';
+import { win } from "leaflet/src/core/Browser";
 
 
 
@@ -46,6 +47,10 @@ export default class About extends Component<AboutProps, {}> {
     componentDidMount() {
 
         this.setState({ loading: true }, this.getData)
+
+        // ToDo: This should be done for every page in the "app.js".
+        const base = document.querySelector("head>base");
+        base.href = document.location.pathname;
 
     } // componentDidMount
 

@@ -16,6 +16,10 @@ import * as Styles from './MobileRegionTable.styles';
 const MobileRegionTable: ComponentType<Props> = ({ ...props }: Props) => {
     const data = useLoadData();
 
+    // ToDo: This should be done for every page in the "app.js".
+    const base = document.querySelector("head>base");
+    base.href = document.location.pathname;
+
     if ( !data ) return <MainLoading/>;
 
     return (

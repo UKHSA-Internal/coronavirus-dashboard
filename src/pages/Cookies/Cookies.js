@@ -28,6 +28,10 @@ const setCookies = () => {
 const Cookies: ComponentType<Props> = ({ }: Props) => {
     const [cookieState, setCookieState] = useState('unset');
 
+    // ToDo: This should be done for every page in the "app.js".
+    const base = document.querySelector("head>base");
+    base.href = document.location.pathname;
+
     const handleAccept = () => {
         const
             today = new Date(),
