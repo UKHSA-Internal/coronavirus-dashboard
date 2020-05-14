@@ -30,17 +30,17 @@ const BarChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =>
                         labels: dataSorted.map(d => d.date),
                         datasets: [
                             // REMOVED PENDING FORMAL RELEASE
-                            // {
-                            //     label: "Rolling average",
-                            //     data: movingAverage(dataSorted.map(d => d.value), 7),
-                            //     type: 'line',
-                            //     fill: false,
-                            //     borderColor: "#323d13",
-                            //     backgroundColor: "#323d13",
-                            //     borderWidth: 2,
-                            //     order: 0,
-                            //     pointHoverRadius: 0
-                            // },
+                            {
+                                label: "Rolling average",
+                                data: movingAverage(dataSorted.map(d => d.value), 7),
+                                type: 'line',
+                                fill: false,
+                                borderColor: "#323d13",
+                                backgroundColor: "#323d13",
+                                borderWidth: 2,
+                                order: 0,
+                                pointHoverRadius: 0
+                            },
                             {
                                 label: "Daily deaths",
                                 backgroundColor: '#62a3b3',
