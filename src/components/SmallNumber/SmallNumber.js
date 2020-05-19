@@ -5,7 +5,7 @@ import numeral from "numeral";
 
 export const SmallNumberContainer: Component<Props> = ({ heading, caption="", children }) => {
 
-    return <Styles.MainContainer>
+    return <Styles.MainContainer className="govuk-!-margin-bottom-9">
         {
             caption
                 ? <Styles.HeadingCaption className={ "govuk-caption-l" }>

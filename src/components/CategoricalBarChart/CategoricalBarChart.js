@@ -110,7 +110,7 @@ const CategoricalBarChart: ComponentType<ChartProps> = ({ header, tooltipText, d
     const mobileView = useResponsiveLayout(500) === "mobile"
 
     return (
-        <Styles.Container>
+        <Styles.Container className="govuk-!-margin-bottom-9">
             <span className="govuk-heading-s">{ header }</span>
             <Styles.Chart>
                 <Bar

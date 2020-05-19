@@ -50,7 +50,7 @@ export default class Disclaimer extends Component<Props, {}> {
 
         if ( loading ) return null;
 
-        return <Styles.Container className={ "disclaimer" }>
+        return <Styles.Container className="disclaimer govuk-!-margin-top-9">
             <div className={ "markdown" } dangerouslySetInnerHTML={{ __html: data }}/>
         </Styles.Container>
 
