@@ -1,7 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import React,  { Fragment } from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 import { Header, Footer } from 'govuk-react-jsx';
+
+// handle environment vars
+import dotenv from 'dotenv';
 
 import Regional from 'pages/Regional';
 import MobileRegionTable from 'pages/MobileRegionTable';
@@ -13,6 +17,8 @@ import Navigation from 'components/Navigation';
 import CookieBanner from 'components/CookieBanner';
 import BackToTop from 'components/BackToTop';
 
+// get environment vars
+dotenv.config();
 
 const FooterContents = () => {
 

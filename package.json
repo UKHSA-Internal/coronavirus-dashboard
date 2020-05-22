@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "dotenv": "^8.2.0",
     "flow-bin": "^0.120.1"
   }
 }
