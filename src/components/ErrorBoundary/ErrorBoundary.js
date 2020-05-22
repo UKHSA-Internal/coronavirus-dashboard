@@ -39,7 +39,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                 <ul className="govuk-list govuk-list--bullet">
                     <li>Details of what you were trying to do that caused the problem</li>
                     <li>Your operating system (such as Windows, Mac OS, Android, iOS) and its version if possible</li>
-                    <li>Your platform (such as mobile, table, computer)</li>
+                    <li>Your platform (such as mobile, tablet, computer)</li>
                     <li>Your browser (such as Chrome, Edge, Firefox, Internet Explorer)</li>
                     <li>The technical details quoted below</li>
                 </ul>
