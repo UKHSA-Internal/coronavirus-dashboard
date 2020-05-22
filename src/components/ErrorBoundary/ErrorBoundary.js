@@ -34,14 +34,14 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                     There was an error. Please try again later.
                 </p>
                 <p className="govuk-body">
-                    If the problem persists, please contact us via <a href="mailto:coronavirus-tracker@phe.gov.uk" className="govuk-link">coronavirus-tracker@phe.gov.uk</a> and include:
+                    If the problem persists, contact us via <a href="mailto:coronavirus-tracker@phe.gov.uk" className="govuk-link">coronavirus-tracker@phe.gov.uk</a> and include:
                 </p>
                 <ul className="govuk-list govuk-list--bullet">
-                    <li>Details of what you were trying to do that caused the problem</li>
-                    <li>Your operating system (such as Windows, Mac OS, Android, iOS) and its version if possible</li>
-                    <li>Your platform (such as mobile, tablet, computer)</li>
-                    <li>Your browser (such as Chrome, Edge, Firefox, Internet Explorer)</li>
-                    <li>The technical details quoted below</li>
+                    <li>details of what you were trying to do that caused the problem</li>
+                    <li>your operating system (such as Windows, Mac OS, Android, iOS) and its version if possible</li>
+                    <li>your platform (such as mobile, tablet, computer)</li>
+                    <li>your browser (such as Chrome, Edge, Firefox, Internet Explorer)</li>
+                    <li>the technical details quoted below</li>
                 </ul>
                 <details className="govuk-details" data-module="govuk-details">
                     <summary className="govuk-details__summary">
