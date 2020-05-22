@@ -16,6 +16,7 @@ import Cookies from 'pages/Cookies';
 import Navigation from 'components/Navigation';
 import CookieBanner from 'components/CookieBanner';
 import BackToTop from 'components/BackToTop';
+import ErrorBoundary from "components/ErrorBoundary";
 
 // get environment vars
 dotenv.config();
@@ -78,32 +79,35 @@ const App = () => {
             />
             <Navigation/>
 
-            {/* We only want back-to-top links on the main & about pages. */}
-            <Switch>
-                {/* These back-to-top links are the 'overlay' style that stays
-                    on screen as we scroll. */}
-                <Route path="/about" exact render={ () => <BackToTop mode={ "overlay" }/> } />
-                <Route path="/accessibility" exact render={ () => <BackToTop mode={ "overlay" }/> } />
-                <Route path="/" exact render={ () => <BackToTop mode={ "overlay" }/> } />
-            </Switch>
+            <ErrorBoundary>
 
-            <Switch>
-                <Route path="/region" component={ MobileRegionTable }/>
-                <Route path="/about" component={ About }/>
-                <Route path="/accessibility" component={ Accessibility }/>
-                <Route path="/cookies" component={ Cookies }/>
-                <Route path="/archive" component={ Archive }/>
-                <Route path="/" component={ Regional }/>
-                <Redirect to="/"/>
-            </Switch>
+                {/* We only want back-to-top links on the main & about pages. */}
+                <Switch>
+                    {/* These back-to-top links are the 'overlay' style that stays
+                        on screen as we scroll. */}
+                    <Route path="/about" exact render={ () => <BackToTop mode={ "overlay" }/> } />
+                    <Route path="/accessibility" exact render={ () => <BackToTop mode={ "overlay" }/> } />
+                    <Route path="/" exact render={ () => <BackToTop mode={ "overlay" }/> } />
+                </Switch>
 
-            {/* We only want back-to-top links on the main & about pages. */}
-            <Switch>
-                {/* These back-to-top links are the 'inline' style that sits
-                    statically between the end of the content and the footer. */}
-                <Route path="/about" exact render={ props => <BackToTop {...props} mode="inline"/> } />
-                <Route path="/" exact render={ props => <BackToTop {...props} mode="inline"/>  } />
-            </Switch>
+                <Switch>
+                    <Route path="/region" component={ MobileRegionTable }/>
+                    <Route path="/about" component={ About }/>
+                    <Route path="/accessibility" component={ Accessibility }/>
+                    <Route path="/cookies" component={ Cookies }/>
+                    <Route path="/archive" component={ Archive }/>
+                    <Route path="/" component={ Regional }/>
+                    <Redirect to="/"/>
+                </Switch>
+
+                {/* We only want back-to-top links on the main & about pages. */}
+                <Switch>
+                    {/* These back-to-top links are the 'inline' style that sits
+                        statically between the end of the content and the footer. */}
+                    <Route path="/about" exact render={ props => <BackToTop {...props} mode="inline"/> } />
+                    <Route path="/" exact render={ props => <BackToTop {...props} mode="inline"/>  } />
+                </Switch>
+            </ErrorBoundary>
 
             <Switch>
                 <Route path="/region" component={ F }/>
