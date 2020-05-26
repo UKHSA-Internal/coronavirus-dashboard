@@ -38,10 +38,7 @@ export const Caption: ComponentType<*> = (() => {
 })();
 
 export const Title: ComponentType<*> = (() => {
-  return styled.h1`
-    font-size: 3rem;
-    margin-bottom: 20px;
-  `;
+  return styled.h1``;
 })();
 
 export const Subtitle: ComponentType<*> = (() => {

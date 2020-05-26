@@ -131,7 +131,7 @@ export class MapTable extends Component<MapTableProps, {}> {
 
         if (loading) return <Styles.P>Loading&hellip;</Styles.P>
 
-        return <Styles.MainContainer>
+        return <Styles.MainContainer className="govuk-!-margin-top-9 govuk-!-margin-bottom-9">
             <Styles.TabContainer>
                 <div className={ "govuk-tabs" } data-module={ "govuk-tabs" }>
                     <ul className={ "govuk-tabs__list" }>
@@ -227,7 +227,7 @@ export class MapTable extends Component<MapTableProps, {}> {
                 <Description text={
                     `Rates per ${ numeral(RatePerPopulation).format("0,0") } resident population.
                     ${!isMobile && parsedHash.map === "rate"
-                        ? ` Darker shades have higher rates.` 
+                        ? ` Darker shades have higher rates.`
                         : ""}` }
                 />
                 { children }

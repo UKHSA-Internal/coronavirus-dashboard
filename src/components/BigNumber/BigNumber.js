@@ -9,7 +9,7 @@ import * as Styles from './BigNumber.styles.js';
 
 export const BigNumberContainer: Component<Props> = ({ children }) => {
 
-    return <Styles.MainContainer>
+    return <Styles.MainContainer className="govuk-!-margin-top-9 govuk-!-margin-bottom-9">
         <Styles.Children>{ children }</Styles.Children>
     </Styles.MainContainer>
 

@@ -165,7 +165,7 @@ export const GenericTable = ({ data, structure }: EnglandTableProps): React.Reac
         dataKeys = structure.metadata.map(item => item.key),
         dataArray = transpose(dataKeys.map(key => data[key].sort(structure.sortFunc)));
 
-    return <Styles.Container>
+    return <Styles.Container className="govuk-!-margin-bottom-9">
         {
             structure?.extra?.intro ?? null
                 ? <span className={ "govuk-heading-s" }>{ structure.extra.intro }</span>

@@ -19,7 +19,7 @@ const sortFunc = (a, b) => {
 
 const AltChartTable: ComponentType<Props> = ({ header, valueName, data }: Props) => {
   return (
-    <Styles.Container>
+    <Styles.Container className="govuk-!-margin-bottom-9">
       <span className="govuk-heading-s">{header}</span>
       <Styles.Table>
         <Table

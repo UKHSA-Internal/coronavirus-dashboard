@@ -23,13 +23,15 @@ const MobileRegionTable: ComponentType<Props> = ({ ...props }: Props) => {
     if ( !data ) return <MainLoading/>;
 
     return (
-        <Styles.Container { ...props } className="govuk-width-container" role="main">
-            <PageTitle
-                caption="Regional view"
-                title="Coronavirus (COVID-19) in the UK"
-                subtitle={ `Last updated on ${ timestamp(data) }` }
-            />
-            <MapTable isMobile={ true }/>
+        <Styles.Container { ...props } className="govuk-width-container">
+            <Styles.Content className="govuk-main-wrapper" role="main">
+                <PageTitle
+                    caption="Regional view"
+                    title="Coronavirus (COVID-19) in the UK"
+                    subtitle={ `Last updated on ${ timestamp(data) }` }
+                />
+                <MapTable isMobile={ true }/>
+            </Styles.Content>
         </Styles.Container>
     );
 };
