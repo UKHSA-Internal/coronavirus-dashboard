@@ -44,20 +44,20 @@ export const MainContainer: ComponentType<*> = (() => {
     align-items: stretch;
     height: 750px;
     width: 100%;
-    
+
     &>* {
         flex-grow: 1;
         max-width: 50%;
-        
+
         ${ addIECss(css`
           width: 48%;
         `) }
     }
-    
+
     @media only screen and (max-width: 768px) {
         display: block;
         flex-direction: column-reverse;
-        
+
         &>* {
             display: block;
             max-width: 100%;
@@ -80,7 +80,7 @@ export const TabContainer: ComponentType<*> = (() => {
     & .govuk-tabs__panel {
       height: 650px;
       overflow: auto;
-      
+
        & a {
         text-decoration: none;
       }
@@ -89,6 +89,13 @@ export const TabContainer: ComponentType<*> = (() => {
         height: 400px;
         max-height: none;
       }
+    }
+
+    @media only screen and (min-width: 768px) and (max-width: 890px) {
+        .govuk-tabs__list-item {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
     }
   `;
 })();
@@ -99,7 +106,7 @@ export const ChildrenContainer: ComponentType<*> = (() => {
     display: flex;
     flex-direction: column;
     align-contents: stretch;
-    
+
     &>* {
         width: 100%;
     }
@@ -117,11 +124,11 @@ export const TableHeadingCell = (() => {
     display: flex;
     flex-direction: row;
     align-items: center;
-    
+
     &.numeric {
         justify-content: flex-end;
     }
-    
+
     &.string,
     &.date {
         justify-content: flex-start;
@@ -140,7 +147,7 @@ export const Sort: ComponentType<*> = (() => {
     margin-left: 5px;
     outline: none;
     cursor: pointer;
-    
+
     &:last-of-type {
         padding-right: 20px;
     }
@@ -152,7 +159,6 @@ export const Sort: ComponentType<*> = (() => {
 export const MapViewOption: ComponentType<*> = (() => {
     return styled.div`
     height: 640px;
-    width: 520px;
     `;
 })();
 
@@ -167,7 +173,7 @@ export const RightContainer: ComponentType<*> = (() => {
       height: 580px;
       padding: 0;
     }
-    
+
     @media only screen and (max-width: 768px) {
       max-height: 50px;
     }
@@ -197,14 +203,14 @@ export const Description: ComponentType<*> = (() => {
         justify-self: center;
         margin: 0;
         color: #626a6e;
-        
+
         &:last-of-type:not(.above) {
             margin-bottom: 1rem;
         }
-        
+
         &.above {
             display: flex;
-            justify-content: flex-end;        
+            justify-content: flex-end;
             padding-top: 10px;
             padding-left: 10px;
             align-items: center;
