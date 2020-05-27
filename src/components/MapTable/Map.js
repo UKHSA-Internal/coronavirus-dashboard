@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import ReactDomServer from 'react-dom/server'
 
 import axios from "axios";
@@ -7,7 +7,6 @@ import L from "leaflet";
 import { max } from "d3-array";
 import { scaleLinear, scaleSqrt } from "d3-scale";
 
-import ErrorBoundary from "components/ErrorBoundary";
 import URLs from "common/urls";
 
 import 'leaflet/dist/leaflet.css';
@@ -290,10 +289,11 @@ export class Map extends Component<MapProps, {}> {
 
         }
 
-        return <ErrorBoundary>
+        return <Fragment>
             { this.display() }
             <Styles.Map id={ "map" }>{ children }</Styles.Map>
-        </ErrorBoundary>
+        </Fragment>
+
 
     } // render
 
