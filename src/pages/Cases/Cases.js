@@ -34,10 +34,11 @@ const Cases: ComponentType<Props> = ({ }: Props) => {
                             <DashboardHeader />
 
                             <Styles.FlexContainer>
+                                <Card />
+                            </Styles.FlexContainer>
 
-                                    <Card />
-                                    <Card />
-
+                            <Styles.FlexContainer>
+                                <Card />
                             </Styles.FlexContainer>
                         </div>
 
