@@ -7,7 +7,7 @@ import { BigNumber, BigNumberContainer } from 'components/BigNumber';
 import PageTitle from 'components/PageTitle';
 import SideNavigation from 'components/SideNavigation';
 import DashboardHeader from 'components/DashboardHeader';
-import Card from 'components/Card';
+import { HalfWidthCard } from 'components/Card';
 import type { Props } from './Tests.types';
 import * as Styles from './Tests.styles';
 
@@ -46,11 +46,11 @@ const Tests: ComponentType<Props> = ({ }: Props) => {
                     </BigNumberContainer>
 
                     <Styles.FlexContainer>
-                        <Card />
+                        <HalfWidthCard />
                     </Styles.FlexContainer>
 
                     <Styles.FlexContainer>
-                        <Card />
+                        <HalfWidthCard />
                     </Styles.FlexContainer>
                 </div>
 
