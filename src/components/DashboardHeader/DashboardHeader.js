@@ -28,7 +28,7 @@ const DashboardHeader: ComponentType<Props> = ({ location: { pathname }, title}:
 
                 </div>
             </div>
-            <div class="govuk-grid-row govuk-!-margin-top-0">
+            <div class="govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-4">
                 <div class="govuk-grid-column-full">
                     <hr class="govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" />
                 </div>

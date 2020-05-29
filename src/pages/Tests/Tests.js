@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import type { ComponentType } from 'react';
 
+import { BigNumber, BigNumberContainer } from 'components/BigNumber';
 import PageTitle from 'components/PageTitle';
 import SideNavigation from 'components/SideNavigation';
 import DashboardHeader from 'components/DashboardHeader';
@@ -30,6 +31,19 @@ const Tests: ComponentType<Props> = ({ }: Props) => {
 
                 <div class="govuk-grid-column-dashboard">
                     <DashboardHeader title={"Tests"} />
+
+                    <BigNumberContainer>
+                        <BigNumber
+                            caption="All time total"
+                            title="Number of tests"
+                            number="3,090,566"
+                        />
+                        <BigNumber
+                            caption="Current daily"
+                            title="Planned lab-capacity"
+                            number="145,855"
+                        />
+                    </BigNumberContainer>
 
                     <Styles.FlexContainer>
                         <Card />
