@@ -1,5 +1,7 @@
 $govuk-assets-path: "~govuk-frontend/govuk/assets/";
-$govuk-page-width: 1400px;
+$govuk-page-width: calc(100vw - 1px);
+$govuk-gutter: 3rem;
+//$govuk-gutter: 0;
 $govuk-font-family: "GDS Transport", Arial, sans-serif;
 @import "node_modules/govuk-frontend/govuk/all";
 
