@@ -29,7 +29,9 @@
     "remark-slug": "^6.0.0",
     "remark-html": "^11.0.1",
     "remark-external-links": "^6.0.0",
-    "replacestream": "^4.0.3"
+    "replacestream": "^4.0.3",
+    "plotly.js": "^1.54.1",
+    "react-plotly.js": "^2.4.0"
   },
   "scripts": {
     "lint": "yarn flow",
