@@ -20,7 +20,8 @@ const getBarChartData = ({ previous, change }) => {
     const
         previousSorted = fillDateGaps(previous),
         changeData = fillDateGaps(change),
-        sum = previousSorted.map(({ value }, index) => value + changeData[index].value);
+        filteredChangeData = changeData.map(({ value })  => value > 0 ? value : 0),
+        sum = previousSorted.map(({ value }, index) => value + filteredChangeData[index] );
 
     return {
         labels: previousSorted.map(d => d.date),
@@ -50,8 +51,7 @@ const getBarChartData = ({ previous, change }) => {
             {
                 label: "Newly reported",
                 backgroundColor: '#5c1955',
-                data: changeData
-                    .map(({ value }) => value > 0 ? value : 0)
+                data: filteredChangeData
             }
         ]
     }
