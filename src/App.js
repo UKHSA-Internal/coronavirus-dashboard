@@ -121,22 +121,22 @@ const App = () => {
                             <Route path="/" exact render={ props => <BackToTop {...props} mode="inline"/>  } />
                         </Switch>
                     </ErrorBoundary>
-
-                    <Switch>
-                        <Route path="/region" component={ F }/>
-                        <Route path="/" exact component={ F }/>
-                        <Route path="/about" exact component={ F }/>
-                        <Route path="/accessibility" exact component={ F }/>
-                        <Route path="/cookies" exact component={ F }/>
-                        <Route path="/newdesign" exact component={ F }/>
-                        <Route path="/archive" exact component={ F }/>
-                        <Route path="/tests" component={ F }/>
-                        <Route path="/cases" component={ F }/>
-                        <Route path="/healthcare" component={ F }/>
-                        <Route path="/deaths" component={ F }/>
-                    </Switch>
                 </main>
             </div>
+
+            <Switch>
+                <Route path="/region" component={ F }/>
+                <Route path="/" exact component={ F }/>
+                <Route path="/about" exact component={ F }/>
+                <Route path="/accessibility" exact component={ F }/>
+                <Route path="/cookies" exact component={ F }/>
+                <Route path="/newdesign" exact component={ F }/>
+                <Route path="/archive" exact component={ F }/>
+                <Route path="/tests" component={ F }/>
+                <Route path="/cases" component={ F }/>
+                <Route path="/healthcare" component={ F }/>
+                <Route path="/deaths" component={ F }/>
+            </Switch>
         </Fragment>
     );
 }
