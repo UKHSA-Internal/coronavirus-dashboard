@@ -21,7 +21,7 @@ const LineChart: ComponentType<Props> = ({ header, tooltipText, data }: Props) =
 
 
     return (
-        <Styles.Container>
+        <Styles.Container className="govuk-!-margin-bottom-9">
             <span className="govuk-heading-s">{ header }</span>
             <Styles.Chart>
                 <Line

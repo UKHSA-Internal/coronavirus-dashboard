@@ -60,7 +60,7 @@ const getBarChartData = ({ previous, change }) => {
 
 
 const getBarChartOptions = (tooltipText, mobileView) => {
-    
+
     const labelFontSize = mobileView ? 11 : 14;
 
     return {
@@ -127,7 +127,7 @@ const StackedBarChart: ComponentType<Props> = ({ header, tooltipText, data, desc
     const mobileView = useResponsiveLayout(500)  === "mobile";
 
     return (
-        <Styles.Container>
+        <Styles.Container className="govuk-!-margin-bottom-9">
             <span className="govuk-heading-s">{header}</span>
             <Styles.Chart>
                 <Bar

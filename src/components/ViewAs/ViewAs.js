@@ -9,7 +9,7 @@ import * as Styles from './ViewAs.styles.js';
 
 const ViewAs: ComponentType<Props> = ({ view, setView }: Props) => {
   return (
-    <Styles.Container>
+    <Styles.Container className="govuk-!-margin-bottom-9">
       <Radios
         value={view}
         onChange={v => setView(v.target.value)}

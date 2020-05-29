@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import URLs from "common/urls";
 
 import {
-    Container, DownloadLink, Table, TableContainer,
+    Container, Content, DownloadLink, Table, TableContainer,
     SectionHeader, BodyCell, HeadCell
 } from "./Archive.style";
 
@@ -143,13 +143,25 @@ export default class Archive extends Component<ArchiveProps, {}> {
         const
             { data } = await axios.get(this.#url, { responseType: 'document' }),
             nameParser = /^(\w+)\/dated\/coronavirus-(\w+)_(\d{4})(\d{2})(\d{2}).*$/,
-            fileTypes = ["csv", "json"],
-            contents = fileTypes
-                .map(f => data.evaluate(
-                    `//Blob/Name[starts-with(text(), '${f}/dated')]`,
+            contents = getSortedPaths(
+                data.evaluate(`//Blob/Name[starts-with(text(), 'json/dated')]`,
                     data, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null
                 ))
-                .map(getSortedPaths)
+                .reduce(
+                    (acc: Array<Array<string>, Array<string>>, item: string) => {
+
+                        const deaths = item.replace(/cases/g, "deaths")
+
+                        acc[0].push([
+                            item.replace(/json/g, "csv"),
+                            deaths.replace(/json/g, "csv")
+                        ])
+                        acc[1].push([item, deaths])
+
+                        return acc
+
+                    },
+                    [[], []])
                 .map(item => item.map( v => nameParser.exec(v) ));
 
         this.setState({
@@ -200,27 +212,33 @@ export default class Archive extends Component<ArchiveProps, {}> {
 
     render(): React.ReactNode {
 
-        return <Container className={"govuk-width-container"} role="main">
-            <SectionHeader className={ "govuk-heading-l" }>
-                Archive
-            </SectionHeader>
-            <p className={ "govuk-body" }>
-                This page provides links to data previously published on the dashboard.
-                These files include data that have been superseded because errors have
-                been found.  For corrected up-to-date series of daily data, use the
-                “latest” downloads below.
-            </p>
-            <p className={ "govuk-body" }>
-                Files for deaths dated 28 April 2020 and earlier include the data for
-                England based only on hospital deaths reported by NHS England.  Files
-                dated 29 April 2020 onwards include deaths for England calculated by PHE
-                from multiple sources. See the&nbsp;
-                <Link to={ "/about" }
-                      className={ "govuk-link govuk-link--no-visited-state" }>
-                    About the data
-                </Link>&nbsp;for details.
-            </p>
-            { this.display() }
+        return <Container className={"govuk-width-container"}>
+            <Content className="govuk-main-wrapper" role="main">
+                <Container className="govuk-grid-row">
+                    <Container className="govuk-grid-column-two-thirds">
+                        <SectionHeader className={ "govuk-heading-l" }>
+                            Archive
+                        </SectionHeader>
+                        <p className={ "govuk-body" }>
+                            This page provides links to data previously published on the dashboard.
+                            These files include data that have been superseded because errors have
+                            been found.  For corrected up-to-date series of daily data, use the
+                            “latest” downloads below.
+                        </p>
+                        <p className={ "govuk-body" }>
+                            Files for deaths dated 28 April 2020 and earlier include the data for
+                            England based only on hospital deaths reported by NHS England.  Files
+                            dated 29 April 2020 onwards include deaths for England calculated by PHE
+                            from multiple sources. See the&nbsp;
+                            <Link to={ "/about" }
+                                  className={ "govuk-link govuk-link--no-visited-state" }>
+                                About the data
+                            </Link>&nbsp;for details.
+                        </p>
+                    </Container>
+                </Container>
+                { this.display() }
+            </Content>
         </Container>
 
     } // render

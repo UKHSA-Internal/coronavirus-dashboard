@@ -124,7 +124,7 @@ const Regional: ComponentType<Props> = ({}: Props) => {
             }));
 
     return (
-        <Styles.Container className="govuk-width-container" role="main">
+        <Styles.Container className="govuk-width-container">
 
             <Announcement firstDisplayDate={ { year: 2020, month: 4, day: 27 } }
                           lastDisplayDate={ { year: 2020, month: 5, day: 1 } }>
@@ -138,51 +138,59 @@ const Regional: ComponentType<Props> = ({}: Props) => {
                 </p>
             </Announcement>
 
-            <PageTitle
-                title="Coronavirus (COVID-19) in the UK"
-                subtitle={ `Last updated on ${ timestamp(data) }` }
-            />
+            <Styles.Content className="govuk-main-wrapper" role="main">
 
-            <BigNumberContainer>
-                <BigNumber
-                    caption={ BigNumberTitles.ukCases }
-                    number={ data?.overview?.K02000001?.totalCases?.value ?? 0 }
-                    description={ BigNumberDescriptions.ukCases }
+                <PageTitle
+                    title="Coronavirus (COVID-19) in the UK"
+                    subtitle={ `Last updated on ${ timestamp(data) }` }
                 />
-                <BigNumber
-                    caption={ BigNumberTitles.dailyUkCases  }
-                    number={ data?.overview?.K02000001?.newCases?.value ?? 0 }
-                    description={ formatStr(BigNumberDescriptions.dailyUkCases, {date: lastDataUpdate})  }
-                />
-                <BigNumber
-                    caption={ BigNumberTitles.ukDeaths }
-                    number={ data?.overview?.K02000001?.deaths.value ?? 0 }
-                    description={BigNumberDescriptions.ukDeaths }
-                />
-                <BigNumber
-                    caption={ BigNumberTitles.dailyUkDeaths  }
-                    number={ latestDeaths?.value ?? 0 }
-                    description={ formatStr(BigNumberDescriptions.dailyUkDeaths, {date: lastDataUpdate}) }
-                />
-            </BigNumberContainer>
 
-            <SmallNumberContainer heading={ "Total number by nation" } caption={ "COVID-19 associated deaths" }>
+                <BigNumberContainer>
+                    <BigNumber
+                        caption={ BigNumberTitles.ukCases }
+                        number={ data?.overview?.K02000001?.totalCases?.value ?? 0 }
+                        description={ BigNumberDescriptions.ukCases }
+                    />
+                    <BigNumber
+                        caption={ BigNumberTitles.dailyUkCases  }
+                        number={ data?.overview?.K02000001?.newCases?.value ?? 0 }
+                        description={ formatStr(BigNumberDescriptions.dailyUkCases, {date: lastDataUpdate})  }
+                    />
+                    <BigNumber
+                        caption={ BigNumberTitles.ukDeaths }
+                        number={ data?.overview?.K02000001?.deaths.value ?? 0 }
+                        description={BigNumberDescriptions.ukDeaths }
+                    />
+                    <BigNumber
+                        caption={ BigNumberTitles.dailyUkDeaths  }
+                        number={ latestDeaths?.value ?? 0 }
+                        description={ formatStr(BigNumberDescriptions.dailyUkDeaths, {date: lastDataUpdate}) }
+                    />
+                </BigNumberContainer>
+
+                <SmallNumberContainer heading={ "Total number by nation" } caption={ "COVID-19 associated deaths" }>
+                    {
+                        countryDeaths.map(({ name, value }) =>
+                            <SmallNumber key={ `SmallNumber-${name}` }
+                                         caption={ name }
+                                         number={ value }/>
+                        )
+                    }
+                </SmallNumberContainer>
                 {
-                    countryDeaths.map(({ name, value }) =>
-                        <SmallNumber key={ `SmallNumber-${name}` }
-                                     caption={ name }
-                                     number={ value }/>
-                    )
+                    layout === 'desktop'
+                        ? <MapTable><Exports/></MapTable>
+                        : <Styles.FullWidth className="govuk-!-margin-bottom-9"><Exports/></Styles.FullWidth>
                 }
-            </SmallNumberContainer>
-            {
-                layout === 'desktop'
-                    ? <MapTable><Exports/></MapTable>
-                    : <Styles.FullWidth><Exports/></Styles.FullWidth>
-            }
-            <ChartTable data={ data }/>
 
-            <Disclaimer text={ data?.metadata?.disclaimer ?? "" }/>
+                <Styles.TwoThirdsFixed>
+
+                    <ChartTable data={ data }/>
+                    <Disclaimer text={ data?.metadata?.disclaimer ?? "" }/>
+
+                </Styles.TwoThirdsFixed>
+
+            </Styles.Content>
         </Styles.Container>
     );
 };
