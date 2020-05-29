@@ -14,8 +14,6 @@ import URLs from "common/urls";
 
 import type { AboutProps, AboutState } from './About.types';
 import * as Styles from './About.styles';
-import { win } from "leaflet/src/core/Browser";
-
 
 
 export default class About extends Component<AboutProps, {}> {
