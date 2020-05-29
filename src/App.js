@@ -13,7 +13,11 @@ import About from 'pages/About';
 import Archive from "pages/Archive";
 import Accessibility from 'pages/Accessibility';
 import Cookies from 'pages/Cookies';
-import NewDesign from 'pages/NewDesign';
+import DailySummary from 'pages/DailySummary';
+import Tests from 'pages/Tests';
+import Cases from 'pages/Cases';
+import Healthcare from 'pages/Healthcare';
+import Deaths from 'pages/Deaths';
 import Navigation from 'components/Navigation';
 import CookieBanner from 'components/CookieBanner';
 import BackToTop from 'components/BackToTop';
@@ -78,7 +82,9 @@ const App = () => {
                 serviceUrlTo="/"
                 homepageUrlHref="https://gov.uk"
             />
+            {/*
             <Navigation/>
+            */}
 
             <ErrorBoundary>
 
@@ -96,9 +102,12 @@ const App = () => {
                     <Route path="/about" component={ About }/>
                     <Route path="/accessibility" component={ Accessibility }/>
                     <Route path="/cookies" component={ Cookies }/>
-                    <Route path="/newdesign" component={ NewDesign }/>
                     <Route path="/archive" component={ Archive }/>
-                    <Route path="/" component={ Regional }/>
+                    <Route path="/tests" component={ Tests }/>
+                    <Route path="/cases" component={ Cases }/>
+                    <Route path="/healthcare" component={ Healthcare }/>
+                    <Route path="/deaths" component={ Deaths }/>
+                    <Route path="/" component={ DailySummary }/>
                     <Redirect to="/"/>
                 </Switch>
 
@@ -119,6 +128,10 @@ const App = () => {
                 <Route path="/cookies" exact component={ F }/>
                 <Route path="/newdesign" exact component={ F }/>
                 <Route path="/archive" exact component={ F }/>
+                <Route path="/tests" component={ F }/>
+                <Route path="/cases" component={ F }/>
+                <Route path="/healthcare" component={ F }/>
+                <Route path="/deaths" component={ F }/>
             </Switch>
         </Fragment>
     );

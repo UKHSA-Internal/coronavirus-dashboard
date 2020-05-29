@@ -7,11 +7,11 @@ import PageTitle from 'components/PageTitle';
 import SideNavigation from 'components/SideNavigation';
 import DashboardHeader from 'components/DashboardHeader';
 import Card from 'components/Card';
-import type { Props } from './NewDesign.types';
-import * as Styles from './NewDesign.styles';
+import type { Props } from './Tests.types';
+import * as Styles from './Tests.styles';
 
 
-const NewDesign: ComponentType<Props> = ({ }: Props) => {
+const Tests: ComponentType<Props> = ({ }: Props) => {
 
     // ToDo: This should be done for every page in the "app.js".
     const base = document.querySelector("head>base");
@@ -24,7 +24,7 @@ const NewDesign: ComponentType<Props> = ({ }: Props) => {
                 <Styles.Container className="govuk-grid-row">
                     <Styles.Container className="govuk-grid-column-full">
 
-                        <PageTitle title={"New design!"} />
+                        <PageTitle title={"Tests"} />
 
                         <div class="govuk-grid-column-menu">
                             <SideNavigation />
@@ -48,4 +48,4 @@ const NewDesign: ComponentType<Props> = ({ }: Props) => {
     );
 };
 
-export default NewDesign
+export default Tests

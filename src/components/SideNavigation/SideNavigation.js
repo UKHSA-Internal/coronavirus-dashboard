@@ -21,7 +21,7 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
           </li>
 
           <li class="moj-side-navigation__item">
-            <a href="testing">Tests</a>
+            <a href="tests">Tests</a>
           </li>
 
           <li class="moj-side-navigation__item">
@@ -29,11 +29,11 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
           </li>
 
           <li class="moj-side-navigation__item">
-            <a href="#3">Healthcare</a>
+            <a href="healthcare">Healthcare</a>
           </li>
 
           <li class="moj-side-navigation__item">
-            <a href="#3">Deaths</a>
+            <a href="deaths">Deaths</a>
           </li>
 
           <hr class="govuk-section-break govuk-section-break--m govuk-!-margin-top-3 govuk-!-margin-bottom-3 govuk-section-break--visible" />
