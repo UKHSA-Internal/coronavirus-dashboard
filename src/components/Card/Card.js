@@ -1,49 +1,92 @@
 // @flow
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import type { ComponentType } from 'react';
 import { BackLink } from 'govuk-react-jsx';
 
 import type { Props } from './Card.types';
 import * as Styles from './Card.styles';
 
-const Card: ComponentType<Props> = ({ caption, title, subtitle, backUrl }: Props) => {
-  return (
-    <Styles.Card className="dashboard-panel">
 
-      <div class="govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-0">
-        <div class="govuk-grid-column-one-half">
-          <h2 class="govuk-heading-m govuk-!-margin-bottom-1 govuk-!-margin-top-0">Testing</h2>
+const VisualSection: ComponentType<Props> = ({ children }: Props) => {
+
+    return <div className={ "govuk-grid-column-one-half container-map" }>
+        { children }
+        {/*<img src={ "/public/images/graph-tests.png" } width={ "100%" } alt={ "" }/>*/}
+    </div>
+
+}; // Visuals
+
+
+const ValueItem: ComponentType<Props> = ({ label, value, description=null, colourName }: Props) => {
+
+    return <Fragment>
+        <div className={ "data-label" }>
+            <p className={ "govuk-body govuk-!-margin-bottom-0" }>{ label }</p>
         </div>
-        <div class="govuk-grid-column-one-half">
-          <span class="govuk-caption-m govuk-body-s more-detail govuk-!-margin-bottom-0 govuk-!-margin-top-1"><a class="govuk-link more-detail govuk-!-font-weight-bold govuk-link--no-visited-state govuk-!-margin-bottom-0" href="testing">More detail ►</a></span>
+        <div className={ `square-${ colourName }` }/>
+        <div className={ "data-value" }>
+            <h3 className={ "govuk-heading-m govuk-!-margin-bottom-2 govuk-!-padding-top-0" }>
+                { value }
+                {
+                    description
+                        ? <small className={ "govuk-body-s govuk-!-margin-bottom-0 today" }>
+                            { description }
+                        </small>
+                        : null
+                }
+            </h3>
         </div>
-      </div>
+    </Fragment>
 
-      <hr class="govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" />
+}; // ValueItem
 
-      <div class="govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-0">
-        <div class="govuk-grid-column-one-half container-map">
-          <img src="/public/images/graph-tests.png" width="100%" alt="" />
+
+const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
+
+    return <div className={ "govuk-grid-column-one-half" }>
+        { children }
+        <div className={ "spacer" }/>
+    </div>
+
+}; // ValueItemContainer
+
+
+const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", backUrl=null, children }: Props) => {
+
+    return <Styles.Card classNameName={ "dashboard-panel" }>
+        <div className={ "govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
+            <div className={ "govuk-grid-column-one-half" }>
+                <h2 className={ "govuk-heading-m govuk-!-margin-bottom-1 govuk-!-margin-top-0" }>{ caption }</h2>
+            </div>
+            <div className={ "govuk-grid-column-one-half" }>
+                    <span
+                        className={ "govuk-caption-m govuk-body-s more-detail govuk-!-margin-bottom-0 govuk-!-margin-top-1" }>
+                        <a className={ "govuk-link more-detail govuk-!-font-weight-bold govuk-link--no-visited-state govuk-!-margin-bottom-0" }
+                           href={ "testing" }>More detail ►</a>
+                    </span>
+            </div>
         </div>
-        <div class="govuk-grid-column-one-half">
 
-          <div class="data-label"><p class="govuk-body govuk-!-margin-bottom-0">No. of tests</p></div><div class="square-blue"></div>
-          <div class="data-value"><h3 class="govuk-heading-m govuk-!-margin-bottom-2 govuk-!-padding-top-0">
-            128,340
-            <p class="govuk-body-s govuk-!-margin-bottom-0 today">Total all time: 3,090,566</p>
-          </h3></div>
+        <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
 
-          <div class="data-label"><p class="govuk-body govuk-!-margin-bottom-0">Planned lab-capacity</p></div><div class="square-grey"></div>
-          <div class="data-value"><h3 class="govuk-heading-m govuk-!-margin-bottom-3 govuk-!-padding-top-0">
-            145,855
-          </h3></div>
-          <div class="spacer"> </div>
-        </div>
+        <div className={ "govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
+            { children }
         </div>
 
-      </Styles.Card>
-  );
+    </Styles.Card>
+
 };
 
-export default Card;
+
+const FullWidthCard: ComponentType<Props> = ({ caption, title, subtitle, backUrl }: Props) => {
+
+}
+
+export {
+    HalfWidthCard,
+    FullWidthCard,
+    VisualSection,
+    ValueItem,
+    ValueItemsSection
+};
