@@ -12,6 +12,7 @@ export const Card: ComponentType<*> = (() => {
     padding: 20px;
     border: 1px #f3f2f1 solid;
     margin: 10px;
+    flex-basis: 43%;
   `;
 })();
 
