@@ -144,28 +144,29 @@ export default class Archive extends Component<ArchiveProps, {}> {
             { data } = await axios.get(this.#url, { responseType: 'document' }),
             nameParser = /^(\w+)\/dated\/coronavirus-(\w+)_(\d{4})(\d{2})(\d{2}).*$/,
             contents = getSortedPaths(
-                data.evaluate(`//Blob/Name[starts-with(text(), 'json/dated')]`,
+                data.evaluate(`//Blob/Name[starts-with(text(), 'json/dated/coronavirus-cases')]`,
                     data, null, XPathResult.UNORDERED_NODE_ITERATOR_TYPE, null
-                ))
+                ), 'json')
                 .reduce(
                     (acc: Array<Array<string>, Array<string>>, item: string) => {
 
                         const deaths = item.replace(/cases/g, "deaths")
 
-                        acc[0].push([
+                        acc = [
+                            ...acc,
                             item.replace(/json/g, "csv"),
-                            deaths.replace(/json/g, "csv")
-                        ])
-                        acc[1].push([item, deaths])
+                            deaths.replace(/json/g, "csv"),
+                            item,
+                            deaths
+                        ]
 
                         return acc
 
-                    },
-                    [[], []])
-                .map(item => item.map( v => nameParser.exec(v) ));
+                    }, [])
+                .map(item => nameParser.exec(item));
 
         this.setState({
-            data: groupByDate(contents),
+            data: groupByDate([contents]),
             loading: false
         })
 
