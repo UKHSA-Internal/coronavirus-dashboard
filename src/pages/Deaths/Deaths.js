@@ -19,32 +19,27 @@ const Deaths: ComponentType<Props> = ({ }: Props) => {
 
 
     return (
-        <Styles.Container className={"govuk-width-container"}>
-            <Styles.Content className="govuk-main-wrapper" role="main">
-                <Styles.Container className="govuk-grid-row">
-                    <Styles.Container className="govuk-grid-column-full">
+        <div className="govuk-grid-row">
+            <div className="govuk-grid-column-full">
 
-                        <PageTitle title={"Deaths"} />
+                <p className="govuk-body">Last updated on Thursday 28 May 2020 at 3:37pm</p>
 
-                        <div class="govuk-grid-column-menu">
-                            <SideNavigation />
-                        </div>
+                <div class="govuk-grid-column-menu">
+                    <SideNavigation />
+                </div>
 
-                        <div class="govuk-grid-column-dashboard">
-                            <DashboardHeader />
+                <div class="govuk-grid-column-dashboard">
+                    <DashboardHeader title={"Deaths"} />
 
-                            <Styles.FlexContainer>
+                    <Styles.FlexContainer>
+                        <Card />
+                        <Card />
+                    </Styles.FlexContainer>
+                </div>
 
-                                    <Card />
-                                    <Card />
+            </div>
+        </div>
 
-                            </Styles.FlexContainer>
-                        </div>
-
-                    </Styles.Container>
-                </Styles.Container>
-            </Styles.Content>
-        </Styles.Container>
     );
 };
 
