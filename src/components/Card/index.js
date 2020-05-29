@@ -1,1 +1,1 @@
-export { default } from './Card';
+export { ValueItem, VisualSection, FullWidthCard, HalfWidthCard, ValueItemsSection } from './Card';

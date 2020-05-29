@@ -6,7 +6,7 @@ import type { ComponentType } from 'react';
 import PageTitle from 'components/PageTitle';
 import SideNavigation from 'components/SideNavigation';
 import DashboardHeader from 'components/DashboardHeader';
-import Card from 'components/Card';
+import { HalfWidthCard } from 'components/Card';
 import type { Props } from './Healthcare.types';
 import * as Styles from './Healthcare.styles';
 
@@ -32,8 +32,8 @@ const Healthcare: ComponentType<Props> = ({ }: Props) => {
                     <DashboardHeader title={"Healthcare"} />
 
                     <Styles.FlexContainer>
-                        <Card />
-                        <Card />
+                        <HalfWidthCard />
+                        <HalfWidthCard />
                     </Styles.FlexContainer>
                 </div>
 
