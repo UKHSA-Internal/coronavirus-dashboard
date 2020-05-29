@@ -9,23 +9,20 @@ import * as Styles from './BigNumber.styles.js';
 
 export const BigNumberContainer: Component<Props> = ({ children }) => {
 
-    return <Styles.MainContainer className="govuk-!-margin-top-9 govuk-!-margin-bottom-9">
-        <Styles.Children>{ children }</Styles.Children>
-    </Styles.MainContainer>
-
-}; // SmallNumberContainer
+    return <Styles.Children>{ children }</Styles.Children>
 
 
-export const BigNumber: Component<Props> = ({ caption, number, description }: Props) => {
+}; // BigNumberContainer
+
+
+export const BigNumber: Component<Props> = ({ caption, number, title }: Props) => {
     return (
-        <Styles.Container>
-            <Styles.Caption className="govuk-caption-l">{ caption }</Styles.Caption>
-            <Styles.Number
-                className="govuk-heading-l">{ numeral(number).format('0,0') }</Styles.Number>
-            <Styles.Description
-                className="govuk-body govuk-!-font-size-16 govuk-!-margin-bottom-1">
-                { description }
-            </Styles.Description>
+        <Styles.Container className="govuk-!-padding-left-4 govuk-!-padding-right-4">
+            <span className="govuk-caption-m">{ caption }</span>
+            <h2 className="govuk-heading-s govuk-!-margin-bottom-0">
+                { title }
+            </h2>
+            <h3 className="govuk-heading-l govuk-!-margin-bottom-2">{ numeral(number).format('0,0') }</h3>
         </Styles.Container>
     );
 };
