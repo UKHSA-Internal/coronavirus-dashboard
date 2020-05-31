@@ -2,23 +2,32 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-
 import URLs from "common/urls";
 
 
-const useLoadData = () => {
-    const [data, setData] = useState<?Data>(null);
+const AreaHierarchy = () => {
+
+    const [ hierarchy, setHierarchy ] = useState(null);
 
     useEffect(() => {
+
         const getData = async () => {
-            const {data: d} = await axios.get(URLs.landingData);
-            setData(d);
+
+            const { data } = await axios.get(
+                "area_hierarchy_v1.json",
+                { baseURL: URLs.lookups }
+            );
+
+            setHierarchy(data)
+
         };
 
         getData();
+
     }, []);
 
-    return data;
+    return hierarchy;
+
 };
 
-export default useLoadData;
+export default AreaHierarchy;
