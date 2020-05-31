@@ -28,9 +28,6 @@ import MomentLocaleUtils, {
 } from 'react-day-picker/moment';
 import moment from "moment";
 import 'moment/locale/en-gb';
-import type { URIParameters } from "../MapTable/MapTable.types";
-import { prepAsKey } from "../MapTable/utils";
-
 
 const PathNameMapper = {
     "/": "Daily Summary",
