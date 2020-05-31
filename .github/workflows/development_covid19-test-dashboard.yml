@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - covid19-test-dashboard
 on:
   push:
     branches:
-      - development
+      - v2-development
 
 jobs:
   build-and-deploy:
