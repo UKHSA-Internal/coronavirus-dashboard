@@ -36,7 +36,7 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
                         <a href="deaths">Deaths</a>
                     </li>
 
-                    <hr class="govuk-section-break govuk-section-break--m govuk-!-margin-top-3 govuk-!-margin-bottom-3 govuk-section-break--visible" />
+                    <hr className="govuk-section-break govuk-section-break--m govuk-!-margin-top-3 govuk-!-margin-bottom-3 govuk-section-break--visible" />
 
                     <li className={`moj-side-navigation__item ${pathname === '/about' ? "moj-side-navigation__item--active" : ""}`}>
                         <a href="about-data">About the data</a>
