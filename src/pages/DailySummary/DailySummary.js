@@ -1,11 +1,11 @@
 // @flow
 
-import React, { useState, Component } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import type { ComponentType } from 'react';
+import { withRouter } from 'react-router';
 
 import moment from "moment";
 
-import useLoadData from 'hooks/useLoadData';
 import PageTitle from 'components/PageTitle';
 import SideNavigation from 'components/SideNavigation';
 import DashboardHeader from 'components/DashboardHeader';
@@ -14,6 +14,10 @@ import type { Props } from './DailySummary.types';
 import * as Styles from './DailySummary.styles';
 import axios from 'axios';
 import Plot from 'react-plotly.js';
+import { max } from "d3-array";
+import type { URIParameters } from "../../components/MapTable/MapTable.types";
+import deepEqual from "deep-equal"
+
 
 /**
  * Extracts the number of deaths from the latest date included in
@@ -65,283 +69,412 @@ export const MainLoading = () => {
 }; // MainLoading
 
 
-class DailySummary extends Component<Props, {}> {
+const sum = (arr, key) => {
 
-    #url = 'https://uks-covid19-pubdash-dev.azure-api.net/fn-coronavirus-dashboard-pipeline-etl-dev/v1/data';
+    return arr.reduce((acc, item) => {
+        acc = acc + key(item)
+        return acc
+    }, 0)
+
+}
+
+
+const Plotter = ({ ...props }) => {
+
+    return <Plot
+        config={ {
+            showLink: false,
+            responsive: true,
+        } }
+        useResizeHandler={ true }
+        style={{ display: 'flex' }}
+        layout={ {
+            // width: 400,
+            height: 240,
+            // autosize: true,
+            legend: {
+                orientation: 'h'
+            },
+            showlegend: false,
+            margin: {
+                l: 20,
+                r: 5,
+                b: 25,
+                t: 5,
+                pad: 0
+            },
+            xaxis: {
+                showgrid: false,
+                zeroline: false,
+                showline: false,
+                // tickangle: 30,
+                tickfont:{
+                    family: `"GDS Transport", Arial, sans-serif`,
+                    size : 10,
+                    color: "#6f777b"
+                }
+            },
+            yaxis: {
+                tickformat: 's',
+                tickfont:{
+                    family: `"GDS Transport", Arial, sans-serif`,
+                    size : 10,
+                    color: "#6f777b",
+                }
+            },
+            plot_bgcolor: "rgba(231,231,231,0)",
+            paper_bgcolor: "rgba(255,255,255,0)"
+        } }
+        {...props}
+    />
+
+}; // Plotter
+
+
+
+const groupByUniqueKey = (data, uniqueKeyName) => {
+
+    try {
+        return data
+            .reduce((acc, { [uniqueKeyName]: grouper, ...rest }) =>
+                grouper ? { ...acc, [grouper]: rest } : acc, {})
+    } catch {
+        return {}
+    }
+
+};  // groupByUniqueKey
+
+
+const DeathsCard = ({ data }) => {
+
+    const
+        groupByDeathReportDate = groupByUniqueKey(data, 'deathReportDate'),
+        maxDeathReportDate = max(Object.keys(groupByDeathReportDate));
+
+    return <HalfWidthCard caption={ "Deaths" }>
+        <VisualSection>
+            <Plotter
+                data={ [
+                    {
+                        name: "Total lab-confirmed cases",
+                        x: data.map(item => item?.deathReportDate ?? ""),
+                        y: data.map(item => item?.deaths ?? 0),
+                        type: 'scatter',
+                        fill: 'tozeroy',
+                        fillcolor: 'rgba(43,140,196,0.2)'
+                    }
+                ] }
+            />
+        </VisualSection>
+        <ValueItemsSection>
+            <ValueItem
+                label={ "Confirmed COVID-19 associated deaths" }
+                value={  groupByDeathReportDate[maxDeathReportDate]?.deaths ?? 0 }
+                description={ 'Total all time' }
+                descriptionValue={ sum(data, item => item?.deaths ?? 0) }
+                colourName={ 'blue' }
+            />
+        </ValueItemsSection>
+    </HalfWidthCard>
+
+}
+
+
+const HealthcareCard = ({ data }) => {
+
+    return <HalfWidthCard caption={ "Healthcare" }>
+        <VisualSection>
+            <Plotter
+                data={ [
+                    {
+                        name: "",
+                        x: [],
+                        y: [],
+                        type: 'line',
+                        mode: 'lines',
+                        marker: { color: '#2B8CC4' },
+                    }
+                ] }
+            />
+        </VisualSection>
+        <ValueItemsSection>
+            <ValueItem
+                label={ "Discharged" }
+                value={ max(data, item => item?.dischargeDate ?? 0)?.discharged ?? 0}
+                description={ 'Total all time' }
+                descriptionValue={ sum(data, item => item?.discharged ?? 0) }
+                colourName={ 'blue' }
+            />
+            <ValueItem
+                label={ "In hospital" }
+                value={ max(data, item => item?.inHospitalDate ?? 0)?.inHospital ?? 0 }
+                description={ 'Occupancy' }
+                descriptionValue={ 0 }
+                descriptionSign={ "%" }
+            />
+            <ValueItem
+                label={ "Hospital breakdown" }
+                value={ 0 }
+            />
+        </ValueItemsSection>
+    </HalfWidthCard>
+
+}
+
+
+const CasesCard = ({ data }) => {
+
+    const
+        groupBySpecimenDate = groupByUniqueKey(data, 'specimenDate'),
+        maxSpecimenDate = max(Object.keys(groupBySpecimenDate)),
+        groupByTestDate = groupByUniqueKey(data, 'testDate'),
+        testDate = max(Object.keys(groupByTestDate));
+
+
+    return <HalfWidthCard caption={ "Cases" }>
+        <VisualSection>
+            <Plotter
+                data={ [
+                    {
+                        name: "Cases",
+                        x: data.map(item => item?.specimenDate ?? ""),
+                        y: data.map(item => item?.cases ?? 0),
+                        fill: 'tozeroy',
+                        fillcolor: 'rgba(43,140,196,0.2)'
+                    },
+                    {
+                        name: "Tests",
+                        x: data.map(item => item?.testDate ?? ""),
+                        y: data.map(item => item?.cases ?? 0),
+                        fill: 'tozeroy',
+                        fillcolor: 'rgba(111,119,123,0.2)'
+                    }
+                ] }
+            />
+        </VisualSection>
+        <ValueItemsSection>
+            <ValueItem
+                label={ "Lab-confirmed" }
+                value={ groupBySpecimenDate[maxSpecimenDate]?.cases ?? 0 }
+                description={ 'Total all time' }
+                descriptionValue={ sum(data, item => item?.cases ?? 0) }
+                colourName={ 'blue' }
+            />
+            <ValueItem
+                label={ "No. of people tested" }
+                value={ groupByTestDate[testDate]?.tests ?? 0 }
+                description={ 'Total all time' }
+                descriptionValue={ sum(data, item => item?.tests ?? 0) }
+            />
+            <ValueItem
+                label={ "Patients recovered" }
+                value={ sum(data, item => item?.recovered ?? 0) }
+            />
+        </ValueItemsSection>
+    </HalfWidthCard>
+
+}
+
+
+const TestingCard = ({ data }) => {
+
+    const
+        testDate = groupByUniqueKey(data, 'testDate'),
+        maxTestDate = max(Object.keys(testDate)),
+        labCapacityDate = groupByUniqueKey(data, 'labCapacityDate'),
+        maxLabCapacityDate = max(Object.keys(labCapacityDate));
+
+
+    return <HalfWidthCard caption={ "Testing" }>
+        <VisualSection>
+            <Plotter
+                data={ [
+                    {
+                        name: "",
+                        x: [],
+                        y: [],
+                        type: 'line',
+                        mode: 'lines',
+                        marker: { color: 'red' },
+                    }
+                ] }
+            />
+        </VisualSection>
+        <ValueItemsSection>
+            <ValueItem
+                label={ "No. of test" }
+                value={ testDate[maxTestDate]?.tests ?? 0}
+                description={ 'Total all time' }
+                descriptionValue={ sum(data, item => item?.tests ?? 0) }
+                colourName={ 'blue' }
+            />
+            <ValueItem
+                label={ "Planned lab capacity" }
+                value={ labCapacityDate[maxLabCapacityDate]?.labCapacity ?? 0 }
+            />
+        </ValueItemsSection>
+    </HalfWidthCard>
+
+}
+
+export const objectsAreEqual = (...objects): boolean => {
+
+    const
+        keys = Object.keys(objects[0]),
+        nItems = keys.length;
+
+    // Check number of props
+    if ( !objects.every(item => Object.keys(item).length === nItems) ) return false;
+
+    // Check value equivalence
+    for ( const key of keys )
+        if ( !objects.every( item => item[key] === objects[0][key] ) )
+            return false;
+
+    return true
+
+}; // objectsAreEqual
+
+
+export const createQuery = ( args: Array<{key: string, sign: string, value: string}>, joinBy: string="&", definitionChar: string="?"): string => {
+
+    const params = [];
+
+    for ( let index = 0; index < args.length; index ++ ) {
+
+        const
+            { key, sign, value } = args[index],
+            existingValueIndex = params.reduce(
+                (acc, item, ind) =>
+                    item.startsWith(encodeURI(`${key}${sign}`))
+                        ? ind
+                        : acc,
+                -1
+            );
+
+        if (existingValueIndex > -1) {
+            params[existingValueIndex] = encodeURI(`${key}${sign}${value}`)
+            continue
+        }
+
+        params.push(encodeURI(`${key}${sign}${value}`))
+
+    }
+
+    return definitionChar + params.join(joinBy)
+
+} // createHash
+
+
+export const getParams = (uri: string, separator: string="&"): Array<{key: string, sign: string, value: string}> => {
+
+    return decodeURIComponent(uri)
+        .replace("?", "")
+        .split(separator)
+        .reduce((acc, item) => {
+            const found = /^([a-z]+)([=<>!]{1,2})(.+)$/i.exec(item)
+
+            if (!found) return acc;
+
+            return [
+                ...acc,
+                {
+                    key: found[1],
+                    value: found[3],
+                    sign: found[2]
+                }
+            ]
+        }, [])
+
+}; // getParams
+
+
+class DailySummary extends Component<{}, {}> {
+
+    url = 'https://uks-covid19-pubdash-dev.azure-api.net/fn-coronavirus-dashboard-pipeline-etl-dev/v1/data';
+
+    defaultParams = [
+        { key: 'areaName', sign: '=', value: 'United Kingdom' },
+        { key: 'areaType', sign: '=', value: 'overview' }
+    ];
+
     state = {
         data: null,
-        loading: true
-    }; // state
+        params: this.defaultParams
+    }
 
     getData = async () => {
 
-        const { data: { data=[] } } = await axios.get(this.#url, {
-            params: {
-                areaName: "united kingdom",
-                areaType: "overview",
-                structure: JSON.stringify({
-                    deathDate: "deathReportingDate",
-                    specimenDate: "specimenDate",
-                    deaths: "dailyChangeInDeaths",
-                    cases: "dailyLabConfirmedCases"
-                })
-            }
-        })
+        const
+            { params } = this.state,
+            urlParams = createQuery([
+                {
+                    key: 'filters',
+                    sign: '=',
+                    value: createQuery(params.length ? params : this.defaultParams, ";", "")
+                },
+                {
+                    key: 'structure',
+                    sign: '=',
+                    value: JSON.stringify({
+                        deathReportDate: "deathReportingDate",
+                        specimenDate: "specimenDate",
+                        deaths: "dailyChangeInDeaths",
+                        cases: "dailyLabConfirmedCases"
+                    })
+                }
+            ]),
+            { data: { data = [] } } = await axios.get(this.url + encodeURI(urlParams));
 
-        this.setState({ data: data, loading: false })
+        this.setState({ data: data })
 
-    }; // getData
+    };
 
     componentDidMount(): * {
 
-        return this.setState({loading: true}, this.getData)
-
-    } // componentDidMount
-
-    render(): React$Node {
-
-        const { data, loading } = this.state;
-
-        if ( loading ) return <MainLoading/>;
-        console.log(data);
         // ToDo: This should be done for every page in the "app.js".
         const base = document.querySelector("head>base");
         base.href = document.location.pathname;
 
+        this.setState((prevState, prevProps) => ({
+                params: [
+                    ...prevState.params,
+                    ...getParams(prevProps?.location?.search ?? "")
+                ]
+            }),
+            this.getData
+        )
 
-        return <div className={ "govuk-grid-row" }>
-            <div className={ "govuk-grid-column-full" }>
-                <p className={ "govuk-body" }>Last updated on { }</p>
-                <div className={ "govuk-grid-column-menu" }>
-                    <SideNavigation/>
-                </div>
-                <div className={ "govuk-grid-column-dashboard" }>
-                    <DashboardHeader title={ "Daily Summary" }/>
-                    <Styles.FlexContainer>
+    }
 
-                        <HalfWidthCard caption={ "Testing" }>
-                            <VisualSection>
-                                <Plot
-                                    data={ [
-                                        {
-                                            name: "",
-                                            x: [],
-                                            y: [],
-                                            type: 'line',
-                                            mode: 'lines',
-                                            marker: { color: 'red' },
-                                        }
-                                    ] }
-                                    config={ {
-                                        showLink: false,
-                                        responsive: true,
-                                    } }
-                                    useResizeHandler={ true }
-                                    style={{ display: 'flex' }}
-                                    layout={ {
-                                        // width: 400,
-                                        height: 240,
-                                        // autosize: true,
-                                        legend: {
-                                            orientation: 'h'
-                                        },
-                                        margin: {
-                                            l: 20,
-                                            r: 5,
-                                            b: 20,
-                                            t: 5,
-                                            pad: 0
-                                        },
-                                        plot_bgcolor: "rgba(231,231,231,0)",
-                                        paper_bgcolor: "rgba(255,255,255,0)"
-                                    } }
-                                />
-                            </VisualSection>
-                            <ValueItemsSection>
-                                <ValueItem
-                                    label={ "No. of test" }
-                                    value={ 128340 }
-                                    description={ 'Total all time: 3,090,566' }
-                                    colourName={ 'blue' }
-                                />
-                                <ValueItem
-                                    label={ "Planned lab capacity" }
-                                    value={ 145855 }
-                                />
-                            </ValueItemsSection>
-                        </HalfWidthCard>
+    componentDidUpdate(prevProps: Props, prevState: State, prevContext: *): * {
 
-                        <HalfWidthCard caption={ "Cases" }>
-                            <VisualSection>
-                                <Plot
-                                    data={ [
-                                        {
-                                            name: "",
-                                            x: data.map(item => item.specimenDate),
-                                            y: data.map(item => item.cases),
-                                            type: 'line',
-                                            mode: 'lines',
-                                            marker: { color: 'red' },
-                                        }
-                                    ] }
-                                    config={ {
-                                        showLink: false,
-                                        responsive: true,
-                                    } }
-                                    useResizeHandler={ true }
-                                    style={{ display: 'flex' }}
-                                    layout={ {
-                                        // width: 400,
-                                        height: 240,
-                                        // autosize: true,
-                                        legend: {
-                                            orientation: 'h'
-                                        },
-                                        margin: {
-                                            l: 20,
-                                            r: 5,
-                                            b: 20,
-                                            t: 5,
-                                            pad: 0
-                                        },
-                                        plot_bgcolor: "rgba(231,231,231,0)",
-                                        paper_bgcolor: "rgba(255,255,255,0)"
-                                    } }
-                                />
-                            </VisualSection>
-                            <ValueItemsSection>
-                                <ValueItem
-                                    label={ "Lab-confirmed" }
-                                    value={ 2615 }
-                                    description={ 'Total all time: 250,908' }
-                                    colourName={ 'blue' }
-                                />
-                                <ValueItem
-                                    label={ "No. of people tested" }
-                                    value={ 67681 }
-                                    description={ 'Total all time: 2,064,329' }
-                                />
-                                <ValueItem
-                                    label={ "Patients recovered" }
-                                    value={ 75432 }
-                                />
-                            </ValueItemsSection>
-                        </HalfWidthCard>
+        const
+            { location: { search: prevParams="" } } = prevProps,
+            { location: { search: thisParams="" } } = this.props,
+            prevParamsObj = getParams(prevParams),
+            thisParamsObj = getParams(thisParams);
 
-                        <HalfWidthCard caption={ "Healthcare" }>
-                            <VisualSection>
-                                <Plot
-                                    data={ [
-                                        {
-                                            name: "",
-                                            x: [],
-                                            y: [],
-                                            type: 'line',
-                                            mode: 'lines',
-                                            marker: { color: '#2B8CC4' },
-                                        }
-                                    ] }
-                                    config={ {
-                                        showLink: false,
-                                        responsive: true,
-                                    } }
-                                    useResizeHandler={ true }
-                                    style={{ display: 'flex' }}
-                                    layout={ {
-                                        // width: 400,
-                                        height: 240,
-                                        // autosize: true,
-                                        legend: {
-                                            orientation: 'h'
-                                        },
-                                        margin: {
-                                            l: 20,
-                                            r: 5,
-                                            b: 20,
-                                            t: 5,
-                                            pad: 0
-                                        },
-                                        plot_bgcolor: "rgba(231,231,231,0)",
-                                        paper_bgcolor: "rgba(255,255,255,0)"
-                                    } }
-                                />
-                            </VisualSection>
-                            <ValueItemsSection>
-                                <ValueItem
-                                    label={ "Discharged" }
-                                    value={ 3306 }
-                                    description={ 'Total all time: 248,127' }
-                                    colourName={ 'blue' }
-                                />
-                                <ValueItem
-                                    label={ "In hospital" }
-                                    value={ 36842 }
-                                    description={ '47% occupancy' }
-                                />
-                                <ValueItem
-                                    label={ "Hospital breakdown" }
-                                    value={ 0 }
-                                />
-                            </ValueItemsSection>
-                        </HalfWidthCard>
+        if (!deepEqual(prevParamsObj, thisParamsObj))
+            this.setState({ params: thisParamsObj }, this.getData)
 
-                        <HalfWidthCard caption={ "Deaths" }>
-                            <VisualSection>
-                                <Plot
-                                    data={ [
-                                        {
-                                            name: "Total lab-confirmed cases",
-                                            x: data.map(item => item.deathDate),
-                                            y: data.map(item => item.deaths),
-                                            type: 'scatter',
-                                            // mode: 'none',
-                                            fill: 'tozeroy',
-                                            fillcolor: 'rgba(43,140,196,0.2)'
-                                            // marker: { color: '#2B8CC4' },
-                                        }
-                                    ] }
-                                    config={ {
-                                        showLink: false,
-                                        responsive: true,
-                                    } }
-                                    useResizeHandler={ true }
-                                    style={{ display: 'flex' }}
-                                    layout={ {
-                                        // width: 400,
-                                        height: 240,
-                                        // autosize: true,
-                                        legend: {
-                                            orientation: 'h'
-                                        },
-                                        margin: {
-                                            l: 30,
-                                            r: 5,
-                                            b: 20,
-                                            t: 5,
-                                            pad: 0
-                                        },
-                                        plot_bgcolor: "rgba(231,231,231,0)",
-                                        paper_bgcolor: "rgba(255,255,255,0)"
-                                    } }
-                                />
-                            </VisualSection>
-                            <ValueItemsSection>
-                                <ValueItem
-                                    label={ "Confirmed COVID-19 associated deaths" }
-                                    value={ 338 }
-                                    description={ 'Total all time: 36,042' }
-                                    colourName={ 'blue' }
-                                />
-                            </ValueItemsSection>
-                        </HalfWidthCard>
+    }
 
-                    </Styles.FlexContainer>
-                </div>
-            </div>
-        </div>
+    render(): React$Node {
+
+        const { data } = this.state;
+
+        if ( !data ) return <MainLoading/>
+
+        return<Styles.FlexContainer>
+            <TestingCard data={ data }/>
+            <CasesCard data={ data }/>
+            <HealthcareCard data={ data }/>
+            <DeathsCard data={ data }/>
+        </Styles.FlexContainer>
 
     }
 
 }
 
-export default DailySummary
+export default withRouter(DailySummary)
