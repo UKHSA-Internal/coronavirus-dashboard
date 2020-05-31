@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import type { ComponentType } from 'react';
 import { withRouter, useHistory } from 'react-router';
 import { max } from "d3-array";
@@ -29,6 +29,8 @@ import MomentLocaleUtils, {
 } from 'react-day-picker/moment';
 import moment from "moment";
 import 'moment/locale/en-gb';
+import axios from "axios";
+import URLs from "../../common/urls";
 
 const PathNameMapper = {
     "/": "Daily Summary",
@@ -40,7 +42,7 @@ const PathNameMapper = {
     "/cookies": "Cookies",
     "/accessibility": "Accessibility",
     "/archive": "Archive"
-}
+};
 
 
 const NoPickerPaths = [
@@ -48,8 +50,59 @@ const NoPickerPaths = [
     "/cookies",
     "/accessibility",
     "/archive"
-]
+];
 
+
+const GetLookup = () => {
+
+    const [ lookupTable, setLookupTable ] = useState(null)
+
+    useEffect(() => {
+
+        const getData = async () => {
+
+            const { data } = await axios.get('lookupTable_bothWay_v1.json', { baseURL: URLs.lookups });
+
+            setLookupTable(data)
+        }
+
+        getData()
+
+        return () => {}
+
+    }, [])
+
+    return lookupTable
+
+}
+
+const GetDataFor = (hierarchy) => {
+
+    const
+        lookup = GetLookup(),
+        flatHierarchy = Object
+            .keys(hierarchy)
+            .reduce((acc, item) =>
+                [...acc, ...hierarchy[item].map(value => ({...value, type: item}))],
+                []
+            );
+
+    return (areaType, parentName) => {
+
+        if ( !parentName ) return hierarchy[areaType];
+
+        if ( !lookup ) return null;
+
+        for ( const { name, code, type } of flatHierarchy ) {
+
+            if ( name !== parentName ) continue;
+
+            return hierarchy[areaType].filter(item => lookup[type][code].c.indexOf(item.code) > -1)
+
+        }
+    }
+
+}
 
 const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
 
@@ -58,7 +111,8 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
         [region, setRegion] = useState(null),
         [utla, setUtla] = useState(null),
         [ltla, setLtla] = useState(null),
-        history = useHistory();
+        history = useHistory(),
+        getData = GetDataFor(hierarchy);
 
     const order = [
         {
@@ -66,6 +120,7 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
             label: "nations",
             value: nation,
             setter: setNation,
+            parent: null,
             order: 0,
         },
         {
@@ -73,6 +128,7 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
             label: "regions",
             value: region,
             setter: setRegion,
+            parent: nation,
             order: 1,
         },
         {
@@ -80,6 +136,7 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
             label: "upper-trier local authorities",
             value: utla,
             setter: setUtla,
+            parent: region,
             order: 3,
         },
         {
@@ -87,6 +144,7 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
             label: "lower-tier local authorities",
             value: ltla,
             setter: setLtla,
+            parent: utla,
             order: 4
         }
     ]
@@ -107,7 +165,7 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
         const newQuery = createQuery([
                 ...getParams(query),
                 {key: 'areaType', sign: '=', value: selection.key},
-                {key: 'areaName', sign: '=', value: selection.value}
+                ...(selection.value ? [{key: 'areaName', sign: '=', value: selection.value}] : [])
             ]);
 
         history.push(`/${ newQuery }`)
@@ -134,12 +192,13 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
                                 onChange={ ({ target: { value } }) => areaTypeItem.setter(value) }
                                 className={ 'govuk-select' }
                                 name={ areaTypeItem.key }>
-                            <option>All { areaTypeItem.label }</option>
+                            <option value={ null }>All { areaTypeItem.label }</option>
                             {
-                                hierarchy[areaTypeItem.key].map(({ name, code }) =>
-                                    <option value={ name } key={ `${ areaTypeItem.key }-${ code }` }>
-                                        { name }
-                                    </option>
+                                getData(areaTypeItem.key, areaTypeItem.parent)
+                                    .map(({ name, code }) =>
+                                        <option value={ name } key={ `${ areaTypeItem.key }-${ code }` }>
+                                            { name }
+                                        </option>
                                 )
                             }
                         </Select>
