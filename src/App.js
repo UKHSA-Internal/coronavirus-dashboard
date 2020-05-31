@@ -6,7 +6,6 @@ import { Header, Footer } from 'govuk-react-jsx';
 
 import dotenv from 'dotenv';
 
-import MobileRegionTable from 'pages/MobileRegionTable';
 import About from 'pages/About';
 import Archive from "pages/Archive";
 import Accessibility from 'pages/Accessibility';
@@ -127,7 +126,6 @@ const App = () => {
                                 </Switch>
 
                                 <Switch>
-                                    <Route path="/region" component={ MobileRegionTable }/>
                                     <Route path="/about-data" component={ About }/>
                                     <Route path="/accessibility" component={ Accessibility }/>
                                     <Route path="/cookies" component={ Cookies }/>
