@@ -5,7 +5,11 @@ import type { ComponentType } from 'react';
 import { BackLink } from 'govuk-react-jsx';
 
 import type { Props } from './Card.types';
-import * as Styles from './Card.styles';
+import {
+    CardDescription,
+    CardBody
+} from './Card.styles';
+import numeral from 'numeral'
 
 
 const VisualSection: ComponentType<Props> = ({ children }: Props) => {
@@ -18,7 +22,7 @@ const VisualSection: ComponentType<Props> = ({ children }: Props) => {
 }; // Visuals
 
 
-const ValueItem: ComponentType<Props> = ({ label, value, description=null, colourName }: Props) => {
+const ValueItem: ComponentType<Props> = ({ label, value, description=null, descriptionValue=null, descriptionSign=null, colourName }: Props) => {
 
     return <Fragment>
         <div className={ "data-label" }>
@@ -27,12 +31,10 @@ const ValueItem: ComponentType<Props> = ({ label, value, description=null, colou
         <div className={ `square-${ colourName }` }/>
         <div className={ "data-value" }>
             <h3 className={ "govuk-heading-m govuk-!-margin-bottom-2 govuk-!-padding-top-0" }>
-                { value }
+                { numeral(value).format("0,0") }
                 {
                     description
-                        ? <small className={ "govuk-body-s govuk-!-margin-bottom-0 today" }>
-                            { description }
-                        </small>
+                        ? <CardDescription>{ description }:&nbsp;{ numeral(descriptionValue).format("0,0") }{descriptionSign}</CardDescription>
                         : null
                 }
             </h3>
@@ -54,7 +56,7 @@ const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
 
 const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", backUrl=null, children }: Props) => {
 
-    return <Styles.Card classNameName={ "dashboard-panel" }>
+    return <CardBody>
         <div className={ "govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
             <div className={ "govuk-grid-column-one-half" }>
                 <h2 className={ "govuk-heading-m govuk-!-margin-bottom-1 govuk-!-margin-top-0" }>{ caption }</h2>
@@ -74,7 +76,7 @@ const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", backUrl=nu
             { children }
         </div>
 
-    </Styles.Card>
+    </CardBody>
 
 };
 
