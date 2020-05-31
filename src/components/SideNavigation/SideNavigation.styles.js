@@ -48,7 +48,7 @@ export const NavListItem: ComponentType<*> = (() => {
   `;
 })();
 
-export const Link: ComponentType<*> = (() => {
+export const FooterLink: ComponentType<*> = (() => {
   return styled.a`
     font-weight: 700;
     font-size: 16px;

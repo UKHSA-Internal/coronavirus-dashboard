@@ -8,7 +8,13 @@ import { Link } from "react-router-dom";
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
 import type { Props } from './SideNavigation.types';
-import * as Styles from './SideNavigation.styles';
+import {
+    Container,
+    FooterLink,
+    NavList,
+    NavListItem
+} from './SideNavigation.styles';
+
 
 const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) => {
     const layout = useResponsiveLayout(768);
@@ -39,7 +45,7 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
 
                     <hr className="govuk-section-break govuk-section-break--m govuk-!-margin-top-3 govuk-!-margin-bottom-3 govuk-section-break--visible" />
 
-                    <li className={`moj-side-navigation__item ${pathname === '/about' ? "moj-side-navigation__item--active" : ""}`}>
+                    <li className={`moj-side-navigation__item ${pathname === '/about-data' ? "moj-side-navigation__item--active" : ""}`}>
                         <Link to={ "about-data" }>About the data</Link>
                     </li>
                 </ul>
@@ -47,19 +53,19 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
         );
     }
   return (
-    <Styles.Container className="govuk-header__container--full-width">
-      <Styles.NavList>
-        <Styles.NavListItem active={!pathname.includes('about') && !pathname.includes('region')}>
-          <Styles.Link className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/" dataTopnav="Data dashboard">Data dashboard</Styles.Link>
-        </Styles.NavListItem>
-        <Styles.NavListItem active={pathname.includes('region')}>
-          <Styles.Link className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/region" dataTopnav="Regional">Regional</Styles.Link>
-        </Styles.NavListItem>
-        <Styles.NavListItem active={pathname.includes('about')}>
-          <Styles.Link className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/about" dataTopnav="About the data">About the data</Styles.Link>
-        </Styles.NavListItem>
-      </Styles.NavList>
-    </Styles.Container>
+    <Container className="govuk-header__container--full-width">
+      <NavList>
+        <NavListItem active={!pathname.includes('about') && !pathname.includes('region')}>
+          <FooterLink className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/" dataTopnav="Data dashboard">Data dashboard</FooterLink>
+        </NavListItem>
+        <NavListItem active={pathname.includes('region')}>
+          <FooterLink className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/region" dataTopnav="Regional">Regional</FooterLink>
+        </NavListItem>
+        <NavListItem active={pathname.includes('about')}>
+          <FooterLink className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/about" dataTopnav="About the data">About the data</FooterLink>
+        </NavListItem>
+      </NavList>
+    </Container>
   );
 };
 
