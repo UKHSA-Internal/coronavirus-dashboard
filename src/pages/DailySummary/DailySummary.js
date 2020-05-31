@@ -6,16 +6,15 @@ import { withRouter } from 'react-router';
 
 import moment from "moment";
 
-import PageTitle from 'components/PageTitle';
-import SideNavigation from 'components/SideNavigation';
-import DashboardHeader from 'components/DashboardHeader';
 import { HalfWidthCard, VisualSection, ValueItem, ValueItemsSection } from 'components/Card';
 import type { Props } from './DailySummary.types';
 import * as Styles from './DailySummary.styles';
 import axios from 'axios';
 import Plot from 'react-plotly.js';
 import { max } from "d3-array";
-import type { URIParameters } from "../../components/MapTable/MapTable.types";
+
+import { createQuery, getParams } from "common/utils";
+
 import deepEqual from "deep-equal"
 
 
@@ -334,59 +333,6 @@ export const objectsAreEqual = (...objects): boolean => {
     return true
 
 }; // objectsAreEqual
-
-
-export const createQuery = ( args: Array<{key: string, sign: string, value: string}>, joinBy: string="&", definitionChar: string="?"): string => {
-
-    const params = [];
-
-    for ( let index = 0; index < args.length; index ++ ) {
-
-        const
-            { key, sign, value } = args[index],
-            existingValueIndex = params.reduce(
-                (acc, item, ind) =>
-                    item.startsWith(encodeURI(`${key}${sign}`))
-                        ? ind
-                        : acc,
-                -1
-            );
-
-        if (existingValueIndex > -1) {
-            params[existingValueIndex] = encodeURI(`${key}${sign}${value}`)
-            continue
-        }
-
-        params.push(encodeURI(`${key}${sign}${value}`))
-
-    }
-
-    return definitionChar + params.join(joinBy)
-
-} // createHash
-
-
-export const getParams = (uri: string, separator: string="&"): Array<{key: string, sign: string, value: string}> => {
-
-    return decodeURIComponent(uri)
-        .replace("?", "")
-        .split(separator)
-        .reduce((acc, item) => {
-            const found = /^([a-z]+)([=<>!]{1,2})(.+)$/i.exec(item)
-
-            if (!found) return acc;
-
-            return [
-                ...acc,
-                {
-                    key: found[1],
-                    value: found[3],
-                    sign: found[2]
-                }
-            ]
-        }, [])
-
-}; // getParams
 
 
 class DailySummary extends Component<{}, {}> {

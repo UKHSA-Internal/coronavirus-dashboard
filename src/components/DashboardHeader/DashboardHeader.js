@@ -5,6 +5,7 @@ import type { ComponentType } from 'react';
 import { withRouter, useHistory } from 'react-router';
 import { max } from "d3-array";
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { getParams, createQuery } from "common/utils";
 
 
 import {
@@ -189,61 +190,6 @@ const DatePicker: Component<Props> = ({ baseDate = '', ...props }: Props) => {
 
 
 };
-
-
-export const createQuery = ( args: Array<{key: string, sign: string, value: string}>, joinBy="&", definitionChar: string="?"): string => {
-
-    const params = [];
-
-    for ( let index = 0; index < args.length; index ++ ) {
-
-        const
-            { key, sign, value } = args[index],
-            existingValueIndex = params.reduce(
-                (acc, item, ind) =>
-                    item.startsWith(encodeURI(`${key}${sign}`))
-                        ? ind
-                        : acc,
-                -1
-            );
-
-        if (existingValueIndex > -1) {
-            params[existingValueIndex] = encodeURI(`${key}${sign}${value}`)
-            continue
-        }
-
-        params.push(encodeURI(`${key}${sign}${value}`))
-
-    }
-
-    return definitionChar + params.join(joinBy)
-
-} // createHash
-
-
-export const getParams = (uri: string, separator: string="&"): Array<{key: string, sign: string, value: string}> => {
-
-    return decodeURIComponent(uri)
-        .replace("?", "")
-        .split(separator)
-        .reduce((acc, item) => {
-            const found = /^([a-z]+)([=<>!]{1,2})(.+)$/i.exec(item)
-
-            if (!found) return acc;
-
-            return [
-                ...acc,
-                {
-                    key: found[1],
-                    value: found[3],
-                    sign: found[2]
-                }
-            ]
-        }, [])
-
-}; // getParams
-
-
 
 
 const DateRangePicker: ComponentType<Props> = ({ query, startDate, endDate }: Props) => {
