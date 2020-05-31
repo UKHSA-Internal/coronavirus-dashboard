@@ -32,13 +32,13 @@ dotenv.config();
 
     const { data } = await axios.get(URLs.timestamp, { responseType: 'text' })
 
-    localStorage.setItem("lastUpdate", data)
+    sessionStorage.setItem("lastUpdate", data)
 
 })();
 
 const LastUpdateTime = () => {
 
-    const timestamp = localStorage.getItem('lastUpdate');
+    const timestamp = sessionStorage.getItem('lastUpdate');
 
     if (!timestamp) return null;
 
