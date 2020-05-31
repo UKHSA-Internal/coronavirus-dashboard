@@ -1,12 +1,9 @@
 // @flow
 
-import React, { useState } from 'react';
+import React, { Fragment } from 'react';
 import type { ComponentType } from 'react';
 
 import { BigNumber, BigNumberContainer } from 'components/BigNumber';
-import PageTitle from 'components/PageTitle';
-import SideNavigation from 'components/SideNavigation';
-import DashboardHeader from 'components/DashboardHeader';
 import { HalfWidthCard } from 'components/Card';
 import type { Props } from './Cases.types';
 import * as Styles from './Cases.styles';
@@ -19,50 +16,34 @@ const Cases: ComponentType<Props> = ({ }: Props) => {
     base.href = document.location.pathname;
 
 
-    return (
-        <div className="govuk-grid-row">
-            <div className="govuk-grid-column-full">
+    return <Fragment>
+        <BigNumberContainer>
+            <BigNumber
+                caption="All time total"
+                title="Lab-confirmed positive cases"
+                number="250,908"
+            />
+            <BigNumber
+                caption="All time total"
+                title="Number of people tested"
+                number="2,064,329"
+            />
+            <BigNumber
+                caption="All time total"
+                title="Patients recovered"
+                number="75,432"
+            />
+        </BigNumberContainer>
 
-                <p className="govuk-body">Last updated on Thursday 28 May 2020 at 3:37pm</p>
+        <Styles.FlexContainer>
+            <HalfWidthCard />
+        </Styles.FlexContainer>
 
-                <div class="govuk-grid-column-menu">
-                    <SideNavigation />
-                </div>
+        <Styles.FlexContainer>
+            <HalfWidthCard />
+        </Styles.FlexContainer>
+    </Fragment>
 
-                <div class="govuk-grid-column-dashboard">
-                    <DashboardHeader title={"Cases"} />
-
-                    <BigNumberContainer>
-                        <BigNumber
-                            caption="All time total"
-                            title="Lab-confirmed positive cases"
-                            number="250,908"
-                        />
-                        <BigNumber
-                            caption="All time total"
-                            title="Number of people tested"
-                            number="2,064,329"
-                        />
-                        <BigNumber
-                            caption="All time total"
-                            title="Patients recovered"
-                            number="75,432"
-                        />
-                    </BigNumberContainer>
-
-                    <Styles.FlexContainer>
-                        <HalfWidthCard />
-                    </Styles.FlexContainer>
-
-                    <Styles.FlexContainer>
-                        <HalfWidthCard />
-                    </Styles.FlexContainer>
-                </div>
-
-            </div>
-        </div>
-
-    );
 };
 
 export default Cases
