@@ -31,7 +31,9 @@
     "remark-external-links": "^6.0.0",
     "replacestream": "^4.0.3",
     "plotly.js": "^1.54.1",
-    "react-plotly.js": "^2.4.0"
+    "react-plotly.js": "^2.4.0",
+    "react-day-picker": "^7.4.8",
+    "deep-equal": "^2.0.3"
   },
   "scripts": {
     "lint": "yarn flow",
