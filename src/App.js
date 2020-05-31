@@ -4,10 +4,8 @@ import React,  { Fragment } from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 import { Header, Footer } from 'govuk-react-jsx';
 
-// handle environment vars
 import dotenv from 'dotenv';
 
-import Regional from 'pages/Regional';
 import MobileRegionTable from 'pages/MobileRegionTable';
 import About from 'pages/About';
 import Archive from "pages/Archive";
@@ -18,7 +16,6 @@ import Tests from 'pages/Tests';
 import Cases from 'pages/Cases';
 import Healthcare from 'pages/Healthcare';
 import Deaths from 'pages/Deaths';
-import Navigation from 'components/Navigation';
 import CookieBanner from 'components/CookieBanner';
 import BackToTop from 'components/BackToTop';
 import ErrorBoundary from "components/ErrorBoundary";
