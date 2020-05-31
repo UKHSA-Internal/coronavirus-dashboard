@@ -2,6 +2,7 @@
 
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
+import React from "react";
 
 export const Container: ComponentType<*> = (() => {
   return styled.nav`
@@ -48,14 +49,117 @@ export const NavListItem: ComponentType<*> = (() => {
   `;
 })();
 
-export const Link: ComponentType<*> = (() => {
-  return styled.a`
-    font-weight: 700;
-    font-size: 16px;
-    font-size: 1rem;
-    line-height: 1.25;
-    text-decoration: none;
-    cursor: pointer;
-    color: #1d70b8;
+
+export const HeaderContainer: ComponentType<*> = (() => {
+
+  return styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  `
+
+})();
+
+export const Title: ComponentType<*> = (() => {
+
+  const Node = styled.h2`
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  flex-basis: auto;
   `;
+
+  const Container = styled.div`
+  padding-left: 0;
+  `
+
+  return ({ className="", ...props }) =>
+      <Container>
+        <Node className={ `govuk-caption-l ${className}` } {...props}/>
+      </Container>
+})();
+
+
+export const CollapsibleLink: ComponentType<*> = (() => {
+
+  return styled.button`
+    display: inline-flex;
+    outline: none;
+    cursor: pointer;
+    
+    &, &>* {
+      color: #1d70b8;
+    }
+    
+  `
+
+})();
+
+
+export const CollapsibleLinkContainer: ComponentType<*> = (() => {
+
+  return styled.div`
+  display: inline-flex;
+  justify-self: flex-end;
+  flex-wrap: wrap;
+    
+  & > * {
+    margin-left: 2rem;
+  }
+  `
+
+})();
+
+
+export const TriangleRight: ComponentType<*> = (() => {
+
+  const Node = styled.span`
+    margin-bottom: 0;
+    margin-right: 5px;
+    
+    &:before {
+      content: "►";
+    }
+  `;
+
+  return ({ className="", ...props }) =>
+      <Node className={ `govuk-body-s ${className}` }
+            {...props}/>
+
+})();
+
+
+export const TriangleDown: ComponentType<*> = (() => {
+
+  const Node = styled.span`
+    margin-bottom: 0;
+    margin-right: 5px;
+    
+    &:before {
+      content: "▼";
+    }
+  `;
+
+  return ({ className="", ...props }) =>
+      <Node className={ `govuk-body-s ${className}` }
+            {...props}/>
+
+})();
+
+
+export const Select: ComponentType<*> = (() => {
+
+  const Node = styled.select`
+  width: 100%
+  `
+
+  return ({ ...props }) =>
+      <div className={ "govuk-grid-column-one-quarter" }>
+        <div className={ "govuk-form-group govuk-!-margin-bottom-0" }>
+          <Node {...props}/>
+        </div>
+      </div>
+
 })();
