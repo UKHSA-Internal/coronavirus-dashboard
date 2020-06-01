@@ -1,0 +1,27 @@
+/* GOVUK Extensions
+*/
+
+// Sticky table headers
+thead.govuk-table__head th {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+}
+
+// No gap at top of list to prevent list bleedthrough above thead
+.js-enabled .govuk-tabs__panel {
+    padding-top: 0;
+}
+
+.js-enabled .govuk-tabs__panel .govuk-table__header {
+    padding-top: 20px;
+}
+
+svg.back-to-top {
+  display: inline-block;
+  width: .8em;
+  height: 1em;
+  margin-top: -5px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
