@@ -49,6 +49,7 @@ const LastUpdateTime = () => {
 
 }
 
+
 const FooterContents = () => {
 
     return <Fragment>
@@ -93,6 +94,56 @@ const F = () => <Footer
 />;
 
 
+const DashboardLayout = ({component: Component, ...rest}) => {
+  return (
+    <Route {...rest} render={matchProps => (
+        <Fragment>
+            <Switch>
+                <Route path={ "/" } component={ LastUpdateTime }/>
+            </Switch>
+            <div className={ "dashboard-container" }>
+                <div className={ "dashboard-menu" }>
+                    <Switch>
+                        <Route path={ "/" } component={ SideNavigation }/>
+                    </Switch>
+                </div>
+                <div className={ "dashboard-content" }>
+                    <DashboardHeader title={ "Daily Summary" } />
+                    <Switch>
+                        {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */}
+                        <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> } />
+                    </Switch>
+
+                    <Switch>
+                        <Component {...matchProps} />
+                        <Redirect to="/"/>
+                    </Switch>
+                </div>
+            </div>
+        </Fragment>
+    )} />
+  )
+};
+
+
+const SimpleLayout = ({component: Component, ...rest}) => {
+  return (
+    <Route {...rest} render={matchProps => (
+        <Fragment>
+            <Switch>
+                {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */}
+                <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> } />
+            </Switch>
+            <Switch>
+                <Component {...matchProps} />
+                <Redirect to="/"/>
+            </Switch>
+        </Fragment>
+    )} />
+  )
+};
+
+
 const App = () => {
 
     return <Fragment>
@@ -108,38 +159,15 @@ const App = () => {
         <div className={ "govuk-width-container" }>
             <main className={ "govuk-main-wrapper" } role={ "main" }>
                 <ErrorBoundary>
-                    <div className={ "govuk-grid-row" }>
-                        <div className={ "govuk-grid-column-full" }>
-                            <Switch>
-                                <Route path={ "/" } component={ LastUpdateTime }/>
-                            </Switch>
-                            <div className={ "govuk-grid-column-menu" }>
-                                <Switch>
-                                    <Route path={ "/" } component={ SideNavigation }/>
-                                </Switch>
-                            </div>
-                            <div className={ "govuk-grid-column-dashboard" }>
-                                <DashboardHeader title={ "Daily Summary" } />
-                                <Switch>
-                                    {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */}
-                                    <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> } />
-                                </Switch>
-
-                                <Switch>
-                                    <Route path="/about-data" component={ About }/>
-                                    <Route path="/accessibility" component={ Accessibility }/>
-                                    <Route path="/cookies" component={ Cookies }/>
-                                    <Route path="/archive" component={ Archive }/>
-                                    <Route path="/tests" component={ Tests }/>
-                                    <Route path="/cases" component={ Cases }/>
-                                    <Route path="/healthcare" component={ Healthcare }/>
-                                    <Route path="/deaths" component={ Deaths }/>
-                                    <Route path="/" component={ DailySummary }/>
-                                    <Redirect to="/"/>
-                                </Switch>
-                            </div>
-                        </div>
-                    </div>
+                    <DashboardLayout path="/" exact component={ DailySummary }/>
+                    <DashboardLayout path="/tests" component={ Tests }/>
+                    <DashboardLayout path="/cases" component={ Cases }/>
+                    <DashboardLayout path="/healthcare" component={ Healthcare }/>
+                    <DashboardLayout path="/deaths" component={ Deaths }/>
+                    <DashboardLayout path="/about-data" component={ About }/>
+                    <SimpleLayout path="/archive" component={ Archive }/>
+                    <SimpleLayout path="/accessibility" component={ Accessibility }/>
+                    <SimpleLayout path="/cookies" component={ Cookies }/>
                 </ErrorBoundary>
             </main>
         </div>
