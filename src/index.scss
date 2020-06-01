@@ -7,12 +7,12 @@ $govuk-font-family: "GDS Transport", Arial, sans-serif;
 // GOVUK Frontend
 @import "node_modules/govuk-frontend/govuk/all";
 
-@import "sass/base-elements.scss";
-@import "sass/cookie-banner.scss";
-@import "sass/govuk-extensions.scss";
-@import "sass/markdown.scss";
-@import "sass/accessibility.scss";
-@import "sass/layout.scss";
-@import "sass/side-navigation.scss";
-@import "sass/sticky-header.scss";
-@import "sass/day-picker.scss";
+@import "sass/base-elements";
+@import "sass/cookie-banner";
+@import "sass/govuk-extensions";
+@import "sass/markdown";
+@import "sass/accessibility";
+@import "sass/layout";
+@import "sass/side-navigation";
+@import "sass/sticky-header";
+@import "sass/day-picker";
