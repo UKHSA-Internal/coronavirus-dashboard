@@ -15,7 +15,7 @@ import type {
     FlatHierarchyItem,
     HierarchyDataType,
     LookupDataType,
-    Props
+    LocationPickerProps
 } from "./DashboardHeader.types";
 
 
@@ -100,12 +100,12 @@ const GetDataFor = ( hierarchy: HierarchyDataType, lookup: LookupDataType ) => {
 const usePrevious = (value, getData) => {
 
     const ref = useRef([
-            // These must be ordered.
-            { areaType: "nation", areaName: null, options: getData("nation", null) },
-            { areaType: "region", areaName: null, options: getData("region", null) },
-            { areaType: "utla",   areaName: null, options: getData("utla", null)   },
-            { areaType: "ltla",   areaName: null, options: getData('ltla', null)   },
-        ])
+        // These must be ordered.
+        { areaType: "nation", areaName: null, options: getData("nation", null) },
+        { areaType: "region", areaName: null, options: getData("region", null) },
+        { areaType: "utla",   areaName: null, options: getData("utla", null)   },
+        { areaType: "ltla",   areaName: null, options: getData('ltla', null)   },
+    ]);
 
     useEffect(() => {
 
@@ -118,12 +118,9 @@ const usePrevious = (value, getData) => {
 };  // usePrevious
 
 
-const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
+const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
 
     const
-        lookup = GetLookup(),
-        getData = GetDataFor(hierarchy, lookup),
-        history = useHistory(),
         order = {
             "nation": {
                 key: "nation",
@@ -146,6 +143,9 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
                 parent: "utla"
             }
         },
+        lookup = GetLookup(),
+        getData = GetDataFor(hierarchy, lookup),
+        history = useHistory(),
         initialParam = getParams(query),
         [ location, setLocation ] = useState([]),
         previousLocation = usePrevious(location, getData);
@@ -169,6 +169,7 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
             orderKeys = Object.keys(order),
             tempLoc;
 
+        // Forward propagation of children
         for ( let index = 0; index < prevState.length; index++ ) {
 
             tempLoc = (prevState[index].areaType === areaTypeItem?.key ?? null)
@@ -179,12 +180,14 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
                 }
                 : {
                     ...prevState[index],
+                    areaName: null,
                     options: getData(order[orderKeys[index]].key, tempLoc?.areaName ?? null)
                 };
 
             newLocation.push(tempLoc)
         }
 
+        // Backward propagation of parents
         const indOfMain = Object.keys(order).indexOf(areaTypeItem?.key ?? null);
 
         for ( let index = indOfMain; index > 0; index -- ) {
@@ -212,7 +215,7 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
             .filter(({ areaName }) => areaName)[0];
 
         const newQuery = createQuery([
-                ...getParams(query),
+            ...getParams(query),
             ...(
                 ( selection?.areaName ?? null )
                     ? [
