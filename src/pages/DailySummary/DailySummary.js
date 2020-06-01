@@ -1,7 +1,6 @@
 // @flow
 
-import React, { useState, useEffect, Component } from 'react';
-import type { ComponentType } from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 
 import moment from "moment";
