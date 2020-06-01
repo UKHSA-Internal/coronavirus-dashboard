@@ -7,6 +7,14 @@ export type Props = {|
 |};
 
 
+export type LocationPickerProps = {
+
+    hierarchy: HierarchyDataType,
+    query:     string
+
+} // LocationPickerProps
+
+
 export type ParamItem = {
 
     key:   string,
