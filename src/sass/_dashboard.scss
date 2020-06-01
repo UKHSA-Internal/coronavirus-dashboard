@@ -1,0 +1,22 @@
+/* Dashboard
+*/
+
+.dashboard-container {
+    display: flex;
+}
+
+.dashboard-menu {
+    width: 260px;
+    flex: 0 0 auto;
+    align-self: flex-start;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 4px;
+}
+
+.dashboard-content {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 100%;
+    flex-direction: column
+}
