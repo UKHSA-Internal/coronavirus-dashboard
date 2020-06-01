@@ -151,16 +151,6 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
         previousLocation = usePrevious(location, getData);
 
 
-    useEffect(() => {
-
-        getStateFor(
-            getParamValueFor(initialParam, "areaName"),
-            order?.[getParamValueFor(initialParam, "areaType")] ?? null,
-        )
-
-    }, [ lookup, hierarchy ]);
-
-
     const getStateFor = (value, areaTypeItem) => {
 
         let
@@ -205,6 +195,16 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
         setLocation(newLocation)
 
     };
+
+    useEffect(() => {
+
+        getStateFor(
+            getParamValueFor(initialParam, "areaName"),
+            order?.[getParamValueFor(initialParam, "areaType")] ?? null,
+        )
+
+    }, [ lookup, hierarchy, order, initialParam, getStateFor ]);
+
 
     const handleSubmission = (event) => {
 
