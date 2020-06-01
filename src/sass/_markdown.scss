@@ -1,0 +1,82 @@
+// Markdown
+.about .markdown,
+.accessibility .markdown,
+.disclaimer .markdown {
+    #table-of-contents {
+        @extend .govuk-heading-m;
+    }
+
+    & p {
+        @extend .govuk-body;
+
+        & + h2 {
+            margin-top: 1.5em;
+        }
+        & + h3 {
+            margin-top: 1em;
+        }
+        & + h4 {
+            margin-top: .8em;
+        }
+    }
+
+    & h1 {
+        @extend .govuk-heading-xl;
+        margin-top: 18px;
+    }
+
+    & h2 {
+        @extend .govuk-heading-l;
+        margin-top: 16px;
+    }
+
+    & h3 {
+        @extend .govuk-heading-m;
+        margin-top: 12px;
+    }
+
+    & h4 {
+        @extend .govuk-heading-s;
+        margin-top: 10px;
+    }
+
+    & a {
+        @extend .govuk-link;
+    }
+
+    & ul {
+        @extend .govuk-list;
+
+        &:not(:first-of-type) {
+            @extend .govuk-list--bullet;
+        }
+
+        &:first-of-type {
+            margin-bottom: 3em;
+
+            & a {
+                @extend .govuk-link--no-visited-state;
+            }
+
+            & p {
+                margin-bottom: .8rem;
+            }
+
+            & ul {
+                margin-left: 1em;
+                margin-bottom: 1em;
+            }
+        }
+    }
+
+    & hr {
+        @extend .govuk-section-break;
+        @extend .govuk-section-break--l;
+    }
+}
+
+.disclaimer .markdown {
+    & * {
+        font-size: .8rem !important;
+    }
+}
