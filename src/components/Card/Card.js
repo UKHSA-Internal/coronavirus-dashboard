@@ -3,6 +3,7 @@
 import React, { Fragment } from 'react';
 import type { ComponentType } from 'react';
 import { BackLink } from 'govuk-react-jsx';
+import { Link } from "react-router-dom";
 
 import type { Props } from './Card.types';
 import {
@@ -57,17 +58,9 @@ const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
 const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", backUrl=null, children }: Props) => {
 
     return <CardBody>
-        <div className={ "govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
-            <div className={ "govuk-grid-column-one-half" }>
-                <h2 className={ "govuk-heading-m govuk-!-margin-bottom-1 govuk-!-margin-top-0" }>{ caption }</h2>
-            </div>
-            <div className={ "govuk-grid-column-one-half" }>
-                    <span
-                        className={ "govuk-caption-m govuk-body-s more-detail govuk-!-margin-bottom-0 govuk-!-margin-top-1" }>
-                        <a className={ "govuk-link more-detail govuk-!-font-weight-bold govuk-link--no-visited-state govuk-!-margin-bottom-0" }
-                           href={ "testing" }>More detail ►</a>
-                    </span>
-            </div>
+        <div className={ "util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
+            <h2 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>{ caption }</h2>
+            <Link to={ "tests"} className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>More detail</Link>
         </div>
 
         <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
