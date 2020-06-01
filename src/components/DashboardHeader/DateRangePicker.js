@@ -13,7 +13,7 @@ import type { Props } from "./DashboardHeader.types";
 import { createQuery, getParams } from "common/utils";
 
 
-const DatePicker: Component<Props> = ({ baseDate = '', ...props }: Props) => {
+const DatePicker = ({ baseDate = '', ...props }: Props) => {
 
     return <DayPickerInput
         formatDate={ formatDate }
@@ -34,7 +34,7 @@ const DatePicker: Component<Props> = ({ baseDate = '', ...props }: Props) => {
 };  // DateRangePicker
 
 
-const DateRangePicker: ComponentType<Props> = ({ query, startDate, endDate }: Props) => {
+const DateRangePicker = ({ query, startDate, endDate }: Props) => {
 
     const
         [ fromDate, setFromDate ] = useState(startDate.format("YYYY-MM-DD")),
