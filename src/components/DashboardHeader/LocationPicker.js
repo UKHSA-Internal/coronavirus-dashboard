@@ -22,7 +22,7 @@ import type {
 
 const GetLookup = (): LookupDataType | null => {
 
-    const [ lookupTable, setLookupTable ] = useState(null)
+    const [ lookupTable, setLookupTable ] = useState(null);
 
     useEffect(() => {
         const getData = async () => {
@@ -36,7 +36,7 @@ const GetLookup = (): LookupDataType | null => {
 
         getData()
 
-    }, [])
+    }, []);
 
     return lookupTable
 
