@@ -1,13 +1,25 @@
 // @flow
 
+// React
 import React, { Fragment, useState, useEffect, useRef } from "react";
-import type { ComponentType } from 'react';
 import { withRouter, useHistory } from 'react-router';
-import { max } from "d3-array";
+
+// Third party
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import MomentLocaleUtils, {
+    formatDate,
+    parseDate
+} from 'react-day-picker/moment';
+import moment from "moment";
+import 'moment/locale/en-gb';
+import axios from "axios";
+
+// Internal
+import URLs from "common/urls";
 import { getParams, createQuery } from "common/utils";
+import AreaHierarchy from "hooks/useLoadData";
 
-
+// Styles
 import {
     CollapsibleLink,
     HeaderContainer,
@@ -18,21 +30,12 @@ import {
     Select
 } from './DashboardHeader.styles'
 
+// Types
+import type { ComponentType } from 'react';
 import type { Props } from './DashboardHeader.types';
 
-import AreaHierarchy from "hooks/useLoadData";
 
-
-import MomentLocaleUtils, {
-    formatDate,
-    parseDate
-} from 'react-day-picker/moment';
-import moment from "moment";
-import 'moment/locale/en-gb';
-import axios from "axios";
-import URLs from "../../common/urls";
-import { get } from "leaflet/src/dom/DomUtil";
-
+// Global constants
 const PathNameMapper = {
     "/": "Daily Summary",
     "/cases": "Cases",
@@ -59,23 +62,23 @@ const GetLookup = () => {
     const [ lookupTable, setLookupTable ] = useState(null)
 
     useEffect(() => {
-
         const getData = async () => {
-
-            const { data } = await axios.get('lookupTable_bothWay_v1.json', { baseURL: URLs.lookups });
+            const { data } = await axios.get(
+                'lookupTable_bothWay_v1.json',
+                { baseURL: URLs.lookups }
+                );
 
             setLookupTable(data)
         }
 
         getData()
 
-        return () => {}
-
     }, [])
 
     return lookupTable
 
-}
+};  // GetLookup
+
 
 const GetDataFor = (hierarchy, lookup) => {
 
@@ -87,13 +90,14 @@ const GetDataFor = (hierarchy, lookup) => {
                 []
             );
 
-
-
+    // Closure definition:
+    //--------------------
     // itemName is the parentName for getting children and the childName for getting
     // the parent - Default behaviour is to get the children.
     return (areaType: string, itemName: string | null, getParent: boolean = false): Array<string> | string | null => {
 
         if (!lookup || !hierarchy) return getParent ? "" : [];
+
         // Getting the children
         if ( !getParent ) {
 
@@ -107,32 +111,27 @@ const GetDataFor = (hierarchy, lookup) => {
                 )
             }
 
+            // default children
             return []
-
-        } else {
-
-            // Getting the parent
-            for ( const { name, code, type } of flatHierarchy ) {
-
-                if ( name !== itemName || areaType !== type ) continue;
-
-                for ( const item of flatHierarchy ) {
-                    if ( item.code === lookup[type][code].p ) {
-                        console.log(`>?> ${ areaType } ${ item.code } ${ lookup[type][code].p } ${ itemName } ${ item.name }`)
-                        return item.name
-                    }
-                }
-
-            }
-
-            return ""
 
         }
 
+        // Getting the parent
+        for ( const { name, code, type } of flatHierarchy ) {
+
+            if ( name !== itemName || areaType !== type ) continue;
+
+            for ( const item of flatHierarchy )
+                if ( item.code === lookup[type][code].p ) return item.name
+
+        }
+
+        // default parent
+        return ""
+
     }
 
-
-};
+};  // GetDataFor
 
 
 const usePrevious = (value, getData) => {
@@ -153,7 +152,7 @@ const usePrevious = (value, getData) => {
 
     return ref.current
 
-};
+};  // usePrevious
 
 
 const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
@@ -191,21 +190,12 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
 
     useEffect(() => {
 
-        // const defaultLocations = [
-        //     // These must be ordered.
-        //     { areaType: "nation", areaName: null, options: getData("nation", null) },
-        //     { areaType: "region", areaName: null, options: getData("region", null) },
-        //     { areaType: "utla",   areaName: null, options: getData("utla", null)   },
-        //     { areaType: "ltla",   areaName: null, options: getData('ltla', null)   },
-        // ];
-
         getStateFor(
             getParamValueFor(initialParam, "areaName"),
             order?.[getParamValueFor(initialParam, "areaType")] ?? null,
-            // defaultLocations
         )
 
-    }, [lookup, hierarchy]);
+    }, [ lookup, hierarchy ]);
 
 
     const getStateFor = (value, areaTypeItem) => {
@@ -213,29 +203,28 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
         let
             prevState = previousLocation,
             newLocation = [],
+            orderKeys = Object.keys(order),
             tempLoc;
 
         for ( let index = 0; index < prevState.length; index++ ) {
-            console.log(tempLoc?.areaName ?? null)
+
             tempLoc = (prevState[index].areaType === areaTypeItem?.key ?? null)
                 ? {
                     areaType: areaTypeItem.key,
                     areaName: value,
-                    options: getData(areaTypeItem.key, areaTypeItem.parent)
+                    options: getData(areaTypeItem.key, null)
                 }
                 : {
                     ...prevState[index],
-                    options: getData(prevState[index].areaType, tempLoc?.areaName ?? null)
+                    options: getData(order[orderKeys[index]].key, tempLoc?.areaName ?? null)
                 };
 
-            console.log(prevState[index].areaType)
-            console.log(tempLoc)
             newLocation.push(tempLoc)
         }
 
         const indOfMain = Object.keys(order).indexOf(areaTypeItem?.key ?? null);
 
-        for ( let index = newLocation.length; index > 0; index -- ) {
+        for ( let index = indOfMain; index > 0; index -- ) {
 
             if ( !(newLocation[index]?.areaName ?? null) ) continue;
 
@@ -253,9 +242,10 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
 
     const getParamValueFor = (params: Array<{ key: string, value: string, sign: string }>, keyName: string): string | null => {
 
-        return params.reduce((acc, { key, value }) => key === keyName ? value : acc, null)
+        return params
+            .reduce((acc, { key, value }) => key === keyName ? value : acc, null)
 
-    };
+    };  // getParamValueFor
 
     const handleSubmission = (event) => {
 
@@ -279,9 +269,8 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
 
         history.push(`/${ newQuery }`)
 
-    };
+    };  // handleSubmission
 
-    console.log(location)
 
     return <Fragment>
         <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" } onSubmit={ handleSubmission }>
@@ -309,7 +298,7 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
                                    name={ areaType }>
                         <option value={ "" }>All { areaTypeItem.label }</option>
                         {
-                            options.map(({ name, code }) =>
+                            options && options.map(({ name, code }) =>
                                     <option value={ name }
                                             key={ `${ areaTypeItem.key }-${ code }` }
                                     >
@@ -341,7 +330,8 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
             </div>
         </div>
     </Fragment>
-}
+
+};  // LocationPicker
 
 
 const DatePicker: Component<Props> = ({ baseDate = '', ...props }: Props) => {
@@ -362,8 +352,7 @@ const DatePicker: Component<Props> = ({ baseDate = '', ...props }: Props) => {
         { ...props }
     />
 
-
-};
+};  // DatePicker
 
 
 const DateRangePicker: ComponentType<Props> = ({ query, startDate, endDate }: Props) => {
@@ -475,7 +464,7 @@ const DateRangePicker: ComponentType<Props> = ({ query, startDate, endDate }: Pr
 
     </div>
 
-}
+};  // DateRangePicker
 
 
 const DashboardHeader: ComponentType<Props> = ({ title, location: { search: query, pathname } }: Props) => {
@@ -490,40 +479,40 @@ const DashboardHeader: ComponentType<Props> = ({ title, location: { search: quer
         endDate = params.reduce((acc, { key, sign, value }) => ((key === 'specimenDate' && sign === '<') ? moment(value) : acc), moment()),
         isExcluded = NoPickerPaths.indexOf(pathname) > -1;
 
-    return (
-        <div className={ "sticky-header govuk-!-padding-top-3" }>
-            <HeaderContainer>
-                <Title>{ PathNameMapper[pathname] }</Title>
-                {
-                    isExcluded
-                        ? null
-                        : <CollapsibleLinkContainer>
-                            <CollapsibleLink htmlType={ "button" }
-                                         onClick={ () => setLocationPickerState(!locationPickerState) }>
-                            { locationPickerState ? <TriangleDown/> : <TriangleRight/> }
-                            <span className={ "govuk-body-s govuk-body govuk-body govuk-!-margin-bottom-0" }>
-                                    <b>Location:</b>&nbsp;{ currentLocation }
-                                </span>
-                        </CollapsibleLink>
+    return  <div className={ "sticky-header govuk-!-padding-top-3" }>
+        <HeaderContainer>
+            <Title>{ PathNameMapper[pathname] }</Title>
+            {
+                isExcluded
+                    ? null
+                    : <CollapsibleLinkContainer>
                         <CollapsibleLink htmlType={ "button" }
-                                         onClick={ () => setDatePickerState(!datePickerState) }>
-                            { datePickerState ? <TriangleDown/> : <TriangleRight/> }
-                            <span className={ "govuk-body-s change-location govuk-body govuk-!-margin-bottom-0 " }>
-                                    <b>Date:</b> { startDate.format("D MMM YYYY") } - { endDate.format("D MMM YYYY") }
-                                </span>
-                        </CollapsibleLink>
-                    </CollapsibleLinkContainer>
-            }
-            </HeaderContainer>
-            <div className={ "govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-4" }>
-                <div className={ "govuk-grid-column-full" }>
-                    <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
-                </div>
+                                     onClick={ () => setLocationPickerState(!locationPickerState) }>
+                        { locationPickerState ? <TriangleDown/> : <TriangleRight/> }
+                        <span className={ "govuk-body-s govuk-body govuk-body govuk-!-margin-bottom-0" }>
+                                <b>Location:</b>&nbsp;{ currentLocation }
+                            </span>
+                    </CollapsibleLink>
+                    <CollapsibleLink htmlType={ "button" }
+                                     onClick={ () => setDatePickerState(!datePickerState) }>
+                        { datePickerState ? <TriangleDown/> : <TriangleRight/> }
+                        <span className={ "govuk-body-s change-location govuk-body govuk-!-margin-bottom-0 " }>
+                                <b>Date:</b>&nbsp;{ startDate.format("D MMM YYYY") }&nbsp;-&nbsp;{ endDate.format("D MMM YYYY") }
+                            </span>
+                    </CollapsibleLink>
+                </CollapsibleLinkContainer>
+        }
+        </HeaderContainer>
+        <div className={ "govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-4" }>
+            <div className={ "govuk-grid-column-full" }>
+                <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
             </div>
-            { ( locationPickerState && !isExcluded )? <LocationPicker hierarchy={ hierarchy } query={ query }/> : null }
-            { ( datePickerState && !isExcluded ) ? <DateRangePicker query={ query } startDate={ startDate } endDate={ endDate }/> : null }
         </div>
-    );
-};
+        { ( locationPickerState && !isExcluded )? <LocationPicker hierarchy={ hierarchy } query={ query }/> : null }
+        { ( datePickerState && !isExcluded ) ? <DateRangePicker query={ query } startDate={ startDate } endDate={ endDate }/> : null }
+    </div>
+
+};  // DashboardHeader
+
 
 export default withRouter(DashboardHeader);
