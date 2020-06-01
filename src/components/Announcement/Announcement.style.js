@@ -10,6 +10,7 @@ export const Container: ComponentType<*> = (() => {
       flex-direction: column;
       padding: 20px;
       border: 5px solid #1d70b8;
+      margin-top: 1rem;
       
       @media only screen and (max-width: 768px) {
         grid-column: span 3;
