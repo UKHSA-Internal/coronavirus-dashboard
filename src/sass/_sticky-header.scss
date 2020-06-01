@@ -1,0 +1,10 @@
+/* Sticky Header
+*/
+
+.sticky-header {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0px;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    z-index: 9999;
+}
