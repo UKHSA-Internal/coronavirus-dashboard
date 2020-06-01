@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import type { ComponentType } from 'react';
 import { withRouter, useHistory } from 'react-router';
 import { max } from "d3-array";
@@ -31,6 +31,7 @@ import moment from "moment";
 import 'moment/locale/en-gb';
 import axios from "axios";
 import URLs from "../../common/urls";
+import { get } from "leaflet/src/dom/DomUtil";
 
 const PathNameMapper = {
     "/": "Daily Summary",
@@ -76,10 +77,9 @@ const GetLookup = () => {
 
 }
 
-const GetDataFor = (hierarchy) => {
+const GetDataFor = (hierarchy, lookup) => {
 
     const
-        lookup = GetLookup(),
         flatHierarchy = Object
             .keys(hierarchy)
             .reduce((acc, item) =>
@@ -87,90 +87,201 @@ const GetDataFor = (hierarchy) => {
                 []
             );
 
-    return (areaType, parentName) => {
 
-        if ( !parentName ) return hierarchy[areaType];
 
-        if ( !lookup ) return null;
+    // itemName is the parentName for getting children and the childName for getting
+    // the parent - Default behaviour is to get the children.
+    return (areaType: string, itemName: string | null, getParent: boolean = false): Array<string> | string | null => {
 
-        for ( const { name, code, type } of flatHierarchy ) {
+        if (!lookup || !hierarchy) return getParent ? "" : [];
+        // Getting the children
+        if ( !getParent ) {
 
-            if ( name !== parentName ) continue;
+            if ( !itemName ) return hierarchy[areaType];
 
-            return hierarchy[areaType].filter(item => lookup[type][code].c.indexOf(item.code) > -1)
+            for ( const { name, code, type } of flatHierarchy ) {
+                if ( name !== itemName ) continue;
+
+                return hierarchy[areaType].filter(item =>
+                    lookup[type][code].c.indexOf(item.code) > -1
+                )
+            }
+
+            return []
+
+        } else {
+
+            // Getting the parent
+            for ( const { name, code, type } of flatHierarchy ) {
+
+                if ( name !== itemName || areaType !== type ) continue;
+
+                for ( const item of flatHierarchy ) {
+                    if ( item.code === lookup[type][code].p ) {
+                        console.log(`>?> ${ areaType } ${ item.code } ${ lookup[type][code].p } ${ itemName } ${ item.name }`)
+                        return item.name
+                    }
+                }
+
+            }
+
+            return ""
 
         }
+
     }
 
-}
+
+};
+
+
+const usePrevious = (value, getData) => {
+
+    const ref = useRef([
+            // These must be ordered.
+            { areaType: "nation", areaName: null, options: getData("nation", null) },
+            { areaType: "region", areaName: null, options: getData("region", null) },
+            { areaType: "utla",   areaName: null, options: getData("utla", null)   },
+            { areaType: "ltla",   areaName: null, options: getData('ltla', null)   },
+        ])
+
+    useEffect(() => {
+
+        ref.current = value
+
+    })
+
+    return ref.current
+
+};
+
 
 const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
 
     const
-        [nation, setNation] = useState(null),
-        [region, setRegion] = useState(null),
-        [utla, setUtla] = useState(null),
-        [ltla, setLtla] = useState(null),
+        lookup = GetLookup(),
+        getData = GetDataFor(hierarchy, lookup),
         history = useHistory(),
-        getData = GetDataFor(hierarchy);
+        order = {
+            "nation": {
+                key: "nation",
+                label: "nations",
+                parent: null
+            },
+            "region": {
+                key: "region",
+                label: "regions",
+                parent: "nation",
+            },
+            "utla": {
+                key: "utla",
+                label: "upper-trier local authorities",
+                parent: "region",
+            },
+            "ltla": {
+                key: "ltla",
+                label: "lower-tier local authorities",
+                parent: "utla"
+            }
+        },
+        initialParam = getParams(query),
+        [ location, setLocation ] = useState([]),
+        previousLocation = usePrevious(location, getData);
 
-    const order = [
-        {
-            key: "nation",
-            label: "nations",
-            value: nation,
-            setter: setNation,
-            parent: null,
-            order: 0,
-        },
-        {
-            key: "region",
-            label: "regions",
-            value: region,
-            setter: setRegion,
-            parent: nation,
-            order: 1,
-        },
-        {
-            key: "utla",
-            label: "upper-trier local authorities",
-            value: utla,
-            setter: setUtla,
-            parent: region,
-            order: 3,
-        },
-        {
-            key: "ltla",
-            label: "lower-tier local authorities",
-            value: ltla,
-            setter: setLtla,
-            parent: utla,
-            order: 4
+
+    useEffect(() => {
+
+        // const defaultLocations = [
+        //     // These must be ordered.
+        //     { areaType: "nation", areaName: null, options: getData("nation", null) },
+        //     { areaType: "region", areaName: null, options: getData("region", null) },
+        //     { areaType: "utla",   areaName: null, options: getData("utla", null)   },
+        //     { areaType: "ltla",   areaName: null, options: getData('ltla', null)   },
+        // ];
+
+        getStateFor(
+            getParamValueFor(initialParam, "areaName"),
+            order?.[getParamValueFor(initialParam, "areaType")] ?? null,
+            // defaultLocations
+        )
+
+    }, [lookup, hierarchy]);
+
+
+    const getStateFor = (value, areaTypeItem) => {
+
+        let
+            prevState = previousLocation,
+            newLocation = [],
+            tempLoc;
+
+        for ( let index = 0; index < prevState.length; index++ ) {
+            console.log(tempLoc?.areaName ?? null)
+            tempLoc = (prevState[index].areaType === areaTypeItem?.key ?? null)
+                ? {
+                    areaType: areaTypeItem.key,
+                    areaName: value,
+                    options: getData(areaTypeItem.key, areaTypeItem.parent)
+                }
+                : {
+                    ...prevState[index],
+                    options: getData(prevState[index].areaType, tempLoc?.areaName ?? null)
+                };
+
+            console.log(prevState[index].areaType)
+            console.log(tempLoc)
+            newLocation.push(tempLoc)
         }
-    ]
+
+        const indOfMain = Object.keys(order).indexOf(areaTypeItem?.key ?? null);
+
+        for ( let index = newLocation.length; index > 0; index -- ) {
+
+            if ( !(newLocation[index]?.areaName ?? null) ) continue;
+
+            newLocation[index - 1].areaName = getData(
+                newLocation[index].areaType,
+                newLocation[index].areaName,
+                true
+            );
+
+        }
+
+        setLocation(newLocation)
+
+    };
+
+    const getParamValueFor = (params: Array<{ key: string, value: string, sign: string }>, keyName: string): string | null => {
+
+        return params.reduce((acc, { key, value }) => key === keyName ? value : acc, null)
+
+    };
 
     const handleSubmission = (event) => {
 
         event.preventDefault();
 
-        const targetOrder = max(order, item => item.value ? item.order : null);
-
-        const selection = order.reduce((acc, item) => {
-            if ( item.order === targetOrder )
-                acc = item
-
-            return acc
-        }, {});
+        const selection = [...location]
+            .reverse()
+            .filter(({ areaName }) => areaName)[0];
 
         const newQuery = createQuery([
                 ...getParams(query),
-                {key: 'areaType', sign: '=', value: selection.key},
-                ...(selection.value ? [{key: 'areaName', sign: '=', value: selection.value}] : [])
-            ]);
+            ...(
+                ( selection?.areaName ?? null )
+                    ? [
+                        { key: 'areaType', sign: '=', value: selection.areaType },
+                        { key: 'areaName', sign: '=', value: selection.areaName }
+                    ]
+                    : []
+            )
+        ]);
 
         history.push(`/${ newQuery }`)
 
     };
+
+    console.log(location)
 
     return <Fragment>
         <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" } onSubmit={ handleSubmission }>
@@ -185,26 +296,30 @@ const LocationPicker: ComponentType<Props> = ({ hierarchy, query }) => {
                 </div>
             </div>
 
-            <div className={ "govuk-grid-row " }>
-                {
-                    order.map(areaTypeItem =>
-                        <Select key={ areaTypeItem.key }
-                                onChange={ ({ target: { value } }) => areaTypeItem.setter(value) }
-                                className={ 'govuk-select' }
-                                name={ areaTypeItem.key }>
-                            <option value={ null }>All { areaTypeItem.label }</option>
-                            {
-                                getData(areaTypeItem.key, areaTypeItem.parent)
-                                    .map(({ name, code }) =>
-                                        <option value={ name } key={ `${ areaTypeItem.key }-${ code }` }>
-                                            { name }
-                                        </option>
+            <div className={ "govuk-grid-row " }>{
+                location.map(({ areaName, areaType, options }) => {
+
+                    const areaTypeItem = order[areaType]
+
+                    return <Select value={ areaName ? areaName : "" }
+                                   disabled={ (options?.length ?? 0) === 0 }
+                                   key={ areaType }
+                                   onChange={ ({ target: { value } }) => getStateFor(value, areaTypeItem) }
+                                   className={ 'govuk-select' }
+                                   name={ areaType }>
+                        <option value={ "" }>All { areaTypeItem.label }</option>
+                        {
+                            options.map(({ name, code }) =>
+                                    <option value={ name }
+                                            key={ `${ areaTypeItem.key }-${ code }` }
+                                    >
+                                        { name }
+                                    </option>
                                 )
-                            }
-                        </Select>
-                    )
-                }
-            </div>
+                        }
+                    </Select>
+                })
+            }</div>
 
             <div className={ "govuk-grid-row govuk-!-margin-top-4 govuk-!-margin-bottom-2" }>
                 <div className={ "govuk-grid-column-full" }>
