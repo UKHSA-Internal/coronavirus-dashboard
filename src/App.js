@@ -21,8 +21,9 @@ import ErrorBoundary from "components/ErrorBoundary";
 import axios from "axios";
 import URLs from "./common/urls";
 import moment from "moment";
-import SideNavigation from "./components/SideNavigation/SideNavigation";
-import DashboardHeader from "./components/DashboardHeader/DashboardHeader";
+import SideNavigation from "./components/SideNavigation";
+import SideNavMobile from "./components/SideNavMobile";
+import DashboardHeader from "./components/DashboardHeader";
 
 // get environment vars
 dotenv.config();
@@ -98,6 +99,7 @@ const DashboardLayout = ({component: Component, ...rest}) => {
   return (
     <Route {...rest} render={matchProps => (
         <Fragment>
+            <SideNavMobile />
             <Switch>
                 <Route path={ "/" } component={ LastUpdateTime }/>
             </Switch>
@@ -155,7 +157,6 @@ const App = () => {
             serviceUrlTo="/"
             homepageUrlHref="https://gov.uk"
         />
-
         <div className={ "govuk-width-container" }>
             <main className={ "govuk-main-wrapper" } role={ "main" }>
                 <ErrorBoundary>

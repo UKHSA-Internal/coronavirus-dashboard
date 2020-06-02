@@ -1,27 +1,33 @@
 // @flow
 
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 import { Link } from "react-router-dom";
 
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
-import type { Props } from './SideNavigation.types';
+import type { Props } from './SideNavMobile.types';
 import {
     Container,
     FooterLink,
     NavList,
     NavListItem
-} from './SideNavigation.styles';
+} from './SideNavMobile.styles';
 
 
-const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) => {
-    const layout = useResponsiveLayout(768);
-
+const SideNavMobile: ComponentType<Props> = ({ location: { pathname }}: Props) => {
+    const [menuState, setMenuState] = useState(false);
 
         return (
-            <nav className="moj-side-navigation govuk-!-padding-right-4 govuk-!-padding-top-2" aria-label="Side navigation">
+            <Fragment>
+            <div class="app-header-mobile-nav-toggler-wrapper">
+      <button id="app-mobile-nav-toggler" class="govuk-button app-header-mobile-nav-toggler js-app-mobile-nav-toggler" aria-controls="app-mobile-nav" aria-expanded="false" onClick={ () => setMenuState(!menuState) }>
+        Menu
+      </button>
+    </div>
+    { menuState ?
+            <nav className="moj-side-navigation moj-side-navigation-mobile govuk-!-padding-right-4 govuk-!-padding-top-2" aria-label="Side navigation">
                 <ul className="moj-side-navigation__list">
                     <li className={`moj-side-navigation__item ${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
                         <Link to={ "/" } aria-current="location">Daily summary</Link>
@@ -49,9 +55,11 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
                         <Link to={ "about-data" }>About the data</Link>
                     </li>
                 </ul>
-            </nav>
+            </nav> : '' }
+            </Fragment>
         );
+
 
 };
 
-export default withRouter(SideNavigation);
+export default withRouter(SideNavMobile);
