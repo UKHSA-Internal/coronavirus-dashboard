@@ -59,10 +59,10 @@ const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
 const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", children }: Props) => {
 
     return <CardBody>
-        <heading className={ "util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
+        <header className={ "util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
             <h2 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>{ caption }</h2>
             <Link to={ "tests"} className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>More detail</Link>
-        </heading>
+        </header>
 
         <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
 
@@ -78,9 +78,9 @@ const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", children }
 const FullWidthCard: ComponentType<Props> = ({ caption, children }: Props) => {
 
     return <FullWidthCardBody>
-        <heading className={ "util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
+        <header className={ "util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
             <h2 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>{ caption }</h2>
-        </heading>
+        </header>
 
         <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
 
