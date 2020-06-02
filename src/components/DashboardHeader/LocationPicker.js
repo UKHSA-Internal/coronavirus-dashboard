@@ -225,7 +225,7 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
             )
         ]);
 
-        history.push(`/${ newQuery }`)
+        history.push(`${ newQuery }`)
 
     };  // handleSubmission
 
