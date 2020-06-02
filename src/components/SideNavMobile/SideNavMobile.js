@@ -9,10 +9,9 @@ import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
 import type { Props } from './SideNavMobile.types';
 import {
-    Container,
-    FooterLink,
-    NavList,
-    NavListItem
+    MobileNavWrapper,
+    MobileNavTogglerWrapper,
+    MobileNavToggler
 } from './SideNavMobile.styles';
 
 
@@ -20,14 +19,17 @@ const SideNavMobile: ComponentType<Props> = ({ location: { pathname }}: Props) =
     const [menuState, setMenuState] = useState(false);
 
         return (
-            <Fragment>
-            <div class="app-header-mobile-nav-toggler-wrapper">
-      <button id="app-mobile-nav-toggler" class="govuk-button app-header-mobile-nav-toggler js-app-mobile-nav-toggler" aria-controls="app-mobile-nav" aria-expanded="false" onClick={ () => setMenuState(!menuState) }>
+            <MobileNavWrapper>
+                <MobileNavTogglerWrapper>
+                    <MobileNavToggler className={ "govuk-button" } onClick={ () => setMenuState(!menuState) }>
+                        Menu
+                    </MobileNavToggler>
+                </MobileNavTogglerWrapper>
+      {/*<button id="app-mobile-nav-toggler" class="govuk-button app-header-mobile-nav-toggler js-app-mobile-nav-toggler" aria-controls="app-mobile-nav" aria-expanded="false" >
         Menu
-      </button>
-    </div>
+      </button>*/}
     { menuState ?
-            <nav className="moj-side-navigation moj-side-navigation-mobile govuk-!-padding-right-4 govuk-!-padding-top-2" aria-label="Side navigation">
+            <nav className="moj-side-navigation moj-side-navigation-mobile" aria-label="Side navigation">
                 <ul className="moj-side-navigation__list">
                     <li className={`moj-side-navigation__item ${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
                         <Link to={ "/" } aria-current="location">Daily summary</Link>
@@ -49,14 +51,13 @@ const SideNavMobile: ComponentType<Props> = ({ location: { pathname }}: Props) =
                         <Link to={ "deaths" }>Deaths</Link>
                     </li>
 
-                    <hr className="govuk-section-break govuk-section-break--m govuk-!-margin-top-3 govuk-!-margin-bottom-3 govuk-section-break--visible" />
-
                     <li className={`moj-side-navigation__item ${pathname === '/about-data' ? "moj-side-navigation__item--active" : ""}`}>
                         <Link to={ "about-data" }>About the data</Link>
                     </li>
                 </ul>
+                <hr className="govuk-section-break govuk-section-break--m govuk-!-margin-top-3 govuk-!-margin-bottom-3 govuk-section-break--visible" />
             </nav> : '' }
-            </Fragment>
+            </MobileNavWrapper>
         );
 
 
