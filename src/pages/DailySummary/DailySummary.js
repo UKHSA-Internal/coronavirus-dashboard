@@ -84,6 +84,7 @@ const Plotter = ({ ...props }) => {
             showLink: false,
             responsive: true,
             displaylogo: false,
+            staticPlot: true,
             modeBarButtonsToRemove: [
                 "autoScale2d",
                 "zoomIn2d",
@@ -269,7 +270,8 @@ const CasesCard = ({ data }) => {
         <ValueItemsSection>
             <ValueItem
                 label={ "Lab-confirmed" }
-                value={ groupBySpecimenDate[maxSpecimenDate]?.cases ?? 0 }
+                // value={ groupBySpecimenDate[maxSpecimenDate]?.cases ?? 0 }
+                value={ sum(data, item => item?.dailyLabCases ?? 0) }
                 description={ 'Total all time' }
                 descriptionValue={ sum(data, item => item?.cases ?? 0) }
                 colourName={ 'blue' }
@@ -378,6 +380,7 @@ class DailySummary extends Component<{}, {}> {
                     key: 'structure',
                     sign: '=',
                     value: JSON.stringify({
+                        dailyLabCases: "changeInDailyCases",
                         deathReportDate: "deathReportingDate",
                         specimenDate: "specimenDate",
                         deaths: "dailyChangeInDeaths",
