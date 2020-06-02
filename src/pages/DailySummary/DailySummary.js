@@ -11,7 +11,7 @@ import * as Styles from './DailySummary.styles';
 import axios from 'axios';
 import Plot from 'react-plotly.js';
 import { max } from "d3-array";
-
+import { MainLoading } from "components/Loading";
 import { createQuery, getParams } from "common/utils";
 
 import deepEqual from "deep-equal"
@@ -55,16 +55,6 @@ export const timestamp = (data): string =>
     data.hasOwnProperty("metadata")
         ? moment(data?.metadata?.lastUpdatedAt).format("dddd D MMMM YYYY [at] h:mma")
         : "";
-
-export const MainLoading = () => {
-
-    return <div className="govuk-width-container" role="main">
-        <div className={ "govuk-body govuk-!-font-size-24" }>
-            The website is loading. Please wait&hellip;
-        </div>
-    </div>
-
-}; // MainLoading
 
 
 const sum = (arr, key) => {
