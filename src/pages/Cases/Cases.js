@@ -14,10 +14,10 @@ import { createQuery, getParams, getParamValueFor } from "common/utils";
 import { Plotter } from "./plots";
 import { MainLoading } from "components/Loading";
 import deepEqual from "deep-equal";
+import URLs from "common/urls";
 
 
 const
-    API_URL = 'https://uks-covid19-pubdash-dev.azure-api.net/fn-coronavirus-dashboard-pipeline-etl-dev/v1/data',
     DefaultParams = [
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
         { key: 'areaType', sign: '=', value: 'overview' }
@@ -26,7 +26,7 @@ const
 
 const usePrevious = (value) => {
 
-    const ref = useRef(DefaultParams);
+    const ref = useRef([]);
 
     useEffect(() => {
         ref.current = value
@@ -66,7 +66,7 @@ const useDailyData = (params) => {
         const getData = async () => {
             if ( !deepEqual(prevParams, params) )
                 try {
-                    const { data: dt } = await axios.get(API_URL + urlParams);
+                    const { data: dt } = await axios.get(URLs.api + urlParams);
                     setData(dt.data)
                 } catch (e) {}
         }
@@ -86,7 +86,6 @@ const useTotalData = (params) => {
         [ data, setData ] = useState([]),
         prevParams =  usePrevious(params);
 
-    console.log(params, prevParams)
     useEffect(() => {
 
         const urlParams = createQuery([
@@ -110,7 +109,7 @@ const useTotalData = (params) => {
         const getData = async () => {
             if ( !deepEqual(prevParams, params) )
                 try {
-                    const { data: dt } = await axios.get(API_URL + urlParams);
+                    const { data: dt } = await axios.get(URLs.api + urlParams);
                     setData(dt.data)
                 } catch (e) {}
         }
