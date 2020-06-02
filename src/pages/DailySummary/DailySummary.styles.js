@@ -14,10 +14,6 @@ export const FlexContainer: ComponentType<*> = (() => {
       width: fit-content;
     }
 
-    & a {
-      margin-bottom: 45px;
-    }
-
     @media only screen and (max-width: 768px) {
       grid-column: span 2;
     }
