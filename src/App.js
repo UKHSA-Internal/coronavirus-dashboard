@@ -97,32 +97,34 @@ const F = () => <Footer
 
 const DashboardLayout = ({component: Component, ...rest}) => {
   return (
-    <Route {...rest} render={matchProps => (
-        <Fragment>
-            <SideNavMobile />
-            <Switch>
-                <Route path={ "/" } component={ LastUpdateTime }/>
-            </Switch>
-            <div className={ "dashboard-container" }>
-                <div className={ "dashboard-menu" }>
-                    <Switch>
-                        <Route path={ "/" } component={ SideNavigation }/>
-                    </Switch>
-                </div>
-                <div className={ "dashboard-content" }>
-                    <DashboardHeader title={ "Daily Summary" } />
-                    <Switch>
-                        {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */}
-                        <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> } />
-                    </Switch>
+    <Route {...rest} render={matchProps => ( <Fragment>
+        <SideNavMobile />
+        <div className={ "govuk-width-container" }>
+            <main className={ "govuk-main-wrapper" } role={ "main" }>
+                <Switch>
+                    <Route path={ "/" } component={ LastUpdateTime }/>
+                </Switch>
+                <div className={ "dashboard-container" }>
+                    <div className={ "dashboard-menu" }>
+                        <Switch>
+                            <Route path={ "/" } component={ SideNavigation }/>
+                        </Switch>
+                    </div>
+                    <div className={ "dashboard-content" }>
+                        <DashboardHeader title={ "Daily Summary" } />
+                        <Switch>
+                            {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */}
+                            <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> } />
+                        </Switch>
 
-                    <Switch>
-                        <Component {...matchProps} />
-                        <Redirect to="/"/>
-                    </Switch>
+                        <Switch>
+                            <Component {...matchProps} />
+                            <Redirect to="/"/>
+                        </Switch>
+                    </div>
                 </div>
-            </div>
-        </Fragment>
+            </main>
+        </div></Fragment>
     )} />
   )
 };
@@ -157,8 +159,7 @@ const App = () => {
             serviceUrlTo="/"
             homepageUrlHref="https://gov.uk"
         />
-        <div className={ "govuk-width-container" }>
-            <main className={ "govuk-main-wrapper" } role={ "main" }>
+
                 <ErrorBoundary>
                     <DashboardLayout path="/" exact component={ DailySummary }/>
                     <DashboardLayout path="/tests" component={ Tests }/>
@@ -170,8 +171,7 @@ const App = () => {
                     <SimpleLayout path="/accessibility" component={ Accessibility }/>
                     <SimpleLayout path="/cookies" component={ Cookies }/>
                 </ErrorBoundary>
-            </main>
-        </div>
+
 
         {/* We only want back-to-top links on the main & about pages. */}
         <Switch>
