@@ -17,6 +17,7 @@ const URLs = {
     landingData:    `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/data/landing.json`,
     timestamp:      `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/db/latest_timestamp`,
     lookups:        `https://${ REACT_APP_MAIN_CDN }/assets/lookups/`,
+    api:            `https://uks-covid19-pubdash-dev.azure-api.net/fn-coronavirus-dashboard-pipeline-etl-dev/v1/data`,
     latestCases: {
         csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-cases_latest.csv`,
         json: `${ REACT_APP_BASE_URL }/downloads/json/coronavirus-cases_latest.json`
