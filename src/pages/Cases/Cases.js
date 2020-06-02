@@ -15,6 +15,7 @@ import { Plotter } from "./plots";
 import { MainLoading } from "components/Loading";
 import deepEqual from "deep-equal";
 import URLs from "common/urls";
+import { TabLink, TabLinkContainer } from "../../components/TabLink";
 
 
 const
@@ -179,16 +180,16 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
         <Styles.FlexContainer>
             <FullWidthCard caption={ `Cases in ${ getParamValueFor(params, "areaName") } by date` }>
-                <ul className={ 'govuk-tabs__list govuk-!-margin-bottom-3' } role={ 'tablist' }>
-                    <li className={ "govuk-tabs__list-item govuk-!-padding-left-1 govuk-tabs__list-item--selected" } role={ "presentation" }>
-                        <a className={ "govuk-tabs__tab" } href={ "#past-day" } id={ "tab_past-day" } role={ "tab" }
-                           aria-controls={ "past-day" } aria-selected={ "true" } tabIndex={ "0" }>
-                            Cumulative
-                        </a>
-                    </li>
-                    <li className={ "govuk-tabs__list-item govuk-!-padding-left-1 govuk-tabs__list-item--selected" }>Daily</li>
-                    <li className={ "govuk-tabs__list-item govuk-!-padding-left-1 govuk-tabs__list-item--selected" }>Data table</li>
-                </ul>
+
+                <TabLinkContainer>
+                    <TabLink label={ "Tab A" }>
+                        <p>Content A</p>
+                    </TabLink>
+                    <TabLink label={ "Tab B" }>
+                        <p>Content B</p>
+                    </TabLink>
+
+                </TabLinkContainer>
                 <TotalPlot params={ params }/>
             </FullWidthCard>
             <FullWidthCard caption={ 'Confirmed cases rate by location' }/>
