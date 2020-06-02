@@ -151,6 +151,15 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
         previousLocation = usePrevious(location, getData);
 
 
+    useEffect(() => {
+        getStateFor(
+            getParamValueFor(initialParam, "areaName"),
+            order?.[getParamValueFor(initialParam, "areaType")] ?? null,
+        )
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ lookup, hierarchy ]);
+
+
     const getStateFor = (value, areaTypeItem) => {
 
         let
@@ -195,16 +204,6 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
         setLocation(newLocation)
 
     };
-
-    useEffect(() => {
-
-        getStateFor(
-            getParamValueFor(initialParam, "areaName"),
-            order?.[getParamValueFor(initialParam, "areaType")] ?? null,
-        )
-
-    }, [ lookup, hierarchy, order, initialParam, getStateFor ]);
-
 
     const handleSubmission = (event) => {
 
