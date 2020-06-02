@@ -275,7 +275,7 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
                            className={ "govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0" }/>
                     <input type={ "reset" }
                            value={ "Reset to UK" }
-                           onClick={ () => history.push('/') }
+                           onClick={ () => history.push('?') }
                            className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }/>
                 </div>
             </div>
