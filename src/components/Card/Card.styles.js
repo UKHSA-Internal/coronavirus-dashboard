@@ -8,7 +8,7 @@ import addIECss from 'addIECss';
 
 export const CardBody: ComponentType<*> = (() => {
 
-  const node = styled.div`
+  const node = styled.article`
     flex: 1 1 auto;
     background-color: #f8f8f8;
     padding: 20px;
@@ -25,7 +25,7 @@ export const CardBody: ComponentType<*> = (() => {
 
 export const FullWidthCardBody: ComponentType<*> = (() => {
 
-  const node = styled.div`
+  const node = styled.article`
     flex: 1 1 auto;
     background-color: #f8f8f8;
     padding: 20px;
