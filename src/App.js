@@ -21,8 +21,9 @@ import ErrorBoundary from "components/ErrorBoundary";
 import axios from "axios";
 import URLs from "./common/urls";
 import moment from "moment";
-import SideNavigation from "./components/SideNavigation/SideNavigation";
-import DashboardHeader from "./components/DashboardHeader/DashboardHeader";
+import SideNavigation from "./components/SideNavigation";
+import SideNavMobile from "./components/SideNavMobile";
+import DashboardHeader from "./components/DashboardHeader";
 
 // get environment vars
 dotenv.config();
@@ -96,31 +97,34 @@ const F = () => <Footer
 
 const DashboardLayout = ({component: Component, ...rest}) => {
   return (
-    <Route {...rest} render={matchProps => (
-        <Fragment>
-            <Switch>
-                <Route path={ "/" } component={ LastUpdateTime }/>
-            </Switch>
-            <div className={ "dashboard-container" }>
-                <div className={ "dashboard-menu" }>
-                    <Switch>
-                        <Route path={ "/" } component={ SideNavigation }/>
-                    </Switch>
-                </div>
-                <div className={ "dashboard-content" }>
-                    <DashboardHeader title={ "Daily Summary" } />
-                    <Switch>
-                        {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */}
-                        <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> } />
-                    </Switch>
+    <Route {...rest} render={matchProps => ( <Fragment>
+        <SideNavMobile />
+        <div className={ "govuk-width-container" }>
+            <main className={ "govuk-main-wrapper" } role={ "main" }>
+                <Switch>
+                    <Route path={ "/" } component={ LastUpdateTime }/>
+                </Switch>
+                <div className={ "dashboard-container" }>
+                    <div className={ "dashboard-menu" }>
+                        <Switch>
+                            <Route path={ "/" } component={ SideNavigation }/>
+                        </Switch>
+                    </div>
+                    <div className={ "dashboard-content" }>
+                        <DashboardHeader title={ "Daily Summary" } />
+                        <Switch>
+                            {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */}
+                            <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> } />
+                        </Switch>
 
-                    <Switch>
-                        <Component {...matchProps} />
-                        <Redirect to="/"/>
-                    </Switch>
+                        <Switch>
+                            <Component {...matchProps} />
+                            <Redirect to="/"/>
+                        </Switch>
+                    </div>
                 </div>
-            </div>
-        </Fragment>
+            </main>
+        </div></Fragment>
     )} />
   )
 };
@@ -156,8 +160,6 @@ const App = () => {
             homepageUrlHref="https://gov.uk"
         />
 
-        <div className={ "govuk-width-container" }>
-            <main className={ "govuk-main-wrapper" } role={ "main" }>
                 <ErrorBoundary>
                     <DashboardLayout path="/" exact component={ DailySummary }/>
                     <DashboardLayout path="/tests" component={ Tests }/>
@@ -169,8 +171,7 @@ const App = () => {
                     <SimpleLayout path="/accessibility" component={ Accessibility }/>
                     <SimpleLayout path="/cookies" component={ Cookies }/>
                 </ErrorBoundary>
-            </main>
-        </div>
+
 
         {/* We only want back-to-top links on the main & about pages. */}
         <Switch>
