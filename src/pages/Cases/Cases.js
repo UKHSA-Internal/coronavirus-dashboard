@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useRef } from 'react';
 import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 
@@ -13,20 +13,35 @@ import axios from 'axios';
 import { createQuery, getParams, getParamValueFor } from "common/utils";
 import { Plotter } from "./plots";
 import { MainLoading } from "components/Loading";
+import deepEqual from "deep-equal";
 
 
-const API_URL = 'https://uks-covid19-pubdash-dev.azure-api.net/fn-coronavirus-dashboard-pipeline-etl-dev/v1/data';
+const
+    API_URL = 'https://uks-covid19-pubdash-dev.azure-api.net/fn-coronavirus-dashboard-pipeline-etl-dev/v1/data',
+    DefaultParams = [
+        { key: 'areaName', sign: '=', value: 'United Kingdom' },
+        { key: 'areaType', sign: '=', value: 'overview' }
+    ];
 
 
-const GetDailyData = ( params=[] ) => {
+const usePrevious = (value) => {
+
+    const ref = useRef(DefaultParams);
+
+    useEffect(() => {
+        ref.current = value
+    })
+
+    return ref.current
+
+};  // usePrevious
+
+
+const useDailyData = (params) => {
 
     const
         [ data, setData ] = useState([]),
-        defaultParams = [
-            { key: 'areaName', sign: '=', value: 'United Kingdom' },
-            { key: 'areaType', sign: '=', value: 'overview' }
-        ];
-
+        prevParams =  usePrevious(params);
 
     useEffect(() => {
 
@@ -34,7 +49,7 @@ const GetDailyData = ( params=[] ) => {
                 {
                     key: 'filters',
                     sign: '=',
-                    value: createQuery(params.length ? params : defaultParams, ";", "")
+                    value: createQuery(params, ";", "")
                 },
                 {
                     key: 'structure',
@@ -49,37 +64,36 @@ const GetDailyData = ( params=[] ) => {
             ]);
 
         const getData = async () => {
-            const { data: dt } = await axios.get(API_URL + urlParams);
-            setData(dt.data)
+            if ( !deepEqual(prevParams, params) )
+                try {
+                    const { data: dt } = await axios.get(API_URL + urlParams);
+                    setData(dt.data)
+                } catch (e) {}
         }
 
         getData()
 
-    }, [])
+    }, [ params ])
 
     return data
 
 }; // GetData
 
 
-
-const GetTotalData = (params=[]) => {
+const useTotalData = (params) => {
 
     const
-        [data, setData] = useState([]),
-        defaultParams = [
-            { key: 'areaName', sign: '=', value: 'United Kingdom' },
-            { key: 'areaType', sign: '=', value: 'overview' }
-        ];
+        [ data, setData ] = useState([]),
+        prevParams =  usePrevious(params);
 
-
+    console.log(params, prevParams)
     useEffect(() => {
 
         const urlParams = createQuery([
             {
                 key: 'filters',
                 sign: '=',
-                value: createQuery(params.length ? params : defaultParams, ";", "")
+                value: createQuery(params, ";", "")
             },
             {
                 key: 'structure',
@@ -94,13 +108,16 @@ const GetTotalData = (params=[]) => {
         ]);
 
         const getData = async () => {
-            const { data: dt } = await axios.get(API_URL + urlParams);
-            setData(dt.data)
+            if ( !deepEqual(prevParams, params) )
+                try {
+                    const { data: dt } = await axios.get(API_URL + urlParams);
+                    setData(dt.data)
+                } catch (e) {}
         }
 
         getData()
 
-    }, [])
+    }, [ params ])
 
     return data
 
@@ -109,7 +126,7 @@ const GetTotalData = (params=[]) => {
 
 const TotalPlot = ({ params }) => {
 
-    const data = GetTotalData(params);
+    const data = useTotalData(params);
 
     if (!data) return <MainLoading/>
 
@@ -128,19 +145,19 @@ const TotalPlot = ({ params }) => {
         ] }
     />
 
-};
+}; // TotalPlot
+
 
 const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
-
-    const
-        params = getParams(query),
-        data = GetDailyData(params);
-
 
     // ToDo: This should be done for every page in the "app.js".
     const base = document.querySelector("head>base");
     base.href = document.location.pathname;
 
+    const
+        urlParams = getParams(query),
+        params = urlParams.length ? urlParams : DefaultParams;
+        // data = GetDailyData({ params: params });
 
     return <Fragment>
         <BigNumberContainer>
@@ -179,7 +196,7 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
         </Styles.FlexContainer>
     </Fragment>
 
-};
+};  // Cases
 
 
 export default withRouter(Cases);
