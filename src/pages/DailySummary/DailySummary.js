@@ -1,7 +1,6 @@
 // @flow
 
-import React, { useState, useEffect, Component } from 'react';
-import type { ComponentType } from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 
 import moment from "moment";
@@ -84,6 +83,22 @@ const Plotter = ({ ...props }) => {
         config={ {
             showLink: false,
             responsive: true,
+            displaylogo: false,
+            modeBarButtonsToRemove: [
+                "autoScale2d",
+                "zoomIn2d",
+                "zoomOut2d",
+                "toggleSpikelines",
+                "hoverClosestCartesian",
+                "zoom2d"
+            ],
+            toImageButtonOptions: {
+                format: 'png',
+                filename: 'export',
+                height: 1024,
+                width: 768,
+                scale: 4
+            }
         } }
         useResizeHandler={ true }
         style={{ display: 'flex' }}
