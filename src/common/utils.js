@@ -1,5 +1,6 @@
 import moment from "moment";
 import { max, min } from "d3-array";
+import type { ParamItem } from "../components/DashboardHeader/DashboardHeader.types";
 
 
 const isNumeric = subject => typeof subject === 'number'
@@ -162,3 +163,14 @@ export const getParams = (uri: string, separator: string="&"): Array<{key: strin
         }, [])
 
 }; // getParams
+
+
+export const getParamValueFor = (params: Array<ParamItem>, keyName: string, defaultValue: string|null=null): string | null => {
+
+    return params
+        .reduce((acc, { key, value }) =>
+            key === keyName ? value : acc,
+            defaultValue
+        )
+
+};  // getParamValueFor
