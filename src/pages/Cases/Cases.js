@@ -10,7 +10,7 @@ import type { Props } from './Cases.types';
 import * as Styles from './Cases.styles';
 
 import axios from 'axios';
-import { createQuery, getParams, getParamValueFor } from "common/utils";
+import { createQuery, getParams, getParamValueFor, movingAverage } from "common/utils";
 import { Plotter } from "./plots";
 import { MainLoading } from "components/Loading";
 import deepEqual from "deep-equal";
@@ -148,6 +148,47 @@ const TotalPlot = ({ params }) => {
 }; // TotalPlot
 
 
+const DailyPlot = ({ params }) => {
+
+    const data = useDailyData(params);
+
+    if (!data) return <MainLoading/>;
+
+    const average =  movingAverage(data.map(item => item?.daily ?? 0), 7)
+        .map(item => Math.round(item ,1));
+
+    for (let index = 0; index < 7; index ++)
+        average[index] = NaN;
+
+    return <Plotter
+        data={ [
+            {
+                name: "Daily cases",
+                x: data.map(item => item?.date ?? ""),
+                y: data.map(item => item?.daily ?? 0),
+                fill: 'tozeroy',
+                type: "bar",
+                marker: {
+                    color: '#5a9dd5'
+                }
+            },
+            {
+                name: "Rolling average",
+                x: data.map(item => item?.date ?? ""),
+                y: average,
+                type: "line",
+                line: {
+                    width: 3,
+                    dash: "dash",
+                    color: 'rgb(106,106,106)'
+                }
+            }
+        ] }
+    />
+
+}; // TotalPlot
+
+
 const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
     // ToDo: This should be done for every page in the "app.js".
@@ -157,7 +198,6 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
     const
         urlParams = getParams(query),
         params = urlParams.length ? urlParams : DefaultParams;
-        // data = GetDailyData({ params: params });
 
     return <Fragment>
         <BigNumberContainer>
@@ -182,15 +222,17 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
             <FullWidthCard caption={ `Cases in ${ getParamValueFor(params, "areaName") } by date` }>
 
                 <TabLinkContainer>
-                    <TabLink label={ "Tab A" }>
-                        <p>Content A</p>
+                    <TabLink label={ "Cumulative" }>
+                        <TotalPlot params={ params }/>
                     </TabLink>
-                    <TabLink label={ "Tab B" }>
-                        <p>Content B</p>
+                    <TabLink label={ "Daily" }>
+                        <DailyPlot params={ params }/>
+                    </TabLink>
+                    <TabLink label={ "Data" }>
+                        <p>Data content</p>
                     </TabLink>
 
                 </TabLinkContainer>
-                <TotalPlot params={ params }/>
             </FullWidthCard>
             <FullWidthCard caption={ 'Confirmed cases rate by location' }/>
         </Styles.FlexContainer>
