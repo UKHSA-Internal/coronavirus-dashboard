@@ -8,7 +8,8 @@ import { Link } from "react-router-dom";
 import type { Props } from './Card.types';
 import {
     CardDescription,
-    CardBody
+    CardBody,
+    FullWidthCardBody
 } from './Card.styles';
 import numeral from 'numeral'
 
@@ -55,7 +56,7 @@ const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
 }; // ValueItemContainer
 
 
-const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", backUrl=null, children }: Props) => {
+const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", children }: Props) => {
 
     return <CardBody>
         <div className={ "util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
@@ -74,7 +75,20 @@ const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", backUrl=nu
 };
 
 
-const FullWidthCard: ComponentType<Props> = ({ caption, title, subtitle, backUrl }: Props) => {
+const FullWidthCard: ComponentType<Props> = ({ caption, children }: Props) => {
+
+    return <FullWidthCardBody>
+        <div className={ "util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
+            <h2 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>{ caption }</h2>
+        </div>
+
+        <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
+
+        <div className={ "govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
+            { children }
+        </div>
+
+    </FullWidthCardBody>
 
 }
 
