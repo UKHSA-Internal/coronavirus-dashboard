@@ -6,6 +6,7 @@ import { withRouter } from 'react-router';
 import moment from "moment";
 
 import { HalfWidthCard, VisualSection, ValueItem, ValueItemsSection } from 'components/Card';
+import URLs from 'common/urls';
 import type { Props } from './DailySummary.types';
 import * as Styles from './DailySummary.styles';
 import axios from 'axios';
@@ -14,7 +15,7 @@ import { max } from "d3-array";
 import { MainLoading } from "components/Loading";
 import { createQuery, getParams } from "common/utils";
 
-import deepEqual from "deep-equal"
+import deepEqual from "deep-equal";
 
 
 /**
@@ -344,8 +345,6 @@ export const objectsAreEqual = (...objects): boolean => {
 
 class DailySummary extends Component<{}, {}> {
 
-    url = 'https://uks-covid19-pubdash-dev.azure-api.net/fn-coronavirus-dashboard-pipeline-etl-dev/v1/data';
-
     defaultParams = [
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
         { key: 'areaType', sign: '=', value: 'overview' }
@@ -378,7 +377,7 @@ class DailySummary extends Component<{}, {}> {
                     })
                 }
             ]),
-            { data: { data = [] } } = await axios.get(this.url + encodeURI(urlParams));
+            { data: { data = [] } } = await axios.get(URLs.api + encodeURI(urlParams));
 
         this.setState({ data: data })
 
