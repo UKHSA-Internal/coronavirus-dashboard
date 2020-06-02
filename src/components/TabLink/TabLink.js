@@ -37,15 +37,18 @@ export const TabLinkContainer = ({ children }: TabLinkContainerProps): React$Nod
             children.map(({ props: { label } }, index) =>
                 <Tab type={ "link" }
                      key={ `${label}-${index}` }
-                     style={{ color: "blue" }}
+                     className={ label === current ? 'active' : null }
                      onClick={ () => setCurrent(label)  }>{ label }</Tab>
             )
         }</TabsContainer>
-        <Body>{
-            children.reduce((acc, { props: { label, children } }) =>
-                label === current ? children : acc, null
+        {
+            children.map(({ props: { label, children } }, index) =>
+                <Body
+                    key={ `${label}-child-${index}` }
+                    className={ label === current ? null : 'inactive' }
+                >{ children }</Body>
             )
-        }</Body>
+        }
     </MainContainer>
 
 };  // TabLinkContainer
