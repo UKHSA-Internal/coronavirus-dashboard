@@ -24,6 +24,7 @@ import {
     TriangleRight,
     TriangleDown,
     CollapsibleLinkContainer,
+    MainContainer
 } from './DashboardHeader.styles'
 
 // Types
@@ -65,7 +66,7 @@ const DashboardHeader: ComponentType<Props> = ({ title, location: { search: quer
         endDate = getParamDateFor(params, "specimenDate", moment(), "<"),
         isExcluded = NoPickerPaths.indexOf(pathname) > -1;
 
-    return <div className={ "sticky-header govuk-!-padding-top-3" }>
+    return <MainContainer className={ "sticky-header govuk-!-padding-top-3" }>
         <HeaderContainer>
             <Title>{ PathNameMapper[pathname] }</Title>
             {
@@ -104,7 +105,7 @@ const DashboardHeader: ComponentType<Props> = ({ title, location: { search: quer
                 ? <DateRangePicker query={ query } startDate={ startDate } endDate={ endDate }/>
                 : null
         }
-    </div>
+    </MainContainer>
 
 };  // DashboardHeader
 
