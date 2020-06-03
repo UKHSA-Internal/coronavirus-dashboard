@@ -5,7 +5,7 @@ import axios from 'axios';
 import URLs from "common/urls";
 
 
-const AreaHierarchy = () => {
+const useHierarchy = () => {
 
     const [ hierarchy, setHierarchy ] = useState(null);
 
@@ -30,4 +30,4 @@ const AreaHierarchy = () => {
 
 };
 
-export default AreaHierarchy;
+export default useHierarchy;
