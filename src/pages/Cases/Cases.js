@@ -77,11 +77,21 @@ const DailyPlot = ({ data }) => {
             {
                 name: "Daily cases",
                 x: data.map(item => item?.date ?? ""),
-                y: data.map(item => item?.cases ?? 0),
+                y: data.map(item => Math.min(item?.casesPrev ?? 0, item?.casesPrev ?? 0 + item?.casesChange ?? 0)),
                 fill: 'tozeroy',
                 type: "bar",
                 marker: {
                     color: '#5a9dd5'
+                }
+            },
+            {
+                name: "Daily cases",
+                x: data.map(item => item?.date ?? ""),
+                y: data.map(item => Math.max(item?.casesChange ?? 0, 0)),
+                fill: 'tozeroy',
+                type: "bar",
+                marker: {
+                    color: '#ff8033',
                 }
             },
             {

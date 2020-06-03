@@ -28,6 +28,7 @@ export const Plotter = ({ ...props }) => {
         useResizeHandler={ true }
         style={{ display: 'flex' }}
         layout={ {
+            barmode: 'stack',
             height: 320,
             legend: {
                 orientation: 'h',
