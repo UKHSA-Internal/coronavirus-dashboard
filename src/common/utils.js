@@ -157,3 +157,23 @@ export const getParamValueFor = (params: Array<ParamItem>, keyName: string, defa
         )
 
 };  // getParamValueFor
+
+
+export const sum = (arr, key) => {
+
+    return arr.reduce((acc, item) => {
+        acc = acc + key(item)
+        return acc
+    }, 0)
+
+};  // sum
+
+
+export const firstObjWithMax = ( arr: Array<{[string|number]: [string|number|null]}>, key: ([string|number]) => [string|number|null] ) => {
+
+    const maxValue = max(arr, key);
+
+    for ( const item of arr )
+        if (key(item) === maxValue) return item;
+
+};
