@@ -15,6 +15,7 @@ import { MainLoading } from "components/Loading";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
 import { zip } from "d3-array";
+import numeral from "numeral"
 
 
 
@@ -155,7 +156,7 @@ const DataTable = ({ args }) => {
                 <th scope={ 'col' } colSpan={ 3 } className={ 'govuk-table__header' }>Cumulative</th>
             </tr>
             <tr className={ "govuk-table__row" }>
-                <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header' }>Specimen Date</th>
+                <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header' }>Specimen date</th>
                 <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header govuk-table__header--numeric' }>Previously reported</th>
                 <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header govuk-table__header--numeric' }>Change</th>
                 <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header govuk-table__header--numeric' }>Total confirmed</th>
@@ -168,12 +169,12 @@ const DataTable = ({ args }) => {
             zip(...args).map(([ daily, total ], index) =>
                 <tr key={ `row-${index}` } className={ 'govuk-table__row' }>
                     <td className={ "govuk-table__cell" }>{ daily.date }</td>
-                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ daily.casesPrev }</td>
-                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ daily.casesChange }</td>
-                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ daily.cases }</td>
-                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ total.casesPrev }</td>
-                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ total.casesChange }</td>
-                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ total.cases }</td>
+                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ numeral(daily.casesPrev).format("0,0") }</td>
+                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ numeral(daily.casesChange).format("0,0") }</td>
+                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ numeral(daily.cases).format("0,0") }</td>
+                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ numeral(total.casesPrev).format("0,0") }</td>
+                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ numeral(total.casesChange).format("0,0") }</td>
+                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ numeral(total.cases).format("0,0") }</td>
                 </tr>
             )
         }</tbody>
