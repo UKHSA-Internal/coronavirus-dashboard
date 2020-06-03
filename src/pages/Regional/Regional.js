@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import moment from "moment";
 
-import useLoadData from 'hooks/useLoadData';
+import useLoadData from 'hooks/useHierarchy';
 import useResponsiveLayout from 'hooks/useResponsiveLayout';
 import { BigNumber, BigNumberContainer } from 'components/BigNumber';
 import PageTitle from 'components/PageTitle';

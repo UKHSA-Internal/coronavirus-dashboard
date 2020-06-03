@@ -9,7 +9,7 @@ import moment from "moment";
 import 'moment/locale/en-gb';
 
 import { getParams } from "common/utils";
-import AreaHierarchy from "hooks/useLoadData";
+import useHierarchy from "hooks/useHierarchy";
 
 // Internal
 import LocationPicker from "./LocationPicker";
@@ -56,7 +56,7 @@ const NoPickerPaths = [
 const DashboardHeader: ComponentType<Props> = ({ title, location: { search: query, pathname } }: Props) => {
 
     const
-        hierarchy = AreaHierarchy(),
+        hierarchy = useHierarchy(),
         [locationPickerState, setLocationPickerState] = useState(false),
         [datePickerState, setDatePickerState] = useState(false),
         params = getParams(query),

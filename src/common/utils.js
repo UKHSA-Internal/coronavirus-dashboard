@@ -1,7 +1,6 @@
 import moment from "moment";
 import { max, min } from "d3-array";
-import type { ParamItem } from "../components/DashboardHeader/DashboardHeader.types";
-
+import type { ParsedParams } from "./utils.types";
 
 const isNumeric = subject => typeof subject === 'number'
 
@@ -95,7 +94,7 @@ export const movingAverage = ( data: number[], size: number ): number[] => {
 } // movingAverage
 
 
-export const createQuery = ( args: Array<{key: string, sign: string, value: string}>, joinBy: string="&", definitionChar: string="?"): string => {
+export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionChar: string="?"): string => {
 
     const params = [];
 
@@ -125,7 +124,7 @@ export const createQuery = ( args: Array<{key: string, sign: string, value: stri
 } // createHash
 
 
-export const getParams = (uri: string, separator: string="&"): Array<{key: string, sign: string, value: string}> => {
+export const getParams = (uri: string, separator: string="&"): ParsedParams => {
 
     return decodeURIComponent(uri)
         .replace("?", "")
@@ -148,7 +147,7 @@ export const getParams = (uri: string, separator: string="&"): Array<{key: strin
 }; // getParams
 
 
-export const getParamValueFor = (params: Array<ParamItem>, keyName: string, defaultValue: string|null=null): string | null => {
+export const getParamValueFor = (params: Array<ParsedParams>, keyName: string, defaultValue: string|null=null): string | null => {
 
     return params
         .reduce((acc, { key, value }) =>
@@ -157,3 +156,23 @@ export const getParamValueFor = (params: Array<ParamItem>, keyName: string, defa
         )
 
 };  // getParamValueFor
+
+
+export const sum = (arr, key) => {
+
+    return arr.reduce((acc, item) => {
+        acc = acc + key(item)
+        return acc
+    }, 0)
+
+};  // sum
+
+
+export const firstObjWithMax = ( arr: Array<{[string|number]: [string|number|null]}>, key: ([string|number]) => [string|number|null] ) => {
+
+    const maxValue = max(arr, key);
+
+    for ( const item of arr )
+        if (key(item) === maxValue) return item;
+
+};
