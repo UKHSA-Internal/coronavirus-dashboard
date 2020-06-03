@@ -75,7 +75,7 @@ const DailyPlot = ({ data }) => {
     return <Plotter
         data={ [
             {
-                name: "Daily cases",
+                name: "Previously reported",
                 x: data.map(item => item?.date ?? ""),
                 y: data.map(item => Math.min(item?.casesPrev ?? 0, item?.casesPrev ?? 0 + item?.casesChange ?? 0)),
                 fill: 'tozeroy',
@@ -85,7 +85,7 @@ const DailyPlot = ({ data }) => {
                 }
             },
             {
-                name: "Daily cases",
+                name: "Newly reported",
                 x: data.map(item => item?.date ?? ""),
                 y: data.map(item => Math.max(item?.casesChange ?? 0, 0)),
                 fill: 'tozeroy',
@@ -95,7 +95,7 @@ const DailyPlot = ({ data }) => {
                 }
             },
             {
-                name: "Rolling average",
+                name: "Rolling average of the total",
                 x: data.map(item => item?.date ?? ""),
                 y: average,
                 type: "line",
