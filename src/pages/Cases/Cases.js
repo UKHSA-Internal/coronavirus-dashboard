@@ -7,15 +7,17 @@ import { withRouter } from 'react-router';
 import { BigNumber, BigNumberContainer } from 'components/BigNumber';
 import { HalfWidthCard, FullWidthCard } from 'components/Card';
 import type { Props } from './Cases.types';
-import { Table, FlexContainer } from './Cases.styles';
+import { Table } from './Cases.styles';
 
 import { getParams, getParamValueFor, movingAverage, firstObjWithMax } from "common/utils";
-import { Plotter } from "./plots";
+import { Plotter, Mapper } from "./plots";
 import { MainLoading } from "components/Loading";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
 import { zip } from "d3-array";
-import numeral from "numeral"
+import numeral from "numeral";
+import axios from "axios";
+import URLs from "../../common/urls";
 
 
 
@@ -193,6 +195,61 @@ const DataTable = ({ args }) => {
 };  // DataTable
 
 
+const useGeoJSON = (type="countries") => {
+
+    const [ data, setData ] = useState(null);
+
+    useEffect(() => {
+
+        (async () => {
+            const { data } = await axios.get(
+                `${ type }_v1.geojson`,
+                { baseURL: URLs.baseGeo }
+            );
+            setData(data)
+        })()
+
+    }, [ type ]);
+
+    return data
+
+};
+
+const CasesMap = ({ data }) => {
+
+    const geoData = useGeoJSON("countries");
+
+    if ( !geoData ) return <MainLoading/>;
+
+    return <Mapper data={ [
+        {
+            type: 'scattermapbox',
+            // lon: geoData.features.map(f => f.properties.long),
+            // lat: geoData.features.map(f => f.properties.lat),
+            locations: [], // unpack(rows, 'CODE'),
+            // geoJSON: geoData,
+            featureidkey: [],
+            z: [], // unpack(rows, 'GDP (BILLIONS)'),
+            text: [], // unpack(rows, 'COUNTRY'),
+            colorscale: [
+                [0, 'rgb(5, 10, 172)'], [0.35, 'rgb(40, 60, 190)'],
+                [0.5, 'rgb(70, 100, 245)'], [0.6, 'rgb(90, 120, 245)'],
+                [0.7, 'rgb(106, 137, 247)'], [1, 'rgb(220, 220, 220)']],
+            autocolorscale: false,
+            reversescale: true,
+            center: {'lat': 55, 'lon': -2},
+            marker: {
+                line: {
+                    color: 'rgb(180,180,180)',
+                    width: 0.5
+                }
+            }
+        }
+    ] }/>
+
+};  // CasesMap
+
+
 const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
     // ToDo: This should be done for every page in the "app.js".
@@ -212,24 +269,24 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
             <TotalRecovered data={ totalData }/>
         </BigNumberContainer>
 
-        <FlexContainer>
-            <FullWidthCard caption={ `Cases in ${ getParamValueFor(params, "areaName") } by date` }>
+        <FullWidthCard caption={ `Cases in ${ getParamValueFor(params, "areaName") } by date` }>
 
-                <TabLinkContainer>
-                    <TabLink label={ "Cumulative" }>
-                        <TotalPlot data={ totalData }/>
-                    </TabLink>
-                    <TabLink label={ "Daily" }>
-                        <DailyPlot data={ dailyData }/>
-                    </TabLink>
-                    <TabLink label={ "Data" }>
-                        <DataTable args={ [dailyData, totalData] }/>
-                    </TabLink>
+            <TabLinkContainer>
+                <TabLink label={ "Cumulative" }>
+                    <TotalPlot data={ totalData }/>
+                </TabLink>
+                <TabLink label={ "Daily" }>
+                    <DailyPlot data={ dailyData }/>
+                </TabLink>
+                <TabLink label={ "Data" }>
+                    <DataTable args={ [dailyData, totalData] }/>
+                </TabLink>
 
-                </TabLinkContainer>
-            </FullWidthCard>
-            <FullWidthCard caption={ 'Confirmed cases rate by location' }/>
-        </FlexContainer>
+            </TabLinkContainer>
+        </FullWidthCard>
+        <FullWidthCard caption={ 'Confirmed cases rate by location' }>
+            <CasesMap data={ totalData }/>
+        </FullWidthCard>
     </Fragment>
 
 };  // Cases
