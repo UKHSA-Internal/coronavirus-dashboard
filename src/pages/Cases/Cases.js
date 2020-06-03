@@ -8,117 +8,35 @@ import { BigNumber, BigNumberContainer } from 'components/BigNumber';
 import { HalfWidthCard, FullWidthCard } from 'components/Card';
 import type { Props } from './Cases.types';
 import * as Styles from './Cases.styles';
-import { max } from "d3-array";
 
 import axios from 'axios';
-import { createQuery, getParams, getParamValueFor, movingAverage, firstObjWithMax } from "common/utils";
+import { getParams, getParamValueFor, movingAverage, firstObjWithMax } from "common/utils";
 import { Plotter } from "./plots";
 import { MainLoading } from "components/Loading";
-import deepEqual from "deep-equal";
-import URLs from "common/urls";
+import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
+
 
 
 const
     DefaultParams = [
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
         { key: 'areaType', sign: '=', value: 'overview' }
-    ];
-
-
-const usePrevious = (value) => {
-
-    const ref = useRef([]);
-
-    useEffect(() => {
-        ref.current = value
-    })
-
-    return ref.current
-
-};  // usePrevious
-
-
-const useDailyData = (params) => {
-
-    const
-        [ data, setData ] = useState([]),
-        prevParams =  usePrevious(params);
-
-    useEffect(() => {
-
-        const urlParams = createQuery([
-                {
-                    key: 'filters',
-                    sign: '=',
-                    value: createQuery(params, ";", "")
-                },
-                {
-                    key: 'structure',
-                    sign: '=',
-                    value: JSON.stringify({
-                        cases: "dailyLabConfirmedCases",
-                        casesChange: "changeInDailyCases",
-                        casesPrev: "previouslyReportedDailyCases",
-                        date: "specimenDate"
-                    })
-                }
-            ]);
-
-        (async () => {
-            if ( !deepEqual(prevParams, params) )
-                try {
-                    const { data: dt } = await axios.get(URLs.api + urlParams);
-                    setData(dt.data)
-                } catch (e) {}
-        })()
-
-    }, [ params ])
-
-    return data
-
-}; // GetData
-
-
-const useTotalData = (params) => {
-
-    const
-        [ data, setData ] = useState([]),
-        prevParams =  usePrevious(params);
-
-    useEffect(() => {
-
-        const urlParams = createQuery([
-            {
-                key: 'filters',
-                sign: '=',
-                value: createQuery(params, ";", "")
-            },
-            {
-                key: 'structure',
-                sign: '=',
-                value: JSON.stringify({
-                    cases: "totalLabConfirmedCases",
-                    casesChange: "changeInTotalCases",
-                    casesPrev: "previouslyReportedTotalCases",
-                    date: "specimenDate"
-                })
-            }
-        ]);
-
-        (async () => {
-            if ( !deepEqual(prevParams, params) )
-                try {
-                    const { data: dt } = await axios.get(URLs.api + urlParams);
-                    setData(dt.data)
-                } catch (e) {}
-        })()
-
-    }, [ params ])
-
-    return data
-
-}; // GetTotalData
+    ],
+    Structures = {
+        totalData: {
+            cases: "totalLabConfirmedCases",
+            casesChange: "changeInTotalCases",
+            casesPrev: "previouslyReportedTotalCases",
+            date: "specimenDate"
+        },
+        dailyData: {
+            cases: "dailyLabConfirmedCases",
+            casesChange: "changeInDailyCases",
+            casesPrev: "previouslyReportedDailyCases",
+            date: "specimenDate"
+        }
+    };
 
 
 const TotalPlot = ({ data }) => {
@@ -236,8 +154,8 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
     const
         urlParams = getParams(query),
         params = urlParams.length ? urlParams : DefaultParams,
-        dailyData = useDailyData(params),
-        totalData = useTotalData(params);
+        dailyData = useApi(params, Structures.dailyData),
+        totalData = useApi(params, Structures.totalData);
 
     return <Fragment>
         <BigNumberContainer>
