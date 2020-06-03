@@ -40,6 +40,7 @@ export const Tab: ComponentType<*> = (() => {
     return styled.button`
         color: #1E70B8;
         padding-bottom: 2px;
+        cursor: pointer;
 
         &.active {
             color: #1E70B8;
