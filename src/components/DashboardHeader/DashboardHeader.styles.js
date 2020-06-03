@@ -62,6 +62,16 @@ export const HeaderContainer: ComponentType<*> = (() => {
 
 })();
 
+
+export const MainContainer: ComponentType<*> = (() => {
+
+  return styled.div`
+  background-color: rgba(255, 255, 255, 0.95);
+  `
+
+})();
+
+
 export const Title: ComponentType<*> = (() => {
 
   const Node = styled.h2`
