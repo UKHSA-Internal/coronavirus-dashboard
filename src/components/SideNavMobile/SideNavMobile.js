@@ -29,7 +29,7 @@ const SideNavMobile: ComponentType<Props> = ({ location: { pathname }}: Props) =
                     <nav className="moj-side-navigation moj-side-navigation-mobile" aria-label="Side navigation">
                         <ul className="moj-side-navigation__list">
                             <li className={`moj-side-navigation__item ${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
-                                <Link to={ "/" } aria-current="location">Daily summary</Link>
+                                <Link to={ "/" } aria-current="location">UK Summary</Link>
                             </li>
 
                             <li className={`moj-side-navigation__item ${pathname === '/tests' ? "moj-side-navigation__item--active" : ""}`}>
