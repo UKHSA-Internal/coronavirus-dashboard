@@ -5,8 +5,13 @@ import axios from 'axios';
 import URLs from "common/urls";
 import { createQuery } from "common/utils";
 import deepEqual from "deep-equal";
-import type { useApiStructureInput, useApiResponse } from "./hooks.types";
-import type { ParsedParams } from "../common/utils.types";
+
+import type {
+    useApiStructureInput,
+    useApiResponseInput,
+    useApiResponse
+} from "./hooks.types";
+import type { ParsedParams } from "common/utils.types";
 
 
 const usePrevious = (value) => {
@@ -22,7 +27,7 @@ const usePrevious = (value) => {
 };  // usePrevious
 
 
-const useApi = ( params: ParsedParams, structure: useApiStructureInput, defaultResponse: useApiResponse =[] ) => {
+const useApi = ( params: ParsedParams, structure: useApiStructureInput, defaultResponse: useApiResponseInput=[] ): useApiResponse => {
 
     const
         [ data, setData ] = useState(defaultResponse),
