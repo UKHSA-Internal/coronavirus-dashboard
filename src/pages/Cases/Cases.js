@@ -218,24 +218,22 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
             />
         </BigNumberContainer>
 
-        <Styles.FlexContainer>
-            <FullWidthCard caption={ `Cases in ${ getParamValueFor(params, "areaName") } by date` }>
+        <FullWidthCard caption={ `Cases in ${ getParamValueFor(params, "areaName") } by date` }>
+            <TabLinkContainer>
+                <TabLink label={ "Cumulative" }>
+                    <TotalPlot params={ params }/>
+                </TabLink>
+                <TabLink label={ "Daily" }>
+                    <DailyPlot params={ params }/>
+                </TabLink>
+                <TabLink label={ "Data" }>
+                    <p>Data content</p>
+                </TabLink>
+            </TabLinkContainer>
+        </FullWidthCard>
 
-                <TabLinkContainer>
-                    <TabLink label={ "Cumulative" }>
-                        <TotalPlot params={ params }/>
-                    </TabLink>
-                    <TabLink label={ "Daily" }>
-                        <DailyPlot params={ params }/>
-                    </TabLink>
-                    <TabLink label={ "Data" }>
-                        <p>Data content</p>
-                    </TabLink>
+        <FullWidthCard caption={ 'Confirmed cases rate by location' }/>
 
-                </TabLinkContainer>
-            </FullWidthCard>
-            <FullWidthCard caption={ 'Confirmed cases rate by location' }/>
-        </Styles.FlexContainer>
     </Fragment>
 
 };  // Cases
