@@ -47,6 +47,7 @@ const PathNameMapper = {
 
 
 const NoPickerPaths = [
+    "/",
     "/about-data",
     "/cookies",
     "/accessibility",
