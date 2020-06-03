@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 import { BigNumber, BigNumberContainer } from 'components/BigNumber';
 import { HalfWidthCard, FullWidthCard } from 'components/Card';
 import type { Props } from './Cases.types';
-import { Table, FlexContainer } from './Cases.styles';
+import { Table } from './Cases.styles';
 
 import { getParams, getParamValueFor, movingAverage, firstObjWithMax } from "common/utils";
 import { Plotter } from "./plots";
@@ -202,24 +202,22 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
             <TotalRecovered data={ totalData }/>
         </BigNumberContainer>
 
-        <FlexContainer>
-            <FullWidthCard caption={ `Cases in ${ getParamValueFor(params, "areaName") } by date` }>
+        <FullWidthCard caption={ `Cases in ${ getParamValueFor(params, "areaName") } by date` }>
 
-                <TabLinkContainer>
-                    <TabLink label={ "Cumulative" }>
-                        <TotalPlot data={ totalData }/>
-                    </TabLink>
-                    <TabLink label={ "Daily" }>
-                        <DailyPlot data={ dailyData }/>
-                    </TabLink>
-                    <TabLink label={ "Data" }>
-                        <DataTable args={ [dailyData, totalData] }/>
-                    </TabLink>
+            <TabLinkContainer>
+                <TabLink label={ "Cumulative" }>
+                    <TotalPlot data={ totalData }/>
+                </TabLink>
+                <TabLink label={ "Daily" }>
+                    <DailyPlot data={ dailyData }/>
+                </TabLink>
+                <TabLink label={ "Data" }>
+                    <DataTable args={ [dailyData, totalData] }/>
+                </TabLink>
 
-                </TabLinkContainer>
-            </FullWidthCard>
-            <FullWidthCard caption={ 'Confirmed cases rate by location' }/>
-        </FlexContainer>
+            </TabLinkContainer>
+        </FullWidthCard>
+        <FullWidthCard caption={ 'Confirmed cases rate by location' }/>
     </Fragment>
 
 };  // Cases

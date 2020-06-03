@@ -66,9 +66,7 @@ const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", children }
 
         <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
 
-        <div className={ "govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
-            { children }
-        </div>
+        { children }
 
     </CardBody>
 
@@ -84,9 +82,7 @@ const FullWidthCard: ComponentType<Props> = ({ caption, children }: Props) => {
 
         <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
 
-        <div className={ "govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
-            { children }
-        </div>
+        { children }
 
     </FullWidthCardBody>
 
