@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { Fragment, useState, useEffect } from 'react';
-import { Switch, Route, Redirect } from 'react-router';
+import { Switch, Route, Redirect, withRouter } from 'react-router';
 import { Header, Footer } from 'govuk-react-jsx';
 
 import dotenv from 'dotenv';
@@ -101,81 +101,62 @@ const F = () => (
 );  // Footer
 
 
-const DashboardLayout = ({ component: Component, ...props }) => (
-    <Route { ...props } component={ matchProps =>
-        <Fragment>
-            <SideNavMobile/>
-            <Switch>
-                <Route path={ "/" } component={ LastUpdateTime }/>
-            </Switch>
-            <div className={ "dashboard-container" }>
-                <div className={ "dashboard-menu" }>
-                    <Switch>
-                        <Route path={ "/" } component={ SideNavigation }/>
-                    </Switch>
-                </div>
-                <div className={ "dashboard-content" }>
-                    <DashboardHeader title={ "Daily Summary" }/>
-                    <Switch>
-                        {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */ }
-                        <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> }/>
-                    </Switch>
+const PathWithSideMenu = [
+    "/",
+    "/tests",
+    "/cases",
+    "/healthcare",
+    "/deaths",
+    "/about-data"
+];
 
-                    <Switch>
-                        <Component { ...matchProps } />
-                        <Redirect to={ "/" }/>
-                    </Switch>
-                </div>
-            </div>
-        </Fragment>
-    }/>
-);  // DashboardLayout
+const App = ({ location: { pathname } }) => {
 
+    const hasMenu = PathWithSideMenu.indexOf(pathname) > -1;
 
-const SimpleLayout = ({ component: Component, ...rest }) => (
-    <Route { ...rest } render={ matchProps => (
-        <Fragment>
-            <Switch>
-                {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */ }
-                <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> }/>
-            </Switch>
-            <Switch>
-                <Component { ...matchProps } />
-                <Redirect to="/"/>
-            </Switch>
-        </Fragment>
-    ) }/>
-);  // SimpleLayout
-
-
-const App = () => {
-
-    return <Fragment>
+    return <ErrorBoundary>
         <CookieBanner/>
         <Header
             // containerClassName="govuk-header__container--full-width"
             // navigationClassName="govuk-header__navigation--end"
-            serviceName="Coronavirus (COVID-19) cases in the UK"
+            serviceName="Coronavirus (COVID-19) in the UK"
             serviceUrlTo="/"
             homepageUrlHref="https://gov.uk"
         />
-
+        <SideNavMobile/>
         <div className={ "govuk-width-container" }>
             <main className={ "govuk-main-wrapper" } role={ "main" }>
-                <ErrorBoundary>
-                    <DashboardLayout path="/" exact component={ DailySummary }/>
-                    <DashboardLayout path="/tests" component={ Tests }/>
-                    <DashboardLayout path="/cases" component={ Cases }/>
-                    <DashboardLayout path="/healthcare" component={ Healthcare }/>
-                    <DashboardLayout path="/deaths" component={ Deaths }/>
-                    <DashboardLayout path="/about-data" component={ About }/>
+                <LastUpdateTime/>
+                <div className={ "dashboard-container" }>
+                    <div className={ "dashboard-menu" }>
+                        <Switch>
+                            <Route path={ "/" } component={ hasMenu ? SideNavigation : null }/>
+                        </Switch>
+                    </div>
+                    <div className={ "dashboard-content" }>
+                        <DashboardHeader/>
 
-                    <SimpleLayout path="/archive" component={ Archive }/>
-                    <SimpleLayout path="/accessibility" component={ Accessibility }/>
-                    <SimpleLayout path="/cookies" component={ Cookies }/>
-                </ErrorBoundary>
+                        <Switch>
+                            <Route path="/" exact component={ DailySummary }/>
+                            <Route path="/tests" component={ Tests }/>
+                            <Route path="/cases" component={ Cases }/>
+                            <Route path="/healthcare" component={ Healthcare }/>
+                            <Route path="/deaths" component={ Deaths }/>
+                            <Route path="/about-data" component={ About }/>
+
+                            <Route path="/archive" component={ Archive }/>
+                            <Route path="/accessibility" component={ Accessibility }/>
+                            <Route path="/cookies" component={ Cookies }/>
+                        </Switch>
+                    </div>
+                </div>
             </main>
         </div>
+
+        <Switch>
+            {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */ }
+            <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> }/>
+        </Switch>
 
         {/* We only want back-to-top links on the main & about pages. */ }
         <Switch>
@@ -187,8 +168,8 @@ const App = () => {
         <Switch>
             <Route path="/" component={ F }/>
         </Switch>
-    </Fragment>
+    </ErrorBoundary>
 };  // App
 
 
-export default App;
+export default withRouter(App);
