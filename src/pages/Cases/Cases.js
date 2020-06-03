@@ -7,14 +7,14 @@ import { withRouter } from 'react-router';
 import { BigNumber, BigNumberContainer } from 'components/BigNumber';
 import { HalfWidthCard, FullWidthCard } from 'components/Card';
 import type { Props } from './Cases.types';
-import * as Styles from './Cases.styles';
+import { Table, FlexContainer } from './Cases.styles';
 
-import axios from 'axios';
 import { getParams, getParamValueFor, movingAverage, firstObjWithMax } from "common/utils";
 import { Plotter } from "./plots";
 import { MainLoading } from "components/Loading";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
+import { zip } from "d3-array";
 
 
 
@@ -145,6 +145,43 @@ const TotalRecovered = ({ data }) => {
 };  // TotalCasesFigure
 
 
+const DataTable = ({ args }) => {
+
+    return <Table className={ "govuk-table sticky-header" }>
+        <thead className={ "govuk-table__head" }>
+            <tr className={ "govuk-table__row" }>
+                <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header' }/>
+                <th scope={ 'col' } colSpan={ 3 } className={ 'govuk-table__header' }>Daily</th>
+                <th scope={ 'col' } colSpan={ 3 } className={ 'govuk-table__header' }>Cumulative</th>
+            </tr>
+            <tr className={ "govuk-table__row" }>
+                <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header' }>Specimen Date</th>
+                <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header govuk-table__header--numeric' }>Previously reported</th>
+                <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header govuk-table__header--numeric' }>Change</th>
+                <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header govuk-table__header--numeric' }>Total confirmed</th>
+                <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header govuk-table__header--numeric' }>Previously reported</th>
+                <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header govuk-table__header--numeric' }>Change</th>
+                <th scope={ 'col' } colSpan={ 1 } className={ 'govuk-table__header govuk-table__header--numeric' }>Total confirmed</th>
+            </tr>
+        </thead>
+        <tbody className={ "govuk-table__body" }>{
+            zip(...args).map(([ daily, total ], index) =>
+                <tr key={ `row-${index}` } className={ 'govuk-table__row' }>
+                    <td className={ "govuk-table__cell" }>{ daily.date }</td>
+                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ daily.casesPrev }</td>
+                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ daily.casesChange }</td>
+                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ daily.cases }</td>
+                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ total.casesPrev }</td>
+                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ total.casesChange }</td>
+                    <td className={ "govuk-table__cell govuk-table__cell--numeric" }>{ total.cases }</td>
+                </tr>
+            )
+        }</tbody>
+    </Table>
+
+};  // DataTable
+
+
 const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
     // ToDo: This should be done for every page in the "app.js".
@@ -164,7 +201,7 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
             <TotalRecovered data={ totalData }/>
         </BigNumberContainer>
 
-        <Styles.FlexContainer>
+        <FlexContainer>
             <FullWidthCard caption={ `Cases in ${ getParamValueFor(params, "areaName") } by date` }>
 
                 <TabLinkContainer>
@@ -175,13 +212,13 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
                         <DailyPlot data={ dailyData }/>
                     </TabLink>
                     <TabLink label={ "Data" }>
-                        <p>Data content</p>
+                        <DataTable args={ [dailyData, totalData] }/>
                     </TabLink>
 
                 </TabLinkContainer>
             </FullWidthCard>
             <FullWidthCard caption={ 'Confirmed cases rate by location' }/>
-        </Styles.FlexContainer>
+        </FlexContainer>
     </Fragment>
 
 };  // Cases
