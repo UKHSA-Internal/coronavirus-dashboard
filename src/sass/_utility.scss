@@ -5,6 +5,14 @@
     display: flex !important;
 }
 
+.util-flex-col {
+    flex-direction: column !important;
+}
+
+.util-flex-wrap {
+    flex-wrap: wrap !important;
+}
+
 .util-flex-justify-between {
     justify-content: space-between !important;
 }
