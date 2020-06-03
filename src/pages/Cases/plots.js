@@ -20,8 +20,8 @@ export const Plotter = ({ ...props }) => {
             toImageButtonOptions: {
                 format: 'png',
                 filename: 'export',
-                height: 768,
-                width: 1024,
+                height: 989,
+                width: 1600,
                 scale: 4
             }
         } }
