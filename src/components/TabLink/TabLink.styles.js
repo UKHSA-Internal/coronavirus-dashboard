@@ -9,7 +9,7 @@ export const MainContainer: ComponentType<*> = (() => {
     return styled.div`
     `;
 
-})();  // Container
+})();  // MainContainer
 
 
 export const Body: ComponentType<*> = (() => {
@@ -32,13 +32,13 @@ export const TabsList: ComponentType<*> = (() => {
 
     return styled.ul``;
 
-})();  // TabsContainer
+})();  // TabsList
 
 export const TabItem: ComponentType<*> = (() => {
 
     return styled.li``;
 
-})();  // TabsContainer
+})();  // TabItem
 
 export const TabItemLink: ComponentType<*> = (() => {
 
@@ -55,5 +55,5 @@ export const TabItemLink: ComponentType<*> = (() => {
         }
     `;
 
-})();  // Tab
+})();  // TabItemLink
 
