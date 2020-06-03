@@ -134,7 +134,7 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
             },
             "utla": {
                 key: "utla",
-                label: "upper-trier local authorities",
+                label: "upper-tier local authorities",
                 parent: "region",
             },
             "ltla": {

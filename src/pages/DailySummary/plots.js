@@ -9,6 +9,7 @@ export const Plotter = ({ ...props }) => {
             showLink: false,
             responsive: true,
             displaylogo: false,
+            staticPlot: true,
             modeBarButtonsToRemove: [
                 "autoScale2d",
                 "zoomIn2d",
@@ -20,31 +21,27 @@ export const Plotter = ({ ...props }) => {
             toImageButtonOptions: {
                 format: 'png',
                 filename: 'export',
-                height: 989,
-                width: 1600,
+                height: 1024,
+                width: 768,
                 scale: 4
             }
         } }
         useResizeHandler={ true }
         style={{ display: 'flex' }}
         layout={ {
-            height: 320,
+            // width: 400,
+            height: 240,
+            // autosize: true,
             legend: {
-                orientation: 'h',
-                font: {
-                    family: `"GDS Transport", Arial, sans-serif`,
-                    size: 16,
-                },
-                xanchor: 'auto',
-                y: -.2
+                orientation: 'h'
             },
-            showlegend: true,
+            showlegend: false,
             margin: {
-                l: 60,
-                r: 25,
-                b: 40,
-                t: 20,
-                pad: 5
+                l: 20,
+                r: 5,
+                b: 25,
+                t: 5,
+                pad: 0
             },
             xaxis: {
                 showgrid: false,
@@ -53,7 +50,7 @@ export const Plotter = ({ ...props }) => {
                 // tickangle: 30,
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
-                    size : 14,
+                    size : 10,
                     color: "#6f777b"
                 }
             },
@@ -61,7 +58,7 @@ export const Plotter = ({ ...props }) => {
                 tickformat: 's',
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
-                    size : 14,
+                    size : 10,
                     color: "#6f777b",
                 }
             },
