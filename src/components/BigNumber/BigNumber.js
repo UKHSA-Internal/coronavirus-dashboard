@@ -22,7 +22,9 @@ export const BigNumber: Component<Props> = ({ caption, number, title }: Props) =
             <h2 className="govuk-heading-s govuk-!-margin-bottom-0">
                 { title }
             </h2>
-            <h3 className="govuk-heading-l govuk-!-margin-bottom-2">{ numeral(number).format('0,0') }</h3>
+            <h3 className="govuk-heading-l govuk-!-margin-bottom-2">
+                { typeof number === 'number' ? numeral(number).format('0,0') : number }
+            </h3>
         </Styles.Container>
     );
 };
