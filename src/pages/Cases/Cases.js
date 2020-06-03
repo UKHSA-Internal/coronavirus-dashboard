@@ -31,12 +31,20 @@ const
             cases: "totalLabConfirmedCases",
             casesChange: "changeInTotalCases",
             casesPrev: "previouslyReportedTotalCases",
-            date: "specimenDate"
+            date: "specimenDate",
+            code: "areaCode"
         },
         dailyData: {
             cases: "dailyLabConfirmedCases",
             casesChange: "changeInDailyCases",
             casesPrev: "previouslyReportedDailyCases",
+            date: "specimenDate",
+            code: "areaCode"
+        },
+        dailyCollective:  {
+            rate: "dailyTotalLabConfirmedCasesRate",
+            code: "areaCode",
+            name: "areaName",
             date: "specimenDate"
         }
     };
@@ -215,33 +223,62 @@ const useGeoJSON = (type="countries") => {
 
 };
 
-const CasesMap = ({ data }) => {
+const CasesMap = ({ ...props }) => {
 
-    const geoData = useGeoJSON("countries");
+    const
+        geoData = useGeoJSON("ltlas"),
+        data = useApi(
+            [
+                {key: "areaType", sign: "=", value: "ltla"},
+            ],
+            Structures.dailyCollective,
+            [],
+            [
+                {key: "latestBy", value: "specimenDate", sign: "="}
+            ]
+        );
 
-    if ( !geoData ) return <MainLoading/>;
+    if ( !geoData || !data ) return <MainLoading/>
 
-    return <Mapper data={ [
+    const
+        sortedData = data.sort(({ code: a }, { code: b }) => (a < b) || -((a > b) || 0)),
+        rates = sortedData.map(item => item.rate),
+        codes = sortedData.map(item => item.code),
+        names = sortedData.map(item => item.name);
+
+    return <Mapper
+        data={ [
         {
-            type: 'scattermapbox',
-            // lon: geoData.features.map(f => f.properties.long),
-            // lat: geoData.features.map(f => f.properties.lat),
-            locations: [], // unpack(rows, 'CODE'),
-            // geoJSON: geoData,
-            featureidkey: [],
-            z: [], // unpack(rows, 'GDP (BILLIONS)'),
-            text: [], // unpack(rows, 'COUNTRY'),
+            type: 'choroplethmapbox',
+            geojson: 'https://c19pub.azureedge.net/assets/geo/ltlas_v1.geojson',
+            locations: codes,
+            featureidkey: 'properties.lad19cd',
+            text: names,
+            z: rates,
+            hoverinfo: 'text+z',
             colorscale: [
                 [0, 'rgb(5, 10, 172)'], [0.35, 'rgb(40, 60, 190)'],
                 [0.5, 'rgb(70, 100, 245)'], [0.6, 'rgb(90, 120, 245)'],
                 [0.7, 'rgb(106, 137, 247)'], [1, 'rgb(220, 220, 220)']],
             autocolorscale: false,
             reversescale: true,
-            center: {'lat': 55, 'lon': -2},
+            colorbar: {
+                thickness: 10,
+                thickfont: {
+                    family: `"GDS Transport", Arial, sans-serif`
+                },
+                title: "Rate per 100,000 resident population"
+            },
+            hoverlabel: {
+                font: {
+                    family: `"GDS Transport", Arial, sans-serif`
+                },
+            },
+            center: {'lat': 53.5, 'lon': -2},
             marker: {
                 line: {
-                    color: 'rgb(180,180,180)',
-                    width: 0.5
+                    color: 'rgb(104,104,104)',
+                    width: 1
                 }
             }
         }
@@ -285,7 +322,7 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
             </TabLinkContainer>
         </FullWidthCard>
         <FullWidthCard caption={ 'Confirmed cases rate by location' }>
-            <CasesMap data={ totalData }/>
+            <CasesMap/>
         </FullWidthCard>
     </Fragment>
 

@@ -76,7 +76,7 @@ export const Plotter = ({ ...props }) => {
 }; // Plotter
 
 
-export const Mapper = ({ ...props }) => {
+export const Mapper = ({ layers, ...props }) => {
 
     return <Plot
         config={ {
@@ -94,8 +94,8 @@ export const Mapper = ({ ...props }) => {
             toImageButtonOptions: {
                 format: 'png',
                 filename: 'export',
-                height: 1200,
-                width: 1200,
+                height: 600,
+                width: 600,
                 scale: 4
             }
         } }
@@ -104,23 +104,31 @@ export const Mapper = ({ ...props }) => {
         layout={ {
             barmode: 'stack',
             height: 500,
-            width: "50%",
+            geo: {
+                fitbounds: "geojson",
+                resolution: 50,
+                scope: "europe",
+                projection: {
+                    lon: 2,
+                    lat: 2,
+                    roll: 130,
+                }
+            },
             mapbox: {
                 style: URLs.mapStyle,
                 center: {
-                  lat: 55,
-                  lon: -2
+                  lat: 55.5,
+                  lon: -2.5
                 },
-                zoom: 4,
+                zoom: 4.2,
                 layers: [
                     {
                         sourcetype: 'geojson',
                         source: `${ URLs.baseGeo }countries_v1.geojson`,
                         type: 'line',
-                        color: '#575757',
+                        color: '#a3a3a3',
                         line: {
-                            width: 1,
-                            // dash: "dash",
+                            width: 1
                         }
                     },
                 ]
@@ -136,11 +144,11 @@ export const Mapper = ({ ...props }) => {
             },
             showlegend: true,
             margin: {
-                l: 60,
-                r: 25,
-                b: 40,
-                t: 20,
-                pad: 5
+                l: 0,
+                r: 5,
+                b: 0,
+                t: 0,
+                pad: 0
             },
             xaxis: {
                 showgrid: false,
