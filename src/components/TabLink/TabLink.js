@@ -4,7 +4,9 @@ import React, { useState } from "react";
 
 import {
     MainContainer,
-    TabsContainer,
+    TabsList,
+    TabItem,
+    TabItemLink,
     Body,
     Tab
 } from "./TabLink.styles";
@@ -32,15 +34,20 @@ export const TabLinkContainer = ({ children }: TabLinkContainerProps): React$Nod
 
     const [ current, setCurrent ] = useState(children[0].props.label);
 
-    return <MainContainer>
-        <TabsContainer>{
+    return <MainContainer className={ "util-flex util-flex-col" }>
+        <TabsList className={ "util-flex util-flex-wrap govuk-list" }>{
             children.map(({ props: { label } }, index) =>
-                <Tab type={ "link" }
-                     key={ `${label}-${index}` }
-                     className={ label === current ? 'active' : null }
-                     onClick={ () => setCurrent(label)  }>{ label }</Tab>
+                <TabItem className={ "govuk-!-margin-bottom-2 govuk-!-margin-right-7" }>
+                    <TabItemLink
+                        href={ "#" }
+                        key={ `${label}-${index}` }
+                        className={`govuk-link ${label === current ? 'active govuk-!-font-weight-bold' : '' }`}
+                        onClick={ () => setCurrent(label)  }>
+                        { label }
+                    </TabItemLink>
+                </TabItem>
             )
-        }</TabsContainer>
+        }</TabsList>
         {
             children.map(({ props: { label, children } }, index) =>
                 <Body

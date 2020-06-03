@@ -7,8 +7,6 @@ import type { ComponentType } from 'react';
 export const MainContainer: ComponentType<*> = (() => {
 
     return styled.div`
-    display: flex;
-    flex-direction: column;
     `;
 
 })();  // Container
@@ -18,7 +16,7 @@ export const Body: ComponentType<*> = (() => {
 
     return styled.div`
     width: 100%;
-    
+
     &.inactive {
         // Do not use "display: none" - It confuses
         // the graph's responsiveness.
@@ -30,35 +28,31 @@ export const Body: ComponentType<*> = (() => {
 })();  // Body
 
 
-export const TabsContainer: ComponentType<*> = (() => {
+export const TabsList: ComponentType<*> = (() => {
 
-    return styled.div``;
+    return styled.ul``;
 
 })();  // TabsContainer
 
+export const TabItem: ComponentType<*> = (() => {
 
-export const Tab: ComponentType<*> = (() => {
+    return styled.li``;
 
-    return styled.button`
-    padding: .5rem 1rem;
-    outline: none;
-    cursor: pointer;
-    color: blue;
-    margin-bottom: 5px;
-    margin-right: 5px;
-    border-color: blue;
-    
-    &.active {
-        margin-bottom: 0 !important;
-        border-bottom: 5px solid !important;
-    }
-    
-    &:hover,
-    &:active, 
-    &:focus {
-        margin-bottom: 4px;
-        border-bottom: 1px solid;
-    }
+})();  // TabsContainer
+
+export const TabItemLink: ComponentType<*> = (() => {
+
+    return styled.a`
+        text-decoration: none;
+        padding-bottom: 2px;
+
+        &:visited {
+            color: #1E70B8;
+        }
+
+        &.active:link {
+            border-bottom: 4px solid #1E70B8;
+        }
     `;
 
 })();  // Tab
