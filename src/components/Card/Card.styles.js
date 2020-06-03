@@ -30,8 +30,7 @@ export const FullWidthCardBody: ComponentType<*> = (() => {
     background-color: #f8f8f8;
     padding: 20px;
     border: 1px #f3f2f1 solid;
-    margin: 10px;
-    flex-basis: 100%;
+    margin-bottom: 30px;
   `;
 
   node.className = 'dashboard-panel'
