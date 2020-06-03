@@ -6,126 +6,38 @@ import { withRouter } from 'react-router';
 import moment from "moment";
 
 import { HalfWidthCard, VisualSection, ValueItem, ValueItemsSection } from 'components/Card';
-import URLs from 'common/urls';
-import type { Props } from './DailySummary.types';
+
 import * as Styles from './DailySummary.styles';
-import axios from 'axios';
-import Plot from 'react-plotly.js';
+
 import { max } from "d3-array";
 import { MainLoading } from "components/Loading";
-import { createQuery, getParams, sum } from "common/utils";
+import { getParams, sum } from "common/utils";
 
-import deepEqual from "deep-equal";
+import useApi from "hooks/useApi";
+
+import { Plotter } from "./plots";
 
 
-/**
- * Extracts the number of deaths from the latest date included in
- * the data, under: ``data.overview.K02000001.dailyDeaths``
- * @param data
- * @returns {number} Latest number of deaths or 0.
- */
-const getLatestDailyDeaths = (data: any): number => {
+const
+    DefaultParams = [
+        { key: 'areaName', sign: '=', value: 'United Kingdom' },
+        { key: 'areaType', sign: '=', value: 'overview' }
+    ],
+    Structures = {
+        data: {
+            dailyLabCases: "changeInDailyCases",
+            deathReportDate: "deathReportingDate",
+            specimenDate: "specimenDate",
+            deaths: "dailyChangeInDeaths",
+            cases: "dailyLabConfirmedCases"
+        }
+    };
 
-    const defaultDate = '0000.00.00';
-
-    try {
-        return data?.overview?.K02000001?.dailyDeaths?.sort((a, b) =>
-            new Date(b?.date ?? defaultDate) - new Date(a?.date ?? defaultDate)
-        )[0] ?? {}
-    } catch (e) {
-        return {}
-    }
-
-}; // getLatestDailyDeaths
-
-const formatStr = (s: string, replacements: ReplacementsType): string => {
-
-    for ( const key in replacements ) {
-
-        if ( !replacements.hasOwnProperty(key) ) continue
-
-        s = s.replace(`{${ key }}`, replacements?.[key] ?? "")
-
-    }
-
-    return s
-
-}; // formatStr
 
 export const timestamp = (data): string =>
     data.hasOwnProperty("metadata")
         ? moment(data?.metadata?.lastUpdatedAt).format("dddd D MMMM YYYY [at] h:mma")
         : "";
-
-
-const Plotter = ({ ...props }) => {
-
-    return <Plot
-        config={ {
-            showLink: false,
-            responsive: true,
-            displaylogo: false,
-            staticPlot: true,
-            modeBarButtonsToRemove: [
-                "autoScale2d",
-                "zoomIn2d",
-                "zoomOut2d",
-                "toggleSpikelines",
-                "hoverClosestCartesian",
-                "zoom2d"
-            ],
-            toImageButtonOptions: {
-                format: 'png',
-                filename: 'export',
-                height: 1024,
-                width: 768,
-                scale: 4
-            }
-        } }
-        useResizeHandler={ true }
-        style={{ display: 'flex' }}
-        layout={ {
-            // width: 400,
-            height: 240,
-            // autosize: true,
-            legend: {
-                orientation: 'h'
-            },
-            showlegend: false,
-            margin: {
-                l: 20,
-                r: 5,
-                b: 25,
-                t: 5,
-                pad: 0
-            },
-            xaxis: {
-                showgrid: false,
-                zeroline: false,
-                showline: false,
-                // tickangle: 30,
-                tickfont:{
-                    family: `"GDS Transport", Arial, sans-serif`,
-                    size : 10,
-                    color: "#6f777b"
-                }
-            },
-            yaxis: {
-                tickformat: 's',
-                tickfont:{
-                    family: `"GDS Transport", Arial, sans-serif`,
-                    size : 10,
-                    color: "#6f777b",
-                }
-            },
-            plot_bgcolor: "rgba(231,231,231,0)",
-            paper_bgcolor: "rgba(255,255,255,0)"
-        } }
-        {...props}
-    />
-
-}; // Plotter
-
 
 
 const groupByUniqueKey = (data, uniqueKeyName) => {
@@ -142,6 +54,8 @@ const groupByUniqueKey = (data, uniqueKeyName) => {
 
 
 const DeathsCard = ({ data }) => {
+
+    if ( !data ) return <MainLoading/>;
 
     const
         groupByDeathReportDate = groupByUniqueKey(data, 'deathReportDate'),
@@ -173,10 +87,12 @@ const DeathsCard = ({ data }) => {
         </ValueItemsSection>
     </HalfWidthCard>
 
-}
+};  // DeathsCard
 
 
 const HealthcareCard = ({ data }) => {
+
+    if ( !data ) return <MainLoading/>;
 
     return <HalfWidthCard caption={ "Healthcare" }>
         <VisualSection>
@@ -215,10 +131,12 @@ const HealthcareCard = ({ data }) => {
         </ValueItemsSection>
     </HalfWidthCard>
 
-}
+};  // HealthcareCard
 
 
 const CasesCard = ({ data }) => {
+
+    if ( !data ) return <MainLoading/>;
 
     const
         groupBySpecimenDate = groupByUniqueKey(data, 'specimenDate'),
@@ -270,10 +188,12 @@ const CasesCard = ({ data }) => {
         </ValueItemsSection>
     </HalfWidthCard>
 
-}
+};   // CasesCard
 
 
 const TestingCard = ({ data }) => {
+
+    if ( !data ) return <MainLoading/>;
 
     const
         testDate = groupByUniqueKey(data, 'testDate'),
@@ -312,112 +232,23 @@ const TestingCard = ({ data }) => {
         </ValueItemsSection>
     </HalfWidthCard>
 
-}
+};  // TestingCard
 
-export const objectsAreEqual = (...objects): boolean => {
+
+const DailySummary = ({ location: { search: query } }) => {
 
     const
-        keys = Object.keys(objects[0]),
-        nItems = keys.length;
+        urlParams = getParams(query),
+        params = urlParams.length ? urlParams : DefaultParams,
+        data = useApi(params, Structures.data);
 
-    // Check number of props
-    if ( !objects.every(item => Object.keys(item).length === nItems) ) return false;
+    return<Styles.FlexContainer>
+        <TestingCard data={ data }/>
+        <CasesCard data={ data }/>
+        <HealthcareCard data={ data }/>
+        <DeathsCard data={ data }/>
+    </Styles.FlexContainer>
 
-    // Check value equivalence
-    for ( const key of keys )
-        if ( !objects.every( item => item[key] === objects[0][key] ) )
-            return false;
-
-    return true
-
-}; // objectsAreEqual
-
-
-class DailySummary extends Component<{}, {}> {
-
-    defaultParams = [
-        { key: 'areaName', sign: '=', value: 'United Kingdom' },
-        { key: 'areaType', sign: '=', value: 'overview' }
-    ];
-
-    state = {
-        data: null,
-        params: this.defaultParams
-    }
-
-    getData = async () => {
-
-        const
-            { params } = this.state,
-            urlParams = createQuery([
-                {
-                    key: 'filters',
-                    sign: '=',
-                    value: createQuery(params.length ? params : this.defaultParams, ";", "")
-                },
-                {
-                    key: 'structure',
-                    sign: '=',
-                    value: JSON.stringify({
-                        dailyLabCases: "changeInDailyCases",
-                        deathReportDate: "deathReportingDate",
-                        specimenDate: "specimenDate",
-                        deaths: "dailyChangeInDeaths",
-                        cases: "dailyLabConfirmedCases"
-                    })
-                }
-            ]),
-            { data: { data = [] } } = await axios.get(URLs.api + encodeURI(urlParams));
-
-        this.setState({ data: data })
-
-    };
-
-    componentDidMount(): * {
-
-        // ToDo: This should be done for every page in the "app.js".
-        const base = document.querySelector("head>base");
-        base.href = document.location.pathname;
-
-        this.setState((prevState, prevProps) => ({
-                params: [
-                    ...prevState.params,
-                    ...getParams(prevProps?.location?.search ?? "")
-                ]
-            }),
-            this.getData
-        )
-
-    }
-
-    componentDidUpdate(prevProps: Props, prevState: State, prevContext: *): * {
-
-        const
-            { location: { search: prevParams="" } } = prevProps,
-            { location: { search: thisParams="" } } = this.props,
-            prevParamsObj = getParams(prevParams),
-            thisParamsObj = getParams(thisParams);
-
-        if (!deepEqual(prevParamsObj, thisParamsObj))
-            this.setState({ params: thisParamsObj }, this.getData)
-
-    }
-
-    render(): React$Node {
-
-        const { data } = this.state;
-
-        if ( !data ) return <MainLoading/>
-
-        return<Styles.FlexContainer>
-            <TestingCard data={ data }/>
-            <CasesCard data={ data }/>
-            <HealthcareCard data={ data }/>
-            <DeathsCard data={ data }/>
-        </Styles.FlexContainer>
-
-    }
-
-}
+};  // DailySummary
 
 export default withRouter(DailySummary)
