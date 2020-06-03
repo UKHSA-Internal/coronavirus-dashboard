@@ -28,32 +28,24 @@ export const Body: ComponentType<*> = (() => {
 })();  // Body
 
 
-export const TabsList: ComponentType<*> = (() => {
+export const TabsContainer: ComponentType<*> = (() => {
 
-    return styled.ul``;
+    return styled.div``;
 
-})();  // TabsList
+})();  // TabsContainer
 
-export const TabItem: ComponentType<*> = (() => {
 
-    return styled.li``;
+export const Tab: ComponentType<*> = (() => {
 
-})();  // TabItem
-
-export const TabItemLink: ComponentType<*> = (() => {
-
-    return styled.a`
-        text-decoration: none;
+    return styled.button`
+        color: #1E70B8;
         padding-bottom: 2px;
 
-        &:visited {
+        &.active {
             color: #1E70B8;
-        }
-
-        &.active:link {
             border-bottom: 4px solid #1E70B8;
         }
     `;
 
-})();  // TabItemLink
+})();  // Tab
 
