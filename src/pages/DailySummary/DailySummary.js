@@ -13,7 +13,7 @@ import axios from 'axios';
 import Plot from 'react-plotly.js';
 import { max } from "d3-array";
 import { MainLoading } from "components/Loading";
-import { createQuery, getParams } from "common/utils";
+import { createQuery, getParams, sum } from "common/utils";
 
 import deepEqual from "deep-equal";
 
@@ -56,16 +56,6 @@ export const timestamp = (data): string =>
     data.hasOwnProperty("metadata")
         ? moment(data?.metadata?.lastUpdatedAt).format("dddd D MMMM YYYY [at] h:mma")
         : "";
-
-
-const sum = (arr, key) => {
-
-    return arr.reduce((acc, item) => {
-        acc = acc + key(item)
-        return acc
-    }, 0)
-
-}
 
 
 const Plotter = ({ ...props }) => {
