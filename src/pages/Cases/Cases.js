@@ -551,18 +551,17 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
     const
         urlParams = getParams(query),
         params = urlParams.length ? urlParams : DefaultParams,
-        dailyData = useApi(params, Structures.dailyData),
-        totalData = useApi(params, Structures.totalData),
-        dailyCollectiveData = useApi(
-                [
-                    {key: "areaType", sign: "=", value: "ltla"},
-                ],
-                Structures.dailyCollective,
-                [],
-                [
-                    {key: "latestBy", value: "specimenDate", sign: "="}
-                ]
-            );
+        dailyData = useApi({conjunctiveFilters: params, structure: Structures.dailyData}),
+        totalData = useApi({conjunctiveFilters: params, structure: Structures.totalData}),
+        dailyCollectiveData = useApi({
+            conjunctiveParams: [
+                { key: "areaType", sign: "=", value: "ltla" },
+            ],
+            structure: Structures.dailyCollective,
+            extraParams: [
+                { key: "latestBy", value: "specimenDate", sign: "=" }
+            ]
+        });
 
     return <Fragment>
         <BigNumberContainer>
