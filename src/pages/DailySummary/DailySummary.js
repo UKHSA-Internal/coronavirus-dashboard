@@ -11,7 +11,7 @@ import { Container } from './DailySummary.styles';
 
 import { max } from "d3-array";
 import { MainLoading } from "components/Loading";
-import { getParams, sum } from "common/utils";
+import { getParams, sum, movingAverage } from "common/utils";
 
 import useApi from "hooks/useApi";
 
@@ -68,7 +68,7 @@ const DeathsCard = ({ data }) => {
                     {
                         name: "Total lab-confirmed cases",
                         x: data.map(item => item?.deathReportDate ?? ""),
-                        y: data.map(item => item?.deaths ?? 0),
+                        y: movingAverage(data.map(item => (item?.deaths ?? 0) || 0), 7),
                         type: 'scatter',
                         fill: 'tozeroy',
                         fillcolor: 'rgba(43,140,196,0.2)'
@@ -152,7 +152,7 @@ const CasesCard = ({ data }) => {
                     {
                         name: "Cases",
                         x: data.map(item => item?.specimenDate ?? ""),
-                        y: data.map(item => item?.cases ?? 0),
+                        y: movingAverage(data.map(item => item?.cases ?? 0), 7),
                         fill: 'tozeroy',
                         fillcolor: 'rgba(43,140,196,0.2)'
                     },

@@ -27,7 +27,7 @@ const usePrevious = (value) => {
 };  // usePrevious
 
 
-const useApi = ( params: ParsedParams, structure: useApiStructureInput, defaultResponse: useApiResponseInput=[] ): useApiResponse => {
+const useApi = ( params: ParsedParams, structure: useApiStructureInput, defaultResponse: useApiResponseInput=[], extraParams: ParsedParams=[] ): useApiResponse => {
 
     const
         [ data, setData ] = useState(defaultResponse),
@@ -41,6 +41,7 @@ const useApi = ( params: ParsedParams, structure: useApiStructureInput, defaultR
                 sign: '=',
                 value: createQuery(params, ";", "")
             },
+            ...extraParams,
             {
                 key: 'structure',
                 sign: '=',
@@ -60,7 +61,7 @@ const useApi = ( params: ParsedParams, structure: useApiStructureInput, defaultR
 
         })()
 
-    }, [ params ])
+    }, [ params, extraParams, structure ])
 
     return data
 

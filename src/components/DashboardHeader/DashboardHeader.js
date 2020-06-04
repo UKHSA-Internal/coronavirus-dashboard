@@ -34,7 +34,7 @@ import type { Props } from './DashboardHeader.types';
 
 // Global constants
 const PathNameMapper = {
-    "/": "Daily Summary",
+    "/": "UK Summary",
     "/cases": "Cases",
     "/tests": "Tests",
     "/healthcare": "Healthcare",
@@ -47,6 +47,7 @@ const PathNameMapper = {
 
 
 const NoPickerPaths = [
+    "/",
     "/about-data",
     "/cookies",
     "/accessibility",

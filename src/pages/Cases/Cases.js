@@ -10,12 +10,14 @@ import type { Props } from './Cases.types';
 import { Table } from './Cases.styles';
 
 import { getParams, getParamValueFor, movingAverage, firstObjWithMax } from "common/utils";
-import { Plotter } from "./plots";
+import { Plotter, Mapper } from "./plots";
 import { MainLoading } from "components/Loading";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
 import { zip } from "d3-array";
-import numeral from "numeral"
+import numeral from "numeral";
+import axios from "axios";
+import URLs from "../../common/urls";
 
 
 const
@@ -28,12 +30,20 @@ const
             cases: "totalLabConfirmedCases",
             casesChange: "changeInTotalCases",
             casesPrev: "previouslyReportedTotalCases",
-            date: "specimenDate"
+            date: "specimenDate",
+            code: "areaCode"
         },
         dailyData: {
             cases: "dailyLabConfirmedCases",
             casesChange: "changeInDailyCases",
             casesPrev: "previouslyReportedDailyCases",
+            date: "specimenDate",
+            code: "areaCode"
+        },
+        dailyCollective:  {
+            rate: "dailyTotalLabConfirmedCasesRate",
+            code: "areaCode",
+            name: "areaName",
             date: "specimenDate"
         }
     };
@@ -74,7 +84,7 @@ const DailyPlot = ({ data }) => {
     return <Plotter
         data={ [
             {
-                name: "Daily cases",
+                name: "Previously reported",
                 x: data.map(item => item?.date ?? ""),
                 y: data.map(item => Math.min(item?.casesPrev ?? 0, item?.casesPrev ?? 0 + item?.casesChange ?? 0)),
                 fill: 'tozeroy',
@@ -84,7 +94,7 @@ const DailyPlot = ({ data }) => {
                 }
             },
             {
-                name: "Daily cases",
+                name: "Newly reported",
                 x: data.map(item => item?.date ?? ""),
                 y: data.map(item => Math.max(item?.casesChange ?? 0, 0)),
                 fill: 'tozeroy',
@@ -94,7 +104,7 @@ const DailyPlot = ({ data }) => {
                 }
             },
             {
-                name: "Rolling average",
+                name: "Rolling average of the total",
                 x: data.map(item => item?.date ?? ""),
                 y: average,
                 type: "line",
@@ -192,6 +202,90 @@ const DataTable = ({ args }) => {
 };  // DataTable
 
 
+const useGeoJSON = (type="countries") => {
+
+    const [ data, setData ] = useState(null);
+
+    useEffect(() => {
+
+        (async () => {
+            const { data } = await axios.get(
+                `${ type }_v1.geojson`,
+                { baseURL: URLs.baseGeo }
+            );
+            setData(data)
+        })()
+
+    }, [ type ]);
+
+    return data
+
+};
+
+const CasesMap = ({ ...props }) => {
+
+    const
+        geoData = useGeoJSON("ltlas"),
+        data = useApi(
+            [
+                {key: "areaType", sign: "=", value: "ltla"},
+            ],
+            Structures.dailyCollective,
+            [],
+            [
+                {key: "latestBy", value: "specimenDate", sign: "="}
+            ]
+        );
+
+    if ( !geoData || !data ) return <MainLoading/>
+
+    const
+        sortedData = data.sort(({ code: a }, { code: b }) => (a < b) || -((a > b) || 0)),
+        rates = sortedData.map(item => item.rate),
+        codes = sortedData.map(item => item.code),
+        names = sortedData.map(item => item.name);
+
+    return <Mapper
+        data={ [
+        {
+            type: 'choroplethmapbox',
+            geojson: 'https://c19pub.azureedge.net/assets/geo/ltlas_v1.geojson',
+            locations: codes,
+            featureidkey: 'properties.lad19cd',
+            text: names,
+            z: rates,
+            hoverinfo: 'text+z',
+            colorscale: [
+                [0, 'rgba(0, 94, 165, 1)'],
+                [1, 'rgba(0, 94, 165, 0)']
+            ],
+            autocolorscale: false,
+            reversescale: true,
+            colorbar: {
+                thickness: 10,
+                thickfont: {
+                    family: `"GDS Transport", Arial, sans-serif`
+                },
+                // title: "Rate per 100,000 resident population"
+            },
+            hoverlabel: {
+                font: {
+                    family: `"GDS Transport", Arial, sans-serif`
+                },
+            },
+            center: {'lat': 53.5, 'lon': -2},
+            marker: {
+                line: {
+                    color: '#fff',
+                    width: 1
+                }
+            }
+        }
+    ] }/>
+
+};  // CasesMap
+
+
 const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
     // ToDo: This should be done for every page in the "app.js".
@@ -226,7 +320,9 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
             </TabLinkContainer>
         </FullWidthCard>
-        <FullWidthCard caption={ 'Confirmed cases rate by location' }/>
+        <FullWidthCard caption={ 'Confirmed cases rate by location' }>
+            <CasesMap/>
+        </FullWidthCard>
     </Fragment>
 
 };  // Cases
