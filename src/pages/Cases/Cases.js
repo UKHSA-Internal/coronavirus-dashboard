@@ -13,7 +13,6 @@ import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import Loading from "components/Loading";
 
-
 const
     DefaultParams = [
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
