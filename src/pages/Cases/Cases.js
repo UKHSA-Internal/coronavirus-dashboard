@@ -596,7 +596,7 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
             <TotalRecovered data={ totalData }/>
         </BigNumberContainer>
 
-        <FullWidthCard caption={ `Cases in ${ getParamValueFor(params, "areaName") } by date` }>
+        <FullWidthCard heading={ `Cases in ${ getParamValueFor(params, "areaName") } by date` } caption={ "All time total" }>
 
             <TabLinkContainer>
                 <TabLink label={ "Cumulative" }>
@@ -611,11 +611,8 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
             </TabLinkContainer>
         </FullWidthCard>
-        <FullWidthCard caption={ 'Confirmed cases rate by location' }>
-            {/*<FlexContainer>*/}
-                <CasesMap data={ dailyCollectiveData }/>
-                {/*<CasesMap data={ dailyCollectiveData }/>*/}
-            {/*</FlexContainer>*/}
+        <FullWidthCard heading={ 'Confirmed cases rate by location' } caption={ "All time total" }>
+            <CasesMap data={ dailyCollectiveData }/>
         </FullWidthCard>
     </Fragment>
 

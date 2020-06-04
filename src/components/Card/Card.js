@@ -56,11 +56,11 @@ const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
 }; // ValueItemContainer
 
 
-const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", children }: Props) => {
+const HalfWidthCard: ComponentType<Props> = ({ heading="Placeholder", children }: Props) => {
 
     return <CardBody>
         <header className={ "util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
-            <h2 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>{ caption }</h2>
+            <h2 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>{ heading }</h2>
             <Link to={ "tests"} className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>More detail</Link>
         </header>
 
@@ -73,14 +73,34 @@ const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", children }
 };
 
 
-const FullWidthCard: ComponentType<Props> = ({ caption, children }: Props) => {
+const FullWidthCard: ComponentType<Props> = ({ heading="Placeholder", caption, children }: Props) => {
 
     return <FullWidthCardBody>
-        <header className={ "util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
-            <h2 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>{ caption }</h2>
+        <header className={ "util-flex util-flex-wrap util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
+            <h2 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>
+                <span className={ "govuk-caption-m" }>{ caption }</span>
+                { heading }
+            </h2>
+            <div>
+                <form>
+                    <fieldset className={ "govuk-fieldset" }>
+                        <div className={ "govuk-radios govuk-radios--small govuk-radios--inline" }>
+                            <div className={ "govuk-radios__item" }>
+                                <input className={ "govuk-radios__input" } id="changed-name" name="changed-name" type="radio" value="month" />
+                                <label className={ "govuk-label govuk-radios__label" } htmlFor="changed-name">By specimen date
+                                </label>
+                            </div>
+                            <div className={ "govuk-radios__item" }>
+                                <input className={ "govuk-radios__input" } id="changed-name-2" name="changed-name" type="radio" value="year" />
+                                <label className={ "govuk-label govuk-radios__label" } htmlFor="changed-name-2">By reported date
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
         </header>
 
-        <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
 
         { children }
 
