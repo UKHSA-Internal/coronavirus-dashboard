@@ -98,14 +98,8 @@ export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionC
 
     const params = [];
 
-    for ( let index = 0; index < args.length; index ++ ) {
-
-        const
-            { key, sign, value } = args[index];
-
-        params.push(encodeURI(`${key}${sign}${value}`))
-
-    }
+    for ( const { key, sign, value } of args )
+        params.push(encodeURI(`${key}${sign}${value}`));
 
     return definitionChar + params.join(joinBy)
 
