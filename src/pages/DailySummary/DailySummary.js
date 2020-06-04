@@ -82,7 +82,7 @@ const DeathsCard = ({ data }) => {
                 value={  groupByDeathReportDate[maxDeathReportDate]?.deaths ?? 0 }
                 description={ 'Total all time' }
                 descriptionValue={ sum(data, item => item?.deaths ?? 0) }
-                colourName={ 'blue' }
+                colourValue={ '#2B8CC4' }
             />
         </ValueItemsSection>
     </HalfWidthCard>
@@ -115,7 +115,7 @@ const HealthcareCard = ({ data }) => {
                 value={ max(data, item => item?.dischargeDate ?? 0)?.discharged ?? 0}
                 description={ 'Total all time' }
                 descriptionValue={ sum(data, item => item?.discharged ?? 0) }
-                colourName={ 'blue' }
+                colourValue={ '#2B8CC4' }
             />
             <ValueItem
                 label={ "In hospital" }
@@ -123,10 +123,13 @@ const HealthcareCard = ({ data }) => {
                 description={ 'Occupancy' }
                 descriptionValue={ 0 }
                 descriptionSign={ "%" }
+                colourValue={ '#F47738' }
+
             />
             <ValueItem
                 label={ "Hospital breakdown" }
                 value={ 0 }
+                colourValue={ '#6F777B' }
             />
         </ValueItemsSection>
     </HalfWidthCard>
@@ -173,13 +176,14 @@ const CasesCard = ({ data }) => {
                 value={ sum(data, item => item?.dailyLabCases ?? 0) }
                 description={ 'Total all time' }
                 descriptionValue={ sum(data, item => item?.cases ?? 0) }
-                colourName={ 'blue' }
+                colourValue={ '#2B8CC4' }
             />
             <ValueItem
                 label={ "No. of people tested" }
                 value={ groupByTestDate[testDate]?.tests ?? 0 }
                 description={ 'Total all time' }
                 descriptionValue={ sum(data, item => item?.tests ?? 0) }
+                colourValue={ '#6F777B' }
             />
             <ValueItem
                 label={ "Patients recovered" }
@@ -223,11 +227,12 @@ const TestingCard = ({ data }) => {
                 value={ testDate[maxTestDate]?.tests ?? 0}
                 description={ 'Total all time' }
                 descriptionValue={ sum(data, item => item?.tests ?? 0) }
-                colourName={ 'blue' }
+                colourValue={ '#2B8CC4' }
             />
             <ValueItem
                 label={ "Planned lab capacity" }
                 value={ labCapacityDate[maxLabCapacityDate]?.labCapacity ?? 0 }
+                colourValue={ '#6F777B' }
             />
         </ValueItemsSection>
     </HalfWidthCard>

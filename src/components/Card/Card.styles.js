@@ -8,7 +8,7 @@ import addIECss from 'addIECss';
 
 export const CardBody: ComponentType<*> = (() => {
 
-  const node = styled.article`
+  return styled.article`
     flex: 1 1 43%;
     padding: 20px;
     margin: 15px;
@@ -16,15 +16,12 @@ export const CardBody: ComponentType<*> = (() => {
     border: 1px #f3f2f1 solid;
   `;
 
-  node.className = 'dashboard-panel'
-
-  return node
-
 })();
+
 
 export const FullWidthCardBody: ComponentType<*> = (() => {
 
-  const node = styled.article`
+  return styled.article`
     flex: 1 1 auto;
     padding: 20px;
     margin-bottom: 30px;
@@ -32,26 +29,6 @@ export const FullWidthCardBody: ComponentType<*> = (() => {
     border: 1px #f3f2f1 solid;
   `;
 
-  node.className = 'dashboard-panel'
-
-  return node
-
-})();
-
-export const Caption: ComponentType<*> = (() => {
-  return styled.span`
-    margin-bottom: 5px;
-    font-size: 16px;
-    color: #626a63;
-  `;
-})();
-
-export const Title: ComponentType<*> = (() => {
-  return styled.h1``;
-})();
-
-export const Subtitle: ComponentType<*> = (() => {
-  return styled.span``;
 })();
 
 
@@ -67,3 +44,37 @@ export const CardDescription: ComponentType<*> = (() => {
             {...props}/>
 
 })();
+
+
+export const DataColour: ComponentType<*> = (() => {
+
+  return styled.div`
+    float: left;
+    width: 10px;
+    height: 10px;
+    margin: 6px 6px 6px 0;
+    background: ${props => props.colour};
+    border: 1px solid #000;
+    box-shadow:inset 0px 0px 0px 1px #ffffff;
+  `;
+
+})();
+
+
+export const DataLabel: ComponentType<*> = (() => {
+
+  return styled.div`
+    margin-left: 16px;
+  `;
+
+})();
+
+
+export const DataValue: ComponentType<*> = (() => {
+
+  return styled.div`
+    margin-left: 16px;
+  `;
+
+})();
+
