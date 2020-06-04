@@ -257,9 +257,9 @@ const CasesMap = ({ ...props }) => {
             z: rates,
             hoverinfo: 'text+z',
             colorscale: [
-                [0, 'rgb(5, 10, 172)'], [0.35, 'rgb(40, 60, 190)'],
-                [0.5, 'rgb(70, 100, 245)'], [0.6, 'rgb(90, 120, 245)'],
-                [0.7, 'rgb(106, 137, 247)'], [1, 'rgb(220, 220, 220)']],
+                [0, 'rgba(0, 94, 165, 1)'],
+                [1, 'rgba(0, 94, 165, 0)']
+            ],
             autocolorscale: false,
             reversescale: true,
             colorbar: {
@@ -267,7 +267,7 @@ const CasesMap = ({ ...props }) => {
                 thickfont: {
                     family: `"GDS Transport", Arial, sans-serif`
                 },
-                title: "Rate per 100,000 resident population"
+                // title: "Rate per 100,000 resident population"
             },
             hoverlabel: {
                 font: {
@@ -277,7 +277,7 @@ const CasesMap = ({ ...props }) => {
             center: {'lat': 53.5, 'lon': -2},
             marker: {
                 line: {
-                    color: 'rgb(104,104,104)',
+                    color: '#fff',
                     width: 1
                 }
             }
