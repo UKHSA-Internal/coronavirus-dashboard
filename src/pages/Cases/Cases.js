@@ -20,7 +20,6 @@ import axios from "axios";
 import URLs from "../../common/urls";
 
 
-
 const
     DefaultParams = [
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
