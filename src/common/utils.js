@@ -101,19 +101,7 @@ export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionC
     for ( let index = 0; index < args.length; index ++ ) {
 
         const
-            { key, sign, value } = args[index],
-            existingValueIndex = params.reduce(
-                (acc, item, ind) =>
-                    item.startsWith(encodeURI(`${key}${sign}`))
-                        ? ind
-                        : acc,
-                -1
-            );
-
-        if (existingValueIndex > -1) {
-            params[existingValueIndex] = encodeURI(`${key}${sign}${value}`)
-            continue
-        }
+            { key, sign, value } = args[index];
 
         params.push(encodeURI(`${key}${sign}${value}`))
 
