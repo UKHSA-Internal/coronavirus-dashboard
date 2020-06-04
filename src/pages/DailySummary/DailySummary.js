@@ -61,7 +61,7 @@ const DeathsCard = ({ data }) => {
         groupByDeathReportDate = groupByUniqueKey(data, 'deathReportDate'),
         maxDeathReportDate = max(Object.keys(groupByDeathReportDate));
 
-    return <HalfWidthCard caption={ "Deaths" }>
+    return <HalfWidthCard heading={ "Deaths" }>
         <VisualSection>
             <Plotter
                 data={ [
@@ -94,7 +94,7 @@ const HealthcareCard = ({ data }) => {
 
     if ( !data ) return <MainLoading/>;
 
-    return <HalfWidthCard caption={ "Healthcare" }>
+    return <HalfWidthCard heading={ "Healthcare" }>
         <VisualSection>
             <Plotter
                 data={ [
@@ -145,7 +145,7 @@ const CasesCard = ({ data }) => {
         testDate = max(Object.keys(groupByTestDate));
 
 
-    return <HalfWidthCard caption={ "Cases" }>
+    return <HalfWidthCard heading={ "Cases" }>
         <VisualSection>
             <Plotter
                 data={ [
@@ -202,7 +202,7 @@ const TestingCard = ({ data }) => {
         maxLabCapacityDate = max(Object.keys(labCapacityDate));
 
 
-    return <HalfWidthCard caption={ "Testing" }>
+    return <HalfWidthCard heading={ "Testing" }>
         <VisualSection>
             <Plotter
                 data={ [
