@@ -9,12 +9,11 @@ import addIECss from 'addIECss';
 export const CardBody: ComponentType<*> = (() => {
 
   const node = styled.article`
-    flex: 1 1 auto;
-    background-color: #f8f8f8;
+    flex: 1 1 43%;
     padding: 20px;
+    margin: 15px;
+    background-color: #f8f8f8;
     border: 1px #f3f2f1 solid;
-    margin: 10px;
-    flex-basis: 43%;
   `;
 
   node.className = 'dashboard-panel'
@@ -27,10 +26,10 @@ export const FullWidthCardBody: ComponentType<*> = (() => {
 
   const node = styled.article`
     flex: 1 1 auto;
-    background-color: #f8f8f8;
     padding: 20px;
-    border: 1px #f3f2f1 solid;
     margin-bottom: 30px;
+    background-color: #f8f8f8;
+    border: 1px #f3f2f1 solid;
   `;
 
   node.className = 'dashboard-panel'

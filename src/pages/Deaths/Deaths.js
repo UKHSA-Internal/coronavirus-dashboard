@@ -5,7 +5,7 @@ import type { ComponentType } from 'react';
 
 import { HalfWidthCard } from 'components/Card';
 import type { Props } from './Deaths.types';
-import * as Styles from './Deaths.styles';
+import { Container } from './Deaths.styles';
 
 
 const Deaths: ComponentType<Props> = ({ }: Props) => {
@@ -15,10 +15,10 @@ const Deaths: ComponentType<Props> = ({ }: Props) => {
     base.href = document.location.pathname;
 
 
-    return <Styles.FlexContainer>
+    return <Container className={ "util-flex util-flex-wrap" }>
         <HalfWidthCard />
         <HalfWidthCard />
-    </Styles.FlexContainer>
+    </Container>
 
 };
 

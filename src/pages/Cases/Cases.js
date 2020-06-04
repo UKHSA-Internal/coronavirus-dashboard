@@ -21,7 +21,6 @@ import URLs from "../../common/urls";
 import Plot from "react-plotly.js";
 
 
-
 const
     DefaultParams = [
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
