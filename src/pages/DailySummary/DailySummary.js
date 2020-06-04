@@ -55,7 +55,15 @@ const groupByUniqueKey = (data, uniqueKeyName) => {
 
 const DeathsCard = ({ data }) => {
 
-    if ( !data ) return <MainLoading/>;
+    const nationalData = useApi({
+        conjunctiveFilters: [
+            { key: "areaType", sign: "=", value: "nation" }
+        ],
+        structure: { name: "areaName", death: "dailyChangeInDeaths" },
+        extraParams: [{ key: "latestBy", sign: "=", value: "deathReportingDate" }]
+    });
+
+    if ( !data || !nationalData ) return <MainLoading/>;
 
     const
         deathReportDate =  data.map(item => item?.deathReportDate ?? ""),
@@ -87,6 +95,61 @@ const DeathsCard = ({ data }) => {
                 descriptionValue={ sum(deaths) }
                 colourValue={ '#2B8CC4' }
             />
+            <div>
+                <Plotter
+                    data={[
+                        {
+                            name: "Previously reported",
+                            y: nationalData.map(({ name="" }) => name.replace(/Northern Ireland/g, "NI")),
+                            x: nationalData.map(item => item?.death ?? ""),
+                            text: nationalData.map(item => item?.death ?? ""),
+                            type: "bar",
+                            orientation: "h",
+                            width: 0.7,
+                            mode: 'marker+text',
+                            marker: {
+                                color: '#5a9dd5'
+                            },
+                            texttemplate: '%{text:s}',
+                            textposition: 'auto',
+                            cliponaxis: true,
+                            showlegend: false,
+                            textfont: {
+                                color: '#0d4b7b',
+                                family: `"GDS Transport", Arial, sans-serif`,
+                                size: 11
+                            }
+                        }
+                    ]}
+                    layout={{
+                        margin: {
+                            l: 57,
+                            r: 0,
+                            b: 0,
+                            t: 0,
+                            pad: 5
+                        },
+                        offset: .1,
+                        yaxis: {
+                            tickfont:{
+                                family: `"GDS Transport", Arial, sans-serif`,
+                                size : 13,
+                                color: "#6f777b",
+                            },
+                            layer: "below traces"
+                        },
+                        xaxis: {
+                            visible: false,
+                            layer: "below traces"
+                        },
+                        height: 110,
+                        uniformtext: {
+                            minsize: 8,
+                            mode: 'hide'
+                        }
+                    }}
+                />
+            </div>
         </ValueItemsSection>
     </HalfWidthCard>
 
@@ -248,7 +311,7 @@ const DailySummary = ({ location: { search: query } }) => {
     const
         urlParams = getParams(query),
         params = urlParams.length ? urlParams : DefaultParams,
-        data = useApi(params, Structures.data);
+        data = useApi({ conjunctiveFilters: params, structure: Structures.data });
 
     return <Container className={ "util-flex util-flex-wrap" }>
         <TestingCard data={ data }/>
