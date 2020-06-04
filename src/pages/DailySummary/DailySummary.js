@@ -70,7 +70,9 @@ const DeathsCard = ({ data }) => {
         deaths = data.map(item => (item?.deaths ?? 0) || 0),
         deathsMovingAverage = movingAverage(deaths, 7),
         groupByDeathReportDate = groupByUniqueKey(data, 'deathReportDate'),
-        maxDeathReportDate = max(Object.keys(groupByDeathReportDate));
+        maxDeathReportDate = max(Object.keys(groupByDeathReportDate)),
+        nationalDataDeaths = nationalData.map(item => item?.death ?? ""),
+        maxDeath = max(nationalDataDeaths);
 
     return <HalfWidthCard heading={ "Deaths" }>
         <VisualSection>
@@ -101,21 +103,21 @@ const DeathsCard = ({ data }) => {
                         {
                             name: "Previously reported",
                             y: nationalData.map(({ name="" }) => name.replace(/Northern Ireland/g, "NI")),
-                            x: nationalData.map(item => item?.death ?? ""),
-                            text: nationalData.map(item => item?.death ?? ""),
+                            x: nationalDataDeaths,
+                            text: nationalDataDeaths,
                             type: "bar",
                             orientation: "h",
                             width: 0.7,
                             mode: 'marker+text',
                             marker: {
-                                color: '#5a9dd5'
+                                color: '#005EA5'
                             },
                             texttemplate: '%{text:s}',
                             textposition: 'auto',
                             cliponaxis: true,
                             showlegend: false,
                             textfont: {
-                                color: '#0d4b7b',
+                                color: nationalDataDeaths.map(item => item === maxDeath ? '#fff' :  '#005EA5'),
                                 family: `"GDS Transport", Arial, sans-serif`,
                                 size: 11
                             }
