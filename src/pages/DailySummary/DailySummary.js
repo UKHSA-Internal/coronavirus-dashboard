@@ -93,7 +93,7 @@ const DeathsCard = ({ data }) => {
             <ValueItem
                 label={ "Confirmed COVID-19 associated deaths" }
                 value={  groupByDeathReportDate[maxDeathReportDate]?.deaths ?? 0 }
-                description={ 'Total all time' }
+                description={ 'Total' }
                 descriptionValue={ sum(deaths) }
                 colourValue={ '#2B8CC4' }
             />
@@ -181,7 +181,7 @@ const HealthcareCard = ({ data }) => {
             <ValueItem
                 label={ "Discharged" }
                 value={ max(data, item => item?.dischargeDate ?? 0)?.discharged ?? 0}
-                description={ 'Total all time' }
+                description={ 'Total' }
                 descriptionValue={ sum(data, item => item?.discharged ?? 0) }
                 colourValue={ '#2B8CC4' }
             />
@@ -242,14 +242,14 @@ const CasesCard = ({ data }) => {
                 label={ "Lab-confirmed" }
                 // value={ groupBySpecimenDate[maxSpecimenDate]?.cases ?? 0 }
                 value={ sum(data, item => item?.dailyLabCases ?? 0) }
-                description={ 'Total all time' }
+                description={ 'Total' }
                 descriptionValue={ sum(data, item => item?.cases ?? 0) }
                 colourValue={ '#2B8CC4' }
             />
             <ValueItem
                 label={ "No. of people tested" }
                 value={ groupByTestDate[testDate]?.tests ?? 0 }
-                description={ 'Total all time' }
+                description={ 'Total' }
                 descriptionValue={ sum(data, item => item?.tests ?? 0) }
                 colourValue={ '#6F777B' }
             />
@@ -293,7 +293,7 @@ const TestingCard = ({ data }) => {
             <ValueItem
                 label={ "No. of test" }
                 value={ testDate[maxTestDate]?.tests ?? 0}
-                description={ 'Total all time' }
+                description={ 'Total' }
                 descriptionValue={ sum(data, item => item?.tests ?? 0) }
                 colourValue={ '#2B8CC4' }
             />
