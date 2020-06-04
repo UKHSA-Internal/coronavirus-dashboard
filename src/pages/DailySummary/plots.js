@@ -2,7 +2,7 @@ import React from "react";
 import Plot from "react-plotly.js";
 
 
-export const Plotter = ({ ...props }) => {
+export const Plotter = ({ layout, ...props }) => {
 
     return <Plot
         config={ {
@@ -63,7 +63,8 @@ export const Plotter = ({ ...props }) => {
                 }
             },
             plot_bgcolor: "rgba(231,231,231,0)",
-            paper_bgcolor: "rgba(255,255,255,0)"
+            paper_bgcolor: "rgba(255,255,255,0)",
+            ...layout
         } }
         {...props}
     />
