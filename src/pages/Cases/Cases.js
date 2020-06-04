@@ -44,7 +44,7 @@ const
         },
         dailyCollective:  {
             rate: "dailyTotalLabConfirmedCasesRate",
-            death: "dailyChangeInDeaths",
+            cases: "totalLabConfirmedCases",
             code: "areaCode",
             name: "areaName",
             date: "specimenDate"
@@ -205,34 +205,7 @@ const DataTable = ({ args }) => {
 };  // DataTable
 
 
-const useGeoJSON = (type="countries") => {
-
-    const [ data, setData ] = useState(null);
-
-    useEffect(() => {
-
-        (async () => {
-            const { data } = await axios.get(
-                `${ type }_v1.geojson`,
-                { baseURL: URLs.baseGeo }
-            );
-            setData(data)
-        })()
-
-    }, [ type ]);
-
-    return data
-
-};
-
-
 const calculateTrendLine =  (x, y, domain) => {
-
-    // Y = a + bX
-    //
-    // b = (sum(x*y) - sum(x)sum(y)/n) / (sum(x^2) - sum(x)^2/n)
-    //
-    // a = sum(y)/n - b(sum(x)/n)
 
     const
         XY = zip(x, y),
@@ -240,17 +213,18 @@ const calculateTrendLine =  (x, y, domain) => {
         sigmaXY = XY.reduce((acc,[x_i, y_i]) => acc + (x_i * y_i), 0),
         sigmaX =  x.reduce((acc, val) => acc + val, 0),
         sigmaY =  x.reduce((acc, val) => acc + val, 0),
-        sigmaX2 =  x.reduce((acc, val) => acc + (val * val), 0),
-        sigmaY2 =  x.reduce((acc, val) => acc + (val * val), 0);
+        sigmaX2 =  x.reduce((acc, val) => acc + (val * val), 0);
 
     const
-        b = (sigmaXY - (sigmaX * sigmaY / N)) / (sigmaX2 - ((sigmaX * sigmaX) / N)),
-        a = (sigmaY / N) - (b * sigmaX / N),
+        numerator = (N * sigmaXY) - (sigmaX * sigmaY),
+        denominator = (N * sigmaX2) - (sigmaX * sigmaX),
+        m = numerator / denominator,
+        b  =  (sigmaY - (m * sigmaX)) / N,
         Y  = [],
         X = domain;
 
     for ( let x_i of X )
-        Y.push(Math.round(a + b * x_i, 2))
+        Y.push(Math.round(m * x_i + b))
 
     return [X, Y]
 
@@ -259,27 +233,29 @@ const calculateTrendLine =  (x, y, domain) => {
 
 const CasesMap = ({ data, ...props }) => {
 
+    const GeoJSONPath = `${ URLs.baseGeo }ltlas_v1.geojson`;
+
     if ( !data ) return <MainLoading/>
 
     const
         sortedData = data.sort(({ code: a }, { code: b }) => (a < b) || -((a > b) || 0)),
         rates = sortedData.map(item => item.rate || 0),
-        death = sortedData.map(item => item.death || 0),
+        cases = sortedData.map(item => item.cases || 0),
         codes = sortedData.map(item => item.code),
         names = sortedData.map(item => item.name),
-        [X, Y] = calculateTrendLine(death, rates, [Math.min(...death) - 10, Math.max(...death) + 10]);
+        [X, Y] = calculateTrendLine(cases, rates, [Math.min(...rates) - 10, Math.max(...rates) + 10]);
 
     return <div style={{ display: "flex", flexFlow: "row-wrap", flex: "1 1 100%" }}>
 
         <div style={{  flex: "1 2 50%"  }}>
-            <div style={{  }}>
+            <div>
                 <Plotter
                     data={[
                         {
                             name: "b",
-                            x: data.map(item => item?.death ?? 0),
-                            y: data.map(item => item?.rate ?? 0),
-                            text: data.map(item => item?.name ?? ""),
+                            x: rates,
+                            y: cases,
+                            text: names,
                             type: 'scatter',
                             mode: 'markers',
                             showlegend: false,
@@ -386,9 +362,9 @@ const CasesMap = ({ data, ...props }) => {
                         {
                             name: "a",
                             type: 'choroplethmapbox',
-                            geojson: 'https://c19pub.azureedge.net/assets/geo/countries_v1.geojson',
+                            geojson: GeoJSONPath,
                             locations: codes,
-                            featureidkey: 'properties.ctry19cd',
+                            featureidkey: 'properties.lad19cd',
                             text: names,
                             z: rates,
                             hoverinfo: 'text+z',
@@ -420,8 +396,6 @@ const CasesMap = ({ data, ...props }) => {
                                     width: 1
                                 }
                             },
-                            // xaxis: 'x2',
-                            // yaxis: 'y2',
                         }
                     ]}
                     config={ {
@@ -581,7 +555,7 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
         totalData = useApi(params, Structures.totalData),
         dailyCollectiveData = useApi(
                 [
-                    {key: "areaType", sign: "=", value: "nation"},
+                    {key: "areaType", sign: "=", value: "ltla"},
                 ],
                 Structures.dailyCollective,
                 [],
