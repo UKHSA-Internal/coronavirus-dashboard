@@ -114,7 +114,7 @@ const App = ({ location: { pathname } }) => {
 
     const hasMenu = PathWithSideMenu.indexOf(pathname) > -1;
 
-    return <ErrorBoundary>
+    return <Fragment>
         <CookieBanner/>
         <Header
             // containerClassName="govuk-header__container--full-width"
@@ -126,30 +126,32 @@ const App = ({ location: { pathname } }) => {
         <SideNavMobile/>
         <div className={ "govuk-width-container" }>
             <main className={ "govuk-main-wrapper" } role={ "main" }>
-                <LastUpdateTime/>
-                <div className={ "dashboard-container" }>
-                    <div className={ "dashboard-menu" }>
-                        <Switch>
-                            <Route path={ "/" } component={ hasMenu ? SideNavigation : null }/>
-                        </Switch>
-                    </div>
-                    <div className={ "dashboard-content" }>
-                        <DashboardHeader/>
+                <ErrorBoundary>
+                    <Route path={ "/" } component={ hasMenu ? LastUpdateTime : null }/>
+                    <div className={ "dashboard-container" }>
+                        <div className={ "dashboard-menu" }>
+                            <Switch>
+                                <Route path={ "/" } component={ hasMenu ? SideNavigation : null }/>
+                            </Switch>
+                        </div>
+                        <div className={ "dashboard-content" }>
+                            <DashboardHeader/>
 
-                        <Switch>
-                            <Route path="/" exact component={ DailySummary }/>
-                            <Route path="/tests" component={ Tests }/>
-                            <Route path="/cases" component={ Cases }/>
-                            <Route path="/healthcare" component={ Healthcare }/>
-                            <Route path="/deaths" component={ Deaths }/>
-                            <Route path="/about-data" component={ About }/>
+                            <Switch>
+                                <Route path="/" exact component={ DailySummary }/>
+                                <Route path="/tests" component={ Tests }/>
+                                <Route path="/cases" component={ Cases }/>
+                                <Route path="/healthcare" component={ Healthcare }/>
+                                <Route path="/deaths" component={ Deaths }/>
+                                <Route path="/about-data" component={ About }/>
 
-                            <Route path="/archive" component={ Archive }/>
-                            <Route path="/accessibility" component={ Accessibility }/>
-                            <Route path="/cookies" component={ Cookies }/>
-                        </Switch>
+                                <Route path="/archive" component={ Archive }/>
+                                <Route path="/accessibility" component={ Accessibility }/>
+                                <Route path="/cookies" component={ Cookies }/>
+                            </Switch>
+                        </div>
                     </div>
-                </div>
+                </ErrorBoundary>
             </main>
         </div>
 
@@ -168,7 +170,7 @@ const App = ({ location: { pathname } }) => {
         <Switch>
             <Route path="/" component={ F }/>
         </Switch>
-    </ErrorBoundary>
+    </Fragment>
 };  // App
 
 
