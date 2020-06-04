@@ -7,7 +7,7 @@ import moment from "moment";
 
 import { HalfWidthCard, VisualSection, ValueItem, ValueItemsSection } from 'components/Card';
 
-import * as Styles from './DailySummary.styles';
+import { Container } from './DailySummary.styles';
 
 import { max } from "d3-array";
 import { MainLoading } from "components/Loading";
@@ -242,12 +242,12 @@ const DailySummary = ({ location: { search: query } }) => {
         params = urlParams.length ? urlParams : DefaultParams,
         data = useApi(params, Structures.data);
 
-    return<Styles.FlexContainer>
+    return <Container className={ "util-flex util-flex-wrap" }>
         <TestingCard data={ data }/>
         <CasesCard data={ data }/>
         <HealthcareCard data={ data }/>
         <DeathsCard data={ data }/>
-    </Styles.FlexContainer>
+    </Container>
 
 };  // DailySummary
 

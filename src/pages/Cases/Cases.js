@@ -18,7 +18,6 @@ import { zip } from "d3-array";
 import numeral from "numeral"
 
 
-
 const
     DefaultParams = [
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
