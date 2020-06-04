@@ -67,34 +67,31 @@ const DashboardHeader: ComponentType<Props> = ({ title, location: { search: quer
         isExcluded = NoPickerPaths.indexOf(pathname) > -1;
 
     return <MainContainer className={ "sticky-header govuk-!-padding-top-3" }>
-        <HeaderContainer>
+        <HeaderContainer className={ "util-flex util-flex-justify-between util-flex-wrap util-flex-align-items-center" }>
             <Title>{ PathNameMapper[pathname] }</Title>
-            {
-                isExcluded
-                    ? null
-                    : <CollapsibleLinkContainer>
-                        <CollapsibleLink htmlType={ "button" }
-                                     onClick={ () => setLocationPickerState(!locationPickerState) }>
+            { isExcluded
+                ? null
+                : <CollapsibleLinkContainer>
+                    <CollapsibleLink htmlType={ "button" }
+                        onClick={ () => setLocationPickerState(!locationPickerState) }
+                        className={ "govuk-!-margin-right-6" }>
                         { locationPickerState ? <TriangleDown/> : <TriangleRight/> }
                         <span className={ "govuk-body-s govuk-body govuk-body govuk-!-margin-bottom-0" }>
-                                <b>Location:</b>&nbsp;{ currentLocation }
-                            </span>
+                            <b>Location:</b>&nbsp;{ currentLocation }
+                        </span>
                     </CollapsibleLink>
                     <CollapsibleLink htmlType={ "button" }
-                                     onClick={ () => setDatePickerState(!datePickerState) }>
+                        onClick={ () => setDatePickerState(!datePickerState) }>
                         { datePickerState ? <TriangleDown/> : <TriangleRight/> }
                         <span className={ "govuk-body-s change-location govuk-body govuk-!-margin-bottom-0 " }>
-                                <b>Date:</b>&nbsp;{ startDate.format("D MMM YYYY") }&nbsp;-&nbsp;{ endDate.format("D MMM YYYY") }
-                            </span>
+                            <b>Date:</b>&nbsp;{ startDate.format("D MMM YYYY") }&nbsp;-&nbsp;{ endDate.format("D MMM YYYY") }
+                        </span>
                     </CollapsibleLink>
                 </CollapsibleLinkContainer>
-        }
+            }
         </HeaderContainer>
-        <div className={ "govuk-grid-row govuk-!-margin-top-0 govuk-!-margin-bottom-4" }>
-            <div className={ "govuk-grid-column-full" }>
-                <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
-            </div>
-        </div>
+        <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
+
         {
             ( locationPickerState && !isExcluded )
                 ? <LocationPicker hierarchy={ hierarchy } query={ query }/>
