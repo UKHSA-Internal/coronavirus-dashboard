@@ -3,7 +3,7 @@ import Plot from "react-plotly.js";
 import URLs from "../../common/urls";
 
 
-export const Plotter = ({ ...props }) => {
+export const Plotter = ({ layout={}, xaxis={}, yaxis={}, ...props }) => {
 
     return <Plot
         config={ {
@@ -57,7 +57,8 @@ export const Plotter = ({ ...props }) => {
                     family: `"GDS Transport", Arial, sans-serif`,
                     size : 14,
                     color: "#6f777b"
-                }
+                },
+                ...xaxis
             },
             yaxis: {
                 tickformat: 's',
@@ -65,10 +66,12 @@ export const Plotter = ({ ...props }) => {
                     family: `"GDS Transport", Arial, sans-serif`,
                     size : 14,
                     color: "#6f777b",
-                }
+                },
+                ...yaxis
             },
             plot_bgcolor: "rgba(231,231,231,0)",
-            paper_bgcolor: "rgba(255,255,255,0)"
+            paper_bgcolor: "rgba(255,255,255,0)",
+            ...layout
         } }
         {...props}
     />
@@ -95,13 +98,18 @@ export const Mapper = ({ layers, ...props }) => {
                 format: 'png',
                 filename: 'export',
                 height: 600,
-                width: 600,
+                width: 1200,
                 scale: 4
             }
         } }
         useResizeHandler={ true }
         style={{ display: 'flex' }}
         layout={ {
+            grid: {
+                rows: 1,
+                columns: 2,
+                pattern: 'independent'
+            },
             barmode: 'stack',
             height: 500,
             geo: {
@@ -115,6 +123,9 @@ export const Mapper = ({ layers, ...props }) => {
                 }
             },
             mapbox: {
+                domain:  {
+                    x: [.5, 1]
+                },
                 style: URLs.mapStyle,
                 center: {
                   lat: 55.5,
@@ -145,12 +156,13 @@ export const Mapper = ({ layers, ...props }) => {
             showlegend: true,
             margin: {
                 l: 0,
-                r: 5,
-                b: 0,
+                r: 0,
+                b: 25,
                 t: 0,
                 pad: 0
             },
             xaxis: {
+                domain: [0.05, .47],
                 showgrid: false,
                 zeroline: false,
                 showline: false,
@@ -162,6 +174,7 @@ export const Mapper = ({ layers, ...props }) => {
                 }
             },
             yaxis: {
+                domain: [0, .8],
                 tickformat: 's',
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
@@ -169,11 +182,17 @@ export const Mapper = ({ layers, ...props }) => {
                     color: "#6f777b",
                 }
             },
+            xaxis2: {
+                domain: [.5, 1]
+            },
+            yaxis2: {
+                anchor: 'x2'
+            },
             plot_bgcolor: "rgba(231,231,231,0)",
             paper_bgcolor: "rgba(255,255,255,0)"
         } }
         {...props}
     />
 
-}; // Plotter
+}; // Mapper
 
