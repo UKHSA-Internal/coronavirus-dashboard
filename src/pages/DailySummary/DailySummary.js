@@ -58,6 +58,9 @@ const DeathsCard = ({ data }) => {
     if ( !data ) return <MainLoading/>;
 
     const
+        deathReportDate =  data.map(item => item?.deathReportDate ?? ""),
+        deaths = data.map(item => (item?.deaths ?? 0) || 0),
+        deathsMovingAverage = movingAverage(deaths, 7),
         groupByDeathReportDate = groupByUniqueKey(data, 'deathReportDate'),
         maxDeathReportDate = max(Object.keys(groupByDeathReportDate));
 
@@ -67,8 +70,8 @@ const DeathsCard = ({ data }) => {
                 data={ [
                     {
                         name: "Total lab-confirmed cases",
-                        x: data.map(item => item?.deathReportDate ?? ""),
-                        y: movingAverage(data.map(item => (item?.deaths ?? 0) || 0), 7),
+                        x: deathReportDate,
+                        y: deathsMovingAverage,
                         type: 'scatter',
                         fill: 'tozeroy',
                         fillcolor: 'rgba(43,140,196,0.2)'
@@ -81,7 +84,7 @@ const DeathsCard = ({ data }) => {
                 label={ "Confirmed COVID-19 associated deaths" }
                 value={  groupByDeathReportDate[maxDeathReportDate]?.deaths ?? 0 }
                 description={ 'Total all time' }
-                descriptionValue={ sum(data, item => item?.deaths ?? 0) }
+                descriptionValue={ sum(deaths) }
                 colourValue={ '#2B8CC4' }
             />
         </ValueItemsSection>
