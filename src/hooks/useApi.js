@@ -7,11 +7,9 @@ import { createQuery } from "common/utils";
 import deepEqual from "deep-equal";
 
 import type {
-    useApiStructureInput,
-    useApiResponseInput,
+    useApiInputs,
     useApiResponse
 } from "./hooks.types";
-import type { ParsedParams } from "common/utils.types";
 
 
 const usePrevious = (value) => {
@@ -27,19 +25,27 @@ const usePrevious = (value) => {
 };  // usePrevious
 
 
-const useApi = ( params: ParsedParams, structure: useApiStructureInput, defaultResponse: useApiResponseInput=[], extraParams: ParsedParams=[] ): useApiResponse => {
+const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
+                    defaultResponse=[], extraParams=[] }: useApiInputs): useApiResponse => {
 
     const
         [ data, setData ] = useState(defaultResponse),
-        prevParams =  usePrevious(params);
+        prevConjunctiveParams =  usePrevious(conjunctiveFilters),
+        prevDisjunctiveParams =  usePrevious(disjunctiveFilters),
+        prevStructure =  usePrevious(structure),
+        prevExtraParams =  usePrevious(extraParams);
 
     useEffect(() => {
 
-        const urlParams = createQuery([
+        const
+            conjunctive = createQuery(conjunctiveFilters, ";", "") || "",
+            disjunctive = createQuery(disjunctiveFilters, "|", "") || "",
+            paramString = `${conjunctive}${(conjunctive && disjunctive) ? ";" : ""}${disjunctive}`,
+            urlParams = createQuery([
             {
                 key: 'filters',
                 sign: '=',
-                value: createQuery(params, ";", "")
+                value: paramString
             },
             ...extraParams,
             {
@@ -51,7 +57,12 @@ const useApi = ( params: ParsedParams, structure: useApiStructureInput, defaultR
 
         (async () => {
 
-            if ( !deepEqual(prevParams, params) )
+            if (
+                !deepEqual(prevConjunctiveParams, conjunctiveFilters) ||
+                !deepEqual(prevDisjunctiveParams, disjunctiveFilters ) ||
+                !deepEqual(prevStructure, structure) ||
+                !deepEqual(prevExtraParams, extraParams)
+            )
                 try {
                     const { data: dt } = await axios.get(URLs.api + urlParams);
                     setData(dt.data)
@@ -61,7 +72,7 @@ const useApi = ( params: ParsedParams, structure: useApiStructureInput, defaultR
 
         })()
 
-    }, [ params, extraParams, structure ])
+    }, [ conjunctiveFilters, extraParams, structure, disjunctiveFilters ])
 
     return data
 
