@@ -93,7 +93,7 @@ const DailyPlot = ({ data }) => {
                 fill: 'tozeroy',
                 type: "bar",
                 marker: {
-                    color: '#5a9dd5'
+                    color: '#2B8CC4'
                 }
             },
             {
@@ -103,7 +103,7 @@ const DailyPlot = ({ data }) => {
                 fill: 'tozeroy',
                 type: "bar",
                 marker: {
-                    color: '#ff8033',
+                    color: '#F47738',
                 }
             },
             {
@@ -260,9 +260,9 @@ const CasesMap = ({ data, ...props }) => {
                             mode: 'markers',
                             showlegend: false,
                             marker: {
-                                size: 8
+                                size: 8,
                             },
-                            fillcolor: 'rgb(0, 94, 165)',
+                            fillcolor: '#005EA5',
                         },
                         {
                             name: "b",
@@ -271,6 +271,7 @@ const CasesMap = ({ data, ...props }) => {
                             showlegend: false,
                             // type: "line",
                             mode: "lines",
+                            fillcolor: '#F47738',
                             line: {
                                 width: 3,
                                 dash: "dash",
@@ -300,7 +301,6 @@ const CasesMap = ({ data, ...props }) => {
                         }
                     } }
                     layout={ {
-                        barmode: 'stack',
                         height: 500,
                         // width: 400,
                         geo: {
@@ -369,9 +369,12 @@ const CasesMap = ({ data, ...props }) => {
                             z: rates,
                             hoverinfo: 'text+z',
                             colorscale: [
-                                [0, 'rgba(0, 94, 165, 1)'],
-                                [1, 'rgba(0, 94, 165, 0)']
+                                [0, '#F47738'],
+                                [0.5, '#005EA5'],
+                                [1, '#9DDAE8'],
                             ],
+                            zmin: Math.min(...rates),
+                            zmax: Math.max(...rates),
                             autocolorscale: false,
                             reversescale: true,
                             colorbar: {
@@ -392,8 +395,8 @@ const CasesMap = ({ data, ...props }) => {
                             },
                             marker: {
                                 line: {
-                                    color: '#fff',
-                                    width: 1
+                                    color: '#2f2f2f',
+                                    width: 0.1
                                 }
                             },
                         }
@@ -420,7 +423,6 @@ const CasesMap = ({ data, ...props }) => {
                         }
                     } }
                     layout={ {
-                        barmode: 'stack',
                         height: 500,
                         geo: {
                             fitbounds: "geojson",
@@ -446,7 +448,7 @@ const CasesMap = ({ data, ...props }) => {
                                     type: 'line',
                                     color: '#a3a3a3',
                                     line: {
-                                        width: 1
+                                        width: 0.1
                                     }
                                 },
                             ]
@@ -554,7 +556,7 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
         dailyData = useApi({conjunctiveFilters: params, structure: Structures.dailyData}),
         totalData = useApi({conjunctiveFilters: params, structure: Structures.totalData}),
         dailyCollectiveData = useApi({
-            conjunctiveParams: [
+            conjunctiveFilters: [
                 { key: "areaType", sign: "=", value: "ltla" },
             ],
             structure: Structures.dailyCollective,
