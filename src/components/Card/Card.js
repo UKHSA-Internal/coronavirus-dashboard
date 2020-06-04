@@ -9,7 +9,10 @@ import type { Props } from './Card.types';
 import {
     CardDescription,
     CardBody,
-    FullWidthCardBody
+    FullWidthCardBody,
+    DataColour,
+    DataLabel,
+    DataValue
 } from './Card.styles';
 import numeral from 'numeral'
 
@@ -24,14 +27,14 @@ const VisualSection: ComponentType<Props> = ({ children }: Props) => {
 }; // Visuals
 
 
-const ValueItem: ComponentType<Props> = ({ label, value, description=null, descriptionValue=null, descriptionSign=null, colourName }: Props) => {
+const ValueItem: ComponentType<Props> = ({ label, value, description=null, descriptionValue=null, descriptionSign=null, colourValue }: Props) => {
 
     return <Fragment>
-        <div className={ "data-label" }>
+        { colourValue ? <DataColour colour={ colourValue } /> : null }
+        <DataLabel>
             <p className={ "govuk-body govuk-!-margin-bottom-0" }>{ label }</p>
-        </div>
-        <div className={ `square-${ colourName }` }/>
-        <div className={ "data-value" }>
+        </DataLabel>
+        <DataValue className={ "govuk-!-margin-bottom-4" }>
             <h3 className={ "govuk-heading-m govuk-!-margin-bottom-2 govuk-!-padding-top-0" }>
                 { numeral(value).format("0,0") }
                 {
@@ -40,7 +43,7 @@ const ValueItem: ComponentType<Props> = ({ label, value, description=null, descr
                         : null
                 }
             </h3>
-        </div>
+        </DataValue>
     </Fragment>
 
 }; // ValueItem
