@@ -13,7 +13,7 @@ import axios from "axios";
 import URLs from "common/urls";
 
 import type { AboutProps, AboutState } from './About.types';
-import * as Styles from './About.styles';
+import { Article } from './About.styles';
 
 
 export default class About extends Component<AboutProps, {}> {
@@ -56,7 +56,7 @@ export default class About extends Component<AboutProps, {}> {
 
         const { loading, data } = this.state;
 
-        if ( loading ) return <p>Loading&hellip;</p>
+        if ( loading ) return <p className={ "govuk-body" }>Loading&hellip;</p>
 
         return <div className={ "markdown" } dangerouslySetInnerHTML={{ __html: data }}/>
 
@@ -64,15 +64,10 @@ export default class About extends Component<AboutProps, {}> {
 
     render(): React$Node {
 
-        return <Styles.Container className={"govuk-width-container about"}>
-            <Styles.Content className="govuk-main-wrapper" role="main">
-                <Styles.Container className="govuk-grid-row">
-                    <Styles.Container className="govuk-grid-column-two-thirds">
-                        { this.display() }
-                    </Styles.Container>
-                </Styles.Container>
-            </Styles.Content>
-        </Styles.Container>
+        return <Article className={ "about" }>
+            { this.display() }
+            </Article>
+
 
     } // render
 
