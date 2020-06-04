@@ -51,7 +51,6 @@ export const Number: ComponentType<*> = (() => {
 export const Children: ComponentType<*> = (() => {
   return styled.div`
     display: flex;
-    flex-direction: row;
 
     @media only screen and (max-width: 768px) {
         align-items: stretch;
