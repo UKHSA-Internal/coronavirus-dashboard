@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 import { BigNumber, BigNumberContainer } from 'components/BigNumber';
 import { HalfWidthCard, FullWidthCard } from 'components/Card';
 import type { Props } from './Cases.types';
-import { Table } from './Cases.styles';
+import { Table, FlexContainer } from './Cases.styles';
 
 import { getParams, getParamValueFor, movingAverage, firstObjWithMax } from "common/utils";
 import { Plotter, Mapper } from "./plots";
@@ -18,7 +18,7 @@ import { zip } from "d3-array";
 import numeral from "numeral";
 import axios from "axios";
 import URLs from "../../common/urls";
-
+import Plot from "react-plotly.js";
 
 
 const
@@ -43,6 +43,7 @@ const
         },
         dailyCollective:  {
             rate: "dailyTotalLabConfirmedCasesRate",
+            death: "dailyChangeInDeaths",
             code: "areaCode",
             name: "areaName",
             date: "specimenDate"
@@ -223,68 +224,347 @@ const useGeoJSON = (type="countries") => {
 
 };
 
-const CasesMap = ({ ...props }) => {
+
+const calculateTrendLine =  (x, y, domain) => {
+
+    // Y = a + bX
+    //
+    // b = (sum(x*y) - sum(x)sum(y)/n) / (sum(x^2) - sum(x)^2/n)
+    //
+    // a = sum(y)/n - b(sum(x)/n)
 
     const
-        geoData = useGeoJSON("ltlas"),
-        data = useApi(
-            [
-                {key: "areaType", sign: "=", value: "ltla"},
-            ],
-            Structures.dailyCollective,
-            [],
-            [
-                {key: "latestBy", value: "specimenDate", sign: "="}
-            ]
-        );
+        XY = zip(x, y),
+        N = XY.length,
+        sigmaXY = XY.reduce((acc,[x_i, y_i]) => acc + (x_i * y_i), 0),
+        sigmaX =  x.reduce((acc, val) => acc + val, 0),
+        sigmaY =  x.reduce((acc, val) => acc + val, 0),
+        sigmaX2 =  x.reduce((acc, val) => acc + (val * val), 0),
+        sigmaY2 =  x.reduce((acc, val) => acc + (val * val), 0);
 
-    if ( !geoData || !data ) return <MainLoading/>
+    const
+        b = (sigmaXY - (sigmaX * sigmaY / N)) / (sigmaX2 - ((sigmaX * sigmaX) / N)),
+        a = (sigmaY / N) - (b * sigmaX / N),
+        Y  = [],
+        X = domain;
+
+    for ( let x_i of X )
+        Y.push(Math.round(a + b * x_i, 2))
+
+    return [X, Y]
+
+}
+
+
+const CasesMap = ({ data, ...props }) => {
+
+    if ( !data ) return <MainLoading/>
 
     const
         sortedData = data.sort(({ code: a }, { code: b }) => (a < b) || -((a > b) || 0)),
-        rates = sortedData.map(item => item.rate),
+        rates = sortedData.map(item => item.rate || 0),
+        death = sortedData.map(item => item.death || 0),
         codes = sortedData.map(item => item.code),
-        names = sortedData.map(item => item.name);
+        names = sortedData.map(item => item.name),
+        [X, Y] = calculateTrendLine(death, rates, [Math.min(...death) - 10, Math.max(...death) + 10]);
 
-    return <Mapper
-        data={ [
-        {
-            type: 'choroplethmapbox',
-            geojson: 'https://c19pub.azureedge.net/assets/geo/ltlas_v1.geojson',
-            locations: codes,
-            featureidkey: 'properties.lad19cd',
-            text: names,
-            z: rates,
-            hoverinfo: 'text+z',
-            colorscale: [
-                [0, 'rgba(0, 94, 165, 1)'],
-                [1, 'rgba(0, 94, 165, 0)']
-            ],
-            autocolorscale: false,
-            reversescale: true,
-            colorbar: {
-                thickness: 10,
-                thickfont: {
-                    family: `"GDS Transport", Arial, sans-serif`
-                },
-                // title: "Rate per 100,000 resident population"
-            },
-            hoverlabel: {
-                font: {
-                    family: `"GDS Transport", Arial, sans-serif`
-                },
-            },
-            center: {'lat': 53.5, 'lon': -2},
-            marker: {
-                line: {
-                    color: '#fff',
-                    width: 1
-                }
-            }
-        }
-    ] }/>
+    return <div style={{ display: "flex", flexFlow: "row-wrap", flex: "1 1 100%" }}>
+
+        <div style={{  flex: "1 2 50%"  }}>
+            <div style={{  }}>
+                <Plotter
+                    data={[
+                        {
+                            name: "b",
+                            x: data.map(item => item?.death ?? 0),
+                            y: data.map(item => item?.rate ?? 0),
+                            text: data.map(item => item?.name ?? ""),
+                            type: 'scatter',
+                            mode: 'markers',
+                            showlegend: false,
+                            marker: {
+                                size: 8
+                            },
+                            fillcolor: 'rgb(0, 94, 165)',
+                        },
+                        {
+                            name: "b",
+                            x: X,
+                            y: Y,
+                            showlegend: false,
+                            // type: "line",
+                            mode: "lines",
+                            line: {
+                                width: 3,
+                                dash: "dash",
+                                color: 'rgba(109,109,109,0.7)'
+                            },
+                        }
+                    ]}
+                    config={ {
+                        displayModeBar: true,
+                        showLink: false,
+                        responsive: true,
+                        displaylogo: false,
+                        modeBarButtonsToRemove: [
+                            "autoScale2d",
+                            "zoomIn2d",
+                            "zoomOut2d",
+                            "toggleSpikelines",
+                            "hoverClosestCartesian",
+                            "zoom2d"
+                        ],
+                        toImageButtonOptions: {
+                            format: 'png',
+                            filename: 'export',
+                            height: 600,
+                            width: 1200,
+                            scale: 4
+                        }
+                    } }
+                    layout={ {
+                        barmode: 'stack',
+                        height: 500,
+                        // width: 400,
+                        geo: {
+                            fitbounds: "geojson",
+                            resolution: 50,
+                            scope: "europe",
+                            projection: {
+                                lon: 2,
+                                lat: 2,
+                                roll: 130,
+                            }
+                        },
+                        legend: {
+                            orientation: 'h',
+                            font: {
+                                family: `"GDS Transport", Arial, sans-serif`,
+                                size: 16,
+                            },
+                            xanchor: 'auto',
+                            y: -.2
+                        },
+                        showlegend: true,
+                        margin: {
+                            l: 40,
+                            r: 10,
+                            b: 20,
+                            t: 0,
+                            pad: 0
+                        },
+                        xaxis: {
+                            showgrid: false,
+                            zeroline: false,
+                            showline: false,
+                            tickfont:{
+                                family: `"GDS Transport", Arial, sans-serif`,
+                                size : 14,
+                                color: "#6f777b"
+                            }
+                        },
+                        yaxis: {
+                            tickformat: 's',
+                            tickfont:{
+                                family: `"GDS Transport", Arial, sans-serif`,
+                                size : 14,
+                                color: "#6f777b",
+                            }
+                        },
+                        plot_bgcolor: "rgba(231,231,231,0)",
+                        paper_bgcolor: "rgba(255,255,255,0)"
+                    } }
+                />
+            </div>
+        </div>
+
+        <div style={{ flex: "1 2 50%" }}>
+            <div>
+                <Plotter
+                    data={ [
+                        {
+                            name: "a",
+                            type: 'choroplethmapbox',
+                            geojson: 'https://c19pub.azureedge.net/assets/geo/countries_v1.geojson',
+                            locations: codes,
+                            featureidkey: 'properties.ctry19cd',
+                            text: names,
+                            z: rates,
+                            hoverinfo: 'text+z',
+                            colorscale: [
+                                [0, 'rgba(0, 94, 165, 1)'],
+                                [1, 'rgba(0, 94, 165, 0)']
+                            ],
+                            autocolorscale: false,
+                            reversescale: true,
+                            colorbar: {
+                                thickness: 10,
+                                thickfont: {
+                                    family: `"GDS Transport", Arial, sans-serif`
+                                },
+                                // title: "Rate per 100,000 resident population"
+                            },
+                            hoverlabel: {
+                                font: {
+                                    family: `"GDS Transport", Arial, sans-serif`
+                                },
+                            },
+                            center: {
+                                'lat': 53.5,
+                                'lon': -2
+                            },
+                            marker: {
+                                line: {
+                                    color: '#fff',
+                                    width: 1
+                                }
+                            },
+                            // xaxis: 'x2',
+                            // yaxis: 'y2',
+                        }
+                    ]}
+                    config={ {
+                        displayModeBar: true,
+                        showLink: false,
+                        responsive: true,
+                        displaylogo: false,
+                        modeBarButtonsToRemove: [
+                            "autoScale2d",
+                            "zoomIn2d",
+                            "zoomOut2d",
+                            "toggleSpikelines",
+                            "hoverClosestCartesian",
+                            "zoom2d"
+                        ],
+                        toImageButtonOptions: {
+                            format: 'png',
+                            filename: 'export',
+                            height: 600,
+                            width: 1200,
+                            scale: 4
+                        }
+                    } }
+                    layout={ {
+                        barmode: 'stack',
+                        height: 500,
+                        geo: {
+                            fitbounds: "geojson",
+                            resolution: 50,
+                            scope: "europe",
+                            projection: {
+                                lon: 2,
+                                lat: 2,
+                                roll: 130,
+                            }
+                        },
+                        mapbox: {
+                            style: URLs.mapStyle,
+                            center: {
+                              lat: 55.5,
+                              lon: -2.5
+                            },
+                            zoom: 4.2,
+                            layers: [
+                                {
+                                    sourcetype: 'geojson',
+                                    source: `${ URLs.baseGeo }countries_v1.geojson`,
+                                    type: 'line',
+                                    color: '#a3a3a3',
+                                    line: {
+                                        width: 1
+                                    }
+                                },
+                            ]
+                        },
+                        legend: {
+                            orientation: 'h',
+                            font: {
+                                family: `"GDS Transport", Arial, sans-serif`,
+                                size: 16,
+                            },
+                            xanchor: 'auto',
+                            y: -.2
+                        },
+                        showlegend: true,
+                        margin: {
+                            l: 0,
+                            r: 0,
+                            b: 0,
+                            t: 0,
+                            pad: 0
+                        },
+                        xaxis: {
+                            // domain: [.5, 1],
+                            showgrid: false,
+                            zeroline: false,
+                            showline: false,
+                            tickfont:{
+                                family: `"GDS Transport", Arial, sans-serif`,
+                                size : 14,
+                                color: "#6f777b"
+                            }
+                        },
+                        yaxis: {
+                            tickformat: 's',
+                            tickfont:{
+                                family: `"GDS Transport", Arial, sans-serif`,
+                                size : 14,
+                                color: "#6f777b",
+                            }
+                        },
+                        plot_bgcolor: "rgba(231,231,231,0)",
+                        paper_bgcolor: "rgba(255,255,255,0)"
+                     }}
+                />
+            </div>
+        </div>
+
+    </div>
 
 };  // CasesMap
+
+
+
+const ScatterPlot = ({ data, ...props }) => {
+
+    if ( !data ) return <MainLoading/>
+
+    return <div>
+        <Plotter
+            data={[
+                {
+                    x: data.map(item => item?.death ?? 0),
+                    y: data.map(item => item?.rate ?? 0),
+                    text: data.map(item => item?.name ?? ""),
+                    type: 'scatter',
+                    mode: 'markers',
+                    showlegend: false,
+                    marker: {
+                        size: 5
+                    },
+                    fillcolor: 'rgb(0, 94, 165)'
+                }
+            ]}
+            xaxis={{
+                title: "Death",
+                titlefont: {
+                    family: `"GDS Transport", Arial, sans-serif`,
+                    size: 16,
+                    color: "#7f7f7f"
+                }
+            }}
+            yaxis={{
+                title: "Cases Rate",
+                titlefont: {
+                    family: `"GDS Transport", Arial, sans-serif`,
+                    size: 16,
+                    color: "#7f7f7f"
+                }
+            }}
+        />
+    </div>
+
+};  // ScatterPlot
 
 
 const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
@@ -297,7 +577,17 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
         urlParams = getParams(query),
         params = urlParams.length ? urlParams : DefaultParams,
         dailyData = useApi(params, Structures.dailyData),
-        totalData = useApi(params, Structures.totalData);
+        totalData = useApi(params, Structures.totalData),
+        dailyCollectiveData = useApi(
+                [
+                    {key: "areaType", sign: "=", value: "nation"},
+                ],
+                Structures.dailyCollective,
+                [],
+                [
+                    {key: "latestBy", value: "specimenDate", sign: "="}
+                ]
+            );
 
     return <Fragment>
         <BigNumberContainer>
@@ -322,7 +612,7 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
             </TabLinkContainer>
         </FullWidthCard>
         <FullWidthCard heading={ 'Confirmed cases rate by location' } caption={ "All time total" }>
-            <CasesMap/>
+            <CasesMap data={ dailyCollectiveData }/>
         </FullWidthCard>
     </Fragment>
 

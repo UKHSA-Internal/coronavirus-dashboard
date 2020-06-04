@@ -248,12 +248,15 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
 
                     const areaTypeItem = order[areaType]
 
-                    return <Select value={ areaName ? areaName : "" }
-                                   disabled={ (options?.length ?? 0) === 0 }
-                                   key={ areaType }
-                                   onChange={ ({ target: { value } }) => getStateFor(value, areaTypeItem) }
-                                   className={ 'govuk-select' }
-                                   name={ areaType }>
+                    return <Fragment>
+                        <label className={ "govuk-visually-hidden" } htmlFor={ areaType } key={ `${areaType}-label` }>{ areaType }</label>
+                        <Select value={ areaName ? areaName : "" }
+                                disabled={ (options?.length ?? 0) === 0 }
+                                key={ areaType }
+                                onChange={ ({ target: { value } }) => getStateFor(value, areaTypeItem) }
+                                className={ 'govuk-select' }
+                                name={ areaType }
+                                id={ areaType }>
                         <option value={ "" }>All { areaTypeItem.label }</option>
                         {
                             options && options.map(({ name, code }) =>
@@ -265,6 +268,7 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
                                 )
                         }
                     </Select>
+                    </Fragment>
                 })
             }</div>
 
