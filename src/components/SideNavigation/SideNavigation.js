@@ -9,10 +9,10 @@ import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
 import type { Props } from './SideNavigation.types';
 import {
-    Container,
-    FooterLink,
-    NavList,
-    NavListItem
+    SideNav,
+    SideNavList,
+    SideNavListItem,
+    SectionBreak
 } from './SideNavigation.styles';
 
 
@@ -21,35 +21,35 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
 
 
         return (
-            <nav className="moj-side-navigation govuk-!-padding-right-4 govuk-!-padding-top-2" aria-label="Side navigation">
-                <ul className="moj-side-navigation__list">
-                    <li className={`moj-side-navigation__item ${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
+            <SideNav aria-label="Side navigation">
+                <SideNavList>
+                    <SideNavListItem className={`${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
                         <Link to={ "/" } aria-current="location">UK Summary</Link>
-                    </li>
+                    </SideNavListItem>
 
-                    <li className={`moj-side-navigation__item ${pathname === '/tests' ? "moj-side-navigation__item--active" : ""}`}>
+                    <SideNavListItem className={`${pathname === '/tests' ? "moj-side-navigation__item--active" : ""}`}>
                         <Link to={ "tests" }>Tests</Link>
-                    </li>
+                    </SideNavListItem>
 
-                    <li className={`moj-side-navigation__item ${pathname === '/cases' ? "moj-side-navigation__item--active" : ""}`}>
+                    <SideNavListItem className={`${pathname === '/cases' ? "moj-side-navigation__item--active" : ""}`}>
                         <Link to={ "cases" }>Cases</Link>
-                    </li>
+                    </SideNavListItem>
 
-                    <li className={`moj-side-navigation__item ${pathname === '/healthcare' ? "moj-side-navigation__item--active" : ""}`}>
+                    <SideNavListItem className={`${pathname === '/healthcare' ? "moj-side-navigation__item--active" : ""}`}>
                         <Link to={ "healthcare" }>Healthcare</Link>
-                    </li>
+                    </SideNavListItem>
 
-                    <li className={`moj-side-navigation__item ${pathname === '/deaths' ? "moj-side-navigation__item--active" : ""}`}>
+                    <SideNavListItem className={`${pathname === '/deaths' ? "moj-side-navigation__item--active" : ""}`}>
                         <Link to={ "deaths" }>Deaths</Link>
-                    </li>
+                    </SideNavListItem>
 
-                    <hr className="govuk-section-break govuk-section-break--m govuk-!-margin-top-3 govuk-!-margin-bottom-3 govuk-section-break--visible" />
+                    <SectionBreak/>
 
-                    <li className={`moj-side-navigation__item ${pathname === '/about-data' ? "moj-side-navigation__item--active" : ""}`}>
+                    <SideNavListItem className={`${pathname === '/about-data' ? "moj-side-navigation__item--active" : ""}`}>
                         <Link to={ "about-data" }>About the data</Link>
-                    </li>
-                </ul>
-            </nav>
+                    </SideNavListItem>
+                </SideNavList>
+            </SideNav>
         );
 
 };
