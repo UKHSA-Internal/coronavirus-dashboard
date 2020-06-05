@@ -11,7 +11,7 @@ import { Table, FlexContainer } from './Cases.styles';
 
 import { getParams, getParamValueFor, firstObjWithMax } from "common/utils";
 import { movingAverage, leastSquareRegression } from "common/stats";
-import { Plotter, Mapper } from "./plots";
+import { Plotter, Choropleth, ScatterPlotWithTrendLine } from "./plots";
 import { MainLoading } from "components/Loading";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
@@ -218,253 +218,28 @@ const CasesMap = ({ data, ...props }) => {
         trendDomain = [Math.min(...rates) - 10, Math.max(...rates) + 10],
         [trend_X, trend_Y] = leastSquareRegression(cases, rates, trendDomain);
 
-    return <div style={{ display: "flex", flexFlow: "row-wrap", flex: "1 1 100%" }}>
+    return <div style={{ display: "flex", flexFlow: "row-wrap", flex: "1 1 100%" }} { ...props }>
 
         <div style={{  flex: "1 2 50%"  }}>
             <div>
-                <Plotter
-                    data={[
-                        {
-                            name: "b",
-                            x: rates,
-                            y: cases,
-                            text: names,
-                            type: 'scatter',
-                            mode: 'markers',
-                            showlegend: false,
-                            marker: {
-                                size: 8,
-                            },
-                            fillcolor: '#005EA5',
-                        },
-                        {
-                            name: "b",
-                            x: trend_X,
-                            y: trend_Y,
-                            showlegend: false,
-                            mode: "lines",
-                            fillcolor: '#F47738',
-                            line: {
-                                width: 3,
-                                dash: "dash",
-                                color: 'rgba(109,109,109,0.7)'
-                            },
-                        }
-                    ]}
-                    config={ {
-                        displayModeBar: true,
-                        showLink: false,
-                        responsive: true,
-                        displaylogo: false,
-                        modeBarButtonsToRemove: [
-                            "autoScale2d",
-                            "zoomIn2d",
-                            "zoomOut2d",
-                            "toggleSpikelines",
-                            "hoverClosestCartesian",
-                            "zoom2d"
-                        ],
-                        toImageButtonOptions: {
-                            format: 'png',
-                            filename: 'export',
-                            height: 600,
-                            width: 1200,
-                            scale: 4
-                        }
-                    } }
-                    layout={ {
-                        height: 500,
-                        // width: 400,
-                        geo: {
-                            fitbounds: "geojson",
-                            resolution: 50,
-                            scope: "europe",
-                            projection: {
-                                lon: 2,
-                                lat: 2,
-                                roll: 130,
-                            }
-                        },
-                        legend: {
-                            orientation: 'h',
-                            font: {
-                                family: `"GDS Transport", Arial, sans-serif`,
-                                size: 16,
-                            },
-                            xanchor: 'auto',
-                            y: -.2
-                        },
-                        showlegend: true,
-                        margin: {
-                            l: 40,
-                            r: 10,
-                            b: 20,
-                            t: 0,
-                            pad: 0
-                        },
-                        xaxis: {
-                            showgrid: false,
-                            zeroline: false,
-                            showline: false,
-                            tickfont:{
-                                family: `"GDS Transport", Arial, sans-serif`,
-                                size : 14,
-                                color: "#6f777b"
-                            }
-                        },
-                        yaxis: {
-                            tickformat: 's',
-                            tickfont:{
-                                family: `"GDS Transport", Arial, sans-serif`,
-                                size : 14,
-                                color: "#6f777b",
-                            }
-                        },
-                        plot_bgcolor: "rgba(231,231,231,0)",
-                        paper_bgcolor: "rgba(255,255,255,0)"
-                    } }
+                <ScatterPlotWithTrendLine
+                    scatterData={ { x: rates, y: cases, text: names } }
+                    trendLineData={ { x: trend_X, y: trend_Y } }
                 />
             </div>
         </div>
 
         <div style={{ flex: "1 2 50%" }}>
             <div>
-                <Plotter
-                    data={ [
-                        {
-                            name: "a",
-                            type: 'choroplethmapbox',
-                            geojson: GeoJSONPath,
-                            locations: codes,
-                            featureidkey: 'properties.lad19cd',
-                            text: names,
-                            z: rates,
-                            hoverinfo: 'text+z',
-                            colorscale: [
-                                [0, '#F47738'],
-                                [0.5, '#005EA5'],
-                                [1, '#9DDAE8'],
-                            ],
-                            zmin: Math.min(...rates),
-                            zmax: Math.max(...rates),
-                            autocolorscale: false,
-                            reversescale: true,
-                            colorbar: {
-                                thickness: 10,
-                                thickfont: {
-                                    family: `"GDS Transport", Arial, sans-serif`
-                                },
-                                // title: "Rate per 100,000 resident population"
-                            },
-                            hoverlabel: {
-                                font: {
-                                    family: `"GDS Transport", Arial, sans-serif`
-                                },
-                            },
-                            center: {
-                                'lat': 53.5,
-                                'lon': -2
-                            },
-                            marker: {
-                                line: {
-                                    color: '#2f2f2f',
-                                    width: 0.1
-                                }
-                            },
-                        }
-                    ]}
-                    config={ {
-                        displayModeBar: true,
-                        showLink: false,
-                        responsive: true,
-                        displaylogo: false,
-                        modeBarButtonsToRemove: [
-                            "autoScale2d",
-                            "zoomIn2d",
-                            "zoomOut2d",
-                            "toggleSpikelines",
-                            "hoverClosestCartesian",
-                            "zoom2d"
-                        ],
-                        toImageButtonOptions: {
-                            format: 'png',
-                            filename: 'export',
-                            height: 600,
-                            width: 1200,
-                            scale: 4
-                        }
-                    } }
-                    layout={ {
-                        height: 500,
-                        geo: {
-                            fitbounds: "geojson",
-                            resolution: 50,
-                            scope: "europe",
-                            projection: {
-                                lon: 2,
-                                lat: 2,
-                                roll: 130,
-                            }
-                        },
-                        mapbox: {
-                            style: URLs.mapStyle,
-                            center: {
-                              lat: 55.5,
-                              lon: -2.5
-                            },
-                            zoom: 4.2,
-                            layers: [
-                                {
-                                    sourcetype: 'geojson',
-                                    source: `${ URLs.baseGeo }countries_v1.geojson`,
-                                    type: 'line',
-                                    color: '#a3a3a3',
-                                    line: {
-                                        width: 0.1
-                                    }
-                                },
-                            ]
-                        },
-                        legend: {
-                            orientation: 'h',
-                            font: {
-                                family: `"GDS Transport", Arial, sans-serif`,
-                                size: 16,
-                            },
-                            xanchor: 'auto',
-                            y: -.2
-                        },
-                        showlegend: true,
-                        margin: {
-                            l: 0,
-                            r: 0,
-                            b: 0,
-                            t: 0,
-                            pad: 0
-                        },
-                        xaxis: {
-                            // domain: [.5, 1],
-                            showgrid: false,
-                            zeroline: false,
-                            showline: false,
-                            tickfont:{
-                                family: `"GDS Transport", Arial, sans-serif`,
-                                size : 14,
-                                color: "#6f777b"
-                            }
-                        },
-                        yaxis: {
-                            tickformat: 's',
-                            tickfont:{
-                                family: `"GDS Transport", Arial, sans-serif`,
-                                size : 14,
-                                color: "#6f777b",
-                            }
-                        },
-                        plot_bgcolor: "rgba(231,231,231,0)",
-                        paper_bgcolor: "rgba(255,255,255,0)"
-                     }}
-                />
+                <Choropleth data={ {
+                    geojson: GeoJSONPath,
+                    locations: codes,
+                    featureidkey: 'properties.lad19cd',
+                    text: names,
+                    z: rates,
+                    zmin: trendDomain[0],
+                    zmax: trendDomain[1],
+                } }/>
             </div>
         </div>
 
