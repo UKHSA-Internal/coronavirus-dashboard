@@ -4,7 +4,12 @@ import React from 'react';
 import type { ComponentType } from 'react';
 
 import { ArrowUp } from "common/Icons";
-import * as Styles from './BackToTop.styles';
+import {
+    OverlayContainer,
+    InlineContainer,
+    Container,
+    Link
+} from './BackToTop.styles';
 import type { Props } from './BackToTop.types';
 
 import useBackToTopOverlayVisible from 'hooks/useBackToTopOverlayVisible';
@@ -21,15 +26,14 @@ const backToTopClickHandler = event => {
 
 const BackToTopLink: ComponentType<Props> = () => {
 
-    return <div className={ "govuk-width-container" }>
-        <Styles.Link className={ "govuk-link govuk-link--no-visited-state" }
-                     role={ "button" }
-                     href={ "" }
-                     onClick={ backToTopClickHandler }>
+    return <Container>
+        <Link role={ "button" }
+            href={ "" }
+            onClick={ backToTopClickHandler }>
             <ArrowUp/>
             Back to top
-        </Styles.Link>
-    </div>
+        </Link>
+    </Container>
 
 }; // BackToTopLink
 
@@ -50,15 +54,15 @@ const BackToTop: ComponentType<Props> = ({ mode }: Props) => {
 
     if ( mode === 'overlay' ) {
 
-        return<Styles.OverlayContainer style={ { opacity: visible ? 1 : 0 } }>
+        return<OverlayContainer style={ { opacity: visible ? 1 : 0 } }>
             <BackToTopLink/>
-        </Styles.OverlayContainer>
+        </OverlayContainer>
 
     } else {
 
-        return <Styles.InlineContainer style={ { opacity: visible ? 0 : 1 } }>
+        return <InlineContainer style={ { opacity: visible ? 0 : 1 } }>
             <BackToTopLink/>
-        </Styles.InlineContainer>
+        </InlineContainer>
 
     }
 

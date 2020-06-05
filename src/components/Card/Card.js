@@ -10,30 +10,37 @@ import {
     CardDescription,
     HalfCard,
     HalfCardHeader,
+    HalfCardHeading,
     HalfCardBody,
     FullCard,
-    Section,
+    FullCardHeader,
+    FullCardHeading,
+    Caption,
+    BodySection,
+    SectionBreak,
     DataColour,
     DataLabel,
-    DataValue
+    LabelText,
+    DataValue,
+    Number
 } from './Card.styles';
 import numeral from 'numeral'
 
 
 const VisualSection: ComponentType<Props> = ({ children }: Props) => {
 
-    return <Section>
+    return <BodySection>
         { children }
-    </Section>
+    </BodySection>
 
 }; // Visuals
 
 
 const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
 
-    return <Section>
+    return <BodySection>
         { children }
-    </Section>
+    </BodySection>
 
 }; // ValueItemContainer
 
@@ -43,17 +50,17 @@ const ValueItem: ComponentType<Props> = ({ label, value, description=null, descr
     return <Fragment>
         { colourValue ? <DataColour colour={ colourValue } /> : null }
         <DataLabel>
-            <p className={ "govuk-body govuk-!-margin-bottom-0" }>{ label }</p>
+            <LabelText>{ label }</LabelText>
         </DataLabel>
-        <DataValue className={ "govuk-!-margin-bottom-4" }>
-            <h3 className={ "govuk-heading-m govuk-!-margin-bottom-2 govuk-!-padding-top-0" }>
+        <DataValue>
+            <Number>
                 { numeral(value).format("0,0") }
                 {
                     description
                         ? <CardDescription>{ description }:&nbsp;{ numeral(descriptionValue).format("0,0") }{descriptionSign}</CardDescription>
                         : null
                 }
-            </h3>
+            </Number>
         </DataValue>
     </Fragment>
 
@@ -63,17 +70,14 @@ const ValueItem: ComponentType<Props> = ({ label, value, description=null, descr
 const HalfWidthCard: ComponentType<Props> = ({ heading="Placeholder", children }: Props) => {
 
     return <HalfCard>
-        <HalfCardHeader className={ "util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
-            <h2 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>{ heading }</h2>
+        <HalfCardHeader>
+            <HalfCardHeading>{ heading }</HalfCardHeading>
             <Link to={ "tests"} className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>More detail</Link>
         </HalfCardHeader>
-
-        <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
-
-        <HalfCardBody className={ "util-flex util-flex-wrap" }>
+        <SectionBreak />
+        <HalfCardBody>
             { children }
         </HalfCardBody>
-
 
     </HalfCard>
 
@@ -83,11 +87,11 @@ const HalfWidthCard: ComponentType<Props> = ({ heading="Placeholder", children }
 const FullWidthCard: ComponentType<Props> = ({ heading="Placeholder", caption, children }: Props) => {
 
     return <FullCard>
-        <header className={ "util-flex util-flex-wrap util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
-            <h2 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>
-                <span className={ "govuk-caption-m" }>{ caption }</span>
+        <FullCardHeader>
+            <FullCardHeading>
+                <Caption>{ caption }</Caption>
                 { heading }
-            </h2>
+            </FullCardHeading>
             <div>
                 <form>
                     <fieldset className={ "govuk-fieldset" }>
@@ -106,7 +110,7 @@ const FullWidthCard: ComponentType<Props> = ({ heading="Placeholder", caption, c
                     </fieldset>
                 </form>
             </div>
-        </header>
+        </FullCardHeader>
 
         { children }
 
