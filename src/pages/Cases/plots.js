@@ -79,10 +79,46 @@ export const Plotter = ({ layout={}, xaxis={}, yaxis={}, ...props }) => {
 }; // Plotter
 
 
-export const Mapper = ({ layers, ...props }) => {
+export const Choropleth = ({ data, layout, config, ...props }) => {
 
-    return <Plot
+    return <Plotter
+        data={ [
+            {
+                type: 'choroplethmapbox',
+                hoverinfo: 'text+z',
+                colorscale: [
+                    [0, '#F47738'],
+                    [0.5, '#005EA5'],
+                    [1, '#9DDAE8'],
+                ],
+                autocolorscale: false,
+                reversescale: true,
+                colorbar: {
+                    thickness: 10,
+                    thickfont: {
+                        family: `"GDS Transport", Arial, sans-serif`
+                    },
+                },
+                hoverlabel: {
+                    font: {
+                        family: `"GDS Transport", Arial, sans-serif`
+                    },
+                },
+                center: {
+                    'lat': 53.5,
+                    'lon': -2
+                },
+                marker: {
+                    line: {
+                        color: '#2f2f2f',
+                        width: 0.1
+                    }
+                },
+                ...data
+            }
+        ]}
         config={ {
+            displayModeBar: true,
             showLink: false,
             responsive: true,
             displaylogo: false,
@@ -100,17 +136,10 @@ export const Mapper = ({ layers, ...props }) => {
                 height: 600,
                 width: 1200,
                 scale: 4
-            }
-        } }
-        useResizeHandler={ true }
-        style={{ display: 'flex' }}
-        layout={ {
-            grid: {
-                rows: 1,
-                columns: 2,
-                pattern: 'independent'
             },
-            barmode: 'stack',
+            ...config
+        } }
+        layout={ {
             height: 500,
             geo: {
                 fitbounds: "geojson",
@@ -123,9 +152,6 @@ export const Mapper = ({ layers, ...props }) => {
                 }
             },
             mapbox: {
-                domain:  {
-                    x: [.5, 1]
-                },
                 style: URLs.mapStyle,
                 center: {
                   lat: 55.5,
@@ -139,7 +165,7 @@ export const Mapper = ({ layers, ...props }) => {
                         type: 'line',
                         color: '#a3a3a3',
                         line: {
-                            width: 1
+                            width: 0.1
                         }
                     },
                 ]
@@ -157,16 +183,15 @@ export const Mapper = ({ layers, ...props }) => {
             margin: {
                 l: 0,
                 r: 0,
-                b: 25,
+                b: 0,
                 t: 0,
                 pad: 0
             },
             xaxis: {
-                domain: [0.05, .47],
+                // domain: [.5, 1],
                 showgrid: false,
                 zeroline: false,
                 showline: false,
-                // tickangle: 30,
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
                     size : 14,
@@ -174,7 +199,6 @@ export const Mapper = ({ layers, ...props }) => {
                 }
             },
             yaxis: {
-                domain: [0, .8],
                 tickformat: 's',
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
@@ -182,17 +206,107 @@ export const Mapper = ({ layers, ...props }) => {
                     color: "#6f777b",
                 }
             },
-            xaxis2: {
-                domain: [.5, 1]
-            },
-            yaxis2: {
-                anchor: 'x2'
-            },
             plot_bgcolor: "rgba(231,231,231,0)",
-            paper_bgcolor: "rgba(255,255,255,0)"
-        } }
-        {...props}
+            paper_bgcolor: "rgba(255,255,255,0)",
+            ...layout
+        }}
+        { ...props }
     />
 
 }; // Mapper
+
+
+export const ScatterPlotWithTrendLine = ({ scatterData, trendLineData, layout, config, ...props }) => {
+
+    return <Plotter
+        data={[
+            {
+                type: 'scatter',
+                mode: 'markers',
+                showlegend: false,
+                marker: {
+                    size: 8,
+                },
+                fillcolor: '#005EA5',
+                ...scatterData
+            },
+            {
+                showlegend: false,
+                mode: "lines",
+                fillcolor: '#F47738',
+                line: {
+                    width: 3,
+                    dash: "dash",
+                    color: 'rgba(109,109,109,0.7)'
+                },
+                ...trendLineData
+            }
+        ]}
+        config={ {
+            displayModeBar: true,
+            showLink: false,
+            responsive: true,
+            displaylogo: false,
+            modeBarButtonsToRemove: [
+                "autoScale2d",
+                "zoomIn2d",
+                "zoomOut2d",
+                "toggleSpikelines",
+                "hoverClosestCartesian",
+                "zoom2d"
+            ],
+            toImageButtonOptions: {
+                format: 'png',
+                filename: 'export',
+                height: 600,
+                width: 1200,
+                scale: 4
+            },
+            ...config
+        } }
+        layout={ {
+            height: 500,
+            legend: {
+                orientation: 'h',
+                font: {
+                    family: `"GDS Transport", Arial, sans-serif`,
+                    size: 16,
+                },
+                xanchor: 'auto',
+                y: -.2
+            },
+            showlegend: true,
+            margin: {
+                l: 40,
+                r: 10,
+                b: 20,
+                t: 0,
+                pad: 0
+            },
+            xaxis: {
+                showgrid: false,
+                zeroline: false,
+                showline: false,
+                tickfont:{
+                    family: `"GDS Transport", Arial, sans-serif`,
+                    size : 14,
+                    color: "#6f777b"
+                }
+            },
+            yaxis: {
+                tickformat: 's',
+                tickfont:{
+                    family: `"GDS Transport", Arial, sans-serif`,
+                    size : 14,
+                    color: "#6f777b",
+                }
+            },
+            plot_bgcolor: "rgba(231,231,231,0)",
+            paper_bgcolor: "rgba(255,255,255,0)",
+            ...layout
+        } }
+        { ...props }
+    />
+
+};  // ScatterPlot
 
