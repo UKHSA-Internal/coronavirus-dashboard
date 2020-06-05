@@ -1,8 +1,7 @@
 import moment from "moment";
 import { max, min } from "d3-array";
-import type { ParsedParams } from "./utils.types";
 
-const isNumeric = subject => typeof subject === 'number'
+import type { ParsedParams } from "./utils.types";
 
 
 export const sortByDate = (a, b) => {
@@ -13,7 +12,7 @@ export const sortByDate = (a, b) => {
 
     return (dateA < dateB) || -((dateA > dateB) || 0)
 
-};
+};  // sortByDate
 
 
 const dateRange = (startDate, stopDate): Array<string> => {
@@ -60,40 +59,6 @@ export const fillDateGaps = (data: Array<any>, defaultValue: number = 0): Array<
 }; // fillDateGaps
 
 
-/**
- * Moving average
- * --------------
- * Centered moving average.
- *
- * @param data { Array<number> } Array of numbers
- * @param size { number } Size of the moving window
- * @returns { Array<number> } Array of moving averages
- */
-export const movingAverage = ( data: number[], size: number ): number[] => {
-
-    const
-        N = data.length,
-        floor = Math.floor(size / 2),
-        ceil = Math.ceil(size / 2);
-
-    let
-        movingMean = Array(N).fill(NaN),
-        sum ;
-
-    for ( let index = floor; index < N - size; index++ ) {
-        sum = 0;
-
-        for ( let sumIndex = index - floor; sumIndex < index + ceil; sumIndex ++ )
-            sum = sum + data[sumIndex];
-
-        movingMean[index] = sum / size;
-    }
-
-    return movingMean
-
-} // movingAverage
-
-
 export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionChar: string="?"): string => {
 
     const params = [];
@@ -138,18 +103,6 @@ export const getParamValueFor = (params: Array<ParsedParams>, keyName: string, d
         )
 
 };  // getParamValueFor
-
-
-export const sum = (arr, key=null) => {
-
-    if ( !key ) return arr.reduce((acc, item) => acc + item, 0);
-
-    return arr.reduce((acc, item) => {
-        acc = acc + key(item)
-        return acc
-    }, 0)
-
-};  // sum
 
 
 export const firstObjWithMax = ( arr: Array<{[string|number]: [string|number|null]}>, key: ([string|number]) => [string|number|null] ) => {
