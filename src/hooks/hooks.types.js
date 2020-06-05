@@ -1,4 +1,4 @@
-import type { ParsedParams } from "common/utils.types";
+import type { ParsedParams } from "common/utils/utils.types";
 
 
 export type useApiStructureInput = {[string]: [string]} | Array<string, string>;
