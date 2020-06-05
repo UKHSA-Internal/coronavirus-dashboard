@@ -1,9 +1,11 @@
 // @flow
 
+import React from 'react';
 import styled, { css } from 'styled-components';
 import type { ComponentType } from 'react';
 
 import addIECss from 'addIECss';
+
 
 export const Container: ComponentType<*> = (() => {
   return styled.div`
@@ -29,18 +31,12 @@ export const Container: ComponentType<*> = (() => {
   `;
 })();
 
-export const Caption: ComponentType<*> = (() => {
-  return styled.span`
-    margin-bottom: 5px;
-    font-size: 16px;
-    color: #626a63;
-  `;
-})();
 
-export const Title: ComponentType<*> = (() => {
-  return styled.h1``;
-})();
+export const Title = ({ className, ...props }) => (
+  <h1 className={ `govuk-heading-xl govuk-!-margin-bottom-4 ${className}` } { ...props }/>
+);
 
-export const Subtitle: ComponentType<*> = (() => {
-  return styled.span``;
-})();
+
+export const Subtitle = ({ className, ...props }) => (
+  <span className={ `govuk-body govuk-!-margin-bottom-0 ${className}` } { ...props }/>
+);
