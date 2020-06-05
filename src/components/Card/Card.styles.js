@@ -6,7 +6,7 @@ import type { ComponentType } from 'react';
 
 import addIECss from 'addIECss';
 
-export const CardBody: ComponentType<*> = (() => {
+export const HalfCard: ComponentType<*> = (() => {
 
   return styled.article`
     flex: 1 1 43%;
@@ -19,7 +19,24 @@ export const CardBody: ComponentType<*> = (() => {
 })();
 
 
-export const FullWidthCardBody: ComponentType<*> = (() => {
+export const HalfCardHeader: ComponentType<*> = (() => {
+
+    return styled.header`
+    `;
+
+})();
+
+
+export const HalfCardBody: ComponentType<*> = (() => {
+
+    return styled.div`
+      margin: 0 -15px;
+    `;
+
+})();
+
+
+export const FullCard: ComponentType<*> = (() => {
 
   return styled.article`
     flex: 1 1 auto;
@@ -32,11 +49,21 @@ export const FullWidthCardBody: ComponentType<*> = (() => {
 })();
 
 
+export const Section: ComponentType<*> = (() => {
+
+    return styled.div`
+      flex: 1 1 43%;
+      margin: 0 15px;
+    `;
+
+})();
+
+
 export const CardDescription: ComponentType<*> = (() => {
 
   const Node = styled.small`
-  display: flex;
-  color: #626a6e;
+    display: flex;
+    color: #626a6e;
   `;
 
   return ({ className="", ...props }) =>
