@@ -42,18 +42,18 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
             disjunctive = createQuery(disjunctiveFilters, "|", "") || "",
             paramString = `${conjunctive}${(conjunctive && disjunctive) ? ";" : ""}${disjunctive}`,
             urlParams = createQuery([
-            {
-                key: 'filters',
-                sign: '=',
-                value: paramString
-            },
-            ...extraParams,
-            {
-                key: 'structure',
-                sign: '=',
-                value: JSON.stringify(structure)
-            }
-        ]);
+                {
+                    key: 'filters',
+                    sign: '=',
+                    value: paramString
+                },
+                ...extraParams,
+                {
+                    key: 'structure',
+                    sign: '=',
+                    value: JSON.stringify(structure)
+                }
+            ]);
 
         (async () => {
 
