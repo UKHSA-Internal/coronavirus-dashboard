@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Fragment, useState, useEffect, useRef } from 'react';
+import React, { Fragment } from 'react';
 import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 
@@ -9,16 +9,15 @@ import { HalfWidthCard, FullWidthCard } from 'components/Card';
 import type { Props } from './Cases.types';
 import { Table, FlexContainer } from './Cases.styles';
 
-import { getParams, getParamValueFor, movingAverage, firstObjWithMax } from "common/utils";
+import { getParams, getParamValueFor, firstObjWithMax } from "common/utils";
+import { movingAverage, leastSquareRegression } from "common/stats";
 import { Plotter, Mapper } from "./plots";
 import { MainLoading } from "components/Loading";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
 import { zip } from "d3-array";
 import numeral from "numeral";
-import axios from "axios";
-import URLs from "../../common/urls";
-import Plot from "react-plotly.js";
+import URLs from "common/urls";
 
 
 
@@ -205,32 +204,6 @@ const DataTable = ({ args }) => {
 };  // DataTable
 
 
-const calculateTrendLine =  (x, y, domain) => {
-
-    const
-        XY = zip(x, y),
-        N = XY.length,
-        sigmaXY = XY.reduce((acc,[x_i, y_i]) => acc + (x_i * y_i), 0),
-        sigmaX =  x.reduce((acc, val) => acc + val, 0),
-        sigmaY =  x.reduce((acc, val) => acc + val, 0),
-        sigmaX2 =  x.reduce((acc, val) => acc + (val * val), 0);
-
-    const
-        numerator = (N * sigmaXY) - (sigmaX * sigmaY),
-        denominator = (N * sigmaX2) - (sigmaX * sigmaX),
-        m = numerator / denominator,
-        b  =  (sigmaY - (m * sigmaX)) / N,
-        Y  = [],
-        X = domain;
-
-    for ( let x_i of X )
-        Y.push(Math.round(m * x_i + b))
-
-    return [X, Y]
-
-}
-
-
 const CasesMap = ({ data, ...props }) => {
 
     const GeoJSONPath = `${ URLs.baseGeo }ltlas_v1.geojson`;
@@ -243,7 +216,8 @@ const CasesMap = ({ data, ...props }) => {
         cases = sortedData.map(item => item.cases || 0),
         codes = sortedData.map(item => item.code),
         names = sortedData.map(item => item.name),
-        [X, Y] = calculateTrendLine(cases, rates, [Math.min(...rates) - 10, Math.max(...rates) + 10]);
+        trendDomain = [Math.min(...rates) - 10, Math.max(...rates) + 10],
+        [trend_X, trend_Y] = leastSquareRegression(cases, rates, trendDomain);
 
     return <div style={{ display: "flex", flexFlow: "row-wrap", flex: "1 1 100%" }}>
 
@@ -266,10 +240,9 @@ const CasesMap = ({ data, ...props }) => {
                         },
                         {
                             name: "b",
-                            x: X,
-                            y: Y,
+                            x: trend_X,
+                            y: trend_Y,
                             showlegend: false,
-                            // type: "line",
                             mode: "lines",
                             fillcolor: '#F47738',
                             line: {
