@@ -11,7 +11,9 @@ import { Container } from './DailySummary.styles';
 
 import { max } from "d3-array";
 import { MainLoading } from "components/Loading";
-import { getParams, sum, movingAverage } from "common/utils";
+import { getParams } from "common/utils";
+import { movingAverage } from "common/stats";
+import { sum } from "common/math";
 
 import useApi from "hooks/useApi";
 
