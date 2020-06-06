@@ -216,7 +216,17 @@ const CasesMap = ({ data, ...props }) => {
         <div style={{  flex: "1 2 50%"  }}>
             <div>
                 <ScatterPlotWithTrendLine
-                    scatterData={ { x: rates, y: cases, text: names } }
+                    scatterData={ {
+                        x: rates,
+                        y: cases,
+                        text: names,
+                        // xaxis: {
+                        //     // title: { text: "Incident rate"  }
+                        //         },
+                        // yaxis: {
+                        //     // title: { text: "Total cases" }
+                        //     },
+                    } }
                     trendLineData={ { x: trend_X, y: trend_Y } }
                 />
             </div>
