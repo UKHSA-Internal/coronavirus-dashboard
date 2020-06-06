@@ -68,7 +68,7 @@ const BigNumberTitles = {
 const BigNumberDescriptions = {
     ukCases: 'Includes tests carried out by commercial partners which are not included in the 4 National totals',
     dailyUkCases: "Number of additional cases on {date}",
-    ukDeaths: "Deaths of people who have had a positive test result confirmed by a Public Health or NHS laboratory",
+    ukDeaths: "Deaths of people who have had a positive test result",
     dailyUkDeaths: "Number of additional deaths on {date}"
 }
 
