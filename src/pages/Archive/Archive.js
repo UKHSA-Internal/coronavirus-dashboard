@@ -7,15 +7,26 @@ import { Link } from 'react-router-dom';
 
 import URLs from "common/urls";
 
-import {
-    Container, Content, DownloadLink, Table, TableContainer,
-    SectionHeader, BodyCell, HeadCell
-} from "./Archive.style";
-
+import PageTitle from 'components/PageTitle';
 import type {
-    ArchiveData, ArchiveState, ArchiveProps,
-    DateGroupedArchiveData, RegExExtractArchiveData
+    ArchiveData,
+    ArchiveState,
+    ArchiveProps,
+    DateGroupedArchiveData,
+    RegExExtractArchiveData
 } from "./Archive.types"
+
+import {
+    BodyCell,
+    Tag,
+    DownloadLink,
+    Loading,
+    Table,
+    TableContainer,
+    HeadCell,
+    TextContainer
+} from "./Archive.styles";
+
 
 
 const [URL, FORMAT, CATEGORY, YEAR, MONTH, DAY] = [0, 1, 2, 3, 4, 5];
@@ -104,20 +115,18 @@ const getTableCells = (data: Array<ArchiveData>, isFirst: boolean=false) => {
         ];
 
     return <Fragment>
-        <BodyCell className={ `govuk-table__cell` }>
+        <BodyCell>
             { moment(cellData[0].date).format("ddd, DD MMM YYYY") }&nbsp;
             {
                 isFirst
-                    ? <strong className="govuk-tag">Latest</strong>
+                    ? <Tag>Latest</Tag>
                     : null
             }
         </BodyCell>
         {
             cellData.map(d =>
-                <BodyCell key={ `${d.date}_${d.category}_${d.format}` }
-                          className={ `govuk-table__cell` }>
+                <BodyCell key={ `${d.date}_${d.category}_${d.format}` }>
                     <DownloadLink href={ `/downloads/${d.url}` }
-                       className={ 'govuk-link' }
                        download={ `coronavirus-${d.category}_${d.date}.${d.format}` }>
                         { capitalize(d.category) } as { d.format.toUpperCase() }
                     </DownloadLink>
@@ -186,14 +195,14 @@ export default class Archive extends Component<ArchiveProps, {}> {
 
         const { loading, data } = this.state;
 
-        if ( loading ) return <p className={ "govuk-body" }>Loading&hellip;</p>
+        if ( loading ) return <Loading>Loading&hellip;</Loading>
 
         return <TableContainer>
-            <Table className={ "govuk-table" }>
+            <Table>
                 <thead className={ "govuk-table__head" }>
                     <tr className={ "govuk-table__row" }>
-                        <HeadCell scope={ "col" } className={ "govuk-table__header app-custom-class" }>Date</HeadCell>
-                        <HeadCell colSpan={ 4 } className={ "govuk-table__header app-custom-class" }>Downloads</HeadCell>
+                        <HeadCell scope={ "col" }>Date</HeadCell>
+                        <HeadCell colSpan={ 4 }>Downloads</HeadCell>
                     </tr>
                 </thead>
                 <tbody className={ "govuk-table__body" }>
@@ -213,34 +222,19 @@ export default class Archive extends Component<ArchiveProps, {}> {
 
     render(): React.ReactNode {
 
-        return <Container className={"govuk-width-container"}>
-            <Content className="govuk-main-wrapper" role="main">
-                <Container className="govuk-grid-row">
-                    <Container className="govuk-grid-column-two-thirds">
-                        <SectionHeader className={ "govuk-heading-l" }>
-                            Archive
-                        </SectionHeader>
-                        <p className={ "govuk-body" }>
-                            This page provides links to data previously published on the dashboard.
-                            These files include data that have been superseded because errors have
-                            been found.  For corrected up-to-date series of daily data, use the
-                            “latest” downloads below.
-                        </p>
-                        <p className={ "govuk-body" }>
-                            Files for deaths dated 28 April 2020 and earlier include the data for
-                            England based only on hospital deaths reported by NHS England.  Files
-                            dated 29 April 2020 onwards include deaths for England calculated by PHE
-                            from multiple sources. See the&nbsp;
-                            <Link to={ "/about" }
-                                  className={ "govuk-link govuk-link--no-visited-state" }>
-                                About the data
-                            </Link>&nbsp;for details.
-                        </p>
-                    </Container>
-                </Container>
-                { this.display() }
-            </Content>
-        </Container>
+        return <Fragment>
+            <PageTitle title={"Archive"} />
+            <TextContainer>
+                <p className={ "govuk-body" }>
+                    This page provides links to data previously published on the dashboard. These files include data that have been superseded because errors have been found.  For corrected up-to-date series of daily data, use the “latest” downloads below.
+                </p>
+                <p className={ "govuk-body" }>
+                    Files for deaths dated 28 April 2020 and earlier include the data for England based only on hospital deaths reported by NHS England. Files dated 29 April 2020 onwards include deaths for England calculated by PHE from multiple sources. See the <Link to={ "/about" } className={ "govuk-link govuk-link--no-visited-state" }>About the data</Link> for details.
+                </p>
+            </TextContainer>
+
+            { this.display() }
+        </Fragment>
 
     } // render
 
