@@ -17,6 +17,11 @@ import { TabLink, TabLinkContainer } from "components/TabLink";
 import { zip } from "d3-array";
 import URLs from "common/urls";
 
+import {
+    VisContainer,
+    VisItem
+} from "./Cases.styles";
+
 
 const
     DefaultParams = [
@@ -210,18 +215,18 @@ const CasesMap = ({ data, ...props }) => {
         trendDomain = [Math.min(...rates) - 10, Math.max(...rates) + 10],
         [trend_X, trend_Y] = leastSquareRegression(cases, rates, trendDomain);
 
-    return <div style={{ display: "flex", flexFlow: "row-wrap", flex: "1 1 100%" }} { ...props }>
+    return <VisContainer { ...props }>
 
-        <div style={{  flex: "1 2 50%"  }}>
+        <VisItem>
             <div>
                 <ScatterPlotWithTrendLine
                     scatterData={ { x: rates, y: cases, text: names } }
                     trendLineData={ { x: trend_X, y: trend_Y } }
                 />
             </div>
-        </div>
+        </VisItem>
 
-        <div style={{ flex: "1 2 50%" }}>
+        <VisItem>
             <div>
                 <Choropleth data={ {
                     geojson: GeoJSONPath,
@@ -233,9 +238,9 @@ const CasesMap = ({ data, ...props }) => {
                     zmax: trendDomain[1],
                 } }/>
             </div>
-        </div>
+        </VisItem>
 
-    </div>
+    </VisContainer>
 
 };  // CasesMap
 
