@@ -15,7 +15,7 @@ const Healthcare: ComponentType<Props> = ({ }: Props) => {
     base.href = document.location.pathname;
 
 
-    return <Container className={ "util-flex util-flex-wrap" }>
+    return <Container>
         <HalfWidthCard />
         <HalfWidthCard />
     </Container>
