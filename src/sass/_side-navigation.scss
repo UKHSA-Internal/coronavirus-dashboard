@@ -3,6 +3,7 @@
 
 .moj-side-navigation {
     @include govuk-font(19);
+
     @include govuk-media-query($from: tablet) {
         @include govuk-font(16);
     }
@@ -15,9 +16,9 @@
 }
 
 .moj-side-navigation__list {
-    list-style: none;
-    margin: 0;
     padding: 0;
+    margin: 0;
+    list-style: none;
 
     @include govuk-media-query($from: tablet) {
         margin-bottom: govuk-spacing(4);
@@ -25,25 +26,24 @@
 }
 
 .moj-side-navigation__item {
-
     a,
     a:link,
     a:visited {
+        display: block;
         background-color: inherit;
         color: govuk-colour("blue");
-        display: block;
         text-decoration: none;
 
         @include govuk-media-query($until: tablet) {
-            border-left: 4px solid transparent;
-            background-color: inherit;
             padding: govuk-spacing(3);
             padding-bottom: govuk-spacing(3) - 4px; // Compensate for 4px border
+            border-left: 4px solid transparent;
+            background-color: inherit;
         }
 
         @include govuk-media-query($from: tablet) {
-            border-left: 4px solid transparent;
             padding: govuk-spacing(2);
+            border-left: 4px solid transparent;
         }
     }
 
@@ -52,12 +52,12 @@
     }
 
     a:focus {
-        color: $govuk-focus-text-colour;
-        background-color: $govuk-focus-colour;
-        box-shadow: 0 -2px $govuk-focus-colour, 0 4px $govuk-focus-text-colour;
+        position: relative;
         border-color: $govuk-focus-text-colour;
         border-left-color: transparent;
-        position: relative;
+        background-color: $govuk-focus-colour;
+        box-shadow: 0 -2px $govuk-focus-colour, 0 4px $govuk-focus-text-colour;
+        color: $govuk-focus-text-colour;
     }
 }
 
@@ -65,28 +65,16 @@
     a:link,
     a:visited {
         border-color: govuk-colour("blue");
+        background-color: govuk-colour("light-grey");
         color: govuk-colour("blue");
         font-weight: bold;
     }
 
     a:focus {
-        color: $govuk-focus-text-colour;
-        background-color: $govuk-focus-colour;
-        box-shadow: 0 -2px $govuk-focus-colour, 0 4px $govuk-focus-text-colour;
         border-color: $govuk-focus-text-colour;
         border-left-color: transparent;
+        background-color: $govuk-focus-colour;
+        box-shadow: 0 -2px $govuk-focus-colour, 0 4px $govuk-focus-text-colour;
+        color: $govuk-focus-text-colour;
     }
-
-
-        a:link,
-        a:visited {
-            background-color: govuk-colour("light-grey");
-        }
-
-        a:focus {
-            color: $govuk-focus-text-colour;
-            background-color: $govuk-focus-colour;
-            border-color: transparent;
-        }
-
 }
