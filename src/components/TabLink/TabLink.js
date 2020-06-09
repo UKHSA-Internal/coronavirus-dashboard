@@ -32,12 +32,12 @@ export const TabLinkContainer = ({ children }: TabLinkContainerProps): React$Nod
 
     const [ current, setCurrent ] = useState(children[0].props.label);
 
-    return <MainContainer className={ "util-flex util-flex-col" }>
-        <TabsContainer className={ "util-flex util-flex-wrap util-flex-align-items-start govuk-!-margin-bottom-6" }>{
+    return <MainContainer>
+        <TabsContainer>{
             children.map(({ props: { label } }, index) =>
             <Tab type={ "link" }
                 key={ `${label}-${index}` }
-                className={`govuk-link govuk-!-font-size-19 govuk-!-margin-right-7 ${label === current ? 'active govuk-!-font-weight-bold' : '' }`}
+                className={`${label === current ? 'active govuk-!-font-weight-bold' : '' }`}
                 onClick={ () => setCurrent(label)  }>
                 { label }
             </Tab>

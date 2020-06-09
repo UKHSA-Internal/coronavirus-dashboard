@@ -4,7 +4,7 @@ import React from 'react';
 
 import PageTitle from 'components/PageTitle';
 import type { Props } from './ErrorBoundary.types';
-import * as Styles from './ErrorBoundary.styles';
+import { Container, DetailsBody } from './ErrorBoundary.styles';
 
 
 export default class ErrorBoundary extends React.Component<Props, State> {
@@ -27,7 +27,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
         if (this.state.errorInfo) {
 
             // Error path
-            return <Styles.Container className="govuk-width-container" role="main">
+            return <Container role="main">
                 <PageTitle title={"Something went wrong"} />
 
                 <p className="govuk-body">
@@ -49,14 +49,13 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                             Technical details
                         </span>
                     </summary>
-                    <Styles.DetailsBody className="govuk-details__text">
+                    <DetailsBody>
                         {this.state.error && this.state.error.toString()}
                         <br/>
                         {this.state.errorInfo.componentStack}
-                    </Styles.DetailsBody>
+                    </DetailsBody>
                 </details>
-
-            </Styles.Container>
+            </Container>
 
         }
         // Normally, just render children
