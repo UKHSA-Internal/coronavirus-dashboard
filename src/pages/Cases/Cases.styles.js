@@ -1,25 +1,23 @@
 // @flow
-
+import React from 'react';
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
-export const FlexContainer: ComponentType<*> = (() => {
-  return styled.div`
-    display: flex;
-    flex-flow: row wrap;
-    grid-column: 1/-1;
-    margin: 0 -10px;
 
-    & .govuk-back-link {
-      width: fit-content;
-    }
+export const Table: ComponentType<*> = (() => {
 
-    & a {
-      margin-bottom: 45px;
-    }
+    const Container = styled.div`
+      max-height: 350px;
+      overflow: scroll;
 
-    @media only screen and (max-width: 768px) {
-      grid-column: span 2;
-    }
-  `;
+      &>table {
+        font-size: 1.1rem;
+        background-color: transparent !important;
+      }
+    `;
+
+    return ({ ...props}) => <Container>
+      <table {...props}/>
+    </Container>
+
 })();

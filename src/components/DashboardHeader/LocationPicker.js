@@ -134,7 +134,7 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
             },
             "utla": {
                 key: "utla",
-                label: "upper-trier local authorities",
+                label: "upper-tier local authorities",
                 parent: "region",
             },
             "ltla": {
@@ -225,7 +225,7 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
             )
         ]);
 
-        history.push(`/${ newQuery }`)
+        history.push(`${ newQuery }`)
 
     };  // handleSubmission
 
@@ -248,12 +248,15 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
 
                     const areaTypeItem = order[areaType]
 
-                    return <Select value={ areaName ? areaName : "" }
-                                   disabled={ (options?.length ?? 0) === 0 }
-                                   key={ areaType }
-                                   onChange={ ({ target: { value } }) => getStateFor(value, areaTypeItem) }
-                                   className={ 'govuk-select' }
-                                   name={ areaType }>
+                    return <Fragment>
+                        <label className={ "govuk-visually-hidden" } htmlFor={ areaType } key={ `${areaType}-label` }>{ areaType }</label>
+                        <Select value={ areaName ? areaName : "" }
+                                disabled={ (options?.length ?? 0) === 0 }
+                                key={ areaType }
+                                onChange={ ({ target: { value } }) => getStateFor(value, areaTypeItem) }
+                                className={ 'govuk-select' }
+                                name={ areaType }
+                                id={ areaType }>
                         <option value={ "" }>All { areaTypeItem.label }</option>
                         {
                             options && options.map(({ name, code }) =>
@@ -265,6 +268,7 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
                                 )
                         }
                     </Select>
+                    </Fragment>
                 })
             }</div>
 
@@ -275,7 +279,7 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
                            className={ "govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0" }/>
                     <input type={ "reset" }
                            value={ "Reset to UK" }
-                           onClick={ () => history.push('/') }
+                           onClick={ () => history.push('?') }
                            className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }/>
                 </div>
             </div>

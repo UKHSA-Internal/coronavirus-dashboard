@@ -19,12 +19,12 @@ import {
 const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) => {
     const layout = useResponsiveLayout(768);
 
-    if (layout === 'desktop') {
+
         return (
             <nav className="moj-side-navigation govuk-!-padding-right-4 govuk-!-padding-top-2" aria-label="Side navigation">
                 <ul className="moj-side-navigation__list">
                     <li className={`moj-side-navigation__item ${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
-                        <Link to={ "/" } aria-current="location">Daily summary</Link>
+                        <Link to={ "/" } aria-current="location">UK Summary</Link>
                     </li>
 
                     <li className={`moj-side-navigation__item ${pathname === '/tests' ? "moj-side-navigation__item--active" : ""}`}>
@@ -51,22 +51,7 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
                 </ul>
             </nav>
         );
-    }
-  return (
-    <Container className="govuk-header__container--full-width">
-      <NavList>
-        <NavListItem active={!pathname.includes('about') && !pathname.includes('region')}>
-          <FooterLink className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/" dataTopnav="Data dashboard">Data dashboard</FooterLink>
-        </NavListItem>
-        <NavListItem active={pathname.includes('region')}>
-          <FooterLink className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/region" dataTopnav="Regional">Regional</FooterLink>
-        </NavListItem>
-        <NavListItem active={pathname.includes('about')}>
-          <FooterLink className="govuk-link govuk-link--no-visited-state app-navigation__link" href="/about" dataTopnav="About the data">About the data</FooterLink>
-        </NavListItem>
-      </NavList>
-    </Container>
-  );
+
 };
 
 export default withRouter(SideNavigation);

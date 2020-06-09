@@ -1,8 +1,7 @@
 // Global settings
-$govuk-assets-path: '~govuk-frontend/govuk/assets/';
-$govuk-page-width: calc(100vw - 1px);
-$govuk-gutter: 3rem;
-$govuk-font-family: 'GDS Transport', Arial, sans-serif;
+$govuk-assets-path: "~govuk-frontend/govuk/assets/";
+$govuk-page-width: 1920px;
+$govuk-font-family: "GDS Transport", Arial, sans-serif;
 
 // GOVUK Frontend
 @import 'node_modules/govuk-frontend/govuk/all';

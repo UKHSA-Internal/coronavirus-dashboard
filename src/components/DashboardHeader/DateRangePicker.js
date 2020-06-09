@@ -54,7 +54,7 @@ const DateRangePicker = ({ query, startDate, endDate }: Props) => {
                 {key: 'specimenDate', sign: '<', value: end}
             ]);
 
-        history.push(`/${newQuery}`)
+        history.push(`${newQuery}`)
 
     }
 

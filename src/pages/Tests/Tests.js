@@ -4,9 +4,9 @@ import React, { Fragment } from 'react';
 import type { ComponentType } from 'react';
 
 import { BigNumber, BigNumberContainer } from 'components/BigNumber';
-import { HalfWidthCard } from 'components/Card';
+import { FullWidthCard } from 'components/Card';
 import type { Props } from './Tests.types';
-import * as Styles from './Tests.styles';
+import { Container } from './Tests.styles';
 
 
 const Tests: ComponentType<Props> = ({ }: Props) => {
@@ -30,13 +30,8 @@ const Tests: ComponentType<Props> = ({ }: Props) => {
             />
         </BigNumberContainer>
 
-        <Styles.FlexContainer>
-            <HalfWidthCard />
-        </Styles.FlexContainer>
-
-        <Styles.FlexContainer>
-            <HalfWidthCard />
-        </Styles.FlexContainer>
+        <FullWidthCard caption={ "Testing in the UK by date" } />
+        <FullWidthCard caption={ "Daily breakdown by pillar" } />
     </Fragment>
 };
 

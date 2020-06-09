@@ -6,144 +6,40 @@ import { withRouter } from 'react-router';
 import moment from "moment";
 
 import { HalfWidthCard, VisualSection, ValueItem, ValueItemsSection } from 'components/Card';
-import type { Props } from './DailySummary.types';
-import * as Styles from './DailySummary.styles';
-import axios from 'axios';
-import Plot from 'react-plotly.js';
+
+import { Container } from './DailySummary.styles';
+
 import { max } from "d3-array";
+import { MainLoading } from "components/Loading";
+import { getParams } from "common/utils";
+import { movingAverage } from "common/stats";
+import { sum } from "common/math";
 
-import { createQuery, getParams } from "common/utils";
+import useApi from "hooks/useApi";
 
-import deepEqual from "deep-equal"
+import { Plotter } from "./plots";
 
 
-/**
- * Extracts the number of deaths from the latest date included in
- * the data, under: ``data.overview.K02000001.dailyDeaths``
- * @param data
- * @returns {number} Latest number of deaths or 0.
- */
-const getLatestDailyDeaths = (data: any): number => {
+const
+    DefaultParams = [
+        { key: 'areaName', sign: '=', value: 'United Kingdom' },
+        { key: 'areaType', sign: '=', value: 'overview' }
+    ],
+    Structures = {
+        data: {
+            dailyLabCases: "changeInDailyCases",
+            deathReportDate: "deathReportingDate",
+            specimenDate: "specimenDate",
+            deaths: "dailyChangeInDeaths",
+            cases: "dailyLabConfirmedCases"
+        }
+    };
 
-    const defaultDate = '0000.00.00';
-
-    try {
-        return data?.overview?.K02000001?.dailyDeaths?.sort((a, b) =>
-            new Date(b?.date ?? defaultDate) - new Date(a?.date ?? defaultDate)
-        )[0] ?? {}
-    } catch (e) {
-        return {}
-    }
-
-}; // getLatestDailyDeaths
-
-const formatStr = (s: string, replacements: ReplacementsType): string => {
-
-    for ( const key in replacements ) {
-
-        if ( !replacements.hasOwnProperty(key) ) continue
-
-        s = s.replace(`{${ key }}`, replacements?.[key] ?? "")
-
-    }
-
-    return s
-
-}; // formatStr
 
 export const timestamp = (data): string =>
     data.hasOwnProperty("metadata")
         ? moment(data?.metadata?.lastUpdatedAt).format("dddd D MMMM YYYY [at] h:mma")
         : "";
-
-export const MainLoading = () => {
-
-    return <div className="govuk-width-container" role="main">
-        <div className={ "govuk-body govuk-!-font-size-24" }>
-            The website is loading. Please wait&hellip;
-        </div>
-    </div>
-
-}; // MainLoading
-
-
-const sum = (arr, key) => {
-
-    return arr.reduce((acc, item) => {
-        acc = acc + key(item)
-        return acc
-    }, 0)
-
-}
-
-
-const Plotter = ({ ...props }) => {
-
-    return <Plot
-        config={ {
-            showLink: false,
-            responsive: true,
-            displaylogo: false,
-            modeBarButtonsToRemove: [
-                "autoScale2d",
-                "zoomIn2d",
-                "zoomOut2d",
-                "toggleSpikelines",
-                "hoverClosestCartesian",
-                "zoom2d"
-            ],
-            toImageButtonOptions: {
-                format: 'png',
-                filename: 'export',
-                height: 1024,
-                width: 768,
-                scale: 4
-            }
-        } }
-        useResizeHandler={ true }
-        style={{ display: 'flex' }}
-        layout={ {
-            // width: 400,
-            height: 240,
-            // autosize: true,
-            legend: {
-                orientation: 'h'
-            },
-            showlegend: false,
-            margin: {
-                l: 20,
-                r: 5,
-                b: 25,
-                t: 5,
-                pad: 0
-            },
-            xaxis: {
-                showgrid: false,
-                zeroline: false,
-                showline: false,
-                // tickangle: 30,
-                tickfont:{
-                    family: `"GDS Transport", Arial, sans-serif`,
-                    size : 10,
-                    color: "#6f777b"
-                }
-            },
-            yaxis: {
-                tickformat: 's',
-                tickfont:{
-                    family: `"GDS Transport", Arial, sans-serif`,
-                    size : 10,
-                    color: "#6f777b",
-                }
-            },
-            plot_bgcolor: "rgba(231,231,231,0)",
-            paper_bgcolor: "rgba(255,255,255,0)"
-        } }
-        {...props}
-    />
-
-}; // Plotter
-
 
 
 const groupByUniqueKey = (data, uniqueKeyName) => {
@@ -161,18 +57,33 @@ const groupByUniqueKey = (data, uniqueKeyName) => {
 
 const DeathsCard = ({ data }) => {
 
-    const
-        groupByDeathReportDate = groupByUniqueKey(data, 'deathReportDate'),
-        maxDeathReportDate = max(Object.keys(groupByDeathReportDate));
+    const nationalData = useApi({
+        conjunctiveFilters: [
+            { key: "areaType", sign: "=", value: "nation" }
+        ],
+        structure: { name: "areaName", death: "dailyChangeInDeaths" },
+        extraParams: [{ key: "latestBy", sign: "=", value: "deathReportingDate" }]
+    });
 
-    return <HalfWidthCard caption={ "Deaths" }>
+    if ( !data || !nationalData ) return <MainLoading/>;
+
+    const
+        deathReportDate =  data.map(item => item?.deathReportDate ?? ""),
+        deaths = data.map(item => (item?.deaths ?? 0) || 0),
+        deathsMovingAverage = movingAverage(deaths, 7),
+        groupByDeathReportDate = groupByUniqueKey(data, 'deathReportDate'),
+        maxDeathReportDate = max(Object.keys(groupByDeathReportDate)),
+        nationalDataDeaths = nationalData.map(item => item?.death ?? ""),
+        maxDeath = max(nationalDataDeaths);
+
+    return <HalfWidthCard heading={ "Deaths" }>
         <VisualSection>
             <Plotter
                 data={ [
                     {
                         name: "Total lab-confirmed cases",
-                        x: data.map(item => item?.deathReportDate ?? ""),
-                        y: data.map(item => item?.deaths ?? 0),
+                        x: deathReportDate,
+                        y: deathsMovingAverage,
                         type: 'scatter',
                         fill: 'tozeroy',
                         fillcolor: 'rgba(43,140,196,0.2)'
@@ -184,19 +95,76 @@ const DeathsCard = ({ data }) => {
             <ValueItem
                 label={ "Confirmed COVID-19 associated deaths" }
                 value={  groupByDeathReportDate[maxDeathReportDate]?.deaths ?? 0 }
-                description={ 'Total all time' }
-                descriptionValue={ sum(data, item => item?.deaths ?? 0) }
-                colourName={ 'blue' }
+                description={ 'Total' }
+                descriptionValue={ sum(deaths) }
+                colourValue={ '#2B8CC4' }
             />
+            <div>
+                <Plotter
+                    data={[
+                        {
+                            name: "Previously reported",
+                            y: nationalData.map(({ name="" }) => name.replace(/Northern Ireland/g, "NI")),
+                            x: nationalDataDeaths,
+                            text: nationalDataDeaths,
+                            type: "bar",
+                            orientation: "h",
+                            width: 0.7,
+                            mode: 'marker+text',
+                            marker: {
+                                color: '#005EA5'
+                            },
+                            texttemplate: '%{text:s}',
+                            textposition: 'auto',
+                            cliponaxis: true,
+                            showlegend: false,
+                            textfont: {
+                                color: nationalDataDeaths.map(item => item === maxDeath ? '#fff' :  '#005EA5'),
+                                family: `"GDS Transport", Arial, sans-serif`,
+                                size: 11
+                            }
+                        }
+                    ]}
+                    layout={{
+                        margin: {
+                            l: 57,
+                            r: 0,
+                            b: 0,
+                            t: 0,
+                            pad: 5
+                        },
+                        offset: .1,
+                        yaxis: {
+                            tickfont:{
+                                family: `"GDS Transport", Arial, sans-serif`,
+                                size : 13,
+                                color: "#6f777b",
+                            },
+                            layer: "below traces"
+                        },
+                        xaxis: {
+                            visible: false,
+                            layer: "below traces"
+                        },
+                        height: 110,
+                        uniformtext: {
+                            minsize: 8,
+                            mode: 'hide'
+                        }
+                    }}
+                />
+            </div>
         </ValueItemsSection>
     </HalfWidthCard>
 
-}
+};  // DeathsCard
 
 
 const HealthcareCard = ({ data }) => {
 
-    return <HalfWidthCard caption={ "Healthcare" }>
+    if ( !data ) return <MainLoading/>;
+
+    return <HalfWidthCard heading={ "Healthcare" }>
         <VisualSection>
             <Plotter
                 data={ [
@@ -215,9 +183,9 @@ const HealthcareCard = ({ data }) => {
             <ValueItem
                 label={ "Discharged" }
                 value={ max(data, item => item?.dischargeDate ?? 0)?.discharged ?? 0}
-                description={ 'Total all time' }
+                description={ 'Total' }
                 descriptionValue={ sum(data, item => item?.discharged ?? 0) }
-                colourName={ 'blue' }
+                colourValue={ '#2B8CC4' }
             />
             <ValueItem
                 label={ "In hospital" }
@@ -225,18 +193,23 @@ const HealthcareCard = ({ data }) => {
                 description={ 'Occupancy' }
                 descriptionValue={ 0 }
                 descriptionSign={ "%" }
+                colourValue={ '#F47738' }
+
             />
             <ValueItem
                 label={ "Hospital breakdown" }
                 value={ 0 }
+                colourValue={ '#6F777B' }
             />
         </ValueItemsSection>
     </HalfWidthCard>
 
-}
+};  // HealthcareCard
 
 
 const CasesCard = ({ data }) => {
+
+    if ( !data ) return <MainLoading/>;
 
     const
         groupBySpecimenDate = groupByUniqueKey(data, 'specimenDate'),
@@ -245,14 +218,14 @@ const CasesCard = ({ data }) => {
         testDate = max(Object.keys(groupByTestDate));
 
 
-    return <HalfWidthCard caption={ "Cases" }>
+    return <HalfWidthCard heading={ "Cases" }>
         <VisualSection>
             <Plotter
                 data={ [
                     {
                         name: "Cases",
                         x: data.map(item => item?.specimenDate ?? ""),
-                        y: data.map(item => item?.cases ?? 0),
+                        y: movingAverage(data.map(item => item?.cases ?? 0), 7),
                         fill: 'tozeroy',
                         fillcolor: 'rgba(43,140,196,0.2)'
                     },
@@ -269,16 +242,18 @@ const CasesCard = ({ data }) => {
         <ValueItemsSection>
             <ValueItem
                 label={ "Lab-confirmed" }
-                value={ groupBySpecimenDate[maxSpecimenDate]?.cases ?? 0 }
-                description={ 'Total all time' }
+                // value={ groupBySpecimenDate[maxSpecimenDate]?.cases ?? 0 }
+                value={ sum(data, item => item?.dailyLabCases ?? 0) }
+                description={ 'Total' }
                 descriptionValue={ sum(data, item => item?.cases ?? 0) }
-                colourName={ 'blue' }
+                colourValue={ '#2B8CC4' }
             />
             <ValueItem
                 label={ "No. of people tested" }
                 value={ groupByTestDate[testDate]?.tests ?? 0 }
-                description={ 'Total all time' }
+                description={ 'Total' }
                 descriptionValue={ sum(data, item => item?.tests ?? 0) }
+                colourValue={ '#6F777B' }
             />
             <ValueItem
                 label={ "Patients recovered" }
@@ -287,10 +262,12 @@ const CasesCard = ({ data }) => {
         </ValueItemsSection>
     </HalfWidthCard>
 
-}
+};   // CasesCard
 
 
 const TestingCard = ({ data }) => {
+
+    if ( !data ) return <MainLoading/>;
 
     const
         testDate = groupByUniqueKey(data, 'testDate'),
@@ -299,7 +276,7 @@ const TestingCard = ({ data }) => {
         maxLabCapacityDate = max(Object.keys(labCapacityDate));
 
 
-    return <HalfWidthCard caption={ "Testing" }>
+    return <HalfWidthCard heading={ "Testing" }>
         <VisualSection>
             <Plotter
                 data={ [
@@ -318,124 +295,35 @@ const TestingCard = ({ data }) => {
             <ValueItem
                 label={ "No. of test" }
                 value={ testDate[maxTestDate]?.tests ?? 0}
-                description={ 'Total all time' }
+                description={ 'Total' }
                 descriptionValue={ sum(data, item => item?.tests ?? 0) }
-                colourName={ 'blue' }
+                colourValue={ '#2B8CC4' }
             />
             <ValueItem
                 label={ "Planned lab capacity" }
                 value={ labCapacityDate[maxLabCapacityDate]?.labCapacity ?? 0 }
+                colourValue={ '#6F777B' }
             />
         </ValueItemsSection>
     </HalfWidthCard>
 
-}
+};  // TestingCard
 
-export const objectsAreEqual = (...objects): boolean => {
+
+const DailySummary = ({ location: { search: query } }) => {
 
     const
-        keys = Object.keys(objects[0]),
-        nItems = keys.length;
+        urlParams = getParams(query),
+        params = urlParams.length ? urlParams : DefaultParams,
+        data = useApi({ conjunctiveFilters: params, structure: Structures.data });
 
-    // Check number of props
-    if ( !objects.every(item => Object.keys(item).length === nItems) ) return false;
+    return <Container className={ "util-flex util-flex-wrap" }>
+        <TestingCard data={ data }/>
+        <CasesCard data={ data }/>
+        <HealthcareCard data={ data }/>
+        <DeathsCard data={ data }/>
+    </Container>
 
-    // Check value equivalence
-    for ( const key of keys )
-        if ( !objects.every( item => item[key] === objects[0][key] ) )
-            return false;
-
-    return true
-
-}; // objectsAreEqual
-
-
-class DailySummary extends Component<{}, {}> {
-
-    url = 'https://uks-covid19-pubdash-dev.azure-api.net/fn-coronavirus-dashboard-pipeline-etl-dev/v1/data';
-
-    defaultParams = [
-        { key: 'areaName', sign: '=', value: 'United Kingdom' },
-        { key: 'areaType', sign: '=', value: 'overview' }
-    ];
-
-    state = {
-        data: null,
-        params: this.defaultParams
-    }
-
-    getData = async () => {
-
-        const
-            { params } = this.state,
-            urlParams = createQuery([
-                {
-                    key: 'filters',
-                    sign: '=',
-                    value: createQuery(params.length ? params : this.defaultParams, ";", "")
-                },
-                {
-                    key: 'structure',
-                    sign: '=',
-                    value: JSON.stringify({
-                        deathReportDate: "deathReportingDate",
-                        specimenDate: "specimenDate",
-                        deaths: "dailyChangeInDeaths",
-                        cases: "dailyLabConfirmedCases"
-                    })
-                }
-            ]),
-            { data: { data = [] } } = await axios.get(this.url + encodeURI(urlParams));
-
-        this.setState({ data: data })
-
-    };
-
-    componentDidMount(): * {
-
-        // ToDo: This should be done for every page in the "app.js".
-        const base = document.querySelector("head>base");
-        base.href = document.location.pathname;
-
-        this.setState((prevState, prevProps) => ({
-                params: [
-                    ...prevState.params,
-                    ...getParams(prevProps?.location?.search ?? "")
-                ]
-            }),
-            this.getData
-        )
-
-    }
-
-    componentDidUpdate(prevProps: Props, prevState: State, prevContext: *): * {
-
-        const
-            { location: { search: prevParams="" } } = prevProps,
-            { location: { search: thisParams="" } } = this.props,
-            prevParamsObj = getParams(prevParams),
-            thisParamsObj = getParams(thisParams);
-
-        if (!deepEqual(prevParamsObj, thisParamsObj))
-            this.setState({ params: thisParamsObj }, this.getData)
-
-    }
-
-    render(): React$Node {
-
-        const { data } = this.state;
-
-        if ( !data ) return <MainLoading/>
-
-        return<Styles.FlexContainer>
-            <TestingCard data={ data }/>
-            <CasesCard data={ data }/>
-            <HealthcareCard data={ data }/>
-            <DeathsCard data={ data }/>
-        </Styles.FlexContainer>
-
-    }
-
-}
+};  // DailySummary
 
 export default withRouter(DailySummary)
