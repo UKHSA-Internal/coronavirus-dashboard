@@ -3,17 +3,14 @@
 
 .DayPicker {
     display: inline-block;
-    font-size: 1rem;
     font-family: $govuk-font-family;
+    font-size: 1rem;
 }
 
 .DayPicker-wrapper {
     position: relative;
     flex-direction: row;
     padding-bottom: 1em;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 
@@ -26,11 +23,8 @@
 .DayPicker-Month {
     display: table;
     margin: 1em 1em 0;
-    border-spacing: 0;
     border-collapse: collapse;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+    border-spacing: 0;
     user-select: none;
 }
 
@@ -44,12 +38,12 @@
     right: 1.5em;
     left: auto;
     display: inline-block;
-    margin-top: -.4em;
     width: 1.25em;
     height: 1.25em;
+    margin-top: -.4em;
     background-position: center;
-    background-size: 50%;
     background-repeat: no-repeat;
+    background-size: 50%;
     color: white;
     cursor: pointer;
 }
@@ -62,7 +56,8 @@
     margin-right: 1.5em;
     background-image: none;
     font-size: 16px;
-    &:before {
+
+    &::before {
         content: "\25c4";
     }
 }
@@ -70,7 +65,8 @@
 .DayPicker-NavButton--next {
     background-image: none;
     font-size: 16px;
-    &:before {
+
+    &::before {
         content: "\25BA";
     }
 }
@@ -81,19 +77,18 @@
 
 .DayPicker-Caption {
     display: table-caption;
-    margin-bottom: 0.5em;
     padding: 0.5em 1em;
-    text-align: left;
+    margin: -1em;
+    margin-bottom: 0.5em;
     background: #1d70b8;
     color: white;
     font-weight: bold;
-    margin: -1em;
-    margin-bottom: 0.5em
+    text-align: left;
 }
 
-.DayPicker-Caption>div {
-    font-weight: 500;
+.DayPicker-Caption > div {
     font-size: 1.15em;
+    font-weight: 500;
 }
 
 .DayPicker-Weekdays {
@@ -108,9 +103,9 @@
 .DayPicker-Weekday {
     display: table-cell;
     padding: 0.5em;
-    color: #8B9898;
-    text-align: center;
+    color: #8b9898;
     font-size: 0.875em;
+    text-align: center;
 }
 
 .DayPicker-Weekday abbr[title] {
@@ -130,21 +125,21 @@
     display: table-cell;
     padding: 0.5em;
     border-radius: 50%;
-    vertical-align: middle;
-    text-align: center;
     cursor: pointer;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .DayPicker-WeekNumber {
     display: table-cell;
-    padding: 0.5em;
     min-width: 1em;
-    border-right: 1px solid #EAECEC;
-    color: #8B9898;
-    vertical-align: middle;
-    text-align: right;
-    font-size: 0.75em;
+    padding: 0.5em;
+    border-right: 1px solid #eaecec;
+    color: #8b9898;
     cursor: pointer;
+    font-size: 0.75em;
+    text-align: right;
+    vertical-align: middle;
 }
 
 .DayPicker--interactionDisabled .DayPicker-Day {
@@ -160,9 +155,9 @@
     background-color: transparent;
     background-image: none;
     box-shadow: none;
-    color: #4A90E2;
-    font-size: 0.875em;
+    color: #4a90e2;
     cursor: pointer;
+    font-size: 0.875em;
 }
 
 /* Default modifiers */
@@ -173,51 +168,53 @@
 }
 
 .DayPicker-Day--outside {
-    color: #8B9898;
+    color: #8b9898;
     cursor: default;
 }
 
 .DayPicker-Day--disabled {
-    color: #DCE0E0;
+    color: #dce0e0;
     cursor: default;
+
     /* background-color: #eff1f1; */
 }
 
 /* Example modifiers */
 
 .DayPicker-Day--sunday {
-    background-color: #F7F8F8;
+    background-color: #f7f8f8;
 }
 
 .DayPicker-Day--sunday:not(.DayPicker-Day--today) {
-    color: #DCE0E0;
+    color: #dce0e0;
 }
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
     position: relative;
-    background-color: #4A90E2;
-    color: #F0F8FF;
+    background-color: #4a90e2;
+    color: #f0f8ff;
 }
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
-    background-color: #51A0FA;
+    background-color: #51a0fa;
 }
 
 .DayPicker:not(.DayPicker--interactionDisabled) .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
-    background-color: #F0F8FF;
+    background-color: #f0f8ff;
 }
 
 /* DayPickerInput */
 
 .DayPickerInput {
     display: inline-block;
+
     & > input {
         @extend .govuk-input;
 
-        &:after {
-            content: ' ';
+        &::after {
+            width: 32px;
             background-image: url(https://c19pub.azureedge.net/assets/images/cal.svg);
-            width: 32px
+            content: ' ';
         }
     }
 }
@@ -228,8 +225,8 @@
 
 .DayPickerInput-Overlay {
     position: absolute;
-    left: 0;
     z-index: 1;
+    left: 0;
     background: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
