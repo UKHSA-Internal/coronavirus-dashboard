@@ -23,8 +23,8 @@ export const Loading = ({ className = '', ...props }) => (
 
 export const TableContainer: ComponentType<*> = (() =>
     styled.div`
-        padding-top: 0;
         max-height: 75vh;
+        padding-top: 0;
         overflow-y: scroll;
     `
 )();
@@ -36,7 +36,7 @@ export const Table: ComponentType<*> = (() => {
         Node = styled.table`
             margin-top: 1rem;
 
-            &>thead {
+            & > thead {
                 padding-top: 20px;
             }
         `;
