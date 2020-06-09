@@ -19,13 +19,13 @@ export const Tab: ComponentType<*> = (() => {
     const
         classes = 'govuk-link govuk-!-font-size-19 govuk-!-margin-right-7',
         Node = styled.button`
-            color: #1E70B8;
             padding-bottom: 2px;
+            color: #1e70b8;
             cursor: pointer;
 
             &.active {
-                color: #1E70B8;
-                border-bottom: 4px solid #1E70B8;
+                border-bottom: 4px solid #1e70b8;
+                color: #1e70b8;
             }
         `;
 
@@ -39,8 +39,8 @@ export const Body: ComponentType<*> = (() => {
         width: 100%;
 
         &.inactive {
-            // Do not use "display: none" - It confuses
-            // the graph's responsiveness.
+            /* Do not use "display: none" - It confuses
+            the graph's responsiveness. */
             height: 0;
             visibility: hidden !important;
         }
