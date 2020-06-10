@@ -31,26 +31,22 @@ const
     ],
     Structures = {
         totalData: {
-            cases: "totalLabConfirmedCases",
-            casesChange: "changeInTotalCases",
-            casesPrev: "previouslyReportedTotalCases",
-            date: "specimenDate",
-            code: "areaCode"
+            cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
+            cumCasesByPublishDate: "cumCasesByPublishDate",
+            date: "date",
         },
         dailyData: {
-            cases: "dailyLabConfirmedCases",
-            casesChange: "changeInDailyCases",
-            casesPrev: "previouslyReportedDailyCases",
-            date: "specimenDate",
-            code: "areaCode"
+            newPeopleTestedByPublishDate: "newPeopleTestedByPublishDate",
+            newCasesByPublishDate: "newCasesByPublishDate",
+            date: "date",
         },
-        dailyCollective:  {
-            rate: "dailyTotalLabConfirmedCasesRate",
-            cases: "totalLabConfirmedCases",
-            code: "areaCode",
-            name: "areaName",
-            date: "specimenDate"
-        }
+        // dailyCollective:  {
+        //     rate: "dailyTotalLabConfirmedCasesRate",
+        //     cases: "totalLabConfirmedCases",
+        //     code: "areaCode",
+        //     name: "areaName",
+        //     date: "specimenDate"
+        // }
     };
 
 
@@ -61,14 +57,24 @@ const TotalPlot = ({ data }) => {
     return <Plotter
         data={ [
             {
-                name: "Cumulative cases",
-                x: data.map(item => item?.date ?? ""),
-                y: data.map(item => item?.cases ?? 0),
+                name: "Number of people tested",
+                x: data.map(item => item?.date ?? null),
+                y: data.map(item => item?.cumPeopleTestedByPublishDate ?? null),
                 fill: 'tozeroy',
                 line: {
                     color: 'rgb(108,108,108)'
                 },
                 fillcolor: 'rgba(108,108,108,0.2)'
+            },
+            {
+                name: "Number of cases",
+                x: data.map(item => item?.date ?? null),
+                y: data.map(item => item?.cumCasesByPublishDate ?? null),
+                fill: 'tozeroy',
+                fillcolor: 'rgba(43,140,196,0.2)',
+                line: {
+                    color: 'rgb(43,140,196)'
+                }
             }
         ] }
     />
@@ -80,18 +86,24 @@ const DailyPlot = ({ data }) => {
 
     if ( !data ) return <MainLoading/>;
 
-    const average =  movingAverage(data.map(item => item?.cases ?? 0), 7)
-        .map(item => Math.round(item ,1));
+    const
+        date = data.map(item => item?.date ?? ""),
+        tested = data.map(item => item?.newPeopleTestedByPublishDate ?? null),
+        cases = data.map(item => item?.newCasesByPublishDate ?? null),
+        testedRollingAve = movingAverage(data.map(item => item?.newPeopleTestedByPublishDate ?? 0), 7),
+        casesRollingAve = movingAverage(data.map(item => item?.newPeopleTestedByPublishDate ?? 0), 7);
 
-    for (let index = 0; index < 7; index ++)
-        average[index] = NaN;
+    for (let index = 0; index < 7; index ++) {
+        testedRollingAve[index] = NaN;
+        casesRollingAve[index] = NaN;
+    }
 
     return <Plotter
         data={ [
             {
-                name: "Previously reported",
-                x: data.map(item => item?.date ?? ""),
-                y: data.map(item => Math.min(item?.casesPrev ?? 0, item?.casesPrev ?? 0 + item?.casesChange ?? 0)),
+                name: "Number of people tested",
+                x: date,
+                y: tested,
                 fill: 'tozeroy',
                 type: "bar",
                 marker: {
@@ -99,9 +111,9 @@ const DailyPlot = ({ data }) => {
                 }
             },
             {
-                name: "Newly reported",
-                x: data.map(item => item?.date ?? ""),
-                y: data.map(item => Math.max(item?.casesChange ?? 0, 0)),
+                name: "Number of cases",
+                x: date,
+                y: cases,
                 fill: 'tozeroy',
                 type: "bar",
                 marker: {
@@ -109,9 +121,20 @@ const DailyPlot = ({ data }) => {
                 }
             },
             {
-                name: "Rolling average of the total",
-                x: data.map(item => item?.date ?? ""),
-                y: average,
+                name: "People tested (7-day average)",
+                x: date,
+                y: testedRollingAve,
+                type: "line",
+                line: {
+                    width: 3,
+                    dash: "dash",
+                    color: 'rgb(106,106,106)'
+                }
+            },
+            {
+                name: "Cases (7-day average)",
+                x: date,
+                y: casesRollingAve,
                 type: "line",
                 line: {
                     width: 3,
@@ -172,6 +195,7 @@ const TotalRecovered = ({ data }) => {
 
 const DataTable = ({ args }) => {
 
+    return null
     return <Table
         head={[
             [
