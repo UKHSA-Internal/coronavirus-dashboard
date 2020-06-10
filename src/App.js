@@ -52,7 +52,11 @@ const LastUpdateTime = () => {
     if (!timestamp) return null;
 
     return <p className={ "govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-5" }>
-        Last updated on&nbsp;{ moment(timestamp).format("dddd D MMMM YYYY [at] h:mma") }
+        Last updated on&nbsp;{
+            moment(timestamp)
+                .local(true)
+                .format("dddd D MMMM YYYY [at] h:mma")
+        }
     </p>
 
 }; // LastUpdateTime
