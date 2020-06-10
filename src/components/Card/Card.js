@@ -25,6 +25,7 @@ import {
     Number
 } from './Card.styles';
 import numeral from 'numeral'
+import ReactTooltip from "react-tooltip";
 
 
 const VisualSection: ComponentType<Props> = ({ children }: Props) => {
@@ -45,24 +46,51 @@ const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
 }; // ValueItemContainer
 
 
-const ValueItem: ComponentType<Props> = ({ label, value, description=null, descriptionValue=null, descriptionSign=null, colourValue }: Props) => {
+// const ToolTipDescription = ({ id, message }) => {
+//
+//     return
+//
+// };  // ToolTopDescription
 
-    return <Fragment>
+
+const ValueItem: ComponentType<Props> = ({
+         heading, primaryLabel="Daily", primaryValue, primaryModal=null, primaryDescription=null, primarySign=null,
+         secondaryLabel=null, secondaryValue=null, secondaryModal=null, secondaryDescription=null, secondarySign=null,
+         colourValue }: Props) => {
+
+    const tipId = encodeURI(primaryLabel);
+
+    return <div>
         { colourValue ? <DataColour colour={ colourValue } /> : null }
-        <DataLabel>
-            <LabelText>{ label }</LabelText>
-        </DataLabel>
-        <DataValue>
-            <Number>
-                { numeral(value).format("0,0") }
-                {
-                    description
-                        ? <CardDescription>{ description }:&nbsp;{ numeral(descriptionValue).format("0,0") }{descriptionSign}</CardDescription>
-                        : null
-                }
-            </Number>
-        </DataValue>
-    </Fragment>
+        <h3>{ heading }</h3>
+        <div data-tip={ primaryDescription } data-for={ tipId }>
+            <DataLabel>
+                <h4>{ primaryLabel }</h4>
+            </DataLabel>
+            <DataValue>
+                <Number>
+                    { numeral(primaryValue).format("0,0") }{ primarySign }
+                </Number>
+            </DataValue>
+        </div>
+        {
+            secondaryLabel
+                ? <Fragment>
+                    <div data-tip={ secondaryDescription } data-for={ tipId }>
+                        <DataLabel>
+                            <h4>{ secondaryLabel }</h4>
+                        </DataLabel>
+                        <DataValue>
+                            <Number>
+                                { numeral(secondaryValue).format("0,0") }{ secondarySign }
+                            </Number>
+                        </DataValue>
+                    </div>
+                </Fragment>
+                : null
+        }
+        <ReactTooltip id={ tipId } place={ "top" } effect={ "solid" }/>
+    </div>
 
 }; // ValueItem
 
