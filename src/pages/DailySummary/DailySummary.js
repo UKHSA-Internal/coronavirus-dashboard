@@ -13,7 +13,6 @@ import { max } from "d3-array";
 import { MainLoading } from "components/Loading";
 import { getParams } from "common/utils";
 import { movingAverage } from "common/stats";
-import { sum } from "common/math";
 
 import useApi from "hooks/useApi";
 
@@ -23,16 +22,58 @@ import { Plotter } from "./plots";
 const
     DefaultParams = [
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
-        { key: 'areaType', sign: '=', value: 'overview' }
+        { key: 'areaType', sign: '=', value: 'overview' },
     ],
     Structures = {
-        data: {
-            dailyLabCases: "changeInDailyCases",
-            deathReportDate: "deathReportingDate",
-            specimenDate: "specimenDate",
-            deaths: "dailyChangeInDeaths",
-            cases: "dailyLabConfirmedCases"
+        deaths: {
+            date: "date",
+            newDeathsByPublishDate: "newDeathsByPublishDate",
+            cumDeathsByPublishDate: "cumDeathsByPublishDate"
+        },
+        healthcare: {
+            date: "date",
+            hospitalCases: "hospitalCases",
+            covidOccupiedMVBeds: "covidOccupiedMVBeds",
+            newAdmissions: "newAdmissions",
+            cumAdmissions: "cumAdmissions"
+        },
+        cases: {
+            date: "date",
+            newCasesByPublishDate: "newCasesByPublishDate",
+            cumCasesByPublishDate: "cumCasesByPublishDate",
+            newPeopleTestedByPublishDate: "newPeopleTestedByPublishDate",
+            cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
+        },
+        testing: {
+            date: "date",
+            newTestsByPublishDate: "newTestsByPublishDate",
+            cumTestsByPublishDate: "cumTestsByPublishDate",
+            plannedCapacityByPublishDate: "plannedCapacityByPublishDate"
         }
+        // data: {
+        //     date: "date",
+        //
+        //     // Testing
+        //     newTestsByPublishDate: "newTestsByPublishDate",
+        //     cumTestsByPublishDate: "cumTestsByPublishDate",
+        //     plannedCapacityByPublishDate: "plannedCapacityByPublishDate",
+        //
+        //     // Cases
+        //     newCasesByPublishDate: "newCasesByPublishDate",
+        //     cumCasesByPublishDate: "cumCasesByPublishDate",
+        //     newPeopleTestedByPublishDate: "newPeopleTestedByPublishDate",
+        //     cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
+        //
+        //     // Healthcare
+        //     hospitalCases: "hospitalCases",
+        //     covidOccupiedMVBeds: "covidOccupiedMVBeds",
+        //     newAdmissions: "newAdmissions",
+        //     cumAdmissions: "cumAdmissions",
+        //
+        //     // // deaths
+        //     // newDeathsByPublishDate: "newDeathsByPublishDate",
+        //     // cumDeathsByPublishDate: "cumDeathsByPublishDate",
+        // }
     };
 
 
@@ -55,151 +96,188 @@ const groupByUniqueKey = (data, uniqueKeyName) => {
 };  // groupByUniqueKey
 
 
-const DeathsCard = ({ data }) => {
+const DeathsCard = ({ params, ...props }) => {
 
-    const nationalData = useApi({
-        conjunctiveFilters: [
-            { key: "areaType", sign: "=", value: "nation" }
-        ],
-        structure: { name: "areaName", death: "dailyChangeInDeaths" },
-        extraParams: [{ key: "latestBy", sign: "=", value: "deathReportingDate" }]
+    const data = useApi({
+        conjunctiveFilters: params,
+        structure: Structures.deaths
     });
+    // const nationalData = useApi({
+    //     conjunctiveFilters: [
+    //         { key: "areaType", sign: "=", value: "nation" }
+    //     ],
+    //     structure: { name: "areaName", death: "dailyChangeInDeaths" },
+    //     extraParams: [{ key: "latestBy", sign: "=", value: "deathReportingDate" }]
+    // });
 
-    if ( !data || !nationalData ) return <MainLoading/>;
+    if ( !data
+        // !nationalData
+    ) return <MainLoading/>;
+
+    // const
+    //     deathReportDate =  data.map(item => item?.deathReportDate ?? ""),
+    //     deaths = data.map(item => (item?.deaths ?? 0) || 0),
+    //     deathsMovingAverage = movingAverage(deaths, 7),
+    //     groupByDeathReportDate = groupByUniqueKey(data, 'deathReportDate'),
+    //     maxDeathReportDate = max(Object.keys(groupByDeathReportDate)),
+    //     nationalDataDeaths = nationalData.map(item => item?.death ?? ""),
+    //     maxDeath = max(nationalDataDeaths);
 
     const
-        deathReportDate =  data.map(item => item?.deathReportDate ?? ""),
-        deaths = data.map(item => (item?.deaths ?? 0) || 0),
-        deathsMovingAverage = movingAverage(deaths, 7),
-        groupByDeathReportDate = groupByUniqueKey(data, 'deathReportDate'),
-        maxDeathReportDate = max(Object.keys(groupByDeathReportDate)),
-        nationalDataDeaths = nationalData.map(item => item?.death ?? ""),
-        maxDeath = max(nationalDataDeaths);
+        // nationalData = [],
+        date = data.map(item => item?.date ?? null),
+        groupBySpecimenDate = groupByUniqueKey(data, 'date'),
+        maxSpecimenDate = max(Object.keys(groupBySpecimenDate)),
+        groupByTestDate = groupBySpecimenDate,
+        testDate = max(Object.keys(groupByTestDate));
 
     return <HalfWidthCard heading={ "Deaths" }>
         <VisualSection>
             <Plotter
                 data={ [
                     {
-                        name: "Total lab-confirmed cases",
-                        x: deathReportDate,
-                        y: deathsMovingAverage,
-                        type: 'scatter',
+                        name: "New deaths by publish date",
+                        x: date,
+                        y: movingAverage(data.map(item => item?.newDeathsByPublishDate ?? null), 7),
                         fill: 'tozeroy',
-                        fillcolor: 'rgba(43,140,196,0.2)'
+                        type: 'line',
+                        mode: 'lines',
+                        fillcolor: 'rgba(43,140,196,0.2)',
+                        marker: { color: '#2B8CC4' }
                     }
                 ] }
             />
         </VisualSection>
         <ValueItemsSection>
             <ValueItem
-                label={ "Confirmed COVID-19 associated deaths" }
-                value={  groupByDeathReportDate[maxDeathReportDate]?.deaths ?? 0 }
+                label={ "Number of COVID-19 associated deaths" }
+                value={ groupBySpecimenDate[maxSpecimenDate]?.newDeathsByPublishDate ?? "No data" }
                 description={ 'Total' }
-                descriptionValue={ sum(deaths) }
+                descriptionValue={ groupBySpecimenDate[maxSpecimenDate]?.cumDeathsByPublishDate ?? "No data" }
                 colourValue={ '#2B8CC4' }
             />
-            <div>
-                <Plotter
-                    data={[
-                        {
-                            name: "Previously reported",
-                            y: nationalData.map(({ name="" }) => name.replace(/Northern Ireland/g, "NI")),
-                            x: nationalDataDeaths,
-                            text: nationalDataDeaths,
-                            type: "bar",
-                            orientation: "h",
-                            width: 0.7,
-                            mode: 'marker+text',
-                            marker: {
-                                color: '#005EA5'
-                            },
-                            texttemplate: '%{text:s}',
-                            textposition: 'auto',
-                            cliponaxis: true,
-                            showlegend: false,
-                            textfont: {
-                                color: nationalDataDeaths.map(item => item === maxDeath ? '#fff' :  '#005EA5'),
-                                family: `"GDS Transport", Arial, sans-serif`,
-                                size: 11
-                            }
-                        }
-                    ]}
-                    layout={{
-                        margin: {
-                            l: 57,
-                            r: 0,
-                            b: 0,
-                            t: 0,
-                            pad: 5
-                        },
-                        offset: .1,
-                        yaxis: {
-                            tickfont:{
-                                family: `"GDS Transport", Arial, sans-serif`,
-                                size : 13,
-                                color: "#6f777b",
-                            },
-                            layer: "below traces"
-                        },
-                        xaxis: {
-                            visible: false,
-                            layer: "below traces"
-                        },
-                        height: 110,
-                        uniformtext: {
-                            minsize: 8,
-                            mode: 'hide'
-                        }
-                    }}
-                />
-            </div>
+            {/*<div>*/}
+            {/*    <Plotter*/}
+            {/*        data={[*/}
+            {/*            {*/}
+            {/*                name: "Previously reported",*/}
+            {/*                y: nationalData.map(({ name="" }) => name.replace(/Northern Ireland/g, "NI")),*/}
+            {/*                x: nationalDataDeaths,*/}
+            {/*                text: nationalDataDeaths,*/}
+            {/*                type: "bar",*/}
+            {/*                orientation: "h",*/}
+            {/*                width: 0.7,*/}
+            {/*                mode: 'marker+text',*/}
+            {/*                marker: {*/}
+            {/*                    color: '#005EA5'*/}
+            {/*                },*/}
+            {/*                texttemplate: '%{text:s}',*/}
+            {/*                textposition: 'auto',*/}
+            {/*                cliponaxis: true,*/}
+            {/*                showlegend: false,*/}
+            {/*                textfont: {*/}
+            {/*                    color: nationalDataDeaths.map(item => item === maxDeath ? '#fff' :  '#005EA5'),*/}
+            {/*                    family: `"GDS Transport", Arial, sans-serif`,*/}
+            {/*                    size: 11*/}
+            {/*                }*/}
+            {/*            }*/}
+            {/*        ]}*/}
+            {/*        layout={{*/}
+            {/*            margin: {*/}
+            {/*                l: 57,*/}
+            {/*                r: 0,*/}
+            {/*                b: 0,*/}
+            {/*                t: 0,*/}
+            {/*                pad: 5*/}
+            {/*            },*/}
+            {/*            offset: .1,*/}
+            {/*            yaxis: {*/}
+            {/*                tickfont:{*/}
+            {/*                    family: `"GDS Transport", Arial, sans-serif`,*/}
+            {/*                    size : 13,*/}
+            {/*                    color: "#6f777b",*/}
+            {/*                },*/}
+            {/*                layer: "below traces"*/}
+            {/*            },*/}
+            {/*            xaxis: {*/}
+            {/*                visible: false,*/}
+            {/*                layer: "below traces"*/}
+            {/*            },*/}
+            {/*            height: 110,*/}
+            {/*            uniformtext: {*/}
+            {/*                minsize: 8,*/}
+            {/*                mode: 'hide'*/}
+            {/*            }*/}
+            {/*        }}*/}
+            {/*    />*/}
+            {/*</div>*/}
         </ValueItemsSection>
     </HalfWidthCard>
 
 };  // DeathsCard
 
 
-const HealthcareCard = ({ data }) => {
+const HealthcareCard = ({ params, ...props }) => {
+
+    const data = useApi({
+        conjunctiveFilters: params,
+        structure: Structures.healthcare
+    });
 
     if ( !data ) return <MainLoading/>;
+
+    const
+        date = data.map(item => item?.date ?? null),
+        groupBySpecimenDate = groupByUniqueKey(data, 'date'),
+        maxSpecimenDate = max(Object.keys(groupBySpecimenDate)),
+        groupByTestDate = groupBySpecimenDate,
+        testDate = max(Object.keys(groupByTestDate));
 
     return <HalfWidthCard heading={ "Healthcare" }>
         <VisualSection>
             <Plotter
                 data={ [
                     {
-                        name: "",
-                        x: [],
-                        y: [],
+                        name: "Patients in hospital",
+                        x: date,
+                        y: data.map(item => item?.hospitalCases ?? null),
+                        fill: 'tozeroy',
                         type: 'line',
                         mode: 'lines',
-                        marker: { color: '#2B8CC4' },
+                        fillcolor: 'rgba(43,140,196,0.2)',
+                        marker: { color: '#2B8CC4' }
+                    },
+                    {
+                        name: "Patients in mechanical ventilation beds",
+                        x: date,
+                        y: data.map(item => item?.covidOccupiedMVBeds ?? null),
+                        fill: 'tozeroy',
+                        fillcolor: 'rgba(111,119,123,0.1)',
+                        line: {
+                            color: 'rgb(111,119,123)'
+                        }
                     }
                 ] }
             />
         </VisualSection>
         <ValueItemsSection>
             <ValueItem
-                label={ "Discharged" }
-                value={ max(data, item => item?.dischargeDate ?? 0)?.discharged ?? 0}
-                description={ 'Total' }
-                descriptionValue={ sum(data, item => item?.discharged ?? 0) }
+                label={ "Patients in hospital" }
+                value={  groupBySpecimenDate[maxSpecimenDate]?.hospitalCases ?? "No data" }
                 colourValue={ '#2B8CC4' }
             />
             <ValueItem
-                label={ "In hospital" }
-                value={ max(data, item => item?.inHospitalDate ?? 0)?.inHospital ?? 0 }
-                description={ 'Occupancy' }
-                descriptionValue={ 0 }
-                descriptionSign={ "%" }
-                colourValue={ '#F47738' }
-
+                label={ "Patients in mechanical ventilation beds" }
+                value={ groupBySpecimenDate[maxSpecimenDate]?.covidOccupiedMVBeds ?? "No data"  }
+                colourValue={ '#6F777B' }
             />
             <ValueItem
-                label={ "Hospital breakdown" }
-                value={ 0 }
-                colourValue={ '#6F777B' }
+                label={ "Patients admitted" }
+                value={ groupBySpecimenDate[maxSpecimenDate]?.newAdmissions ?? "No data" }
+                description={ 'Total' }
+                descriptionValue={ groupBySpecimenDate[maxSpecimenDate]?.cumAdmissions ?? "No data" }
+                // Orange colour
+                // colourValue={ '#F47738' }
             />
         </ValueItemsSection>
     </HalfWidthCard>
@@ -207,73 +285,23 @@ const HealthcareCard = ({ data }) => {
 };  // HealthcareCard
 
 
-const CasesCard = ({ data }) => {
+const TestingCard = ({ params, ...props }) => {
+
+    const data = useApi({
+        conjunctiveFilters: params,
+        structure: Structures.testing
+    });
 
     if ( !data ) return <MainLoading/>;
-
+            // newTestsByPublishDate: "newTestsByPublishDate",
+            // cumTestsByPublishDate: "cumTestsByPublishDate",
+            // plannedCapacityByPublishDate: "plannedCapacityByPublishDate"
     const
-        groupBySpecimenDate = groupByUniqueKey(data, 'specimenDate'),
+        date = data.map(item => item?.date ?? null),
+        groupBySpecimenDate = groupByUniqueKey(data, 'date'),
         maxSpecimenDate = max(Object.keys(groupBySpecimenDate)),
-        groupByTestDate = groupByUniqueKey(data, 'testDate'),
+        groupByTestDate = groupBySpecimenDate,
         testDate = max(Object.keys(groupByTestDate));
-
-
-    return <HalfWidthCard heading={ "Cases" }>
-        <VisualSection>
-            <Plotter
-                data={ [
-                    {
-                        name: "Cases",
-                        x: data.map(item => item?.specimenDate ?? ""),
-                        y: movingAverage(data.map(item => item?.cases ?? 0), 7),
-                        fill: 'tozeroy',
-                        fillcolor: 'rgba(43,140,196,0.2)'
-                    },
-                    {
-                        name: "Tests",
-                        x: data.map(item => item?.testDate ?? ""),
-                        y: data.map(item => item?.cases ?? 0),
-                        fill: 'tozeroy',
-                        fillcolor: 'rgba(111,119,123,0.2)'
-                    }
-                ] }
-            />
-        </VisualSection>
-        <ValueItemsSection>
-            <ValueItem
-                label={ "Lab-confirmed" }
-                // value={ groupBySpecimenDate[maxSpecimenDate]?.cases ?? 0 }
-                value={ sum(data, item => item?.dailyLabCases ?? 0) }
-                description={ 'Total' }
-                descriptionValue={ sum(data, item => item?.cases ?? 0) }
-                colourValue={ '#2B8CC4' }
-            />
-            <ValueItem
-                label={ "No. of people tested" }
-                value={ groupByTestDate[testDate]?.tests ?? 0 }
-                description={ 'Total' }
-                descriptionValue={ sum(data, item => item?.tests ?? 0) }
-                colourValue={ '#6F777B' }
-            />
-            <ValueItem
-                label={ "Patients recovered" }
-                value={ sum(data, item => item?.recovered ?? 0) }
-            />
-        </ValueItemsSection>
-    </HalfWidthCard>
-
-};   // CasesCard
-
-
-const TestingCard = ({ data }) => {
-
-    if ( !data ) return <MainLoading/>;
-
-    const
-        testDate = groupByUniqueKey(data, 'testDate'),
-        maxTestDate = max(Object.keys(testDate)),
-        labCapacityDate = groupByUniqueKey(data, 'labCapacityDate'),
-        maxLabCapacityDate = max(Object.keys(labCapacityDate));
 
 
     return <HalfWidthCard heading={ "Testing" }>
@@ -281,27 +309,113 @@ const TestingCard = ({ data }) => {
             <Plotter
                 data={ [
                     {
-                        name: "",
-                        x: [],
-                        y: [],
-                        type: 'line',
-                        mode: 'lines',
-                        marker: { color: 'red' },
+                        name: "Planned capacity by publish date",
+                        x: date,
+                        y: data.map(item => item?.plannedCapacityByPublishDate ?? null),
+                        fill: 'tozeroy',
+                        fillcolor: 'rgba(111,119,123,0.1)',
+                        line: {
+                            color: 'rgb(111,119,123)'
+                        }
+                    },
+                    {
+                        name: "New tests by publish date",
+                        x: date,
+                        y: movingAverage(data.map(item => item?.newTestsByPublishDate ?? null), 7),
+                        fill: 'tozeroy',
+                        fillcolor: 'rgba(43,140,196,0.2)',
+                        line: {
+                            color: 'rgb(43,140,196)'
+                        }
                     }
                 ] }
             />
         </VisualSection>
         <ValueItemsSection>
             <ValueItem
-                label={ "No. of test" }
-                value={ testDate[maxTestDate]?.tests ?? 0}
+                label={ "Number of tests" }
+                // value={ groupBySpecimenDate[maxSpecimenDate]?.cases ?? 0 }
+                value={ groupBySpecimenDate[maxSpecimenDate]?.newTestsByPublishDate ?? "No data" }
                 description={ 'Total' }
-                descriptionValue={ sum(data, item => item?.tests ?? 0) }
+                descriptionValue={ groupBySpecimenDate[maxSpecimenDate]?.cumTestsByPublishDate ?? "No data" }
                 colourValue={ '#2B8CC4' }
             />
             <ValueItem
-                label={ "Planned lab capacity" }
-                value={ labCapacityDate[maxLabCapacityDate]?.labCapacity ?? 0 }
+                label={ "Testing capacity" }
+                value={ groupBySpecimenDate[maxSpecimenDate]?.plannedCapacityByPublishDate ?? "No data" }
+                colourValue={ '#6F777B' }
+            />
+        </ValueItemsSection>
+    </HalfWidthCard>
+
+};   // CasesCard
+
+
+const CasesCard = ({ params, ...props }) => {
+
+    const data = useApi({
+        conjunctiveFilters: params,
+        structure: Structures.cases
+    });
+
+    if ( !data ) return <MainLoading/>;
+
+    const
+        date = data.map(item => item?.date ?? null),
+        groupBySpecimenDate = groupByUniqueKey(data, 'date'),
+        maxSpecimenDate = max(Object.keys(groupBySpecimenDate)),
+        groupByTestDate = groupBySpecimenDate,
+        testDate = max(Object.keys(groupByTestDate));
+
+    //             newCasesByPublishDate: "newCasesByPublishDate",
+    //             cumCasesByPublishDate: "cumCasesByPublishDate",
+    //             newPeopleTestedByPublishDate: "newPeopleTestedByPublishDate",
+    //             cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate"
+
+    return <HalfWidthCard heading={ "Cases" }>
+        <VisualSection>
+            <Plotter
+                data={ [
+                    {
+                        name: "Number of people tested",
+                        x: date,
+                        y: movingAverage(data.map(item => item?.newPeopleTestedByPublishDate ?? null), 7),
+                        type: 'line',
+                        mode: 'lines',
+                        fill: 'tozeroy',
+                        fillcolor: 'rgba(111,119,123,0.1)',
+                        line: {
+                            color: 'rgb(111,119,123)'
+                        }
+                    },
+                    {
+                        name: "Number of lab-confirmed cases",
+                        x: date,
+                        y: movingAverage(data.map(item => item?.newCasesByPublishDate ?? null), 7),
+                        type: 'line',
+                        mode: 'lines',
+                        fill: 'tozeroy',
+                        fillcolor: 'rgba(43,140,196,0.2)',
+                        line: {
+                            color: 'rgb(43,140,196)'
+                        }
+                    }
+                ] }
+            />
+        </VisualSection>
+        <ValueItemsSection>
+            <ValueItem
+                label={ "Number of lab-confirmed cases" }
+                value={ groupBySpecimenDate[maxSpecimenDate]?.newCasesByPublishDate ?? "No data" }
+                description={ 'Total' }
+                descriptionValue={ groupBySpecimenDate[maxSpecimenDate]?.cumCasesByPublishDate ?? "No data" }
+                colourValue={ '#2B8CC4' }
+            />
+            <ValueItem
+                label={ "Number of people tested" }
+                value={ groupBySpecimenDate[maxSpecimenDate]?.newPeopleTestedByPublishDate ?? "No data" }
+                description={ 'Total' }
+                descriptionValue={ groupBySpecimenDate[maxSpecimenDate]?.cumPeopleTestedByPublishDate ?? "No data" }
                 colourValue={ '#6F777B' }
             />
         </ValueItemsSection>
@@ -314,14 +428,14 @@ const DailySummary = ({ location: { search: query } }) => {
 
     const
         urlParams = getParams(query),
-        params = urlParams.length ? urlParams : DefaultParams,
-        data = useApi({ conjunctiveFilters: params, structure: Structures.data });
+        params = urlParams.length ? urlParams : DefaultParams;
+        // data = useApi({ conjunctiveFilters: params, structure: Structures.data });
 
-    return <Container>
-        <TestingCard data={ data }/>
-        <CasesCard data={ data }/>
-        <HealthcareCard data={ data }/>
-        <DeathsCard data={ data }/>
+    return <Container className={ "util-flex util-flex-wrap" }>
+        <TestingCard params={ params }/>
+        <CasesCard params={ params }/>
+        <HealthcareCard params={ params }/>
+        <DeathsCard params={ params }/>
     </Container>
 
 };  // DailySummary
