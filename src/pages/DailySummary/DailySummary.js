@@ -50,30 +50,6 @@ const
             cumTestsByPublishDate: "cumTestsByPublishDate",
             plannedCapacityByPublishDate: "plannedCapacityByPublishDate"
         }
-        // data: {
-        //     date: "date",
-        //
-        //     // Testing
-        //     newTestsByPublishDate: "newTestsByPublishDate",
-        //     cumTestsByPublishDate: "cumTestsByPublishDate",
-        //     plannedCapacityByPublishDate: "plannedCapacityByPublishDate",
-        //
-        //     // Cases
-        //     newCasesByPublishDate: "newCasesByPublishDate",
-        //     cumCasesByPublishDate: "cumCasesByPublishDate",
-        //     newPeopleTestedByPublishDate: "newPeopleTestedByPublishDate",
-        //     cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
-        //
-        //     // Healthcare
-        //     hospitalCases: "hospitalCases",
-        //     covidOccupiedMVBeds: "covidOccupiedMVBeds",
-        //     newAdmissions: "newAdmissions",
-        //     cumAdmissions: "cumAdmissions",
-        //
-        //     // // deaths
-        //     // newDeathsByPublishDate: "newDeathsByPublishDate",
-        //     // cumDeathsByPublishDate: "cumDeathsByPublishDate",
-        // }
     };
 
 
@@ -150,10 +126,10 @@ const DeathsCard = ({ params, ...props }) => {
         </VisualSection>
         <ValueItemsSection>
             <ValueItem
-                label={ "Number of COVID-19 associated deaths" }
-                value={ groupBySpecimenDate[maxSpecimenDate]?.newDeathsByPublishDate ?? "No data" }
-                description={ 'Total' }
-                descriptionValue={ groupBySpecimenDate[maxSpecimenDate]?.cumDeathsByPublishDate ?? "No data" }
+                heading={ "Number of COVID-19 associated deaths" }
+                primaryValue={ groupBySpecimenDate[maxSpecimenDate]?.newDeathsByPublishDate ?? "No data" }
+                secondaryLabel={ 'Total' }
+                secondaryValue={ groupBySpecimenDate[maxSpecimenDate]?.cumDeathsByPublishDate ?? "No data" }
                 colourValue={ '#2B8CC4' }
             />
             {/*<div>*/}
@@ -262,20 +238,20 @@ const HealthcareCard = ({ params, ...props }) => {
         </VisualSection>
         <ValueItemsSection>
             <ValueItem
-                label={ "Patients in hospital" }
-                value={  groupBySpecimenDate[maxSpecimenDate]?.hospitalCases ?? "No data" }
+                heading={ "Patients in hospital" }
+                primaryValue={  groupBySpecimenDate[maxSpecimenDate]?.hospitalCases ?? "No data" }
                 colourValue={ '#2B8CC4' }
             />
             <ValueItem
-                label={ "Patients in mechanical ventilation beds" }
-                value={ groupBySpecimenDate[maxSpecimenDate]?.covidOccupiedMVBeds ?? "No data"  }
+                heading={ "Patients in mechanical ventilation beds" }
+                primaryValue={ groupBySpecimenDate[maxSpecimenDate]?.covidOccupiedMVBeds ?? "No data"  }
                 colourValue={ '#6F777B' }
             />
             <ValueItem
-                label={ "Patients admitted" }
-                value={ groupBySpecimenDate[maxSpecimenDate]?.newAdmissions ?? "No data" }
-                description={ 'Total' }
-                descriptionValue={ groupBySpecimenDate[maxSpecimenDate]?.cumAdmissions ?? "No data" }
+                heading={ "Patients admitted" }
+                primaryValue={ groupBySpecimenDate[maxSpecimenDate]?.newAdmissions ?? "No data" }
+                secondaryLabel={ 'Total' }
+                secondaryValue={ groupBySpecimenDate[maxSpecimenDate]?.cumAdmissions ?? "No data" }
                 // Orange colour
                 // colourValue={ '#F47738' }
             />
@@ -333,16 +309,19 @@ const TestingCard = ({ params, ...props }) => {
         </VisualSection>
         <ValueItemsSection>
             <ValueItem
-                label={ "Number of tests" }
+                heading={ "Number of tests" }
                 // value={ groupBySpecimenDate[maxSpecimenDate]?.cases ?? 0 }
-                value={ groupBySpecimenDate[maxSpecimenDate]?.newTestsByPublishDate ?? "No data" }
-                description={ 'Total' }
-                descriptionValue={ groupBySpecimenDate[maxSpecimenDate]?.cumTestsByPublishDate ?? "No data" }
+                primaryValue={ groupBySpecimenDate[maxSpecimenDate]?.newTestsByPublishDate ?? "No data" }
+                primaryDescription={ "Daily number of tests reported on {date}" }
+                secondaryLabel={ 'Total' }
+                secondaryValue={ groupBySpecimenDate[maxSpecimenDate]?.cumTestsByPublishDate ?? "No data" }
+                secondaryDescription={ 'Total number of tests reported up to {date}' }
                 colourValue={ '#2B8CC4' }
             />
             <ValueItem
-                label={ "Testing capacity" }
-                value={ groupBySpecimenDate[maxSpecimenDate]?.plannedCapacityByPublishDate ?? "No data" }
+                heading={ "Testing capacity" }
+                primaryValue={ groupBySpecimenDate[maxSpecimenDate]?.plannedCapacityByPublishDate ?? "No data" }
+                primaryDescription={ 'Estimated total lab capacity on {date}' }
                 colourValue={ '#6F777B' }
             />
         </ValueItemsSection>
@@ -405,17 +384,17 @@ const CasesCard = ({ params, ...props }) => {
         </VisualSection>
         <ValueItemsSection>
             <ValueItem
-                label={ "Number of lab-confirmed cases" }
-                value={ groupBySpecimenDate[maxSpecimenDate]?.newCasesByPublishDate ?? "No data" }
-                description={ 'Total' }
-                descriptionValue={ groupBySpecimenDate[maxSpecimenDate]?.cumCasesByPublishDate ?? "No data" }
+                heading={ "Number of lab-confirmed cases" }
+                primaryValue={ groupBySpecimenDate[maxSpecimenDate]?.newCasesByPublishDate ?? "No data" }
+                secondaryLabel={ 'Total' }
+                secondaryValue={ groupBySpecimenDate[maxSpecimenDate]?.cumCasesByPublishDate ?? "No data" }
                 colourValue={ '#2B8CC4' }
             />
             <ValueItem
-                label={ "Number of people tested" }
-                value={ groupBySpecimenDate[maxSpecimenDate]?.newPeopleTestedByPublishDate ?? "No data" }
-                description={ 'Total' }
-                descriptionValue={ groupBySpecimenDate[maxSpecimenDate]?.cumPeopleTestedByPublishDate ?? "No data" }
+                heading={ "Number of people tested" }
+                primaryValue={ groupBySpecimenDate[maxSpecimenDate]?.newPeopleTestedByPublishDate ?? "No data" }
+                secondaryLabel={ 'Total' }
+                secondaryValue={ groupBySpecimenDate[maxSpecimenDate]?.cumPeopleTestedByPublishDate ?? "No data" }
                 colourValue={ '#6F777B' }
             />
         </ValueItemsSection>
