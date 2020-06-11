@@ -2,6 +2,7 @@ import moment from "moment";
 import { max, min } from "d3-array";
 
 import type { ParsedParams } from "./utils.types";
+import type { RGB } from "../../components/MapTable/MapTable.types";
 
 
 export const sortByDate = (a, b) => {
@@ -113,3 +114,18 @@ export const firstObjWithMax = ( arr: Array<{[string|number]: [string|number|nul
         if (key(item) === maxValue) return item;
 
 };
+
+
+export const hexToRgb = (hex: string): RGB => {
+
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
+    if (!result) return null;
+
+    return {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    }
+
+}; // hexToRgb
