@@ -4,15 +4,16 @@ $govuk-page-width: 1920px;
 $govuk-font-family: "GDS Transport", Arial, sans-serif;
 
 // GOVUK Frontend
-@import "node_modules/govuk-frontend/govuk/all";
+@import 'node_modules/govuk-frontend/govuk/all';
 
-@import "sass/base-elements";
-@import "sass/cookie-banner";
-@import "sass/govuk-extensions";
-@import "sass/markdown";
-@import "sass/accessibility";
-@import "sass/dashboard";
-@import "sass/side-navigation";
-@import "sass/sticky-header";
-@import "sass/day-picker";
-@import "sass/utility";
+@import 'sass/base-elements';
+@import 'sass/cookie-banner';
+@import 'sass/govuk-extensions';
+@import 'sass/markdown';
+@import 'sass/accessibility';
+@import 'sass/dashboard';
+@import 'sass/side-navigation';
+@import 'sass/sticky-header';
+@import 'sass/day-picker';
+@import 'sass/tooltip';
+@import 'sass/utility';
