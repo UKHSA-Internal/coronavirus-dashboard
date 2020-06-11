@@ -76,9 +76,13 @@ export const SectionBreak = ({ className="", ...props }) => (
 );
 
 
-export const DataContainer = ({ className="", ...props }) => (
-    <div className={ `${className}` } { ...props }/>
-);
+export const DataContainer = ({ className="", ...props }) => {
+    const Node = styled.div`
+    font-family: "GDS Transport", Arial, sans-serif;
+    `;
+
+    return <Node className={ `${ className }` } { ...props }/>
+};
 
 
 export const DataHeading = ({ className="", ...props }) => (
