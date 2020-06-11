@@ -421,7 +421,7 @@ const getMaxDateValuePair = ( data: Array<{ [string]: string | number | null }>,
     for ( const { [valueKey]: value, date } of data ) {
 
         if ( value )
-            return { date: moment(date).format("dddd D MMMM YYYY"), value: value };
+            return { date: moment(date).format("dddd, D MMMM YYYY"), value: value };
 
     }
 
@@ -487,14 +487,21 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
 
                 const
                     primaryData = getMaxDateValuePair(data, primaryValue),
-                    secondaryData = getMaxDateValuePair(data, secondaryValue);
+                    secondaryData = getMaxDateValuePair(data, secondaryValue),
+                    primaryReplacements = { kwargs: primaryData },
+                    secondaryReplacements = { kwargs: primaryData };
 
                 return <ValueItem
                     key={ index }
                     primaryValue={ primaryData.value }
-                    primaryTooltip={ strFormat(primaryTooltip, { kwargs: primaryData }) }
+                    primaryTooltip={ strFormat(primaryTooltip, primaryReplacements) }
+                    primaryModal={ primaryValue }
+                    primaryModalReplacements={ primaryReplacements }
                     secondaryValue={ secondaryData.value }
-                    secondaryTooltip={ strFormat(primaryTooltip, { kwargs: primaryData }) }
+                    secondaryTooltip={ strFormat(primaryTooltip, secondaryReplacements) }
+                    secondaryModal={ secondaryValue }
+                    secondaryModalReplacements={ secondaryReplacements }
+
                     { ...rest }
                 />
             })
