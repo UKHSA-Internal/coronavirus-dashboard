@@ -9,22 +9,7 @@ export const Plotter = ({ layout, ...props }) => {
             showLink: false,
             responsive: true,
             displaylogo: false,
-            staticPlot: true,
-            modeBarButtonsToRemove: [
-                "autoScale2d",
-                "zoomIn2d",
-                "zoomOut2d",
-                "toggleSpikelines",
-                "hoverClosestCartesian",
-                "zoom2d"
-            ],
-            toImageButtonOptions: {
-                format: 'png',
-                filename: 'export',
-                height: 1024,
-                width: 768,
-                scale: 4
-            }
+            staticPlot: true
         } }
         useResizeHandler={ true }
         style={{ display: 'flex' }}
@@ -37,9 +22,9 @@ export const Plotter = ({ layout, ...props }) => {
             },
             showlegend: false,
             margin: {
-                l: 20,
-                r: 5,
-                b: 25,
+                l: 25,
+                r: 0,
+                b: 15,
                 t: 5,
                 pad: 0
             },
@@ -47,7 +32,9 @@ export const Plotter = ({ layout, ...props }) => {
                 showgrid: false,
                 zeroline: false,
                 showline: false,
-                // tickangle: 30,
+                automargin: true,
+                tickangle: 20,
+                type: "date",
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
                     size : 10,
