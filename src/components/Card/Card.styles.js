@@ -1,10 +1,8 @@
 // @flow
 
 import React from "react";
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import type { ComponentType } from 'react';
-
-import addIECss from 'addIECss';
 
 export const HalfCard: ComponentType<*> = (() => {
     return styled.article`
@@ -17,12 +15,12 @@ export const HalfCard: ComponentType<*> = (() => {
 })();
 
 
-export const HalfCardHeader = ({ className, ...props }) => (
+export const HalfCardHeader = ({ className="", ...props }) => (
     <header className={ `util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2 ${className}` } { ...props }/>
 );
 
 
-export const HalfCardHeading = ({ className, ...props }) => (
+export const HalfCardHeading = ({ className="", ...props }) => (
     <h2 className={ `govuk-heading-m govuk-!-margin-bottom-0 ${className}` } { ...props }/>
 );
 
@@ -34,7 +32,7 @@ export const HalfCardBody: ComponentType<*> = (() => {
             margin: 0 -15px;
         `;
 
-    return ({ className, ...props }) =>
+    return ({ className="", ...props }) =>
         <Node className={ `${classes} ${className}` } { ...props }/>
 })();
 
@@ -50,17 +48,17 @@ export const FullCard: ComponentType<*> = (() => {
 })();
 
 
-export const FullCardHeader = ({ className, ...props }) => (
+export const FullCardHeader = ({ className="", ...props }) => (
     <header className={ `util-flex util-flex-wrap util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2 ${className}` } { ...props }/>
 );
 
 
-export const FullCardHeading = ({ className, ...props }) => (
+export const FullCardHeading = ({ className="", ...props }) => (
     <h2 className={ `govuk-heading-m govuk-!-margin-bottom-0 ${className}` } { ...props }/>
 );
 
 
-export const Caption = ({ className, ...props }) => (
+export const Caption = ({ className="", ...props }) => (
     <span className={ `govuk-caption-m ${className}` } { ...props }/>
 );
 
@@ -73,61 +71,90 @@ export const BodySection: ComponentType<*> = (() => {
 })();
 
 
-export const CardDescription: ComponentType<*> = (() => {
-    const Node = styled.small`
-        display: flex;
-        color: #626a6e;
-    `;
-
-    return ({ className="", ...props }) =>
-            <Node className={ `govuk-body-s govuk-!-margin-bottom-0 ${className}` }
-                        {...props}/>
-})();
-
-
-export const SectionBreak = ({ className, ...props }) => (
+export const SectionBreak = ({ className="", ...props }) => (
     <hr className={ `govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible ${className}` } { ...props }/>
+);
+
+
+export const DataContainer = ({ className="", ...props }) => (
+    <div className={ `${className}` } { ...props }/>
+);
+
+
+export const DataHeading = ({ className="", ...props }) => (
+    <h3 className={ `govuk-heading-s govuk-!-margin-bottom-1 ${className}` } { ...props }/>
 );
 
 
 export const DataColour: ComponentType<*> = (() => {
     return styled.span`
-        width: 10px;
-        height: 10px;
-        float: left;
+        width: 12px;
+        height: 12px;
         border: 1px solid #000;
-        margin: 6px 6px 6px 0;
+        margin: 6px 7px 6px 0;
         background: ${props => props.colour};
         box-shadow: inset 0 0 0 1px #fff;
+        float: left;
     `;
 })();
 
 
-export const DataLabel: ComponentType<*> = (() => {
-    return styled.div`
-        margin-left: 16px;
-    `;
-})();
-
-
-export const LabelText = ({ className, ...props }) => (
-    <p className={ `govuk-body govuk-!-margin-bottom-0 ${className}` } { ...props }/>
+export const DataNumbersContainer = ({ className="", ...props }) => (
+    <div className={ `util-flex util-flex-wrap govuk-!-margin-bottom-21 govuk-!-margin-left-4 ${className}` } { ...props }/>
 );
 
 
-export const DataValue: ComponentType<*> = (() => {
+export const DataPrimary = ({ className="", ...props }) => (
+    <div className={ `govuk-!-margin-right-4 ${className}` } { ...props }/>
+);
+
+
+export const DataSecondary = ({ className="", ...props }) => (
+    <div className={ `${className}` } { ...props }/>
+);
+
+
+export const DataLabel = ({ className="", ...props }) => (
+    <span className={ `govuk-caption-m govuk-!-font-size-16 ${className}` } { ...props }/>
+);
+
+
+export const Number = ({ className="", ...props }) => (
+    <h3 className={ `govuk-heading-m govuk-!-font-weight-regular govuk-!-margin-bottom-2 govuk-!-padding-top-0 ${className}` } { ...props }/>
+);
+
+
+export const ToolTip: ComponentType<*> = (() => {
     const
-        classes = 'govuk-!-margin-bottom-4',
-        Node = styled.div`
-            margin-left: 16px;
+        classes = '',
+        Node = styled.span`
+            &::before {
+                position: relative;
+                top: -5px;
+                display: inline-block;
+                width: 14px;
+                height: 14px;
+                border: 1px solid #1d70b8;
+                margin-left: 5px;
+                border-radius: 10px;
+                color: #1d70b8;
+                content: 'i';
+                font-family: Verdana, sans-serif;
+                font-size: 12px;
+                font-weight: bold;
+                text-align: center;
+            }
+
+            &:hover {
+                &::before {
+                    border-color: #1d70b8;
+                    background: #1d70b8;
+                    color: white;
+                }
+            }
         `;
 
-    return ({ className, ...props }) =>
+    return ({ className="", ...props }) =>
         <Node className={ `${classes} ${className}` } { ...props }/>
 })();
-
-
-export const Number = ({ className, ...props }) => (
-    <h3 className={ `govuk-heading-m govuk-!-margin-bottom-2 govuk-!-padding-top-0 ${className}` } { ...props }/>
-);
 
