@@ -5,20 +5,24 @@ import type { ComponentType } from 'react';
 import { BackLink } from 'govuk-react-jsx';
 
 import type { Props } from './PageTitle.types';
-import * as Styles from './PageTitle.styles';
+import {
+  Container,
+  Title ,
+  Subtitle
+} from './PageTitle.styles';
 
 const PageTitle: ComponentType<Props> = ({ caption, title, subtitle, backUrl }: Props) => {
   return (
-    <Styles.Container>
+    <Container>
       {/* <Styles.Caption className="govuk-caption-s">{caption}</Styles.Caption> */}
       {backUrl && (
         <BackLink href={backUrl}>
           Back
         </BackLink>
       )}
-      <Styles.Title className="govuk-heading-xl govuk-!-margin-bottom-4">{title}</Styles.Title>
-      <Styles.Subtitle className="govuk-body govuk-!-margin-bottom-0">{subtitle}</Styles.Subtitle>
-    </Styles.Container>
+      <Title>{title}</Title>
+      <Subtitle>{subtitle}</Subtitle>
+    </Container>
   );
 };
 

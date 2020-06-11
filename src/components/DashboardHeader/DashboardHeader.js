@@ -18,13 +18,15 @@ import { getParamValueFor, getParamDateFor } from "./utils";
 
 // Styles
 import {
-    CollapsibleLink,
+    MainContainer,
     HeaderContainer,
     Title,
+    CollapsibleLinkContainer,
+    CollapsibleLink,
+    CollapsibleLinkText,
     TriangleRight,
     TriangleDown,
-    CollapsibleLinkContainer,
-    MainContainer
+    SectionBreak
 } from './DashboardHeader.styles'
 
 // Types
@@ -67,31 +69,30 @@ const DashboardHeader: ComponentType<Props> = ({ title, location: { search: quer
         endDate = getParamDateFor(params, "specimenDate", moment(), "<"),
         isExcluded = NoPickerPaths.indexOf(pathname) > -1;
 
-    return <MainContainer className={ "sticky-header govuk-!-padding-top-3" }>
-        <HeaderContainer className={ "util-flex util-flex-justify-between util-flex-wrap util-flex-align-items-center" }>
+    return <MainContainer>
+        <HeaderContainer>
             <Title>{ PathNameMapper[pathname] }</Title>
             { isExcluded
                 ? null
                 : <CollapsibleLinkContainer>
                     <CollapsibleLink htmlType={ "button" }
-                        onClick={ () => setLocationPickerState(!locationPickerState) }
-                        className={ "govuk-!-margin-right-6" }>
+                        onClick={ () => setLocationPickerState(!locationPickerState) }>
                         { locationPickerState ? <TriangleDown/> : <TriangleRight/> }
-                        <span className={ "govuk-body-s govuk-body govuk-body govuk-!-margin-bottom-0" }>
-                            <b>Location:</b>&nbsp;{ currentLocation }
-                        </span>
+                        <CollapsibleLinkText>
+                            <strong>Location:</strong>&nbsp;{ currentLocation }
+                        </CollapsibleLinkText>
                     </CollapsibleLink>
                     <CollapsibleLink htmlType={ "button" }
                         onClick={ () => setDatePickerState(!datePickerState) }>
                         { datePickerState ? <TriangleDown/> : <TriangleRight/> }
-                        <span className={ "govuk-body-s change-location govuk-body govuk-!-margin-bottom-0 " }>
-                            <b>Date:</b>&nbsp;{ startDate.format("D MMM YYYY") }&nbsp;-&nbsp;{ endDate.format("D MMM YYYY") }
-                        </span>
+                        <CollapsibleLinkText>
+                            <strong>Date:</strong>&nbsp;{ startDate.format("D MMM YYYY") }&nbsp;-&nbsp;{ endDate.format("D MMM YYYY") }
+                        </CollapsibleLinkText>
                     </CollapsibleLink>
                 </CollapsibleLinkContainer>
             }
         </HeaderContainer>
-        <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
+        <SectionBreak />
 
         {
             ( locationPickerState && !isExcluded )
