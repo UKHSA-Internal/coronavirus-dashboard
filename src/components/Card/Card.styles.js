@@ -91,7 +91,7 @@ export const SectionBreak = ({ className, ...props }) => (
 
 
 export const DataColour: ComponentType<*> = (() => {
-  return styled.div`
+  return styled.span`
     float: left;
     width: 10px;
     height: 10px;
