@@ -68,7 +68,7 @@ const BigNumberTitles = {
 const BigNumberDescriptions = {
     ukCases: 'Includes tests carried out by commercial partners which are not included in the 4 National totals',
     dailyUkCases: "Number of additional cases on {date}",
-    ukDeaths: "Deaths of people who have had a positive test result confirmed by a Public Health or NHS laboratory",
+    ukDeaths: "Deaths of people who have had a positive test result",
     dailyUkDeaths: "Number of additional deaths on {date}"
 }
 
@@ -126,15 +126,15 @@ const Regional: ComponentType<Props> = ({}: Props) => {
     return (
         <Styles.Container className="govuk-width-container">
 
-            <Announcement firstDisplayDate={ { year: 2020, month: 4, day: 27 } }
-                          lastDisplayDate={ { year: 2020, month: 5, day: 1 } }>
+            <Announcement firstDisplayDate={ { year: 2020, month: 6, day: 1 } }
+                          lastDisplayDate={ { year: 2020, month: 6, day: 4 } }>
                 <p className={ "govuk-body" }>
-                    The way COVID-19 deaths are reported has changed.
-                    For details see the&nbsp;
+                    Note that the definition for deaths in England changed on 1 June 2020.
+                    See the &nbsp;
                     <Link to={ '/about' }
                           className={ "govuk-link govuk-link--no-visited-state" }>
                     About the data
-                    </Link>&nbsp;page.
+                    </Link>&nbsp;page for details.
                 </p>
             </Announcement>
 
