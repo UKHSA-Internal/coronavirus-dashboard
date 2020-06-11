@@ -88,7 +88,7 @@ export const DataContainer: ComponentType<*> = (() => {
 
 
 export const DataHeading = ({ className="", ...props }) => (
-    <h3 className={ `govuk-heading-s govuk-!-margin-bottom-1 ${className}` } { ...props }/>
+    <h3 className={ `govuk-heading-s govuk-!-margin-bottom-1 govuk-!-margin-left-4 ${className}` } { ...props }/>
 );
 
 
