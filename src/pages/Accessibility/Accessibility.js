@@ -13,7 +13,11 @@ import axios from "axios";
 import URLs from "common/urls";
 
 import type { AccessibilityState, AccessibilityProps } from './Accessibility.types';
-import * as Styles from './Accessibility.styles';
+import {
+    Loading,
+    Markdown,
+    Article
+} from './Accessibility.styles';
 
 
 
@@ -57,23 +61,17 @@ export default class Accessibility extends Component<AccessibilityProps, {}> {
 
         const { loading, data } = this.state;
 
-        if ( loading ) return <p>Loading&hellip;</p>
+        if ( loading ) return <Loading>Loading&hellip;</Loading>
 
-        return <div className={ "markdown" } dangerouslySetInnerHTML={{ __html: data }}/>
+        return <Markdown dangerouslySetInnerHTML={{ __html: data }}/>
 
     } // display
 
     render(): React$Node {
 
-        return <Styles.Container className={"govuk-width-container accessibility"}>
-            <Styles.Content className="govuk-main-wrapper" role="main">
-                <Styles.Container className="govuk-grid-row">
-                    <Styles.Container className="govuk-grid-column-two-thirds">
-                        { this.display() }
-                    </Styles.Container>
-                </Styles.Container>
-            </Styles.Content>
-        </Styles.Container>
+        return <Article>
+            { this.display() }
+        </Article>
 
     } // render
 

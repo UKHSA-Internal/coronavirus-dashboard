@@ -410,7 +410,7 @@ const DailySummary = ({ location: { search: query } }) => {
         params = urlParams.length ? urlParams : DefaultParams;
         // data = useApi({ conjunctiveFilters: params, structure: Structures.data });
 
-    return <Container className={ "util-flex util-flex-wrap" }>
+    return <Container>
         <TestingCard params={ params }/>
         <CasesCard params={ params }/>
         <HealthcareCard params={ params }/>
