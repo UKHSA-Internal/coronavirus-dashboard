@@ -6,11 +6,11 @@ name: Build and deploy Node.js app to Azure Web App - covid19-test-dashboard
 on:
   push:
     branches:
-      - development
+      - v2-development
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@master
@@ -18,7 +18,7 @@ jobs:
     - name: Set up Node.js version
       uses: actions/setup-node@v1
       with:
-        node-version: '12.13.0'
+        node-version: '13.1.0'
 
     - name: Install dependencies
       run: |

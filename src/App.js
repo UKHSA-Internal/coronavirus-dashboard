@@ -1,33 +1,73 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React,  { Fragment } from 'react';
-import { Switch, Route, Redirect } from 'react-router';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Switch, Route, Redirect, withRouter } from 'react-router';
 import { Header, Footer } from 'govuk-react-jsx';
 
-// handle environment vars
 import dotenv from 'dotenv';
 
-import Regional from 'pages/Regional';
-import MobileRegionTable from 'pages/MobileRegionTable';
 import About from 'pages/About';
 import Archive from "pages/Archive";
 import Accessibility from 'pages/Accessibility';
 import Cookies from 'pages/Cookies';
-import Navigation from 'components/Navigation';
+import DailySummary from 'pages/DailySummary';
+import Tests from 'pages/Tests';
+import Cases from 'pages/Cases';
+import Healthcare from 'pages/Healthcare';
+import Deaths from 'pages/Deaths';
 import CookieBanner from 'components/CookieBanner';
 import BackToTop from 'components/BackToTop';
 import ErrorBoundary from "components/ErrorBoundary";
+import axios from "axios";
+import URLs from "./common/urls";
+import moment from "moment";
+import SideNavigation from "./components/SideNavigation";
+import SideNavMobile from "./components/SideNavMobile";
+import DashboardHeader from "./components/DashboardHeader";
 
 // get environment vars
 dotenv.config();
 
-const FooterContents = () => {
 
-    return <Fragment>
+const useTimestamp = () => {
+
+    const [ timestamp, setTimestamp ] = useState("");
+
+    useEffect(() => {
+        (async () => {
+            const { data } = await axios.get(URLs.timestamp, { responseType: 'text' })
+            setTimestamp(data)
+        })();
+    }, []);
+
+    return timestamp
+
+};  // useTimestamp
+
+
+const LastUpdateTime = () => {
+
+    const timestamp = useTimestamp();
+
+    if (!timestamp) return null;
+
+    return <p className={ "govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-5" }>
+        Last updated on&nbsp;{
+            moment(timestamp)
+                .local(true)
+                .format("dddd D MMMM YYYY [at] h:mma")
+        }
+    </p>
+
+}; // LastUpdateTime
+
+
+const FooterContents = () => (
+    <Fragment>
         <p className={ "govuk-footer__meta-custom" }>
             For feedback email&nbsp;
             <a className="govuk-footer__link"
-               href="mailto:coronavirus-tracker@phe.gov.uk?Subject=Coronavirus%20dashboard%20feedback"
+               href={ encodeURI("mailto:coronavirus-tracker@phe.gov.uk?Subject=Coronavirus dashboard feedback") }
                rel="noopener noreferrer"
                target="_blank"
             >coronavirus-tracker@phe.gov.uk</a>
@@ -47,79 +87,95 @@ const FooterContents = () => {
             >NHSX</a>
         </p>
     </Fragment>
-
-}; // FooterContents
-
-
-const F = () => <Footer
-
-    meta={ {
-        children: <FooterContents/>,
-        items: [
-            { children: ['Archive'], href: '/archive' },
-            { children: ['Accessibility'], href: '/accessibility' },
-            { children: ['Cookies'], href: '/cookies' }
-        ],
-        visuallyHiddenTitle: 'Items',
-    } }
-/>;
+);  // FooterContents
 
 
-const App = () => {
-
-    return (
-        <Fragment>
-            <CookieBanner/>
-            <Header
-                // containerClassName="govuk-header__container--full-width"
-                // navigationClassName="govuk-header__navigation--end"
-                serviceName="Coronavirus (COVID-19) cases in the UK"
-                serviceUrlTo="/"
-                homepageUrlHref="https://gov.uk"
-            />
-            <Navigation/>
-
-            <ErrorBoundary>
-
-                {/* We only want back-to-top links on the main & about pages. */}
-                <Switch>
-                    {/* These back-to-top links are the 'overlay' style that stays
-                        on screen as we scroll. */}
-                    <Route path="/about" exact render={ () => <BackToTop mode={ "overlay" }/> } />
-                    <Route path="/accessibility" exact render={ () => <BackToTop mode={ "overlay" }/> } />
-                    <Route path="/" exact render={ () => <BackToTop mode={ "overlay" }/> } />
-                </Switch>
-
-                <Switch>
-                    <Route path="/region" component={ MobileRegionTable }/>
-                    <Route path="/about" component={ About }/>
-                    <Route path="/accessibility" component={ Accessibility }/>
-                    <Route path="/cookies" component={ Cookies }/>
-                    <Route path="/archive" component={ Archive }/>
-                    <Route path="/" component={ Regional }/>
-                    <Redirect to="/"/>
-                </Switch>
-
-                {/* We only want back-to-top links on the main & about pages. */}
-                <Switch>
-                    {/* These back-to-top links are the 'inline' style that sits
-                        statically between the end of the content and the footer. */}
-                    <Route path="/about" exact render={ props => <BackToTop {...props} mode="inline"/> } />
-                    <Route path="/" exact render={ props => <BackToTop {...props} mode="inline"/>  } />
-                </Switch>
-            </ErrorBoundary>
-
-            <Switch>
-                <Route path="/region" component={ F }/>
-                <Route path="/" exact component={ F }/>
-                <Route path="/about" exact component={ F }/>
-                <Route path="/accessibility" exact component={ F }/>
-                <Route path="/cookies" exact component={ F }/>
-                <Route path="/archive" exact component={ F }/>
-            </Switch>
-        </Fragment>
-    );
-}
+const F = () => (
+    <Footer
+        meta={ {
+            children: <FooterContents/>,
+            items: [
+                { children: ['Archive'], href: '/archive' },
+                { children: ['Accessibility'], href: '/accessibility' },
+                { children: ['Cookies'], href: '/cookies' }
+            ],
+            visuallyHiddenTitle: 'Items',
+        } }
+    />
+);  // Footer
 
 
-export default App;
+const PathWithSideMenu = [
+    "/",
+    "/tests",
+    "/cases",
+    "/healthcare",
+    "/deaths",
+    "/about-data"
+];
+
+const App = ({ location: { pathname } }) => {
+
+    const hasMenu = PathWithSideMenu.indexOf(pathname) > -1;
+
+    return <Fragment>
+        <CookieBanner/>
+        <Header
+            // containerClassName="govuk-header__container--full-width"
+            // navigationClassName="govuk-header__navigation--end"
+            serviceName="Coronavirus (COVID-19) in the UK"
+            serviceUrlTo="/"
+            homepageUrlHref="https://gov.uk"
+        />
+        <SideNavMobile/>
+        <div className={ "govuk-width-container" }>
+            <main className={ "govuk-main-wrapper" } role={ "main" }>
+                <ErrorBoundary>
+                    <Route path={ "/" } component={ hasMenu ? LastUpdateTime : null }/>
+                    <div className={ "dashboard-container" }>
+                        <div className={ "dashboard-menu" }>
+                            <Switch>
+                                <Route path={ "/" } component={ hasMenu ? SideNavigation : null }/>
+                            </Switch>
+                        </div>
+                        <div className={ "dashboard-content" }>
+                            <DashboardHeader/>
+
+                            <Switch>
+                                <Route path="/" exact component={ DailySummary }/>
+                                <Route path="/tests" component={ Tests }/>
+                                <Route path="/cases" component={ Cases }/>
+                                <Route path="/healthcare" component={ Healthcare }/>
+                                <Route path="/deaths" component={ Deaths }/>
+                                <Route path="/about-data" component={ About }/>
+
+                                <Route path="/archive" component={ Archive }/>
+                                <Route path="/accessibility" component={ Accessibility }/>
+                                <Route path="/cookies" component={ Cookies }/>
+                            </Switch>
+                        </div>
+                    </div>
+                </ErrorBoundary>
+            </main>
+        </div>
+
+        <Switch>
+            {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */ }
+            <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> }/>
+        </Switch>
+
+        {/* We only want back-to-top links on the main & about pages. */ }
+        <Switch>
+            {/* These back-to-top links are the 'inline' style that sits
+                statically between the end of the content and the footer. */ }
+            <Route path="/" render={ props => <BackToTop { ...props } mode="inline"/> }/>
+        </Switch>
+
+        <Switch>
+            <Route path="/" component={ F }/>
+        </Switch>
+    </Fragment>
+};  // App
+
+
+export default withRouter(App);

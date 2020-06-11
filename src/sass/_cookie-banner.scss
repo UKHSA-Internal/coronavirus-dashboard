@@ -1,0 +1,49 @@
+/* Cookie Banner
+*/
+
+.gem-c-cookie-banner {
+    padding: 20px 0;
+}
+
+.gem-c-cookie-banner__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+
+.gem-c-button {
+    flex-grow: 1;
+    flex-basis: 10rem;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    display: inline-block;
+    width: auto;
+    vertical-align: baseline;
+}
+
+.gem-c-cookie-banner__confirmation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & p {
+        margin-bottom: 0;
+    }
+
+    & button {
+        color: #1D70B8;
+        cursor: pointer
+    }
+}
+
+.gem-c-notice {
+    color: #0b0c0c;
+    padding: 15px;
+    margin-bottom: 30px;
+    clear: both;
+    border: 5px solid #1d70b8;
+
+    & h2 {
+        margin-bottom: 20px;
+    }
+}

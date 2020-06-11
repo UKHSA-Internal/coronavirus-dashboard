@@ -1,90 +1,65 @@
 // @flow
 
+import React from "react";
 import styled, { css } from 'styled-components';
 import type { ComponentType } from 'react';
 
 import addIECss from 'addIECss';
 
-export const Container: ComponentType<*> = (() => {
-    return styled.div`
-    display: flex;
-    flex-direction: column;
-    border-top: 1px solid #b1b4b6;
-    padding-top: 20px;
-    grid-column: span 1;
-    margin-bottom: 2rem;
-    
-    @media only screen and (max-width: 768px) {
-        &:nth-child(n+1) {
-            margin-right: 0; 
-        }
-    }
-    
-    ${ addIECss(css`
-      width: 100%;
-    `) }
-  `;
-})();
-
-
-export const Caption: ComponentType<*> = (() => {
-    return styled.h2`
-    margin-bottom: 5px;
-    color: black;
-    font-size: 20px;
-    font-weight: bold;
-  `;
-})();
-
-
-export const Description: ComponentType<*> = (() => {
-    return styled.p`
-    margin: 0;
-    color: #626a6e;
-  `;
-})();
-
-
-export const Number: ComponentType<*> = (() => {
-    return styled.span`
-    margin-bottom: 10px;
-    color: #367E93;
-  `;
-})();
-
-
-export const MainContainer: ComponentType<*> = (() => {
-
-    return styled.section`
-    grid-column: 1/-1;
-    
-    ${ addIECss(css`
-      width: 100%;
-    `) }
-    `
-
-})();
-
 
 export const Children: ComponentType<*> = (() => {
-  return styled.div`
-    grid-column: 1/-1;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    &>* {
-        width: 48%;
-    }
-  
-    @media only screen and (max-width: 768px) {
-        align-items: stretch;
-        flex-direction: column;
-        
-        &>* {
-            width: 100%;
-        }
-    }
-  `;
+    const
+        classes = 'govuk-!-margin-top-5 govuk-!-margin-bottom-5',
+        Node = styled.div`
+            display: flex;
+
+            @media only screen and (max-width: 768px) {
+                align-items: stretch;
+                flex-direction: column;
+
+                &>* {
+                    width: 100%;
+                }
+            }
+        `;
+
+    return ({ className, ...props }) =>
+        <Node className={ `${classes} ${className}` } { ...props }/>
 })();
+
+
+export const Container: ComponentType<*> = (() => {
+    const
+        classes = 'govuk-!-padding-left-4 govuk-!-padding-right-4',
+        Node = styled.div`
+            width: 33%;
+
+            @media only screen and (max-width: 768px) {
+                &:nth-child(n+1) {
+                    margin-right: 0;
+                }
+            }
+
+            ${ addIECss(css`
+              width: 100%;
+            `) }
+        `;
+
+    return ({ className, ...props }) =>
+        <Node className={ `${classes} ${className}` } { ...props }/>
+})();
+
+
+export const Caption = ({ className, ...props }) => (
+  <span className={ `govuk-caption-m ${className}` } { ...props }/>
+);
+
+
+export const Title = ({ className, ...props }) => (
+  <h2 className={ `govuk-heading-s govuk-!-margin-bottom-0 ${className}` } { ...props }/>
+);
+
+
+export const Number = ({ className, ...props }) => (
+  <h3 className={ `govuk-heading-l govuk-!-margin-bottom-2 ${className}` } { ...props }/>
+);

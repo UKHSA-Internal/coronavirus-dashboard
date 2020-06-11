@@ -1,0 +1,26 @@
+/* Utility classes
+*/
+
+.util-flex {
+    display: flex !important;
+}
+
+.util-flex-col {
+    flex-direction: column !important;
+}
+
+.util-flex-wrap {
+    flex-wrap: wrap !important;
+}
+
+.util-flex-justify-between {
+    justify-content: space-between !important;
+}
+
+.util-flex-align-items-center {
+    align-items: center !important;
+}
+
+.util-flex-align-items-start {
+    align-items: flex-start !important;
+}
