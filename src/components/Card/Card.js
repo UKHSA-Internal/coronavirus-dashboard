@@ -56,7 +56,7 @@ const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
 
 
 const ValueItem: ComponentType<Props> = ({
-         heading, primaryLabel, primaryValue, primaryModal=null, primaryTooltip=null, primarySign=null,
+         caption, primaryLabel, primaryValue, primaryModal=null, primaryTooltip=null, primarySign=null,
          secondaryLabel=null, secondaryValue=null, secondaryModal=null, secondaryTooltip=null, secondarySign=null,
          chart }: Props) => {
 
@@ -64,7 +64,7 @@ const ValueItem: ComponentType<Props> = ({
 
     return <DataContainer>
         { ( chart?.colour ?? null ) ? <DataColour colour={ chart.colour } /> : null }
-        <DataHeading>{ heading }</DataHeading>
+        <DataHeading>{ caption }</DataHeading>
         <DataNumbersContainer>
             <DataPrimary>
                 <DataLabel>{ primaryLabel }</DataLabel>

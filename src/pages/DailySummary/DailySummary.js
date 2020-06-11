@@ -435,12 +435,6 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
         groupedByDate = groupByUniqueKey(data, 'date'),
         maxDate = max(Object.keys(groupedByDate));
 
-    console.log(
-        layout
-            .filter(item => item.hasOwnProperty("chart"))
-
-    )
-
     return <HalfWidthCard heading={ heading }>
         <VisualSection>
             <Plotter

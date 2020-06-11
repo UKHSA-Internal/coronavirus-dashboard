@@ -17,6 +17,8 @@ export type useApiInputs = {
 
 
 export type UKSummaryField = {
+    caption: string,
+
     primaryLabel: string,
     primaryValue: string,
     primarySign?: string,
