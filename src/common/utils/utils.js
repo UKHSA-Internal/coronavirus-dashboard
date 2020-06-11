@@ -129,3 +129,34 @@ export const hexToRgb = (hex: string): RGB => {
     }
 
 }; // hexToRgb
+
+
+export const strFormat = (str, { args, kwargs }) => {
+
+    let unkeyedIndex = 0;
+
+    return str.replace(/{(\w*)}/g, ( match, key ) => {
+
+        if ( key === '' ) {
+
+            key = unkeyedIndex;
+            unkeyedIndex++
+        }
+
+        if ( key === +key ) {
+
+            return args[key] !== 'undefined'
+                ? args[key]
+                : match;
+
+        } else {
+
+            if ( kwargs.hasOwnProperty(key) ) return kwargs[key];
+
+            return match
+
+        }
+
+    })
+
+};  // strFormat
