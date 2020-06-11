@@ -11,7 +11,7 @@ import { Container } from './DailySummary.styles';
 
 import { max } from "d3-array";
 import { MainLoading } from "components/Loading";
-import { getParams, hexToRgb } from "common/utils";
+import { getParams, hexToRgb, strFormat } from "common/utils";
 import { movingAverage } from "common/stats";
 
 import useApi from "hooks/useApi";
@@ -409,6 +409,27 @@ const CasesCard = ({ params, ...props }) => {
 };  // TestingCard
 
 
+/**
+ *
+ * @param data - Must always be sorted by date (descending).
+ * @param valueKey
+ */
+const getMaxDateValuePair = ( data: Array<{ [string]: string | number | null }>, valueKey: string ): { date: string | null, value: string | number | null } =>  {
+
+    if ( !valueKey ) return { date: null, value: null };
+
+    for ( const { [valueKey]: value, date } of data ) {
+
+        if ( value )
+            return { date: moment(date).format("dddd D MMMM YYYY"), value: value };
+
+    }
+
+    return { date: null, value: null }
+
+};
+
+
 const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) => {
 
     const structure = { date: "date" };
@@ -461,9 +482,23 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
                 }
             />
         </VisualSection>
-        <ValueItemsSection>
-            { layout.map(item => <ValueItem key={ item.primaryValue } { ...item }/>) }
-        </ValueItemsSection>
+        <ValueItemsSection>{
+            layout.map(({ primaryValue, secondaryValue=null, primaryTooltip="", secondaryTooltip="", ...rest }, index) => {
+
+                const
+                    primaryData = getMaxDateValuePair(data, primaryValue),
+                    secondaryData = getMaxDateValuePair(data, secondaryValue);
+
+                return <ValueItem
+                    key={ index }
+                    primaryValue={ primaryData.value }
+                    primaryTooltip={ strFormat(primaryTooltip, { kwargs: primaryData }) }
+                    secondaryValue={ secondaryData.value }
+                    secondaryTooltip={ strFormat(primaryTooltip, { kwargs: primaryData }) }
+                    { ...rest }
+                />
+            })
+        }</ValueItemsSection>
     </HalfWidthCard>
 
 };  // DailySummaryCard
