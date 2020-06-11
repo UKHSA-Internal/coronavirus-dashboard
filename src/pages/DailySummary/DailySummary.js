@@ -484,15 +484,15 @@ const DailySummary = ({ location: { search: query } }) => {
 
     if ( !pageLayout ) return <MainLoading/>;
 
-    return <Container className={ "util-flex util-flex-wrap" }>
-        { pageLayout.summary.map(item =>
+    return <Container className={ "util-flex util-flex-wrap" }>{
+        pageLayout.summary.map(item =>
             <DailySummaryCard
                 key={ item.heading }
                 params={ params }
                 heading={ item.heading }
                 layout={ item.fields }/>
-        ) }
-    </Container>
+        )
+    }</Container>
 
 };  // DailySummary
 
