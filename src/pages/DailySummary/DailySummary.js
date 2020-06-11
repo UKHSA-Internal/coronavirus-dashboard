@@ -11,12 +11,18 @@ import { Container } from './DailySummary.styles';
 
 import { max } from "d3-array";
 import { MainLoading } from "components/Loading";
-import { getParams } from "common/utils";
+import { getParams, hexToRgb } from "common/utils";
 import { movingAverage } from "common/stats";
 
 import useApi from "hooks/useApi";
 
 import { Plotter } from "./plots";
+
+import usePageLayout from "hooks/usePageLayout";
+import URLs from "common/urls";
+import type {
+    DailySummaryCardProps
+} from "./DailySummary.types"
 
 
 const
@@ -403,18 +409,89 @@ const CasesCard = ({ params, ...props }) => {
 };  // TestingCard
 
 
+const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) => {
+
+    const structure = { date: "date" };
+
+    for ( const { primaryValue, secondaryValue=null, ...rest } of layout )  {
+
+        structure[primaryValue] = primaryValue;
+
+        if ( secondaryValue )
+            structure[secondaryValue] = secondaryValue;
+
+        if ( rest?.chart ?? null )
+            structure[rest.chart.variableName] = rest.chart.variableName;
+
+    }
+
+    const  data = useApi({
+        conjunctiveFilters: params,
+        structure: structure
+    });
+
+    const
+        date = data.map(item => item?.date ?? null),
+        groupedByDate = groupByUniqueKey(data, 'date'),
+        maxDate = max(Object.keys(groupedByDate));
+
+    console.log(
+        layout
+            .filter(item => item.hasOwnProperty("chart"))
+
+    )
+
+    return <HalfWidthCard heading={ heading }>
+        <VisualSection>
+            <Plotter
+                data={
+                    layout
+                        .filter(item => item.hasOwnProperty("chart"))
+                        .map(item => {
+                            const yData =
+                                    data.map(variable => variable?.[item.chart.variableName] ?? null),
+                                    { r, g, b } = hexToRgb(item.chart.colour);
+
+                            return {
+                                x: date,
+                                y: item.chart.rollingAverage ? movingAverage(yData, 7) : yData,
+                                type: 'line',
+                                mode: 'lines',
+                                fill: 'tozeroy',
+                                fillcolor: `rgba(${r},${g},${b},0.1)`,
+                                line: {
+                                    color: item.chart.colour
+                                }
+                            }
+                        })
+                }
+            />
+        </VisualSection>
+        <ValueItemsSection>
+            { layout.map(item => <ValueItem key={ item.primaryValue } { ...item }/>) }
+        </ValueItemsSection>
+    </HalfWidthCard>
+
+};  // DailySummaryCard
+
+
 const DailySummary = ({ location: { search: query } }) => {
 
     const
+        pageLayout = usePageLayout(URLs.pageLayouts.UKSummary),
         urlParams = getParams(query),
         params = urlParams.length ? urlParams : DefaultParams;
-        // data = useApi({ conjunctiveFilters: params, structure: Structures.data });
 
-    return <Container>
-        <TestingCard params={ params }/>
-        <CasesCard params={ params }/>
-        <HealthcareCard params={ params }/>
-        <DeathsCard params={ params }/>
+    if ( !pageLayout ) return <MainLoading/>;
+
+    return <Container className={ "util-flex util-flex-wrap" }>
+        { pageLayout.summary.map(item =>
+            <DailySummaryCard
+                key={ item.heading }
+                params={ params }
+                heading={ item.heading }
+                layout={ item.fields }/>
+        ) }
     </Container>
 
 };  // DailySummary
