@@ -128,39 +128,3 @@ export const DataLabel = ({ className="", ...props }) => (
 export const Number = ({ className="", ...props }) => (
     <h3 className={ `govuk-heading-m govuk-!-font-weight-regular govuk-!-margin-bottom-2 govuk-!-padding-top-0 ${className}` } { ...props }/>
 );
-
-
-export const ToolTip: ComponentType<*> = (() => {
-    const
-        classes = '',
-        Node = styled.span`
-            &::before {
-                position: relative;
-                top: -5px;
-                display: inline-block;
-                width: 14px;
-                height: 14px;
-                border: 1px solid #1d70b8;
-                margin-left: 5px;
-                border-radius: 10px;
-                color: #1d70b8;
-                content: 'i';
-                font-family: Verdana, sans-serif;
-                font-size: 12px;
-                font-weight: bold;
-                text-align: center;
-            }
-
-            &:hover {
-                &::before {
-                    border-color: #1d70b8;
-                    background: #1d70b8;
-                    color: white;
-                }
-            }
-        `;
-
-    return ({ className="", ...props }) =>
-        <Node className={ `${classes} ${className}` } { ...props }/>
-})();
-
