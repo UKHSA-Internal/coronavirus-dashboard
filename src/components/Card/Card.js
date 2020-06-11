@@ -56,22 +56,24 @@ const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
 
 
 const ValueItem: ComponentType<Props> = ({
-         heading, primaryLabel="Daily", primaryValue, primaryModal=null, primaryDescription=null, primarySign=null,
-         secondaryLabel=null, secondaryValue=null, secondaryModal=null, secondaryDescription=null, secondarySign=null,
-         colourValue }: Props) => {
+         heading, primaryLabel, primaryValue, primaryModal=null, primaryTooltip=null, primarySign=null,
+         secondaryLabel=null, secondaryValue=null, secondaryModal=null, secondaryTooltip=null, secondarySign=null,
+         chart }: Props) => {
 
     const tipId = encodeURI(primaryLabel);
 
     return <DataContainer>
-        { colourValue ? <DataColour colour={ colourValue } /> : null }
+        { ( chart?.colour ?? null ) ? <DataColour colour={ chart.colour } /> : null }
         <DataHeading>{ heading }</DataHeading>
         <DataNumbersContainer>
             <DataPrimary>
                 <DataLabel>{ primaryLabel }</DataLabel>
                 <Number>
                     { numeral(primaryValue).format("0,0") }{ primarySign }
-                    <ToolTip data-tip={ primaryDescription } data-for={ tipId }>
-                        <span className={ "govuk-visually-hidden" }>More information</span>
+                    <ToolTip data-tip={ primaryTooltip } data-for={ tipId }>
+                        <span className={ "govuk-visually-hidden" }>
+                            More information on { primaryLabel }: { primaryTooltip }
+                        </span>
                     </ToolTip>
                 </Number>
             </DataPrimary>
@@ -82,8 +84,10 @@ const ValueItem: ComponentType<Props> = ({
                     <DataLabel>{ secondaryLabel }</DataLabel>
                     <Number>
                         { numeral(secondaryValue).format("0,0") }{ secondarySign }
-                        <ToolTip data-tip={ secondaryDescription } data-for={ tipId }>
-                            <span className={ "govuk-visually-hidden" }>More information</span>
+                        <ToolTip data-tip={ secondaryTooltip } data-for={ tipId }>
+                            <span className={ "govuk-visually-hidden" }>
+                                More information on { secondaryLabel }: { secondaryTooltip }
+                            </span>
                         </ToolTip>
                     </Number>
                 </DataSecondary>
