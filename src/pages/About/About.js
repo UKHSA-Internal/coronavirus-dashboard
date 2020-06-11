@@ -50,10 +50,6 @@ export default class About extends Component<AboutProps, {}> {
 
         this.setState({ loading: true }, this.getData)
 
-        // ToDo: This should be done for every page in the "app.js".
-        const base = document.querySelector("head>base");
-        base.href = document.location.pathname;
-
     } // componentDidMount
 
     display() {

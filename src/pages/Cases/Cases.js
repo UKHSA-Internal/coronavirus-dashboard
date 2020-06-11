@@ -324,10 +324,6 @@ const ScatterPlot = ({ data, ...props }) => {
 
 const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
-    // ToDo: This should be done for every page in the "app.js".
-    const base = document.querySelector("head>base");
-    base.href = document.location.pathname;
-
     const
         urlParams = getParams(query),
         params = urlParams.length ? urlParams : DefaultParams,
