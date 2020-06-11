@@ -1,13 +1,11 @@
 // @flow
 
-import React, { Fragment } from 'react';
+import React from 'react';
 import type { ComponentType } from 'react';
-import { BackLink } from 'govuk-react-jsx';
 import { Link } from "react-router-dom";
 
 import type { Props } from './Card.types';
 import {
-    CardDescription,
     HalfCard,
     HalfCardHeader,
     HalfCardHeading,
@@ -18,11 +16,15 @@ import {
     Caption,
     BodySection,
     SectionBreak,
+    DataContainer,
     DataColour,
+    DataHeading,
+    DataNumbersContainer,
+    DataPrimary,
+    DataSecondary,
     DataLabel,
-    LabelText,
-    DataValue,
-    Number
+    Number,
+    ToolTip
 } from './Card.styles';
 import numeral from 'numeral'
 import ReactTooltip from "react-tooltip";
@@ -60,37 +62,36 @@ const ValueItem: ComponentType<Props> = ({
 
     const tipId = encodeURI(primaryLabel);
 
-    return <div>
+    return <DataContainer>
         { colourValue ? <DataColour colour={ colourValue } /> : null }
-        <h3>{ heading }</h3>
-        <div data-tip={ primaryDescription } data-for={ tipId }>
-            <DataLabel>
-                <h4>{ primaryLabel }</h4>
-            </DataLabel>
-            <DataValue>
+        <DataHeading>{ heading }</DataHeading>
+        <DataNumbersContainer>
+            <DataPrimary>
+                <DataLabel>{ primaryLabel }</DataLabel>
                 <Number>
                     { numeral(primaryValue).format("0,0") }{ primarySign }
+                    <ToolTip data-tip={ primaryDescription } data-for={ tipId }>
+                        <span className={ "govuk-visually-hidden" }>More information</span>
+                    </ToolTip>
                 </Number>
-            </DataValue>
-        </div>
+            </DataPrimary>
+
         {
             secondaryLabel
-                ? <Fragment>
-                    <div data-tip={ secondaryDescription } data-for={ tipId }>
-                        <DataLabel>
-                            <h4>{ secondaryLabel }</h4>
-                        </DataLabel>
-                        <DataValue>
-                            <Number>
-                                { numeral(secondaryValue).format("0,0") }{ secondarySign }
-                            </Number>
-                        </DataValue>
-                    </div>
-                </Fragment>
+                ? <DataSecondary>
+                    <DataLabel>{ secondaryLabel }</DataLabel>
+                    <Number>
+                        { numeral(secondaryValue).format("0,0") }{ secondarySign }
+                        <ToolTip data-tip={ secondaryDescription } data-for={ tipId }>
+                            <span className={ "govuk-visually-hidden" }>More information</span>
+                        </ToolTip>
+                    </Number>
+                </DataSecondary>
                 : null
         }
+        </DataNumbersContainer>
         <ReactTooltip id={ tipId } place={ "top" } effect={ "solid" }/>
-    </div>
+    </DataContainer>
 
 }; // ValueItem
 
