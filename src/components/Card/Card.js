@@ -1,8 +1,10 @@
 // @flow
 
-import React from 'react';
+import React, { useState } from 'react';
 import type { ComponentType } from 'react';
 import { Link } from "react-router-dom";
+
+import ModalTooltip from "components/Modal";
 
 import type { Props } from './Card.types';
 import {
@@ -48,17 +50,11 @@ const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
 }; // ValueItemContainer
 
 
-// const ToolTipDescription = ({ id, message }) => {
-//
-//     return
-//
-// };  // ToolTopDescription
-
-
 const ValueItem: ComponentType<Props> = ({
-         caption, primaryLabel, primaryValue, primaryModal=null, primaryTooltip=null, primarySign=null,
-         secondaryLabel=null, secondaryValue=null, secondaryModal=null, secondaryTooltip=null, secondarySign=null,
-         chart }: Props) => {
+         caption, primaryLabel, primaryValue, primaryModal=null, primaryTooltip=null,
+         primarySign=null, primaryModalReplacements={}, secondaryLabel=null,
+         secondaryValue=null, secondaryModal=null, secondaryTooltip=null,
+         secondarySign=null, secondaryModalReplacements={}, chart }: Props) => {
 
     const tipId = encodeURI(primaryLabel);
 
@@ -67,28 +63,38 @@ const ValueItem: ComponentType<Props> = ({
         <DataHeading>{ caption }</DataHeading>
         <DataNumbersContainer>
             <DataPrimary>
-                <DataLabel>{ primaryLabel }</DataLabel>
+                { primaryLabel && <DataLabel>{ primaryLabel }</DataLabel> }
                 <Number>
                     { numeral(primaryValue).format("0,0") }{ primarySign }
-                    <ToolTip data-tip={ primaryTooltip } data-for={ tipId }>
+                    <ModalTooltip
+                        data-tip={ primaryTooltip }
+                        data-for={ tipId }
+                        markdownPath={ primaryModal }
+                        replacements={ primaryModalReplacements }
+                    >
                         <span className={ "govuk-visually-hidden" }>
                             More information on { primaryLabel }: { primaryTooltip }
                         </span>
-                    </ToolTip>
+                    </ModalTooltip>
                 </Number>
             </DataPrimary>
 
         {
             secondaryLabel
                 ? <DataSecondary>
-                    <DataLabel>{ secondaryLabel }</DataLabel>
+                    { secondaryLabel && <DataLabel>{ secondaryLabel }</DataLabel> }
                     <Number>
                         { numeral(secondaryValue).format("0,0") }{ secondarySign }
-                        <ToolTip data-tip={ secondaryTooltip } data-for={ tipId }>
+                        <ModalTooltip
+                            data-tip={ secondaryTooltip }
+                            data-for={ tipId }
+                            markdownPath={ secondaryModal }
+                            replacements={ secondaryModalReplacements }
+                        >
                             <span className={ "govuk-visually-hidden" }>
                                 More information on { secondaryLabel }: { secondaryTooltip }
                             </span>
-                        </ToolTip>
+                        </ModalTooltip>
                     </Number>
                 </DataSecondary>
                 : null
