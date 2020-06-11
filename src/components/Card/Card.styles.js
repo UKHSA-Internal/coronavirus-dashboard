@@ -100,7 +100,7 @@ export const DataColour: ComponentType<*> = (() => {
 
 
 export const DataNumbersContainer = ({ className="", ...props }) => (
-    <div className={ `util-flex util-flex-wrap govuk-!-margin-bottom-21 govuk-!-margin-left-4 ${className}` } { ...props }/>
+    <div className={ `util-flex util-flex-wrap govuk-!-margin-bottom-2 govuk-!-margin-left-4 ${className}` } { ...props }/>
 );
 
 
