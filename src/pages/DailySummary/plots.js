@@ -33,7 +33,7 @@ export const Plotter = ({ layout, ...props }) => {
                 zeroline: false,
                 showline: false,
                 automargin: true,
-                tickangle: 20,
+                tickangle: -20,
                 type: "date",
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
