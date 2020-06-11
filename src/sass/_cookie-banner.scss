@@ -9,15 +9,15 @@
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-  }
+}
 
 .gem-c-button {
-    flex-grow: 1;
-    flex-basis: 10rem;
-    margin-right: 15px;
-    margin-bottom: 15px;
     display: inline-block;
     width: auto;
+    flex-basis: 10rem;
+    flex-grow: 1;
+    margin-right: 15px;
+    margin-bottom: 15px;
     vertical-align: baseline;
 }
 
@@ -31,17 +31,17 @@
     }
 
     & button {
-        color: #1D70B8;
-        cursor: pointer
+        color: #1d70b8;
+        cursor: pointer;
     }
 }
 
 .gem-c-notice {
-    color: #0b0c0c;
     padding: 15px;
+    border: 5px solid #1d70b8;
     margin-bottom: 30px;
     clear: both;
-    border: 5px solid #1d70b8;
+    color: #0b0c0c;
 
     & h2 {
         margin-bottom: 20px;

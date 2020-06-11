@@ -30,8 +30,8 @@ export const Title = ({ className, ...props }) => (
 export const CollapsibleLinkContainer: ComponentType<*> = (() => {
   return styled.div`
   display: inline-flex;
-  justify-self: flex-end;
   flex-wrap: wrap;
+  justify-self: flex-end;
   `
 })();
 
@@ -42,7 +42,8 @@ export const CollapsibleLink: ComponentType<*> = (() => {
     Node = styled.button`
       cursor: pointer;
 
-      &, &>* {
+      &,
+      & > * {
         color: #1d70b8;
       }
     `;
@@ -56,10 +57,10 @@ export const TriangleRight: ComponentType<*> = (() => {
   const
     classes = 'govuk-body-s',
     Node = styled.span`
-      margin-bottom: 0;
       margin-right: 5px;
+      margin-bottom: 0;
 
-      &:before {
+      &::before {
         content: "►";
       }
     `;
@@ -73,10 +74,10 @@ export const TriangleDown: ComponentType<*> = (() => {
   const
     classes = 'govuk-body-s',
     Node = styled.span`
-      margin-bottom: 0;
       margin-right: 5px;
+      margin-bottom: 0;
 
-      &:before {
+      &::before {
         content: "▼";
       }
     `;
@@ -99,7 +100,7 @@ export const SectionBreak = ({ className, ...props }) => (
 export const Select: ComponentType<*> = (() => {
 
   const Node = styled.select`
-  width: 100%
+    width: 100%;
   `;
 
   return ({ ...props }) =>

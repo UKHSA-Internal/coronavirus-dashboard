@@ -10,9 +10,9 @@ export const HalfCard: ComponentType<*> = (() => {
   return styled.article`
     flex: 1 1 43%;
     padding: 20px;
+    border: 1px #f3f2f1 solid;
     margin: 15px;
     background-color: #f8f8f8;
-    border: 1px #f3f2f1 solid;
   `;
 })();
 
@@ -43,9 +43,9 @@ export const FullCard: ComponentType<*> = (() => {
   return styled.article`
     flex: 1 1 auto;
     padding: 20px;
+    border: 1px #f3f2f1 solid;
     margin-bottom: 30px;
     background-color: #f8f8f8;
-    border: 1px #f3f2f1 solid;
   `;
 })();
 
@@ -92,13 +92,13 @@ export const SectionBreak = ({ className, ...props }) => (
 
 export const DataColour: ComponentType<*> = (() => {
   return styled.span`
-    float: left;
     width: 10px;
     height: 10px;
+    float: left;
+    border: 1px solid #000;
     margin: 6px 6px 6px 0;
     background: ${props => props.colour};
-    border: 1px solid #000;
-    box-shadow:inset 0px 0px 0px 1px #ffffff;
+    box-shadow: inset 0 0 0 1px #fff;
   `;
 })();
 

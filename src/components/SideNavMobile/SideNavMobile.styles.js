@@ -9,6 +9,7 @@ export const MobileNavWrapper: ComponentType<*> = (() => {
   return styled.div`
     position: relative;
     margin-top: 12px;
+
     @media only screen and (min-width: 40.0625em) {
       display: none;
     }

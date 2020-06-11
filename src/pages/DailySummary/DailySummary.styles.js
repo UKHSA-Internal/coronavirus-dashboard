@@ -14,6 +14,4 @@ const
 
 return ({ className = '', ...props }) =>
     <Node className={ `${classes} ${className}` } { ...props }/>
-  return styled.div`
-  `;
 })();

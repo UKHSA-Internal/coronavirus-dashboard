@@ -1,12 +1,11 @@
 /* Sticky Header
 */
 
-
 // Sticky table headers
 thead.govuk-table__head th {
-  position: sticky;
-  top: 0;
-  background-color: #f8f8f8;
+    position: sticky;
+    top: 0;
+    background-color: #f8f8f8;
 }
 
 // No gap at top of list to prevent list bleedthrough above thead
@@ -21,7 +20,7 @@ thead.govuk-table__head th {
 .sticky-header {
     position: -webkit-sticky; /* Safari */
     position: sticky;
+    z-index: 9999;
     top: 0;
     background-color: rgba(248, 248, 248, 0.95);
-    z-index: 9999;
 }

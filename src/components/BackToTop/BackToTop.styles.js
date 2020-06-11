@@ -9,10 +9,10 @@ export const OverlayContainer: ComponentType<*> = (() => {
   position: fixed;
   bottom: 0;
   width: 100%;
+  z-index: 1234567;
   padding-top: 20px;
   padding-bottom: 20px;
   background: transparent;
-  z-index: 1234567;
    `;
 })();
 
@@ -30,8 +30,8 @@ export const Link: ComponentType<*> = (() => {
   const
     classes = 'govuk-link govuk-link--no-visited-state',
     Node = styled.a`
-    background: rgba(255, 255, 255, .8);
     padding: .5em .5em 2em .5em;
+    background: rgba(255, 255, 255, .8);
   `;
 
   return ({ className, ...props }) =>

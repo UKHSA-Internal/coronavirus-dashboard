@@ -14,10 +14,10 @@ export const Children: ComponentType<*> = (() => {
             display: flex;
 
             @media only screen and (max-width: 768px) {
-                align-items: stretch;
                 flex-direction: column;
+                align-items: stretch;
 
-                &>* {
+                & > * {
                     width: 100%;
                 }
             }
