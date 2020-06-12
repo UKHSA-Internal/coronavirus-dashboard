@@ -30,34 +30,7 @@ const
     DefaultParams = [
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
         { key: 'areaType', sign: '=', value: 'overview' },
-    ],
-    Structures = {
-        deaths: {
-            date: "date",
-            newDeathsByPublishDate: "newDeathsByPublishDate",
-            cumDeathsByPublishDate: "cumDeathsByPublishDate"
-        },
-        healthcare: {
-            date: "date",
-            hospitalCases: "hospitalCases",
-            covidOccupiedMVBeds: "covidOccupiedMVBeds",
-            newAdmissions: "newAdmissions",
-            cumAdmissions: "cumAdmissions"
-        },
-        cases: {
-            date: "date",
-            newCasesByPublishDate: "newCasesByPublishDate",
-            cumCasesByPublishDate: "cumCasesByPublishDate",
-            newPeopleTestedByPublishDate: "newPeopleTestedByPublishDate",
-            cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
-        },
-        testing: {
-            date: "date",
-            newTestsByPublishDate: "newTestsByPublishDate",
-            cumTestsByPublishDate: "cumTestsByPublishDate",
-            plannedCapacityByPublishDate: "plannedCapacityByPublishDate"
-        }
-    };
+    ];
 
 
 export const timestamp = (data): string =>
