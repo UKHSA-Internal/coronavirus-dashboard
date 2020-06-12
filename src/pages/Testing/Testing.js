@@ -21,26 +21,7 @@ const
     DefaultParams = [
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
         { key: 'areaType', sign: '=', value: 'overview' }
-    ],
-    Structures = {
-        totalData: {
-            cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
-            cumCasesByPublishDate: "cumCasesByPublishDate",
-            date: "date",
-        },
-        dailyData: {
-            newPeopleTestedByPublishDate: "newPeopleTestedByPublishDate",
-            newCasesByPublishDate: "newCasesByPublishDate",
-            date: "date",
-        },
-        // dailyCollective:  {
-        //     rate: "dailyTotalLabConfirmedCasesRate",
-        //     cases: "totalLabConfirmedCases",
-        //     code: "areaCode",
-        //     name: "areaName",
-        //     date: "specimenDate"
-        // }
-    };
+    ];
 
 
 const TotalPlot = ({ params }) => {
@@ -49,7 +30,7 @@ const TotalPlot = ({ params }) => {
         conjunctiveFilters: params,
         structure: {
             cumTestsByPublishDate: "cumTestsByPublishDate",
-            cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
+            // cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
             date: "date"
         },
         defaultResponse: []
@@ -91,15 +72,15 @@ const DailyPlot = ({ params }) => {
             conjunctiveFilters: params,
             structure: {
                 newTestsByPublishDate: "newTestsByPublishDate",
-                newPeopleTestedByPublishDate: "newPeopleTestedByPublishDate",
+                // newPeopleTestedByPublishDate: "newPeopleTestedByPublishDate",
                 plannedCapacityByPublishDate: "plannedCapacityByPublishDate",
                 date: "date"
             },
             defaultResponse: []
         }),
         date = data.map(item => item?.date ?? ""),
-        tested = data.map(item => item?.newTestsByPublishDate ?? null),
-        peopleTested = data.map(item => item?.newPeopleTestedByPublishDate ?? null);
+        tested = data.map(item => item?.newTestsByPublishDate ?? null);
+        // peopleTested = data.map(item => item?.newPeopleTestedByPublishDate ?? null);
 
     // if (!data) return <MainLoading/>
 
