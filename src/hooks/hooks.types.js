@@ -23,13 +23,11 @@ export type UKSummaryField = {
     primaryValue: string,
     primarySign?: string,
     primaryTooltip?: string,
-    primaryModal?: string,
 
     secondaryLabel?: string,
     secondaryValue?: string,
     secondarySign?: string,
     secondaryTooltip?: string,
-    secondaryModal?: string,
 
     chart?: {
         variableName: string,
