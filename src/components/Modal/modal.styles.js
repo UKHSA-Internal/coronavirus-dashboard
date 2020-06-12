@@ -99,7 +99,7 @@ export const Markdown: ComponentType<*> = (() => {
             padding: 30px;
             overflow-x: scroll;
             font-size: 80%;
-            border-bottom: 1px solid gray;
+            border-bottom: 1px solid #6F777B;
 
             & > :first-child {
                 margin-top: 0;
