@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React  from 'react';
 import { withRouter } from 'react-router';
 
 import moment from "moment";
@@ -23,8 +23,7 @@ import URLs from "common/urls";
 import type {
     DailySummaryCardProps
 } from "./DailySummary.types"
-import Plot from "react-plotly.js";
-import type { UKSummaryField } from "../../hooks/hooks.types";
+import type { UKSummaryField } from "hooks/hooks.types";
 
 
 const
