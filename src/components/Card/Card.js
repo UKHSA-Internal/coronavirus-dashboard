@@ -100,7 +100,7 @@ const ValueItem: ComponentType<Props> = ({
                 : null
         }
         </DataNumbersContainer>
-        <ReactTooltip id={ tipId } place={ "right" } className={ "tooltip" } effect={ "solid" }/>
+        <ReactTooltip id={ tipId } place={ "right" } backgroundColor={ "#0b0c0c" }  className={ "tooltip" } effect={ "solid" }/>
     </DataContainer>
 
 }; // ValueItem
