@@ -76,15 +76,9 @@ export const SectionBreak = ({ className="", ...props }) => (
 );
 
 
-export const DataContainer: ComponentType<*> = (() => {
-
-    const Node = styled.div`
-        font-family: "GDS Transport", Arial, sans-serif;
-    `;
-
-    return  ({ ...props }) => <Node { ...props }/>
-
-})();
+export const DataContainer = ({ className="", ...props }) => (
+    <div className={ `${ className }` } { ...props }/>
+);
 
 
 export const DataHeading = ({ className="", ...props }) => (
