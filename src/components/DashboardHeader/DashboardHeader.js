@@ -38,7 +38,7 @@ import type { Props } from './DashboardHeader.types';
 const PathNameMapper = {
     "/": "UK Summary",
     "/cases": "Cases",
-    "/tests": "Tests",
+    "/testing": "Testing",
     "/healthcare": "Healthcare",
     "/deaths": "Deaths",
     "/about-data": "About data",
