@@ -11,11 +11,6 @@ import { Container } from './Testing.styles';
 
 const Testing: ComponentType<Props> = ({ }: Props) => {
 
-    // ToDo: This should be done for every page in the "app.js".
-    const base = document.querySelector("head>base");
-    base.href = document.location.pathname;
-
-
     return <Fragment>
         <BigNumberContainer>
             <BigNumber
