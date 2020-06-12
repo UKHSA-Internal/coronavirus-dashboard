@@ -21,6 +21,7 @@ import {
     VisContainer,
     VisItem
 } from "./Cases.styles";
+import moment from "moment";
 
 
 const
@@ -49,98 +50,220 @@ const
     };
 
 
-const TotalPlot = ({ data }) => {
+// const TotalPlot = ({ data }) => {
+//
+//     if (!data) return <MainLoading/>
+//
+//     return <Plotter
+//         data={ [
+//             {
+//                 name: "Number of people tested",
+//                 x: data.map(item => item?.date ?? null),
+//                 y: data.map(item => item?.cumPeopleTestedByPublishDate ?? null),
+//                 fill: 'tozeroy',
+//                 line: {
+//                     color: 'rgb(108,108,108)'
+//                 },
+//                 fillcolor: 'rgba(108,108,108,0.2)'
+//             },
+//             {
+//                 name: "Number of cases",
+//                 x: data.map(item => item?.date ?? null),
+//                 y: data.map(item => item?.cumCasesByPublishDate ?? null),
+//                 fill: 'tozeroy',
+//                 fillcolor: 'rgba(43,140,196,0.2)',
+//                 line: {
+//                     color: 'rgb(43,140,196)'
+//                 }
+//             }
+//         ] }
+//     />
+//
+// }; // TotalPlot
+//
+//
+// const DailyPlot = ({ data }) => {
+//
+//     if ( !data ) return <MainLoading/>;
+//
+//     const
+//         date = data.map(item => item?.date ?? ""),
+//         tested = data.map(item => item?.newPeopleTestedByPublishDate ?? null),
+//         cases = data.map(item => item?.newCasesByPublishDate ?? null),
+//         testedRollingAve = movingAverage(data.map(item => item?.newPeopleTestedByPublishDate ?? 0), 7),
+//         casesRollingAve = movingAverage(data.map(item => item?.newPeopleTestedByPublishDate ?? 0), 7);
+//
+//     for (let index = 0; index < 7; index ++) {
+//         testedRollingAve[index] = NaN;
+//         casesRollingAve[index] = NaN;
+//     }
+//
+//     return <Plotter
+//         data={ [
+//             {
+//                 name: "Number of people tested",
+//                 x: date,
+//                 y: tested,
+//                 fill: 'tozeroy',
+//                 type: "bar",
+//                 marker: {
+//                     color: '#2B8CC4'
+//                 }
+//             },
+//             {
+//                 name: "Number of cases",
+//                 x: date,
+//                 y: cases,
+//                 fill: 'tozeroy',
+//                 type: "bar",
+//                 marker: {
+//                     color: '#F47738',
+//                 }
+//             },
+//             {
+//                 name: "People tested (7-day average)",
+//                 x: date,
+//                 y: testedRollingAve,
+//                 type: "line",
+//                 line: {
+//                     width: 3,
+//                     dash: "dash",
+//                     color: 'rgb(106,106,106)'
+//                 }
+//             },
+//             {
+//                 name: "Cases (7-day average)",
+//                 x: date,
+//                 y: casesRollingAve,
+//                 type: "line",
+//                 line: {
+//                     width: 3,
+//                     dash: "dash",
+//                     color: 'rgb(106,106,106)'
+//                 }
+//             }
+//         ] }
+//     />
+//
+// }; // TotalPlot
 
-    if (!data) return <MainLoading/>
+
+
+
+const TotalPlot = ({ params }) => {
+
+    const data = useApi({
+        conjunctiveFilters: params,
+        structure: {
+            cumCasesByPublishDate: "cumCasesByPublishDate",
+            cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
+            date: "date"
+        },
+        defaultResponse: []
+    });
+    // if (!data) return <MainLoading/>
 
     return <Plotter
         data={ [
             {
-                name: "Number of people tested",
+                name: "People tested positive",
                 x: data.map(item => item?.date ?? null),
-                y: data.map(item => item?.cumPeopleTestedByPublishDate ?? null),
+                y: data.map(item => item?.cumCasesByPublishDate ?? null),
                 fill: 'tozeroy',
                 line: {
                     color: 'rgb(108,108,108)'
                 },
                 fillcolor: 'rgba(108,108,108,0.2)'
             },
-            {
-                name: "Number of cases",
-                x: data.map(item => item?.date ?? null),
-                y: data.map(item => item?.cumCasesByPublishDate ?? null),
-                fill: 'tozeroy',
-                fillcolor: 'rgba(43,140,196,0.2)',
-                line: {
-                    color: 'rgb(43,140,196)'
-                }
-            }
+            // {
+            //     name: "All people tested",
+            //     x: data.map(item => item?.date ?? null),
+            //     y: data.map(item => item?.cumPeopleTestedByPublishDate ?? null),
+            //     fill: 'tozeroy',
+            //     fillcolor: 'rgba(43,140,196,0.2)',
+            //     line: {
+            //         color: 'rgb(43,140,196)'
+            //     }
+            // }
         ] }
     />
 
 }; // TotalPlot
 
 
-const DailyPlot = ({ data }) => {
-
-    if ( !data ) return <MainLoading/>;
+const DailyPlot = ({ params }) => {
 
     const
+        data = useApi({
+            conjunctiveFilters: params,
+            structure: {
+                newCasesByPublishDate: "newCasesByPublishDate",
+                newPeopleTestedByPublishDate: "newPeopleTestedByPublishDate",
+                date: "date"
+            },
+            defaultResponse: []
+        }),
         date = data.map(item => item?.date ?? ""),
-        tested = data.map(item => item?.newPeopleTestedByPublishDate ?? null),
         cases = data.map(item => item?.newCasesByPublishDate ?? null),
-        testedRollingAve = movingAverage(data.map(item => item?.newPeopleTestedByPublishDate ?? 0), 7),
-        casesRollingAve = movingAverage(data.map(item => item?.newPeopleTestedByPublishDate ?? 0), 7);
+        peopleTested = data.map(item => item?.newPeopleTestedByPublishDate ?? null);
 
-    for (let index = 0; index < 7; index ++) {
-        testedRollingAve[index] = NaN;
-        casesRollingAve[index] = NaN;
-    }
+    // if (!data) return <MainLoading/>
 
     return <Plotter
         data={ [
             {
-                name: "Number of people tested",
+                name: "People tested positive",
                 x: date,
-                y: tested,
+                y: cases,
                 fill: 'tozeroy',
                 type: "bar",
                 marker: {
                     color: '#2B8CC4'
                 }
             },
+            // {
+            //     name: "People tested",
+            //     x: date,
+            //     y: peopleTested,
+            //     fill: 'tozeroy',
+            //     type: "bar",
+            //     marker: {
+            //         color: '#F47738',
+            //     }
+            // },
+            // {
+            //     name: "All people tested",
+            //     x: date,
+            //     y: peopleTested,
+            //     type: "line",
+            //     line: {
+            //         width: 3,
+            //         // dash: "dash",
+            //         color: 'rgb(106,106,106)'
+            //     }
+            // },
             {
-                name: "Number of cases",
+                name: "Positive cases (7-day average)",
                 x: date,
-                y: cases,
-                fill: 'tozeroy',
-                type: "bar",
-                marker: {
-                    color: '#F47738',
-                }
-            },
-            {
-                name: "People tested (7-day average)",
-                x: date,
-                y: testedRollingAve,
+                y: movingAverage(cases, 7),
                 type: "line",
                 line: {
                     width: 3,
                     dash: "dash",
-                    color: 'rgb(106,106,106)'
+                    color: '#F47738'
                 }
             },
-            {
-                name: "Cases (7-day average)",
-                x: date,
-                y: casesRollingAve,
-                type: "line",
-                line: {
-                    width: 3,
-                    dash: "dash",
-                    color: 'rgb(106,106,106)'
-                }
-            }
+            // {
+            //     name: "People tested (7-day average)",
+            //     x: date,
+            //     y: movingAverage(peopleTested, 7),
+            //     type: "line",
+            //     line: {
+            //         width: 3,
+            //         dash: "dash",
+            //         color: '#F47738'
+            //     }
+            // }
         ] }
     />
 
@@ -322,47 +445,96 @@ const ScatterPlot = ({ data, ...props }) => {
 };  // ScatterPlot
 
 
+
+/**
+ * Iterates through the data until it finds a valid value (not null) and
+ * returns the value with its corresponding date:
+ *
+ *      { date: 'DATE', value: VALUE }
+ *
+ * If no valid value is found, it will return:
+ *
+ *      { date: null, value: null }
+ *
+ * @param data { Array<{ [string]: string} > | number | null }
+ *        Must always be sorted by date (descending).
+ *
+ * @param valueKey { { date: string | null  , value: string | number | null } }
+ *        Key for the value whose validity is tested for a given date.
+ *
+ * @returns { { date: string | null, value: string | number | null } }
+ */
+const getMaxDateValuePair = ( data: Array<{ [string]: string | number | null }>, valueKey: string ): { date: string | null, value: string | number | null } =>  {
+
+    if ( !valueKey ) return { date: null, value: null };
+
+    for ( const { [valueKey]: value, date } of data ) {
+
+        if ( value )
+            return { date: moment(date).format("dddd, D MMMM YYYY"), value: value };
+
+    }
+
+    return { date: null, value: null }
+
+};  // getMaxDateValuePair
+
+
+
 const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
     const
         urlParams = getParams(query),
-        params = urlParams.length ? urlParams : DefaultParams,
-        dailyData = useApi({conjunctiveFilters: params, structure: Structures.dailyData}),
-        totalData = useApi({conjunctiveFilters: params, structure: Structures.totalData}),
-        dailyCollectiveData = useApi({
-            conjunctiveFilters: [
-                { key: "areaType", sign: "=", value: "ltla" },
-            ],
-            structure: Structures.dailyCollective,
-            extraParams: [
-                { key: "latestBy", value: "specimenDate", sign: "=" }
-            ]
-        });
+        params = urlParams.length ? urlParams : DefaultParams;
+        // dailyData = useApi({conjunctiveFilters: params, structure: Structures.dailyData}),
+        // totalData = useApi({conjunctiveFilters: params, structure: Structures.totalData})
+        // data = useApi({
+        //     conjunctiveFilters: params,
+        //     structure: {
+        //         cumCasesByPublishDate: "cumCasesByPublishDate",
+        //         cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
+        //         date: "date"
+        //     },
+        // });
+        // dailyCollectiveData = useApi({
+        //     conjunctiveFilters: [
+        //         { key: "areaType", sign: "=", value: "ltla" },
+        //     ],
+        //     structure: Structures.dailyCollective,
+        //     extraParams: [
+        //         { key: "latestBy", value: "specimenDate", sign: "=" }
+        //     ]
+        // })
+
+
+
+
+    // if (!data) return <MainLoading/>;
 
     return <Fragment>
         <BigNumberContainer>
-            <TotalCases data={ totalData }/>
-            <TotalTested data={ totalData }/>
-            <TotalRecovered data={ totalData }/>
+            <TotalCases data={ [] }/>
+            <TotalTested data={ [] }/>
+            {/*<TotalRecovered data={ totalData }/>*/}
         </BigNumberContainer>
 
         <FullWidthCard heading={ `Cases in ${ getParamValueFor(params, "areaName") } by date` } caption={ "All time total" }>
 
             <TabLinkContainer>
                 <TabLink label={ "Cumulative" }>
-                    <TotalPlot data={ totalData }/>
+                    <TotalPlot params={ params }/>
                 </TabLink>
                 <TabLink label={ "Daily" }>
-                    <DailyPlot data={ dailyData }/>
+                    <DailyPlot params={ params }/>
                 </TabLink>
                 <TabLink label={ "Data" }>
-                    <DataTable args={ [dailyData, totalData] }/>
+                    {/*<DataTable args={ [dailyData, totalData] }/>*/}
                 </TabLink>
 
             </TabLinkContainer>
         </FullWidthCard>
         <FullWidthCard heading={ 'Confirmed cases rate by location' } caption={ "All time total" }>
-            <CasesMap data={ dailyCollectiveData }/>
+            {/*<CasesMap data={ dailyCollectiveData }/>*/}
         </FullWidthCard>
     </Fragment>
 
