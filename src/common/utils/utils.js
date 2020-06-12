@@ -183,3 +183,38 @@ export const strFormat = (str, { args, kwargs }) => {
     })
 
 };  // strFormat
+
+
+
+/**
+ * Iterates through the data until it finds a valid value (not null) and
+ * returns the value with its corresponding date:
+ *
+ *      { date: 'DATE', value: VALUE }
+ *
+ * If no valid value is found, it will return:
+ *
+ *      { date: null, value: null }
+ *
+ * @param data { Array<{ [string]: string} > | number | null }
+ *        Must always be sorted by date (descending).
+ *
+ * @param valueKey { { date: string | null  , value: string | number | null } }
+ *        Key for the value whose validity is tested for a given date.
+ *
+ * @returns { { date: string | null, value: string | number | null } }
+ */
+export const getMaxDateValuePair = ( data: Array<{ [string]: string | number | null }>, valueKey: string ): { date: string | null, value: string | number | null } =>  {
+
+    if ( !valueKey || !data ) return { date: null, value: null };
+
+    for ( const { [valueKey]: value, date } of data ) {
+
+        if ( value )
+            return { date: moment(date).format("dddd, D MMMM YYYY"), value: value };
+
+    }
+
+    return { date: null, value: null }
+
+};  // getMaxDateValuePair
