@@ -498,7 +498,7 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
                     primaryModal={ primaryValue }
                     primaryModalReplacements={ primaryReplacements }
                     secondaryValue={ secondaryData.value }
-                    secondaryTooltip={ strFormat(primaryTooltip, secondaryReplacements) }
+                    secondaryTooltip={ strFormat(secondaryTooltip, secondaryReplacements) }
                     secondaryModal={ secondaryValue }
                     secondaryModalReplacements={ secondaryReplacements }
 
