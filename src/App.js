@@ -11,7 +11,7 @@ import Archive from "pages/Archive";
 import Accessibility from 'pages/Accessibility';
 import Cookies from 'pages/Cookies';
 import DailySummary from 'pages/DailySummary';
-import Tests from 'pages/Tests';
+import Tests from 'pages/Testing';
 import Cases from 'pages/Cases';
 import Healthcare from 'pages/Healthcare';
 import Deaths from 'pages/Deaths';
@@ -107,7 +107,7 @@ const F = () => (
 
 const PathWithSideMenu = [
     "/",
-    "/tests",
+    "/testing",
     "/cases",
     "/healthcare",
     "/deaths",

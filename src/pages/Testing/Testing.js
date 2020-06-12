@@ -5,11 +5,11 @@ import type { ComponentType } from 'react';
 
 import { BigNumber, BigNumberContainer } from 'components/BigNumber';
 import { FullWidthCard } from 'components/Card';
-import type { Props } from './Tests.types';
-import { Container } from './Tests.styles';
+import type { Props } from './Testing.types';
+import { Container } from './Testing.styles';
 
 
-const Tests: ComponentType<Props> = ({ }: Props) => {
+const Testing: ComponentType<Props> = ({ }: Props) => {
 
     // ToDo: This should be done for every page in the "app.js".
     const base = document.querySelector("head>base");
@@ -35,4 +35,4 @@ const Tests: ComponentType<Props> = ({ }: Props) => {
     </Fragment>
 };
 
-export default Tests
+export default Testing
