@@ -4,9 +4,9 @@ import URLs from "common/urls";
 import type  { usePageLayoutInputType, usePageLayoutReturnType } from "hooks/hooks.types"
 
 
-const usePageLayout = (layout: usePageLayoutInputType): usePageLayoutReturnType => {
+const usePageLayout = (layout: usePageLayoutInputType, defaultOutput: null): usePageLayoutReturnType => {
 
-    const [ data, setData ] = useState(null);
+    const [ data, setData ] = useState(defaultOutput);
 
     useEffect(() => {
         (async () => {
