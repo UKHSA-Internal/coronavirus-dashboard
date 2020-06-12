@@ -6,7 +6,7 @@ export type Props = {||};
 
 export type DailySummaryCardProps = {
     params: any,
-    layout: UKSummaryField,
+    layout: Array<UKSummaryField>,
     heading: string
 }
 
