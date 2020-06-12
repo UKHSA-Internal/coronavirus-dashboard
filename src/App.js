@@ -143,7 +143,7 @@ const App = ({ location: { pathname } }) => {
 
                             <Switch>
                                 <Route path="/" exact component={ DailySummary }/>
-                                <Route path="/tests" component={ Tests }/>
+                                <Route path="/testing" component={ Tests }/>
                                 <Route path="/cases" component={ Cases }/>
                                 <Route path="/healthcare" component={ Healthcare }/>
                                 <Route path="/deaths" component={ Deaths }/>

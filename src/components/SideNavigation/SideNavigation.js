@@ -27,8 +27,8 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
                         <Link to={ "/" } aria-current="location">UK Summary</Link>
                     </SideNavListItem>
 
-                    <SideNavListItem className={`${pathname === '/tests' ? "moj-side-navigation__item--active" : ""}`}>
-                        <Link to={ "tests" }>Tests</Link>
+                    <SideNavListItem className={`${pathname === '/testing' ? "moj-side-navigation__item--active" : ""}`}>
+                        <Link to={ "testing" }>Testing</Link>
                     </SideNavListItem>
 
                     <SideNavListItem className={`${pathname === '/cases' ? "moj-side-navigation__item--active" : ""}`}>
