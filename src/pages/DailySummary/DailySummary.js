@@ -240,11 +240,11 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
                 layout.map((item, index) =>
                     <ValueBox { ...item } data={ data } key={ `${heading}-${index}` }/>)
             }
-            {
-                heading.toLowerCase().indexOf("death") > -1
-                    ? <NationDeathsPlot/>
-                    : null
-            }
+            {/*{*/}
+            {/*    heading.toLowerCase().indexOf("death") > -1*/}
+            {/*        ? <NationDeathsPlot/>*/}
+            {/*        : null*/}
+            {/*}*/}
         </ValueItemsSection>
     </HalfWidthCard>
 
