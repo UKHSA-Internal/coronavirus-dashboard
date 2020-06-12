@@ -25,8 +25,7 @@ import {
     DataPrimary,
     DataSecondary,
     DataLabel,
-    Number,
-    ToolTip
+    Number
 } from './Card.styles';
 import numeral from 'numeral'
 import ReactTooltip from "react-tooltip";
