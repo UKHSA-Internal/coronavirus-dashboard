@@ -8,7 +8,7 @@ import { BigNumber, BigNumberContainer } from 'components/BigNumber';
 import { HalfWidthCard, FullWidthCard } from 'components/Card';
 import type { Props } from './Cases.types';
 import { Table } from "components/GovUk/Table"
-import { getParams, getParamValueFor, firstObjWithMax } from "common/utils";
+import { getParams, getParamValueFor, firstObjWithMax, getMaxDateValuePair } from "common/utils";
 import { movingAverage, leastSquareRegression } from "common/stats";
 import { Plotter, Choropleth, ScatterPlotWithTrendLine } from "./plots";
 import { MainLoading } from "components/Loading";
@@ -300,20 +300,6 @@ const TotalTested = ({ data }) => {
 };  // TotalCasesFigure
 
 
-const TotalRecovered = ({ data }) => {
-
-    if ( !data ) return <MainLoading/>;
-
-    const value = firstObjWithMax(data, item => item?.date ?? null)?.recovered
-
-    return <BigNumber
-        caption={ "All time total" }
-        title={ "Patients recovered" }
-        number={  value || "No data" }
-    />
-
-};  // TotalCasesFigure
-
 
 const DataTable = ({ args }) => {
 
@@ -445,77 +431,38 @@ const ScatterPlot = ({ data, ...props }) => {
 };  // ScatterPlot
 
 
-
-/**
- * Iterates through the data until it finds a valid value (not null) and
- * returns the value with its corresponding date:
- *
- *      { date: 'DATE', value: VALUE }
- *
- * If no valid value is found, it will return:
- *
- *      { date: null, value: null }
- *
- * @param data { Array<{ [string]: string} > | number | null }
- *        Must always be sorted by date (descending).
- *
- * @param valueKey { { date: string | null  , value: string | number | null } }
- *        Key for the value whose validity is tested for a given date.
- *
- * @returns { { date: string | null, value: string | number | null } }
- */
-const getMaxDateValuePair = ( data: Array<{ [string]: string | number | null }>, valueKey: string ): { date: string | null, value: string | number | null } =>  {
-
-    if ( !valueKey ) return { date: null, value: null };
-
-    for ( const { [valueKey]: value, date } of data ) {
-
-        if ( value )
-            return { date: moment(date).format("dddd, D MMMM YYYY"), value: value };
-
-    }
-
-    return { date: null, value: null }
-
-};  // getMaxDateValuePair
-
-
-
 const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
     const
         urlParams = getParams(query),
-        params = urlParams.length ? urlParams : DefaultParams;
-        // dailyData = useApi({conjunctiveFilters: params, structure: Structures.dailyData}),
-        // totalData = useApi({conjunctiveFilters: params, structure: Structures.totalData})
-        // data = useApi({
-        //     conjunctiveFilters: params,
-        //     structure: {
-        //         cumCasesByPublishDate: "cumCasesByPublishDate",
-        //         cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
-        //         date: "date"
-        //     },
-        // });
-        // dailyCollectiveData = useApi({
-        //     conjunctiveFilters: [
-        //         { key: "areaType", sign: "=", value: "ltla" },
-        //     ],
-        //     structure: Structures.dailyCollective,
-        //     extraParams: [
-        //         { key: "latestBy", value: "specimenDate", sign: "=" }
-        //     ]
-        // })
-
-
-
-
-    // if (!data) return <MainLoading/>;
+        params = urlParams.length ? urlParams : DefaultParams,
+        data = useApi({
+            conjunctiveFilters: [
+                ...params,
+                // {key: "date", sign: ">", value: moment().subtract(5, 'days').format("YYYY-MM-DD") }
+            ],
+            structure: {
+                cumCasesByPublishDate: "cumCasesByPublishDate",
+                cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
+                date: "date"
+            },
+            defaultResponse: []
+        }),
+        cumCasesByPublishDateLatest = getMaxDateValuePair(data, "cumCasesByPublishDate"),
+        cumPeopleTestedByPublishDateLatest = getMaxDateValuePair(data, "cumPeopleTestedByPublishDate");
 
     return <Fragment>
         <BigNumberContainer>
-            <TotalCases data={ [] }/>
-            <TotalTested data={ [] }/>
-            {/*<TotalRecovered data={ totalData }/>*/}
+            <BigNumber
+                caption={ "All time total" }
+                title={ "Lab-confirmed positive cases" }
+                number={  cumCasesByPublishDateLatest?.value ?? "No data" }
+            />
+            <BigNumber
+                caption={ "All time total" }
+                title={ "Number of people tested" }
+                number={  cumPeopleTestedByPublishDateLatest?.value ?? "No data" }
+            />
         </BigNumberContainer>
 
         <FullWidthCard heading={ `Cases in ${ getParamValueFor(params, "areaName") } by date` } caption={ "All time total" }>
