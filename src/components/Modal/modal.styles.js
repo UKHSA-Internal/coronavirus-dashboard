@@ -27,10 +27,8 @@ export const ModalContent: ComponentType<*> = (() => {
     return styled.article`
     display: flex;
     flex-direction: column;
-    padding: 30px;
     max-height: min(80vh, 500px);
-    max-width: 350px;
-    min-width: 250px;
+    max-width: min(400px, 95vw);
     border: 5px solid black;
     background-color: #fff;
     overflow-x: scroll;
@@ -84,8 +82,9 @@ export const ModalOpener: ComponentType<*> = (() => {
 export const ModalCloser: ComponentType<*> = (() => {
     const
         classes = '',
-        Node = styled.button`            
-            margin-bottom: 0;
+        Node = styled.button` 
+            width: inherit;           
+            margin: 20px 30px 30px 30px;
         `;
 
     return ({ className="", ...props }) =>
@@ -97,7 +96,7 @@ export const Markdown: ComponentType<*> = (() => {
 
     const
         Node = styled.div`
-            margin-bottom: 1em;
+            padding: 30px;
             overflow-x: scroll;
             font-size: 80%;
 
