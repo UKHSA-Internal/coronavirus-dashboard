@@ -10,6 +10,7 @@ import type {
     useApiInputs,
     useApiResponse
 } from "./hooks.types";
+import type { ParsedParams } from "common/utils/utils.types";
 
 
 const usePrevious = (value) => {

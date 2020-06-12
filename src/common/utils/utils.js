@@ -64,8 +64,31 @@ export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionC
 
     const params = [];
 
-    for ( const { key, sign, value } of args )
-        params.push(encodeURI(`${key}${sign}${value}`));
+    for ( const { key, sign, value } of args ) {
+        const
+            fullQuery = encodeURI(`${key}${sign}${value}`);
+        //     partialQueryWithSign = encodeURI(`${key}${sign}`),
+        //     joinedParams = params.join(joinBy),
+        //     fullQueryIndex = joinedParams.indexOf(fullQuery);
+        //
+        // if ( fullQueryIndex > -1 ) {
+        //     const index = params.indexOf(fullQuery);
+        //
+        //     params[fullQueryIndex] = fullQuery;
+        //     continue
+        // }
+        //
+        // const partialQueryIndex = joinedParams.indexOf(partialQueryWithSign);
+        //
+        // if ( partialQueryIndex > -1 ) {
+        //     const index = params();
+        //     params[partialQueryIndex] = fullQuery;
+        //     continue
+        // }
+
+        params.push(fullQuery)
+
+    }
 
     return definitionChar + params.join(joinBy)
 
