@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { Fragment, useState, useEffect } from 'react';
-import { Switch, Route, Redirect, withRouter } from 'react-router';
+import { Switch, Route, withRouter } from 'react-router';
 import { Header, Footer } from 'govuk-react-jsx';
 
 import dotenv from 'dotenv';
