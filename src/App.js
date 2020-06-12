@@ -19,11 +19,11 @@ import CookieBanner from 'components/CookieBanner';
 import BackToTop from 'components/BackToTop';
 import ErrorBoundary from "components/ErrorBoundary";
 import axios from "axios";
-import URLs from "./common/urls";
+import URLs from "common/urls";
 import moment from "moment";
-import SideNavigation from "./components/SideNavigation";
-import SideNavMobile from "./components/SideNavMobile";
-import DashboardHeader from "./components/DashboardHeader";
+import SideNavigation from "components/SideNavigation";
+import SideNavMobile from "components/SideNavMobile";
+import DashboardHeader from "components/DashboardHeader";
 
 // get environment vars
 dotenv.config();
