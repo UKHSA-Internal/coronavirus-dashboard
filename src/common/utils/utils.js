@@ -1,8 +1,8 @@
 import moment from "moment";
-import { max, min } from "d3-array";
+import { max, min, group } from "d3-array";
 
 import type { ParsedParams } from "./utils.types";
-import type { RGB } from "../../components/MapTable/MapTable.types";
+import type { RGB } from "components/MapTable/MapTable.types";
 
 
 export const sortByDate = (a, b) => {
@@ -232,3 +232,31 @@ export const getMaxDateValuePair = ( data: Array<{ [string]: string | number | n
     return { date: null, value: null }
 
 };  // getMaxDateValuePair
+
+
+/**
+ * Converts a ``Map`` to a JSON object.
+ *
+ * @param map { Map }
+ * @returns { Object }
+ */
+export const map2Object = ( map ): Object => {
+
+    const out = Object.create(null)
+
+    map.forEach((value, key) => {
+        out[key] = value instanceof Map
+            ? map2Object(value)
+            : value
+    })
+
+    return out
+
+}
+
+
+export const groupBy = (arr, key) => {
+
+    return map2Object(group(arr, key))
+
+} // groupBy
