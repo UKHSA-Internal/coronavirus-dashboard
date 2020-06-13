@@ -193,19 +193,18 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
 const DailySummary = ({ location: { search: query } }) => {
 
     const
-        pageLayout = usePageLayout(URLs.pageLayouts.UKSummary),
+        pageLayout = usePageLayout(URLs.pageLayouts.UKSummary, {}),
         urlParams = getParams(query),
-        params = urlParams.length ? urlParams : DefaultParams;
-
-    if ( !pageLayout ) return <MainLoading/>;
+        params = urlParams.length ? urlParams : DefaultParams,
+        { summary=[] } = pageLayout;
 
     return <Container className={ "util-flex util-flex-wrap" }>{
-        pageLayout.summary.map(item =>
+        summary.map((item, index) =>
             <DailySummaryCard
-                key={ item.heading }
+                key={ `card-${item?.heading ?? ""}-index` }
                 params={ params }
-                heading={ item.heading }
-                layout={ item.fields }/>
+                heading={ item?.heading ?? "" }
+                layout={ item?.fields ?? [] }/>
         )
     }</Container>
 
