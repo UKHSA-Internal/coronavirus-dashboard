@@ -37,14 +37,9 @@ export const Tab: ComponentType<*> = (() => {
 
 export const Body: ComponentType<*> = (() => {
     return styled.div`
+        display: block;
+        height: auto;
         width: 100%;
-
-        &.inactive {
-            /* Do not use "display: none" - It confuses
-            the graph's responsiveness. */
-            height: 0;
-            visibility: hidden !important;
-        }
     `;
 })();  // Body
 
