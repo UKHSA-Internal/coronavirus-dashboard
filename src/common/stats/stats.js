@@ -1,4 +1,5 @@
 import { zip } from "d3-array";
+import { roundTo } from "../math";
 
 
 export const leastSquareRegression =  (x, y, domain) => {
@@ -34,9 +35,10 @@ export const leastSquareRegression =  (x, y, domain) => {
  *
  * @param data { Array<number> } Array of numbers
  * @param size { number } Size of the moving window
+ * @param round { number }
  * @returns { Array<number> } Array of moving averages
  */
-export const movingAverage = ( data: number[], size: number ): number[] => {
+export const movingAverage = ( data: number[], size: number, round: number=1 ): number[] => {
 
     const
         N = data.length,
@@ -53,7 +55,7 @@ export const movingAverage = ( data: number[], size: number ): number[] => {
         for ( let sumIndex = index - floor; sumIndex < index + ceil; sumIndex ++ )
             sum = sum + data[sumIndex];
 
-        movingMean[index] = sum / size;
+        movingMean[index] = roundTo(sum / size, round);
     }
 
     return movingMean
