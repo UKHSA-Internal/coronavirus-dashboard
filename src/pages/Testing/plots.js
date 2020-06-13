@@ -24,12 +24,15 @@ export const Plotter = ({ layout={}, xaxis={}, yaxis={}, ...props }) => {
                 height: 989,
                 width: 1600,
                 scale: 4
-            }
+            },
+            // onLegendItem
         } }
         useResizeHandler={ true }
-        style={{ display: 'flex' }}
+        style={{ display: 'block', height: 320 }}
         layout={ {
-            height: 320,
+            // barmode: "overlay",
+            // barmode: "overlay",
+            // height: 320,
             legend: {
                 orientation: 'h',
                 font: {
