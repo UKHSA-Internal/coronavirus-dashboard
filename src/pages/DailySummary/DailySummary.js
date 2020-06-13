@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 
 import moment from "moment";
 
-import { HalfWidthCard, VisualSection, ValueItem, ValueItemsSection } from 'components/Card';
+import { Card, VisualSection, ValueItem, NumericReports } from 'components/Card';
 
 import { Container } from './DailySummary.styles';
 
@@ -170,11 +170,11 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
         structure: structure
     });
 
-    return <HalfWidthCard heading={ heading }>
+    return <Card heading={ heading }>
         <VisualSection>
             <Plotter data={ getPlotData(layout, data) }/>
         </VisualSection>
-        <ValueItemsSection>
+        <NumericReports>
             {
                 layout.map((item, index) =>
                     <ValueBox { ...item } data={ data } key={ `${heading}-${index}` }/>)
@@ -184,8 +184,8 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
             {/*        ? <NationDeathsPlot/>*/}
             {/*        : null*/}
             {/*}*/}
-        </ValueItemsSection>
-    </HalfWidthCard>
+        </NumericReports>
+    </Card>
 
 };  // DailySummaryCard
 
