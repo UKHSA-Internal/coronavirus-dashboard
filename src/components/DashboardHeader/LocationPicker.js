@@ -1,4 +1,5 @@
 // @flow
+
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router";
 
@@ -20,7 +21,7 @@ import type {
 
 
 
-const GetLookup = (): LookupDataType | null => {
+const useLookupTable = (): LookupDataType | null => {
 
     const [ lookupTable, setLookupTable ] = useState(null);
 
@@ -143,7 +144,7 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
                 parent: "utla"
             }
         },
-        lookup = GetLookup(),
+        lookup = useLookupTable(),
         getData = GetDataFor(hierarchy, lookup),
         history = useHistory(),
         initialParam = getParams(query),
@@ -248,7 +249,7 @@ const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
 
                     const areaTypeItem = order[areaType]
 
-                    return <Fragment>
+                    return <Fragment key={ `areaType-${ areaType }` }>
                         <label className={ "govuk-visually-hidden" } htmlFor={ areaType } key={ `${areaType}-label` }>{ areaType }</label>
                         <Select value={ areaName ? areaName : "" }
                                 disabled={ (options?.length ?? 0) === 0 }
