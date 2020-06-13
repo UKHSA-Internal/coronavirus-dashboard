@@ -20,7 +20,7 @@ import {
     SectionBreak,
     DataContainer,
     DataColour,
-    DataHeading,
+    Heading,
     DataNumbersContainer,
     DataPrimary,
     DataSecondary,
@@ -41,20 +41,21 @@ const VisualSection: ComponentType<Props> = ({ children }: Props) => {
 }; // Visuals
 
 
-const HValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
+// const NumericReports: ComponentType<Props> = ({ children }: Props) => {
+//
+//     return <HBodySection>
+//         { children }
+//     </HBodySection>
+//
+// }; // ValueItemContainer
 
-    return <HBodySection>
-        { children }
-    </HBodySection>
 
-}; // ValueItemContainer
+const NumericReports: ComponentType<Props> = ({ children, horizontal=false }: Props) => {
 
+    if ( horizontal )
+        return <HBodySection>{ children }</HBodySection>;
 
-const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
-
-    return <BodySection>
-        { children }
-    </BodySection>
+    return <BodySection>{ children }</BodySection>
 
 }; // ValueItemContainer
 
@@ -69,7 +70,7 @@ const ValueItem: ComponentType<Props> = ({
 
     return <DataContainer>
         { ( chart?.colour ?? null ) ? <DataColour colour={ chart.colour } /> : null }
-        <DataHeading>{ caption }</DataHeading>
+        <Heading>{ caption }</Heading>
         <DataNumbersContainer>
             <DataPrimary>
                 { primaryLabel && <DataLabel>{ primaryLabel }</DataLabel> }
@@ -119,24 +120,19 @@ const ValueItem: ComponentType<Props> = ({
 }; // ValueItem
 
 
-const HalfWidthCard: ComponentType<Props> = ({ heading="Placeholder", children }: Props) => {
+const Card: ComponentType<Props> = ({ heading="Placeholder", caption="", fullWidth=false, children }: Props) => {
 
-    return <HalfCard>
-        <HalfCardHeader>
-            <HalfCardHeading>{ heading }</HalfCardHeading>
-            <Link to={ "tests"} className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>More detail</Link>
-        </HalfCardHeader>
-        <SectionBreak />
-        <HalfCardBody>
-            { children }
-        </HalfCardBody>
-
-    </HalfCard>
-
-};
-
-
-const FullWidthCard: ComponentType<Props> = ({ heading="Placeholder", caption, children }: Props) => {
+    if ( !fullWidth ) {
+        return <HalfCard>
+            <HalfCardHeader>
+                <HalfCardHeading>{ heading }</HalfCardHeading>
+                <Link to={ "tests" } className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>More
+                    detail</Link>
+            </HalfCardHeader>
+            <SectionBreak/>
+            <HalfCardBody>{ children }</HalfCardBody>
+        </HalfCard>
+    }
 
     return <FullCard>
         <FullCardHeader>
@@ -145,18 +141,15 @@ const FullWidthCard: ComponentType<Props> = ({ heading="Placeholder", caption, c
                 { heading }
             </FullCardHeading>
         </FullCardHeader>
-
         { children }
-
     </FullCard>
 
-}
+};  // Card
+
 
 export {
-    HalfWidthCard,
-    FullWidthCard,
+    Card,
     VisualSection,
     ValueItem,
-    ValueItemsSection,
-    HValueItemsSection
+    NumericReports,
 };

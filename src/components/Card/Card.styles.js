@@ -93,7 +93,7 @@ export const DataContainer = ({ className="", ...props }) => (
 );
 
 
-export const DataHeading = ({ className="", ...props }) => (
+export const Heading = ({ className="", ...props }) => (
     <h3 className={ `govuk-heading-s govuk-!-margin-bottom-1 govuk-!-margin-left-4 ${className}` } { ...props }/>
 );
 
