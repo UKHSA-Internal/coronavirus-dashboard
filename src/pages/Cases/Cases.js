@@ -175,16 +175,16 @@ const TotalPlot = ({ params }) => {
                 },
                 fillcolor: 'rgba(108,108,108,0.2)'
             },
-            // {
-            //     name: "All people tested",
-            //     x: data.map(item => item?.date ?? null),
-            //     y: data.map(item => item?.cumPeopleTestedByPublishDate ?? null),
-            //     fill: 'tozeroy',
-            //     fillcolor: 'rgba(43,140,196,0.2)',
-            //     line: {
-            //         color: 'rgb(43,140,196)'
-            //     }
-            // }
+            {
+                name: "All people tested",
+                x: data.map(item => item?.date ?? null),
+                y: data.map(item => item?.cumPeopleTestedByPublishDate ?? null),
+                fill: 'tozeroy',
+                fillcolor: 'rgba(43,140,196,0.2)',
+                line: {
+                    color: 'rgb(43,140,196)'
+                }
+            }
         ] }
     />
 
@@ -221,27 +221,27 @@ const DailyPlot = ({ params }) => {
                     color: '#2B8CC4'
                 }
             },
-            // {
-            //     name: "People tested",
-            //     x: date,
-            //     y: peopleTested,
-            //     fill: 'tozeroy',
-            //     type: "bar",
-            //     marker: {
-            //         color: '#F47738',
-            //     }
-            // },
-            // {
-            //     name: "All people tested",
-            //     x: date,
-            //     y: peopleTested,
-            //     type: "line",
-            //     line: {
-            //         width: 3,
-            //         // dash: "dash",
-            //         color: 'rgb(106,106,106)'
-            //     }
-            // },
+            {
+                name: "People tested",
+                x: date,
+                y: peopleTested,
+                fill: 'tozeroy',
+                type: "bar",
+                marker: {
+                    color: '#F47738',
+                }
+            },
+            {
+                name: "All people tested",
+                x: date,
+                y: peopleTested,
+                type: "line",
+                line: {
+                    width: 3,
+                    // dash: "dash",
+                    color: 'rgb(106,106,106)'
+                }
+            },
             {
                 name: "Positive cases (7-day average)",
                 x: date,
@@ -253,17 +253,17 @@ const DailyPlot = ({ params }) => {
                     color: '#F47738'
                 }
             },
-            // {
-            //     name: "People tested (7-day average)",
-            //     x: date,
-            //     y: movingAverage(peopleTested, 7),
-            //     type: "line",
-            //     line: {
-            //         width: 3,
-            //         dash: "dash",
-            //         color: '#F47738'
-            //     }
-            // }
+            {
+                name: "People tested (7-day average)",
+                x: date,
+                y: movingAverage(peopleTested, 7),
+                type: "line",
+                line: {
+                    width: 3,
+                    dash: "dash",
+                    color: '#F47738'
+                }
+            }
         ] }
     />
 
