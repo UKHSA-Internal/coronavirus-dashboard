@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import type { ComponentType } from 'react';
 
-import { HalfWidthCard } from 'components/Card';
+import { Card } from 'components/Card';
 import type { Props } from './Healthcare.types';
 import { Container } from './Healthcare.styles';
 
@@ -16,8 +16,8 @@ const Healthcare: ComponentType<Props> = ({ }: Props) => {
 
 
     return <Container>
-        <HalfWidthCard />
-        <HalfWidthCard />
+        <Card />
+        <Card />
     </Container>
 
 };

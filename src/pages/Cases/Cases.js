@@ -5,7 +5,7 @@ import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 
 import { BigNumber, BigNumberContainer } from 'components/BigNumber';
-import { HalfWidthCard, FullWidthCard } from 'components/Card';
+import { Card, FullWidthCard } from 'components/Card';
 import type { Props } from './Cases.types';
 import { Table } from "components/GovUk/Table"
 import { getParams, getParamValueFor, firstObjWithMax, getMaxDateValuePair } from "common/utils";
@@ -465,7 +465,7 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
             />
         </BigNumberContainer>
 
-        <FullWidthCard heading={ `Cases in ${ getParamValueFor(params, "areaName") } by date` } caption={ "All time total" }>
+        <Card fullWidth heading={ `Cases in ${ getParamValueFor(params, "areaName") } by date` } caption={ "All time total" }>
 
             <TabLinkContainer>
                 <TabLink label={ "Cumulative" }>
@@ -479,10 +479,10 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
                 </TabLink>
 
             </TabLinkContainer>
-        </FullWidthCard>
-        <FullWidthCard heading={ 'Confirmed cases rate by location' } caption={ "All time total" }>
+        </Card>
+        <Card fullWidth heading={ 'Confirmed cases rate by location' } caption={ "All time total" }>
             {/*<CasesMap data={ dailyCollectiveData }/>*/}
-        </FullWidthCard>
+        </Card>
     </Fragment>
 
 };  // Cases
