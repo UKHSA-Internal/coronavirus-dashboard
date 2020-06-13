@@ -60,11 +60,29 @@ export const fillDateGaps = (data: Array<any>, defaultValue: number = 0): Array<
 }; // fillDateGaps
 
 
-export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionChar: string="?"): string => {
+/**
+ * Composes URL query parameters.
+ *
+ * @param args { ParsedParams }
+ *      Array of parameters, structured as follows:
+ *
+ *          [
+ *              { key: "", sign: "", value:"" }
+ *          ]
+ *
+ * @param joinBy { string }
+ *      Character used to separate individual queries. [Default: ``&``]
+ * @param definitionChar { string }
+ *      Character to be prepended to the query string. [Default: ``?``]
+ * @returns { string }
+ *      The query; starting with ``definitionChar`` and separated using ``joinBy``.
+ */
+export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionChar: string="?" ): string => {
 
     let params = "";
 
     for ( const { key, sign, value } of args ) {
+
         const
             fullQuery = `${key}${sign}${value}`,
             partialQueryWithSign = `${key}${sign}`,
@@ -72,7 +90,6 @@ export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionC
             partialPattern = new RegExp(`(${partialQueryWithSign}[A-Za-z0-9\-]+)`);
 
         if ( fullPattern.exec(params) ) continue;
-
 
         if ( partialPattern.exec(params) ) {
             params = params.replace(partialPattern, fullQuery)
