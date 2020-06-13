@@ -65,7 +65,7 @@ const DashboardHeader: ComponentType<Props> = ({ title, location: { search: quer
         [datePickerState, setDatePickerState] = useState(false),
         params = getParams(query),
         currentLocation = getParamValueFor(params, "areaName", "United Kingdom"),
-        startDate = getParamDateFor(params, 'specimenDate', moment("2020-01-30"), ">"),
+        startDate = getParamDateFor(params, 'specimenDate', moment("2020-01-03"), ">"),
         endDate = getParamDateFor(params, "specimenDate", moment(), "<"),
         isExcluded = NoPickerPaths.indexOf(pathname) > -1;
 

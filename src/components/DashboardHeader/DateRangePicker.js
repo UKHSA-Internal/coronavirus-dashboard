@@ -24,7 +24,7 @@ const DatePicker = ({ baseDate = '', ...props }: Props) => {
             locale: 'en-gb',
             localeUtils: MomentLocaleUtils,
             disabledDays: [{
-                before: new Date(2020, 0, 30),
+                before: new Date(2020, 0, 3),
                 after: new Date()
             }]
         } }
@@ -50,8 +50,8 @@ const DateRangePicker = ({ query, startDate, endDate }: Props) => {
             end = moment(toDate).format("YYYY-MM-DD"),
             newQuery = createQuery([
                 ...getParams(query),
-                {key: 'specimenDate', sign: '>', value: start},
-                {key: 'specimenDate', sign: '<', value: end}
+                {key: 'date', sign: '>', value: start},
+                {key: 'date', sign: '<', value: end}
             ]);
 
         history.push(`${newQuery}`)
