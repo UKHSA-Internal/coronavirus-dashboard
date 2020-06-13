@@ -25,7 +25,8 @@ import {
     DataPrimary,
     DataSecondary,
     DataLabel,
-    Number
+    Number,
+    HBodySection
 } from './Card.styles';
 import numeral from 'numeral'
 import ReactTooltip from "react-tooltip";
@@ -134,24 +135,6 @@ const FullWidthCard: ComponentType<Props> = ({ heading="Placeholder", caption, c
                 <Caption>{ caption }</Caption>
                 { heading }
             </FullCardHeading>
-            <div>
-                <form>
-                    <fieldset className={ "govuk-fieldset" }>
-                        <div className={ "govuk-radios govuk-radios--small govuk-radios--inline" }>
-                            <div className={ "govuk-radios__item" }>
-                                <input className={ "govuk-radios__input" } id="changed-name" name="changed-name" type="radio" value="month" />
-                                <label className={ "govuk-label govuk-radios__label" } htmlFor="changed-name">By specimen date
-                                </label>
-                            </div>
-                            <div className={ "govuk-radios__item" }>
-                                <input className={ "govuk-radios__input" } id="changed-name-2" name="changed-name" type="radio" value="year" />
-                                <label className={ "govuk-label govuk-radios__label" } htmlFor="changed-name-2">By reported date
-                                </label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
         </FullCardHeader>
 
         { children }
@@ -165,5 +148,6 @@ export {
     FullWidthCard,
     VisualSection,
     ValueItem,
-    ValueItemsSection
+    ValueItemsSection,
+    // HValueItemsSection
 };
