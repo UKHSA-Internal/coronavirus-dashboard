@@ -119,6 +119,14 @@ export const DataLabel = ({ className="", ...props }) => (
 );
 
 
-export const Number = ({ className="", ...props }) => (
-    <h3 className={ `govuk-heading-m govuk-!-font-weight-regular govuk-!-margin-bottom-2 govuk-!-padding-top-0 ${className}` } { ...props }/>
-);
+export const Number: ComponentType<*> = (() => {
+
+    const Node = styled.h3`
+        font-size: 1.2rem;
+    `;
+
+    return ({ className="", ...props }) =>
+        <Node className={ `govuk-heading-m govuk-!-font-weight-regular govuk-!-margin-bottom-2 govuk-!-padding-top-0 ${ className }` }
+            { ...props }/>
+
+})();
