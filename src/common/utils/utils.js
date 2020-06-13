@@ -62,35 +62,32 @@ export const fillDateGaps = (data: Array<any>, defaultValue: number = 0): Array<
 
 export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionChar: string="?"): string => {
 
-    const params = [];
+    let params = "";
 
     for ( const { key, sign, value } of args ) {
         const
-            fullQuery = encodeURI(`${key}${sign}${value}`);
-        //     partialQueryWithSign = encodeURI(`${key}${sign}`),
-        //     joinedParams = params.join(joinBy),
-        //     fullQueryIndex = joinedParams.indexOf(fullQuery);
-        //
-        // if ( fullQueryIndex > -1 ) {
-        //     const index = params.indexOf(fullQuery);
-        //
-        //     params[fullQueryIndex] = fullQuery;
-        //     continue
-        // }
-        //
-        // const partialQueryIndex = joinedParams.indexOf(partialQueryWithSign);
-        //
-        // if ( partialQueryIndex > -1 ) {
-        //     const index = params();
-        //     params[partialQueryIndex] = fullQuery;
-        //     continue
-        // }
+            fullQuery = `${key}${sign}${value}`,
+            partialQueryWithSign = `${key}${sign}`,
+            fullPattern = new RegExp(`(${fullQuery})`),
+            partialPattern = new RegExp(`(${partialQueryWithSign}[A-Za-z0-9\-]+)`);
 
-        params.push(fullQuery)
+        if ( fullPattern.exec(params) ) continue;
+
+
+        if ( partialPattern.exec(params) ) {
+            params = params.replace(partialPattern, fullQuery)
+            continue
+        }
+
+        params = params + ( params.length > 0 ? joinBy : "" ) + fullQuery
 
     }
 
-    return definitionChar + params.join(joinBy)
+    // Remove the trailing `joinBy` char if one exists
+    if ( joinBy !==  "" )
+        params = params.replace(new RegExp(`${"\\" + joinBy}+$`), "");
+
+    return definitionChar + encodeURI(params)
 
 } // createHash
 
