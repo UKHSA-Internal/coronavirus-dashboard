@@ -41,6 +41,15 @@ const VisualSection: ComponentType<Props> = ({ children }: Props) => {
 }; // Visuals
 
 
+const HValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
+
+    return <HBodySection>
+        { children }
+    </HBodySection>
+
+}; // ValueItemContainer
+
+
 const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
 
     return <BodySection>
@@ -149,5 +158,5 @@ export {
     VisualSection,
     ValueItem,
     ValueItemsSection,
-    // HValueItemsSection
+    HValueItemsSection
 };
