@@ -38,7 +38,7 @@ export const Tab: ComponentType<*> = (() => {
 export const Body: ComponentType<*> = (() => {
     return styled.div`
         display: block;
-        height: auto;
+        height: fit-content;
         width: 100%;
     `;
 })();  // Body
