@@ -71,6 +71,18 @@ export const BodySection: ComponentType<*> = (() => {
 })();
 
 
+
+export const HBodySection: ComponentType<*> = (() => {
+        return styled.div`
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 0 15px;
+        `;
+})();
+
+
 export const SectionBreak = ({ className="", ...props }) => (
     <hr className={ `govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible ${className}` } { ...props }/>
 );
