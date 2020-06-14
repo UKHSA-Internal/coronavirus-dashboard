@@ -56,7 +56,7 @@ const RadioButtons = () => {
 }
 
 
-const OneTheseStacksNation = () => {
+const NationsDaily = () => {
 
     // newTestsByPublishDate
     const
@@ -93,7 +93,7 @@ const OneTheseStacksNation = () => {
 }; // TotalPlot
 
 
-const CumOneTheseStacksNation = () => {
+const NationsCumulative = () => {
 
     // cumTestsByPublishDate
     const
@@ -349,10 +349,10 @@ const Testing: ComponentType<Props> = ({ location: { search: query }}: Props) =>
         <Card fullWidth heading={ "NHS and PHE tests by nation" }>
             <TabLinkContainer>
                 <TabLink label={ "Daily" }>
-                    <OneTheseStacksNation/>
+                    <NationsDaily/>
                 </TabLink>
                 <TabLink label={ "Cumulative" }>
-                    <CumOneTheseStacksNation/>
+                    <NationsCumulative/>
                 </TabLink>
                 <TabLink label={ "Data" }>
                      Placeholder
