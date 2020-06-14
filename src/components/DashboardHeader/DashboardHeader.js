@@ -82,13 +82,13 @@ const DashboardHeader: ComponentType<Props> = ({ title, location: { search: quer
                             <strong>Location:</strong>&nbsp;{ currentLocation }
                         </CollapsibleLinkText>
                     </CollapsibleLink>
-                    <CollapsibleLink htmlType={ "button" }
-                        onClick={ () => setDatePickerState(!datePickerState) }>
-                        { datePickerState ? <TriangleDown/> : <TriangleRight/> }
-                        <CollapsibleLinkText>
-                            <strong>Date:</strong>&nbsp;{ startDate.format("D MMM YYYY") }&nbsp;-&nbsp;{ endDate.format("D MMM YYYY") }
-                        </CollapsibleLinkText>
-                    </CollapsibleLink>
+                    {/*<CollapsibleLink htmlType={ "button" }*/}
+                    {/*    onClick={ () => setDatePickerState(!datePickerState) }>*/}
+                    {/*    { datePickerState ? <TriangleDown/> : <TriangleRight/> }*/}
+                    {/*    <CollapsibleLinkText>*/}
+                    {/*        <strong>Date:</strong>&nbsp;{ startDate.format("D MMM YYYY") }&nbsp;-&nbsp;{ endDate.format("D MMM YYYY") }*/}
+                    {/*    </CollapsibleLinkText>*/}
+                    {/*</CollapsibleLink>*/}
                 </CollapsibleLinkContainer>
             }
         </HeaderContainer>
