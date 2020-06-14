@@ -12,8 +12,7 @@ import type {
     TabContentProps,
     TabContentType
 } from './Testing.types';
-import { Container } from './Testing.styles';
-import { getParams, groupBy, getMaxDateValuePair, strFormat, hexToRgb } from "common/utils";
+import { getParams, groupBy, getMaxDateValuePair, strFormat, hexToRgb, dropLeadingZeros } from "common/utils";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
 import { Plotter } from "./plots";
@@ -72,10 +71,8 @@ const OneTheseStacksNation = () => {
             },
             defaultResponse: []
         }),
-        groups = groupBy(data, item => item.name),
-        colours = [
-            '#FFBF47', '#2B8CC4', '#2E358B',
-            '#DF3034', "#7f7f7f"];;
+        groups = groupBy(dropLeadingZeros(data,"value"), item => item.name),
+        colours = ['#2B8CC4', '#FFBF47', '#2E358B', '#DF3034', "#7f7f7f"];
 
     return <Plotter
         data={
@@ -111,10 +108,8 @@ const CumOneTheseStacksNation = () => {
             },
             defaultResponse: []
         }),
-        groups = groupBy(data, item => item.name),
-        colours = [
-            '#FFBF47', '#2B8CC4', '#2E358B',
-            '#DF3034', "#7f7f7f"];;
+        groups = groupBy(dropLeadingZeros(data, "value"), item => item.name),
+        colours = ['#2B8CC4', '#FFBF47', '#2E358B', '#DF3034', "#7f7f7f"];
 
     return <Plotter
         data={
@@ -156,8 +151,7 @@ const DataTable = ({ fields, data }) => {
 };  // DataTable
 
 
-
-const getPlotData = (fields: Array<{}>, data) => {
+const getPlotData = (fields: Array<{}>, rawData) => {
 
     const
         // yellow, cornFlowerBlue, darkBlue, red, gray
@@ -168,6 +162,7 @@ const getPlotData = (fields: Array<{}>, data) => {
     return fields.map(field => {
 
             const
+                data = dropLeadingZeros(rawData, field.value),
                 yData = data?.map(variable => variable?.[field.value] ?? null) ?? [],
                 { r, g, b } = hexToRgb(colours[field.colour]);
 
@@ -351,6 +346,20 @@ const Testing: ComponentType<Props> = ({ location: { search: query }}: Props) =>
                              { ...card }/> ?? null
             )
         }
+        <Card fullWidth heading={ "NHS and PHE tests by nation" }>
+            <TabLinkContainer>
+                <TabLink label={ "Daily" }>
+                    <OneTheseStacksNation/>
+                </TabLink>
+                <TabLink label={ "Cumulative" }>
+                    <CumOneTheseStacksNation/>
+                </TabLink>
+                <TabLink label={ "Data" }>
+                     Placeholder
+                </TabLink>
+
+            </TabLinkContainer>
+        </Card>
     </Fragment>
 };
 
