@@ -6,14 +6,23 @@ import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 
 import { BigNumber, BigNumberContainer } from 'components/BigNumber';
-import { FullWidthCard } from 'components/Card';
-import type { Props } from './Testing.types';
+import { Card, NumericReports, ValueItem} from 'components/Card';
+import type {
+    Props,
+    TabContentProps,
+    TabContentType
+} from './Testing.types';
 import { Container } from './Testing.styles';
-import { getParams } from "common/utils";
+import { getParams, groupBy, getMaxDateValuePair, strFormat, hexToRgb } from "common/utils";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
 import { Plotter } from "./plots";
 import { movingAverage } from "common/stats";
+import usePageLayout from "hooks/usePageLayout";
+import URLs from "common/urls";
+import { MainLoading } from "components/Loading";
+import { Table } from "components/GovUk";
+import moment from "moment";
 
 
 const
@@ -48,375 +57,300 @@ const RadioButtons = () => {
 }
 
 
-const TotalPlot = ({ params }) => {
+const OneTheseStacksNation = () => {
 
-    const data = useApi({
-        conjunctiveFilters: params,
-        structure: {
-            cumTestsByPublishDate: "cumTestsByPublishDate",
-            date: "date"
-        },
-        defaultResponse: []
-    });
-
-    return <Plotter
-        data={ [
-            {
-                name: "Tests",
-                x: data.map(item => item?.date ?? null),
-                y: data.map(item => item?.cumTestsByPublishDate ?? null),
-                fill: 'tozeroy',
-                line: {
-                    color: 'rgb(108,108,108)'
-                },
-                fillcolor: 'rgba(108,108,108,0.2)'
-            }
-        ] }
-    />
-
-}; // TotalPlot
-
-const TotalPlotSecondCard = ({ params }) => {
-
-    const data = useApi({
-        conjunctiveFilters: params,
-        structure: {
-            cumPeopleTestedByPublishDate: "cumPeopleTestedByPublishDate",
-            date: "date"
-        },
-        defaultResponse: []
-    });
-
-    return <Plotter
-        data={ [
-            {
-                name: "People tested",
-                x: data.map(item => item?.date ?? null),
-                y: data.map(item => item?.cumPeopleTestedByPublishDate ?? null),
-                fill: 'tozeroy',
-                fillcolor: 'rgba(43,140,196,0.2)',
-                line: {
-                    color: 'rgb(43,140,196)'
-                }
-            }
-        ] }
-    />
-
-}; // TotalPlot
-
-
-const DailyPlot = ({ params }) => {
-
+    // newTestsByPublishDate
     const
         data = useApi({
-            conjunctiveFilters: params,
+            conjunctiveFilters: [
+                { key: "areaType", sign: "=", value: "nation" }
+            ],
             structure: {
-                newTestsByPublishDate: "newTestsByPublishDate",
-                plannedCapacityByPublishDate: "plannedCapacityByPublishDate",
-                date: "date"
+                value: "newPillarOneTestsByPublishDate",
+                date: "date",
+                name: "areaName"
             },
             defaultResponse: []
         }),
-        date = data.map(item => item?.date ?? ""),
-        tested = data.map(item => item?.newTestsByPublishDate ?? null);
+        groups = groupBy(data, item => item.name),
+        colours = [
+            '#FFBF47', '#2B8CC4', '#2E358B',
+            '#DF3034', "#7f7f7f"];;
 
     return <Plotter
-        data={ [
-            {
-                name: "Tests",
-                x: date,
-                y: tested,
+        data={
+            Object.keys(groups).map((areaName, index) => ({
+                name: areaName,
+                x: groups[areaName].map(item => item.date),
+                y: groups[areaName].map(item => item.value),
                 fill: 'tozeroy',
                 type: "bar",
                 marker: {
-                    color: '#2B8CC4'
+                    color: colours[index]
                 }
-            },
-            {
-                name: "Lab capacity",
-                x: date,
-                y: data.map(item => item?.plannedCapacityByPublishDate ?? null),
-                type: "line",
-                line: {
-                    width: 3,
-                    // dash: "dash",
-                    color: 'rgb(106,106,106)'
-                }
-            },
-            {
-                name: "Tests (7-day average)",
-                x: date,
-                y: movingAverage(tested, 7),
-                type: "line",
-                line: {
-                    width: 3,
-                    dash: "dash",
-                    color: '#F47738'
-                }
-            }
-        ] }
-    />
-
-}; // TotalPlot
-
-
-const DailyPlotSecondCard = ({ params }) => {
-
-    const
-        data = useApi({
-            conjunctiveFilters: params,
-            structure: {
-                newPeopleTestedByPublishDate: "newPeopleTestedByPublishDate",
-                date: "date"
-            },
-            defaultResponse: []
-        }),
-        date = data.map(item => item?.date ?? ""),
-        tested = data.map(item => item?.newPeopleTestedByPublishDate ?? null);
-
-    return <Plotter
-        data={ [
-            {
-                name: "Tests",
-                x: date,
-                y: tested,
-                fill: 'tozeroy',
-                type: "bar",
-                marker: {
-                    color: '#2B8CC4'
-                }
-            },
-            {
-                name: "Tests (7-day average)",
-                x: date,
-                y: movingAverage(tested, 7),
-                type: "line",
-                line: {
-                    width: 3,
-                    dash: "dash",
-                    color: '#F47738'
-                }
-            }
-        ] }
-    />
-
-}; // TotalPlot
-
-
-const OneTheseStacks = ({ params }) => {
-
-    const
-        data = useApi({
-            conjunctiveFilters: params,
-            structure: {
-                newPillarOneTestsByPublishDate: "newPillarOneTestsByPublishDate",
-                newPillarTwoTestsByPublishDate: "newPillarTwoTestsByPublishDate",
-                newPillarThreeTestsByPublishDate: "newPillarThreeTestsByPublishDate",
-                newPillarFourTestsByPublishDate: "newPillarFourTestsByPublishDate",
-                date: "date"
-            },
-            defaultResponse: []
-        }),
-        date = data.map(item => item?.date ?? ""),
-        tested = data.map(item => item?.newPeopleTestedByPublishDate ?? null);
-
-    // if (!data) return <MainLoading/>
-
-    return <Plotter
-        data={ [
-            {
-                name: "NHS and PHE testing",
-                x: date,
-                y: data.map(item => item?.newPillarOneTestsByPublishDate ?? null ),
-                fill: 'tozeroy',
-                type: "bar",
-                marker: {
-                    color: '#6F777B'
-                }
-            },
-            {
-                name: "Commercial partner testing",
-                x: date,
-                y: data.map(item => item?.newPillarTwoTestsByPublishDate ?? null ),
-                fill: 'tozeroy',
-                type: "bar",
-                marker: {
-                    color: '#005EA5'
-                }
-            },
-            {
-                name: "Antibody testing",
-                x: date,
-                y: data.map(item => item?.newPillarThreeTestsByPublishDate ?? null ),
-                fill: 'tozeroy',
-                type: "bar",
-                marker: {
-                    color: '#29A197'
-                }
-            },
-            {
-                name: "Surveillance testing",
-                x: date,
-                y: data.map(item => item?.newPillarFourTestsByPublishDate ?? null ),
-                fill: 'tozeroy',
-                type: "bar",
-                marker: {
-                    color: '#B58840'
-                }
-            },
-        ] }
+            }))
+        }
         layout={{ barmode: "stack" }}
     />
 
 }; // TotalPlot
 
 
-const CumOneTheseStacks = ({ params }) => {
+const CumOneTheseStacksNation = () => {
 
+    // cumTestsByPublishDate
     const
         data = useApi({
-            conjunctiveFilters: params,
+            conjunctiveFilters: [
+                { key: "areaType", sign: "=", value: "nation" }
+            ],
             structure: {
-                cumPillarOneTestsByPublishDate: "cumPillarOneTestsByPublishDate",
-                cumPillarTwoTestsByPublishDate: "cumPillarTwoTestsByPublishDate",
-                cumPillarThreeTestsByPublishDate: "cumPillarThreeTestsByPublishDate",
-                cumPillarFourTestsByPublishDate: "cumPillarFourTestsByPublishDate",
-                date: "date"
+                value: "cumPillarOneTestsByPublishDate",
+                date: "date",
+                name: "areaName"
             },
             defaultResponse: []
         }),
-        date = data.map(item => item?.date ?? "");
-
-    // if (!data) return <MainLoading/>
+        groups = groupBy(data, item => item.name),
+        colours = [
+            '#FFBF47', '#2B8CC4', '#2E358B',
+            '#DF3034', "#7f7f7f"];;
 
     return <Plotter
-        data={ [
-            {
-                name: "NHS and PHE testing",
-                x: date,
-                y: data.map(item => item?.cumPillarOneTestsByPublishDate ?? null ),
+        data={
+            Object.keys(groups).map((areaName, index) => ({
+                name: areaName,
+                x: groups[areaName].map(item => item.date),
+                y: groups[areaName].map(item => item.value),
                 fill: 'tozeroy',
                 type: "bar",
                 marker: {
-                    color: '#6F777B'
+                    color: colours[index]
                 }
-            },
-            {
-                name: "Commercial partner testing",
-                x: date,
-                y: data.map(item => item?.cumPillarTwoTestsByPublishDate ?? null ),
-                fill: 'tozeroy',
-                type: "bar",
-                marker: {
-                    color: '#005EA5'
-                }
-            },
-            {
-                name: "Antibody testing",
-                x: date,
-                y: data.map(item => item?.cumPillarThreeTestsByPublishDate ?? null ),
-                fill: 'tozeroy',
-                type: "bar",
-                marker: {
-                    color: '#29A197'
-                }
-            },
-            {
-                name: "Surveillance testing",
-                x: date,
-                y: data.map(item => item?.newPillarFourTestsByPublishDate ?? null ),
-                fill: 'tozeroy',
-                type: "bar",
-                marker: {
-                    color: '#B58840'
-                }
-            },
-        ] }
+            }))
+        }
         layout={{ barmode: "stack" }}
     />
 
 }; // TotalPlot
+
+
+const DataTable = ({ fields, data }) => {
+
+    const fieldNames = fields.map(item => item.value)
+
+    return <Table
+        head={[
+            fields.map(item => ({ value: item.label, type: item.type }))
+        ]}
+        body={
+            data.map(item => fieldNames.map(name =>
+                name === "date"
+                    ? moment(item[name]).format("DD-MM-YYYY")
+                    : item[name]
+
+            ))
+        }
+    />
+
+};  // DataTable
+
+
+
+const getPlotData = (fields: Array<{}>, data) => {
+
+    const
+        // yellow, cornFlowerBlue, darkBlue, red, gray
+        colours = [
+            '#FFBF47', '#2B8CC4', '#2E358B',
+            '#DF3034', "#7f7f7f"];
+
+    return fields.map(field => {
+
+            const
+                yData = data?.map(variable => variable?.[field.value] ?? null) ?? [],
+                { r, g, b } = hexToRgb(colours[field.colour]);
+
+            let plotFeatures;
+
+            switch ( field.type ) {
+                case "bar":
+                    plotFeatures = {
+                        type: field.type,
+                        marker: {
+                            color: colours[field.colour]
+                        }
+                    }
+                    break;
+
+                case "line":
+                    plotFeatures = {
+                        type: field.type,
+                        mode: 'lines',
+                        ...(field?.fill ?? true)
+                            ? {
+                                fill: 'tozeroy',
+                                fillcolor: `rgba(${ r },${ g },${ b },0.1)`
+                            }:
+                            {},
+                        line: {
+                            color: colours[field.colour]
+                        }
+                    };
+                    break;
+
+            }
+
+            return {
+                name: field.label,
+                x: data?.map(item => item?.date ?? null) ?? [],
+                y: field.rollingAverage ? movingAverage(yData, 7) : yData,
+                ...plotFeatures
+            }
+
+        });
+
+};  // getYAxisData
+
+
+const TabContent: TabContentType<TabContentProps> = ({ fields, params, tabType, barType=null }: TabContentProps): React$Component => {
+
+    const  structure = { date: "date" };
+
+    for ( const { value } of fields )
+        structure[value] = value;
+
+    const data = useApi({
+        conjunctiveFilters: params,
+        structure: structure,
+        defaultResponse: []
+    });
+
+    switch ( tabType ) {
+
+        case "chart":
+            const layout = {};
+            if ( barType ) layout["barmode"] = barType;
+
+            return <Plotter data={ getPlotData(fields, data) } layout={ layout }/>;
+
+        case "table":
+            return <DataTable fields={ fields } data={ data }/>;
+
+        default:
+            return null;
+
+    }
+
+};  // TabContent
+
+
+const TestingCard = ({ tabs, tabs: { heading }, cardType, params, ...props }) => {
+
+    switch ( cardType ) {
+
+        case "chart":
+            return <Card heading={ heading }{ ...props }>
+                <TabLinkContainer>{
+                    tabs.map(({ heading: tabHeading, ...rest }) =>
+                        <TabLink key={ `tab-${ tabHeading }` } label={ tabHeading }>
+                            <TabContent params={ params } { ...props } { ...rest }/>
+                        </TabLink>
+                    )
+                }</TabLinkContainer>
+            </Card>
+
+        case "map":
+            return <Card heading={ heading }{ ...props }>
+                <TabLinkContainer>{
+                    tabs.map(({ heading: tabHeading, fields }) =>
+                        <TabLink key={ `tab-${ tabHeading }` }
+                                 label={ tabHeading }>
+                            <p>Not implemented.</p>
+                        </TabLink>
+                    )
+                }</TabLinkContainer>
+            </Card>
+
+        default:
+            return <p>Invalid chart type</p>;
+
+    }
+
+};  // TestingCard
+
+
+const ValueBox = ({ data, primaryValue, secondaryValue=null, primaryTooltip="", secondaryTooltip="", ...rest }) => {
+
+    const
+        primaryData = getMaxDateValuePair(data, primaryValue),
+        secondaryData = getMaxDateValuePair(data, secondaryValue),
+        primaryReplacements = { kwargs: primaryData },
+        secondaryReplacements = { kwargs: primaryData };
+
+    return <ValueItem
+        primaryValue={ primaryData.value }
+        primaryTooltip={ strFormat(primaryTooltip, primaryReplacements) }
+        primaryModal={ primaryValue }
+        primaryModalReplacements={ primaryReplacements }
+        secondaryValue={ secondaryData.value }
+        secondaryTooltip={ strFormat(secondaryTooltip, secondaryReplacements) }
+        secondaryModal={ secondaryValue }
+        secondaryModalReplacements={ secondaryReplacements }
+        { ...rest }
+    />
+
+};  // getValueItemSections
+
+
+const HeadlineNumbers = ({ params, headlineNumbers=[] }) => {
+
+    const structure = { date: "date" };
+
+    for ( const { primaryValue, secondaryValue=null } of headlineNumbers ) {
+
+        structure[primaryValue] = primaryValue;
+
+        if ( secondaryValue )
+            structure[secondaryValue] = secondaryValue;
+
+    }
+
+    const data = useApi({
+        conjunctiveFilters: params,
+        structure: structure,
+        defaultResponse: []
+    });
+
+    return headlineNumbers?.map((item, index) =>
+        <ValueBox data={ data }
+                  key={ `headlineNumber-${index}` }
+                  { ...item }/>
+    ) ?? null
+
+} // HeadlineNumbers
 
 
 const Testing: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
     const
         urlParams = getParams(query),
+        layout = usePageLayout(URLs.pageLayouts.testing,  null),
         params = urlParams.length ? urlParams : DefaultParams;
-        // totalData = useApi({conjunctiveFilters: params, structure: Structures.totalData});
+
+    if ( !layout ) return <MainLoading/>;
 
     return <Fragment>
-        <BigNumberContainer>
-            <BigNumber
-                caption={ "All time total" }
-                title={ "Number of tests" }
-                number={ "N/A" }
-            />
-            <BigNumber
-                caption={ "Current daily" }
-                title={ "Planned lab-capacity" }
-                number={ "N/A" }
-            />
-        </BigNumberContainer>
-
-        <FullWidthCard heading={ "Testing and capacity" }>
-            {/*<RadioButtons/>*/}
-            <TabLinkContainer>
-                <TabLink label={ "Daily" }>
-                    <DailyPlot params={ params }/>
-                </TabLink>
-                <TabLink label={ "Cumulative" }>
-                    <TotalPlot params={ params }/>
-                </TabLink>
-                <TabLink label={ "Data" }>
-                    {/*<DataTable args={ [dailyData, dailyData] }/>*/}
-                </TabLink>
-            </TabLinkContainer>
-        </FullWidthCard>
-
-        <FullWidthCard heading={ "People tested" }>
-            <TabLinkContainer>
-                <TabLink label={ "Daily" }>
-                    <DailyPlotSecondCard params={ params }/>
-                </TabLink>
-                <TabLink label={ "Cumulative" }>
-                    <TotalPlotSecondCard params={ params }/>
-                </TabLink>
-                <TabLink label={ "Data" }>
-                    {/*<DataTable args={ [dailyData, dailyData] }/>*/}
-                </TabLink>
-            </TabLinkContainer>
-        </FullWidthCard>
-
-        <FullWidthCard heading={ "Type of testing" }>
-            <TabLinkContainer>
-                <TabLink label={ "Daily" }>
-                    <OneTheseStacks params={ params }/>
-                </TabLink>
-                <TabLink label={ "Cumulative" }>
-                    <CumOneTheseStacks params={ params }/>
-                </TabLink>
-                <TabLink label={ "Data" }>
-                     Placeholder
-                </TabLink>
-
-            </TabLinkContainer>
-        </FullWidthCard>
-
-        <FullWidthCard heading={ "Testing by nation" }>
-            <TabLinkContainer>
-                <TabLink label={ "Daily" }>
-                    <OneTheseStacks params={ params }/>
-                </TabLink>
-                <TabLink label={ "Cumulative" }>
-                    <OneTheseStacks params={ params }/>
-                </TabLink>
-                <TabLink label={ "Data" }>
-                     Placeholder
-                </TabLink>
-
-            </TabLinkContainer>
-        </FullWidthCard>
+        <NumericReports horizontal={ true }>
+            <HeadlineNumbers params={ params } { ...layout }/>
+        </NumericReports>
+        {
+            layout?.cards.map(( { ...card }, index ) =>
+                <TestingCard key={ `card-${ index }` }
+                             params={ params }
+                             { ...card }/> ?? null
+            )
+        }
     </Fragment>
 };
 
