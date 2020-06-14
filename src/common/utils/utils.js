@@ -252,11 +252,38 @@ export const map2Object = ( map ): Object => {
 
     return out
 
-}
+};  // map2Object
 
 
 export const groupBy = (arr, key) => {
 
     return map2Object(group(arr, key))
 
-} // groupBy
+};  // groupBy
+
+
+/**
+ *
+ * .. attention::
+ *      The ``data`` variable is expected to be ordered (descending) in
+ *      using the desired ``key``.
+ *
+ * @param data { Array<{ [any]: any }> }
+ * @param keys { any }
+ * @returns { Array<{ [any]: any }> }
+ */
+export const dropLeadingZeros = (data: Array<{ [any]: any }>, ...keys) => {
+
+    let sum = 0;
+
+    for ( let index = data.length - 1; index > 0; index-- ) {
+
+        sum = keys.reduce((acc, key) => acc + data[index][key], 0);
+
+        if ( sum !== 0 ) return data.slice(0, index);
+
+    }
+
+    return []
+
+};  // dropLeadingZeros
