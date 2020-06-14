@@ -36,7 +36,11 @@ const URLs = {
 };
 
 URLs.pageLayouts = {
-    UKSummary: 'UKSummary.json'
+    UKSummary: 'UKSummary.json',
+    testing: 'testing.json',
+    healthcare: 'healthcare.json',
+    deaths: 'deaths.json',
+    cases: 'cases.json',
 }
 
 export default URLs;
