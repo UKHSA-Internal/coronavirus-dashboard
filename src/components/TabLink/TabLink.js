@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 
 import {
     MainContainer,
@@ -20,7 +20,7 @@ import type {
 // containers easier and more consistent.
 export const TabLink = function ({ label, children }: TabLinkProps) {
 
-    return this
+    return <Fragment/>
 
 }  // TabLink
 
@@ -35,12 +35,13 @@ export const TabLinkContainer = ({ children }: TabLinkContainerProps): React$Nod
     return <MainContainer>
         <TabsContainer>{
             children.map(({ props: { label } }, index) =>
-            <Tab type={ "link" }
-                key={ `${label}-${index}` }
-                className={`${label === current ? 'active govuk-!-font-weight-bold' : '' }`}
-                onClick={ () => setCurrent(label)  }>
-                { label }
-            </Tab>
+                <Tab type={ "link" }
+                     key={ `${label}-${index}` }
+                     className={ `${label === current ? 'active govuk-!-font-weight-bold' : '' }` }
+                     onClick={ () => setCurrent(label)  }
+                >
+                     { label }
+                </Tab>
             )
         }</TabsContainer>
         {
