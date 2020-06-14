@@ -66,7 +66,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, ...props }) => {
             },
             yaxis: {
                 tickformat: 's',
-                tickfont:{
+                tickfont: {
                     family: `"GDS Transport", Arial, sans-serif`,
                     size : 14,
                     color: "#6f777b",
