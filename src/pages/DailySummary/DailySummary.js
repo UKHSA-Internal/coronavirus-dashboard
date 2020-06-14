@@ -11,7 +11,7 @@ import { Container } from './DailySummary.styles';
 
 import { max } from "d3-array";
 import { MainLoading } from "components/Loading";
-import { getParams, hexToRgb, strFormat, getMaxDateValuePair } from "common/utils";
+import { getParams, hexToRgb, strFormat, getMaxDateValuePair, dropLeadingZeros } from "common/utils";
 import { movingAverage } from "common/stats";
 
 import useApi from "hooks/useApi";
@@ -101,14 +101,15 @@ const NationDeathsPlot = ({ ...props }) => {
 };  // DeathsCard
 
 
-const getPlotData = (layout: Array<UKSummaryField>, data) => {
+const getPlotData = (layout: Array<UKSummaryField>, rawData) => {
 
     return layout
         .filter(item => item.hasOwnProperty("chart"))
         .map(item => {
-            const yData =
-                    data.map(variable => variable?.[item.chart.variableName] ?? null),
-                    { r, g, b } = hexToRgb(item.chart.colour);
+            const
+                data = dropLeadingZeros(rawData || [], item.chart.variableName),
+                yData = data.map(variable => variable?.[item.chart.variableName] ?? null),
+                { r, g, b } = hexToRgb(item.chart.colour);
 
             return {
                 x: data.map(item => item?.date ?? null),

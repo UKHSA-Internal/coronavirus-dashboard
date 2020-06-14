@@ -12,7 +12,7 @@ import type {
     TabContentProps,
     TabContentType
 } from './Healthcare.types';
-import { getParams, groupBy, getMaxDateValuePair, strFormat, hexToRgb } from "common/utils";
+import { getParams, groupBy, getMaxDateValuePair, strFormat, hexToRgb, dropLeadingZeros } from "common/utils";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
 import { Plotter } from "./plots";
@@ -78,7 +78,7 @@ const DataTable = ({ fields, data }) => {
 
 
 
-const getPlotData = (fields: Array<{}>, data) => {
+const getPlotData = (fields: Array<{}>, rawData) => {
 
     const
         // yellow, cornFlowerBlue, darkBlue, red, gray
@@ -89,6 +89,7 @@ const getPlotData = (fields: Array<{}>, data) => {
     return fields.map(field => {
 
             const
+                data = dropLeadingZeros(rawData || [], field.value),
                 yData = data?.map(variable => variable?.[field.value] ?? null) ?? [],
                 { r, g, b } = hexToRgb(colours[field.colour]);
 
