@@ -36,31 +36,6 @@ const
     ];
 
 
-
-const RadioButtons = () => {
-
-    return <div>
-        <form>
-            <fieldset className={ "govuk-fieldset" }>
-                <div className={ "govuk-radios govuk-radios--small govuk-radios--inline" }>
-                    <div className={ "govuk-radios__item" }>
-                        <input className={ "govuk-radios__input" } id="changed-name" name="changed-name" type="radio" value="month" />
-                        <label className={ "govuk-label govuk-radios__label" } htmlFor="changed-name">By specimen date
-                        </label>
-                    </div>
-                    <div className={ "govuk-radios__item" }>
-                        <input className={ "govuk-radios__input" } id="changed-name-2" name="changed-name" type="radio" value="year" />
-                        <label className={ "govuk-label govuk-radios__label" } htmlFor="changed-name-2">By reported date
-                        </label>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
-    </div>
-
-}
-
-
 const NationsDaily = () => {
 
     // newTestsByPublishDate
