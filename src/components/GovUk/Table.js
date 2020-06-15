@@ -5,6 +5,7 @@ import React from "react";
 import numeral from "numeral";
 
 import { TableComponent } from "./Table.styles"
+import moment from "moment";
 
 
 const TH = ({ className, children, type='string', colSpan=1, ...props }) => {
@@ -105,3 +106,24 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
     </TableComponent>
 
 };  // Table
+
+
+export const DataTable = ({ fields, data }) => {
+
+    const fieldNames = fields.map(item => item.value)
+
+    return <Table
+        head={[
+            fields.map(item => ({ value: item.label, type: item.type }))
+        ]}
+        body={
+            data.map(item => fieldNames.map(name =>
+                name === "date"
+                    ? moment(item[name]).format("DD-MM-YYYY")
+                    : item[name]
+
+            ))
+        }
+    />
+
+};  // DataTable
