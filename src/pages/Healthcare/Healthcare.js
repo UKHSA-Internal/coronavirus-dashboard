@@ -11,7 +11,12 @@ import type {
     TabContentProps,
     TabContentType
 } from './Healthcare.types';
-import { getParams, getMaxDateValuePair, strFormat, hexToRgb, dropLeadingZeros, getPlotData } from "common/utils";
+import {
+    getParams,
+    getMaxDateValuePair,
+    strFormat,
+    getPlotData
+} from "common/utils";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
 import { Plotter } from "components/Plotter";

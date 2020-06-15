@@ -11,7 +11,14 @@ import type {
     TabContentProps,
     TabContentType
 } from './Testing.types';
-import { getParams, groupBy, getMaxDateValuePair, strFormat, dropLeadingZeros, getPlotData } from "common/utils";
+import {
+    getParams,
+    groupBy,
+    getMaxDateValuePair,
+    strFormat,
+    dropLeadingZeros,
+    getPlotData
+} from "common/utils";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
 import { Plotter } from "components/Plotter";
