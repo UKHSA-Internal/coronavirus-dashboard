@@ -71,6 +71,8 @@ export type TableTabType = GenericTabType & {
     fields?: Array<GenericTableTabType>
 }
 
+export type TabType = ChartTabType | TableTabType;
+
 export type Testing = {
 
     headlineNumbers: CardNumberDataType,
