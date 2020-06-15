@@ -45,7 +45,8 @@ export type GenericChartType = {
 
 export type GenericTabType = {
     heading: string,
-    barType?: "normal"
+    barType?: null
+            | "normal"
             | "overlay"
             | "stack"
             | "group",
