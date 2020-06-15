@@ -108,7 +108,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
             // onLegendItem
         } }
         useResizeHandler={ true }
-        style={{ display: 'block', height: 320 }}
+        style={{ display: 'block', height: 370 }}
         layout={ {
             // barmode: "overlay",
             // barmode: "stack",
@@ -120,6 +120,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     size: 16,
                 },
                 xanchor: 'auto',
+                // yanchor: 'auto'
                 y: -.2
             },
             showlegend: true,
@@ -142,6 +143,28 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     size : 14,
                     color: "#6f777b"
                 },
+                // rangeslider: {range: ['20202-01-01', new Date().toString()]},
+                rangeselector: {buttons: [
+                    {
+                      count: 7,
+                      label: '7d',
+                      step: 'day',
+                      stepmode: 'backward'
+                    },
+                        {
+                      count: 1,
+                      label: '1m',
+                      step: 'month',
+                      stepmode: 'backward'
+                    },
+                        {
+                      count: 3,
+                      label: '3m',
+                      step: 'month',
+                      stepmode: 'backward'
+                    },
+                    {step: 'all'}
+                  ]},
                 ...xaxis
             },
             yaxis: {
