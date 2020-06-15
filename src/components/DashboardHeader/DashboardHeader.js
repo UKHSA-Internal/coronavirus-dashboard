@@ -1,8 +1,9 @@
 // @flow
 
 // React
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter } from 'react-router';
+import { useHistory } from "react-router";
 
 // Third party
 import moment from "moment";
@@ -47,6 +48,19 @@ const PathNameMapper = {
     "/archive": "Archive"
 };
 
+export const PathNames = {
+    // Only use lower case in paths.
+    summary: "/",
+    cases: "/cases",
+    testing: "/testing",
+    healthcare: "/healthcare",
+    deaths: "/deaths",
+    aboutData: "/about-data",
+    cookies: "cookies",
+    accessibility: "/accessibility",
+    archive: "/archive"
+}
+
 
 const NoPickerPaths = [
     "/",
@@ -57,21 +71,28 @@ const NoPickerPaths = [
 ];
 
 
-const DashboardHeader: ComponentType<Props> = ({ title, location: { search: query, pathname } }: Props) => {
+const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
 
     const
+        history = useHistory(),
         hierarchy = useHierarchy(),
         [locationPickerState, setLocationPickerState] = useState(false),
         // [datePickerState, setDatePickerState] = useState(false),
-        params = getParams(query),
+        params = getParams(history.location.search),
         currentLocation = getParamValueFor(params, "areaName", "United Kingdom"),
         startDate = getParamDateFor(params, 'specimenDate', moment("2020-01-03"), ">"),
         endDate = getParamDateFor(params, "specimenDate", moment(), "<"),
-        isExcluded = NoPickerPaths.indexOf(pathname) > -1;
+        isExcluded = NoPickerPaths.indexOf(history.location.pathname) > -1;
+
+    useEffect(() => {
+
+        setLocationPickerState(false)
+
+    },  [  history.location.pathname ])
 
     return <MainContainer>
         <HeaderContainer>
-            <Title>{ PathNameMapper[pathname] }</Title>
+            <Title>{ PathNameMapper[history.location.pathname] }</Title>
             { isExcluded
                 ? null
                 : <CollapsibleLinkContainer>
@@ -96,9 +117,7 @@ const DashboardHeader: ComponentType<Props> = ({ title, location: { search: quer
 
         {
             ( locationPickerState && !isExcluded )
-                ? <LocationPicker hierarchy={ hierarchy }
-                                  query={ query }
-                                  pathname={ pathname }/>
+                ? <LocationPicker hierarchy={ hierarchy }/>
                 : null
         }
         {/*{*/}
@@ -113,4 +132,4 @@ const DashboardHeader: ComponentType<Props> = ({ title, location: { search: quer
 };  // DashboardHeader
 
 
-export default withRouter(DashboardHeader);
+export default DashboardHeader;
