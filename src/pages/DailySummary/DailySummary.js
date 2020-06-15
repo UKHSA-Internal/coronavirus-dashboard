@@ -10,7 +10,6 @@ import { Card, VisualSection, ValueItem, NumericReports } from 'components/Card'
 import { Container } from './DailySummary.styles';
 
 import { max } from "d3-array";
-import { MainLoading } from "components/Loading";
 import { getParams, hexToRgb, strFormat, getMaxDateValuePair, dropLeadingZeros } from "common/utils";
 import { movingAverage } from "common/stats";
 
@@ -31,12 +30,6 @@ const
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
         { key: 'areaType', sign: '=', value: 'overview' },
     ];
-
-
-export const timestamp = (data): string =>
-    data.hasOwnProperty("metadata")
-        ? moment(data?.metadata?.lastUpdatedAt).format("dddd D MMMM YYYY [at] h:mma")
-        : "";
 
 
 const groupByUniqueKey = (data, uniqueKeyName) => {
