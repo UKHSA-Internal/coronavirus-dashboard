@@ -5,18 +5,16 @@ import type { ComponentType } from 'react';
 
 import { withRouter } from 'react-router';
 
-import { BigNumber, BigNumberContainer } from 'components/BigNumber';
+import { Plotter } from "components/Plotter"
 import { Card, NumericReports, ValueItem} from 'components/Card';
 import type {
     Props,
     TabContentProps,
     TabContentType
 } from './Cases.types';
-import { getParams, groupBy, getMaxDateValuePair, strFormat, hexToRgb, dropLeadingZeros } from "common/utils";
+import { getParams, groupBy, getMaxDateValuePair, strFormat, hexToRgb, dropLeadingZeros, getPlotData } from "common/utils";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
-import { Plotter } from "./plots";
-import { movingAverage } from "common/stats";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import { MainLoading } from "components/Loading";
@@ -73,63 +71,6 @@ const DataTable = ({ fields, data }) => {
     />
 
 };  // DataTable
-
-
-const getPlotData = (fields: Array<{}>, rawData) => {
-
-    const
-        // yellow, cornFlowerBlue, darkBlue, red, gray
-        colours = [
-            '#FFBF47', '#2B8CC4', '#2E358B',
-            '#DF3034', "#7f7f7f"];
-
-    return fields.map(field => {
-
-            const
-                data = dropLeadingZeros(rawData || [], field.value),
-                yData = data?.map(variable => variable?.[field.value] ?? null) ?? [],
-                { r, g, b } = hexToRgb(colours[field.colour]);
-
-            let plotFeatures;
-
-            switch ( field.type ) {
-                case "bar":
-                    plotFeatures = {
-                        type: field.type,
-                        marker: {
-                            color: colours[field.colour]
-                        }
-                    }
-                    break;
-
-                case "line":
-                    plotFeatures = {
-                        type: field.type,
-                        mode: 'lines',
-                        ...(field?.fill ?? true)
-                            ? {
-                                fill: 'tozeroy',
-                                fillcolor: `rgba(${ r },${ g },${ b },0.1)`
-                            }:
-                            {},
-                        line: {
-                            color: colours[field.colour]
-                        }
-                    };
-                    break;
-
-            }
-
-            return {
-                name: field.label,
-                x: data?.map(item => item?.date ?? null) ?? [],
-                y: field.rollingAverage ? movingAverage(yData, 7) : yData,
-                ...plotFeatures
-            }
-
-        });
-
-};  // getYAxisData
 
 
 const TabContent: TabContentType<TabContentProps> = ({ fields, params, tabType, barType=null }: TabContentProps): React$Component => {
