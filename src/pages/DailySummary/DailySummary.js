@@ -10,7 +10,13 @@ import { Card, VisualSection, ValueItem, NumericReports } from 'components/Card'
 import { Container } from './DailySummary.styles';
 
 import { max } from "d3-array";
-import { getParams, hexToRgb, strFormat, getMaxDateValuePair, dropLeadingZeros } from "common/utils";
+import {
+    getParams,
+    hexToRgb,
+    strFormat,
+    getMaxDateValuePair,
+    dropLeadingZeros
+} from "common/utils";
 import { movingAverage } from "common/stats";
 
 import useApi from "hooks/useApi";
@@ -30,19 +36,6 @@ const
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
         { key: 'areaType', sign: '=', value: 'overview' },
     ];
-
-
-const groupByUniqueKey = (data, uniqueKeyName) => {
-
-    try {
-        return data
-            .reduce((acc, { [uniqueKeyName]: grouper, ...rest }) =>
-                grouper ? { ...acc, [grouper]: rest } : acc, {})
-    } catch {
-        return {}
-    }
-
-};  // groupByUniqueKey
 
 
 const NationDeathsPlot = ({ ...props }) => {
