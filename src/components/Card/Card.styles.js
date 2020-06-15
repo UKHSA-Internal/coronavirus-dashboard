@@ -39,7 +39,7 @@ export const HalfCardBody: ComponentType<*> = (() => {
 
 export const FullCard: ComponentType<*> = (() => {
     return styled.article`
-        flex: 1 1 auto;
+        flex: 1 2 50%;
         padding: 20px;
         border: 1px #f3f2f1 solid;
         margin-bottom: 30px;
@@ -77,8 +77,12 @@ export const HBodySection: ComponentType<*> = (() => {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            justify-content: space-between;
-            margin: 0 15px;
+            justify-content: flex-start;
+            margin: 1rem 0;
+            
+            & > * {
+                margin-right: 2rem;
+            }
         `;
 })();
 
