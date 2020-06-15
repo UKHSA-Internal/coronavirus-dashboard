@@ -62,7 +62,7 @@ const DashboardHeader: ComponentType<Props> = ({ title, location: { search: quer
     const
         hierarchy = useHierarchy(),
         [locationPickerState, setLocationPickerState] = useState(false),
-        [datePickerState, setDatePickerState] = useState(false),
+        // [datePickerState, setDatePickerState] = useState(false),
         params = getParams(query),
         currentLocation = getParamValueFor(params, "areaName", "United Kingdom"),
         startDate = getParamDateFor(params, 'specimenDate', moment("2020-01-03"), ">"),
@@ -96,14 +96,18 @@ const DashboardHeader: ComponentType<Props> = ({ title, location: { search: quer
 
         {
             ( locationPickerState && !isExcluded )
-                ? <LocationPicker hierarchy={ hierarchy } query={ query }/>
+                ? <LocationPicker hierarchy={ hierarchy }
+                                  query={ query }
+                                  pathname={ pathname }/>
                 : null
         }
-        {
-            ( datePickerState && !isExcluded )
-                ? <DateRangePicker query={ query } startDate={ startDate } endDate={ endDate }/>
-                : null
-        }
+        {/*{*/}
+        {/*    ( datePickerState && !isExcluded )*/}
+        {/*        ? <DateRangePicker query={ query }*/}
+        {/*                           startDate={ startDate }*/}
+        {/*                           endDate={ endDate }/>*/}
+        {/*        : null*/}
+        {/*}*/}
     </MainContainer>
 
 };  // DashboardHeader
