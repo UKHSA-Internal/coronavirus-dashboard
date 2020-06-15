@@ -12,9 +12,12 @@ import { getParamValueFor } from "./utils";
 import type {
     FlatHierarchyItem,
     HierarchyDataType,
-    LookupDataType,
     LocationPickerProps
 } from "./DashboardHeader.types";
+
+import type {
+    LookupDataType
+} from "hooks/useLookupTable.types";
 
 
 const GetDataFor = ( hierarchy: HierarchyDataType, lookup: LookupDataType ) => {
