@@ -10,7 +10,7 @@ import type {
     Props,
     TabContentProps,
     TabContentType
-} from './Cases.types';
+} from './Deaths.types';
 import {
     getParams,
     getMaxDateValuePair,

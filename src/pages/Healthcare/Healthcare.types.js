@@ -1,26 +1,12 @@
 // @flow
 
+import type { TabType } from "hooks/usePageLayout.types";
+
+
 export type Props = {||};
 
-
-export type TabContentProps = {
+export type TabContentProps = TabType & {
     params: any,
-    tabType: string,
-    barmode:
-        null
-        | "stack"
-        | "normal"
-        | "group"
-        | "overlay",
-    fields: Array<{
-        label: string,
-        value: string,
-        tooltip: string,
-        type: string,
-        colour: number,
-        rollingAverage: boolean
-    }>
 }
-
 
 declare export type TabContentType<P> = React$ComponentType<P>;
