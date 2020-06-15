@@ -1,6 +1,11 @@
-import type { LookupDataType } from "../components/DashboardHeader/DashboardHeader.types";
+// @flow
+
+import React, { useState, useEffect } from "react";
+
 import axios from "axios";
 import URLs from "common/urls";
+
+import type { LookupDataType } from "useLookupTable.types";
 
 
 const useLookupTable = (): LookupDataType | null => {
