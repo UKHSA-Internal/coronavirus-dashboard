@@ -9,6 +9,8 @@ import { Select } from "./DashboardHeader.styles";
 
 import { getParamValueFor } from "./utils";
 
+import { PathNames } from "./DashboardHeader";
+
 import type {
     FlatHierarchyItem,
     HierarchyDataType,
@@ -20,7 +22,143 @@ import type {
 } from "hooks/useLookupTable.types";
 
 
-const GetDataFor = ( hierarchy: HierarchyDataType, lookup: LookupDataType ) => {
+const useOrder = () => {
+
+    const
+        defaultOrder = {
+            "nation": {
+                key: "nation",
+                label: "nations",
+                parent: null
+            },
+            "region": {
+                key: "region",
+                label: "regions",
+                parent: "nation",
+            },
+            "utla": {
+                key: "utla",
+                label: "upper-tier local authorities",
+                parent: "region",
+            },
+            "ltla": {
+                key: "ltla",
+                label: "lower-tier local authorities",
+                parent: "utla"
+            }
+        },
+        history = useHistory(),
+        [ order, setOrder ] = useState(defaultOrder);
+
+    useEffect(() => {
+
+        let currentOrder;
+
+        switch (history.location.pathname.toLowerCase()) {
+
+            case PathNames.testing:
+                currentOrder = {
+                    "nation": {
+                        key: "nation",
+                        label: "nations",
+                        parent: null
+                    }
+                };
+                break;
+
+            case PathNames.deaths:
+                currentOrder = {
+                    "nation": {
+                        key: "nation",
+                        label: "nations",
+                        parent: null
+                    },
+                    "region": {
+                        key: "region",
+                        label: "regions",
+                        parent: "nation",
+                    },
+                    "utla": {
+                        key: "utla",
+                        label: "upper-tier local authorities",
+                        parent: "region",
+                    }
+                };
+                break;
+
+            case PathNames.healthcare:
+                currentOrder = {
+                    "nhsNation": {
+                        key: "nhsNation",
+                        label: "nations",
+                        parent: null
+                    },
+                    "nhsRegion": {
+                        key: "nhsRegion",
+                        label: "NHS regions",
+                        parent: "nhsNation",
+                    }
+                };
+                break;
+
+            default:
+                currentOrder = defaultOrder;
+
+        }  // switch
+
+        setOrder(currentOrder)
+
+    }, [ history.location.pathname ])
+
+    return order
+
+};  // getOrder
+
+
+const useDefaultOutput = ( getData ) => {
+
+    const
+        history = useHistory();
+
+    switch (history.location.pathname.toLowerCase()) {
+
+        case PathNames.testing:
+            return [
+                // These must be ordered.
+                { areaType: "nation", areaName: null, options: getData("nation", null) },
+            ];
+
+        case PathNames.deaths:
+            return [
+                // These must be ordered.
+                { areaType: "nation", areaName: null, options: getData("nation", null) },
+                { areaType: "region", areaName: null, options: getData("region", null) },
+                { areaType: "utla", areaName: null, options: getData("utla", null) },
+            ];
+
+        case PathNames.healthcare:
+            return [
+                // These must be ordered.
+                { areaType: "nhsNation", areaName: null, options: getData("nhsNation", null) },
+                { areaType: "nhsRegion", areaName: null, options: getData("nhsRegion", null) },
+            ];
+
+        case PathNames.cases:
+        default:
+            return [
+                // These must be ordered.
+                { areaType: "nation", areaName: null, options: getData("nation", null) },
+                { areaType: "region", areaName: null, options: getData("region", null) },
+                { areaType: "utla", areaName: null, options: getData("utla", null) },
+                { areaType: "ltla", areaName: null, options: getData('ltla', null) },
+            ]
+
+    } // switch
+
+};  // getDefaultOutput
+
+
+const getDataFor = ( hierarchy: HierarchyDataType, lookup: LookupDataType ) => {
 
     const
         flatHierarchy: FlatHierarchyItem = Object
@@ -74,22 +212,11 @@ const GetDataFor = ( hierarchy: HierarchyDataType, lookup: LookupDataType ) => {
 };  // GetDataFor
 
 
-const usePrevious = (value, getData, pathname) => {
+const usePrevious = (value, getData) => {
 
-    const ref = useRef(
-        pathname.toLowerCase().indexOf("healthcare") < 0
-            ? [
-                // These must be ordered.
-                { areaType: "nation", areaName: null, options: getData("nation", null) },
-                { areaType: "region", areaName: null, options: getData("region", null) },
-                { areaType: "utla", areaName: null, options: getData("utla", null) },
-                { areaType: "ltla", areaName: null, options: getData('ltla', null) },
-            ]
-            : [
-                { areaType: "nhsNation", areaName: null, options: getData("nhsNation", null) },
-                { areaType: "nhsRegion", areaName: null, options: getData("nhsRegion", null) },
-            ]
-    );
+    const
+        defaultOutput = useDefaultOutput(getData),
+        ref = useRef(defaultOutput);
 
     useEffect(() => {
 
@@ -102,53 +229,17 @@ const usePrevious = (value, getData, pathname) => {
 };  // usePrevious
 
 
-const LocationPicker = ({ hierarchy, query, pathname }: LocationPickerProps) => {
+const LocationPicker = ({ hierarchy }: LocationPickerProps) => {
 
     const
-        order = pathname
-            .toLowerCase()
-            .indexOf("healthcare") < 0
-                ? {
-                    "nation": {
-                        key: "nation",
-                        label: "nations",
-                        parent: null
-                    },
-                    "region": {
-                        key: "region",
-                        label: "regions",
-                        parent: "nation",
-                    },
-                    "utla": {
-                        key: "utla",
-                        label: "upper-tier local authorities",
-                        parent: "region",
-                    },
-                    "ltla": {
-                        key: "ltla",
-                        label: "lower-tier local authorities",
-                        parent: "utla"
-                    }
-                }
-                : {
-                    "nhsNation": {
-                        key: "nation",
-                        label: "nations",
-                        parent: null
-                    },
-                    "nhsRegion": {
-                        key: "nhsRegion",
-                        label: "NHS regions",
-                        parent: "nation",
-                    },
-                },
+        order = useOrder(),
         lookup = useLookupTable(),
-        getData = GetDataFor(hierarchy, lookup),
+        getData = getDataFor(hierarchy, lookup),
         history = useHistory(),
+        { search: query, pathname } = history.location,
         initialParam = getParams(query),
         [ location, setLocation ] = useState([]),
-        previousLocation = usePrevious(location, getData, pathname);
-
+        previousLocation = usePrevious(location, getData);
 
     useEffect(() => {
         getStateFor(
@@ -156,7 +247,7 @@ const LocationPicker = ({ hierarchy, query, pathname }: LocationPickerProps) => 
             order?.[getParamValueFor(initialParam, "areaType")] ?? null,
         )
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ lookup, hierarchy ]);
+    }, [ lookup, hierarchy, pathname, query ]);
 
 
     const getStateFor = (value, areaTypeItem) => {
@@ -256,7 +347,7 @@ const LocationPicker = ({ hierarchy, query, pathname }: LocationPickerProps) => 
                                 className={ 'govuk-select' }
                                 name={ areaType }
                                 id={ areaType }>
-                        <option value={ "" } disabled>All { areaTypeItem.label }</option>
+                        <option value={ "" } disabled>All { areaTypeItem?.label ?? "" }</option>
                         {
                             options && options.map(({ name, code }) =>
                                     <option value={ name }
