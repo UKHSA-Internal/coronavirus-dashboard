@@ -14,7 +14,7 @@ const useHierarchy = () => {
         const getData = async () => {
 
             const { data } = await axios.get(
-                "area_hierarchy_v1.json",
+                "area_hierarchy_v2.json",
                 { baseURL: URLs.lookups }
             );
 
