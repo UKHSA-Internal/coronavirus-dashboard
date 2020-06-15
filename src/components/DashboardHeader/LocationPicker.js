@@ -3,11 +3,8 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router";
 
-import axios from "axios";
-
-import URLs from "common/urls";
 import { createQuery, getParams } from "common/utils";
-
+import useLookupTable from "hooks/useLookupTable";
 import { Select } from "./DashboardHeader.styles";
 
 import { getParamValueFor } from "./utils";
@@ -18,29 +15,6 @@ import type {
     LookupDataType,
     LocationPickerProps
 } from "./DashboardHeader.types";
-
-
-const useLookupTable = (): LookupDataType | null => {
-
-    const [ lookupTable, setLookupTable ] = useState(null);
-
-    useEffect(() => {
-        const getData = async () => {
-            const { data } = await axios.get(
-                'lookupTable_bothWay_v2.json',
-                { baseURL: URLs.lookups }
-                );
-
-            setLookupTable(data)
-        }
-
-        getData()
-
-    }, []);
-
-    return lookupTable
-
-};  // GetLookup
 
 
 const GetDataFor = ( hierarchy: HierarchyDataType, lookup: LookupDataType ) => {
