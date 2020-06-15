@@ -23,8 +23,7 @@ import { Plotter } from "components/Plotter";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import { MainLoading } from "components/Loading";
-import { Table } from "components/GovUk";
-import moment from "moment";
+import { DataTable } from "components/GovUk";
 
 
 const
@@ -32,27 +31,6 @@ const
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
         { key: 'areaType', sign: '=', value: 'overview' }
     ];
-
-
-const DataTable = ({ fields, data }) => {
-
-    const fieldNames = fields.map(item => item.value)
-
-    return <Table
-        head={[
-            fields.map(item => ({ value: item.label, type: item.type }))
-        ]}
-        body={
-            data.map(item => fieldNames.map(name =>
-                name === "date"
-                    ? moment(item[name]).format("DD-MM-YYYY")
-                    : item[name]
-
-            ))
-        }
-    />
-
-};  // DataTable
 
 
 const TabContent: TabContentType<TabContentProps> = ({ fields, params, tabType, barType=null }: TabContentProps): React$Component => {
