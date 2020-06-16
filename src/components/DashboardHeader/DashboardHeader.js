@@ -101,8 +101,7 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
                 : <CollapsibleLinkContainer>
                     <CollapsibleLink className={ locationPickerState ? "opened" : "closed" }
                                      onClick={ () => setLocationPickerState(!locationPickerState) }>
-                            {/*<Triangle />*/}
-                            Change location
+                        Change location
                     </CollapsibleLink>
                     {/*<CollapsibleLink htmlType={ "button" }*/}
                     {/*    onClick={ () => setDatePickerState(!datePickerState) }>*/}
