@@ -27,7 +27,7 @@ import {
     CollapsibleLinkText,
     TriangleRight,
     TriangleDown,
-    SectionBreak
+    SectionBreak, CurrentLocation, Triangle
 } from './DashboardHeader.styles'
 
 // Types
@@ -92,16 +92,17 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
 
     return <MainContainer>
         <HeaderContainer>
-            <Title>{ PathNameMapper[history.location.pathname] }</Title>
+            <Title>
+                { PathNameMapper[history.location.pathname] }&nbsp;
+                <CurrentLocation>{ currentLocation }</CurrentLocation>
+            </Title>
             { isExcluded
                 ? null
                 : <CollapsibleLinkContainer>
-                    <CollapsibleLink htmlType={ "button" }
-                        onClick={ () => setLocationPickerState(!locationPickerState) }>
-                        { locationPickerState ? <TriangleDown/> : <TriangleRight/> }
-                        <CollapsibleLinkText>
-                            <strong>Location:</strong>&nbsp;{ currentLocation }
-                        </CollapsibleLinkText>
+                    <CollapsibleLink className={ locationPickerState ? "opened" : "closed" }
+                                     onClick={ () => setLocationPickerState(!locationPickerState) }>
+                            {/*<Triangle />*/}
+                            Change location
                     </CollapsibleLink>
                     {/*<CollapsibleLink htmlType={ "button" }*/}
                     {/*    onClick={ () => setDatePickerState(!datePickerState) }>*/}
