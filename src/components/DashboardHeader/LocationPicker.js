@@ -349,7 +349,9 @@ const LocationPicker = ({ hierarchy }: LocationPickerProps) => {
                                 id={ areaType }>
                         <option value={ "" } disabled>All { areaTypeItem?.label ?? "" }</option>
                         {
-                            options && options.map(({ name, code }) =>
+                            options && options
+                                .sort(({ name: a }, { name: b }) => a > b || -(b > a || 0))
+                                .map(({ name, code }) =>
                                     <option value={ name }
                                             key={ `${ areaTypeItem.key }-${ code }` }
                                     >
