@@ -27,6 +27,16 @@ export const Title = ({ className, ...props }) => (
 );
 
 
+export const CurrentLocation: ComponentType<*> = (() => {
+
+    return styled.small`
+      font-size: 75%;
+      font-weight: bold;
+    `
+
+})();
+
+
 export const CollapsibleLinkContainer: ComponentType<*> = (() => {
   return styled.div`
   display: inline-flex;
@@ -38,31 +48,39 @@ export const CollapsibleLinkContainer: ComponentType<*> = (() => {
 
 export const CollapsibleLink: ComponentType<*> = (() => {
   const
-    classes = 'govuk-!-margin-right-6',
     Node = styled.button`
       cursor: pointer;
+      font-weight: bold;
+      outline: none;
+      color: #1d70b8;
+         
+      &::before {
+        padding-right: 4px;
+      }
+      
+      &.closed::before {
+        content: "►";
+      }
 
-      &,
-      & > * {
-        color: #1d70b8;
+      &.opened::before {
+        content: "▼";
       }
     `;
 
-  return ({ className, ...props }) =>
-    <Node className={ `${classes} ${className}` } { ...props }/>
+  return ({ className="", ...props }) =>
+    <Node className={ `govuk-body-s govuk-body govuk-!-margin-bottom-0 ${ className }` }
+          htmlType={ "button" }
+          { ...props }/>
 })();
 
 
-export const TriangleRight: ComponentType<*> = (() => {
+export const Triangle: ComponentType<*> = (() => {
   const
     classes = 'govuk-body-s',
     Node = styled.span`
       margin-right: 5px;
       margin-bottom: 0;
-
-      &::before {
-        content: "►";
-      }
+      colour: #1d70b8;
     `;
 
   return ({ className="", ...props }) =>
@@ -76,6 +94,7 @@ export const TriangleDown: ComponentType<*> = (() => {
     Node = styled.span`
       margin-right: 5px;
       margin-bottom: 0;
+      colour: #1d70b8;
 
       &::before {
         content: "▼";
@@ -85,11 +104,6 @@ export const TriangleDown: ComponentType<*> = (() => {
   return ({ className="", ...props }) =>
       <Node className={ `${classes} ${className}` } { ...props }/>
 })();
-
-
-export const CollapsibleLinkText = ({ className, ...props }) => (
-  <span className={ `govuk-body-s govuk-body govuk-!-margin-bottom-0 ${className}` } { ...props }/>
-);
 
 
 export const SectionBreak = ({ className, ...props }) => (
