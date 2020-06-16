@@ -24,6 +24,7 @@ import moment from "moment";
 import SideNavigation from "components/SideNavigation";
 import SideNavMobile from "components/SideNavMobile";
 import DashboardHeader from "components/DashboardHeader";
+import Announcement from "./components/Announcement";
 
 // get environment vars
 dotenv.config();
@@ -51,13 +52,21 @@ const LastUpdateTime = () => {
 
     if (!timestamp) return null;
 
-    return <p className={ "govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-5" }>
-        Last updated on&nbsp;{
-            moment(timestamp)
-                .local(true)
-                .format("dddd D MMMM YYYY [at] h:mma")
-        }
-    </p>
+    return <Fragment>
+        <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>
+            <p className={ "govuk-body govuk-!-margin-top-0" }>
+                This is a development service. The functionality is <strong>not</strong> reliable and some
+                of the data are random simulations.
+            </p>
+        </Announcement>
+        <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
+            Last updated on&nbsp;{
+                moment(timestamp)
+                    .local(true)
+                    .format("dddd D MMMM YYYY [at] h:mma")
+            }
+        </p>
+    </Fragment>
 
 }; // LastUpdateTime
 
