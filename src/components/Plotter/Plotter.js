@@ -143,7 +143,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     size : 14,
                     color: "#6f777b"
                 },
-                rangeslider: {range: ['20202-01-01', new Date().toString()]},
+                // rangeslider: {range: ['20202-01-01', new Date().toString()]},
                 rangeselector: {buttons: [
                     {
                       count: 7,
