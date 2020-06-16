@@ -22,8 +22,7 @@ import {
     DataColour,
     Heading,
     DataNumbersContainer,
-    DataPrimary,
-    DataSecondary,
+    NumericData,
     DataLabel,
     Number,
     HBodySection
@@ -72,7 +71,7 @@ const ValueItem: ComponentType<Props> = ({
         { ( chart?.colour ?? null ) ? <DataColour colour={ chart.colour } /> : null }
         <Heading>{ caption }</Heading>
         <DataNumbersContainer>
-            <DataPrimary>
+            <NumericData>
                 { primaryLabel && <DataLabel>{ primaryLabel }</DataLabel> }
                 <Number>
                     { numeral(primaryValue).format("0,0") }{ primarySign }
@@ -87,11 +86,11 @@ const ValueItem: ComponentType<Props> = ({
                         </span>
                     </ModalTooltip>
                 </Number>
-            </DataPrimary>
+            </NumericData>
 
         {
             secondaryLabel
-                ? <DataSecondary>
+                ? <NumericData>
                     { secondaryLabel && <DataLabel>{ secondaryLabel }</DataLabel> }
                     <Number>
                         { numeral(secondaryValue).format("0,0") }{ secondarySign }
@@ -106,7 +105,7 @@ const ValueItem: ComponentType<Props> = ({
                             </span>
                         </ModalTooltip>
                     </Number>
-                </DataSecondary>
+                </NumericData>
                 : null
         }
         </DataNumbersContainer>

@@ -120,24 +120,25 @@ export const DataNumbersContainer = ({ className="", ...props }) => (
 );
 
 
-export const DataPrimary = ({ className="", ...props }) => (
-    <div className={ `govuk-!-margin-right-4 ${className}` } { ...props }/>
-);
+export const NumericData: ComponentType<*> = (() => {
 
+    const Node = styled.h3`
+        margin-top: 0;
+    `
 
-export const DataSecondary = ({ className="", ...props }) => (
-    <div className={ `${className}` } { ...props }/>
-);
+    return ({ className="", ...props }) =>
+        <Node className={ `govuk-!-margin-right-4 ${className}` } { ...props }/>
+})();
 
 
 export const DataLabel = ({ className="", ...props }) => (
-    <span className={ `govuk-caption-m govuk-!-font-size-16 ${className}` } { ...props }/>
+    <small className={ `govuk-caption-m govuk-!-font-size-16 ${className}` } { ...props }/>
 );
 
 
 export const Number: ComponentType<*> = (() => {
 
-    const Node = styled.h3`
+    const Node = styled.span`
         font-size: 1.2rem;
     `;
 
