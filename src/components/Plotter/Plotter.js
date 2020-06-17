@@ -137,7 +137,6 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                 zeroline: false,
                 showline: false,
                 tickslen: 10,
-                // tickangle: 30,
                 ticks: "outside",
                 tickson: "boundaries",
                 ticklen: 'labels',

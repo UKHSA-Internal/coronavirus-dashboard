@@ -33,7 +33,10 @@ export const Plotter = ({ layout, ...props }) => {
                 zeroline: false,
                 showline: false,
                 automargin: true,
-                tickangle: -20,
+                tickslen: 10,
+                ticks: "outside",
+                tickson: "boundaries",
+                ticklen: 'labels',
                 type: "date",
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
