@@ -129,14 +129,18 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                 r: 25,
                 b: 40,
                 t: 20,
-                pad: 5,
+                pad: 0,
                 ...margin
             },
             xaxis: {
                 showgrid: false,
                 zeroline: false,
                 showline: false,
+                tickslen: 10,
                 // tickangle: 30,
+                ticks: "outside",
+                tickson: "boundaries",
+                ticklen: 'labels',
                 type: "date",
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
@@ -144,27 +148,27 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     color: "#6f777b"
                 },
                 // rangeslider: {range: ['20202-01-01', new Date().toString()]},
-                rangeselector: {buttons: [
-                    {
-                      count: 7,
-                      label: '7d',
-                      step: 'day',
-                      stepmode: 'backward'
-                    },
-                        {
-                      count: 1,
-                      label: '1m',
-                      step: 'month',
-                      stepmode: 'backward'
-                    },
-                        {
-                      count: 3,
-                      label: '3m',
-                      step: 'month',
-                      stepmode: 'backward'
-                    },
-                    {step: 'all'}
-                  ]},
+                // rangeselector: {buttons: [
+                //     {
+                //       count: 7,
+                //       label: '7d',
+                //       step: 'day',
+                //       stepmode: 'backward'
+                //     },
+                //         {
+                //       count: 1,
+                //       label: '1m',
+                //       step: 'month',
+                //       stepmode: 'backward'
+                //     },
+                //         {
+                //       count: 3,
+                //       label: '3m',
+                //       step: 'month',
+                //       stepmode: 'backward'
+                //     },
+                //     {step: 'all'}
+                //   ]},
                 ...xaxis
             },
             yaxis: {
