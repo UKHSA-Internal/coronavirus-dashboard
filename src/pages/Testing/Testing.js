@@ -27,6 +27,7 @@ import URLs from "common/urls";
 import { MainLoading } from "components/Loading";
 import { DataTable } from "components/GovUk";
 import numeral from "numeral";
+import moment from "moment";
 
 
 const
@@ -95,18 +96,26 @@ const NationsCumulative = () => {
 
     return <Plotter
         data={
-            Object.keys(groups).map((areaName, index) => ({
-                name: areaName,
-                x: groups[areaName].map(item => item.date),
-                y: groups[areaName].map(item => item.value),
-                text: groups[areaName].map(item => `${ numeral(item.value).format("0,0") }<br>${areaName}`),
-                hoverinfo: "text",
-                fill: 'tozeroy',
-                type: "bar",
-                marker: {
-                    color: colours[index]
+            Object.keys(groups).map((areaName, index) => {
+
+                const
+                    yData = groups[areaName].map(item => item.value),
+                    xData = groups[areaName].map(item => item.date);
+
+                return {
+                    name: areaName,
+                    x: xData,
+                    y: yData,
+                    text: yData.map((value, index) => `${areaName}: ${ numeral(value).format("0,0") }<br>${ moment(xData[index]).format("DD MMM YYYY") }`),
+                    hoverinfo: "text",
+                    fill: 'tozeroy',
+                    type: "bar",
+                    marker: {
+                        color: colours[index]
+                    }
                 }
-            }))
+
+            })
         }
         layout={{ barmode: "stack" }}
     />
