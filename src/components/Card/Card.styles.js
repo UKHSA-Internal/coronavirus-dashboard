@@ -103,7 +103,9 @@ export const Heading = ({ className="", ...props }) => (
 
 
 export const DataColour: ComponentType<*> = (() => {
-    return styled.span`
+    return styled.button`
+        cursor: pointer;
+        outline: none;
         width: 12px;
         height: 12px;
         border: 1px solid #000;
