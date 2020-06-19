@@ -17,9 +17,14 @@ export const MainContainer: ComponentType<*> = (() => {
 })();
 
 
-export const HeaderContainer = ({ className, ...props }) => (
-  <div className={ `util-flex util-flex-justify-between util-flex-wrap util-flex-align-items-center ${className}` } { ...props }/>
-);
+export const HeaderContainer: ComponentType<*> = (() => {
+
+    return styled.div`
+        display: flex;
+        justify-content: space-between;
+    `;
+
+})();
 
 
 export const Title = ({ className, ...props }) => (
@@ -29,9 +34,8 @@ export const Title = ({ className, ...props }) => (
 
 export const CurrentLocation: ComponentType<*> = (() => {
 
-    return styled.small`
-      font-size: 75%;
-      font-weight: bold;
+    return styled.span`
+      font-weight: normal;
     `
 
 })();
@@ -39,9 +43,10 @@ export const CurrentLocation: ComponentType<*> = (() => {
 
 export const CollapsibleLinkContainer: ComponentType<*> = (() => {
   return styled.div`
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
-  justify-self: flex-end;
+
+  // justify-self: space-between;
   `
 })();
 
@@ -53,7 +58,8 @@ export const CollapsibleLink: ComponentType<*> = (() => {
       font-weight: bold;
       outline: none;
       color: #1d70b8;
-         
+      justify-self: flex-end;
+      
       &::before {
         padding-right: 4px;
       }
@@ -74,36 +80,14 @@ export const CollapsibleLink: ComponentType<*> = (() => {
 })();
 
 
-export const Triangle: ComponentType<*> = (() => {
-  const
-    classes = 'govuk-body-s',
-    Node = styled.span`
-      margin-right: 5px;
-      margin-bottom: 0;
-      colour: #1d70b8;
-    `;
+export const LocationPickerContainer: ComponentType<*> = (() => {
 
-  return ({ className="", ...props }) =>
-    <Node className={ `${classes} ${className}` } { ...props }/>
-})();
+    return styled.div`
+        width: 100%;
+        justify-self: stretch;
+    `
 
-
-export const TriangleDown: ComponentType<*> = (() => {
-  const
-    classes = 'govuk-body-s',
-    Node = styled.span`
-      margin-right: 5px;
-      margin-bottom: 0;
-      colour: #1d70b8;
-
-      &::before {
-        content: "▼";
-      }
-    `;
-
-  return ({ className="", ...props }) =>
-      <Node className={ `${classes} ${className}` } { ...props }/>
-})();
+})()
 
 
 export const SectionBreak = ({ className, ...props }) => (
