@@ -1,6 +1,6 @@
 // @flow
 
-import React  from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router';
 
 import moment from "moment";
@@ -28,7 +28,7 @@ import URLs from "common/urls";
 import type {
     DailySummaryCardProps
 } from "./DailySummary.types"
-import type { UKSummaryField } from "hooks/hooks.types";
+import type { UKSummaryField } from "hooks/usePageLayout.types";
 
 
 const
@@ -90,7 +90,6 @@ const NationDeathsPlot = ({ ...props }) => {
 const getPlotData = (layout: Array<UKSummaryField>, rawData) => {
 
     return layout
-        .filter(item => item.hasOwnProperty("chart"))
         .map(item => {
             const
                 data = dropLeadingZeros(rawData || [], item.chart.variableName),
@@ -113,7 +112,7 @@ const getPlotData = (layout: Array<UKSummaryField>, rawData) => {
 };  // getYAxisData
 
 
-const ValueBox = ({ data, primaryValue, secondaryValue=null, primaryTooltip="", secondaryTooltip="", ...rest }) => {
+const ValueBox = ({ data, primaryValue, secondaryValue=null, primaryTooltip="", secondaryTooltip="", isEnabled=true, ...rest }) => {
 
     const
         primaryData = getMaxDateValuePair(data, primaryValue),
@@ -130,6 +129,7 @@ const ValueBox = ({ data, primaryValue, secondaryValue=null, primaryTooltip="", 
         secondaryTooltip={ strFormat(secondaryTooltip, secondaryReplacements) }
         secondaryModal={ secondaryValue }
         secondaryModalReplacements={ secondaryReplacements }
+        isEnabled={ isEnabled }
         { ...rest }
     />
 
@@ -138,7 +138,10 @@ const ValueBox = ({ data, primaryValue, secondaryValue=null, primaryTooltip="", 
 
 const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) => {
 
-    const structure = { date: "date" };
+    const
+        structure = { date: "date" },
+        chartData = {},
+        noToggleData = ["date"];
 
     for ( const { primaryValue, secondaryValue=null, ...rest } of layout )  {
 
@@ -147,24 +150,61 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
         if ( secondaryValue )
             structure[secondaryValue] = secondaryValue;
 
-        if ( rest?.chart ?? null )
+        if ( rest?.chart ?? null ) {
+
             structure[rest.chart.variableName] = rest.chart.variableName;
+
+        }
 
     }
 
-    const data = useApi({
-        conjunctiveFilters: params,
-        structure: structure
-    });
+    const
+        [ plotData, setPlotData ] = useState({}),
+        data = useApi({
+            conjunctiveFilters: params,
+            structure: structure
+        });
+
+    useEffect(() => {
+
+        for ( const { chart={} } of layout ) {
+
+            if ( chart && !chartData.hasOwnProperty(chart?.variableName ?? null) ) {
+
+                chartData[chart.variableName] = true;
+
+            }
+        }
+
+        setPlotData(chartData)
+
+    }, [ params ]);
 
     return <Card heading={ heading }>
         <VisualSection>
-            <Plotter data={ getPlotData(layout, data) }/>
+            <Plotter data={ getPlotData(
+                layout.filter(({ chart=false }) => chart && (plotData?.[chart.variableName] ?? true)),
+                data,
+                chartData
+            )
+            }/>
         </VisualSection>
         <NumericReports>
             {
                 layout.map((item, index) =>
-                    <ValueBox { ...item } data={ data } key={ `${heading}-${index}` }/>)
+                    <ValueBox { ...item }
+                              data={ data }
+                              isEnabled={ plotData?.[(item?.chart?.variableName ?? null)] ?? true }
+                              setChartState={ () => {
+                                  const name = item?.chart?.variableName ?? null;
+
+                                  setPlotData(
+                                      name
+                                          ? { ...plotData, [name]: !(plotData?.[name] ?? true) }
+                                          : plotData
+                                  )
+                              } }
+                              key={ `${heading}-${index}` }/>)
             }
             {/*{*/}
             {/*    heading.toLowerCase().indexOf("death") > -1*/}

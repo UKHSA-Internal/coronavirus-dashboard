@@ -63,12 +63,18 @@ const ValueItem: ComponentType<Props> = ({
          caption, primaryLabel, primaryValue, primaryModal=null, primaryTooltip=null,
          primarySign=null, primaryModalReplacements={}, secondaryLabel=null,
          secondaryValue=null, secondaryModal=null, secondaryTooltip=null,
-         secondarySign=null, secondaryModalReplacements={}, chart }: Props) => {
+         secondarySign=null, secondaryModalReplacements={}, chart={}, isEnabled=true,
+                                             setChartState=() => null }: Props) => {
 
     const tipId = encodeURI(primaryLabel);
 
     return <DataContainer>
-        { ( chart?.colour ?? null ) ? <DataColour colour={ chart.colour } /> : null }
+        {
+            ( chart?.colour ?? false ) &&
+            <DataColour role={ "button" }
+                        onClick={ setChartState }
+                        colour={ isEnabled ? chart.colour : "none" } />
+        }
         <Heading>{ caption }</Heading>
         <DataNumbersContainer>
             <NumericData>
