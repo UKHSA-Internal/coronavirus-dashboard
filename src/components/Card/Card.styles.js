@@ -142,7 +142,7 @@ export const DataLabel = ({ className="", ...props }) => (
 export const Number: ComponentType<*> = (() => {
 
     const Node = styled.span`
-        font-size: 1.2rem;
+        font-size: 1.4rem;
     `;
 
     return ({ className="", ...props }) =>
