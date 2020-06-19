@@ -72,6 +72,11 @@ const ValueItem: ComponentType<Props> = ({
         {
             ( chart?.colour ?? false ) &&
             <DataColour role={ "button" }
+                        data-for={ tipId }
+                        data-tip={
+                            `Click to ${ isEnabled ? "hide" : "show" } 
+                            the "${ caption.toLowerCase() }" on the graph.`
+                        }
                         onClick={ setChartState }
                         colour={ isEnabled ? chart.colour : "none" } />
         }
@@ -81,12 +86,10 @@ const ValueItem: ComponentType<Props> = ({
                 { primaryLabel && <DataLabel>{ primaryLabel }</DataLabel> }
                 <Number>
                     { numeral(primaryValue).format("0,0") }{ primarySign }
-                    <ModalTooltip
-                        data-tip={ primaryTooltip }
-                        data-for={ tipId }
-                        markdownPath={ primaryModal }
-                        replacements={ primaryModalReplacements }
-                    >
+                    <ModalTooltip data-tip={ primaryTooltip }
+                                  data-for={ tipId }
+                                  markdownPath={ primaryModal }
+                                  replacements={ primaryModalReplacements }>
                         <span className={ "govuk-visually-hidden" }>
                             More information on { primaryLabel }: { primaryTooltip }
                         </span>
