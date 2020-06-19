@@ -1,156 +1,111 @@
 // @flow
 
-import React, { Fragment, useState, useEffect, useRef } from "react";
+import React, { Fragment, useEffect, useRef } from "react";
 import { useHistory } from "react-router";
 
-import { createQuery, getParams } from "common/utils";
-import useLookupTable from "hooks/useLookupTable";
-import { Select } from "./DashboardHeader.styles";
+import { createQuery, getParams, groupBy } from "common/utils";
 
 import { getParamValueFor } from "./utils";
 
-import { PathNames } from "./DashboardHeader";
-
-import type {
-    FlatHierarchyItem,
-    HierarchyDataType,
-    LocationPickerProps
-} from "./DashboardHeader.types";
-
-import type {
-    LookupDataType
-} from "hooks/useLookupTable.types";
+import useApi from "hooks/useApi";
+import { PathNames } from "./Constants";
+import Select from "react-select";
 
 
-const useOrder = () => {
+const getOrder = ( history ) => {
 
     const
         defaultOrder = {
             "nation": {
                 key: "nation",
-                label: "nations",
+                label: "Nations",
                 parent: null
             },
             "region": {
                 key: "region",
-                label: "regions",
+                label: "Regions",
                 parent: "nation",
             },
             "utla": {
                 key: "utla",
-                label: "upper-tier local authorities",
+                label: "Upper tier local authorities",
                 parent: "region",
             },
             "ltla": {
                 key: "ltla",
-                label: "lower-tier local authorities",
+                label: "Lower-tier local authorities",
                 parent: "utla"
             }
-        },
-        history = useHistory(),
-        [ order, setOrder ] = useState(defaultOrder);
+        };
 
-    useEffect(() => {
 
-        let currentOrder;
+    switch (history.location.pathname.toLowerCase()) {
 
-        switch (history.location.pathname.toLowerCase()) {
+        case PathNames.testing:
+            return {
+                "nation": {
+                    key: "nation",
+                    label: "Nations",
+                    parent: null
+                }
+            };
 
-            case PathNames.testing:
-                currentOrder = {
-                    "nation": {
-                        key: "nation",
-                        label: "nations",
-                        parent: null
-                    }
-                };
-                break;
+        case PathNames.healthcare:
+            return {
+                "nhsNation": {
+                    key: "nhsNation",
+                    label: "Nations",
+                    parent: null
+                },
+                "nhsRegion": {
+                    key: "nhsRegion",
+                    label: "NHS regions",
+                    parent: "nhsNation",
+                }
+            };
 
-            case PathNames.deaths:
-                currentOrder = {
-                    "nation": {
-                        key: "nation",
-                        label: "nations",
-                        parent: null
-                    },
-                    "region": {
-                        key: "region",
-                        label: "regions",
-                        parent: "nation",
-                    },
-                    "utla": {
-                        key: "utla",
-                        label: "upper-tier local authorities",
-                        parent: "region",
-                    }
-                };
-                break;
+        case PathNames.deaths:
+        case PathNames.cases:
+        default:
+            return defaultOrder;
 
-            case PathNames.healthcare:
-                currentOrder = {
-                    "nhsNation": {
-                        key: "nhsNation",
-                        label: "nations",
-                        parent: null
-                    },
-                    "nhsRegion": {
-                        key: "nhsRegion",
-                        label: "NHS regions",
-                        parent: "nhsNation",
-                    }
-                };
-                break;
-
-            default:
-                currentOrder = defaultOrder;
-
-        }  // switch
-
-        setOrder(currentOrder)
-
-    }, [ history.location.pathname ])
-
-    return order
+    }  // switch
 
 };  // getOrder
 
 
-const useDefaultOutput = ( getData ) => {
-
-    const
-        history = useHistory();
+const getDefaultOutput = ( history ) => {
 
     switch (history.location.pathname.toLowerCase()) {
 
         case PathNames.testing:
             return [
                 // These must be ordered.
-                { areaType: "nation", areaName: null, options: getData("nation", null) },
-            ];
-
-        case PathNames.deaths:
-            return [
-                // These must be ordered.
-                { areaType: "nation", areaName: null, options: getData("nation", null) },
-                { areaType: "region", areaName: null, options: getData("region", null) },
-                { areaType: "utla", areaName: null, options: getData("utla", null) },
+                "nation"
             ];
 
         case PathNames.healthcare:
             return [
                 // These must be ordered.
-                { areaType: "nhsNation", areaName: null, options: getData("nhsNation", null) },
-                { areaType: "nhsRegion", areaName: null, options: getData("nhsRegion", null) },
+                "nhsNation",
+                "nhsRegion"
             ];
+
+        case PathNames.deaths:
+            return [
+                // These must be ordered.
+                "nation",
+                "region"
+            ]
 
         case PathNames.cases:
         default:
             return [
                 // These must be ordered.
-                { areaType: "nation", areaName: null, options: getData("nation", null) },
-                { areaType: "region", areaName: null, options: getData("region", null) },
-                { areaType: "utla", areaName: null, options: getData("utla", null) },
-                { areaType: "ltla", areaName: null, options: getData('ltla', null) },
+                "nation",
+                "region",
+                "utla",
+                "ltla"
             ]
 
     } // switch
@@ -158,65 +113,9 @@ const useDefaultOutput = ( getData ) => {
 };  // getDefaultOutput
 
 
-const getDataFor = ( hierarchy: HierarchyDataType, lookup: LookupDataType ) => {
+const usePrevious = (value) => {
 
-    const
-        flatHierarchy: FlatHierarchyItem = Object
-            .keys(hierarchy)
-            .reduce((acc, item) =>
-                [...acc, ...hierarchy[item].map(value => ({...value, type: item}))],
-                []
-            );
-
-    // Closure definition:
-    //--------------------
-    // itemName is the parentName for getting children and the childName for getting
-    // the parent - Default behaviour is to get the children.
-    return (areaType: string, itemName: string | null, getParent: boolean = false): Array<string> | string => {
-
-        if (!lookup || !hierarchy) return getParent ? "" : [];
-
-        // Getting the children
-        if ( !getParent ) {
-
-            if ( !itemName ) return hierarchy[areaType];
-
-            for ( const { name, code, type } of flatHierarchy ) {
-                if ( name !== itemName ) continue;
-
-                return hierarchy[areaType].filter(item =>
-                    lookup[type][code].c.indexOf(item.code) > -1
-                )
-            }
-
-            // default children
-            return []
-
-        }
-
-        // Getting the parent
-        for ( const { name, code, type } of flatHierarchy ) {
-
-            if ( name !== itemName || areaType !== type ) continue;
-
-            for ( const item of flatHierarchy )
-                if ( item.code === lookup[type][code].p ) return item.name
-
-        }
-
-        // default parent
-        return ""
-
-    }
-
-};  // GetDataFor
-
-
-const usePrevious = (value, getData) => {
-
-    const
-        defaultOutput = useDefaultOutput(getData),
-        ref = useRef(defaultOutput);
+    const ref = useRef(value);
 
     useEffect(() => {
 
@@ -229,160 +128,140 @@ const usePrevious = (value, getData) => {
 };  // usePrevious
 
 
-const LocationPicker = ({ hierarchy }: LocationPickerProps) => {
+const SelectOptions = {
+    control: ( base, state ) => ({
+        ...base,
+        boxShadow: state.isFocused ? "0 0 0 3px #fd0" : "none"
+    }),
+    menu: provided => ({
+        ...provided,
+        borderRadius: 0,
+        backgroundColor: "#f1f1f1",
+        padding: 5
+      }),
+    option: (styles, state) => ({
+        ...styles,
+        backgroundColor: state.isFocused ? "#1d70b8": "#f1f1f1",
+        color: state.isFocused ? "#f1f1f1": "#000",
+        ":before": {
+            content: state.isSelected ? '"✓ "' : '""'
+        }
+    })
+};
+
+
+const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     const
-        order = useOrder(),
-        lookup = useLookupTable(),
-        getData = getDataFor(hierarchy, lookup),
         history = useHistory(),
-        { search: query, pathname } = history.location,
+        order = getOrder(history),
+        defaultAreaTypes = getDefaultOutput(history),
+        pathname = history.location.pathname,
+        query = history.location.search,
         initialParam = getParams(query),
-        [ location, setLocation ] = useState([]),
-        previousLocation = usePrevious(location, getData);
+        prevLocation = usePrevious(pathname),
+        data = useApi({
+             disjunctiveFilters:
+                 ( currentLocation?.areaType ?? "" ) !== "overview"
+                     ? [{ key: "areaType", sign: '=', value: currentLocation.areaType }]
+                     : defaultAreaTypes.map(item => ({ key: "areaType", sign: '=', value: item })),
+             structure: {
+                 value: "areaName",
+                 areaType: "areaType"
+             },
+             endpoint: "lookupApi",
+             defaultResponse: []
+        });
 
     useEffect(() => {
-        getStateFor(
-            getParamValueFor(initialParam, "areaName"),
-            order?.[getParamValueFor(initialParam, "areaType")] ?? null,
-        )
+
+        const paramData = {
+            areaType: getParamValueFor(initialParam, "areaType", "overview"),
+            areaName: getParamValueFor(initialParam, "areaName", "United Kingdom"),
+        }
+
+        setCurrentLocation(paramData);
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ lookup, hierarchy, pathname, query ]);
+    }, [ pathname, query ]);
 
-
-    const getStateFor = (value, areaTypeItem) => {
-
-        let
-            prevState = previousLocation,
-            newLocation = [],
-            orderKeys = Object.keys(order),
-            tempLoc;
-
-        // Forward propagation of children
-        for ( let index = 0; index < prevState.length; index++ ) {
-
-            tempLoc = (prevState[index].areaType === areaTypeItem?.key ?? null)
-                ? {
-                    areaType: areaTypeItem.key,
-                    areaName: value,
-                    options: getData(areaTypeItem.key, null)
-                }
-                : {
-                    ...prevState[index],
-                    areaName: null,
-                    options: getData(order[orderKeys[index]].key, tempLoc?.areaName ?? null)
-                };
-
-            newLocation.push(tempLoc)
-        }
-
-        // Backward propagation of parents
-        const indOfMain = Object.keys(order).indexOf(areaTypeItem?.key ?? null);
-
-        for ( let index = indOfMain; index > 0; index -- ) {
-
-            if ( !(newLocation[index]?.areaName ?? null) ) continue;
-
-            newLocation[index - 1].areaName = getData(
-                newLocation[index].areaType,
-                newLocation[index].areaName,
-                true
-            );
-
-        }
-
-        setLocation(newLocation)
-
-    };
 
     const handleSubmission = (event) => {
 
         event.preventDefault();
 
-        const selection = [...location]
-            .reverse()
-            .filter(({ areaName }) => areaName)[0];
-
         const newQuery = createQuery([
             ...getParams(query),
-            ...(
-                ( selection?.areaName ?? null )
-                    ? [
-                        { key: 'areaType', sign: '=', value: selection.areaType },
-                        { key: 'areaName', sign: '=', value: selection.areaName }
-                    ]
-                    : []
-            )
+            { key: 'areaType', sign: '=', value: currentLocation.areaType },
+            { key: 'areaName', sign: '=', value: currentLocation.areaName }
         ]);
 
         history.push(`${ newQuery }`)
 
     };  // handleSubmission
 
+    if ( !show ) return null;
+
+    const
+        groupedAreaNameData = groupBy(data || [], item => item.value),
+        areaNameData = Object.keys(groupedAreaNameData)
+            .map(value => ({ value: value, label: value, areaType: groupedAreaNameData[value].areaType })),
+        areaTypeData = defaultAreaTypes
+            .map(item => ({ value: item, label: order?.[item]?.label ?? "" }));
 
     return <Fragment>
-        <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" } onSubmit={ handleSubmission }>
-            <div className={ "govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2" }>
-                <div className={ "govuk-grid-column-two-thirds" }>
-                    <h4 className={ "govuk-heading-s govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                        Select a location to customise data
-                    </h4>
-                    <p className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1 govuk-body-s" }>
-                        Please note not all data is available for every location.
-                    </p>
+            <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" } onSubmit={ handleSubmission }>
+                <div className={ "govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2" }>
+                    <div className={ "govuk-grid-column-two-thirds" }>
+                        <h4 className={ "govuk-heading-s govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                            Select a location to customise data
+                        </h4>
+                        <p className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1 govuk-body-s" }>
+                            Please note not all data is available for every location.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div className={ "govuk-grid-row " }>{
-                location.map(({ areaName, areaType, options }) => {
-
-                    const areaTypeItem = order[areaType]
-
-                    return <Fragment key={ `areaType-${ areaType }` }>
-                        <label className={ "govuk-visually-hidden" } htmlFor={ areaType } key={ `${areaType}-label` }>{ areaType }</label>
-                        <Select value={ areaName ? areaName : "" }
-                                disabled={ (options?.length ?? 0) === 0 }
-                                key={ areaType }
-                                onChange={ ({ target: { value } }) => getStateFor(value, areaTypeItem) }
-                                className={ 'govuk-select' }
-                                name={ areaType }
-                                id={ areaType }>
-                        <option value={ "" } disabled>All { areaTypeItem?.label ?? "" }</option>
-                        {
-                            options && options
-                                .sort(({ name: a }, { name: b }) => a > b || -(b > a || 0))
-                                .map(({ name, code }) =>
-                                    <option value={ name }
-                                            key={ `${ areaTypeItem.key }-${ code }` }
-                                    >
-                                        { name }
-                                    </option>
-                                )
-                        }
-                    </Select>
-                    </Fragment>
-                })
-            }</div>
-
-            <div className={ "govuk-grid-row govuk-!-margin-top-4 govuk-!-margin-bottom-2" }>
-                <div className={ "govuk-grid-column-full" }>
-                    <input type={ "submit" }
-                           value={ "Update location" }
-                           className={ "govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0" }/>
-                    <input type={ "reset" }
-                           value={ "Reset to UK" }
-                           onClick={ () => history.push('?') }
-                           className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }/>
+                <div className={ "govuk-grid-row" }>
+                    <div className="govuk-grid-column-one-quarter">
+                        <div className="govuk-form-group govuk-!-margin-bottom-0">
+                            <Select area-label={ "select area type" }
+                                    options={ areaTypeData }
+                                    value={ areaTypeData.filter(item => item.value === currentLocation.areaType) }
+                                    onChange={ item => setCurrentLocation({ areaName: null, areaType: item.value }) }
+                                    styles={ SelectOptions }
+                                    className={ 'select' }/>
+                        </div>
+                    </div>
+                    <div className="govuk-grid-column-one-quarter">
+                        <div className="govuk-form-group govuk-!-margin-bottom-0">
+                            <Select area-label={ "select area type" }
+                                    options={ areaNameData }
+                                    styles={ SelectOptions }
+                                    value={ areaNameData.filter(item => item.label === currentLocation.areaName) }
+                                    isLoading={ data.length < 1 }
+                                    onChange={ item => setCurrentLocation({
+                                        areaType: groupedAreaNameData[item.value][0].areaType,
+                                        areaName: item.value
+                                    }) }
+                                    className={ 'select' }/>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div className={ "govuk-grid-row govuk-!-margin-top-4 govuk-!-margin-bottom-2" }>
+                    <div className={ "govuk-grid-column-full" }>
+                        <input type={ "submit" }
+                               value={ "Update location" }
+                               className={ "govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0" }/>
+                        <input type={ "reset" }
+                               value={ "Reset to UK" }
+                               onClick={ () => history.push('?') }
+                               className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }/>
+                    </div>
+                </div>
 
-        </form>
-
-        <div className={ "govuk-grid-row govuk-!-margin-top-0" }>
-            <div className={ "govuk-grid-column-full" }>
-                <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
-            </div>
-        </div>
+            </form>
+        <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
     </Fragment>
 
 };  // LocationPicker
