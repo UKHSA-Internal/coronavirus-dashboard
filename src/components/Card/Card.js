@@ -40,15 +40,6 @@ const VisualSection: ComponentType<Props> = ({ children }: Props) => {
 }; // Visuals
 
 
-// const NumericReports: ComponentType<Props> = ({ children }: Props) => {
-//
-//     return <HBodySection>
-//         { children }
-//     </HBodySection>
-//
-// }; // ValueItemContainer
-
-
 const NumericReports: ComponentType<Props> = ({ children, horizontal=false }: Props) => {
 
     if ( horizontal )
@@ -135,8 +126,9 @@ const Card: ComponentType<Props> = ({ heading="Placeholder", caption="", fullWid
         return <HalfCard>
             <HalfCardHeader>
                 <HalfCardHeading>{ heading }</HalfCardHeading>
-                <Link to={ "tests" } className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>More
-                    detail</Link>
+                <Link to={ heading.toLowerCase() } className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>
+                    More detail
+                </Link>
             </HalfCardHeader>
             <SectionBreak/>
             <HalfCardBody>{ children }</HalfCardBody>
