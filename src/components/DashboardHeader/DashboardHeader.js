@@ -1,6 +1,5 @@
 // @flow
 
-// React
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router";
 
@@ -51,7 +50,7 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
 
     const
         history = useHistory(),
-        [locationPickerState, setLocationPickerState] = useState(true),
+        [locationPickerState, setLocationPickerState] = useState(false),
         // [datePickerState, setDatePickerState] = useState(false),
         params = getParams(history.location.search),
         areaName = getParamValueFor(params, "areaName", "United Kingdom"),
