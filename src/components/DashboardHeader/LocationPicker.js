@@ -136,12 +136,12 @@ const SelectOptions = {
     menu: provided => ({
         ...provided,
         borderRadius: 0,
-        backgroundColor: "#f1f1f1",
+        backgroundColor: "rgba(241, 241, 241, 0.95)",
         padding: 5
       }),
     option: (styles, state) => ({
         ...styles,
-        backgroundColor: state.isFocused ? "#1d70b8": "#f1f1f1",
+        backgroundColor: state.isFocused ? "#1d70b8": "none",
         color: state.isFocused ? "#f1f1f1": "#000",
         ":before": {
             content: state.isSelected ? '"✓ "' : '""'
