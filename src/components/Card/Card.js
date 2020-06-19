@@ -85,14 +85,15 @@ const ValueItem: ComponentType<Props> = ({
             <NumericData>
                 { primaryLabel && <DataLabel>{ primaryLabel }</DataLabel> }
                 <Number>
-                    { numeral(primaryValue).format("0,0") }{ primarySign }
                     <ModalTooltip data-tip={ primaryTooltip }
                                   data-for={ tipId }
                                   markdownPath={ primaryModal }
                                   replacements={ primaryModalReplacements }>
-                        <span className={ "govuk-visually-hidden" }>
-                            More information on { primaryLabel }: { primaryTooltip }
-                        </span>
+                        { numeral(primaryValue).format("0,0") }{ primarySign }
+                        <p className={ "govuk-visually-hidden" }>
+                            Abstract information on { primaryLabel }: { primaryTooltip }<br/>
+                            Click for additional details.
+                        </p>
                     </ModalTooltip>
                 </Number>
             </NumericData>
@@ -102,16 +103,17 @@ const ValueItem: ComponentType<Props> = ({
                 ? <NumericData>
                     { secondaryLabel && <DataLabel>{ secondaryLabel }</DataLabel> }
                     <Number>
-                        { numeral(secondaryValue).format("0,0") }{ secondarySign }
                         <ModalTooltip
                             data-tip={ secondaryTooltip }
                             data-for={ tipId }
                             markdownPath={ secondaryModal }
                             replacements={ secondaryModalReplacements }
                         >
-                            <span className={ "govuk-visually-hidden" }>
-                                More information on { secondaryLabel }: { secondaryTooltip }
-                            </span>
+                            { numeral(secondaryValue).format("0,0") }{ secondarySign }
+                            <p className={ "govuk-visually-hidden" }>
+                                Abstract information on { secondaryLabel }: { secondaryTooltip }<br/>
+                                Click for additional details.
+                            </p>
                         </ModalTooltip>
                     </Number>
                 </NumericData>

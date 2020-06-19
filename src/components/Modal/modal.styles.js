@@ -43,34 +43,16 @@ export const ModalContent: ComponentType<*> = (() => {
 
 export const ModalOpener: ComponentType<*> = (() => {
     const
+        x = '#959595',
         classes = '',
         Node = styled.button`   
             cursor: pointer;
             outline: none;
-                     
-            &::before {
-                position: relative;
-                top: -5px;
-                display: inline-block;
-                width: 14px;
-                height: 14px;
-                border: 1px solid #1d70b8;
-                margin-left: 5px;
-                border-radius: 10px;
-                color: #1d70b8;
-                content: 'i';
-                font-family: Verdana, sans-serif;
-                font-size: 12px;
-                font-weight: bold;
-                text-align: center;
-            }
-
-            &:hover {
-                &::before {
-                    border-color: #1d70b8;
-                    background: #1d70b8;
-                    color: white;
-                }
+            border-bottom: 1px dashed #959595;
+            
+           &:hover {
+                background-colour: #f1f1f1;
+                border-bottom: 1px dashed #3e3e3e;
             }
         `;
 
