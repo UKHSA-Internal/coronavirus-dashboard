@@ -2,24 +2,21 @@
 
 // React
 import React, { useState, useEffect, useRef } from "react";
-import { withRouter } from 'react-router';
 import { useHistory } from "react-router";
 
-// Third party
 import moment from "moment";
 import 'moment/locale/en-gb';
 
 import { getParams } from "common/utils";
-import useHierarchy from "hooks/useHierarchy";
 
 import deepEqual from "deep-equal";
 
-// Internal
 import LocationPicker from "./LocationPicker";
-// import LocationPicker3 from "./LocationPicker3";
-// import DateRangePicker from "./DateRangePicker";
 import { getParamValueFor, getParamDateFor } from "./utils";
-import useApi from "hooks/useApi";
+
+import { PathNameMapper, NoPickerPaths } from "./Constants";
+
+import LocationProposer from "./LocationProposer";
 
 // Styles
 import {
@@ -32,11 +29,6 @@ import {
     CurrentLocation
 } from './DashboardHeader.styles'
 
-import { PathNameMapper, NoPickerPaths } from "./Constants";
-
-import LocationProposer from "./LocationProposer";
-
-// Types
 import type { ComponentType } from 'react';
 import type { Props } from './DashboardHeader.types';
 
