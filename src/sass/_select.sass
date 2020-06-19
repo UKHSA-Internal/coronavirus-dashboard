@@ -1,0 +1,22 @@
+.select
+  font-family: $govuk-font-family
+
+  div[class*='control']
+    @extend .govuk-select
+    border-radius: 0
+    padding: 0 .3rem
+
+    //border: 2px solid black
+    //padding-left: .3rem
+
+    //outline: none
+
+    &:focus,
+    &:active
+      //outline: 3px solid #fd0
+      //border: 3px solid #fd0
+      box-shadow: 0 0 0 3px #fd0
+
+    //&>[class*='indicatorContainer']
+    //  color: black
+
