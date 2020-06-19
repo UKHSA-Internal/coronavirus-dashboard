@@ -25,6 +25,7 @@ import SideNavigation from "components/SideNavigation";
 import SideNavMobile from "components/SideNavMobile";
 import DashboardHeader from "components/DashboardHeader";
 import Announcement from "./components/Announcement";
+import useResponsiveLayout from "./hooks/useResponsiveLayout";
 
 // get environment vars
 dotenv.config();
@@ -125,7 +126,9 @@ const PathWithSideMenu = [
 
 const App = ({ location: { pathname } }) => {
 
-    const hasMenu = PathWithSideMenu.indexOf(pathname) > -1;
+    const
+        hasMenu = PathWithSideMenu.indexOf(pathname) > -1,
+        layout = useResponsiveLayout(640);
 
     return <Fragment>
         <CookieBanner/>
@@ -136,7 +139,7 @@ const App = ({ location: { pathname } }) => {
             serviceUrlTo="/"
             homepageUrlHref="https://gov.uk"
         />
-        <SideNavMobile/>
+        { layout === "mobile" &&  <SideNavMobile/> }
         <div className={ "govuk-width-container" }>
             <main className={ "govuk-main-wrapper" } role={ "main" }>
                 <ErrorBoundary>
