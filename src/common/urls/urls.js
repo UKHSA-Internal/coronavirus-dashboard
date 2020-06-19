@@ -19,7 +19,7 @@ const URLs = {
     lookups:         `https://${ REACT_APP_MAIN_CDN }/assets/lookups/`,
     lookupApi:       `https://uks-covid19-pubdash-dev.azure-api.net/v1/lookup`,
     pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN }/assets/structural_layouts/`,
-    mainApi:         `https://uks-covid19-pubdash-dev.azure-api.net/fn-coronavirus-dashboard-pipeline-etl-dev/v1/data`,
+    mainApi:         `https://uks-covid19-pubdash-dev.azure-api.net/v1/data`,
     modals:          `https://${ REACT_APP_MAIN_CDN }/assets/modals/`,
     latestCases: {
         csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-cases_latest.csv`,
