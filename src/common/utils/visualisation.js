@@ -2,6 +2,7 @@
 
 import { dropLeadingZeros, hexToRgb } from "./utils";
 import { movingAverage } from "../stats";
+import numeral from "numeral";
 
 
 export const getPlotData = (fields: Array<{}>, rawData) => {
@@ -18,10 +19,11 @@ export const getPlotData = (fields: Array<{}>, rawData) => {
 
             const
                 data = dropLeadingZeros(rawData, field.value),
-                yData = data?.map(variable => variable?.[field.value] ?? null) ?? [],
                 { r, g, b } = hexToRgb(colours[field.colour]);
 
-            let plotFeatures;
+            let
+                yData = data?.map(variable => variable?.[field.value] ?? null) ?? [],
+                plotFeatures;
 
             switch ( field.type ) {
                 case "bar":
@@ -52,10 +54,14 @@ export const getPlotData = (fields: Array<{}>, rawData) => {
 
             }
 
+            yData = field.rollingAverage ? movingAverage(yData, 7) : yData
+
             return {
                 name: field.label,
                 x: data?.map(item => item?.date ?? null) ?? [],
-                y: field.rollingAverage ? movingAverage(yData, 7) : yData,
+                y: yData,
+                text: yData.map(value => `${ numeral(value).format("0,0") }<br>${field.label}`),
+                hoverinfo: "text",
                 ...plotFeatures
             }
 
