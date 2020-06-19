@@ -1,7 +1,7 @@
 // @flow
 
 // React
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { withRouter } from 'react-router';
 import { useHistory } from "react-router";
 
@@ -12,10 +12,14 @@ import 'moment/locale/en-gb';
 import { getParams } from "common/utils";
 import useHierarchy from "hooks/useHierarchy";
 
+import deepEqual from "deep-equal";
+
 // Internal
 import LocationPicker from "./LocationPicker";
+// import LocationPicker3 from "./LocationPicker3";
 // import DateRangePicker from "./DateRangePicker";
 import { getParamValueFor, getParamDateFor } from "./utils";
+import useApi from "hooks/useApi";
 
 // Styles
 import {
@@ -24,85 +28,73 @@ import {
     Title,
     CollapsibleLinkContainer,
     CollapsibleLink,
-    CollapsibleLinkText,
-    TriangleRight,
-    TriangleDown,
-    SectionBreak, CurrentLocation, Triangle
+    SectionBreak,
+    CurrentLocation
 } from './DashboardHeader.styles'
+
+import { PathNameMapper, NoPickerPaths } from "./Constants";
+
+import LocationProposer from "./LocationProposer";
 
 // Types
 import type { ComponentType } from 'react';
 import type { Props } from './DashboardHeader.types';
 
 
-// Global constants
-const PathNameMapper = {
-    "/": "UK Summary",
-    "/cases": "Cases",
-    "/testing": "Testing",
-    "/healthcare": "Healthcare",
-    "/deaths": "Deaths",
-    "/about-data": "About data",
-    "/cookies": "Cookies",
-    "/accessibility": "Accessibility",
-    "/archive": "Archive"
-};
+const usePrevious = (value) => {
 
-export const PathNames = {
-    // Only use lower case in paths.
-    summary: "/",
-    cases: "/cases",
-    testing: "/testing",
-    healthcare: "/healthcare",
-    deaths: "/deaths",
-    aboutData: "/about-data",
-    cookies: "cookies",
-    accessibility: "/accessibility",
-    archive: "/archive"
-}
+    const ref = useRef(value);
 
+    useEffect(() => {
 
-const NoPickerPaths = [
-    "/",
-    "/about-data",
-    "/cookies",
-    "/accessibility",
-    "/archive"
-];
+        ref.current = value
 
+    })
+
+    return ref.current
+
+};  // usePrevious
 
 const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
 
     const
         history = useHistory(),
-        hierarchy = useHierarchy(),
-        [locationPickerState, setLocationPickerState] = useState(false),
+        [locationPickerState, setLocationPickerState] = useState(true),
         // [datePickerState, setDatePickerState] = useState(false),
         params = getParams(history.location.search),
-        currentLocation = getParamValueFor(params, "areaName", "United Kingdom"),
+        areaName = getParamValueFor(params, "areaName", "United Kingdom"),
         startDate = getParamDateFor(params, 'specimenDate', moment("2020-01-03"), ">"),
         endDate = getParamDateFor(params, "specimenDate", moment(), "<"),
-        isExcluded = NoPickerPaths.indexOf(history.location.pathname) > -1;
+        isExcluded = NoPickerPaths.indexOf(history.location.pathname) > -1,
+        prevPathname = usePrevious(history.location.pathname),
+        initialParam = getParams(history.location.query),
+        [ prevPathnameState, setPrevPathnameState ] = useState(prevPathname),
+        [ location, setLocation ] = useState({
+            areaType: getParamValueFor(initialParam, "areaType", "overview"),
+            areaName: getParamValueFor(initialParam, "areaName", "United Kingdom"),
+        }),
+        prevLocation = usePrevious(location);
 
     useEffect(() => {
 
-        setLocationPickerState(false)
+        if ( !deepEqual(location, prevLocation) )
+            setPrevPathnameState(prevPathname);
 
-    },  [  history.location.pathname ])
+    }, [ location, history.location.pathname ])
 
     return <MainContainer>
         <HeaderContainer>
             <Title>
-                { PathNameMapper[history.location.pathname] }&nbsp;
-                <CurrentLocation>{ currentLocation }</CurrentLocation>
+                { PathNameMapper[history.location.pathname] }
             </Title>
-            { isExcluded
-                ? null
-                : <CollapsibleLinkContainer>
+            { !isExcluded &&
+                <CollapsibleLinkContainer>
                     <CollapsibleLink className={ locationPickerState ? "opened" : "closed" }
                                      onClick={ () => setLocationPickerState(!locationPickerState) }>
-                        Change location
+                        Change&nbsp;location:&nbsp;<CurrentLocation>{ areaName }</CurrentLocation>
                     </CollapsibleLink>
+                </CollapsibleLinkContainer>
+            }
                     {/*<CollapsibleLink htmlType={ "button" }*/}
                     {/*    onClick={ () => setDatePickerState(!datePickerState) }>*/}
                     {/*    { datePickerState ? <TriangleDown/> : <TriangleRight/> }*/}
@@ -110,16 +102,8 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
                     {/*        <strong>Date:</strong>&nbsp;{ startDate.format("D MMM YYYY") }&nbsp;-&nbsp;{ endDate.format("D MMM YYYY") }*/}
                     {/*    </CollapsibleLinkText>*/}
                     {/*</CollapsibleLink>*/}
-                </CollapsibleLinkContainer>
-            }
         </HeaderContainer>
-        <SectionBreak />
-
-        {
-            ( locationPickerState && !isExcluded )
-                ? <LocationPicker hierarchy={ hierarchy }/>
-                : null
-        }
+        <SectionBreak/>
         {/*{*/}
         {/*    ( datePickerState && !isExcluded )*/}
         {/*        ? <DateRangePicker query={ query }*/}
@@ -127,6 +111,18 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
         {/*                           endDate={ endDate }/>*/}
         {/*        : null*/}
         {/*}*/}
+        {
+            !isExcluded &&
+            <>
+                <LocationPicker show={ locationPickerState } currentLocation={ location }
+                                setCurrentLocation={ setLocation }/>
+
+                <LocationProposer lastParams={ [
+                    { key: "areaType", sign: "=", value: location.areaType },
+                    { key: "areaName", sign: "=", value: location.areaName }
+                ] } referrer={ prevPathnameState }/>
+            </>
+        }
     </MainContainer>
 
 };  // DashboardHeader
