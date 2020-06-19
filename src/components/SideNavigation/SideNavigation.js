@@ -17,40 +17,38 @@ import {
 
 
 const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) => {
-    const layout = useResponsiveLayout(768);
 
+    return (
+        <SideNav aria-label="Side navigation">
+            <SideNavList>
+                <SideNavListItem className={`${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
+                    <Link to={ "/" } aria-current="location">UK Summary</Link>
+                </SideNavListItem>
 
-        return (
-            <SideNav aria-label="Side navigation">
-                <SideNavList>
-                    <SideNavListItem className={`${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
-                        <Link to={ "/" } aria-current="location">UK Summary</Link>
-                    </SideNavListItem>
+                <SideNavListItem className={`${pathname === '/testing' ? "moj-side-navigation__item--active" : ""}`}>
+                    <Link to={ "testing" }>Testing</Link>
+                </SideNavListItem>
 
-                    <SideNavListItem className={`${pathname === '/testing' ? "moj-side-navigation__item--active" : ""}`}>
-                        <Link to={ "testing" }>Testing</Link>
-                    </SideNavListItem>
+                <SideNavListItem className={`${pathname === '/cases' ? "moj-side-navigation__item--active" : ""}`}>
+                    <Link to={ "cases" }>Cases</Link>
+                </SideNavListItem>
 
-                    <SideNavListItem className={`${pathname === '/cases' ? "moj-side-navigation__item--active" : ""}`}>
-                        <Link to={ "cases" }>Cases</Link>
-                    </SideNavListItem>
+                <SideNavListItem className={`${pathname === '/healthcare' ? "moj-side-navigation__item--active" : ""}`}>
+                    <Link to={ "healthcare" }>Healthcare</Link>
+                </SideNavListItem>
 
-                    <SideNavListItem className={`${pathname === '/healthcare' ? "moj-side-navigation__item--active" : ""}`}>
-                        <Link to={ "healthcare" }>Healthcare</Link>
-                    </SideNavListItem>
+                <SideNavListItem className={`${pathname === '/deaths' ? "moj-side-navigation__item--active" : ""}`}>
+                    <Link to={ "deaths" }>Deaths</Link>
+                </SideNavListItem>
 
-                    <SideNavListItem className={`${pathname === '/deaths' ? "moj-side-navigation__item--active" : ""}`}>
-                        <Link to={ "deaths" }>Deaths</Link>
-                    </SideNavListItem>
+                <SectionBreak/>
 
-                    <SectionBreak/>
-
-                    <SideNavListItem className={`${pathname === '/about-data' ? "moj-side-navigation__item--active" : ""}`}>
-                        <Link to={ "about-data" }>About the data</Link>
-                    </SideNavListItem>
-                </SideNavList>
-            </SideNav>
-        );
+                <SideNavListItem className={`${pathname === '/about-data' ? "moj-side-navigation__item--active" : ""}`}>
+                    <Link to={ "about-data" }>About the data</Link>
+                </SideNavListItem>
+            </SideNavList>
+        </SideNav>
+    );
 
 };
 
