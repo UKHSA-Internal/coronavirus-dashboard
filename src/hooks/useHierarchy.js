@@ -7,23 +7,16 @@ import URLs from "common/urls";
 
 const useHierarchy = () => {
 
-    const [ hierarchy, setHierarchy ] = useState(null);
+    const [ hierarchy, setHierarchy ] = useState({});
 
     useEffect(() => {
-
-        const getData = async () => {
-
+        (async () => {
             const { data } = await axios.get(
                 "area_hierarchy_v2.json",
                 { baseURL: URLs.lookups }
             );
-
             setHierarchy(data)
-
-        };
-
-        getData();
-
+        })()
     }, []);
 
     return hierarchy;
