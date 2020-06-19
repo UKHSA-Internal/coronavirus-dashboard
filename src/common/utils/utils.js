@@ -74,10 +74,11 @@ export const fillDateGaps = (data: Array<any>, defaultValue: number = 0): Array<
  *      Character used to separate individual queries. [Default: ``&``]
  * @param definitionChar { string }
  *      Character to be prepended to the query string. [Default: ``?``]
+ * @param removeDuplicates { boolean }
  * @returns { string }
  *      The query; starting with ``definitionChar`` and separated using ``joinBy``.
  */
-export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionChar: string="?" ): string => {
+export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionChar: string="?", removeDuplicates=true ): string => {
 
     let params = "";
 
@@ -89,9 +90,9 @@ export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionC
             fullPattern = new RegExp(`(${fullQuery})`),
             partialPattern = new RegExp(`(${partialQueryWithSign}[A-Za-z0-9\-,\\s]*)`);
 
-        if ( fullPattern.exec(params) ) continue;
+        if ( fullPattern.exec(params) && removeDuplicates ) continue;
 
-        if ( partialPattern.exec(params) ) {
+        if ( partialPattern.exec(params) && removeDuplicates ) {
             params = params.replace(partialPattern, fullQuery)
             continue
         }
