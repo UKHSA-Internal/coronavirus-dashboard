@@ -230,6 +230,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                                     value={ areaTypeData.filter(item => item.value === currentLocation.areaType) }
                                     onChange={ item => setCurrentLocation({ areaName: null, areaType: item.value }) }
                                     styles={ SelectOptions }
+                                    placeholder={ "Select area type" }
                                     className={ 'select' }/>
                         </div>
                     </div>
@@ -240,6 +241,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                                     styles={ SelectOptions }
                                     value={ areaNameData.filter(item => item.label === currentLocation.areaName) }
                                     isLoading={ data.length < 1 }
+                                    placeholder={ "Select area" }
                                     onChange={ item => setCurrentLocation({
                                         areaType: groupedAreaNameData[item.value][0].areaType,
                                         areaName: item.value
