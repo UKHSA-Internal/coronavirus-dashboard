@@ -3,6 +3,7 @@
 import { dropLeadingZeros, hexToRgb } from "./utils";
 import { movingAverage } from "../stats";
 import numeral from "numeral";
+import moment from "moment";
 
 
 export const getPlotData = (fields: Array<{}>, rawData) => {
@@ -19,7 +20,8 @@ export const getPlotData = (fields: Array<{}>, rawData) => {
 
             const
                 data = dropLeadingZeros(rawData, field.value),
-                { r, g, b } = hexToRgb(colours[field.colour]);
+                { r, g, b } = hexToRgb(colours[field.colour]),
+                xData = data?.map(item => item?.date ?? null) ?? [];
 
             let
                 yData = data?.map(variable => variable?.[field.value] ?? null) ?? [],
@@ -58,9 +60,9 @@ export const getPlotData = (fields: Array<{}>, rawData) => {
 
             return {
                 name: field.label,
-                x: data?.map(item => item?.date ?? null) ?? [],
+                x: xData,
                 y: yData,
-                text: yData.map(value => `${ numeral(value).format("0,0") }<br>${field.label}`),
+                text: yData.map((value, index) => `${field.label}: ${ numeral(value).format("0,0") }<br>${ moment(xData[index]).format("DD MMM YYYY") }`),
                 hoverinfo: "text",
                 ...plotFeatures
             }
