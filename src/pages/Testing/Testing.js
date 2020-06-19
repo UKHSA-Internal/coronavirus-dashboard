@@ -26,6 +26,7 @@ import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import { MainLoading } from "components/Loading";
 import { DataTable } from "components/GovUk";
+import numeral from "numeral";
 
 
 const
@@ -59,6 +60,8 @@ const NationsDaily = () => {
                 name: areaName,
                 x: groups[areaName].map(item => item.date),
                 y: groups[areaName].map(item => item.value),
+                text: groups[areaName].map(item => `${ numeral(item.value).format("0,0") }<br>${areaName}`),
+                hoverinfo: "text",
                 fill: 'tozeroy',
                 type: "bar",
                 marker: {
@@ -96,6 +99,8 @@ const NationsCumulative = () => {
                 name: areaName,
                 x: groups[areaName].map(item => item.date),
                 y: groups[areaName].map(item => item.value),
+                text: groups[areaName].map(item => `${ numeral(item.value).format("0,0") }<br>${areaName}`),
+                hoverinfo: "text",
                 fill: 'tozeroy',
                 type: "bar",
                 marker: {
