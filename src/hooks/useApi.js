@@ -27,7 +27,8 @@ const usePrevious = (value) => {
 
 
 const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
-                    defaultResponse=[], extraParams=[] }: useApiInputs): useApiResponse => {
+                    defaultResponse=[], extraParams=[],
+                    endpoint="mainApi"}: useApiInputs): useApiResponse => {
 
     const
         [ data, setData ] = useState(defaultResponse),
@@ -40,7 +41,7 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
 
         const
             conjunctive = createQuery(conjunctiveFilters, ";", "") || "",
-            disjunctive = createQuery(disjunctiveFilters, "|", "") || "",
+            disjunctive = createQuery(disjunctiveFilters, "|", "", false) || "",
             paramString = `${conjunctive}${(conjunctive && disjunctive) ? ";" : ""}${disjunctive}`,
             urlParams = createQuery([
                 {
@@ -65,7 +66,7 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
                 !deepEqual(prevExtraParams, extraParams)
             )
                 try {
-                    const { data: dt } = await axios.get(URLs.api + urlParams);
+                    const { data: dt } = await axios.get(URLs[endpoint] + urlParams);
                     setData(dt.data)
                 } catch (e) {
                     console.error(e)
