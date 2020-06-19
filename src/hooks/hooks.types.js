@@ -12,5 +12,7 @@ export type useApiInputs = {
     disjunctiveFilters: ParsedParams,
     structure: useApiStructureInput,
     defaultResponse: useApiResponseInput,
-    extraParams: ParsedParams
+    extraParams: ParsedParams,
+    endpoint: "lookupApi"
+            | "mainApi"
 }
