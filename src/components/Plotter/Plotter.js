@@ -82,7 +82,7 @@ import useResponsiveLayout from "hooks/useResponsiveLayout";
 // }; // Plotter
 
 
-export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin={}, ...props }) => {
+export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin={}, isTimeSeries=true, ...props }) => {
 
     const width = useResponsiveLayout(640);
 
@@ -148,7 +148,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     ticks: "outside",
                     tickson: "boundaries",
                     ticklen: 'labels',
-                    type: "date",
+                    type: isTimeSeries ? "date" : "category",
                     tickformat: '%d %b',
                     tickfont:{
                         family: `"GDS Transport", Arial, sans-serif`,
