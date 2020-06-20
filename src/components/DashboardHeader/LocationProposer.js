@@ -76,12 +76,14 @@ const LocationProposer = ({ lastParams, referrer }) => {
         if ( currentLocation !== referrer && destinationPage && destination ) {
             console.log(destination);
 
-            setDispatch(<p style={{ fontFamily: "monospace" }}>
-                <strong>FEATURE TEST [Dev use]:</strong><br/>
-                Referrer: { referrer }<br/>
-                Destination: { destinationPage }<br/>
-                Suggestion: { destination[destinationPage].areaName }
-            </p>)
+            setDispatch(null
+            //     <p style={{ fontFamily: "monospace" }}>
+            //     <strong>FEATURE TEST [Dev use]:</strong><br/>
+            //     Referrer: { referrer }<br/>
+            //     Destination: { destinationPage }<br/>
+            //     Suggestion: { destination[destinationPage].areaName }
+            // </p>
+            )
         } else {
             setDispatch(null)
         }
