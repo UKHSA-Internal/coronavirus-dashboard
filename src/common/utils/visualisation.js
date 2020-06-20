@@ -2,19 +2,20 @@
 
 import { dropLeadingZeros, hexToRgb } from "./utils";
 import { movingAverage } from "../stats";
-import numeral from "numeral";
-import moment from "moment";
+
+
+const
+    // yellow, cornFlowerBlue, darkBlue, red, gray
+    colours = [
+        '#FFBF47',  // yellow
+        '#2B8CC4',  // corn flower blue
+        '#2E358B',  // dark blue
+        '#DF3034',  // red
+        "#7f7f7f"   // gray
+    ];
 
 
 export const getPlotData = (fields: Array<{}>, rawData) => {
-
-    const
-        // yellow, cornFlowerBlue, darkBlue, red, gray
-        colours = [
-            '#FFBF47', '#2B8CC4',
-            '#2E358B', '#DF3034',
-            "#7f7f7f"
-        ];
 
     return fields.map(field => {
 
