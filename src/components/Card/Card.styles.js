@@ -44,7 +44,7 @@ export const FullCard: ComponentType<*> = (() => {
         border: 1px #f3f2f1 solid;
         margin-bottom: 30px;
         background-color: #f8f8f8;
-        min-height: 480px;
+        min-height: 450px;
     `;
 })();
 

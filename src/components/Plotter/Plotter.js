@@ -90,7 +90,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                 showLink: false,
                 responsive: true,
                 displaylogo: false,
-                displayModeBar: true,
+                // displayModeBar: true,
                 modeBarButtonsToRemove: [
                     "autoScale2d",
                     // "zoomIn2d",
@@ -113,7 +113,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                 // onLegendItem
             } }
             useResizeHandler={ true }
-            style={{ height: 350 }}
+            style={{ display: "block", height: 350 }}
             layout={ {
                 // barmode: "overlay",
                 // barmode: "stack",
@@ -130,10 +130,10 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                 },
                 showlegend: true,
                 margin: {
-                    l: 65,
+                    l: 80,
                     r: 10,
                     b: 25,
-                    t: 5,
+                    t: 10,
                     pad: 0,
                     ...margin
                 },
@@ -177,6 +177,11 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     ...xaxis
                 },
                 yaxis: {
+                    tickslen: 5,
+                    ticks: "outside",
+                    tickson: "boundaries",
+                    ticklen: 'labels',
+                    tickcolor: "#f1f1f1",
                     tickformat: ',r',
                     tickfont:{
                         family: `"GDS Transport", Arial, sans-serif`,
