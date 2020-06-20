@@ -60,17 +60,24 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
         (async () => {
 
             if (
-                !deepEqual(prevConjunctiveParams, conjunctiveFilters) ||
-                !deepEqual(prevDisjunctiveParams, disjunctiveFilters ) ||
-                !deepEqual(prevStructure, structure) ||
-                !deepEqual(prevExtraParams, extraParams)
-            )
+                (
+                    conjunctiveFilters.length > 0 ||
+                    disjunctiveFilters.length > 0 ||
+                    extraParams.length > 0
+                ) && (
+                    !deepEqual(prevConjunctiveParams, conjunctiveFilters) ||
+                    !deepEqual(prevDisjunctiveParams, disjunctiveFilters ) ||
+                    !deepEqual(prevStructure, structure) ||
+                    !deepEqual(prevExtraParams, extraParams)
+                )
+            ) {
                 try {
                     const { data: dt } = await axios.get(URLs[endpoint] + urlParams);
                     setData(dt.data)
                 } catch (e) {
                     console.error(e)
                 }
+            }
 
         })()
 
