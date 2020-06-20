@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import ModalTooltip from "components/Modal";
 
-import type { Props } from './Card.types';
+import type { Props, ValueItemType } from './Card.types';
 import {
     HalfCard,
     HalfCardHeader,
@@ -29,6 +29,7 @@ import {
 } from './Card.styles';
 import numeral from 'numeral'
 import ReactTooltip from "react-tooltip";
+import { Radios } from "govuk-react-jsx";
 
 
 const VisualSection: ComponentType<Props> = ({ children }: Props) => {
@@ -50,14 +51,19 @@ const NumericReports: ComponentType<Props> = ({ children, horizontal=false }: Pr
 }; // ValueItemContainer
 
 
-const ValueItem: ComponentType<Props> = ({
-         caption, primaryLabel, primaryValue, primaryModal=null, primaryTooltip=null,
-         primarySign=null, primaryModalReplacements={}, secondaryLabel=null,
-         secondaryValue=null, secondaryModal=null, secondaryTooltip=null,
-         secondarySign=null, secondaryModalReplacements={}, chart={}, isEnabled=true,
-                                             setChartState=() => null }: Props) => {
+const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) => {
 
-    const tipId = encodeURI(primaryLabel);
+    const
+        {
+            caption, primaryLabel, primaryValue, primaryModal=null, primaryTooltip=null,
+            primarySign=null, primaryModalReplacements={},
+
+            secondaryLabel=null, secondaryValue=null, secondaryModal=null,
+            secondaryTooltip=null, secondarySign=null, secondaryModalReplacements={},
+
+            chart={}, isEnabled=true, setChartState=() => null
+        } = props,
+        tipId = encodeURI(props.primaryLabel);
 
     return <DataContainer>
         {
