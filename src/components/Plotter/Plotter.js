@@ -2,6 +2,7 @@ import React from "react";
 import Plot from "react-plotly.js";
 import URLs from "common/urls";
 import { PlotContainer } from "./Plotter.styles";
+import useResponsiveLayout from "hooks/useResponsiveLayout";
 
 
 // export const Plotter = ({ layout={}, xaxis={}, yaxis={}, ...props }) => {
@@ -83,6 +84,8 @@ import { PlotContainer } from "./Plotter.styles";
 
 export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin={}, ...props }) => {
 
+    const width = useResponsiveLayout(640);
+
     return <PlotContainer className={ "govuk-grid-row" }>
         <Plot
             data={ data }
@@ -130,7 +133,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                 },
                 showlegend: true,
                 margin: {
-                    l: 80,
+                    l: width === "desktop" ? 80 : 40,
                     r: 10,
                     b: 25,
                     t: 10,
@@ -182,7 +185,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     tickson: "boundaries",
                     ticklen: 'labels',
                     tickcolor: "#f1f1f1",
-                    tickformat: ',r',
+                    tickformat: width === "desktop" ? ',r': '.2s',
                     tickfont:{
                         family: `"GDS Transport", Arial, sans-serif`,
                         size : 14,
