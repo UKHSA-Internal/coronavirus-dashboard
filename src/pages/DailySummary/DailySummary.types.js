@@ -1,6 +1,6 @@
 // @flow
 
-import type { UKSummaryField } from "hooks/hooks.types";
+import type { UKSummaryField } from "hooks/usePageLayout.types";
 
 export type Props = {||};
 
