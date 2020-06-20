@@ -57,18 +57,25 @@ const NationsDaily = () => {
 
     return <Plotter
         data={
-            Object.keys(groups).map((areaName, index) => ({
-                name: areaName,
-                x: groups[areaName].map(item => item.date),
-                y: groups[areaName].map(item => item.value),
-                text: groups[areaName].map(item => `${ numeral(item.value).format("0,0") }<br>${areaName}`),
-                hoverinfo: "text",
-                fill: 'tozeroy',
-                type: "bar",
-                marker: {
-                    color: colours[index]
+            Object.keys(groups).map((areaName, index) => {
+
+                const
+                    yData = groups[areaName].map(item => item.value),
+                    xData = groups[areaName].map(item => item.date);
+
+                return {
+                    name: areaName,
+                    x: xData,
+                    y: yData,
+                    hovertemplate: "%{y}",
+                    fill: 'tozeroy',
+                    type: "bar",
+                    marker: {
+                        color: colours[index]
+                    }
                 }
-            }))
+
+            })
         }
         layout={{ barmode: "stack" }}
     />
@@ -106,8 +113,7 @@ const NationsCumulative = () => {
                     name: areaName,
                     x: xData,
                     y: yData,
-                    text: yData.map((value, index) => `${areaName}: ${ numeral(value).format("0,0") }<br>${ moment(xData[index]).format("DD MMM YYYY") }`),
-                    hoverinfo: "text",
+                    hovertemplate: "%{y}",
                     fill: 'tozeroy',
                     type: "bar",
                     marker: {

@@ -177,7 +177,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     ...xaxis
                 },
                 yaxis: {
-                    tickformat: '{n}f',
+                    tickformat: ',r',
                     tickfont:{
                         family: `"GDS Transport", Arial, sans-serif`,
                         size : 14,
