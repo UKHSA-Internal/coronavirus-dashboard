@@ -62,8 +62,7 @@ export const getPlotData = (fields: Array<{}>, rawData) => {
                 name: field.label,
                 x: xData,
                 y: yData,
-                text: yData.map((value, index) => `${field.label}: ${ numeral(value).format("0,0") }<br>${ moment(xData[index]).format("DD MMM YYYY") }`),
-                hoverinfo: "text",
+                hovertemplate: "%{y}",
                 ...plotFeatures
             }
 
