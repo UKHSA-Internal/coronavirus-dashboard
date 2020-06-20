@@ -6,20 +6,19 @@ import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 
 import { Plotter } from "components/Plotter"
-import { Card, NumericReports, ValueBox } from 'components/Card';
+import { Card, CardHeader, NumericReports, ValueBox } from 'components/Card';
 import type {
     Props,
     TabContentProps,
     TabContentType
 } from './Cases.types';
-import { getParams, getPlotData } from "common/utils";
+import { colours, dropLeadingZeros, getParams, getPlotData, groupBy } from "common/utils";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import { MainLoading } from "components/Loading";
-import { DataTable } from "components/GovUk";
-import { Radios } from 'govuk-react-jsx';
+import { DataTable, Radio } from "components/GovUk";
 
 
 const
@@ -28,26 +27,6 @@ const
         { key: 'areaType', sign: '=', value: 'overview' }
     ];
 
-
-const Radio = ({ options, value, setValue }) => {
-
-    return <Radios
-        value={ value }
-        onChange={ e => setValue(e.target.value) }
-        className="govuk-radios--inline"
-        formGroup={{ className: 'govuk-radios--small' }}
-        fieldset={{
-          legend: { children: [''] }
-        }}
-        items={
-            options
-                .choices
-                .map(choice => ({ children: [ choice ], value: choice }))
-        }
-        name="option-choices"
-    />
-
-}
 
 
 const TabContent: TabContentType<TabContentProps> = ({ fields, params, tabType, barType=null }: TabContentProps): React$Component => {
@@ -82,6 +61,71 @@ const TabContent: TabContentType<TabContentProps> = ({ fields, params, tabType, 
 };  // TabContent
 
 
+const ageSort = (a, b) => {
+
+    const
+        ageA = parseInt(/(\d+)/.exec(a)[1]),
+        ageB = parseInt(/(\d+)/.exec(b)[1]);
+
+    return ( ageA > ageB ) || -(ageA < ageB || 0)
+
+}; // ageSexSort
+
+
+const AgeSexBreakdown = ({ params, numericValue }) => {
+
+    const
+        data = useApi({
+            conjunctiveFilters: params,
+            structure: {
+                femaleCases: "femaleCases",
+                maleCases: "maleCases",
+                name: "areaName"
+            },
+            extraParams: [
+                { key: "latestBy", sign: "=", value: "femaleCases" }
+            ],
+            defaultResponse: []
+        }),
+        malesGrouped = groupBy(data?.[0]?.maleCases ?? [], item => item.age),
+        femalesGrouped = groupBy(data?.[0]?.femaleCases ?? [], item => item.age),
+        sortedGroups = Object.keys(femalesGrouped).sort(ageSort),
+        groupNames = sortedGroups
+            .map(item =>
+                item
+                    .replace(/_/g, " ")
+                    .replace(/to/, "-")
+            );
+
+    return <Plotter
+        data={[
+            {
+                name: "Male",
+                x: groupNames,
+                y: sortedGroups.map(item => malesGrouped[item][0][numericValue]),
+                hovertemplate: "%{y}",
+                type: "bar",
+                marker: {
+                    color: colours[1]
+                }
+            },
+            {
+                name: "Female",
+                x: groupNames,
+                y: sortedGroups.map(item => femalesGrouped[item][0][numericValue]),
+                hovertemplate: "%{y}",
+                type: "bar",
+                marker: {
+                    color: colours[2]
+                }
+            }
+        ]}
+        layout={{ barmode: "group" }}
+        isTimeSeries={ false }
+    />
+
+};
+
 const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=null,
                          heading, fullWidth, ...props }) => {
 
@@ -96,7 +140,10 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
     switch ( cardType ) {
 
         case "chart":
-            Component = <Card heading={ heading } fullWidth={ fullWidth }>
+            Component = <Card fullWidth={ fullWidth }>
+                <CardHeader heading={ heading } fullWidth={ fullWidth }>
+                    { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
+                </CardHeader>
                 <TabLinkContainer>{
                 tabs?.map(({ heading, ...rest }) =>
                     <TabLink key={ `tab-${ heading }` } label={ heading }>
@@ -108,7 +155,10 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
             break;
 
         case "map":
-            Component = <Card heading={ heading } fullWidth={ fullWidth }>
+            Component = <Card fullWidth={ fullWidth }>
+                    <CardHeader heading={ heading } fullWidth={ fullWidth }>
+                        { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
+                    </CardHeader>
                     <TabLinkContainer>{
                     tabs?.map(({ heading: tabHeading, fields }) =>
                         <TabLink key={ `tab-${ tabHeading }` }
@@ -125,11 +175,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 
     }
 
-    return <Fragment>
-        { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
-        {/*<Component/>*/}
-        { Component }
-    </Fragment>
+    return Component
 
 };  // TestingCard
 
@@ -154,7 +200,7 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
     if ( !layout ) return <MainLoading/>;
 
-    return <Fragment>
+    return <>
         <NumericReports horizontal={ true }>
             <HeadlineNumbers params={ params } { ...layout }/>
         </NumericReports>
@@ -163,7 +209,31 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
                 <CardContent key={ `card-${ index }` } params={ params } { ...cardProps }/>
             ) ?? null
         }
-    </Fragment>
+        <div className={ 'util-flex util-flex-wrap' }>
+            <Card fullWidth={ false }>
+                <CardHeader heading={ "Age and sex breakdown" } fullWidth={ false }/>
+                <TabLinkContainer>
+                    <TabLink label={ "Chart" }>
+                        <AgeSexBreakdown params={ params } numericValue={ "value" }/>
+                    </TabLink>
+                    <TabLink label={ "Data" }>
+                        <AgeSexBreakdown params={ params }/>
+                    </TabLink>
+                </TabLinkContainer>
+            </Card>
+            <Card fullWidth={ false }>
+                <CardHeader heading={ "Age and sex breakdown by rate" } fullWidth={ false }/>
+                <TabLinkContainer>
+                    <TabLink label={ "Chart" }>
+                        <AgeSexBreakdown params={ params } numericValue={ "rate" }/>
+                    </TabLink>
+                    <TabLink label={ "Data" }>
+                        <AgeSexBreakdown params={ params }/>
+                    </TabLink>
+                </TabLinkContainer>
+            </Card>
+        </div>
+    </>
 };
 
 export default withRouter(Cases);
