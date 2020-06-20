@@ -5,7 +5,7 @@ import type { ComponentType } from 'react';
 
 import { withRouter } from 'react-router';
 
-import { Card, NumericReports, ValueItem} from 'components/Card';
+import { Card, NumericReports, ValueBox} from 'components/Card';
 import type {
     Props,
     TabContentProps,
@@ -14,10 +14,9 @@ import type {
 import {
     getParams,
     groupBy,
-    getMaxDateValuePair,
-    strFormat,
     dropLeadingZeros,
-    getPlotData
+    getPlotData,
+    colours
 } from "common/utils";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
@@ -26,8 +25,6 @@ import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import { MainLoading } from "components/Loading";
 import { DataTable } from "components/GovUk";
-import numeral from "numeral";
-import moment from "moment";
 
 
 const
@@ -52,8 +49,7 @@ const NationsDaily = () => {
             },
             defaultResponse: []
         }),
-        groups = groupBy(dropLeadingZeros(data,"value"), item => item.name),
-        colours = ['#2B8CC4', '#FFBF47', '#2E358B', '#DF3034', "#7f7f7f"];
+        groups = groupBy(dropLeadingZeros(data,"value"), item => item.name);
 
     return <Plotter
         data={
@@ -98,8 +94,7 @@ const NationsCumulative = () => {
             },
             defaultResponse: []
         }),
-        groups = groupBy(dropLeadingZeros(data, "value"), item => item.name),
-        colours = ['#2B8CC4', '#FFBF47', '#2E358B', '#DF3034', "#7f7f7f"];
+        groups = groupBy(dropLeadingZeros(data, "value"), item => item.name);
 
     return <Plotter
         data={
@@ -196,51 +191,11 @@ const TestingCard = ({ tabs, tabs: { heading }, cardType, params, ...props }) =>
 };  // TestingCard
 
 
-const ValueBox = ({ data, primaryValue, secondaryValue=null, primaryTooltip="", secondaryTooltip="", ...rest }) => {
-
-    const
-        primaryData = getMaxDateValuePair(data, primaryValue),
-        secondaryData = getMaxDateValuePair(data, secondaryValue),
-        primaryReplacements = { kwargs: primaryData },
-        secondaryReplacements = { kwargs: primaryData };
-
-    return <ValueItem
-        primaryValue={ primaryData.value }
-        primaryTooltip={ strFormat(primaryTooltip, primaryReplacements) }
-        primaryModal={ primaryValue }
-        primaryModalReplacements={ primaryReplacements }
-        secondaryValue={ secondaryData.value }
-        secondaryTooltip={ strFormat(secondaryTooltip, secondaryReplacements) }
-        secondaryModal={ secondaryValue }
-        secondaryModalReplacements={ secondaryReplacements }
-        { ...rest }
-    />
-
-};  // getValueItemSections
-
-
 const HeadlineNumbers = ({ params, headlineNumbers=[] }) => {
 
-    const structure = { date: "date" };
-
-    for ( const { primaryValue, secondaryValue=null } of headlineNumbers ) {
-
-        structure[primaryValue] = primaryValue;
-
-        if ( secondaryValue )
-            structure[secondaryValue] = secondaryValue;
-
-    }
-
-    const data = useApi({
-        conjunctiveFilters: params,
-        structure: structure,
-        defaultResponse: []
-    });
-
     return headlineNumbers?.map((item, index) =>
-        <ValueBox data={ data }
-                  key={ `headlineNumber-${index}` }
+        <ValueBox params={ params }
+                  key={ `headline-number-${index}` }
                   { ...item }/>
     ) ?? null
 

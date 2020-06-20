@@ -4,21 +4,12 @@ import React, { useState, useEffect } from 'react';
 import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 
-import moment from "moment";
-
-import { Card, VisualSection, ValueItem, NumericReports } from 'components/Card';
+import { Card, VisualSection, ValueBox, NumericReports } from 'components/Card';
 
 import { Container } from './DailySummary.styles';
 
 import { max } from "d3-array";
-import {
-    getParams,
-    hexToRgb,
-    strFormat,
-    getMaxDateValuePair,
-    dropLeadingZeros
-} from "common/utils";
-// import { movingAverage } from "common/stats";
+import { getParams, } from "common/utils";
 
 import { getPlotData } from "common/utils";
 
@@ -31,7 +22,6 @@ import URLs from "common/urls";
 import type {
     DailySummaryCardProps
 } from "./DailySummary.types";
-import type { UKSummaryField } from "hooks/usePageLayout.types";
 
 
 const
@@ -88,30 +78,6 @@ const NationDeathsPlot = ({ ...props }) => {
     />
 
 };  // DeathsCard
-
-
-const ValueBox = ({ data, primaryValue, secondaryValue=null, primaryTooltip="", secondaryTooltip="", isEnabled=true, ...rest }) => {
-
-    const
-        primaryData = getMaxDateValuePair(data, primaryValue),
-        secondaryData = getMaxDateValuePair(data, secondaryValue),
-        primaryReplacements = { kwargs: primaryData },
-        secondaryReplacements = { kwargs: primaryData };
-
-    return <ValueItem
-        primaryValue={ primaryData.value }
-        primaryTooltip={ strFormat(primaryTooltip, primaryReplacements) }
-        primaryModal={ primaryValue }
-        primaryModalReplacements={ primaryReplacements }
-        secondaryValue={ secondaryData.value }
-        secondaryTooltip={ strFormat(secondaryTooltip, secondaryReplacements) }
-        secondaryModal={ secondaryValue }
-        secondaryModalReplacements={ secondaryReplacements }
-        isEnabled={ isEnabled }
-        { ...rest }
-    />
-
-};  // getValueItemSections
 
 
 const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout, heading }: DailySummaryCardProps) => {
@@ -171,6 +137,7 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
             {
                 layout.map((item, index) =>
                     <ValueBox { ...item }
+                              params={ params }
                               data={ data }
                               isEnabled={ plotData?.[(item?.chart?.value ?? null)] ?? true }
                               setChartState={ () => {
