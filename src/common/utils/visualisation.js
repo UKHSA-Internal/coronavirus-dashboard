@@ -19,54 +19,54 @@ export const getPlotData = (fields: Array<{}>, rawData) => {
 
     return fields.map(field => {
 
-            const
-                data = dropLeadingZeros(rawData, field.value),
-                { r, g, b } = hexToRgb(colours[field.colour]),
-                xData = data?.map(item => item?.date ?? null) ?? [];
+        const
+            data = dropLeadingZeros(rawData, field.value),
+            { r, g, b } = hexToRgb(colours[field.colour]),
+            xData = data?.map(item => item?.date ?? null) ?? [];
 
-            let
-                yData = data?.map(variable => variable?.[field.value] ?? null) ?? [],
-                plotFeatures;
+        let
+            yData = data?.map(variable => variable?.[field.value] ?? null) ?? [],
+            plotFeatures;
 
-            switch ( field.type ) {
-                case "bar":
-                    plotFeatures = {
-                        type: field.type,
-                        marker: {
-                            color: colours[field.colour]
-                        }
+        switch ( field.type ) {
+            case "bar":
+                plotFeatures = {
+                    type: field.type,
+                    marker: {
+                        color: colours[field.colour]
                     }
-                    break;
+                }
+                break;
 
-                case "line":
-                    plotFeatures = {
-                        type: field.type,
-                        mode: 'lines',
-                        ...(field?.fill ?? true)
-                            ? {
-                                fill: 'tozeroy',
-                                fillcolor: `rgba(${ r },${ g },${ b },0.1)`
-                            }:
-                            {},
-                        line: {
-                            width: 3,
-                            color: colours[field.colour]
-                        }
-                    };
-                    break;
+            case "line":
+                plotFeatures = {
+                    type: field.type,
+                    mode: 'lines',
+                    ...(field?.fill ?? true)
+                        ? {
+                            fill: 'tozeroy',
+                            fillcolor: `rgba(${ r },${ g },${ b },0.1)`
+                        }:
+                        {},
+                    line: {
+                        width: 3,
+                        color: colours[field.colour]
+                    }
+                };
+                break;
 
-            }
+        }
 
-            yData = field.rollingAverage ? movingAverage(yData, 7) : yData
+        yData = field.rollingAverage ? movingAverage(yData, 7) : yData
 
-            return {
-                name: field.label,
-                x: xData,
-                y: yData,
-                hovertemplate: "%{y}",
-                ...plotFeatures
-            }
+        return {
+            name: field.label,
+            x: xData,
+            y: yData,
+            hovertemplate: "%{y}",
+            ...plotFeatures
+        }
 
-        });
+    });
 
 };  // getYAxisData
