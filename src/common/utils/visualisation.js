@@ -4,7 +4,7 @@ import { dropLeadingZeros, hexToRgb } from "./utils";
 import { movingAverage } from "../stats";
 
 
-const
+export const
     // yellow, cornFlowerBlue, darkBlue, red, gray
     colours = [
         '#FFBF47',  // yellow
