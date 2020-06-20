@@ -5,7 +5,7 @@ import type { ComponentType } from 'react';
 
 import { withRouter } from 'react-router';
 
-import { Card, NumericReports, ValueBox  } from 'components/Card';
+import { Card, CardHeader, NumericReports, ValueBox } from 'components/Card';
 import type {
     Props,
     TabContentProps,
@@ -18,8 +18,7 @@ import { Plotter } from "components/Plotter";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import { MainLoading } from "components/Loading";
-import { DataTable } from "components/GovUk";
-import { Radios } from 'govuk-react-jsx';
+import { DataTable, Radio } from "components/GovUk";
 
 
 const
@@ -27,27 +26,6 @@ const
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
         { key: 'areaType', sign: '=', value: 'overview' }
     ];
-
-
-const Radio = ({ options, value, setValue }) => {
-
-    return <Radios
-        value={ value }
-        onChange={ e => setValue(e.target.value) }
-        className="govuk-radios--inline"
-        formGroup={{ className: 'govuk-radios--small' }}
-        fieldset={{
-          legend: { children: [''] }
-        }}
-        items={
-            options
-                .choices
-                .map(choice => ({ children: [ choice ], value: choice }))
-        }
-        name="option-choices"
-    />
-
-}
 
 
 const TabContent: TabContentType<TabContentProps> = ({ fields, params, tabType, barType=null }: TabContentProps): React$Component => {
@@ -82,7 +60,8 @@ const TabContent: TabContentType<TabContentProps> = ({ fields, params, tabType, 
 };  // TabContent
 
 
-const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=null, ...props }) => {
+const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=null,
+                         heading, fullWidth, ...props }) => {
 
     const
         [ active, setActive ] = useState(options?.choices?.[0] ?? null),
@@ -95,24 +74,34 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
     switch ( cardType ) {
 
         case "chart":
-            Component = <TabLinkContainer>{
+            Component = <Card fullWidth={ fullWidth }>
+                <CardHeader heading={ heading } fullWidth={ fullWidth }>
+                    { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
+                </CardHeader>
+                <TabLinkContainer>{
                 tabs?.map(({ heading, ...rest }) =>
                     <TabLink key={ `tab-${ heading }` } label={ heading }>
                         <TabContent params={ params } { ...props } { ...rest }/>
                     </TabLink>
                 ) ?? null
-            }</TabLinkContainer>;
+            }</TabLinkContainer>
+            </Card>;
             break;
 
         case "map":
-            Component = <TabLinkContainer>{
-                tabs?.map(({ heading: tabHeading, fields }) =>
-                    <TabLink key={ `tab-${ tabHeading }` }
-                             label={ tabHeading }>
-                        <p>Not implemented.</p>
-                    </TabLink>
-                ) ?? null
-            }</TabLinkContainer>;
+            Component = <Card fullWidth={ fullWidth }>
+                    <CardHeader heading={ heading } fullWidth={ fullWidth }>
+                        { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
+                    </CardHeader>
+                    <TabLinkContainer>{
+                    tabs?.map(({ heading: tabHeading, fields }) =>
+                        <TabLink key={ `tab-${ tabHeading }` }
+                                 label={ tabHeading }>
+                            <p>Not implemented.</p>
+                        </TabLink>
+                    ) ?? null
+                }</TabLinkContainer>
+            </Card>;
             break;
 
         default:
@@ -120,14 +109,9 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 
     }
 
-    return <Fragment>
-        { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
-        {/*<Component/>*/}
-        { Component }
-    </Fragment>
+    return Component
 
 };  // TestingCard
-
 
 const HeadlineNumbers = ({ params, headlineNumbers=[] }) => {
 
@@ -154,11 +138,9 @@ const Deaths: ComponentType<Props> = ({ location: { search: query }}: Props) => 
             <HeadlineNumbers params={ params } { ...layout }/>
         </NumericReports>
         {
-            layout?.cards.map(( { heading, fullWidth, ...rest }, index ) =>
-                <Card key={ `card-${ index }` } heading={ heading } fullWidth={ fullWidth }>
-                    <CardContent params={ params } { ...rest }/>
-                </Card> ?? null
-            )
+            layout?.cards.map(( cardProps, index ) =>
+                <CardContent key={ `card-${ index }` } params={ params } { ...cardProps }/>
+            ) ?? null
         }
     </Fragment>
 };
