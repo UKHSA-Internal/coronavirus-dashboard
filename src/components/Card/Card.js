@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import type { ComponentType } from 'react';
 import { Link } from "react-router-dom";
 
@@ -30,6 +30,9 @@ import {
 import numeral from 'numeral'
 import ReactTooltip from "react-tooltip";
 import { Radios } from "govuk-react-jsx";
+import { colours, strFormat } from "common/utils";
+import useApi from "hooks/useApi";
+import moment from "moment";
 
 
 const VisualSection: ComponentType<Props> = ({ children }: Props) => {
@@ -49,6 +52,53 @@ const NumericReports: ComponentType<Props> = ({ children, horizontal=false }: Pr
     return <BodySection>{ children }</BodySection>
 
 }; // ValueItemContainer
+
+
+const ValueBox = ({ params, primaryValue, secondaryValue=null, primaryTooltip="", secondaryTooltip="", ...rest }) => {
+
+    const
+        defaultResponse = [ { date: null, value: null } ],
+        getApiArgs = varName => ({
+            conjunctiveFilters: params,
+            extraParams: [
+                { key: "latestBy", sign: "=", value: varName }
+            ],
+            structure: {
+                date: "date",
+                value: varName
+            },
+            defaultResponse: defaultResponse
+        }),
+        primaryData = useApi(getApiArgs(primaryValue)),
+        secondaryData = useApi(
+            secondaryValue
+                ? getApiArgs(secondaryValue)
+                : {conjunctiveFilters: [], defaultResponse: defaultResponse}
+        ),
+        primaryReplacements = {
+            kwargs: {
+                ...(primaryData?.[0] ?? {} ),
+                date: moment(primaryData?.[0].date ?? null).format("dddd, D MMMM YYYY")
+            }
+        },
+        secondaryReplacements = {
+            kwargs: {
+                ...(secondaryData?.[0] ?? {} ),
+                date: moment(secondaryData?.[0].date ?? null).format("dddd, D MMMM YYYY")
+            }
+        };
+
+    return <ValueItem primaryValue={ primaryData?.[0]?.value }
+                      primaryTooltip={ strFormat(primaryTooltip, primaryReplacements) }
+                      primaryModal={ primaryValue }
+                      primaryModalReplacements={ primaryReplacements }
+                      secondaryValue={ secondaryData?.[0]?.value }
+                      secondaryTooltip={ strFormat(secondaryTooltip, secondaryReplacements) }
+                      secondaryModal={ secondaryValue }
+                      secondaryModalReplacements={ secondaryReplacements }
+                      { ...rest }/>
+
+};  // getValueItemSections
 
 
 const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) => {
@@ -75,7 +125,7 @@ const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) =>
                             the "${ caption.toLowerCase() }" on the graph.`
                         }
                         onClick={ setChartState }
-                        colour={ isEnabled ? chart.colour : "none" } />
+                        colour={ isEnabled ? (colours?.[chart.colour] ?? "") : "none" } />
         }
         <Heading>{ caption }</Heading>
         <DataNumbersContainer>
@@ -127,13 +177,36 @@ const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) =>
 }; // ValueItem
 
 
-const Card: ComponentType<Props> = ({ heading="Placeholder", caption="", fullWidth=false, children }: Props) => {
+const Radio = ({ options, value, setValue }) => {
+
+    return <Radios
+        value={ value }
+        onChange={ e => setValue(e.target.value) }
+        className="govuk-radios--inline"
+        formGroup={{ className: 'govuk-radios--small' }}
+        fieldset={{
+          legend: { children: [''] }
+        }}
+        items={
+            options
+                .choices
+                .map(choice => ({ children: [ choice ], value: choice }))
+        }
+        name="option-choices"
+    />
+
+};  // Radio
+
+
+const Card: ComponentType<Props> = ({singleOptionTabs=null, heading="Placeholder",
+                                caption="", fullWidth=false, children }: Props) => {
 
     if ( !fullWidth ) {
         return <HalfCard>
             <HalfCardHeader>
                 <HalfCardHeading>{ heading }</HalfCardHeading>
-                <Link to={ heading.toLowerCase() } className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>
+                <Link to={ heading.toLowerCase() }
+                      className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>
                     More detail
                 </Link>
             </HalfCardHeader>
@@ -151,7 +224,6 @@ const Card: ComponentType<Props> = ({ heading="Placeholder", caption="", fullWid
         </FullCardHeader>
         { children }
     </FullCard>
-
 };  // Card
 
 
@@ -159,5 +231,6 @@ export {
     Card,
     VisualSection,
     ValueItem,
+    ValueBox,
     NumericReports,
 };
