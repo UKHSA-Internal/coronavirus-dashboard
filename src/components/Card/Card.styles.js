@@ -57,16 +57,6 @@ export const FullCard: ComponentType<*> = (() => {
 })();
 
 
-export const FullCardHeader = ({ className="", ...props }) => (
-    <header className={ `util-flex util-flex-wrap util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2 ${className}` } { ...props }/>
-);
-
-
-export const FullCardHeading = ({ className="", ...props }) => (
-    <h2 className={ `govuk-heading-m govuk-!-margin-bottom-0 ${className}` } { ...props }/>
-);
-
-
 export const Caption = ({ className="", ...props }) => (
     <span className={ `govuk-caption-m ${className}` } { ...props }/>
 );
@@ -95,11 +85,6 @@ export const HBodySection: ComponentType<*> = (() => {
             }
         `;
 })();
-
-
-export const SectionBreak = ({ className="", ...props }) => (
-    <hr className={ `govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible ${className}` } { ...props }/>
-);
 
 
 export const DataContainer = ({ className="", ...props }) => (
