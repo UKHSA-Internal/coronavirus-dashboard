@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 
-import { Card, VisualSection, ValueBox, NumericReports } from 'components/Card';
+import { Card, VisualSection, ValueBox, NumericReports, HalfCardSplitBody, CardHeader } from 'components/Card';
 
 import { Container } from './DailySummary.styles';
 
@@ -124,39 +124,42 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
     }, [ params ]);
 
     return <Card heading={ heading }>
-        <VisualSection>
-            <Plotter data={ getPlotData(
-                layout
-                    .filter(({ chart=false }) => chart && (plotData?.[chart.value] ?? true))
-                    .map(item => item.chart),
-                data
-            )
-            }/>
-        </VisualSection>
-        <NumericReports>
-            {
-                layout.map((item, index) =>
-                    <ValueBox { ...item }
-                              params={ params }
-                              data={ data }
-                              isEnabled={ plotData?.[(item?.chart?.value ?? null)] ?? true }
-                              setChartState={ () => {
-                                  const name = item?.chart?.value ?? null;
+        <CardHeader heading={ heading } linkToHeading={ "More detail" }/>
+        <HalfCardSplitBody>
+            <VisualSection>
+                <Plotter data={ getPlotData(
+                    layout
+                        .filter(({ chart=false }) => chart && (plotData?.[chart.value] ?? true))
+                        .map(item => item.chart),
+                    data
+                )
+                }/>
+            </VisualSection>
+            <NumericReports>
+                {
+                    layout.map((item, index) =>
+                        <ValueBox { ...item }
+                                  params={ params }
+                                  data={ data }
+                                  isEnabled={ plotData?.[(item?.chart?.value ?? null)] ?? true }
+                                  setChartState={ () => {
+                                      const name = item?.chart?.value ?? null;
 
-                                  setPlotData(
-                                      name
-                                          ? { ...plotData, [name]: !(plotData?.[name] ?? true) }
-                                          : plotData
-                                  )
-                              } }
-                              key={ `${heading}-${index}` }/>)
-            }
-            {/*{*/}
-            {/*    heading.toLowerCase().indexOf("death") > -1*/}
-            {/*        ? <NationDeathsPlot/>*/}
-            {/*        : null*/}
-            {/*}*/}
-        </NumericReports>
+                                      setPlotData(
+                                          name
+                                              ? { ...plotData, [name]: !(plotData?.[name] ?? true) }
+                                              : plotData
+                                      )
+                                  } }
+                                  key={ `${heading}-${index}` }/>)
+                }
+                {/*{*/}
+                {/*    heading.toLowerCase().indexOf("death") > -1*/}
+                {/*        ? <NationDeathsPlot/>*/}
+                {/*        : null*/}
+                {/*}*/}
+            </NumericReports>
+        </HalfCardSplitBody>
     </Card>
 
 };  // DailySummaryCard
