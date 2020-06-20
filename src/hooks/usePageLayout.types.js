@@ -13,10 +13,12 @@ export type CardNumberDataType = {
 } // CardNumberDataType
 
 export type UKSummaryField = CardNumberDataType & {
-
     chart?: {
-        variableName: string,
-        colour: string
+        value: string,
+        colour: number
+        type: string,
+        display: boolean,
+        fill: boolean,
         rollingAverage: boolean
     }
 };
@@ -24,7 +26,6 @@ export type UKSummaryField = CardNumberDataType & {
 export type UKSummary = {
     summary: Array<{
         heading: string,
-
         fields: Array<UKSummaryField>
     }>
 };
