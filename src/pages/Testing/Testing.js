@@ -5,7 +5,7 @@ import type { ComponentType } from 'react';
 
 import { withRouter } from 'react-router';
 
-import { Card, NumericReports, ValueBox} from 'components/Card';
+import { Card, CardHeader, NumericReports, ValueBox } from 'components/Card';
 import type {
     Props,
     TabContentProps,
@@ -161,7 +161,8 @@ const TestingCard = ({ tabs, tabs: { heading }, cardType, params, ...props }) =>
     switch ( cardType ) {
 
         case "chart":
-            return <Card heading={ heading }{ ...props }>
+            return <Card heading={ heading } { ...props }>
+                <CardHeader heading={ heading } { ...props }/>
                 <TabLinkContainer>{
                     tabs.map(({ heading: tabHeading, ...rest }) =>
                         <TabLink key={ `tab-${ tabHeading }` } label={ tabHeading }>
@@ -173,6 +174,7 @@ const TestingCard = ({ tabs, tabs: { heading }, cardType, params, ...props }) =>
 
         case "map":
             return <Card heading={ heading }{ ...props }>
+                <CardHeader heading={ heading } { ...props }/>
                 <TabLinkContainer>{
                     tabs.map(({ heading: tabHeading, fields }) =>
                         <TabLink key={ `tab-${ tabHeading }` }
@@ -222,7 +224,8 @@ const Testing: ComponentType<Props> = ({ location: { search: query }}: Props) =>
                              { ...card }/> ?? null
             )
         }
-        <Card fullWidth heading={ "NHS and PHE tests by nation" }>
+        <Card fullWidth>
+            <CardHeader heading={ "NHS and PHE tests by nation" } fullWidth={ true }/>
             <TabLinkContainer>
                 <TabLink label={ "Daily" }>
                     <NationsDaily/>
