@@ -1,6 +1,7 @@
 // @flow
 
 import React, { useState, useEffect } from 'react';
+import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 
 import moment from "moment";
@@ -17,7 +18,9 @@ import {
     getMaxDateValuePair,
     dropLeadingZeros
 } from "common/utils";
-import { movingAverage } from "common/stats";
+// import { movingAverage } from "common/stats";
+
+import { getPlotData } from "common/utils";
 
 import useApi from "hooks/useApi";
 
@@ -27,7 +30,7 @@ import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import type {
     DailySummaryCardProps
-} from "./DailySummary.types"
+} from "./DailySummary.types";
 import type { UKSummaryField } from "hooks/usePageLayout.types";
 
 
@@ -87,31 +90,6 @@ const NationDeathsPlot = ({ ...props }) => {
 };  // DeathsCard
 
 
-const getPlotData = (layout: Array<UKSummaryField>, rawData) => {
-
-    return layout
-        .map(item => {
-            const
-                data = dropLeadingZeros(rawData || [], item.chart.variableName),
-                yData = data.map(variable => variable?.[item.chart.variableName] ?? null),
-                { r, g, b } = hexToRgb(item.chart.colour);
-
-            return {
-                x: data.map(item => item?.date ?? null),
-                y: item.chart.rollingAverage ? movingAverage(yData, 7) : yData,
-                type: 'line',
-                mode: 'lines',
-                fill: 'tozeroy',
-                fillcolor: `rgba(${r},${g},${b},0.1)`,
-                line: {
-                    color: item.chart.colour
-                }
-            }
-        })
-
-};  // getYAxisData
-
-
 const ValueBox = ({ data, primaryValue, secondaryValue=null, primaryTooltip="", secondaryTooltip="", isEnabled=true, ...rest }) => {
 
     const
@@ -136,12 +114,11 @@ const ValueBox = ({ data, primaryValue, secondaryValue=null, primaryTooltip="", 
 };  // getValueItemSections
 
 
-const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) => {
+const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout, heading }: DailySummaryCardProps) => {
 
     const
         structure = { date: "date" },
-        chartData = {},
-        noToggleData = ["date"];
+        chartData = {};
 
     for ( const { primaryValue, secondaryValue=null, ...rest } of layout )  {
 
@@ -152,7 +129,7 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
 
         if ( rest?.chart ?? null ) {
 
-            structure[rest.chart.variableName] = rest.chart.variableName;
+            structure[rest.chart.value] = rest.chart.value;
 
         }
 
@@ -169,9 +146,9 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
 
         for ( const { chart={} } of layout ) {
 
-            if ( chart && !chartData.hasOwnProperty(chart?.variableName ?? null) ) {
+            if ( chart && !chartData.hasOwnProperty(chart?.value ?? null) ) {
 
-                chartData[chart.variableName] = true;
+                chartData[chart.value] = chart?.display ?? true;
 
             }
         }
@@ -183,9 +160,10 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
     return <Card heading={ heading }>
         <VisualSection>
             <Plotter data={ getPlotData(
-                layout.filter(({ chart=false }) => chart && (plotData?.[chart.variableName] ?? true)),
-                data,
-                chartData
+                layout
+                    .filter(({ chart=false }) => chart && (plotData?.[chart.value] ?? true))
+                    .map(item => item.chart),
+                data
             )
             }/>
         </VisualSection>
@@ -194,9 +172,9 @@ const DailySummaryCard = ({ params, layout, heading }: DailySummaryCardProps) =>
                 layout.map((item, index) =>
                     <ValueBox { ...item }
                               data={ data }
-                              isEnabled={ plotData?.[(item?.chart?.variableName ?? null)] ?? true }
+                              isEnabled={ plotData?.[(item?.chart?.value ?? null)] ?? true }
                               setChartState={ () => {
-                                  const name = item?.chart?.variableName ?? null;
+                                  const name = item?.chart?.value ?? null;
 
                                   setPlotData(
                                       name
