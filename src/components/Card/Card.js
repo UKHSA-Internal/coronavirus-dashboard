@@ -11,7 +11,7 @@ import {
     HalfCard,
     HalfCardHeader,
     HalfCardHeading,
-    HalfCardBody,
+    HalfCardSplitBody,
     FullCard,
     FullCardHeader,
     FullCardHeading,
@@ -29,7 +29,6 @@ import {
 } from './Card.styles';
 import numeral from 'numeral'
 import ReactTooltip from "react-tooltip";
-import { Radios } from "govuk-react-jsx";
 import { colours, strFormat } from "common/utils";
 import useApi from "hooks/useApi";
 import moment from "moment";
@@ -78,13 +77,13 @@ const ValueBox = ({ params, primaryValue, secondaryValue=null, primaryTooltip=""
         primaryReplacements = {
             kwargs: {
                 ...(primaryData?.[0] ?? {} ),
-                date: moment(primaryData?.[0].date ?? null).format("dddd, D MMMM YYYY")
+                date: moment(primaryData?.[0]?.date ?? null).format("dddd, D MMMM YYYY")
             }
         },
         secondaryReplacements = {
             kwargs: {
                 ...(secondaryData?.[0] ?? {} ),
-                date: moment(secondaryData?.[0].date ?? null).format("dddd, D MMMM YYYY")
+                date: moment(secondaryData?.[0]?.date ?? null).format("dddd, D MMMM YYYY")
             }
         };
 
@@ -177,58 +176,53 @@ const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) =>
 }; // ValueItem
 
 
-const Radio = ({ options, value, setValue }) => {
+const CardHeader: ComponentType<*> = ({ heading, caption="", fullWidth=false, linkToHeading=false, children }: Props) => {
 
-    return <Radios
-        value={ value }
-        onChange={ e => setValue(e.target.value) }
-        className="govuk-radios--inline"
-        formGroup={{ className: 'govuk-radios--small' }}
-        fieldset={{
-          legend: { children: [''] }
-        }}
-        items={
-            options
-                .choices
-                .map(choice => ({ children: [ choice ], value: choice }))
-        }
-        name="option-choices"
-    />
-
-};  // Radio
-
-
-const Card: ComponentType<Props> = ({singleOptionTabs=null, heading="Placeholder",
-                                caption="", fullWidth=false, children }: Props) => {
-
-    if ( !fullWidth ) {
-        return <HalfCard>
-            <HalfCardHeader>
-                <HalfCardHeading>{ heading }</HalfCardHeading>
-                <Link to={ heading.toLowerCase() }
-                      className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>
-                    More detail
-                </Link>
-            </HalfCardHeader>
-            <SectionBreak/>
-            <HalfCardBody>{ children }</HalfCardBody>
-        </HalfCard>
-    }
-
-    return <FullCard>
-        <FullCardHeader>
-            <FullCardHeading>
+    // if ( !fullWidth )
+        return <HalfCardHeader>
+            <HalfCardHeading>
                 <Caption>{ caption }</Caption>
                 { heading }
-            </FullCardHeading>
-        </FullCardHeader>
+            </HalfCardHeading>
+            {
+                linkToHeading &&
+                <Link to={ heading.toLowerCase() }
+                      className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>
+                    { linkToHeading }
+                </Link>
+            }
+            { children }
+        </HalfCardHeader>;
+
+    // return <FullCardHeader>
+    //     <FullCardHeading>
+    //         <Caption>{ caption }</Caption>
+    //         { heading }
+    //     </FullCardHeading>
+    //     { children }
+    // </FullCardHeader>;
+
+};  // CardHeader
+
+
+const Card: ComponentType<Props> = ({ fullWidth=false, children }: Props) => {
+
+    if ( !fullWidth )
+        return <HalfCard>
+            { children }
+        </HalfCard>;
+
+    return <FullCard>
         { children }
     </FullCard>
+
 };  // Card
 
 
 export {
     Card,
+    HalfCardSplitBody,
+    CardHeader,
     VisualSection,
     ValueItem,
     ValueBox,
