@@ -6,18 +6,13 @@ import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 
 import { Plotter } from "components/Plotter"
-import { Card, NumericReports, ValueItem} from 'components/Card';
+import { Card, NumericReports, ValueBox } from 'components/Card';
 import type {
     Props,
     TabContentProps,
     TabContentType
 } from './Cases.types';
-import {
-    getParams,
-    getMaxDateValuePair,
-    strFormat,
-    getPlotData
-} from "common/utils";
+import { getParams, getPlotData } from "common/utils";
 import useApi from "hooks/useApi";
 import { TabLink, TabLinkContainer } from "components/TabLink";
 import usePageLayout from "hooks/usePageLayout";
@@ -87,7 +82,8 @@ const TabContent: TabContentType<TabContentProps> = ({ fields, params, tabType, 
 };  // TabContent
 
 
-const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=null, ...props }) => {
+const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=null,
+                         heading, fullWidth, ...props }) => {
 
     const
         [ active, setActive ] = useState(options?.choices?.[0] ?? null),
@@ -100,24 +96,28 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
     switch ( cardType ) {
 
         case "chart":
-            Component = <TabLinkContainer>{
+            Component = <Card heading={ heading } fullWidth={ fullWidth }>
+                <TabLinkContainer>{
                 tabs?.map(({ heading, ...rest }) =>
                     <TabLink key={ `tab-${ heading }` } label={ heading }>
                         <TabContent params={ params } { ...props } { ...rest }/>
                     </TabLink>
                 ) ?? null
-            }</TabLinkContainer>;
+            }</TabLinkContainer>
+            </Card>;
             break;
 
         case "map":
-            Component = <TabLinkContainer>{
-                tabs?.map(({ heading: tabHeading, fields }) =>
-                    <TabLink key={ `tab-${ tabHeading }` }
-                             label={ tabHeading }>
-                        <p>Not implemented.</p>
-                    </TabLink>
-                ) ?? null
-            }</TabLinkContainer>;
+            Component = <Card heading={ heading } fullWidth={ fullWidth }>
+                    <TabLinkContainer>{
+                    tabs?.map(({ heading: tabHeading, fields }) =>
+                        <TabLink key={ `tab-${ tabHeading }` }
+                                 label={ tabHeading }>
+                            <p>Not implemented.</p>
+                        </TabLink>
+                    ) ?? null
+                }</TabLinkContainer>
+            </Card>;
             break;
 
         default:
@@ -134,51 +134,11 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 };  // TestingCard
 
 
-const ValueBox = ({ data, primaryValue, secondaryValue=null, primaryTooltip="", secondaryTooltip="", ...rest }) => {
-
-    const
-        primaryData = getMaxDateValuePair(data, primaryValue),
-        secondaryData = getMaxDateValuePair(data, secondaryValue),
-        primaryReplacements = { kwargs: primaryData },
-        secondaryReplacements = { kwargs: primaryData };
-
-    return <ValueItem
-        primaryValue={ primaryData.value }
-        primaryTooltip={ strFormat(primaryTooltip, primaryReplacements) }
-        primaryModal={ primaryValue }
-        primaryModalReplacements={ primaryReplacements }
-        secondaryValue={ secondaryData.value }
-        secondaryTooltip={ strFormat(secondaryTooltip, secondaryReplacements) }
-        secondaryModal={ secondaryValue }
-        secondaryModalReplacements={ secondaryReplacements }
-        { ...rest }
-    />
-
-};  // getValueItemSections
-
-
 const HeadlineNumbers = ({ params, headlineNumbers=[] }) => {
 
-    const structure = { date: "date" };
-
-    for ( const { primaryValue, secondaryValue=null } of headlineNumbers ) {
-
-        structure[primaryValue] = primaryValue;
-
-        if ( secondaryValue )
-            structure[secondaryValue] = secondaryValue;
-
-    }
-
-    const data = useApi({
-        conjunctiveFilters: params,
-        structure: structure,
-        defaultResponse: []
-    });
-
     return headlineNumbers?.map((item, index) =>
-        <ValueBox data={ data }
-                  key={ `headlineNumber-${index}` }
+        <ValueBox params={ params }
+                  key={ `headline-number-${index}` }
                   { ...item }/>
     ) ?? null
 
@@ -199,11 +159,9 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
             <HeadlineNumbers params={ params } { ...layout }/>
         </NumericReports>
         {
-            layout?.cards.map(( { heading, fullWidth, ...rest }, index ) =>
-                <Card key={ `card-${ index }` } heading={ heading } fullWidth={ fullWidth }>
-                    <CardContent params={ params } { ...rest }/>
-                </Card> ?? null
-            )
+            layout?.cards.map(( cardProps, index ) =>
+                <CardContent key={ `card-${ index }` } params={ params } { ...cardProps }/>
+            ) ?? null
         }
     </Fragment>
 };
