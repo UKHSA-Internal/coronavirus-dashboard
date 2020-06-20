@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Fragment, useState } from 'react';
+import React from 'react';
 import type { ComponentType } from 'react';
 import { Link } from "react-router-dom";
 
@@ -13,11 +13,8 @@ import {
     HalfCardHeading,
     HalfCardSplitBody,
     FullCard,
-    FullCardHeader,
-    FullCardHeading,
     Caption,
     BodySection,
-    SectionBreak,
     DataContainer,
     DataColour,
     Heading,
@@ -178,29 +175,20 @@ const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) =>
 
 const CardHeader: ComponentType<*> = ({ heading, caption="", fullWidth=false, linkToHeading=false, children }: Props) => {
 
-    // if ( !fullWidth )
-        return <HalfCardHeader>
-            <HalfCardHeading>
-                <Caption>{ caption }</Caption>
-                { heading }
-            </HalfCardHeading>
-            {
-                linkToHeading &&
-                <Link to={ heading.toLowerCase() }
-                      className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>
-                    { linkToHeading }
-                </Link>
-            }
-            { children }
-        </HalfCardHeader>;
-
-    // return <FullCardHeader>
-    //     <FullCardHeading>
-    //         <Caption>{ caption }</Caption>
-    //         { heading }
-    //     </FullCardHeading>
-    //     { children }
-    // </FullCardHeader>;
+    return <HalfCardHeader>
+        <HalfCardHeading>
+            <Caption>{ caption }</Caption>
+            { heading }
+        </HalfCardHeading>
+        {
+            linkToHeading &&
+            <Link to={ heading.toLowerCase() }
+                  className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>
+                { linkToHeading }
+            </Link>
+        }
+        { children }
+    </HalfCardHeader>;
 
 };  // CardHeader
 
