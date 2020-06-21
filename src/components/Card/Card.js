@@ -247,7 +247,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 
         case "chart":
             return <Card fullWidth={ fullWidth }>
-                <CardHeader heading={ heading } fullWidth={ fullWidth }>
+                <CardHeader heading={ heading } fullWidth={ fullWidth } { ...props }>
                     { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
                 <TabLinkContainer>{
@@ -261,7 +261,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 
         case "map":
             return <Card fullWidth={ fullWidth }>
-                <CardHeader heading={ heading } fullWidth={ fullWidth }>
+                <CardHeader heading={ heading } fullWidth={ fullWidth } { ...props }>
                     { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
                 <TabLinkContainer>{
@@ -277,7 +277,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
         case "ageSexBreakdown":
             // FixMe: Small cards need min height
             return <Card fullWidth={ false }>
-                <CardHeader heading={ heading } fullWidth={ false }/>
+                <CardHeader heading={ heading } fullWidth={ false } { ...props }/>
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }) =>
                         <TabLink key={ `tab-${ heading }` } label={ heading }>
