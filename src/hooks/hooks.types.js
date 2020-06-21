@@ -16,3 +16,13 @@ export type useApiInputs = {
     endpoint: "lookupApi"
             | "mainApi"
 }
+
+
+export type generateUrlInputs = {
+    conjunctiveFilters: ParsedParams,
+    disjunctiveFilters: ParsedParams,
+    structure: useApiStructureInput,
+    extraParams: ParsedParams,
+    endpoint: "lookupApi"
+            | "mainApi"
+}
