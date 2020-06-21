@@ -281,7 +281,7 @@ export const dropLeadingZeros = (data: Array<{ [any]: any }>, ...keys) => {
 
         sum = keys.reduce((acc, key) => acc + data[index][key], 0);
 
-        if ( sum !== 0 ) return data.slice(0, index);
+        if ( sum !== 0 ) return data.slice(0, index + 1);
 
     }
 
