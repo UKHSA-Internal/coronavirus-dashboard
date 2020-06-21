@@ -43,7 +43,7 @@ export const HalfCardSplitBody: ComponentType<*> = (() => {
 
 export const FullCard: ComponentType<*> = (() => {
     return styled.article`
-        flex: 1 2 50%;
+        flex: 1 2 60%;
         padding: 20px;
         border: 1px #f3f2f1 solid;
         margin-top: 30px;
