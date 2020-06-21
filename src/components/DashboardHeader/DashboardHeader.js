@@ -81,7 +81,7 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
             { !isExcluded &&
                 <CollapsibleLinkContainer>
                     <CollapsibleLink className={ locationPickerState ? "opened" : "closed" }
-                                     onClick={ () => setLocationPickerState(!locationPickerState) }>
+                                     onClick={ () => setLocationPickerState(locationPickerState => !locationPickerState) }>
                         Change&nbsp;location:&nbsp;<CurrentLocation>{ areaName }</CurrentLocation>
                     </CollapsibleLink>
                 </CollapsibleLinkContainer>
