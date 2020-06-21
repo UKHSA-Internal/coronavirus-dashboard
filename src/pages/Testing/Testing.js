@@ -1,21 +1,22 @@
 // @flow
 
-import React, { Fragment } from 'react';
+import React from 'react';
 import type { ComponentType } from 'react';
 
 import { withRouter } from 'react-router';
 
-import { Card, CardHeader, NumericReports, ValueBox } from 'components/Card';
-import type {
-    Props,
-    TabContentProps,
-    TabContentType
-} from './Testing.types';
+import {
+    Card,
+    CardHeader,
+    MixedCardContainer,
+    HeadlineNumbers,
+    CardContent
+} from 'components/Card';
+import type { Props } from './Testing.types';
 import {
     getParams,
     groupBy,
     dropLeadingZeros,
-    getPlotData,
     colours
 } from "common/utils";
 import useApi from "hooks/useApi";
@@ -24,7 +25,6 @@ import { Plotter } from "components/Plotter";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import { MainLoading } from "components/Loading";
-import { DataTable } from "components/GovUk";
 
 
 const
@@ -124,86 +124,6 @@ const NationsCumulative = () => {
 }; // TotalPlot
 
 
-const TabContent: TabContentType<TabContentProps> = ({ fields, params, tabType, barType=null }: TabContentProps): React$Component => {
-
-    const  structure = { date: "date" };
-
-    for ( const { value } of fields )
-        structure[value] = value;
-
-    const data = useApi({
-        conjunctiveFilters: params,
-        structure: structure,
-        defaultResponse: []
-    });
-
-    switch ( tabType ) {
-
-        case "chart":
-            const layout = {};
-            if ( barType ) layout["barmode"] = barType;
-
-            return <Plotter data={ getPlotData(fields, data) } layout={ layout }/>;
-
-        case "table":
-            return <DataTable fields={ fields } data={ data }/>;
-
-        default:
-            return null;
-
-    }
-
-};  // TabContent
-
-
-const TestingCard = ({ tabs, tabs: { heading }, cardType, params, ...props }) => {
-
-    switch ( cardType ) {
-
-        case "chart":
-            return <Card heading={ heading } { ...props }>
-                <CardHeader heading={ heading } { ...props }/>
-                <TabLinkContainer>{
-                    tabs.map(({ heading: tabHeading, ...rest }) =>
-                        <TabLink key={ `tab-${ tabHeading }` } label={ tabHeading }>
-                            <TabContent params={ params } { ...props } { ...rest }/>
-                        </TabLink>
-                    )
-                }</TabLinkContainer>
-            </Card>;
-
-        case "map":
-            return <Card heading={ heading }{ ...props }>
-                <CardHeader heading={ heading } { ...props }/>
-                <TabLinkContainer>{
-                    tabs.map(({ heading: tabHeading, fields }) =>
-                        <TabLink key={ `tab-${ tabHeading }` }
-                                 label={ tabHeading }>
-                            <p>Not implemented.</p>
-                        </TabLink>
-                    )
-                }</TabLinkContainer>
-            </Card>;
-
-        default:
-            return <p>Invalid chart type</p>;
-
-    }
-
-};  // TestingCard
-
-
-const HeadlineNumbers = ({ params, headlineNumbers=[] }) => {
-
-    return headlineNumbers?.map((item, index) =>
-        <ValueBox params={ params }
-                  key={ `headline-number-${index}` }
-                  { ...item }/>
-    ) ?? null
-
-} // HeadlineNumbers
-
-
 const Testing: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
     const
@@ -213,33 +133,31 @@ const Testing: ComponentType<Props> = ({ location: { search: query }}: Props) =>
 
     if ( !layout ) return <MainLoading/>;
 
-    return <Fragment>
-        <NumericReports horizontal={ true }>
-            <HeadlineNumbers params={ params } { ...layout }/>
-        </NumericReports>
-        {
-            layout?.cards.map(( { ...card }, index ) =>
-                <TestingCard key={ `card-${ index }` }
-                             params={ params }
-                             { ...card }/> ?? null
-            )
-        }
-        <Card fullWidth>
-            <CardHeader heading={ "NHS and PHE tests by nation" } fullWidth={ true }/>
-            <TabLinkContainer>
-                <TabLink label={ "Daily" }>
-                    <NationsDaily/>
-                </TabLink>
-                <TabLink label={ "Cumulative" }>
-                    <NationsCumulative/>
-                </TabLink>
-                <TabLink label={ "Data" }>
-                     Placeholder
-                </TabLink>
+    return <>
+        <HeadlineNumbers params={ params } { ...layout }/>
+        <MixedCardContainer>
+            {
+                layout?.cards.map(( cardProps, index ) =>
+                    <CardContent key={ `card-${ index }` } params={ params } { ...cardProps }/>
+                ) ?? null
+            }
+            <Card fullWidth>
+                <CardHeader heading={ "NHS and PHE tests by nation" } fullWidth={ true }/>
+                <TabLinkContainer>
+                    <TabLink label={ "Daily" }>
+                        <NationsDaily/>
+                    </TabLink>
+                    <TabLink label={ "Cumulative" }>
+                        <NationsCumulative/>
+                    </TabLink>
+                    <TabLink label={ "Data" }>
+                         Placeholder
+                    </TabLink>
 
-            </TabLinkContainer>
-        </Card>
-    </Fragment>
+                </TabLinkContainer>
+            </Card>
+        </MixedCardContainer>
+    </>
 };
 
 export default withRouter(Testing);
