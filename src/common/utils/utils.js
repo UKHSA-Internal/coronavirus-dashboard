@@ -3,6 +3,7 @@ import { max, min, group } from "d3-array";
 
 import type { ParsedParams } from "./utils.types";
 import type { RGB } from "components/MapTable/MapTable.types";
+import { generateUrl } from "hooks/useApi";
 
 
 export const sortByDate = (a, b) => {
@@ -288,3 +289,25 @@ export const dropLeadingZeros = (data: Array<{ [any]: any }>, ...keys) => {
     return []
 
 };  // dropLeadingZeros
+
+
+export const fieldToStructure = (fields, params, extraParams=[]) => {
+
+    const  structure = { date: "date" };
+
+    for ( const { key } of params ) {
+        structure[key] = key;
+    }
+
+    for ( const { value } of fields ) {
+        structure[value] = value
+    }
+
+    return generateUrl({
+        conjunctiveFilters: params,
+        structure: structure,
+        defaultResponse: [],
+        extraParams: extraParams
+    })
+
+};  // fieldToStructure
