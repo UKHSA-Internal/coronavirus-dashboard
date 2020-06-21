@@ -192,7 +192,13 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
         const newQuery = createQuery([
             ...getParams(query),
-            { key: 'areaType', sign: '=', value: currentLocation.areaType },
+            {
+                key: 'areaType',
+                sign: '=',
+                value: currentLocation.areaType
+                    .toLowerCase()
+                    .replace(/nhs/, "")
+            },
             { key: 'areaName', sign: '=', value: currentLocation.areaName }
         ]);
 
