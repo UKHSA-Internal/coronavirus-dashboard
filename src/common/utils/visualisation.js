@@ -15,14 +15,14 @@ export const
     ];
 
 
-export const getPlotData = (fields: Array<{}>, rawData) => {
+export const getPlotData = (fields: Array<{}>, rawData, xKey="date" ) => {
 
     return fields.map(field => {
 
         const
             data = dropLeadingZeros(rawData, field.value),
             { r, g, b } = hexToRgb(colours[field.colour]),
-            xData = data?.map(item => item?.date ?? null) ?? [];
+            xData = data?.map(item => item?.[xKey] ?? null) ?? [];
 
         let
             yData = data?.map(variable => variable?.[field.value] ?? null) ?? [],
