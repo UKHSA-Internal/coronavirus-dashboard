@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { useState } from 'react';
 import type { ComponentType } from 'react';
 import { Link } from "react-router-dom";
 
@@ -29,6 +29,13 @@ import ReactTooltip from "react-tooltip";
 import { colours, strFormat } from "common/utils";
 import useApi from "hooks/useApi";
 import moment from "moment";
+import {
+    AgeSexBreakdownTabContent,
+    TabContent,
+    TabLink,
+    TabLinkContainer
+} from "components/TabLink";
+import { Radio } from "components/GovUk"
 
 
 const VisualSection: ComponentType<Props> = ({ children }: Props) => {
@@ -48,6 +55,19 @@ const NumericReports: ComponentType<Props> = ({ children, horizontal=false }: Pr
     return <BodySection>{ children }</BodySection>
 
 }; // ValueItemContainer
+
+
+const HeadlineNumbers = ({ params, headlineNumbers=[] }) => {
+
+    return <NumericReports horizontal={ true }>{
+        headlineNumbers?.map((item, index) =>
+            <ValueBox params={ params }
+                      key={ `headline-number-${index}` }
+                      { ...item }/>
+        ) ?? null
+    }</NumericReports>
+
+} // HeadlineNumbers
 
 
 const ValueBox = ({ params, primaryValue, secondaryValue=null, primaryTooltip="", secondaryTooltip="", ...rest }) => {
@@ -207,8 +227,80 @@ const Card: ComponentType<Props> = ({ fullWidth=false, children }: Props) => {
 };  // Card
 
 
+const MixedCardContainer: ComponentType<*> = ({ children }) => {
+
+    return <div className={ 'util-flex util-flex-wrap' }>{ children }</div>
+
+};  // MixedCardContainer
+
+
+const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=null,
+                         heading, fullWidth, ...props }) => {
+
+    const
+        [ active, setActive ] = useState(options?.choices?.[0] ?? null),
+        tabs = !active
+            ? (singleOptionTabs || [])
+            : ( props?.[active]?.tabs ?? [] );
+
+    switch ( cardType ) {
+
+        case "chart":
+            return <Card fullWidth={ fullWidth }>
+                <CardHeader heading={ heading } fullWidth={ fullWidth }>
+                    { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
+                </CardHeader>
+                <TabLinkContainer>{
+                    tabs?.map(({ heading, ...rest }) =>
+                        <TabLink key={ `tab-${ heading }` } label={ heading }>
+                            <TabContent params={ params } { ...props } { ...rest }/>
+                        </TabLink>
+                    ) ?? null
+                }</TabLinkContainer>
+            </Card>;
+
+        case "map":
+            return <Card fullWidth={ fullWidth }>
+                <CardHeader heading={ heading } fullWidth={ fullWidth }>
+                    { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
+                </CardHeader>
+                <TabLinkContainer>{
+                    tabs?.map(({ heading: tabHeading, fields }) =>
+                        <TabLink key={ `tab-${ tabHeading }` }
+                                 label={ tabHeading }>
+                            <p>Not implemented.</p>
+                        </TabLink>
+                    ) ?? null
+                }</TabLinkContainer>
+            </Card>;
+
+        case "ageSexBreakdown":
+            // FixMe: Small cards need min height
+            return <Card fullWidth={ false }>
+                <CardHeader heading={ heading } fullWidth={ false }/>
+                <TabLinkContainer>{
+                    tabs?.map(({ heading, ...rest }) =>
+                        <TabLink key={ `tab-${ heading }` } label={ heading }>
+                            <AgeSexBreakdownTabContent params={ params } { ...rest }/>
+                        </TabLink>
+                    ) ?? null
+                }</TabLinkContainer>
+            </Card>
+
+        default:
+            return <p>Invalid chart type</p>;
+
+    }
+
+
+};  // TestingCard
+
+
 export {
     Card,
+    HeadlineNumbers,
+    MixedCardContainer,
+    CardContent,
     HalfCardSplitBody,
     CardHeader,
     VisualSection,
