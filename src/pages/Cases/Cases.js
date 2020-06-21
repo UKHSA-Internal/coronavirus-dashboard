@@ -19,6 +19,7 @@ import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import { MainLoading } from "components/Loading";
 import { DataTable, Radio } from "components/GovUk";
+import { zip, transpose } from "d3-array";
 
 
 const
@@ -66,6 +67,17 @@ const ageSort = (a, b) => {
     const
         ageA = parseInt(/(\d+)/.exec(a)[1]),
         ageB = parseInt(/(\d+)/.exec(b)[1]);
+
+    return ( ageA > ageB ) || -(ageA < ageB || 0)
+
+}; // ageSexSort
+
+
+const ageSortByKey = (a, b) => {
+
+    const
+        ageA = parseInt(/(\d+)/.exec(a.age)[1]),
+        ageB = parseInt(/(\d+)/.exec(b.age)[1]);
 
     return ( ageA > ageB ) || -(ageA < ageB || 0)
 
@@ -126,6 +138,81 @@ const AgeSexBreakdown = ({ params, numericValue }) => {
 
 };
 
+
+const AgeSexBreakdownGeneric = ({ params, groupKey, groupValue, tabType="", fields=[], ...props }) => {
+
+    // Assumptions:
+    // Both categories have the same data type, same groups, same
+    // length, and same structure.
+
+    const structure = {};
+
+    for ( const { value } of fields )
+        structure[value] = value;
+
+
+    const
+        data = useApi({
+            conjunctiveFilters: params,
+            structure: structure,
+            extraParams: [
+                fields && { key: "latestBy", sign: "=", value: fields[0].value }
+            ],
+            defaultResponse: []
+        });
+
+    // console.log(            zip(...fields.map(field => (data?.[0]?.[field.value] ?? []).sort(ageSortByKey)))
+    //             // .reduce((acc, item) => item.map(values => [...acc, values]), [])
+    //             // .map(item => ({...item, [groupKey]: item[groupKey].replace(/_/g, " ").replace(/to/, "-")}))
+    // )
+
+    if ( tabType === 'table' ) {
+        return <div/>
+        // return <DataTable fields={ fields } data={
+        //     transpose(zip(...fields.map(field => (data?.[0]?.[field.value] ?? []).sort(ageSortByKey))))
+        //         .reduce((acc, item) => item.map(values => [...acc, values]), [])
+        //         .map(item => ({...item, [groupKey]: item[groupKey].replace(/_/g, " ").replace(/to/, "-")}))
+        // }/>
+    }
+
+    return <Plotter
+        data={
+            fields.map(field => {
+
+                const
+                    grouped = groupBy(
+                        data?.[0]?.[field.value] ?? [],
+                            item => item?.[groupKey] ?? ""
+                    ),
+                    sortedGroup = Object
+                        .keys(grouped)
+                        .sort(ageSort),
+                    groupNames = sortedGroup
+                        .map(item =>
+                            item
+                                .replace(/_/g, " ")
+                                .replace(/to/, "-")
+                        );
+
+                return {
+                    name: field.label,
+                    x: groupNames,
+                    y: sortedGroup.map(item => grouped[item][0][groupValue]),
+                    hovertemplate: "%{y}",
+                    type: field.type,
+                    marker: {
+                        color: colours[field.colour]
+                    }
+                }
+            })
+        }
+        layout={ props.hasOwnProperty("barType") ? { barmode: props.barType } : {} }
+        isTimeSeries={ false }
+    />
+
+};
+
+
 const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=null,
                          heading, fullWidth, ...props }) => {
 
@@ -135,31 +222,28 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
             ? (singleOptionTabs || [])
             : ( props?.[active]?.tabs ?? [] );
 
-    let Component;
-
     switch ( cardType ) {
 
         case "chart":
-            Component = <Card fullWidth={ fullWidth }>
+            return <Card fullWidth={ fullWidth }>
                 <CardHeader heading={ heading } fullWidth={ fullWidth }>
                     { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
                 <TabLinkContainer>{
-                tabs?.map(({ heading, ...rest }) =>
-                    <TabLink key={ `tab-${ heading }` } label={ heading }>
-                        <TabContent params={ params } { ...props } { ...rest }/>
-                    </TabLink>
-                ) ?? null
-            }</TabLinkContainer>
+                    tabs?.map(({ heading, ...rest }) =>
+                        <TabLink key={ `tab-${ heading }` } label={ heading }>
+                            <TabContent params={ params } { ...props } { ...rest }/>
+                        </TabLink>
+                    ) ?? null
+                }</TabLinkContainer>
             </Card>;
-            break;
 
         case "map":
-            Component = <Card fullWidth={ fullWidth }>
-                    <CardHeader heading={ heading } fullWidth={ fullWidth }>
-                        { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
-                    </CardHeader>
-                    <TabLinkContainer>{
+            return <Card fullWidth={ fullWidth }>
+                <CardHeader heading={ heading } fullWidth={ fullWidth }>
+                    { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
+                </CardHeader>
+                <TabLinkContainer>{
                     tabs?.map(({ heading: tabHeading, fields }) =>
                         <TabLink key={ `tab-${ tabHeading }` }
                                  label={ tabHeading }>
@@ -168,14 +252,27 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
                     ) ?? null
                 }</TabLinkContainer>
             </Card>;
-            break;
+
+        case "ageSexBreakdown":
+            // FixMe: Small cards need min height
+            return <Card fullWidth={ false }>
+                <CardHeader heading={ heading } fullWidth={ false }/>
+                <TabLinkContainer>{
+                    tabs?.map(({ heading, tabType, ...rest }) =>
+                        <TabLink key={ `tab-${ heading }` } label={ heading }>{
+                            tabType === "chart"
+                                ? <AgeSexBreakdownGeneric params={ params } { ...rest }/>
+                                : <div/>
+                        }</TabLink>
+                    ) ?? null
+                }</TabLinkContainer>
+            </Card>
 
         default:
-            Component = <p>Invalid chart type</p>;
+            return <p>Invalid chart type</p>;
 
     }
 
-    return Component
 
 };  // TestingCard
 
@@ -204,35 +301,37 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
         <NumericReports horizontal={ true }>
             <HeadlineNumbers params={ params } { ...layout }/>
         </NumericReports>
+        <div className={ 'util-flex util-flex-wrap' }>
         {
             layout?.cards.map(( cardProps, index ) =>
                 <CardContent key={ `card-${ index }` } params={ params } { ...cardProps }/>
             ) ?? null
         }
-        <div className={ 'util-flex util-flex-wrap' }>
-            <Card fullWidth={ false }>
-                <CardHeader heading={ "Age and sex breakdown" } fullWidth={ false }/>
-                <TabLinkContainer>
-                    <TabLink label={ "Chart" }>
-                        <AgeSexBreakdown params={ params } numericValue={ "value" }/>
-                    </TabLink>
-                    <TabLink label={ "Data" }>
-                        <AgeSexBreakdown params={ params }/>
-                    </TabLink>
-                </TabLinkContainer>
-            </Card>
-            <Card fullWidth={ false }>
-                <CardHeader heading={ "Age and sex breakdown by rate" } fullWidth={ false }/>
-                <TabLinkContainer>
-                    <TabLink label={ "Chart" }>
-                        <AgeSexBreakdown params={ params } numericValue={ "rate" }/>
-                    </TabLink>
-                    <TabLink label={ "Data" }>
-                        <AgeSexBreakdown params={ params }/>
-                    </TabLink>
-                </TabLinkContainer>
-            </Card>
         </div>
+        {/*<div className={ 'util-flex util-flex-wrap' }>*/}
+        {/*    <Card fullWidth={ false }>*/}
+        {/*        <CardHeader heading={ "Age and sex breakdown" } fullWidth={ false }/>*/}
+        {/*        <TabLinkContainer>*/}
+        {/*            <TabLink label={ "Chart" }>*/}
+        {/*                <AgeSexBreakdown params={ params } numericValue={ "value" }/>*/}
+        {/*            </TabLink>*/}
+        {/*            <TabLink label={ "Data" }>*/}
+        {/*                <AgeSexBreakdown params={ params }/>*/}
+        {/*            </TabLink>*/}
+        {/*        </TabLinkContainer>*/}
+        {/*    </Card>*/}
+        {/*    <Card fullWidth={ false }>*/}
+        {/*        <CardHeader heading={ "Age and sex breakdown by rate" } fullWidth={ false }/>*/}
+        {/*        <TabLinkContainer>*/}
+        {/*            <TabLink label={ "Chart" }>*/}
+        {/*                <AgeSexBreakdown params={ params } numericValue={ "rate" }/>*/}
+        {/*            </TabLink>*/}
+        {/*            <TabLink label={ "Data" }>*/}
+        {/*                <AgeSexBreakdown params={ params }/>*/}
+        {/*            </TabLink>*/}
+        {/*        </TabLinkContainer>*/}
+        {/*    </Card>*/}
+        {/*</div>*/}
     </>
 };
 
