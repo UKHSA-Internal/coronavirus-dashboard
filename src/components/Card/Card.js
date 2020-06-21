@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import type { ComponentType } from 'react';
 import { Link } from "react-router-dom";
 
@@ -22,11 +22,13 @@ import {
     NumericData,
     DataLabel,
     Number,
-    HBodySection
+    Download,
+    DownloadContainer,
+    HBodySection, DownloadOptionsContainer
 } from './Card.styles';
 import numeral from 'numeral'
 import ReactTooltip from "react-tooltip";
-import { colours, strFormat } from "common/utils";
+import { colours, fieldToStructure, strFormat } from "common/utils";
 import useApi from "hooks/useApi";
 import moment from "moment";
 import {
@@ -193,12 +195,12 @@ const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) =>
 }; // ValueItem
 
 
-const CardHeader: ComponentType<*> = ({ heading, caption="", fullWidth=false, linkToHeading=false, children }: Props) => {
+const CardHeader: ComponentType<*> = ({ heading, caption="", linkToHeading=false, children }: Props) => {
 
     return <HalfCardHeader>
         <HalfCardHeading>
-            <Caption>{ caption }</Caption>
             { heading }
+            <Caption>{ caption }</Caption>
         </HalfCardHeading>
         {
             linkToHeading &&
@@ -213,14 +215,85 @@ const CardHeader: ComponentType<*> = ({ heading, caption="", fullWidth=false, li
 };  // CardHeader
 
 
-const Card: ComponentType<Props> = ({ fullWidth=false, children }: Props) => {
+const DownloadOptions = ({ baseUrl, noCsv }) => {
+
+    return <DownloadOptionsContainer>
+        {
+            !noCsv
+                ? <a className={ 'govuk-link govuk-link--no-visited-state' }
+                     href={ `${ baseUrl }&format=csv` } download aria-disabled={ !noCsv }>
+                    as CSV
+                </a>
+                : <span className={ 'govuk-link govuk-link--no-visited-state disabled' }>
+                    as CSV
+                </span>
+        }
+        <a className={ 'govuk-link govuk-link--no-visited-state' }
+           href={ `${baseUrl}&format=json` }
+           target={ '_blank' }
+           rel={ 'noreferrer noopener' }>
+            as JSON
+        </a>
+        <a className={ 'govuk-link govuk-link--no-visited-state' }
+           target={ '_blank' }
+           rel={ 'noreferrer noopener' }
+           href={ `${baseUrl}&format=xml` } download>
+            as XML
+        </a>
+    </DownloadOptionsContainer>
+
+};  // DownloadOptions
+
+
+const DownloadData = ({ baseUrl, noCsv }) => {
+
+    const
+        [ open, setOpen ] = useState(false),
+        dropdown = useRef(null);
+
+    function handleClickEvent ({ target }) {
+
+        if ( dropdown.current && !target.closest(`.${dropdown.current.className}`) && open )
+            setOpen(false);
+
+    }
+
+    useEffect(() => {
+        document.addEventListener("click", handleClickEvent);
+
+        return () => {
+            document.removeEventListener("click", handleClickEvent);
+        }
+    });
+
+    if ( !baseUrl ) return null;
+
+    return <DownloadContainer ref={ dropdown }>
+        <Download data-tip={ "Download card data" }
+                  data-for={ "download-tooltip" }
+                  className={ "download-dropdown" }
+                  onClick={ () => setOpen(open => !open) }/>
+        { open &&  <DownloadOptions baseUrl={ baseUrl } noCsv={ noCsv }/> }
+        <ReactTooltip id={ "download-tooltip" }
+              place={ "right" }
+              backgroundColor={ "#0b0c0c" }
+              className={ "tooltip" }
+              effect={ "solid" }/>
+    </DownloadContainer>
+
+};  // DownloadData
+
+
+const Card: ComponentType<Props> = ({ url, children, fullWidth=false, noCsv=false }: Props) => {
 
     if ( !fullWidth )
         return <HalfCard>
+            <DownloadData baseUrl={ url } noCsv={ noCsv }/>
             { children }
         </HalfCard>;
 
     return <FullCard>
+        <DownloadData baseUrl={ url } noCsv={ noCsv }/>
         { children }
     </FullCard>
 
@@ -243,11 +316,15 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
             ? (singleOptionTabs || [])
             : ( props?.[active]?.tabs ?? [] );
 
+    let apiUrl;
+
     switch ( cardType ) {
 
         case "chart":
-            return <Card fullWidth={ fullWidth }>
-                <CardHeader heading={ heading } fullWidth={ fullWidth } { ...props }>
+            apiUrl = fieldToStructure([...tabs]?.reverse()?.[0]?.fields ?? [], params);
+
+            return <Card fullWidth={ fullWidth } url={ apiUrl }>
+                <CardHeader heading={ heading } { ...props }>
                     { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
                 <TabLinkContainer>{
@@ -260,8 +337,10 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
             </Card>;
 
         case "map":
-            return <Card fullWidth={ fullWidth }>
-                <CardHeader heading={ heading } fullWidth={ fullWidth } { ...props }>
+            apiUrl = fieldToStructure([...tabs]?.reverse()?.[0]?.fields ?? [], params);
+
+            return <Card fullWidth={ fullWidth } url={ apiUrl }>
+                <CardHeader heading={ heading } { ...props }>
                     { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
                 <TabLinkContainer>{
@@ -276,8 +355,19 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 
         case "ageSexBreakdown":
             // FixMe: Small cards need min height
-            return <Card fullWidth={ false }>
-                <CardHeader heading={ heading } fullWidth={ false } { ...props }/>
+
+            const breakdownMetrics = [...tabs]?.reverse()?.[0]?.requiredMetrics ?? [];
+
+            apiUrl = fieldToStructure(
+                breakdownMetrics.map(metric => ({value: metric})),
+                params,
+                [
+                    { key: "latestBy", sign: "=", value: breakdownMetrics?.[0] ?? "" }]
+
+            );
+
+            return <Card fullWidth={ false } url={ apiUrl } noCsv={ true }>
+                <CardHeader heading={ heading } { ...props }/>
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }) =>
                         <TabLink key={ `tab-${ heading }` } label={ heading }>
