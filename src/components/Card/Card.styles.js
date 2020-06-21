@@ -13,10 +13,6 @@ export const HalfCard: ComponentType<*> = (() => {
         border: 1px #f3f2f1 solid;
         background-color: #f8f8f8;
         margin-top: 30px;
-        
-        :nth-child(2n) {
-            margin-left: 30px;
-        }
     `;
 })();
 
@@ -45,7 +41,7 @@ export const HalfCardSplitBody: ComponentType<*> = (() => {
 
 export const FullCard: ComponentType<*> = (() => {
     return styled.article`
-        flex: 1 2 60%;
+        flex: 1 0 60%;
         padding: 20px;
         border: 1px #f3f2f1 solid;
         margin-top: 30px;
@@ -74,18 +70,18 @@ export const BodySection: ComponentType<*> = (() => {
 
 
 export const HBodySection: ComponentType<*> = (() => {
-        return styled.section`
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            margin: 1rem 0 0 0;
-            
-            & > * {
-                margin-right: 2rem;
-                margin-bottom: 0;
-            }
-        `;
+    return styled.section`
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        margin: 1rem 0 0 0;
+        
+        & > * {
+            margin-right: 2rem;
+            margin-bottom: 0;
+        }
+    `;
 })();
 
 
