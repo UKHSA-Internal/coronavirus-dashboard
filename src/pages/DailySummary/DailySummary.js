@@ -145,7 +145,7 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
                                   setChartState={ () => {
                                       const name = item?.chart?.value ?? null;
 
-                                      setPlotData(
+                                      setPlotData( plotData =>
                                           name
                                               ? { ...plotData, [name]: !(plotData?.[name] ?? true) }
                                               : plotData
