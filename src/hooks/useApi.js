@@ -7,10 +7,10 @@ import { createQuery } from "common/utils";
 import deepEqual from "deep-equal";
 
 import type {
+    generateUrlInputs,
     useApiInputs,
     useApiResponse
 } from "./hooks.types";
-import type { ParsedParams } from "common/utils/utils.types";
 
 
 const usePrevious = (value) => {
@@ -26,6 +26,31 @@ const usePrevious = (value) => {
 };  // usePrevious
 
 
+export const generateUrl = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
+                        extraParams=[], endpoint="mainApi"}: generateUrlInputs): string => {
+
+    const
+        conjunctive = createQuery(conjunctiveFilters, ";", "") || "",
+        disjunctive = createQuery(disjunctiveFilters, "|", "", false) || "",
+        paramString = `${conjunctive}${(conjunctive && disjunctive) ? ";" : ""}${disjunctive}`;
+
+    return URLs[endpoint] + createQuery([
+        {
+            key: 'filters',
+            sign: '=',
+            value: paramString
+        },
+        ...extraParams,
+        {
+            key: 'structure',
+            sign: '=',
+            value: JSON.stringify(structure)
+        }
+    ]);
+
+};  // generateUrl
+
+
 const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
                     defaultResponse=[], extraParams=[],
                     endpoint="mainApi"}: useApiInputs): useApiResponse => {
@@ -38,24 +63,6 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
         prevExtraParams =  usePrevious(extraParams);
 
     useEffect(() => {
-
-        const
-            conjunctive = createQuery(conjunctiveFilters, ";", "") || "",
-            disjunctive = createQuery(disjunctiveFilters, "|", "", false) || "",
-            paramString = `${conjunctive}${(conjunctive && disjunctive) ? ";" : ""}${disjunctive}`,
-            urlParams = createQuery([
-                {
-                    key: 'filters',
-                    sign: '=',
-                    value: paramString
-                },
-                ...extraParams,
-                {
-                    key: 'structure',
-                    sign: '=',
-                    value: JSON.stringify(structure)
-                }
-            ]);
 
         (async () => {
 
@@ -72,7 +79,14 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
                 )
             ) {
                 try {
-                    const { data: dt } = await axios.get(URLs[endpoint] + urlParams);
+                    const { data: dt } = await axios.get(generateUrl({
+                        conjunctiveFilters:  conjunctiveFilters,
+                        disjunctiveFilters: disjunctiveFilters,
+                        structure: structure,
+                        extraParams: extraParams,
+                        endpoint: endpoint
+                    }));
+
                     setData(dt.data)
                 } catch (e) {
                     console.error(e)
