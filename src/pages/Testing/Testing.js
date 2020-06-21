@@ -170,7 +170,7 @@ const TestingCard = ({ tabs, tabs: { heading }, cardType, params, ...props }) =>
                         </TabLink>
                     )
                 }</TabLinkContainer>
-            </Card>
+            </Card>;
 
         case "map":
             return <Card heading={ heading }{ ...props }>
@@ -183,7 +183,7 @@ const TestingCard = ({ tabs, tabs: { heading }, cardType, params, ...props }) =>
                         </TabLink>
                     )
                 }</TabLinkContainer>
-            </Card>
+            </Card>;
 
         default:
             return <p>Invalid chart type</p>;
