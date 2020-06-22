@@ -38,7 +38,7 @@ const DropdownButton: ComponentType<DropdownButtonProps> = ({
     return <DropdownContainer ref={ dropdown } { ...props }>
         <Laucher data-tip={ tooltip }
                  data-for={ "tooltip-text" }
-                 className={ 'dropdown-launcher' }
+                 className={ `dropdown-launcher ${ open ? "open" : "" }` }
                  onClick={ () => setOpen(open => !open) }
                  { ...launcherProps }>
             <span className={ "govuk-visually-hidden" }>{ launcherSrOnly }</span>

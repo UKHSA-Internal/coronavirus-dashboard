@@ -94,6 +94,7 @@ export const Laucher: ComponentType<*> = (() => {
             background-color: #f1f1f1;
             transition: all .3s;
             
+            &.open,
             &:hover,
             &:active {
                 background-color: #e1e1e1;
