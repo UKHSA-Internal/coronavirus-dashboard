@@ -145,11 +145,11 @@ const App = ({ location: { pathname } }) => {
                 <ErrorBoundary>
                     <Route path={ "/" } component={ hasMenu ? LastUpdateTime : null }/>
                     <div className={ "dashboard-container" }>
-                        <div className={ "dashboard-menu" }>
+                        <aside className={ "dashboard-menu" }>
                             <Switch>
                                 <Route path={ "/" } component={ hasMenu ? SideNavigation : null }/>
                             </Switch>
-                        </div>
+                        </aside>
                         <div className={ "dashboard-content" }>
                             <DashboardHeader/>
 
