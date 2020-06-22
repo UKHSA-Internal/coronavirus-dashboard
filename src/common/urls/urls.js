@@ -15,7 +15,7 @@ const URLs = {
     baseGeo:         `https://${ REACT_APP_MAIN_CDN      }/assets/geo/`,
     mapStyle:        `https://${ REACT_APP_MAIN_CDN      }/assets/map/style_v3.json`,
     landingData:     `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/data/landing.json`,
-    timestamp:       `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/test/v2/info/latest_timestamp`,
+    timestamp:       `https://${ REACT_APP_MAIN_CDN }/assets/dispatch/website_timestamp`,
     lookups:         `https://${ REACT_APP_MAIN_CDN }/assets/lookups/`,
     lookupApi:       `https://uks-covid19-pubdash-dev.azure-api.net/v1/lookup`,
     pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN }/assets/structural_layouts/`,
