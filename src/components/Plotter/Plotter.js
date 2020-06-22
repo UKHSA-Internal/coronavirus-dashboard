@@ -134,7 +134,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                 showlegend: true,
                 margin: {
                     l: width === "desktop" ? 80 : 40,
-                    r: 10,
+                    r: 15,
                     b: 25,
                     t: 10,
                     pad: 0,
