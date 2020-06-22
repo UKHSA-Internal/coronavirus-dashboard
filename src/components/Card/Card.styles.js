@@ -7,13 +7,19 @@ import DownloadIcon from "assets/download.svg"
 
 
 export const HalfCard: ComponentType<*> = (() => {
-    return styled.article`
+
+    return styled.div`
         flex: 1 1 43%;
         padding: 20px;
         border: 1px #f3f2f1 solid;
         background-color: #f8f8f8;
         margin-top: 30px;
+        
+        &:nth-of-type(2n) {
+            margin-left: 30px;
+        }
     `;
+
 })();
 
 
