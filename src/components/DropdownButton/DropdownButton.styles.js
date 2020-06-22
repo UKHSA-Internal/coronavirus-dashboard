@@ -29,6 +29,10 @@ export const OptionsContainer :ComponentType<*> = (() => {
         margin-right: -15px !important;
         min-width: 100px;
         
+        &:focus {
+            background-colour: #ffdd00;
+        }
+        
         & > * {
             display: block;
             padding: 8px 8px;
@@ -78,8 +82,8 @@ export const OptionsContainer :ComponentType<*> = (() => {
 export const Laucher: ComponentType<*> = (() => {
     const
         Container = styled.span`
-            width: 33px;
-            height: 33px;
+            width: 34px;
+            height: 34px;
             display: inline-block;
             position: relative;
             cursor: pointer;
@@ -96,20 +100,21 @@ export const Laucher: ComponentType<*> = (() => {
             }
             
             &:focus {
-                background-colour: #ffdd00;
+                background-colour: #ffdd00 !important;
             }
         `,
         Node = styled.button`
-            width: 28px;
-            height: 30px;
+            width: 34px;
+            height: 34px;
+            padding: 2px 3px;
             outline: none;
             cursor: pointer;
-            display: inline-block;
-            float: right;
-            margin-right: 3px;
+            display: flex;
+            // float: right;
+            margin-right: 1px;
             background: url("${ DownloadIcon }");
             background-repeat: no-repeat;
-            background-size: 25px 25px;
+            background-size: 30px 30px;
             background-position: center center;
                         
             &:focus {
