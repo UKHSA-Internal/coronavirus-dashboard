@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import type { ComponentType } from 'react';
 import { Link } from "react-router-dom";
 
@@ -302,7 +302,7 @@ const Card: ComponentType<Props> = ({ url, children, fullWidth=false, noCsv=fals
 
 const MixedCardContainer: ComponentType<*> = ({ children }) => {
 
-    return <div className={ 'util-flex util-flex-wrap' }>{ children }</div>
+    return <section className={ 'util-flex util-flex-wrap' }>{ children }</section>
 
 };  // MixedCardContainer
 
@@ -344,7 +344,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
                     { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
                 <TabLinkContainer>{
-                    tabs?.map(({ heading: tabHeading, fields }) =>
+                    tabs?.map(({ heading: tabHeading, ...rest }) =>
                         <TabLink key={ `tab-${ tabHeading }` }
                                  label={ tabHeading }>
                             <p>Not implemented.</p>
