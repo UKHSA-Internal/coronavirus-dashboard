@@ -255,10 +255,13 @@ const Card: ComponentType<Props> = ({ url, children, fullWidth=false, noCsv=fals
             : <FullCard {...props}/>;
 
     return <Container>
-        <DropdownButton tooltip={ "Download card data" }
-                        launcherSrOnly={ "Download card data" }>
-            <DownloadOptions baseUrl={ url } noCsv={ noCsv }/>
-        </DropdownButton>
+        {
+            url &&
+            <DropdownButton tooltip={ "Download card data" }
+                            launcherSrOnly={ "Download card data" }>
+                <DownloadOptions baseUrl={ url } noCsv={ noCsv }/>
+            </DropdownButton>
+        }
         { children }
     </Container>;
 
