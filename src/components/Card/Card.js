@@ -196,20 +196,26 @@ const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) =>
 
 const CardHeader: ComponentType<*> = ({ heading, caption="", linkToHeading=false, children }: Props) => {
 
-    return <HalfCardHeader>
-        <HalfCardHeading>
+    return <>
+        <HalfCardHeader className={ linkToHeading ? "" : "govuk-!-margin-bottom-2"}>
+            <HalfCardHeading>
             { heading }
             <Caption>{ caption }</Caption>
-        </HalfCardHeading>
+            </HalfCardHeading>
+            {
+                linkToHeading &&
+                <Link to={ heading.toLowerCase() }
+                      className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state no-decoration" }>
+                    { linkToHeading }
+                </Link>
+            }
+            { children }
+        </HalfCardHeader>
         {
             linkToHeading &&
-            <Link to={ heading.toLowerCase() }
-                  className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>
-                { linkToHeading }
-            </Link>
+            <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
         }
-        { children }
-    </HalfCardHeader>;
+    </>;
 
 };  // CardHeader
 
