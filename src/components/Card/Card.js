@@ -272,7 +272,9 @@ const DownloadData = ({ baseUrl, noCsv }) => {
         <Download data-tip={ "Download card data" }
                   data-for={ "download-tooltip" }
                   className={ "download-dropdown" }
-                  onClick={ () => setOpen(open => !open) }/>
+                  onClick={ () => setOpen(open => !open) }>
+            <span className={ "govuk-visually-hidden" }>Download card data</span>
+        </Download>
         { open &&  <DownloadOptions baseUrl={ baseUrl } noCsv={ noCsv }/> }
         <ReactTooltip id={ "download-tooltip" }
               place={ "right" }
