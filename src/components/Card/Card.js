@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useState } from 'react';
 import type { ComponentType } from 'react';
 import { Link } from "react-router-dom";
 
@@ -22,9 +22,7 @@ import {
     NumericData,
     DataLabel,
     Number,
-    Download,
-    DownloadContainer,
-    HBodySection, DownloadOptionsContainer
+    HBodySection
 } from './Card.styles';
 import numeral from 'numeral'
 import ReactTooltip from "react-tooltip";
@@ -38,6 +36,7 @@ import {
     TabLinkContainer
 } from "components/TabLink";
 import { Radio } from "components/GovUk"
+import DropdownButton from "components/DropdownButton";
 
 
 const VisualSection: ComponentType<Props> = ({ children }: Props) => {
@@ -217,7 +216,7 @@ const CardHeader: ComponentType<*> = ({ heading, caption="", linkToHeading=false
 
 const DownloadOptions = ({ baseUrl, noCsv }) => {
 
-    return <DownloadOptionsContainer>
+    return <>
         {
             !noCsv
                 ? <a className={ 'govuk-link govuk-link--no-visited-state' }
@@ -226,6 +225,9 @@ const DownloadOptions = ({ baseUrl, noCsv }) => {
                 </a>
                 : <span className={ 'govuk-link govuk-link--no-visited-state disabled' }>
                     as CSV
+                    <span className={ "govuk-visually-hidden" }>
+                        CSV format is not available for this card.
+                    </span>
                 </span>
         }
         <a className={ 'govuk-link govuk-link--no-visited-state' }
@@ -240,64 +242,25 @@ const DownloadOptions = ({ baseUrl, noCsv }) => {
            href={ `${baseUrl}&format=xml` } download>
             as XML
         </a>
-    </DownloadOptionsContainer>
+    </>
 
 };  // DownloadOptions
 
 
-const DownloadData = ({ baseUrl, noCsv }) => {
-
-    const
-        [ open, setOpen ] = useState(false),
-        dropdown = useRef(null);
-
-    function handleClickEvent ({ target }) {
-
-        if ( dropdown.current && !target.closest(`.${dropdown.current.className}`) && open )
-            setOpen(false);
-
-    }
-
-    useEffect(() => {
-        document.addEventListener("click", handleClickEvent);
-
-        return () => {
-            document.removeEventListener("click", handleClickEvent);
-        }
-    });
-
-    if ( !baseUrl ) return null;
-
-    return <DownloadContainer ref={ dropdown }>
-        <Download data-tip={ "Download card data" }
-                  data-for={ "download-tooltip" }
-                  className={ "download-dropdown" }
-                  onClick={ () => setOpen(open => !open) }>
-            <span className={ "govuk-visually-hidden" }>Download card data</span>
-        </Download>
-        { open &&  <DownloadOptions baseUrl={ baseUrl } noCsv={ noCsv }/> }
-        <ReactTooltip id={ "download-tooltip" }
-              place={ "right" }
-              backgroundColor={ "#0b0c0c" }
-              className={ "tooltip" }
-              effect={ "solid" }/>
-    </DownloadContainer>
-
-};  // DownloadData
-
-
 const Card: ComponentType<Props> = ({ url, children, fullWidth=false, noCsv=false }: Props) => {
 
-    if ( !fullWidth )
-        return <HalfCard>
-            <DownloadData baseUrl={ url } noCsv={ noCsv }/>
-            { children }
-        </HalfCard>;
+    const Container = ({ ...props }) =>
+        !fullWidth
+            ? <HalfCard {...props}/>
+            : <FullCard {...props}/>;
 
-    return <FullCard>
-        <DownloadData baseUrl={ url } noCsv={ noCsv }/>
+    return <Container>
+        <DropdownButton tooltip={ "Download card data" }
+                        launcherSrOnly={ "Download card data" }>
+            <DownloadOptions baseUrl={ url } noCsv={ noCsv }/>
+        </DropdownButton>
         { children }
-    </FullCard>
+    </Container>;
 
 };  // Card
 
