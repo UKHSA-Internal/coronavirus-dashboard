@@ -24,7 +24,7 @@ export const Plotter = ({ layout, ...props }) => {
             margin: {
                 l: 25,
                 r: 0,
-                b: 15,
+                b: 20,
                 t: 5,
                 pad: 0
             },
@@ -33,11 +33,12 @@ export const Plotter = ({ layout, ...props }) => {
                 zeroline: false,
                 showline: false,
                 automargin: true,
-                tickslen: 10,
+                tickslen: 5,
                 ticks: "outside",
                 tickson: "boundaries",
                 ticklen: 'labels',
                 type: "date",
+                tickformat: '%b',
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
                     size : 10,
