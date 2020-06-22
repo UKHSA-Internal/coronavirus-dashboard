@@ -28,6 +28,9 @@ export const leastSquareRegression =  (x, y, domain) => {
 };  // leastSquareRegression
 
 
+const numberOrNan = value => typeof value === 'number' ? value : NaN;
+
+
 /**
  * Moving average
  * --------------
@@ -49,11 +52,15 @@ export const movingAverage = ( data: number[], size: number, round: number=1 ): 
         movingMean = Array(N).fill(NaN),
         sum ;
 
-    for ( let index = floor; index < N - size; index++ ) {
-        sum = 0;
+    for ( let index = floor; index < (N + size); index++ ) {
 
-        for ( let sumIndex = index - floor; sumIndex < index + ceil; sumIndex ++ )
-            sum = sum + data[sumIndex];
+        if ( numberOrNan(data[index]) )
+            sum = 0;
+        else
+            continue;
+
+        for ( let sumIndex = index - floor; sumIndex < (index + ceil); sumIndex ++ )
+            sum = sum + numberOrNan(data[sumIndex]);
 
         movingMean[index] = roundTo(sum / size, round);
     }
