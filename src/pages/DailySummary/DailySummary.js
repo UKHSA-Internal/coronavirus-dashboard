@@ -127,13 +127,15 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
         <CardHeader heading={ heading } linkToHeading={ "More detail" }/>
         <HalfCardSplitBody>
             <VisualSection>
-                <Plotter data={ getPlotData(
-                    layout
-                        .filter(({ chart=false }) => chart && (plotData?.[chart.value] ?? true))
-                        .map(item => item.chart),
-                    data
-                )
-                }/>
+                <Plotter
+                    data={ getPlotData(
+                        layout
+                            .filter(({ chart=false }) => chart && (plotData?.[chart.value] ?? true))
+                            .map(item => item.chart),
+                        data
+                    ) }
+
+                />
             </VisualSection>
             <NumericReports>
                 {
