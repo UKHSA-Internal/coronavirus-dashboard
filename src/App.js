@@ -61,11 +61,11 @@ const LastUpdateTime = () => {
             </p>
         </Announcement>
         <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
-            Last updated on&nbsp;{
+            Last updated on&nbsp;<time dateTime={ timestamp }>{
                 moment(timestamp)
                     .local(true)
                     .format("dddd D MMMM YYYY [at] h:mma")
-            }
+            }</time>
         </p>
     </Fragment>
 
