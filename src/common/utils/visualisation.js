@@ -5,13 +5,29 @@ import { movingAverage } from "../stats";
 
 
 export const
-    // yellow, cornFlowerBlue, darkBlue, red, gray
     colours = [
-        '#FFBF47',  // yellow
-        '#2B8CC4',  // corn flower blue
-        '#2E358B',  // dark blue
-        '#DF3034',  // red
-        "#7f7f7f"   // gray
+        // Base blue
+        '#5694CA',
+        // Base blue tint 1
+        '#ABCBE5',
+        // Base blue tint 2
+        '#DEEAF4',
+        // Dark blue
+        '#003078',
+        // Dark blue tint 1
+        '#8098BC',
+        // Dark blue tint 2
+        '#CCD6E4',
+        // Grey
+        '#B1B4B6',
+        // Grey tint 1
+        '#D8DADB',
+        // Grey tint 2
+        '#EFF0F0',
+        // Yellow:
+        '#FFDD00',
+        // Red:
+        '#DF3134',
     ];
 
 
