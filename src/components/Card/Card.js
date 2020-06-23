@@ -134,8 +134,9 @@ const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) =>
 
     return <DataContainer>
         {
-            ( chart?.colour ?? false )
-                ? <DataColour role={ "button" }
+            ( chart?.colour ?? false ) === false
+                ?  null
+                : <DataColour role={ "button" }
                             data-for={ tipId }
                             data-tip={
                                 `Click to ${ isEnabled ? "hide" : "show" } 
@@ -143,7 +144,6 @@ const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) =>
                             }
                             onClick={ setChartState }
                             colour={ isEnabled ? (colours?.[chart.colour] ?? "") : "none" } />
-                : null
         }
         <Heading>{ caption }</Heading>
         <DataNumbersContainer>
