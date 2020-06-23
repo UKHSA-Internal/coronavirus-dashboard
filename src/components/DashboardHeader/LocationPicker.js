@@ -197,7 +197,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                 sign: '=',
                 value: currentLocation.areaType
                     .toLowerCase()
-                    .replace(/nhs/, "")
+                    .replace(/nhsNation/, "nation")
             },
             { key: 'areaName', sign: '=', value: currentLocation.areaName }
         ]);
