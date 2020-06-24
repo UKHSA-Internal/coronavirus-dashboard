@@ -4,10 +4,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Switch, Route, withRouter } from 'react-router';
 import { Header, Footer } from 'govuk-react-jsx';
 
-import dotenv from 'dotenv';
-
 import About from 'pages/About';
-import Archive from "pages/Archive";
 import Accessibility from 'pages/Accessibility';
 import Cookies from 'pages/Cookies';
 import DailySummary from 'pages/DailySummary';
@@ -24,11 +21,7 @@ import moment from "moment";
 import SideNavigation from "components/SideNavigation";
 import SideNavMobile from "components/SideNavMobile";
 import DashboardHeader from "components/DashboardHeader";
-import Announcement from "./components/Announcement";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
-
-// get environment vars
-dotenv.config();
 
 
 const useTimestamp = () => {
@@ -54,12 +47,6 @@ const LastUpdateTime = () => {
     if (!timestamp) return null;
 
     return <Fragment>
-        <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>
-            <p className={ "govuk-body govuk-!-margin-top-0" }>
-                This is a development service. The functionality is <strong>not</strong> reliable and some
-                of the data are random simulations.
-            </p>
-        </Announcement>
         <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
             Last updated on&nbsp;<time dateTime={ timestamp }>{
                 moment(timestamp)
@@ -77,7 +64,7 @@ const FooterContents = () => (
         <p className={ "govuk-footer__meta-custom" }>
             For feedback email&nbsp;
             <a className="govuk-footer__link"
-               href={ encodeURI("mailto:coronavirus-tracker@phe.gov.uk?Subject=Coronavirus dashboard feedback") }
+               href={ encodeURI("mailto:coronavirus-tracker@phe.gov.uk?Subject=BETA dashboard feedback") }
                rel="noopener noreferrer"
                target="_blank"
             >coronavirus-tracker@phe.gov.uk</a>
@@ -105,7 +92,7 @@ const F = () => (
         meta={ {
             children: <FooterContents/>,
             items: [
-                { children: ['Archive'], href: '/archive' },
+                // { children: ['Archive'], href: '/archive' },
                 { children: ['Accessibility'], href: '/accessibility' },
                 { children: ['Cookies'], href: '/cookies' }
             ],
@@ -136,7 +123,7 @@ const BetaBanner = ({ ...props }) => {
             <span className="govuk-phase-banner__text">
                 This is a new service &ndash; your&nbsp;
                 <a className="govuk-footer__link"
-                   href={ encodeURI("mailto:coronavirus-tracker@phe.gov.uk?Subject=Coronavirus dashboard feedback") }
+                   href={ encodeURI("mailto:coronavirus-tracker@phe.gov.uk?Subject=BETA dashboard feedback") }
                    rel={ "noopener noreferrer" }
                    target={ "_blank" }>
                     coronavirus-tracker@phe.gov.uk</a>&nbsp;
@@ -146,7 +133,7 @@ const BetaBanner = ({ ...props }) => {
         </p>
     </div>
 
-}
+};
 
 
 const App = ({ location: { pathname } }) => {
@@ -187,7 +174,7 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/deaths" component={ Deaths }/>
                                 <Route path="/about-data" component={ About }/>
 
-                                <Route path="/archive" component={ Archive }/>
+                                {/*<Route path="/archive" component={ Archive }/>*/}
                                 <Route path="/accessibility" component={ Accessibility }/>
                                 <Route path="/cookies" component={ Cookies }/>
                             </Switch>

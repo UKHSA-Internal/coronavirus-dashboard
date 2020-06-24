@@ -18,6 +18,7 @@ import { Plotter } from "components/Plotter";
 import { getPlotData, groupBy } from "common/utils";
 import { DataTable } from "components/GovUk";
 import useApi from "hooks/useApi";
+import { PulseLoader } from "react-spinners";
 
 
 // This is a pseudo-component created to make the implementation of
@@ -94,8 +95,11 @@ export const TabContent: TabContentType<TabContentProps> = ({ fields, params, ta
     const data = useApi({
         conjunctiveFilters: params,
         structure: structure,
-        defaultResponse: []
+        defaultResponse: null
     });
+
+    if ( data === null )
+        return <PulseLoader size={ 8 } margin={ 2 } color={ '#adadad' }/>;
 
     return <TabContentWithData data={ data } fields={ fields } tabType={ tabType } barType={ barType }/>
 
