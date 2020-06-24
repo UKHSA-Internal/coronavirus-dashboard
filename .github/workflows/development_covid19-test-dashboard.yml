@@ -35,7 +35,7 @@ jobs:
         BASE_URL: https://covid19statdev.azureedge.net
         MAIN_CDN: c19pubdev.azureedge.net
         DOWNLOADS_CDN: c19downloadsdev.azureedge.net
-        API_ENDPOINT: https://uks-covid19-pubdash-dev.azure-api.net
+        API_ENDPOINT: uks-covid19-pubdash-dev.azure-api.net
         NODE_ENV: production
 
       run: |
