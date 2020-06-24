@@ -1,6 +1,6 @@
 {
   "name": "covid-public",
-  "version": "2.0.0-stag4",
+  "version": "2.0.0-stag5",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
@@ -11,9 +11,6 @@
     "deep-equal": "^2.0.3",
     "govuk-frontend": "3.7.0",
     "govuk-react-jsx": "2.0.1",
-    "leaflet": "^1.6.0",
-    "mapbox-gl": "^1.10.1",
-    "mapbox-gl-leaflet": "^0.0.12",
     "moment": "^2.24.0",
     "node-sass": "^4.13.1",
     "numeral": "^2.0.6",
@@ -52,12 +49,14 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "ie >= 10"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "last 1 opera version"
     ]
   },
   "devDependencies": {
