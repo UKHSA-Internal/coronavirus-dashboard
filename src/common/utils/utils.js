@@ -311,3 +311,14 @@ export const fieldToStructure = (fields, params, extraParams=[]) => {
     })
 
 };  // fieldToStructure
+
+
+export const isIE = () => {
+
+    const
+        ua = window.navigator.userAgent,
+        msie = ua.indexOf("MSIE ");
+
+    return msie > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./);
+
+};
