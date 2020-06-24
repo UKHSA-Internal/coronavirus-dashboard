@@ -27,7 +27,7 @@ export const
         // Yellow:
         '#FFDD00',
         // Red:
-        '#DF3134',
+        '#d4351c',
     ];
 
 
