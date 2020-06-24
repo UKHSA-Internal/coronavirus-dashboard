@@ -206,7 +206,7 @@ const CardHeader: ComponentType<*> = ({ heading, caption="", linkToHeading=false
             {
                 linkToHeading &&
                 <Link to={ heading.toLowerCase() }
-                      className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state no-decoration" }>
+                      className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state no-decoration smaller" }>
                     { linkToHeading }
                 </Link>
             }
