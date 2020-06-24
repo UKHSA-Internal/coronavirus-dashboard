@@ -126,7 +126,7 @@ const BetaBanner = ({ ...props }) => {
                    href={ encodeURI("mailto:coronavirus-tracker@phe.gov.uk?Subject=BETA dashboard feedback") }
                    rel={ "noopener noreferrer" }
                    target={ "_blank" }>
-                    coronavirus-tracker@phe.gov.uk</a>&nbsp;
+                    feedback</a>&nbsp;
                 will help us to improve it.
                 We currently show UK data only. Sub-national data will be added soon.
             </span>
