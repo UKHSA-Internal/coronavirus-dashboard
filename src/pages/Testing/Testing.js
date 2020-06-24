@@ -49,6 +49,7 @@ const NationsDaily = () => {
             },
             defaultResponse: []
         }),
+        colourIndices = [ 0, 9, 3, 10 ],
         groups = groupBy(dropLeadingZeros(data,"value"), item => item.name);
 
     return <Plotter
@@ -67,7 +68,7 @@ const NationsDaily = () => {
                     fill: 'tozeroy',
                     type: "bar",
                     marker: {
-                        color: colours[index]
+                        color: colours[colourIndices[index]]
                     }
                 }
 
@@ -94,6 +95,7 @@ const NationsCumulative = () => {
             },
             defaultResponse: []
         }),
+        colourIndices = [ 0, 9, 3, 10 ],
         groups = groupBy(dropLeadingZeros(data, "value"), item => item.name);
 
     return <Plotter
@@ -112,7 +114,7 @@ const NationsCumulative = () => {
                     fill: 'tozeroy',
                     type: "bar",
                     marker: {
-                        color: colours[index]
+                        color: colours[colourIndices[index]]
                     }
                 }
 
