@@ -1,17 +1,15 @@
 import React from "react";
 import { PulseLoader } from "react-spinners";
-import { isIE } from "common/utils";
+import { InlineLoading } from "./Loading.styles";
 
 
 const Loading = ({ large=false }) => {
 
-    if ( isIE() ) return null;
-
     if ( !large )
-        return <span>
+        return <InlineLoading>
             <PulseLoader size={ 8 } margin={ 2 } color={ '#adadad' }/>
             <span className={ "govuk-visually-hidden" }>The website is loading. Please wait.</span>
-        </span>
+        </InlineLoading>
 
     return <div className="govuk-width-container" role="main">
         <div className={ "govuk-body govuk-!-font-size-24 govuk-!-margin-top-10" }>
