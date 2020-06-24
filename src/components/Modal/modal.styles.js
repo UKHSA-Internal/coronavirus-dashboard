@@ -49,15 +49,16 @@ export const ModalOpener: ComponentType<*> = (() => {
             cursor: pointer;
             outline: none;
             border-bottom: 1px dashed #959595;
-            
-           &:hover {
+             
+            &:active,
+            &:hover {
                 background-colour: #f1f1f1;
                 border-bottom: 1px dashed #3e3e3e;
             }
         `;
 
     return ({ className="", ...props }) =>
-        <Node className={ `${classes} ${className}` } { ...props }/>
+        <Node className={ `${classes} ${className}` } role={ 'button' } { ...props }/>
 })();
 
 

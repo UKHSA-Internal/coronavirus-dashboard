@@ -61,6 +61,11 @@
     white-space: normal !important;
 }
 
-*:focus {
-    background: #ffdd00;
+a,
+button,
+input[type="submit"],
+input[type="reset"] {
+    &:focus  {
+        background-color: #ffdd00 !important;
+    }
 }
