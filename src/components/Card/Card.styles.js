@@ -16,6 +16,10 @@ export const HalfCard: ComponentType<*> = (() => {
         
         &:nth-of-type(2n) {
             margin-left: 30px;
+            
+            @media only screen and (max-width: 640px) {
+                margin-left: 0;
+            }
         }
     `;
 
