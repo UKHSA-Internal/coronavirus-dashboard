@@ -22,6 +22,7 @@ import URLs from "common/urls";
 import type {
     DailySummaryCardProps
 } from "./DailySummary.types";
+import Loading from "components/Loading";
 
 
 const
@@ -80,6 +81,12 @@ const NationDeathsPlot = ({ ...props }) => {
 };  // DeathsCard
 
 
+const DrawPlots = ({ ...props }) => {
+
+
+
+};
+
 const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout, heading }: DailySummaryCardProps) => {
 
     const
@@ -105,7 +112,8 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
         [ plotData, setPlotData ] = useState({}),
         data = useApi({
             conjunctiveFilters: params,
-            structure: structure
+            structure: structure,
+            defaultResponse: null
         });
 
     useEffect(() => {
@@ -123,19 +131,24 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
 
     }, [ params ]);
 
+
     return <Card heading={ heading }>
         <CardHeader heading={ heading } linkToHeading={ "More detail" }/>
         <HalfCardSplitBody>
             <VisualSection>
-                <Plotter
-                    data={ getPlotData(
-                        layout
-                            .filter(({ chart=false }) => chart && (plotData?.[chart.value] ?? true))
-                            .map(item => item.chart),
-                        data
-                    ) }
+                {
+                    data === null
+                        ? <Loading size={ 8 } margin={ 2 } color={ '#adadad' }/>
+                        : <Plotter
+                            data={ getPlotData(
+                                layout
+                                    .filter(({ chart = false }) => chart && (plotData?.[chart.value] ?? true))
+                                    .map(item => item.chart),
+                                data
+                            ) }
 
-                />
+                        />
+                }
             </VisualSection>
             <NumericReports>
                 {
@@ -174,6 +187,8 @@ const DailySummary = ({ location: { search: query } }) => {
         urlParams = getParams(query),
         params = urlParams.length ? urlParams : DefaultParams,
         { summary=[] } = pageLayout;
+
+    if ( !summary ) return <Loading large={ true }/>
 
     return <Container className={ "util-flex util-flex-wrap" }>{
         summary.map((item, index) =>

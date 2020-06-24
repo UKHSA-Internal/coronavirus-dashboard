@@ -10,7 +10,7 @@ import type {Props } from './Healthcare.types';
 import { getParams } from "common/utils";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
-import { MainLoading } from "components/Loading";
+import Loading from "components/Loading";
 
 
 const
@@ -27,7 +27,7 @@ const Healthcare: ComponentType<Props> = ({ location: { search: query }}: Props)
         layout = usePageLayout(URLs.pageLayouts.healthcare,  null),
         params = urlParams.length ? urlParams : DefaultParams;
 
-    if ( !layout ) return <MainLoading/>;
+    if ( !layout ) return <Loading large={ true }/>;
 
     return <>
         <HeadlineNumbers params={ params } { ...layout }/>
