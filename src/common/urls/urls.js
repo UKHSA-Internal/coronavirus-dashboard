@@ -3,7 +3,8 @@ const
     {
         REACT_APP_MAIN_CDN      = "%MAIN_CDN%",
         REACT_APP_DOWNLOADS_CDN = "%DOWNLOADS_CDN%",
-        REACT_APP_BASE_URL      = "%BASE_URL%"
+        REACT_APP_BASE_URL      = "%BASE_URL%",
+        REACT_APP_API_ENDPOINT  = "%API_ENDPOINT%"
     } = env;
 
 
@@ -19,7 +20,7 @@ const URLs = {
     lookups:         `https://${ REACT_APP_MAIN_CDN }/assets/lookups/`,
     lookupApi:       `https://uks-covid19-pubdash-dev.azure-api.net/v1/lookup`,
     pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN }/assets/structural_layouts/`,
-    mainApi:         `https://uks-covid19-pubdash-dev.azure-api.net/v1/data`,
+    mainApi:         `https://${ REACT_APP_API_ENDPOINT }/v1/data`,
     modals:          `https://${ REACT_APP_MAIN_CDN }/assets/modals/`,
     latestCases: {
         csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-cases_latest.csv`,
