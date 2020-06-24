@@ -24,7 +24,9 @@ import { TabLink, TabLinkContainer } from "components/TabLink";
 import { Plotter } from "components/Plotter";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
-import { MainLoading } from "components/Loading";
+import Loading from "components/Loading";
+import { PulseLoader } from "react-spinners";
+import { DataTable } from "components/GovUk";
 
 
 const
@@ -47,10 +49,15 @@ const NationsDaily = () => {
                 date: "date",
                 name: "areaName"
             },
-            defaultResponse: []
+            defaultResponse: null
         }),
         colourIndices = [ 0, 9, 3, 10 ],
-        groups = groupBy(dropLeadingZeros(data,"value"), item => item.name);
+                groups = data !== null
+            ? groupBy(dropLeadingZeros(data, "value"), item => item.name)
+            : {};
+
+    if ( data === null )
+        return <PulseLoader size={ 8 } margin={ 2 } color={ '#adadad' }/>;
 
     return <Plotter
         data={
@@ -89,14 +96,20 @@ const NationsCumulative = () => {
                 { key: "areaType", sign: "=", value: "nation" }
             ],
             structure: {
+                // value: "newPillarOneTestsByPublishDate",
                 value: "cumPillarOneTestsByPublishDate",
                 date: "date",
                 name: "areaName"
             },
-            defaultResponse: []
+            defaultResponse: null
         }),
         colourIndices = [ 0, 9, 3, 10 ],
-        groups = groupBy(dropLeadingZeros(data, "value"), item => item.name);
+        groups = data !== null
+            ? groupBy(dropLeadingZeros(data, "value"), item => item.name)
+            : {};
+
+    if ( data === null )
+        return <PulseLoader size={ 8 } margin={ 2 } color={ '#adadad' }/>;
 
     return <Plotter
         data={
@@ -126,6 +139,66 @@ const NationsCumulative = () => {
 }; // TotalPlot
 
 
+const NationData = () => {
+    const
+        data = useApi({
+            conjunctiveFilters: [
+                { key: "areaType", sign: "=", value: "nation" }
+            ],
+            structure: {
+                daily: "newPillarOneTestsByPublishDate",
+                cumulative: "cumPillarOneTestsByPublishDate",
+                date: "date",
+                name: "areaName"
+            },
+            defaultResponse: null
+        });
+
+    if ( data === null )
+        return <PulseLoader size={ 8 } margin={ 2 } color={ '#adadad' }/>;
+
+    const
+        groups = groupBy(dropLeadingZeros(data, "daily", "cumulative"), item => item.date),
+        tableData = [];
+
+    let row;
+
+    console.log(groups);
+
+    for ( const date in groups ) {
+
+        // if ( !groups.hasOwnProperty(date) ) continue;
+
+        row = [ date ]
+
+        for ( const { daily, cumulative } of groups[date].sort(({ nameA }, { nameB }) => nameA > nameB || -(nameB > nameA) || 0) ) {
+            row = [...row, daily, cumulative ]
+        }
+
+        tableData.push( row )
+
+    }
+
+    console.log(groups[Object.keys(groups)[0]]
+            .map(row => ([
+                { value: `${ row.name } daily tests`, type: "number" },
+                { value: `${ row.name } total tests`, type: "number" },
+            ])).reduce((acc, item) => [...acc, ...item], []))
+
+    // return null
+    return <DataTable heading={[
+        { value: "Date", type: "date" },
+        ...groups[Object.keys(groups)[0]]
+            .map(row => ([
+                { value: `${ row.name } daily tests`, type: "number" },
+                { value: `${ row.name } total tests`, type: "number" },
+            ])).reduce((acc, item) => [...acc, ...item], [])
+    ]}
+    data={[]}/>
+
+};
+
+
 const Testing: ComponentType<Props> = ({ location: { search: query }}: Props) => {
 
     const
@@ -133,7 +206,7 @@ const Testing: ComponentType<Props> = ({ location: { search: query }}: Props) =>
         layout = usePageLayout(URLs.pageLayouts.testing,  null),
         params = urlParams.length ? urlParams : DefaultParams;
 
-    if ( !layout ) return <MainLoading/>;
+    if ( !layout ) return <Loading large={ true }/>;
 
     return <>
         <HeadlineNumbers params={ params } { ...layout }/>
@@ -153,7 +226,7 @@ const Testing: ComponentType<Props> = ({ location: { search: query }}: Props) =>
                         <NationsCumulative/>
                     </TabLink>
                     <TabLink label={ "Data" }>
-                         Placeholder
+                        <NationData/>
                     </TabLink>
 
                 </TabLinkContainer>

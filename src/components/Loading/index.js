@@ -1,1 +1,1 @@
-export { MainLoading } from "./Loading"
+export { default } from "./Loading"

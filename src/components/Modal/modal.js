@@ -4,14 +4,14 @@ import React, { useState, Fragment } from "react";
 import { ModalContainer, ModalContent, ModalOpener, Markdown, ModalCloser } from "./modal.styles";
 import useModalData from "hooks/useModalData";
 import { strFormat } from "common/utils";
-import { MainLoading } from "components/Loading";
+import Loading from "components/Loading";
 
 
 const Modal = ({ markdownPath, replacements }) => {
 
     const data = useModalData(markdownPath);
 
-    if ( !data ) return <MainLoading/>
+    if ( !data ) return <Loading/>
 
     return <Markdown dangerouslySetInnerHTML={{ __html: strFormat(data, replacements) }}/>
 

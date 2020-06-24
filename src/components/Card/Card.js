@@ -37,7 +37,7 @@ import {
 } from "components/TabLink";
 import { Radio } from "components/GovUk"
 import DropdownButton from "components/DropdownButton";
-import { PulseLoader } from "react-spinners"
+import Loading from "components/Loading"
 
 
 const VisualSection: ComponentType<Props> = ({ children }: Props) => {
@@ -158,7 +158,7 @@ const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) =>
                         {
                             primaryValue
                                 ? numeral(primaryValue).format("0,0")
-                                : <PulseLoader size={ 8 } margin={ 2 } color={ '#adadad' }/>
+                                : <Loading/>
                         }{ primarySign || null }
                         <p className={ "govuk-visually-hidden" }>
                             Abstract information on { primaryLabel }: { primaryTooltip }<br/>
@@ -182,7 +182,7 @@ const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) =>
                             {
                                 secondaryValue
                                 ? numeral(secondaryValue).format("0,0")
-                                : <PulseLoader size={ 8 } margin={ 2 } color={ '#adadad' }/>
+                                : <Loading/>
                             }{ secondarySign || secondarySign }
                             <p className={ "govuk-visually-hidden" }>
                                 Abstract information on { secondaryLabel }: { secondaryTooltip }<br/>
