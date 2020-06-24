@@ -29,8 +29,8 @@ jobs:
       env:
         CI: false
         BUILD_ENV: staging
-        BASE_URL: https://Covid19StaticStaging.azureedge.net
-        MAIN_CDN: c19pub.azureedgestaging.net
+        BASE_URL: https://coronavirus-staging.data.gov.uk
+        MAIN_CDN: c19pubstaging.azureedge.net
         DOWNLOADS_CDN: c19downloadsstaging.azureedge.net
         API_ENDPOINT: coronavirus-staging.data.gov.uk/api
         NODE_ENV: production

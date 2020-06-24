@@ -18,7 +18,7 @@ const URLs = {
     landingData:     `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/data/landing.json`,
     timestamp:       `https://${ REACT_APP_MAIN_CDN }/assets/dispatch/website_timestamp`,
     lookups:         `https://${ REACT_APP_MAIN_CDN }/assets/lookups/`,
-    lookupApi:       `https://uks-covid19-pubdash-dev.azure-api.net/v1/lookup`,
+    lookupApi:       `https://${ REACT_APP_API_ENDPOINT }/v1/lookup`,
     pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN }/assets/structural_layouts/`,
     mainApi:         `https://${ REACT_APP_API_ENDPOINT }/v1/data`,
     modals:          `https://${ REACT_APP_MAIN_CDN }/assets/modals/`,
