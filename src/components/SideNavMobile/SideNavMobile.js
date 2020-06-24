@@ -25,7 +25,7 @@ const SideNavMobile: ComponentType<Props> = ({ location: { pathname }}: Props) =
         return (
             <MobileNavWrapper>
                 <MobileNavTogglerWrapper>
-                    <MobileNavToggler onClick={ () => setMenuState(!menuState) }>
+                    <MobileNavToggler onClick={ () => setMenuState(state => !menuState) }>
                         Menu
                     </MobileNavToggler>
                 </MobileNavTogglerWrapper>
@@ -33,28 +33,34 @@ const SideNavMobile: ComponentType<Props> = ({ location: { pathname }}: Props) =
                     <SideNav aria-label="Side navigation">
                         <SideNavList>
                             <SideNavListItem className={`${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
-                                <Link to={ "/" } aria-current="location">UK Summary</Link>
+                                <Link to={ "/" }
+                                      onClick={ () => setMenuState(state => !state) } aria-current="location">UK Summary</Link>
                             </SideNavListItem>
 
                             <SideNavListItem className={`${pathname === '/testing' ? "moj-side-navigation__item--active" : ""}`}>
-                                <Link to={ "testing" }>Testing</Link>
+                                <Link to={ "testing" }
+                                onClick={ () => setMenuState(state => !state) }>Testing</Link>
                             </SideNavListItem>
 
                             <SideNavListItem className={`${pathname === '/cases' ? "moj-side-navigation__item--active" : ""}`}>
-                                <Link to={ "cases" }>Cases</Link>
+                                <Link to={ "cases" }
+                                onClick={ () => setMenuState(state => !state) }>Cases</Link>
                             </SideNavListItem>
 
                             <SideNavListItem className={`${pathname === '/healthcare' ? "moj-side-navigation__item--active" : ""}`}>
-                                <Link to={ "healthcare" }>Healthcare</Link>
+                                <Link to={ "healthcare" }
+                                onClick={ () => setMenuState(state => !state) }>Healthcare</Link>
                             </SideNavListItem>
 
                             <SideNavListItem className={`${pathname === '/deaths' ? "moj-side-navigation__item--active" : ""}`}>
-                                <Link to={ "deaths" }>Deaths</Link>
+                                <Link to={ "deaths" }
+                                onClick={ () => setMenuState(state => !state) }>Deaths</Link>
                             </SideNavListItem>
 
 
                             <SideNavListItem className={`${pathname === '/about-data' ? "moj-side-navigation__item--active" : ""}`}>
-                                <Link to={ "about-data" }>About the data</Link>
+                                <Link to={ "about-data" }
+                                onClick={ () => setMenuState(state => !state) }>About the data</Link>
                             </SideNavListItem>
                         </SideNavList>
                         <SectionBreak/>
