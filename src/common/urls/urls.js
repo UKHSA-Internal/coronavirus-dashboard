@@ -16,12 +16,12 @@ const URLs = {
     baseGeo:         `https://${ REACT_APP_MAIN_CDN      }/assets/geo/`,
     mapStyle:        `https://${ REACT_APP_MAIN_CDN      }/assets/map/style_v3.json`,
     landingData:     `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/data/landing.json`,
-    timestamp:       `https://${ REACT_APP_MAIN_CDN }/assets/dispatch/website_timestamp`,
-    lookups:         `https://${ REACT_APP_MAIN_CDN }/assets/lookups/`,
-    lookupApi:       `https://${ REACT_APP_API_ENDPOINT }/v1/lookup`,
-    pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN }/assets/structural_layouts/`,
-    mainApi:         `https://${ REACT_APP_API_ENDPOINT }/v1/data`,
-    modals:          `https://${ REACT_APP_MAIN_CDN }/assets/modals/`,
+    timestamp:       `https://${ REACT_APP_MAIN_CDN      }/assets/dispatch/website_timestamp`,
+    lookups:         `https://${ REACT_APP_MAIN_CDN      }/assets/lookups/`,
+    lookupApi:       `https://${ REACT_APP_API_ENDPOINT  }/v1/lookup`,
+    pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN      }/assets/structural_layouts/`,
+    mainApi:         `https://${ REACT_APP_API_ENDPOINT  }/v1/data`,
+    modals:          `https://${ REACT_APP_MAIN_CDN      }/assets/modals/`,
     latestCases: {
         csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-cases_latest.csv`,
         json: `${ REACT_APP_BASE_URL }/downloads/json/coronavirus-cases_latest.json`
@@ -30,10 +30,10 @@ const URLs = {
         csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-deaths_latest.csv`,
         json: `${ REACT_APP_BASE_URL }/downloads/json/coronavirus-deaths_latest.json`
     },
-    about: `https://${ REACT_APP_MAIN_CDN }/assets/about.md`,
-    accessibility: `https://${ REACT_APP_MAIN_CDN }/assets/accessibility.md`,
-    archiveList: `https://${ REACT_APP_DOWNLOADS_CDN }/downloads?restype=container&comp=list`,
-    baseUrl:     REACT_APP_BASE_URL
+    about:         `https://${ REACT_APP_MAIN_CDN      }/assets/about.md`,
+    accessibility: `https://${ REACT_APP_MAIN_CDN      }/assets/accessibility.md`,
+    archiveList:   `https://${ REACT_APP_DOWNLOADS_CDN }/downloads?restype=container&comp=list`,
+    baseUrl:        REACT_APP_BASE_URL
 
 };
 
