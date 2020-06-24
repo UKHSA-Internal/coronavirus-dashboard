@@ -26,7 +26,8 @@ import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import Loading from "components/Loading";
 import { PulseLoader } from "react-spinners";
-import { DataTable } from "components/GovUk";
+import { Table } from "components/GovUk";
+import moment from "moment";
 
 
 const
@@ -163,11 +164,7 @@ const NationData = () => {
 
     let row;
 
-    console.log(groups);
-
     for ( const date in groups ) {
-
-        // if ( !groups.hasOwnProperty(date) ) continue;
 
         row = [ date ]
 
@@ -179,22 +176,21 @@ const NationData = () => {
 
     }
 
-    console.log(groups[Object.keys(groups)[0]]
-            .map(row => ([
-                { value: `${ row.name } daily tests`, type: "number" },
-                { value: `${ row.name } total tests`, type: "number" },
-            ])).reduce((acc, item) => [...acc, ...item], []))
-
     // return null
-    return <DataTable heading={[
-        { value: "Date", type: "date" },
-        ...groups[Object.keys(groups)[0]]
-            .map(row => ([
-                { value: `${ row.name } daily tests`, type: "number" },
-                { value: `${ row.name } total tests`, type: "number" },
-            ])).reduce((acc, item) => [...acc, ...item], [])
+    return <Table head={[
+        [
+            { value: "Date", type: "date" },
+            ...groups[Object.keys(groups)[0]]
+                .map(row => ([
+                    { value: `${ row.name } daily tests`, type: "numeric" },
+                    { value: `${ row.name } total tests`, type: "numeric" },
+                ]))
+                .reduce((acc, item) => [...acc, ...item], [])
+        ]
     ]}
-    data={[]}/>
+    body={
+        tableData.map(item => [ moment(item[0]).format("DD-MM-YYYY"), ...item.slice(1)])
+    }/>
 
 };
 
