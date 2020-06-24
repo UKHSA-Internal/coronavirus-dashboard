@@ -32,7 +32,7 @@ jobs:
         BASE_URL: https://coronavirus-staging.data.gov.uk
         MAIN_CDN: c19pubstaging.azureedge.net
         DOWNLOADS_CDN: c19downloadsstaging.azureedge.net
-        API_ENDPOINT: coronavirus-staging.data.gov.uk/api
+        API_ENDPOINT: api.coronavirus-staging.data.gov.uk
         NODE_ENV: production
 
       run: |
