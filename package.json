@@ -35,7 +35,8 @@
     "remark-toc": "^7.0.0",
     "replacestream": "^4.0.3",
     "styled-components": "^5.0.1",
-    "react-select": "^3.1.0"
+    "react-select": "^3.1.0",
+    "react-spinners": "^0.9.0"
   },
   "scripts": {
     "lint": "yarn flow",

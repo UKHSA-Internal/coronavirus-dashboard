@@ -37,6 +37,7 @@ import {
 } from "components/TabLink";
 import { Radio } from "components/GovUk"
 import DropdownButton from "components/DropdownButton";
+import { PulseLoader } from "react-spinners"
 
 
 const VisualSection: ComponentType<Props> = ({ children }: Props) => {
@@ -154,7 +155,11 @@ const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) =>
                                   data-for={ tipId }
                                   markdownPath={ primaryModal }
                                   replacements={ primaryModalReplacements }>
-                        { numeral(primaryValue).format("0,0") }{ primarySign }
+                        {
+                            primaryValue
+                                ? numeral(primaryValue).format("0,0")
+                                : <PulseLoader size={ 8 } margin={ 2 } color={ '#adadad' }/>
+                        }{ primarySign || null }
                         <p className={ "govuk-visually-hidden" }>
                             Abstract information on { primaryLabel }: { primaryTooltip }<br/>
                             Click for additional details.
@@ -174,7 +179,11 @@ const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) =>
                             markdownPath={ secondaryModal }
                             replacements={ secondaryModalReplacements }
                         >
-                            { numeral(secondaryValue).format("0,0") }{ secondarySign }
+                            {
+                                secondaryValue
+                                ? numeral(secondaryValue).format("0,0")
+                                : <PulseLoader size={ 8 } margin={ 2 } color={ '#adadad' }/>
+                            }{ secondarySign || secondarySign }
                             <p className={ "govuk-visually-hidden" }>
                                 Abstract information on { secondaryLabel }: { secondaryTooltip }<br/>
                                 Click for additional details.
