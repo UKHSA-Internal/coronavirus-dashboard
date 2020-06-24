@@ -1,11 +1,9 @@
+import 'react-app-polyfill/ie11';
 import React from "react";
 import { PulseLoader } from "react-spinners";
-import { isIE } from "common/utils";
 
 
 const Loading = ({ large=false }) => {
-
-    if ( isIE() ) return null;
 
     if ( !large )
         return <span>
