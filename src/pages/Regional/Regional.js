@@ -126,15 +126,14 @@ const Regional: ComponentType<Props> = ({}: Props) => {
     return (
         <Styles.Container className="govuk-width-container">
 
-            <Announcement firstDisplayDate={ { year: 2020, month: 6, day: 1 } }
-                          lastDisplayDate={ { year: 2020, month: 6, day: 4 } }>
+            <Announcement firstDisplayDate={ { year: 2020, month: 6, day: 24, hour: 15, minute: 59 } }
+                          lastDisplayDate={ { year: 2021, month: 1, day: 1 } }>
                 <p className={ "govuk-body" }>
-                    Note that the definition for deaths in England changed on 1 June 2020.
-                    See the &nbsp;
-                    <Link to={ '/about' }
-                          className={ "govuk-link govuk-link--no-visited-state" }>
-                    About the data
-                    </Link>&nbsp;page for details.
+                    We are launching a new version of the dashboard. We welcome your feedback
+                    on the&nbsp;<a href={ "https://coronavirus-staging.data.gov.uk" }
+                              target={ "_blank" }
+                              rel={ "noopener noreferrer" }>
+                    BETA release</a>&nbsp;of the new service.
                 </p>
             </Announcement>
 
