@@ -124,6 +124,31 @@ const PathWithSideMenu = [
     "/about-data"
 ];
 
+
+const BetaBanner = ({ ...props }) => {
+
+    return <div className={ "govuk-phase-banner" }
+                style={{ padding: "1rem" }} { ...props }>
+        <p className="govuk-phase-banner__content">
+            <strong className="govuk-tag govuk-phase-banner__content__tag">
+                beta
+            </strong>
+            <span className="govuk-phase-banner__text">
+                This is a new service &ndash; your&nbsp;
+                <a className="govuk-footer__link"
+                   href={ encodeURI("mailto:coronavirus-tracker@phe.gov.uk?Subject=Coronavirus dashboard feedback") }
+                   rel={ "noopener noreferrer" }
+                   target={ "_blank" }>
+                    coronavirus-tracker@phe.gov.uk</a>&nbsp;
+                will help us to improve it.
+                We currently show UK data only. Sub-national data will be added soon.
+            </span>
+        </p>
+    </div>
+
+}
+
+
 const App = ({ location: { pathname } }) => {
 
     const
@@ -140,16 +165,7 @@ const App = ({ location: { pathname } }) => {
             homepageUrlHref="https://gov.uk"
         />
         { layout === "mobile" &&  <SideNavMobile/> }
-        <div className="govuk-phase-banner" style={{ padding: "1rem" }}>
-            <p className="govuk-phase-banner__content">
-                <strong className="govuk-tag govuk-phase-banner__content__tag">
-                    beta
-                </strong>
-                <span className="govuk-phase-banner__text">
-                    This is a new service – your feedback will help us to improve it.
-                </span>
-            </p>
-        </div>
+        <BetaBanner/>
         <div className={ "govuk-width-container" }>
             <main className={ "govuk-main-wrapper" } role={ "main" }>
                 <ErrorBoundary>
