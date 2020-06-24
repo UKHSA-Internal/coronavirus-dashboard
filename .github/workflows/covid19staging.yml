@@ -3,11 +3,11 @@ name: Build and deploy Node.js app to Azure Web App - Covid19StaticSTAGING
 on:
   push:
     branches:
-      - master
+      - v2-development
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@master
@@ -15,7 +15,7 @@ jobs:
     - name: Set up Node.js version
       uses: actions/setup-node@v1
       with:
-        node-version: '12.13.0'
+        node-version: '13.1.0'
 
     - name: Install dependencies
       run: |
@@ -32,6 +32,7 @@ jobs:
         BASE_URL: https://Covid19StaticStaging.azureedge.net
         MAIN_CDN: c19pub.azureedgestaging.net
         DOWNLOADS_CDN: c19downloadsstaging.azureedge.net
+        API_ENDPOINT: coronavirus-staging.data.gov.uk/api
         NODE_ENV: production
 
       run: |
