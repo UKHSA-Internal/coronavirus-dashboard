@@ -122,6 +122,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                 // barmode: "overlay",
                 // barmode: "stack",
                 // height: 320,
+                hovermode: "x unified",
                 legend: {
                     orientation: 'h',
                     font: {
