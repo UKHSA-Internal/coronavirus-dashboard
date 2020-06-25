@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Fragment, useEffect, useRef } from "react";
-import { useHistory } from "react-router";
+import { useHistory, Redirect } from "react-router";
 
 import { createQuery, getParams, groupBy } from "common/utils";
 
@@ -202,7 +202,9 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
             { key: 'areaName', sign: '=', value: currentLocation.areaName }
         ]);
 
-        history.push(`${ newQuery }`)
+        history.push({ pathname: pathname, search: newQuery })
+        // console.log(newQuery)
+        // return <Redirect to={{ pathname: pathname, search: newQuery }}/>
 
     };  // handleSubmission
 
