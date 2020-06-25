@@ -118,6 +118,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
             useResizeHandler={ true }
             style={{ display: "block", height: 350 }}
             layout={ {
+                hovermode: "x unified",
                 // barmode: "overlay",
                 // barmode: "stack",
                 // height: 320,
