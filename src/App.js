@@ -139,8 +139,12 @@ const BetaBanner = ({ ...props }) => {
                    target={ "_blank" }>
                     feedback</a>&nbsp;
                 will help us to improve it.
-                We currently show UK data only. Sub-national data will be added soon.
-            </span>
+                We currently show UK data only. Sub-national data will be added
+                soon. The&nbsp;<a className="govuk-footer__link"
+                   href={ "https://coronavirus.data.gov.uk/" }
+                   rel={ "noopener noreferrer" }
+                   target={ "_blank" }>current official website</a>&nbsp;is still
+                available.</span>
         </p>
     </div>
 
