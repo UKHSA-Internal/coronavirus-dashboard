@@ -237,7 +237,8 @@ const DownloadOptions = ({ baseUrl, noCsv }) => {
         {
             !noCsv
                 ? <a className={ 'govuk-link govuk-link--no-visited-state' }
-                     href={ `${ baseUrl }&format=csv` } aria-disabled={ !noCsv }>
+                     href={ `${ baseUrl }&format=csv` }
+                     aria-disabled={ !noCsv }>
                     as CSV
                 </a>
                 : <span className={ 'govuk-link govuk-link--no-visited-state disabled' }>
@@ -364,7 +365,10 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 
         case "multiAreaStatic":
             apiUrl = fieldToStructure(
-                [...tabs]?.reverse()?.[0]?.fields ?? [],
+                [
+                    ...[...tabs]?.reverse()?.[0]?.fields ?? [],
+                    { value: "areaName" }
+                ],
                 tabs?.[0]?.params ?? []
             );
 
