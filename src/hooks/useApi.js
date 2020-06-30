@@ -95,7 +95,7 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
 
         })()
 
-    })
+    }, [])
 
     return data
 
