@@ -31,6 +31,7 @@ import useApi from "hooks/useApi";
 import moment from "moment";
 import {
     AgeSexBreakdownTabContent,
+    MultiAreaStaticTabContent,
     TabContent,
     TabLink,
     TabLinkContainer
@@ -360,6 +361,20 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
                     ) ?? null
                 }</TabLinkContainer>
             </Card>
+
+        case "multiAreaStatic":
+            return <Card fullWidth={ fullWidth }>
+                <CardHeader heading={ heading } { ...props }>
+                    { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
+                </CardHeader>
+                <TabLinkContainer>{
+                    tabs?.map(({ heading, ...rest }) =>
+                        <TabLink key={ `tab-${ heading }` } label={ heading }>
+                            <MultiAreaStaticTabContent { ...props } { ...rest }/>
+                        </TabLink>
+                    ) ?? null
+                }</TabLinkContainer>
+            </Card>;
 
         default:
             return <p>Invalid chart type</p>;
