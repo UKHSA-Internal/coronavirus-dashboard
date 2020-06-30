@@ -1,6 +1,6 @@
 {
   "name": "covid-public",
-  "version": "2.0.0-dev37",
+  "version": "2.0.0-stag11",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
@@ -37,7 +37,7 @@
   },
   "scripts": {
     "lint": "yarn flow",
-    "start": "react-scripts start",
+    "start": "unset HOST && react-scripts start",
     "build": "react-scripts build && node scripts/patchUrls.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
