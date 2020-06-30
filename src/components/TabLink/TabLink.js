@@ -15,10 +15,12 @@ import type {
     TabLinkProps
 } from "./TabLink.types";
 import { Plotter } from "components/Plotter";
-import { getPlotData, groupBy } from "common/utils";
-import { DataTable } from "components/GovUk";
+import { dropLeadingZeros, getPlotData, groupBy } from "common/utils";
+import { DataTable, Table } from "components/GovUk";
 import useApi from "hooks/useApi";
 import Loading from "components/Loading";
+import moment from "moment";
+
 
 // This is a pseudo-component created to make the implementation of
 // containers easier and more consistent.
@@ -165,5 +167,75 @@ export const AgeSexBreakdownTabContent = ({ params, groupKey, groupValues, requi
 
     return <TabContentWithData { ...props } fields={ fields } data={ data } isTimeSeries={ false } xKey={ groupKey }/>
 
-};
+};  // AgeSexBreakdownTabContent
+
+
+export const MultiAreaStaticTabContent = ({ params, groupKey, groupValues, requiredMetrics=[], fields=[], ...props }) => {
+
+    const
+        data = useApi({
+            conjunctiveFilters: params,
+            structure: {
+                date: "date",
+                areaName: "areaName",
+                ...fields.reduce((acc, { value }) => ({ ...acc, [value]: value }), {})
+            },
+            defaultResponse: null
+        });
+
+    if ( data === null )
+        return <Loading/>;
+
+    const
+        groups = groupBy(
+            dropLeadingZeros(data, ...fields.map(({ value }) => value)),
+            item => item.date
+        ),
+        newData = [];
+
+    let row, sortedGroups;
+
+    for ( const date in groups ) {
+
+        row = { date: date };
+
+        sortedGroups = groups[date]
+            .sort(({ areaName: a }, { areaName: b }) => a > b || -(b > a || 0));
+
+        for ( const { areaName, ...rest } of sortedGroups ) {
+            row = {
+                ...row,
+                ...fields.reduce((acc, { value }) => ({ ...acc, [`${areaName}${value}`]: rest?.[value] ?? null }), {})
+            }
+        }
+
+        newData.push( row )
+
+    }
+
+    const
+        isTable = (props?.tabType ?? null) === 'table',
+        areaNames = Object.keys(groupBy(data, item => item.areaName)),
+        newFields = [
+            ...isTable
+                ? [{ value: "date", label: "Date", type: "date" }]
+                : [],
+            ...fields
+                .filter(item => item.value !== 'date')
+                .reduce((acc, { value, label, ...rest }) => ([
+                ...acc,
+                ...areaNames.map((areaName, index) => ({
+                    ...rest,
+                    value: `${ areaName }${ value }`,
+                    label: `${ areaName }${ isTable ? " " : "" } ${ label }`,
+                    colour: props?.colours?.[index] ?? index
+                }))
+            ]), [])
+        ];
+
+    return <TabContentWithData { ...props } fields={ newFields } data={ newData }/>
+
+};  // CustomTabContent
+
+
 
