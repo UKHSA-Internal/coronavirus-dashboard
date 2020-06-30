@@ -64,11 +64,11 @@ const THead = ({ className, children, ...props }) => {
 
 
 const NA = () =>
-    <NotAvailable data-tip={ "Data is not currently available." }
+    <NotAvailable data-tip={ "Data not available" }
                   data-for={ "table-tooltip-text" }>
         N/A
         <span className={ "govuk-visually-hidden" }>
-            Data is not currently available.
+            Data not available
         </span>
     </NotAvailable>; // NA
 
