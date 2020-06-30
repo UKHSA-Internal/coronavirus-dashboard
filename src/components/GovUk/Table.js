@@ -4,8 +4,9 @@ import React from "react";
 
 import numeral from "numeral";
 
-import { TableComponent } from "./Table.styles"
+import { TableComponent, NotAvailable } from "./Table.styles"
 import moment from "moment";
+import ReactTooltip from "react-tooltip";
 
 
 const TH = ({ className, children, type='string', colSpan=1, ...props }) => {
@@ -62,6 +63,16 @@ const THead = ({ className, children, ...props }) => {
 };  // THead
 
 
+const NA = () =>
+    <NotAvailable data-tip={ "Data not available" }
+                  data-for={ "table-tooltip-text" }>
+        N/A
+        <span className={ "govuk-visually-hidden" }>
+            Data not available
+        </span>
+    </NotAvailable>; // NA
+
+
 /**
  * Creates a GovUK table with multiple head rows and formatted numbers.
  *
@@ -96,13 +107,20 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
                 item.map((value, cInd) =>
                     <TD key={ `body-td-${rInd}-${cInd}` } type={ typeDefinitions[cInd] }>{
                         typeDefinitions[cInd] === 'numeric'
+                            ? typeof value === 'number'
                             ? numeral(value).format("0,0")
+                            : <NA/>
                             : value
                     }</TD>
                 )
 
             }</TR>)
         }</TBody>
+        <ReactTooltip id={ "table-tooltip-text" }
+                      place={ "right" }
+                      backgroundColor={ "#0b0c0c" }
+                      className={ "tooltip" }
+                      effect={ "solid" }/>
     </TableComponent>
 
 };  // Table
