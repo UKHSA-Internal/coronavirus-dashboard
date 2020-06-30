@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ModalContainer, ModalContent, ModalOpener, Markdown, ModalCloser } from "./modal.styles";
 import useModalData from "hooks/useModalData";
 import { strFormat } from "common/utils";
@@ -21,15 +21,32 @@ const Modal = ({ markdownPath, replacements }) => {
 const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => {
 
     const
-        [ modalStatus, setModalStatus ] = useState(false);
+        [ modalStatus, setModalStatus ] = useState(false),
+        modalRef = useRef(null);
 
-    return <Fragment>
+    const handleKeyPressEvent = event => {
+
+        if ( modalRef.current && event.keyCode === 27 )
+            setModalStatus(false);
+
+    };
+
+    useEffect(() => {
+
+        document.addEventListener("keyup", handleKeyPressEvent);
+
+        return () => document.removeEventListener("keyup", handleKeyPressEvent);
+
+    });
+
+    return <>
         <ModalOpener { ...props }
                      onClick={ () => setModalStatus(true) }
                      children={ children }/>
 
         {
-            modalStatus && <ModalContainer>
+            modalStatus &&
+            <ModalContainer ref={ modalRef }>
                 <ModalContent>
                     <Modal markdownPath={ markdownPath } replacements={ replacements }/>
                     <ModalCloser className={ "govuk-button" }
@@ -40,7 +57,7 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
             </ModalContainer>
         }
 
-    </Fragment>
+    </>
 
 }; // ModalTooltip
 
