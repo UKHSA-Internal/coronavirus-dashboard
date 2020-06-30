@@ -364,7 +364,12 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
             </Card>
 
         case "multiAreaStatic":
-            return <Card fullWidth={ fullWidth }>
+            apiUrl = fieldToStructure(
+                [...tabs]?.reverse()?.[0]?.fields ?? [],
+                tabs?.[0]?.params ?? []
+            );
+
+            return <Card fullWidth={ fullWidth } url={ apiUrl }>
                 <CardHeader heading={ heading } { ...props }>
                     { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
