@@ -31,6 +31,7 @@ import useApi from "hooks/useApi";
 import moment from "moment";
 import {
     AgeSexBreakdownTabContent,
+    MultiAreaStaticTabContent,
     TabContent,
     TabLink,
     TabLinkContainer
@@ -236,7 +237,8 @@ const DownloadOptions = ({ baseUrl, noCsv }) => {
         {
             !noCsv
                 ? <a className={ 'govuk-link govuk-link--no-visited-state' }
-                     href={ `${ baseUrl }&format=csv` } aria-disabled={ !noCsv }>
+                     href={ `${ baseUrl }&format=csv` }
+                     aria-disabled={ !noCsv }>
                     as CSV
                 </a>
                 : <span className={ 'govuk-link govuk-link--no-visited-state disabled' }>
@@ -360,6 +362,28 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
                     ) ?? null
                 }</TabLinkContainer>
             </Card>
+
+        case "multiAreaStatic":
+            apiUrl = fieldToStructure(
+                [
+                    ...[...tabs]?.reverse()?.[0]?.fields ?? [],
+                    { value: "areaName" }
+                ],
+                tabs?.[0]?.params ?? []
+            );
+
+            return <Card fullWidth={ fullWidth } url={ apiUrl }>
+                <CardHeader heading={ heading } { ...props }>
+                    { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
+                </CardHeader>
+                <TabLinkContainer>{
+                    tabs?.map(({ heading, ...rest }) =>
+                        <TabLink key={ `tab-${ heading }` } label={ heading }>
+                            <MultiAreaStaticTabContent { ...props } { ...rest }/>
+                        </TabLink>
+                    ) ?? null
+                }</TabLinkContainer>
+            </Card>;
 
         default:
             return <p>Invalid chart type</p>;

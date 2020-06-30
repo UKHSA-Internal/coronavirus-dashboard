@@ -33,11 +33,11 @@ export const
 
 export const getPlotData = (fields: Array<{}>, rawData, xKey="date" ) => {
 
-    return fields.map(field => {
+    return fields.map((field, index) => {
 
         const
             data = dropLeadingZeros(rawData, field.value),
-            { r, g, b } = hexToRgb(colours[field.colour]),
+            { r, g, b } = hexToRgb(colours[field?.colour ??  index]),
             xData = data?.map(item => item?.[xKey] ?? null) ?? [];
 
         let
@@ -49,7 +49,7 @@ export const getPlotData = (fields: Array<{}>, rawData, xKey="date" ) => {
                 plotFeatures = {
                     type: field.type,
                     marker: {
-                        color: colours[field.colour]
+                        color: colours[field?.colour ?? index]
                     }
                 }
                 break;
@@ -66,7 +66,7 @@ export const getPlotData = (fields: Array<{}>, rawData, xKey="date" ) => {
                         {},
                     line: {
                         width: 3,
-                        color: colours[field.colour]
+                        color: colours[field?.colour ?? index]
                     }
                 };
                 break;
