@@ -236,7 +236,8 @@ const DownloadOptions = ({ baseUrl, noCsv }) => {
         {
             !noCsv
                 ? <a className={ 'govuk-link govuk-link--no-visited-state' }
-                     href={ `${ baseUrl }&format=csv` } download aria-disabled={ !noCsv }>
+                     href={ `${ baseUrl }&format=csv` }
+                     aria-disabled={ !noCsv }>
                     as CSV
                 </a>
                 : <span className={ 'govuk-link govuk-link--no-visited-state disabled' }>
