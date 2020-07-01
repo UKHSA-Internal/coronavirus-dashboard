@@ -54,7 +54,7 @@ export const movingAverage = ( data: number[], size: number, round: number=1 ): 
 
     for ( let index = floor; index < (N + size); index++ ) {
 
-        if ( numberOrNan(data[index]) )
+        if ( typeof data[index] === "number" )
             sum = 0;
         else
             continue;
