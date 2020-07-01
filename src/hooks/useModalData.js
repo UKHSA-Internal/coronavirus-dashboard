@@ -11,6 +11,13 @@ const useModalData = (fileName: string): string | null => {
     const [ data, setData ] = useState(null);
 
     useEffect(() => {
+        window.ga('send', {
+            hitType: 'event',
+            eventCategory: 'Modals',
+            eventAction: 'open',
+            eventLabel: fileName
+        });
+
         (async () => {
             const { data } = await axios.get(
                     `${fileName}.md`,

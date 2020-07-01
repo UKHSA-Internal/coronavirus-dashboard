@@ -231,12 +231,31 @@ const CardHeader: ComponentType<*> = ({ heading, caption="", linkToHeading=false
 };  // CardHeader
 
 
-const DownloadOptions = ({ baseUrl, noCsv }) => {
+const DownloadOptions = ({ heading, baseUrl, noCsv }) => {
+
+    window.ga('send', {
+        hitType: 'event',
+        eventCategory: 'Downloads',
+        eventAction: 'open',
+        eventLabel: 'Selection dropdown'
+    });
+
+    const downloadTriggered = ( type ) => {
+
+        window.ga('send', {
+            hitType: 'event',
+            eventCategory: 'Downloads',
+            eventAction: 'triggered',
+            eventLabel: type
+        });
+
+    };
 
     return <>
         {
             !noCsv
                 ? <a className={ 'govuk-link govuk-link--no-visited-state' }
+                     onClick={ () => downloadTriggered("csv") }
                      href={ `${ baseUrl }&format=csv` }
                      aria-disabled={ !noCsv }>
                     as CSV
@@ -250,12 +269,14 @@ const DownloadOptions = ({ baseUrl, noCsv }) => {
         }
         <a className={ 'govuk-link govuk-link--no-visited-state' }
            href={ `${baseUrl}&format=json` }
+           onClick={ () => downloadTriggered("json") }
            target={ '_blank' }
            rel={ 'noreferrer noopener' }>
             as JSON
         </a>
         <a className={ 'govuk-link govuk-link--no-visited-state' }
            target={ '_blank' }
+           onClick={ () => downloadTriggered("xml") }
            rel={ 'noreferrer noopener' }
            href={ `${baseUrl}&format=xml` } download>
             as XML
