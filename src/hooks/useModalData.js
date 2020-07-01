@@ -4,6 +4,7 @@ import URLs from "common/urls";
 import remark from "remark";
 import externalLink from "remark-external-links";
 import html from "remark-html";
+import { analytics } from "common/utils";
 
 
 const useModalData = (fileName: string): string | null => {
@@ -11,11 +12,10 @@ const useModalData = (fileName: string): string | null => {
     const [ data, setData ] = useState(null);
 
     useEffect(() => {
-        window.ga('send', {
-            hitType: 'event',
-            eventCategory: 'Modals',
-            eventAction: 'open',
-            eventLabel: fileName
+        analytics({
+            category: 'Modals',
+            action: 'open',
+            label: fileName
         });
 
         (async () => {

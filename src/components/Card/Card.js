@@ -26,7 +26,7 @@ import {
 } from './Card.styles';
 import numeral from 'numeral'
 import ReactTooltip from "react-tooltip";
-import { colours, fieldToStructure, strFormat } from "common/utils";
+import { colours, fieldToStructure, strFormat, analytics } from "common/utils";
 import useApi from "hooks/useApi";
 import moment from "moment";
 import {
@@ -36,9 +36,9 @@ import {
     TabLink,
     TabLinkContainer
 } from "components/TabLink";
-import { Radio } from "components/GovUk"
+import { Radio } from "components/GovUk";
 import DropdownButton from "components/DropdownButton";
-import Loading from "components/Loading"
+import Loading from "components/Loading";
 
 
 const VisualSection: ComponentType<Props> = ({ children }: Props) => {
@@ -233,23 +233,17 @@ const CardHeader: ComponentType<*> = ({ heading, caption="", linkToHeading=false
 
 const DownloadOptions = ({ heading, baseUrl, noCsv }) => {
 
-    window.ga('send', {
-        hitType: 'event',
-        eventCategory: 'Downloads',
-        eventAction: 'open',
-        eventLabel: 'Selection dropdown'
+    analytics({
+        category: 'Downloads',
+        action: 'open',
+        label: 'Selection dropdown'
     });
 
-    const downloadTriggered = ( type ) => {
-
-        window.ga('send', {
-            hitType: 'event',
-            eventCategory: 'Downloads',
-            eventAction: 'triggered',
-            eventLabel: type
-        });
-
-    };
+    const downloadTriggered = ( label ) => analytics({
+        category: 'Downloads',
+        action: 'triggered',
+        label: label
+    });
 
     return <>
         {

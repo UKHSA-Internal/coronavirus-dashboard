@@ -322,3 +322,13 @@ export const isIE = () => {
     return msie > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./);
 
 };
+
+export const analytics = ({ category, action, label, value }): void => {
+
+    if ( "ga" in window ) {
+        const tracker = ga.getAll()[0];
+
+        tracker && tracker.send('event', category, action, label, value);
+    }
+
+};  // analytics
