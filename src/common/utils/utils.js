@@ -326,7 +326,7 @@ export const isIE = () => {
 export const analytics = ({ category, action, label, value }): void => {
 
     if ( "ga" in window ) {
-        const tracker = ga.getAll()[0];
+        const tracker = window.ga.getAll()[0];
 
         tracker && tracker.send('event', category, action, label, value);
     }
