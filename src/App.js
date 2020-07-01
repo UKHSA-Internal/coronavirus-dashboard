@@ -22,6 +22,7 @@ import SideNavigation from "components/SideNavigation";
 import SideNavMobile from "components/SideNavMobile";
 import DashboardHeader from "components/DashboardHeader";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
+import Announcement from "./components/Announcement";
 
 
 const useTimestamp = () => {
@@ -47,6 +48,12 @@ const LastUpdateTime = () => {
     if (!timestamp) return null;
 
     return <Fragment>
+        <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>
+            <p className={ "govuk-body govuk-!-margin-top-0" }>
+                We are experiencing technical difficulties and are working to fix the
+                problem and restore the service. Apologies for the inconvenience.
+            </p>
+        </Announcement>
         <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
             Last updated on&nbsp;<time dateTime={ timestamp }>{
                 moment(timestamp)
