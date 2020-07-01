@@ -239,17 +239,17 @@ const DownloadOptions = ({ heading, baseUrl, noCsv }) => {
         label: 'Selection dropdown'
     });
 
-    const downloadTriggered = ( label ) => analytics({
+    const downloadTriggered = ( type ) => analytics({
         category: 'Downloads',
-        action: 'triggered',
-        label: label
+        action: heading,
+        label: type
     });
 
     return <>
         {
             !noCsv
                 ? <a className={ 'govuk-link govuk-link--no-visited-state' }
-                     onClick={ () => downloadTriggered("csv") }
+                     onClick={ () => downloadTriggered("CSV") }
                      href={ `${ baseUrl }&format=csv` }
                      aria-disabled={ !noCsv }>
                     as CSV
@@ -263,14 +263,14 @@ const DownloadOptions = ({ heading, baseUrl, noCsv }) => {
         }
         <a className={ 'govuk-link govuk-link--no-visited-state' }
            href={ `${baseUrl}&format=json` }
-           onClick={ () => downloadTriggered("json") }
+           onClick={ () => downloadTriggered("JSON") }
            target={ '_blank' }
            rel={ 'noreferrer noopener' }>
             as JSON
         </a>
         <a className={ 'govuk-link govuk-link--no-visited-state' }
            target={ '_blank' }
-           onClick={ () => downloadTriggered("xml") }
+           onClick={ () => downloadTriggered("XML") }
            rel={ 'noreferrer noopener' }
            href={ `${baseUrl}&format=xml` } download>
             as XML
@@ -280,7 +280,7 @@ const DownloadOptions = ({ heading, baseUrl, noCsv }) => {
 };  // DownloadOptions
 
 
-const Card: ComponentType<Props> = ({ url, children, fullWidth=false, noCsv=false }: Props) => {
+const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, noCsv=false }: Props) => {
 
     const Container = ({ ...props }) =>
         !fullWidth
@@ -292,7 +292,7 @@ const Card: ComponentType<Props> = ({ url, children, fullWidth=false, noCsv=fals
             url &&
             <DropdownButton tooltip={ "Download card data" }
                             launcherSrOnly={ "Download card data" }>
-                <DownloadOptions baseUrl={ url } noCsv={ noCsv }/>
+                <DownloadOptions heading={ heading } baseUrl={ url } noCsv={ noCsv }/>
             </DropdownButton>
         }
         { children }
@@ -324,7 +324,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
         case "chart":
             apiUrl = fieldToStructure([...tabs]?.reverse()?.[0]?.fields ?? [], params);
 
-            return <Card fullWidth={ fullWidth } url={ apiUrl }>
+            return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl }>
                 <CardHeader heading={ heading } { ...props }>
                     { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
@@ -340,7 +340,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
         case "map":
             apiUrl = fieldToStructure([...tabs]?.reverse()?.[0]?.fields ?? [], params);
 
-            return <Card fullWidth={ fullWidth } url={ apiUrl }>
+            return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl }>
                 <CardHeader heading={ heading } { ...props }>
                     { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
@@ -367,7 +367,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 
             );
 
-            return <Card fullWidth={ false } url={ apiUrl } noCsv={ true }>
+            return <Card heading={ heading } fullWidth={ false } url={ apiUrl } noCsv={ true }>
                 <CardHeader heading={ heading } { ...props }/>
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }) =>
@@ -387,7 +387,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
                 tabs?.[0]?.params ?? []
             );
 
-            return <Card fullWidth={ fullWidth } url={ apiUrl }>
+            return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl }>
                 <CardHeader heading={ heading } { ...props }>
                     { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
