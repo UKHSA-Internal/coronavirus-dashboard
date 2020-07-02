@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { Fragment, useState, useEffect, lazy, Suspense } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Switch, Route, withRouter } from 'react-router';
 import { Header, Footer } from 'govuk-react-jsx';
 
@@ -44,8 +44,8 @@ const LastUpdateTime = () => {
     return <Fragment>
         {/*<Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>*/}
         {/*    <p className={ "govuk-body govuk-!-margin-top-0" }>*/}
-        {/*        This is a development service. The functionality is <strong>not</strong> reliable and some*/}
-        {/*        of the data are random simulations.*/}
+        {/*        We are experiencing technical difficulties and are working to fix the*/}
+        {/*        problem and restore the service. Apologies for the inconvenience.*/}
         {/*    </p>*/}
         {/*</Announcement>*/}
         <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
@@ -59,7 +59,6 @@ const LastUpdateTime = () => {
                     }</time>
             }
         </p>
-
     </Fragment>
 
 }; // LastUpdateTime
