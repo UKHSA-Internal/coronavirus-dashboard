@@ -48,13 +48,6 @@ const LastUpdateTime = () => {
     if (!timestamp) return null;
 
     return <Fragment>
-        <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 2, month: 8, year: 2021 }}>
-            <p className={ "govuk-body govuk-!-margin-top-0" }>
-                From today, numbers of cases will include those identified by
-                testing in all settings (pillars 1 and 2). We are working to
-                make the data available as soon as possible.
-            </p>
-        </Announcement>
         <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
             Last updated on&nbsp;<time dateTime={ timestamp }>{
                 moment(timestamp)
