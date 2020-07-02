@@ -22,8 +22,7 @@ import SideNavigation from "components/SideNavigation";
 import SideNavMobile from "components/SideNavMobile";
 import DashboardHeader from "components/DashboardHeader";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
-import Loading from "components/Loading";
-import Announcement from "components/Announcement";
+import Announcement from "./components/Announcement";
 
 
 const useTimestamp = () => {
@@ -46,17 +45,22 @@ const LastUpdateTime = () => {
 
     const timestamp = useTimestamp();
 
+    if (!timestamp) return null;
+
     return <Fragment>
+        <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 2, month: 8, year: 2021 }}>
+            <p className={ "govuk-body govuk-!-margin-top-0" }>
+                From today, numbers of cases will include those identified by
+                testing in all settings (pillars 1 and 2). We are working to
+                make the data available as soon as possible.
+            </p>
+        </Announcement>
         <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
-            Last updated on&nbsp;{
-                !timestamp
-                    ? <Loading/>
-                    : <time dateTime={ timestamp }>{
-                        moment(timestamp)
-                            .local(true)
-                            .format("dddd D MMMM YYYY [at] h:mma")
-                    }</time>
-            }
+            Last updated on&nbsp;<time dateTime={ timestamp }>{
+                moment(timestamp)
+                    .local(true)
+                    .format("dddd D MMMM YYYY [at] h:mma")
+            }</time>
         </p>
     </Fragment>
 
