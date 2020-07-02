@@ -6,6 +6,7 @@ import numeral from "numeral";
 
 import { TableComponent, NotAvailable } from "./Table.styles"
 import moment from "moment";
+import ReactTooltip from "react-tooltip";
 
 
 const TH = ({ className, children, type='string', colSpan=1, ...props }) => {
