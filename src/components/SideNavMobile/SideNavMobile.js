@@ -25,7 +25,7 @@ const SideNavMobile: ComponentType<Props> = ({ location: { pathname }}: Props) =
         return (
             <MobileNavWrapper>
                 <MobileNavTogglerWrapper>
-                    <MobileNavToggler onClick={ () => setMenuState(state => !menuState) }>
+                    <MobileNavToggler onClick={ () => setMenuState(state => !state) }>
                         Menu
                     </MobileNavToggler>
                 </MobileNavTogglerWrapper>
