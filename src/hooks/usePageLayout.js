@@ -22,7 +22,7 @@ const usePageLayout: usePageLayoutInputType<LayoutInput, PageLayoutDefaultOutput
                 );
             setData(data)
         })()
-    }, [])
+    }, [ layout ])
 
     return data
 

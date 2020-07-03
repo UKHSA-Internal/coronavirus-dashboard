@@ -17,7 +17,7 @@ const useHierarchy = () => {
             );
             setHierarchy(data)
         })()
-    }, []);
+    });
 
     return hierarchy;
 
