@@ -1,7 +1,7 @@
 // @flow
 
-import React, { Fragment, useEffect, useRef } from "react";
-import { useHistory, Redirect } from "react-router";
+import React, { Fragment, useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router";
 
 import { createQuery, getParams, groupBy } from "common/utils";
 
@@ -10,6 +10,7 @@ import { getParamValueFor } from "./utils";
 import useApi from "hooks/useApi";
 import { PathNames } from "./Constants";
 import Select from "react-select";
+import AsyncSelect from "react-select";
 
 
 const getOrder = ( history ) => {
@@ -26,16 +27,21 @@ const getOrder = ( history ) => {
                 label: "Regions",
                 parent: "nation",
             },
-            "utla": {
-                key: "utla",
-                label: "Upper tier local authorities",
+            "la": {
+                key: "la",
+                label: "Local authorities",
                 parent: "region",
             },
-            "ltla": {
-                key: "ltla",
-                label: "Lower-tier local authorities",
-                parent: "utla"
-            }
+            // "utla": {
+            //     key: "utla",
+            //     label: "Upper tier local authorities",
+            //     parent: "region",
+            // },
+            // "ltla": {
+            //     key: "ltla",
+            //     label: "Lower-tier local authorities",
+            //     parent: "utla"
+            // }
         };
 
 
@@ -104,8 +110,9 @@ const getDefaultOutput = ( history ) => {
                 // These must be ordered.
                 "nation",
                 "region",
-                "utla",
-                "ltla"
+                "la"
+                // "utla",
+                // "ltla"
             ]
 
     } // switch
@@ -150,6 +157,20 @@ const SelectOptions = {
 };
 
 
+const AreaTypeSelector = ({}) => {
+
+
+
+};
+
+
+const AreaNameSelector = ({})  => {
+
+
+
+};
+
+
 const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     const
@@ -159,11 +180,17 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
         pathname = history.location.pathname,
         query = history.location.search,
         initialParam = getParams(query),
-        // prevLocation = usePrevious(query),
+        [areaNameData, setAreaNameData] = useState({ grouped: {}, data: [] }),
+        [currentAreaType, setCurrentAreaType] = useState(getParamValueFor(initialParam, "areaType", "overview")),
         data = useApi({
              disjunctiveFilters:
-                 ( currentLocation?.areaType ?? "" ) !== "overview"
-                     ? [{ key: "areaType", sign: '=', value: currentLocation.areaType }]
+                 ( currentAreaType ) !== "overview"
+                     ? currentAreaType === "la"
+                     ? [
+                         { key: "areaType", sign: '=', value: 'utla' },
+                         { key: "areaType", sign: '=', value: 'ltla' },
+                     ]
+                     : [{ key: "areaType", sign: '=', value: currentAreaType }] // must be conjunctive
                      : defaultAreaTypes.map(item => ({ key: "areaType", sign: '=', value: item })),
              structure: {
                  value: "areaName",
@@ -173,19 +200,19 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
              defaultResponse: []
         });
 
-            const newQuery = createQuery([
-                ...getParams(query),
-                {
-                    key: 'areaType',
-                    sign: '=',
-                    value: currentLocation.areaType
-                        .toLowerCase()
-                        .replace(/nhsNation/i, "nation")
-                },
-                { key: 'areaName', sign: '=', value: currentLocation.areaName }
-            ]),
-            prevQuery = usePrevious(newQuery);
 
+    const newQuery = createQuery([
+        ...getParams(query),
+            {
+                key: 'areaType',
+                sign: '=',
+                value: currentLocation.areaType
+                    .toLowerCase()
+                    .replace(/nhsNation/i, "nation")
+            },
+            { key: 'areaName', sign: '=', value: currentLocation.areaName }
+        ]),
+        prevQuery = usePrevious(newQuery);
 
 
     useEffect(() => {
@@ -197,8 +224,26 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
         setCurrentLocation(paramData);
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ pathname, query ]);
+
+
+    useEffect(() => {
+
+        if ( currentLocation.areaName && prevQuery !== newQuery )
+            history.push({ pathname: pathname, search: newQuery });
+
+    }, [ currentLocation, currentLocation, query, prevQuery ])
+
+
+    useEffect(() => {
+        const
+            groupedAreaNameData = groupBy(data || [], item => item.value),
+            areaNameDataPrepped = Object.keys(groupedAreaNameData)
+                .map(value => ({ value: value, label: value, areaType: groupedAreaNameData[value].areaType }));
+
+        setAreaNameData({ grouped: groupedAreaNameData, data: areaNameDataPrepped })
+
+    }, [ data ])
 
 
     const handleSubmission = (event) => {
@@ -223,25 +268,12 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     };  // handleSubmission
 
-    useEffect(() => {
-
-        if ( currentLocation.areaName && prevQuery !== newQuery ) {
-
-
-            history.push({ pathname: pathname, search: newQuery })
-
-        }
-
-    }, [ currentLocation, currentLocation, query, prevQuery ])
-
     if ( !show ) return null;
 
-    const
-        groupedAreaNameData = groupBy(data || [], item => item.value),
-        areaNameData = Object.keys(groupedAreaNameData)
-            .map(value => ({ value: value, label: value, areaType: groupedAreaNameData[value].areaType })),
-        areaTypeData = defaultAreaTypes
-            .map(item => ({ value: item, label: order?.[item]?.label ?? "" }));
+    const areaTypeData = defaultAreaTypes.map(item => ({
+        value: item,
+        label: order?.[item]?.label ?? ""
+    }));
 
     return <Fragment>
             <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" }>
@@ -261,26 +293,29 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                         <div className="govuk-form-group govuk-!-margin-bottom-0">
                             <Select area-label={ "select area type" }
                                     options={ areaTypeData }
-                                    value={ areaTypeData.filter(item => item.value === currentLocation.areaType) }
-                                    onChange={ item => setCurrentLocation({ areaName: null, areaType: item.value }) }
+                                    value={ areaTypeData.filter(item => item.value === currentAreaType) }
+                                    // onChange={ item => setCurrentLocation({ areaName: null, areaType: item.value }) }
+                                    onChange={ item => setCurrentAreaType(item.value) }
                                     styles={ SelectOptions }
+                                    isLoading={ areaTypeData.length < 1 }
                                     placeholder={ "Select area type" }
                                     className={ 'select' }/>
                         </div>
                     </div>
                     <div className="govuk-grid-column-one-quarter">
                         <div className="govuk-form-group govuk-!-margin-bottom-0">
-                            <Select area-label={ "select area type" }
-                                    options={ areaNameData }
-                                    styles={ SelectOptions }
-                                    value={ areaNameData.filter(item => item.label === currentLocation.areaName) }
-                                    isLoading={ data.length < 1 }
-                                    placeholder={ "Select area" }
-                                    onChange={ item => setCurrentLocation({
-                                        areaType: groupedAreaNameData[item.value][0].areaType,
-                                        areaName: item.value
-                                    }) }
-                                    className={ 'select' }/>
+                            <AsyncSelect
+                                area-label={ "select area type" }
+                                options={ areaNameData.data }
+                                styles={ SelectOptions }
+                                value={ areaNameData.data.filter(item => item.label === currentLocation.areaName) }
+                                isLoading={ data.length < 1 }
+                                placeholder={ "Select area" }
+                                onChange={ item => setCurrentLocation({
+                                    areaType: areaNameData.grouped[item.value][0].areaType,
+                                    areaName: item.value
+                                }) }
+                                className={ 'select' }/>
                         </div>
                     </div>
                 </div>
