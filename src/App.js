@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, lazy, Suspense } from 'react';
 import { Switch, Route, withRouter } from 'react-router';
 import { Header, Footer } from 'govuk-react-jsx';
 
@@ -8,18 +8,13 @@ import About from 'pages/About';
 import Accessibility from 'pages/Accessibility';
 import Cookies from 'pages/Cookies';
 import DailySummary from 'pages/DailySummary';
-import Tests from 'pages/Testing';
-import Cases from 'pages/Cases';
-import Healthcare from 'pages/Healthcare';
-import Deaths from 'pages/Deaths';
 import CookieBanner from 'components/CookieBanner';
 import BackToTop from 'components/BackToTop';
 import ErrorBoundary from "components/ErrorBoundary";
 import axios from "axios";
 import URLs from "common/urls";
 import moment from "moment";
-import SideNavigation from "components/SideNavigation";
-import SideNavMobile from "components/SideNavMobile";
+// import SideNavigation from "components/SideNavigation";
 import DashboardHeader from "components/DashboardHeader";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Announcement from "./components/Announcement";
@@ -141,11 +136,31 @@ const BetaBanner = ({ ...props }) => {
 };
 
 
+const Navigation = ({ layout, ...props }) => {
+
+    const Nav = layout !== "mobile"
+        ? React.lazy(() => import('components/SideNavigation'))
+        : React.lazy(() => import('components/SideNavMobile'));
+
+    return <Suspense fallback={ <Loading/> }>
+        <Nav { ...props }/>
+    </Suspense>
+
+};  // MobileNavigation
+
+
+const
+    Cases = lazy(() => import('pages/Cases')),
+    Healthcare = lazy(() => import('pages/Healthcare')),
+    Deaths = lazy(() => import('pages/Deaths')),
+    Tests = lazy(() => import('pages/Testing'));
+
+
 const App = ({ location: { pathname } }) => {
 
     const
         hasMenu = PathWithSideMenu.indexOf(pathname) > -1,
-        layout = useResponsiveLayout(640);
+        layout = useResponsiveLayout(768);
 
     return <Fragment>
         <CookieBanner/>
@@ -156,32 +171,37 @@ const App = ({ location: { pathname } }) => {
             serviceUrlTo="/"
             homepageUrlHref="https://gov.uk"
         />
-        { layout === "mobile" &&  <SideNavMobile/> }
+        { layout === "mobile" && <Navigation layout={ layout }/> }
         <BetaBanner/>
         <div className={ "govuk-width-container" }>
             <main className={ "govuk-main-wrapper" } role={ "main" }>
                 <ErrorBoundary>
                     <Route path={ "/" } component={ hasMenu ? LastUpdateTime : null }/>
                     <div className={ "dashboard-container" }>
-                        <aside className={ "dashboard-menu" }>
-                            <Switch>
-                                <Route path={ "/" } component={ hasMenu ? SideNavigation : null }/>
-                            </Switch>
-                        </aside>
+                        {
+                            layout === "desktop" &&
+                            <aside className={ "dashboard-menu" }>
+                                <Switch>
+                                    <Route path={ "/" } render={ props => <Navigation layout={ layout } { ...props}/> }/>
+                                </Switch>
+                            </aside>
+                        }
                         <div className={ "dashboard-content" }>
                             <DashboardHeader/>
 
                             <Switch>
-                                <Route path="/" exact component={ DailySummary }/>
-                                <Route path="/testing" component={ Tests }/>
-                                <Route path="/cases" component={ Cases }/>
-                                <Route path="/healthcare" component={ Healthcare }/>
-                                <Route path="/deaths" component={ Deaths }/>
-                                <Route path="/about-data" component={ About }/>
+                                <Suspense fallback={ <Loading/> }>
+                                    <Route path="/" exact component={ DailySummary }/>
+                                    <Route path="/testing" component={ Tests }/>
+                                    <Route path="/cases" component={ Cases }/>
+                                    <Route path="/healthcare" component={ Healthcare }/>
+                                    <Route path="/deaths" component={ Deaths }/>
+                                    <Route path="/about-data" component={ About }/>
 
-                                {/*<Route path="/archive" component={ Archive }/>*/}
-                                <Route path="/accessibility" component={ Accessibility }/>
-                                <Route path="/cookies" component={ Cookies }/>
+                                    {/*<Route path="/archive" component={ Archive }/>*/}
+                                    <Route path="/accessibility" component={ Accessibility }/>
+                                    <Route path="/cookies" component={ Cookies }/>
+                                </Suspense>
                             </Switch>
                         </div>
                     </div>
