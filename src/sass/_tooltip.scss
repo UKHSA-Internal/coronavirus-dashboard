@@ -4,6 +4,7 @@
 .tooltip {
     width: 140px;
     padding: 8px 10px;
-    font-family: "GDS Transport", Arial, sans-serif;
+    font-family: "GDS Transport", Arial, sans-serif !important;
     font-size: 16px !important;
+    z-index: 999999;
 }
