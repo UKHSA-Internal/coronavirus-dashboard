@@ -3,7 +3,11 @@ import { Radios } from "govuk-react-jsx";
 import type { ComponentType } from "react";
 
 
-export const Radio: ComponentType<*> = ({ options, value, setValue }) => {
+export const Radio: ComponentType<*> = ({ heading, options, value, setValue }) => {
+
+    if ( !heading ) return null;
+
+    const id = heading.toLowerCase().replace(/[^a-z0-9_]+/g, "-");
 
     return <Radios
         value={ value }
@@ -16,9 +20,9 @@ export const Radio: ComponentType<*> = ({ options, value, setValue }) => {
         items={
             options
                 .choices
-                .map(choice => ({ children: [ choice ], value: choice }))
+                .map((choice, index) => ({ children: [ choice ], value: choice, id: `${id}-${index}` }))
         }
-        name="option-choices"
+        name={ `${id}-option-choices` }
     />
 
 };  // Radio

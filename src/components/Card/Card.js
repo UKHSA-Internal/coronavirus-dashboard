@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { ComponentType } from 'react';
 import { Link } from "react-router-dom";
 
@@ -326,7 +326,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 
             return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl }>
                 <CardHeader heading={ heading } { ...props }>
-                    { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
+                    { active && <Radio heading={ heading } options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }) =>
@@ -342,7 +342,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 
             return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl }>
                 <CardHeader heading={ heading } { ...props }>
-                    { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
+                    { active && <Radio heading={ heading } options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
                 <TabLinkContainer>{
                     tabs?.map(({ heading: tabHeading, ...rest }) =>
@@ -389,7 +389,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 
             return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl }>
                 <CardHeader heading={ heading } { ...props }>
-                    { active && <Radio options={ options } value={ active } setValue={ setActive }/> }
+                    { active && <Radio heading={ heading } options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }) =>
