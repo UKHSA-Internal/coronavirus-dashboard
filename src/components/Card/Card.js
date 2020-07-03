@@ -26,7 +26,7 @@ import {
 } from './Card.styles';
 import numeral from 'numeral'
 import ReactTooltip from "react-tooltip";
-import { colours, fieldToStructure, strFormat, analytics } from "common/utils";
+import { colours, fieldToStructure, analytics, strFormat } from "common/utils";
 import useApi from "hooks/useApi";
 import moment from "moment";
 import {
@@ -128,20 +128,21 @@ const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip
             defaultResponse: null
         }),
         data = useApi(getApiArgs(value)),
-        modalReplacements = {
+        replacements = {
             kwargs: {
-                ...(data?.[0] ?? {} ),
+                ...(data?.[0] ?? {}),
                 date: moment(data?.[0]?.date ?? null).format("dddd, D MMMM YYYY")
             }
-        };
+        },
+        formattedTooltip = strFormat(tooltip, replacements);
 
     return <NumericData>
         { label && <DataLabel>{ label }</DataLabel> }
         <Number>
-            <ModalTooltip data-tip={ tooltip }
+            <ModalTooltip data-tip={ formattedTooltip }
                           data-for={ tipId }
                           markdownPath={ value }
-                          replacements={ modalReplacements }>
+                          replacements={ replacements }>
                 {
                     data !== null
                         ? (data?.length ?? 0) > 0
@@ -150,7 +151,7 @@ const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip
                         : <Loading/>
                 }{ (data && sign) ? sign : null }
                 <p className={ "govuk-visually-hidden" }>
-                    Abstract information on { label }: { tooltip }<br/>
+                    Abstract information on { label }: { formattedTooltip }<br/>
                     Click for additional details.
                 </p>
             </ModalTooltip>
