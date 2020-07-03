@@ -1,6 +1,6 @@
 import React from "react";
 
-import { NotAvailableContainer } from "widgets.styles";
+import { NotAvailableContainer } from "./widgets.styles";
 import type { ComponentType } from 'react';
 
 
