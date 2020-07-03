@@ -68,8 +68,11 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
 
     useEffect(() => {
 
-        if ( !deepEqual(location, prevLocation) )
+        if ( !deepEqual(location, prevLocation) ) {
+
             setPrevPathnameState(prevPathname);
+            setLocationPickerState(state => !state)
+        }
 
     }, [ location, history.location.pathname ])
 
