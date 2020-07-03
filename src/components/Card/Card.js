@@ -313,11 +313,14 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 
     const
         [ active, setActive ] = useState(options?.choices?.[0] ?? null),
+        [ dataState, setDataState ] = useState(true),
         tabs = !active
             ? (singleOptionTabs || [])
             : ( props?.[active]?.tabs ?? [] );
 
     let apiUrl;
+
+    if ( !dataState ) return null;
 
     switch ( cardType ) {
 
@@ -331,7 +334,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }) =>
                         <TabLink key={ `tab-${ heading }` } label={ heading }>
-                            <TabContent params={ params } { ...props } { ...rest }/>
+                            <TabContent params={ params } setDataState={ setDataState } { ...props } { ...rest }/>
                         </TabLink>
                     ) ?? null
                 }</TabLinkContainer>
@@ -372,7 +375,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }) =>
                         <TabLink key={ `tab-${ heading }` } label={ heading }>
-                            <AgeSexBreakdownTabContent params={ params } { ...rest }/>
+                            <AgeSexBreakdownTabContent setDataState={ setDataState } params={ params } { ...rest }/>
                         </TabLink>
                     ) ?? null
                 }</TabLinkContainer>
@@ -394,7 +397,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }) =>
                         <TabLink key={ `tab-${ heading }` } label={ heading }>
-                            <MultiAreaStaticTabContent { ...props } { ...rest }/>
+                            <MultiAreaStaticTabContent setDataState={ setDataState } { ...props } { ...rest }/>
                         </TabLink>
                     ) ?? null
                 }</TabLinkContainer>
