@@ -39,6 +39,7 @@ import {
 import { Radio } from "components/GovUk";
 import DropdownButton from "components/DropdownButton";
 import Loading from "components/Loading";
+import { NotAvailable } from "components/Widgets";
 
 
 const VisualSection: ComponentType<Props> = ({ children }: Props) => {
@@ -73,10 +74,48 @@ const HeadlineNumbers = ({ params, headlineNumbers=[] }) => {
 } // HeadlineNumbers
 
 
-const ValueBox = ({ params, primaryValue, secondaryValue=null, primaryTooltip="", secondaryTooltip="", ...rest }) => {
+const ValueBox = ({ caption, valueItems, ...rest }) => {
 
     const
-        defaultResponse = [ { date: null, value: null } ],
+        { chart={}, isEnabled=true, setChartState=() => null } = rest,
+        tipId = encodeURI(caption);
+
+    return <DataContainer>
+        {
+            ( chart?.colour ?? false ) === false
+                ?  null
+                : <DataColour role={ "button" }
+                              data-for={ tipId }
+                              data-tip={
+                                  `Click to ${ isEnabled ? "hide" : "show" } 
+                                  the "${ caption.toLowerCase() }" on the graph.`
+                              }
+                              onClick={ setChartState }
+                              colour={ isEnabled ? (colours?.[chart.colour] ?? "") : "none" } />
+        }
+        <Heading>{ caption }</Heading>
+        <DataNumbersContainer>{
+            valueItems.map((item, index) =>
+                item.value &&
+                <ValueItem key={ `value-item-${ index }` }
+                           { ...item }
+                           { ...rest }/>
+            )
+        }</DataNumbersContainer>
+        <ReactTooltip id={ tipId }
+                      place={ "right" }
+                      backgroundColor={ "#0b0c0c" }
+                      className={ "tooltip" }
+                      effect={ "solid" }/>
+    </DataContainer>
+
+};  // getValueItemSections
+
+
+const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip=null, sign=null }: ValueItemType) => {
+
+    const
+        tipId = encodeURI(`${label}-${value}`),
         getApiArgs = varName => ({
             conjunctiveFilters: params,
             extraParams: [
@@ -86,121 +125,42 @@ const ValueBox = ({ params, primaryValue, secondaryValue=null, primaryTooltip=""
                 date: "date",
                 value: varName
             },
-            defaultResponse: defaultResponse
+            defaultResponse: null
         }),
-        primaryData = useApi(getApiArgs(primaryValue)),
-        secondaryData = useApi(
-            secondaryValue
-                ? getApiArgs(secondaryValue)
-                : {conjunctiveFilters: [], defaultResponse: defaultResponse}
-        ),
-        primaryReplacements = {
+        data = useApi(getApiArgs(value)),
+        modalReplacements = {
             kwargs: {
-                ...(primaryData?.[0] ?? {} ),
-                date: moment(primaryData?.[0]?.date ?? null).format("dddd, D MMMM YYYY")
-            }
-        },
-        secondaryReplacements = {
-            kwargs: {
-                ...(secondaryData?.[0] ?? {} ),
-                date: moment(secondaryData?.[0]?.date ?? null).format("dddd, D MMMM YYYY")
+                ...(data?.[0] ?? {} ),
+                date: moment(data?.[0]?.date ?? null).format("dddd, D MMMM YYYY")
             }
         };
 
-    return <ValueItem primaryValue={ primaryData?.[0]?.value }
-                      primaryTooltip={ strFormat(primaryTooltip, primaryReplacements) }
-                      primaryModal={ primaryValue }
-                      primaryModalReplacements={ primaryReplacements }
-                      secondaryValue={ secondaryData?.[0]?.value }
-                      secondaryTooltip={ strFormat(secondaryTooltip, secondaryReplacements) }
-                      secondaryModal={ secondaryValue }
-                      secondaryModalReplacements={ secondaryReplacements }
-                      { ...rest }/>
-
-};  // getValueItemSections
-
-
-const ValueItem: ComponentType<ValueItemType> = ({ ...props }: ValueItemType) => {
-
-    const
-        {
-            caption, primaryLabel, primaryValue, primaryModal=null, primaryTooltip=null,
-            primarySign=null, primaryModalReplacements={},
-
-            secondaryLabel=null, secondaryValue=null, secondaryModal=null,
-            secondaryTooltip=null, secondarySign=null, secondaryModalReplacements={},
-
-            chart={}, isEnabled=true, setChartState=() => null
-        } = props,
-        tipId = encodeURI(props.primaryLabel);
-
-    return <DataContainer>
-        {
-            ( chart?.colour ?? false ) === false
-                ?  null
-                : <DataColour role={ "button" }
-                            data-for={ tipId }
-                            data-tip={
-                                `Click to ${ isEnabled ? "hide" : "show" } 
-                                the "${ caption.toLowerCase() }" on the graph.`
-                            }
-                            onClick={ setChartState }
-                            colour={ isEnabled ? (colours?.[chart.colour] ?? "") : "none" } />
-        }
-        <Heading>{ caption }</Heading>
-        <DataNumbersContainer>
-            <NumericData>
-                { primaryLabel && <DataLabel>{ primaryLabel }</DataLabel> }
-                <Number>
-                    <ModalTooltip data-tip={ primaryTooltip }
-                                  data-for={ tipId }
-                                  markdownPath={ primaryModal }
-                                  replacements={ primaryModalReplacements }>
-                        {
-                            primaryValue
-                                ? numeral(primaryValue).format("0,0")
-                                : <Loading/>
-                        }{ primarySign || null }
-                        <p className={ "govuk-visually-hidden" }>
-                            Abstract information on { primaryLabel }: { primaryTooltip }<br/>
-                            Click for additional details.
-                        </p>
-                    </ModalTooltip>
-                </Number>
-            </NumericData>
-
-        {
-            secondaryLabel
-                ? <NumericData>
-                    { secondaryLabel && <DataLabel>{ secondaryLabel }</DataLabel> }
-                    <Number>
-                        <ModalTooltip
-                            data-tip={ secondaryTooltip }
-                            data-for={ tipId }
-                            markdownPath={ secondaryModal }
-                            replacements={ secondaryModalReplacements }
-                        >
-                            {
-                                secondaryValue
-                                ? numeral(secondaryValue).format("0,0")
-                                : <Loading/>
-                            }{ secondarySign || secondarySign }
-                            <p className={ "govuk-visually-hidden" }>
-                                Abstract information on { secondaryLabel }: { secondaryTooltip }<br/>
-                                Click for additional details.
-                            </p>
-                        </ModalTooltip>
-                    </Number>
-                </NumericData>
-                : null
-        }
-        </DataNumbersContainer>
+    return <NumericData>
+        { label && <DataLabel>{ label }</DataLabel> }
+        <Number>
+            <ModalTooltip data-tip={ tooltip }
+                          data-for={ tipId }
+                          markdownPath={ value }
+                          replacements={ modalReplacements }>
+                {
+                    data !== null
+                        ? (data?.length ?? 0) > 0
+                        ? numeral(data[0].value).format("0,0")
+                        : <NotAvailable/>
+                        : <Loading/>
+                }{ (data && sign) ? sign : null }
+                <p className={ "govuk-visually-hidden" }>
+                    Abstract information on { label }: { tooltip }<br/>
+                    Click for additional details.
+                </p>
+            </ModalTooltip>
+        </Number>
         <ReactTooltip id={ tipId }
                       place={ "right" }
                       backgroundColor={ "#0b0c0c" }
                       className={ "tooltip" }
                       effect={ "solid" }/>
-    </DataContainer>
+    </NumericData>
 
 }; // ValueItem
 
