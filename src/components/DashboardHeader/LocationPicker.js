@@ -159,7 +159,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
         pathname = history.location.pathname,
         query = history.location.search,
         initialParam = getParams(query),
-        prevLocation = usePrevious(pathname),
+        // prevLocation = usePrevious(query),
         data = useApi({
              disjunctiveFilters:
                  ( currentLocation?.areaType ?? "" ) !== "overview"
@@ -172,6 +172,21 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
              endpoint: "lookupApi",
              defaultResponse: []
         });
+
+            const newQuery = createQuery([
+                ...getParams(query),
+                {
+                    key: 'areaType',
+                    sign: '=',
+                    value: currentLocation.areaType
+                        .toLowerCase()
+                        .replace(/nhsNation/i, "nation")
+                },
+                { key: 'areaName', sign: '=', value: currentLocation.areaName }
+            ]),
+            prevQuery = usePrevious(newQuery);
+
+
 
     useEffect(() => {
 
@@ -208,6 +223,17 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     };  // handleSubmission
 
+    useEffect(() => {
+
+        if ( currentLocation.areaName && prevQuery !== newQuery ) {
+
+
+            history.push({ pathname: pathname, search: newQuery })
+
+        }
+
+    }, [ currentLocation, currentLocation, query, prevQuery ])
+
     if ( !show ) return null;
 
     const
@@ -218,7 +244,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
             .map(item => ({ value: item, label: order?.[item]?.label ?? "" }));
 
     return <Fragment>
-            <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" } onSubmit={ handleSubmission }>
+            <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" }>
                 <div className={ "govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2" }>
                     <div className={ "govuk-grid-column-two-thirds" }>
                         <h4 className={ "govuk-heading-s govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
@@ -260,9 +286,9 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                 </div>
                 <div className={ "govuk-grid-row govuk-!-margin-top-4 govuk-!-margin-bottom-2" }>
                     <div className={ "govuk-grid-column-full" }>
-                        <input type={ "submit" }
-                               value={ "Update location" }
-                               className={ "govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0" }/>
+                    {/*    <input type={ "submit" }*/}
+                    {/*           value={ "Update location" }*/}
+                    {/*           className={ "govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0" }/>*/}
                         <input type={ "reset" }
                                value={ "Reset to UK" }
                                onClick={ () => history.push('?') }
