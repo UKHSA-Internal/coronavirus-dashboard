@@ -1,13 +1,14 @@
 import React from "react";
 
-import { NotAvailable as NA } from "widgets.styles";
+import { NotAvailableContainer } from "widgets.styles";
+import type { ComponentType } from 'react';
 
 
-export const NotAvailable = () =>
-    <NA data-tip={ "Data not available" }
+export const NotAvailable: ComponentType = () =>
+    <NotAvailableContainer data-tip={ "Data not available" }
                   data-for={ "table-tooltip-text" }>
         N/A
         <span className={ "govuk-visually-hidden" }>
             Data not available
         </span>
-    </NA>; // NA
+    </NotAvailableContainer>; // NA
