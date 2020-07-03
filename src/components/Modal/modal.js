@@ -26,6 +26,7 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
 
     const handleKeyPressEvent = event => {
 
+        // Escape key: 27
         if ( modalRef.current && event.keyCode === 27 )
             setModalStatus(false);
 
