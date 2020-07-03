@@ -22,10 +22,3 @@ export const TableComponent: ComponentType<*> = (() => {
 
 })();
 
-export const NotAvailable: ComponentType<*> = (() => {
-
-    return styled.span`
-      color: #808080;
-    `;
-
-})();
