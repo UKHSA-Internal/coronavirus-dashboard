@@ -9,29 +9,28 @@ import {
     Body
 } from "./TabLink.styles";
 
-import type { React$Node } from "react";
+import type { ComponentType } from "react";
 import type {
     TabLinkContainerProps,
     TabLinkProps
 } from "./TabLink.types";
 import { Plotter } from "components/Plotter";
 import { dropLeadingZeros, getPlotData, groupBy } from "common/utils";
-import { DataTable, Table } from "components/GovUk";
+import { DataTable } from "components/GovUk";
 import useApi from "hooks/useApi";
 import Loading from "components/Loading";
-import moment from "moment";
 
 
 // This is a pseudo-component created to make the implementation of
 // containers easier and more consistent.
-export const TabLink = function ({ label, children }: TabLinkProps) {
+export const TabLink: ComponentType<TabLinkProps> = function ({ label, children }) {
 
     return <Fragment/>
 
 }  // TabLink
 
 
-export const TabLinkContainer = ({ children }: TabLinkContainerProps): React$Node => {
+export const TabLinkContainer: ComponentType<TabLinkContainerProps> = ({ children }) => {
 
     if ( !(children?.length ?? 0) )
         throw new Error(`Component "TabLinkContainer" must have at least two children (of type "TabLink").`);
@@ -65,7 +64,7 @@ export const TabLinkContainer = ({ children }: TabLinkContainerProps): React$Nod
 
 
 
-const TabContentWithData: TabContentType<TabContentProps> = ({ fields, tabType, barType=null, data=[], xKey="date", ...props }: TabContentProps): React$Component => {
+const TabContentWithData: ComponentType<TabContentProps> = ({ fields, tabType, barType=null, data=[], xKey="date", ...props }) => {
 
     switch ( tabType ) {
 
@@ -73,7 +72,8 @@ const TabContentWithData: TabContentType<TabContentProps> = ({ fields, tabType, 
             const layout = {};
             if ( barType ) layout["barmode"] = barType;
 
-            return <Plotter data={ getPlotData(fields, data, xKey) } layout={ layout } { ...props }/>;
+
+            return <Plotter data={ getPlotData(fields, data, xKey) } layout={ layout } { ...props }/>
 
         case "table":
             return <DataTable fields={ fields } data={ data } { ...props }/>;
