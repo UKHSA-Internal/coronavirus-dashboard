@@ -157,20 +157,6 @@ const SelectOptions = {
 };
 
 
-const AreaTypeSelector = ({}) => {
-
-
-
-};
-
-
-const AreaNameSelector = ({})  => {
-
-
-
-};
-
-
 const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     const
@@ -318,9 +304,8 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                                 className={ 'select' }/>
                         </div>
                     </div>
-                </div>
-                <div className={ "govuk-grid-row govuk-!-margin-top-4 govuk-!-margin-bottom-2" }>
-                    <div className={ "govuk-grid-column-full" }>
+                <div className={ "govuk-grid-column-one-quarter" }>
+                    <div className={ "govuk-form-group govuk-!-margin-bottom-0" }>
                     {/*    <input type={ "submit" }*/}
                     {/*           value={ "Update location" }*/}
                     {/*           className={ "govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0" }/>*/}
@@ -329,6 +314,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                                onClick={ () => history.push('?') }
                                className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }/>
                     </div>
+                </div>
                 </div>
 
             </form>
