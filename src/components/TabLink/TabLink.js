@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 
 import {
     MainContainer,
@@ -86,7 +86,7 @@ const TabContentWithData: TabContentType<TabContentProps> = ({ fields, tabType, 
 };
 
 
-export const TabContent: TabContentType<TabContentProps> = ({ fields, params, tabType, barType=null }: TabContentProps): React$Component => {
+export const TabContent: TabContentType<TabContentProps> = ({ fields, setDataState, params, tabType, barType=null }: TabContentProps): React$Component => {
 
     const  structure = { date: "date" };
 
@@ -98,6 +98,12 @@ export const TabContent: TabContentType<TabContentProps> = ({ fields, params, ta
         structure: structure,
         defaultResponse: null
     });
+
+    useEffect(() => {
+
+        setDataState(data === null || (data?.length ?? 0) > 0)
+
+    }, [ data ])
 
     if ( data === null )
         return <Loading/>;
@@ -118,7 +124,7 @@ const ageSortByKey = (a, b) => {
 }; // ageSexSort
 
 
-export const AgeSexBreakdownTabContent = ({ params, groupKey, groupValues, requiredMetrics=[], fields=[], ...props }) => {
+export const AgeSexBreakdownTabContent = ({ params, setDataState, groupKey, groupValues, requiredMetrics=[], fields=[], ...props }) => {
 
     // Assumptions:
     // Both categories have the same data type, same groups, same
@@ -129,15 +135,24 @@ export const AgeSexBreakdownTabContent = ({ params, groupKey, groupValues, requi
     for ( const metric of requiredMetrics )
         structure[metric] = metric;
 
+    const dataRaw = useApi({
+        conjunctiveFilters: params,
+        structure: structure,
+        extraParams: [
+            fields && { key: "latestBy", sign: "=", value: requiredMetrics[0] }
+        ],
+        defaultResponse: null
+    });
+
+    useEffect(() => {
+
+        setDataState(dataRaw === null || (dataRaw?.length ?? 0) > 0)
+
+    }, [ dataRaw ])
+
+    if ( !dataRaw ) return <Loading/>
+
     const
-        dataRaw = useApi({
-            conjunctiveFilters: params,
-            structure: structure,
-            extraParams: [
-                fields && { key: "latestBy", sign: "=", value: requiredMetrics[0] }
-            ],
-            defaultResponse: []
-        }),
         dataGrouped = groupBy(
             requiredMetrics
                 .map(metric =>
@@ -170,7 +185,7 @@ export const AgeSexBreakdownTabContent = ({ params, groupKey, groupValues, requi
 };  // AgeSexBreakdownTabContent
 
 
-export const MultiAreaStaticTabContent = ({ params, groupKey, groupValues, requiredMetrics=[], fields=[], ...props }) => {
+export const MultiAreaStaticTabContent = ({ params, setDataState, groupKey, groupValues, requiredMetrics=[], fields=[], ...props }) => {
 
     const
         data = useApi({
@@ -183,8 +198,14 @@ export const MultiAreaStaticTabContent = ({ params, groupKey, groupValues, requi
             defaultResponse: null
         });
 
-    if ( data === null )
-        return <Loading/>;
+
+    useEffect(() => {
+
+        setDataState(data === null || (data?.length ?? 0) > 0)
+
+    }, [ data ])
+
+    if ( data === null ) return <Loading/>;
 
     const
         groups = groupBy(
