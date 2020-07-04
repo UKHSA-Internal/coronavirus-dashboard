@@ -293,15 +293,17 @@ export const dropLeadingZeros = (data: Array<{ [any]: any }>, ...keys) => {
 
 export const fieldToStructure = (fields, params, extraParams=[]) => {
 
-    const  structure = { date: "date" };
+    const  structure = {
+        areaType: "areaType",
+        areaName: "areaName",
+        date: "date"
+    };
 
-    for ( const { key } of params ) {
+    for ( const { key } of params )
         structure[key] = key;
-    }
 
-    for ( const { value } of fields ) {
-        structure[value] = value
-    }
+    for ( const value of fields )
+        structure[value] = value;
 
     return generateUrl({
         conjunctiveFilters: params,
