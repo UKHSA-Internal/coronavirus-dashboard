@@ -269,7 +269,7 @@ const MixedCardContainer: ComponentType<*> = ({ children }) => {
 };  // MixedCardContainer
 
 
-const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=null,
+const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], params, options=null,
                          heading, fullWidth, ...props }) => {
 
     const
@@ -286,7 +286,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
     switch ( cardType ) {
 
         case "chart":
-            apiUrl = fieldToStructure([...tabs]?.reverse()?.[0]?.fields ?? [], params);
+            apiUrl = fieldToStructure(download, params);
 
             return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl }>
                 <CardHeader heading={ heading } { ...props }>
@@ -302,7 +302,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
             </Card>;
 
         case "map":
-            apiUrl = fieldToStructure([...tabs]?.reverse()?.[0]?.fields ?? [], params);
+            apiUrl = fieldToStructure(download, params);
 
             return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl }>
                 <CardHeader heading={ heading } { ...props }>
@@ -344,10 +344,11 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, params, options=nu
 
         case "multiAreaStatic":
             apiUrl = fieldToStructure(
-                [
-                    ...[...tabs]?.reverse()?.[0]?.fields ?? [],
-                    { value: "areaName" }
-                ],
+                download,
+                // [
+                //     ...[...tabs]?.reverse()?.[0]?.fields ?? [],
+                //     { value: "areaName" }
+                // ],
                 tabs?.[0]?.params ?? []
             );
 
