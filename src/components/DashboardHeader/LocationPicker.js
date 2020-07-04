@@ -177,7 +177,17 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                          { key: "areaType", sign: '=', value: 'ltla' },
                      ]
                      : [{ key: "areaType", sign: '=', value: currentAreaType }] // must be conjunctive
-                     : defaultAreaTypes.map(item => ({ key: "areaType", sign: '=', value: item })),
+                     : [
+                         ...defaultAreaTypes
+                             .filter(item => item !== "la")
+                             .map(item => ({key: "areaType", sign: '=', value: item })),
+                         ...defaultAreaTypes.indexOf("la") > -1
+                             ? [
+                                 { key: "areaType", sign: '=', value: 'utla' },
+                                 { key: "areaType", sign: '=', value: 'ltla' }
+                             ]
+                             : []
+                     ],
              structure: {
                  value: "areaName",
                  areaType: "areaType"
