@@ -28,7 +28,7 @@ export const ModalContent: ComponentType<*> = (() => {
     display: flex;
     flex-direction: column;
     max-height: min(80vh, 500px);
-    max-width: min(400px, 95vw);
+    width: min(400px, 95vw);
     border: 5px solid black;
     background-color: #fff;
     overflow-x: scroll;
@@ -66,7 +66,7 @@ export const ModalCloser: ComponentType<*> = (() => {
     const
         classes = '',
         Node = styled.button` 
-            width: inherit;           
+            min-height: 40px;
             margin: 20px 30px 30px 30px;
         `;
 
