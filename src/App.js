@@ -41,7 +41,7 @@ const LastUpdateTime = () => {
 
     const timestamp = useTimestamp();
 
-    return <Fragment>
+    return <>
         {/*<Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>*/}
         {/*    <p className={ "govuk-body govuk-!-margin-top-0" }>*/}
         {/*        We are experiencing technical difficulties and are working to fix the*/}
@@ -59,7 +59,7 @@ const LastUpdateTime = () => {
                     }</time>
             }
         </p>
-    </Fragment>
+    </>
 
 }; // LastUpdateTime
 
