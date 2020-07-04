@@ -42,7 +42,13 @@ const LastUpdateTime = () => {
 
     if (!timestamp) return null;
 
-    return <Fragment>
+    return <>
+        <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>
+            <p className={ "govuk-body govuk-!-margin-top-0" }>
+                We are working to release sub-national data today. The deployment of the
+                latest data will be delayed.
+            </p>
+        </Announcement>
         <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
             Last updated on&nbsp;<time dateTime={ timestamp }>{
                 moment(timestamp)
@@ -50,7 +56,7 @@ const LastUpdateTime = () => {
                     .format("dddd D MMMM YYYY [at] h:mma")
             }</time>
         </p>
-    </Fragment>
+    </>
 
 }; // LastUpdateTime
 
