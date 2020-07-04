@@ -56,6 +56,7 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
         areaName = getParamValueFor(params, "areaName", "United Kingdom"),
         startDate = getParamDateFor(params, 'specimenDate', moment("2020-01-03"), ">"),
         endDate = getParamDateFor(params, "specimenDate", moment(), "<"),
+        pathname = history.location.pathname,
         isExcluded = NoPickerPaths.indexOf(history.location.pathname) > -1,
         prevPathname = usePrevious(history.location.pathname),
         initialParam = getParams(history.location.query),
@@ -71,21 +72,28 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
         if ( !deepEqual(location, prevLocation) ) {
 
             setPrevPathnameState(prevPathname);
-            setLocationPickerState(state => !state)
+            setLocationPickerState(false)
         }
 
-    }, [ location, history.location.pathname ])
+    }, [ location, prevLocation ])
 
     return <MainContainer>
         <HeaderContainer>
             <Title>
                 { PathNameMapper[history.location.pathname] }
+                {
+                    (pathname && pathname !== "/") &&
+                    <>
+                        &nbsp;in&nbsp;{ areaName }
+                    </>
+                }
             </Title>
             { !isExcluded &&
                 <CollapsibleLinkContainer>
                     <CollapsibleLink className={ locationPickerState ? "opened" : "closed" }
                                      onClick={ () => setLocationPickerState(locationPickerState => !locationPickerState) }>
-                        Change&nbsp;location:&nbsp;<CurrentLocation>{ areaName }</CurrentLocation>
+                        Change&nbsp;location
+                        {/*:&nbsp;<CurrentLocation>{ areaName }</CurrentLocation>*/}
                     </CollapsibleLink>
                 </CollapsibleLinkContainer>
             }
@@ -111,10 +119,10 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
                 <LocationPicker show={ locationPickerState } currentLocation={ location }
                                 setCurrentLocation={ setLocation }/>
 
-                <LocationProposer lastParams={ [
-                    { key: "areaType", sign: "=", value: location.areaType },
-                    { key: "areaName", sign: "=", value: location.areaName }
-                ] } referrer={ prevPathnameState }/>
+                {/*<LocationProposer lastParams={ [*/}
+                {/*    { key: "areaType", sign: "=", value: location.areaType },*/}
+                {/*    { key: "areaName", sign: "=", value: location.areaName }*/}
+                {/*] } referrer={ prevPathnameState }/>*/}
             </>
         }
     </MainContainer>
