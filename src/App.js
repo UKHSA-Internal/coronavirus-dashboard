@@ -45,8 +45,8 @@ const LastUpdateTime = () => {
     return <>
         <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>
             <p className={ "govuk-body govuk-!-margin-top-0" }>
-                We are working to release sub-national data today. The deployment of the
-                latest data will be delayed.
+                We are working to fix a number of technical issues and will add
+                sub-national data as soon as possible.
             </p>
         </Announcement>
         <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
