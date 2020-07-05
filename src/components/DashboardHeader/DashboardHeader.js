@@ -71,7 +71,7 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
 
     useEffect(() => {
 
-        if ( !deepEqual(location.areaName, prevLocation.areaName) )
+        if ( location.areaName && !deepEqual(location.areaName, prevLocation.areaName) )
             setLocationPickerState(false);
 
     }, [ location.areaName, prevLocation.areaName ])
