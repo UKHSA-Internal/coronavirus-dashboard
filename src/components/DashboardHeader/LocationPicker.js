@@ -164,24 +164,24 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
         order = getOrder(history),
         pathname = history.location.pathname,
         query = history.location.search,
-        [ defaultAreaTypes, setDefaultAreaTypes ] = useState(getDefaultOutput(pathname)),
+        // [ defaultAreaTypes, setDefaultAreaTypes ] = useState(getDefaultOutput(pathname)),
         // initialParam = getParams(query),
         [areaNameData, setAreaNameData] = useState({ grouped: {}, data: [] }),
-        [currentAreaType, setCurrentAreaType] = useState("overview"),
+        // [currentAreaType, setCurrentAreaType] = useState(getDefaultOutput(pathname)),
         data = useApi({
              disjunctiveFilters:
-                 ( currentAreaType ) !== "overview"
-                     ? currentAreaType === "la"
+                 ( currentLocation.areaType ) !== "overview"
+                     ? currentLocation.areaType === "la"
                      ? [
                          { key: "areaType", sign: '=', value: 'utla' },
                          { key: "areaType", sign: '=', value: 'ltla' },
                      ]
-                     : [{ key: "areaType", sign: '=', value: currentAreaType }] // must be conjunctive
+                     : [{ key: "areaType", sign: '=', value: currentLocation.areaType }] // must be conjunctive
                      : [
-                         ...defaultAreaTypes
+                         ...getDefaultOutput(pathname)
                              .filter(item => item !== "la")
                              .map(item => ({key: "areaType", sign: '=', value: item })),
-                         ...defaultAreaTypes.indexOf("la") > -1
+                         ...getDefaultOutput(pathname).indexOf("la") > -1
                              ? [
                                  { key: "areaType", sign: '=', value: 'utla' },
                                  { key: "areaType", sign: '=', value: 'ltla' }
@@ -211,12 +211,12 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
         prevQuery = usePrevious(newQuery),
         prevPathname = usePrevious(pathname);
 
-    useEffect(() => {
-
-        if ( pathname !== prevPathname )
-            setCurrentAreaType("overview");
-
-    }, [ pathname, prevPathname ])
+    // useEffect(() => {
+    //
+    //     if ( pathname !== prevPathname )
+    //         setCurrentAreaType(getDefaultOutput(pathname));
+    //
+    // }, [ pathname, prevPathname ])
 
     useEffect(() => {
 
@@ -254,12 +254,12 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
     }, [ data ])
 
 
-    useEffect(() => {
-
-        if ( query !== prevQuery)
-            setDefaultAreaTypes(getDefaultOutput(pathname));
-
-    }, [ pathname, query ])
+    // useEffect(() => {
+    //
+    //     if ( query !== prevQuery)
+    //         setDefaultAreaTypes(getDefaultOutput(pathname));
+    //
+    // }, [ pathname, query ])
 
     const handleSubmission = (event) => {
 
@@ -283,7 +283,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     if ( !show ) return null;
 
-    const areaTypeData = defaultAreaTypes.map(item => ({
+    const areaTypeData = getDefaultOutput(pathname).map(item => ({
         value: item,
         label: order?.[item]?.label ?? ""
     }));
@@ -306,9 +306,9 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                         <div className="govuk-form-group govuk-!-margin-bottom-0">
                             <Select area-label={ "select area type" }
                                     options={ areaTypeData }
-                                    value={ areaTypeData.filter(item => item.value === currentAreaType) }
+                                    value={ areaTypeData.filter(item => item.value === currentLocation.areaType) }
                                     // onChange={ item => setCurrentLocation({ areaName: null, areaType: item.value }) }
-                                    onChange={ item => setCurrentAreaType(item.value) }
+                                    onChange={ item => setCurrentLocation(loc => ({...loc, areaType: item.value})) }
                                     styles={ SelectOptions }
                                     isLoading={ areaTypeData.length < 1 }
                                     placeholder={ "Select area type" }

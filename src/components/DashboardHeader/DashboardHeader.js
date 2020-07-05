@@ -58,6 +58,7 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
         startDate = getParamDateFor(params, 'specimenDate', moment("2020-01-03"), ">"),
         endDate = getParamDateFor(params, "specimenDate", moment(), "<"),
         pathname = history.location.pathname,
+        // prevPathname
         isExcluded = NoPickerPaths.indexOf(pathname) > -1,
         prevPathname = usePrevious(pathname),
         initialParam = getParams(history.location.query),
@@ -78,6 +79,16 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
         location.areaName, location.areaType,
         prevLocation.areaName, prevLocation.areaType
     ])
+
+    useEffect(() => {
+
+        if ( pathname !== prevPathname )
+            setLocation({
+                areaType: getParamValueFor(initialParam, "areaType", "overview"),
+                areaName: getParamValueFor(initialParam, "areaName", "United Kingdom"),
+            });
+
+    }, [ pathname, prevPathname ])
 
     return <MainContainer>
         <HeaderContainer>
