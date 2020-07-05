@@ -81,13 +81,8 @@ const NationDeathsPlot = ({ ...props }) => {
 };  // DeathsCard
 
 
-const DrawPlots = ({ ...props }) => {
 
-
-
-};
-
-const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout, heading }: DailySummaryCardProps) => {
+const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout=[], heading }: DailySummaryCardProps) => {
 
     const
         structure = { date: "date" },
@@ -109,47 +104,35 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
     }
 
     const
-        [ plotData, setPlotData ] = useState({}),
+        [ plotData, setPlotData ] = useState(
+            layout.reduce((acc, { chart={} }) =>
+                chart && !((chart?.value ?? null) in chartData)
+                    ? {...acc, [chart.value]: chart?.display ?? true }
+                    : acc, {}
+            )
+        ),
         data = useApi({
             conjunctiveFilters: params,
             structure: structure,
             defaultResponse: null
         });
 
-    useEffect(() => {
-
-        for ( const { chart={} } of layout ) {
-
-            if ( chart && !chartData.hasOwnProperty(chart?.value ?? null) ) {
-
-                chartData[chart.value] = chart?.display ?? true;
-
-            }
-        }
-
-        setPlotData(chartData)
-
-    }, [ params ]);
-
-
     return <Card heading={ heading }>
         <CardHeader heading={ heading } linkToHeading={ "More detail" }/>
         <HalfCardSplitBody>
-            <VisualSection>
-                {
-                    data === null
-                        ? <Loading size={ 8 } margin={ 2 } color={ '#adadad' }/>
-                        : <Plotter
-                            data={ getPlotData(
-                                layout
-                                    .filter(({ chart = false }) => chart && (plotData?.[chart.value] ?? true))
-                                    .map(item => item.chart),
-                                data
-                            ) }
+            <VisualSection>{
+                data === null
+                    ? <Loading size={ 8 } margin={ 2 } color={ '#adadad' }/>
+                    : <Plotter
+                        data={ getPlotData(
+                            layout
+                                .filter(({ chart = false }) => chart && (plotData?.[chart.value] ?? true))
+                                .map(item => item.chart),
+                            data
+                        ) }
 
-                        />
-                }
-            </VisualSection>
+                    />
+            }</VisualSection>
             <NumericReports>
                 {
                     layout.map((item, index) =>
@@ -193,7 +176,7 @@ const DailySummary = ({ location: { search: query } }) => {
     return <Container className={ "util-flex util-flex-wrap" }>{
         summary.map((item, index) =>
             <DailySummaryCard
-                key={ `card-${item?.heading ?? ""}-index` }
+                key={ `card-${item?.heading ?? ""}-${ index }` }
                 params={ params }
                 heading={ item?.heading ?? "" }
                 layout={ item?.fields ?? [] }/>
