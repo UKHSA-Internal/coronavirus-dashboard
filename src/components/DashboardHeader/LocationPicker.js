@@ -1,16 +1,13 @@
 // @flow
 
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
 
 import { analytics, createQuery, getParams, groupBy } from "common/utils";
 
-import { getParamValueFor } from "./utils";
-
 import useApi from "hooks/useApi";
 import { PathNames } from "./Constants";
 import Select from "react-select";
-import AsyncSelect from "react-select";
 
 
 const getOrder = ( history ) => {
@@ -164,10 +161,19 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
         order = getOrder(history),
         pathname = history.location.pathname,
         query = history.location.search,
-        // [ defaultAreaTypes, setDefaultAreaTypes ] = useState(getDefaultOutput(pathname)),
-        // initialParam = getParams(query),
+        newQuery = createQuery([
+                ...getParams(query),
+                    {
+                        key: 'areaType',
+                        sign: '=',
+                        value: currentLocation.areaType
+                            .toLowerCase()
+                            .replace(/nhsNation/i, "nation")
+                    },
+                    { key: 'areaName', sign: '=', value: currentLocation.areaName }
+                ]),
+        prevQuery = usePrevious(newQuery),
         [areaNameData, setAreaNameData] = useState({ grouped: {}, data: [] }),
-        // [currentAreaType, setCurrentAreaType] = useState(getDefaultOutput(pathname)),
         data = useApi({
              disjunctiveFilters:
                  ( currentLocation.areaType ) !== "overview"
@@ -197,36 +203,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
         });
 
 
-    const newQuery = createQuery([
-        ...getParams(query),
-            {
-                key: 'areaType',
-                sign: '=',
-                value: currentLocation.areaType
-                    .toLowerCase()
-                    .replace(/nhsNation/i, "nation")
-            },
-            { key: 'areaName', sign: '=', value: currentLocation.areaName }
-        ]),
-        prevQuery = usePrevious(newQuery),
-        prevPathname = usePrevious(pathname);
-
-    // useEffect(() => {
-    //
-    //     if ( pathname !== prevPathname )
-    //         setCurrentAreaType(getDefaultOutput(pathname));
-    //
-    // }, [ pathname, prevPathname ])
-
     useEffect(() => {
-
-
-        // const
-        //     paramInit = getParams(query),
-        //     paramData = {
-        //         areaType: getParamValueFor(paramInit, "areaType", "overview"),
-        //         areaName: getParamValueFor(paramInit, "areaName", "United Kingdom"),
-        //     }
 
         setCurrentLocation(currentLocation);
 
@@ -235,60 +212,37 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     useEffect(() => {
 
-        if ( currentLocation.areaName && prevQuery !== newQuery ) {
-            analytics("Localisation", pathname, newQuery.trim("?"))
+        if ( currentLocation.areaName && prevQuery !== newQuery )
             history.push({ pathname: pathname, search: newQuery });
-        }
 
-    }, [ currentLocation.areaName, query, prevQuery, pathname ])
+    }, [ currentLocation.areaName, query, prevQuery, pathname ]);
 
 
     useEffect(() => {
         const
             groupedAreaNameData = groupBy(data || [], item => item.value),
             areaNameDataPrepped = Object.keys(groupedAreaNameData)
-                .map(value => ({ value: value, label: value, areaType: groupedAreaNameData[value].areaType }));
+                .map(value => ({
+                    value: value,
+                    label: value,
+                    areaType: groupedAreaNameData[value].areaType
+                }));
 
         setAreaNameData({ grouped: groupedAreaNameData, data: areaNameDataPrepped })
 
-    }, [ data ])
+    }, [ data ]);
 
-
-    // useEffect(() => {
-    //
-    //     if ( query !== prevQuery)
-    //         setDefaultAreaTypes(getDefaultOutput(pathname));
-    //
-    // }, [ pathname, query ])
-
-    const handleSubmission = (event) => {
-
-        event.preventDefault();
-
-        const newQuery = createQuery([
-            ...getParams(query),
-            {
-                key: 'areaType',
-                sign: '=',
-                value: currentLocation.areaType
-                    .toLowerCase()
-                    .replace(/nhsNation/i, "nation")
-            },
-            { key: 'areaName', sign: '=', value: currentLocation.areaName }
-        ]);
-
-        history.push({ pathname: pathname, search: newQuery })
-
-    };  // handleSubmission
 
     if ( !show ) return null;
+
 
     const areaTypeData = getDefaultOutput(pathname).map(item => ({
         value: item,
         label: order?.[item]?.label ?? ""
     }));
 
-    return <Fragment>
+
+    return <>
             <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" }>
                 <div className={ "govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2" }>
                     <div className={ "govuk-grid-column-two-thirds" }>
@@ -307,8 +261,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                             <Select area-label={ "select area type" }
                                     options={ areaTypeData }
                                     value={ areaTypeData.filter(item => item.value === currentLocation.areaType) }
-                                    // onChange={ item => setCurrentLocation({ areaName: null, areaType: item.value }) }
-                                    onChange={ item => setCurrentLocation(loc => ({ areaType: item.value })) }
+                                    onChange={ item => setCurrentLocation({ areaType: item.value }) }
                                     styles={ SelectOptions }
                                     isLoading={ areaTypeData.length < 1 }
                                     placeholder={ "Select area type" }
@@ -333,12 +286,9 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                     </div>
                 <div className={ "govuk-grid-column-one-quarter" }>
                     <div className={ "govuk-form-group govuk-!-margin-bottom-0" }>
-                        {/*<input type={ "submit" }*/}
-                        {/*       value={ "Update location" }*/}
-                        {/*       className={ "govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0" }/>*/}
                         <input type={ "reset" }
                                value={ "Reset to UK" }
-                               onClick={ () => history.push('?') }
+                               onClick={ () => setCurrentLocation({areaType: "overview", areaName: "United Kingdom"}) }
                                className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }/>
                     </div>
                 </div>
@@ -346,7 +296,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
             </form>
         <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
-    </Fragment>
+    </>
 
 };  // LocationPicker
 
