@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect, useRef } from "react";
 
 import {
     MainContainer,
@@ -93,15 +93,17 @@ export const TabContent: TabContentType<TabContentProps> = ({ fields, setDataSta
     for ( const { value } of fields )
         structure[value] = value;
 
-    const data = useApi({
-        conjunctiveFilters: params,
-        structure: structure,
-        defaultResponse: null
-    });
+    const
+        data = useApi({
+            conjunctiveFilters: params,
+            structure: structure,
+            defaultResponse: null
+        });
 
     useEffect(() => {
 
-        setDataState(data === null || (data?.length ?? 0) > 0)
+        if ( data !== null && ( data?.length ?? 0 ) < 1 )
+            setDataState(false);
 
     }, [ data ])
 
@@ -135,22 +137,24 @@ export const AgeSexBreakdownTabContent = ({ params, setDataState, groupKey, grou
     for ( const metric of requiredMetrics )
         structure[metric] = metric;
 
-    const dataRaw = useApi({
-        conjunctiveFilters: params,
-        structure: structure,
-        extraParams: [
-            fields && { key: "latestBy", sign: "=", value: requiredMetrics[0] }
-        ],
-        defaultResponse: null
-    });
+    const
+        dataRaw = useApi({
+            conjunctiveFilters: params,
+            structure: structure,
+            extraParams: [
+                fields && { key: "latestBy", sign: "=", value: requiredMetrics[0] }
+            ],
+            defaultResponse: null
+        });
 
     useEffect(() => {
 
-        setDataState(dataRaw === null || (dataRaw?.length ?? 0) > 0)
+        if ( dataRaw !== null && ( dataRaw?.length ?? 0 ) < 1 )
+            setDataState(false);
 
     }, [ dataRaw ])
 
-    if ( !dataRaw ) return <Loading/>
+    if ( dataRaw === null ) return <Loading/>;
 
     const
         dataGrouped = groupBy(
@@ -198,14 +202,14 @@ export const MultiAreaStaticTabContent = ({ params, setDataState, groupKey, grou
             defaultResponse: null
         });
 
-
     useEffect(() => {
 
-        setDataState(data === null || (data?.length ?? 0) > 0)
+        if ( data !== null && ( data?.length ?? 0 ) < 1 )
+            setDataState(false);
 
     }, [ data ])
 
-    if ( data === null ) return <Loading/>;
+    if ( !data ) return <Loading/>;
 
     const
         groups = groupBy(
@@ -257,6 +261,3 @@ export const MultiAreaStaticTabContent = ({ params, setDataState, groupKey, grou
     return <TabContentWithData { ...props } fields={ newFields } data={ newData }/>
 
 };  // CustomTabContent
-
-
-
