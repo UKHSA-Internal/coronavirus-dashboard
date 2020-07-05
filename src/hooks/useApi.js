@@ -106,7 +106,8 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
             prevExtraParams,
             prevStructure,
             structure
-        ])
+        ]
+    )
 
     return data
 
