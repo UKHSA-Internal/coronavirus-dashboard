@@ -261,3 +261,32 @@ export const MultiAreaStaticTabContent = ({ params, setDataState, groupKey, grou
     return <TabContentWithData { ...props } fields={ newFields } data={ newData }/>
 
 };  // CustomTabContent
+
+
+export const SimpleTable = ({ setDataState, params, fields=[], ...props }) => {
+
+    const
+        data = useApi({
+            conjunctiveFilters: params,
+            structure: {
+                ...fields.reduce((acc, { value }) => ({ ...acc, [value]: value }), {})
+            },
+            extraParams: [
+                (props?.latestBy ?? null) &&
+                { key: "latestBy", sign: "=", value: props.latestBy }
+            ],
+            defaultResponse: null
+        });
+
+    useEffect(() => {
+
+        if ( data !== null && ( data?.length ?? 0 ) < 1 )
+            setDataState(false);
+
+    }, [ data ])
+
+    if ( !data ) return <Loading/>;
+
+    return <TabContentWithData { ...props } fields={ fields } data={ data }/>
+
+};  // Tabulation

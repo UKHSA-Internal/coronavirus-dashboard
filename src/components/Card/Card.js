@@ -32,6 +32,7 @@ import moment from "moment";
 import {
     AgeSexBreakdownTabContent,
     MultiAreaStaticTabContent,
+    SimpleTable,
     TabContent,
     TabLink,
     TabLinkContainer
@@ -398,6 +399,22 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
                 }</TabLinkContainer>
             </Card>;
 
+        case "simpleTableStatic":
+            apiUrl = fieldToStructure(download, params);
+
+            return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl } dataState={ dataState }>
+                <CardHeader heading={ heading } { ...props }>
+                    { active && <Radio heading={ heading } options={ options } value={ active } setValue={ setActive }/> }
+                </CardHeader>
+                <TabLinkContainer>{
+                    tabs?.map(({ heading, ...rest }, index) =>
+                        <TabLink key={ `tab-${ heading }-${ index }` } label={ heading }>
+                            <SimpleTable setDataState={ setDataState } dataState={ dataState } { ...props } { ...rest }/>
+                        </TabLink>
+                    ) ?? null
+                }</TabLinkContainer>
+            </Card>;
+        
         default:
             return <p>Invalid chart type</p>;
 
