@@ -308,7 +308,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                                     options={ areaTypeData }
                                     value={ areaTypeData.filter(item => item.value === currentLocation.areaType) }
                                     // onChange={ item => setCurrentLocation({ areaName: null, areaType: item.value }) }
-                                    onChange={ item => setCurrentLocation(loc => ({...loc, areaType: item.value})) }
+                                    onChange={ item => setCurrentLocation(loc => ({ areaType: item.value })) }
                                     styles={ SelectOptions }
                                     isLoading={ areaTypeData.length < 1 }
                                     placeholder={ "Select area type" }
