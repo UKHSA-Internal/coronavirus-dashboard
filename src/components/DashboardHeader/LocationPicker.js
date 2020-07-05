@@ -240,7 +240,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
             history.push({ pathname: pathname, search: newQuery });
         }
 
-    }, [ currentLocation.areaType, currentLocation.areaName, query, prevQuery, pathname ])
+    }, [ currentLocation.areaName, query, prevQuery, pathname ])
 
 
     useEffect(() => {
