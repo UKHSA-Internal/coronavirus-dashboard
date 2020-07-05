@@ -42,12 +42,12 @@ const LastUpdateTime = () => {
     const timestamp = useTimestamp();
 
     return <Fragment>
-        <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>
-            <p className={ "govuk-body govuk-!-margin-top-0" }>
-                This is a development service. The functionality is <strong>not</strong> reliable and some
-                of the data are random simulations.
-            </p>
-        </Announcement>
+        {/*<Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>*/}
+        {/*    <p className={ "govuk-body govuk-!-margin-top-0" }>*/}
+        {/*        This is a development service. The functionality is <strong>not</strong> reliable and some*/}
+        {/*        of the data are random simulations.*/}
+        {/*    </p>*/}
+        {/*</Announcement>*/}
         <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
             Last updated on&nbsp;{
                 !timestamp
@@ -134,8 +134,7 @@ const BetaBanner = ({ ...props }) => {
                    target={ "_blank" }>
                     feedback</a>&nbsp;
                 will help us to improve it.
-                We currently show UK data only. Sub-national data will be added
-                soon. The&nbsp;<a className="govuk-footer__link"
+                The&nbsp;<a className="govuk-footer__link"
                    href={ "https://coronavirus.data.gov.uk/" }
                    rel={ "noopener noreferrer" }
                    target={ "_blank" }>current official website</a>&nbsp;is still
