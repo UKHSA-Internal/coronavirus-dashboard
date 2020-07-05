@@ -296,6 +296,7 @@ export const fieldToStructure = (fields, params, extraParams=[]) => {
     const  structure = {
         areaType: "areaType",
         areaName: "areaName",
+        areaCode: "areaCode",
         date: "date"
     };
 
