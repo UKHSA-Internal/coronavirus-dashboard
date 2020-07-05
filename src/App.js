@@ -1,12 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Switch, Route, withRouter } from 'react-router';
 import { Header, Footer } from 'govuk-react-jsx';
 
-import About from 'pages/About';
-import Accessibility from 'pages/Accessibility';
-import Cookies from 'pages/Cookies';
 import DailySummary from 'pages/DailySummary';
 import CookieBanner from 'components/CookieBanner';
 import BackToTop from 'components/BackToTop';
@@ -14,7 +11,6 @@ import ErrorBoundary from "components/ErrorBoundary";
 import axios from "axios";
 import URLs from "common/urls";
 import moment from "moment";
-// import SideNavigation from "components/SideNavigation";
 import DashboardHeader from "components/DashboardHeader";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
@@ -42,12 +38,13 @@ const LastUpdateTime = () => {
     const timestamp = useTimestamp();
 
     return <>
-        {/*<Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>*/}
-        {/*    <p className={ "govuk-body govuk-!-margin-top-0" }>*/}
-        {/*        We are experiencing technical difficulties and are working to fix the*/}
-        {/*        problem and restore the service. Apologies for the inconvenience.*/}
-        {/*    </p>*/}
-        {/*</Announcement>*/}
+        <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>
+            <p className={ "govuk-body govuk-!-margin-top-0" }>
+                We have added local authority trends in cases and other sub-national
+                data. Current data are yesterday's figures. Today's data will be released
+                later this afternoon.
+            </p>
+        </Announcement>
         <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
             Last updated on&nbsp;{
                 !timestamp
@@ -65,7 +62,7 @@ const LastUpdateTime = () => {
 
 
 const FooterContents = () => (
-    <Fragment>
+    <>
         <p className={ "govuk-footer__meta-custom" }>
             For feedback email&nbsp;
             <a className="govuk-footer__link"
@@ -88,7 +85,7 @@ const FooterContents = () => (
                rel="noopener noreferrer"
             >NHSX</a>
         </p>
-    </Fragment>
+    </>
 );  // FooterContents
 
 
@@ -161,7 +158,10 @@ const
     Cases = lazy(() => import('pages/Cases')),
     Healthcare = lazy(() => import('pages/Healthcare')),
     Deaths = lazy(() => import('pages/Deaths')),
-    Tests = lazy(() => import('pages/Testing'));
+    Tests = lazy(() => import('pages/Testing')),
+    About = lazy(() => import('pages/About')),
+    Accessibility = lazy(() => import('pages/Accessibility')),
+    Cookies = lazy(() => import('pages/Cookies'));
 
 
 const App = ({ location: { pathname } }) => {
@@ -170,7 +170,7 @@ const App = ({ location: { pathname } }) => {
         hasMenu = PathWithSideMenu.indexOf(pathname) > -1,
         layout = useResponsiveLayout(768);
 
-    return <Fragment>
+    return <>
         <CookieBanner/>
         <Header
             // containerClassName="govuk-header__container--full-width"
@@ -232,7 +232,7 @@ const App = ({ location: { pathname } }) => {
         <Switch>
             <Route path="/" component={ F }/>
         </Switch>
-    </Fragment>
+    </>
 };  // App
 
 
