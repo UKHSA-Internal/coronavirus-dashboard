@@ -3,7 +3,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
 
-import { createQuery, getParams, groupBy } from "common/utils";
+import { analytics, createQuery, getParams, groupBy } from "common/utils";
 
 import { getParamValueFor } from "./utils";
 
@@ -225,8 +225,10 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     useEffect(() => {
 
-        if ( currentLocation.areaName && prevQuery !== newQuery )
+        if ( currentLocation.areaName && prevQuery !== newQuery ) {
+            analytics("Localisation", pathname, newQuery.trim("?"))
             history.push({ pathname: pathname, search: newQuery });
+        }
 
     }, [ currentLocation, currentLocation, query, prevQuery ])
 
@@ -259,8 +261,6 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
         ]);
 
         history.push({ pathname: pathname, search: newQuery })
-        // console.log(newQuery)
-        // return <Redirect to={{ pathname: pathname, search: newQuery }}/>
 
     };  // handleSubmission
 
@@ -316,9 +316,9 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                     </div>
                 <div className={ "govuk-grid-column-one-quarter" }>
                     <div className={ "govuk-form-group govuk-!-margin-bottom-0" }>
-                    {/*    <input type={ "submit" }*/}
-                    {/*           value={ "Update location" }*/}
-                    {/*           className={ "govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0" }/>*/}
+                        {/*<input type={ "submit" }*/}
+                        {/*       value={ "Update location" }*/}
+                        {/*       className={ "govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0" }/>*/}
                         <input type={ "reset" }
                                value={ "Reset to UK" }
                                onClick={ () => history.push('?') }

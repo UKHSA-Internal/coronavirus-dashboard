@@ -90,7 +90,12 @@ const ValueBox = ({ caption, valueItems, ...rest }) => {
                                   `Click to ${ isEnabled ? "hide" : "show" } 
                                   the "${ caption.toLowerCase() }" on the graph.`
                               }
-                              onClick={ setChartState }
+                              onClick={ () => {
+
+                                  analytics("Chart toggle", caption, isEnabled ? "ON" : "OFF" )
+
+                                  setChartState()
+                              } }
                               colour={ isEnabled ? (colours?.[chart.colour] ?? "") : "none" } />
         }
         <Heading>{ caption }</Heading>
@@ -98,8 +103,11 @@ const ValueBox = ({ caption, valueItems, ...rest }) => {
             valueItems.map((item, index) =>
                 item.value &&
                 <ValueItem key={ `value-item-${ index }` }
-                           { ...item }
-                           { ...rest }/>
+                           value={ item.value }
+                           label={ item.label }
+                           tooltip={ item.tooltip }
+                           sign={ item.sign }
+                           params={ rest.params }/>
             )
         }</DataNumbersContainer>
         <ReactTooltip id={ tipId }
@@ -116,18 +124,17 @@ const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip
 
     const
         tipId = encodeURI(`${label}-${value}`),
-        getApiArgs = varName => ({
+        data = useApi({
             conjunctiveFilters: params,
             extraParams: [
-                { key: "latestBy", sign: "=", value: varName }
+                { key: "latestBy", sign: "=", value: value }
             ],
             structure: {
                 date: "date",
-                value: varName
+                value: value
             },
             defaultResponse: null
         }),
-        data = useApi(getApiArgs(value)),
         replacements = {
             kwargs: {
                 ...(data?.[0] ?? {}),
@@ -269,33 +276,58 @@ const MixedCardContainer: ComponentType<*> = ({ children }) => {
 };  // MixedCardContainer
 
 
+const usePrevious = (value) => {
+
+    const ref = useRef(value);
+
+    useEffect(() => {
+
+        ref.current = value
+
+    })
+
+    return ref.current
+
+};  // usePrevious
+
+
 const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], params, options=null,
                          heading, fullWidth, ...props }) => {
 
     const
         [ active, setActive ] = useState(options?.choices?.[0] ?? null),
         [ dataState, setDataState ] = useState(true),
+        strParams = JSON.stringify(params),
+        prevParams = usePrevious(strParams),
         tabs = !active
             ? (singleOptionTabs || [])
             : ( props?.[active]?.tabs ?? [] );
 
     let apiUrl;
 
+    useEffect(() => {
+
+        if ( prevParams !== strParams ) setDataState(true);
+
+    }, [ prevParams, strParams ])
+
+
     if ( !dataState ) return null;
+
 
     switch ( cardType ) {
 
         case "chart":
             apiUrl = fieldToStructure(download, params);
 
-            return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl }>
+            return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl } dataState={ dataState }>
                 <CardHeader heading={ heading } { ...props }>
-                    { active && <Radio heading={ heading } options={ options } value={ active } setValue={ setActive }/> }
+                    { active && <Radio heading={ heading } options={ options } dataState={ dataState } value={ active } setValue={ setActive }/> }
                 </CardHeader>
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }) =>
                         <TabLink key={ `tab-${ heading }` } label={ heading }>
-                            <TabContent params={ params } setDataState={ setDataState } { ...props } { ...rest }/>
+                            <TabContent params={ params } setDataState={ setDataState } dataState={ dataState } { ...props } { ...rest }/>
                         </TabLink>
                     ) ?? null
                 }</TabLinkContainer>
@@ -304,13 +336,13 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
         case "map":
             apiUrl = fieldToStructure(download, params);
 
-            return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl }>
+            return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl } dataState={ dataState }>
                 <CardHeader heading={ heading } { ...props }>
                     { active && <Radio heading={ heading } options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
                 <TabLinkContainer>{
-                    tabs?.map(({ heading: tabHeading, ...rest }) =>
-                        <TabLink key={ `tab-${ tabHeading }` }
+                    tabs?.map(({ heading: tabHeading, ...rest }, index) =>
+                        <TabLink key={ `tab-${ tabHeading }-${ index }` }
                                  label={ tabHeading }>
                             <p>Not implemented.</p>
                         </TabLink>
@@ -331,11 +363,11 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
 
             );
 
-            return <Card heading={ heading } fullWidth={ false } url={ apiUrl } noCsv={ true }>
+            return <Card heading={ heading } fullWidth={ false } url={ apiUrl } noCsv={ true } dataState={ dataState }>
                 <CardHeader heading={ heading } { ...props }/>
                 <TabLinkContainer>{
-                    tabs?.map(({ heading, ...rest }) =>
-                        <TabLink key={ `tab-${ heading }` } label={ heading }>
+                    tabs?.map(({ heading, ...rest }, index) =>
+                        <TabLink key={ `tab-${ heading }-${ index }` } label={ heading }>
                             <AgeSexBreakdownTabContent setDataState={ setDataState } params={ params } { ...rest }/>
                         </TabLink>
                     ) ?? null
@@ -352,14 +384,14 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
                 tabs?.[0]?.params ?? []
             );
 
-            return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl }>
+            return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl } dataState={ dataState }>
                 <CardHeader heading={ heading } { ...props }>
                     { active && <Radio heading={ heading } options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
                 <TabLinkContainer>{
-                    tabs?.map(({ heading, ...rest }) =>
-                        <TabLink key={ `tab-${ heading }` } label={ heading }>
-                            <MultiAreaStaticTabContent setDataState={ setDataState } { ...props } { ...rest }/>
+                    tabs?.map(({ heading, ...rest }, index) =>
+                        <TabLink key={ `tab-${ heading }-${ index }` } label={ heading }>
+                            <MultiAreaStaticTabContent setDataState={ setDataState } dataState={ dataState } { ...props } { ...rest }/>
                         </TabLink>
                     ) ?? null
                 }</TabLinkContainer>
