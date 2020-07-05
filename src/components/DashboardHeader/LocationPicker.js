@@ -80,9 +80,9 @@ const getOrder = ( history ) => {
 };  // getOrder
 
 
-const getDefaultOutput = ( history ) => {
+const getDefaultOutput = ( pathname ) => {
 
-    switch (history.location.pathname.toLowerCase()) {
+    switch (pathname.toLowerCase()) {
 
         case PathNames.testing:
             return [
@@ -162,12 +162,12 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
     const
         history = useHistory(),
         order = getOrder(history),
-        defaultAreaTypes = getDefaultOutput(history),
         pathname = history.location.pathname,
         query = history.location.search,
-        initialParam = getParams(query),
+        [ defaultAreaTypes, setDefaultAreaTypes ] = useState(getDefaultOutput(pathname)),
+        // initialParam = getParams(query),
         [areaNameData, setAreaNameData] = useState({ grouped: {}, data: [] }),
-        [currentAreaType, setCurrentAreaType] = useState(getParamValueFor(initialParam, "areaType", "overview")),
+        [currentAreaType, setCurrentAreaType] = useState("overview"),
         data = useApi({
              disjunctiveFilters:
                  ( currentAreaType ) !== "overview"
@@ -208,19 +208,29 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
             },
             { key: 'areaName', sign: '=', value: currentLocation.areaName }
         ]),
-        prevQuery = usePrevious(newQuery);
-
+        prevQuery = usePrevious(newQuery),
+        prevPathname = usePrevious(pathname);
 
     useEffect(() => {
 
-        const paramData = {
-            areaType: getParamValueFor(initialParam, "areaType", "overview"),
-            areaName: getParamValueFor(initialParam, "areaName", "United Kingdom"),
-        }
+        if ( pathname !== prevPathname )
+            setCurrentAreaType("overview");
 
-        setCurrentLocation(paramData);
+    }, [ pathname, prevPathname ])
 
-    }, [ pathname, query ]);
+    useEffect(() => {
+
+
+        // const
+        //     paramInit = getParams(query),
+        //     paramData = {
+        //         areaType: getParamValueFor(paramInit, "areaType", "overview"),
+        //         areaName: getParamValueFor(paramInit, "areaName", "United Kingdom"),
+        //     }
+
+        setCurrentLocation(currentLocation);
+
+    }, [ currentLocation.areaType, currentLocation.areaName ]);
 
 
     useEffect(() => {
@@ -230,7 +240,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
             history.push({ pathname: pathname, search: newQuery });
         }
 
-    }, [ currentLocation, currentLocation, query, prevQuery ])
+    }, [ currentLocation.areaType, currentLocation.areaName, query, prevQuery, pathname ])
 
 
     useEffect(() => {
@@ -243,6 +253,13 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     }, [ data ])
 
+
+    useEffect(() => {
+
+        if ( query !== prevQuery)
+            setDefaultAreaTypes(getDefaultOutput(pathname));
+
+    }, [ pathname, query ])
 
     const handleSubmission = (event) => {
 
@@ -300,7 +317,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                     </div>
                     <div className="govuk-grid-column-one-quarter">
                         <div className="govuk-form-group govuk-!-margin-bottom-0">
-                            <AsyncSelect
+                            <Select
                                 area-label={ "select area type" }
                                 options={ areaNameData.data }
                                 styles={ SelectOptions }
