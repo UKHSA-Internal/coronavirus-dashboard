@@ -402,7 +402,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
         case "simpleTableStatic":
             apiUrl = fieldToStructure(download, params);
 
-            return <Card heading={ heading } fullWidth={ fullWidth } url={ apiUrl } dataState={ dataState }>
+            return <Card heading={ heading } fullWidth={ fullWidth } dataState={ dataState }>
                 <CardHeader heading={ heading } { ...props }>
                     { active && <Radio heading={ heading } options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>

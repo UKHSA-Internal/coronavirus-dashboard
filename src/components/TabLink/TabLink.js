@@ -263,7 +263,7 @@ export const MultiAreaStaticTabContent = ({ params, setDataState, groupKey, grou
 };  // CustomTabContent
 
 
-export const SimpleTable = ({ setDataState, params, latestBy="", fields=[], ...props }) => {
+export const SimpleTable = ({ setDataState, params, latestBy="", fields=[], sortBy="", ...props }) => {
 
     const
         data = useApi({
@@ -286,6 +286,12 @@ export const SimpleTable = ({ setDataState, params, latestBy="", fields=[], ...p
 
     if ( !data ) return <Loading/>;
 
-    return <TabContentWithData { ...props } fields={ fields } data={ data }/>
+    return <TabContentWithData { ...props }
+                               fields={ fields }
+                               data={ data
+                                   .sort(({ [sortBy]: a=null }, { [sortBy]: b=null }) =>
+                                       (a > b) || -((a < b) || 0)
+                                   )
+                               }/>
 
 };  // Tabulation
