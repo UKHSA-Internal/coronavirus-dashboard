@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Switch, Route, withRouter } from 'react-router';
+import { Link } from "react-router-dom";
 import { Header, Footer } from 'govuk-react-jsx';
 
 import DailySummary from 'pages/DailySummary';
@@ -14,6 +15,7 @@ import moment from "moment";
 import DashboardHeader from "components/DashboardHeader";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
+import Announcement from "components/Announcement";
 
 
 const useTimestamp = () => {
@@ -37,13 +39,16 @@ const LastUpdateTime = () => {
     const timestamp = useTimestamp();
 
     return <>
-        {/*<Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>*/}
-        {/*    <p className={ "govuk-body govuk-!-margin-top-0" }>*/}
-        {/*        We have added local authority trends in cases and other sub-national*/}
-        {/*        data. Current data are yesterday's figures. Today's data will be released*/}
-        {/*        later this afternoon.*/}
-        {/*    </p>*/}
-        {/*</Announcement>*/}
+        <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>
+            <p className={ "govuk-body govuk-!-margin-top-0" }>
+                Local authority data are now available
+                for&nbsp;<Link className={ "govuk-link govuk-link--no-visited-state" }
+                          to={ '/cases' }>Cases</Link>&nbsp;and&nbsp;
+                <Link className={ "govuk-link govuk-link--no-visited-state" }
+                      to={ '/deaths' }>Deaths</Link>.
+                Click <strong><span>►</span>&nbsp;Change location</strong> at the top of each page.
+            </p>
+        </Announcement>
         <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
             Last updated on&nbsp;{
                 !timestamp
