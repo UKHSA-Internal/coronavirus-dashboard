@@ -416,7 +416,8 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
             </Card>;
         
         default:
-            return <p>Invalid chart type</p>;
+            console.warn(`Invalid card type: "${cardType}"`)
+            return null;
 
     }
 
