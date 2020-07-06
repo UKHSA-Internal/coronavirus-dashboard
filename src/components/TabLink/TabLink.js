@@ -263,7 +263,7 @@ export const MultiAreaStaticTabContent = ({ params, setDataState, groupKey, grou
 };  // CustomTabContent
 
 
-export const SimpleTable = ({ setDataState, params, fields=[], ...props }) => {
+export const SimpleTable = ({ setDataState, params, latestBy="", fields=[], ...props }) => {
 
     const
         data = useApi({
@@ -272,8 +272,7 @@ export const SimpleTable = ({ setDataState, params, fields=[], ...props }) => {
                 ...fields.reduce((acc, { value }) => ({ ...acc, [value]: value }), {})
             },
             extraParams: [
-                (props?.latestBy ?? null) &&
-                { key: "latestBy", sign: "=", value: props.latestBy }
+                { key: "latestBy", sign: "=", value: latestBy }
             ],
             defaultResponse: null
         });
