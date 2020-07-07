@@ -79,7 +79,7 @@ export const OptionsContainer :ComponentType<*> = (() => {
 })();
 
 
-export const Laucher: ComponentType<*> = (() => {
+export const Launcher: ComponentType<*> = (() => {
     const
         Container = styled.span`
             width: 34px;
