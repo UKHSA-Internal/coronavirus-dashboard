@@ -1,11 +1,10 @@
 {
   "name": "covid-public",
-  "version": "2.0.0-dev62",
+  "version": "2.0.0-dev63",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
     "axios": "^0.19.2",
-    "chart.js": "2.9.3",
     "d3-array": "^2.4.0",
     "d3-scale": "^3.2.1",
     "deep-equal": "^2.0.3",
@@ -17,7 +16,6 @@
     "plotly.js": "^1.54.1",
     "react": "^16.13.0",
     "react-app-polyfill": "^1.0.6",
-    "react-chartjs-2": "^2.9.0",
     "react-day-picker": "^7.4.8",
     "react-dom": "^16.13.0",
     "react-plotly.js": "^2.4.0",
