@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { ComponentType } from 'react';
 import { Link } from "react-router-dom";
+import { renderToString } from 'react-dom/server'
 
 import ModalTooltip from "components/Modal";
 
@@ -22,7 +23,8 @@ import {
     NumericData,
     DataLabel,
     Number,
-    HBodySection
+    HBodySection,
+    AbstractContainer
 } from './Card.styles';
 import numeral from 'numeral'
 import ReactTooltip from "react-tooltip";
@@ -292,8 +294,63 @@ const usePrevious = (value) => {
 };  // usePrevious
 
 
+const Abstract: ComponentType = ({ content }) => {
+
+    if ( !content ) return null;
+
+
+    const
+        pattern = new RegExp("{([^:]+):([^}]+)}", "ig");
+
+    let result = [];
+
+    // console.log(pattern.exec(content.trim() + " " + content.trim()))
+    console.log()
+
+    let cnt = content.trim();
+
+    for ( const match of cnt.match(/{([^:]+):([^}]+)}/ig) ) {
+        if ( !match ) continue;
+
+        const [ text, variable ] = match.replace(/[{}]/g, "").split(":");
+
+        const cn = cnt.split(match);
+
+        if (cn.length < 2) continue;
+
+        result = [
+            ...result,
+            cnt
+                .split(match)
+                .reduce((acc, item, index) => {
+
+                    if (!index) return [ item ];
+
+                    return [
+                        ...acc,
+                        <ModalTooltip key={ `sub-${index}` }
+                                      markdownPath={ variable }>
+                            <span className={ "modal-opener-text" }>{ text }</span>
+                        </ModalTooltip>,
+                        item
+                    ]
+
+                }, [])
+        ];
+
+        cnt = cn[1];
+
+    }
+
+    return <AbstractContainer>
+        { result }
+    </AbstractContainer>
+
+};  // Abstract
+
+
 const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], params, options=null,
-                         heading, fullWidth, ...props }) => {
+                         heading, fullWidth, abstract=null, ...props }) => {
 
     const
         [ active, setActive ] = useState(options?.choices?.[0] ?? null),
@@ -325,6 +382,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
                 <CardHeader heading={ heading } { ...props }>
                     { active && <Radio heading={ heading } options={ options } dataState={ dataState } value={ active } setValue={ setActive }/> }
                 </CardHeader>
+                <Abstract content={ abstract }/>
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }) =>
                         <TabLink key={ `tab-${ heading }` } label={ heading }>
@@ -341,6 +399,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
                 <CardHeader heading={ heading } { ...props }>
                     { active && <Radio heading={ heading } options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
+                <Abstract content={ abstract }/>
                 <TabLinkContainer>{
                     tabs?.map(({ heading: tabHeading, ...rest }, index) =>
                         <TabLink key={ `tab-${ tabHeading }-${ index }` }
@@ -367,6 +426,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
 
             return <Card heading={ heading } fullWidth={ false } url={ apiUrl } noCsv={ true } dataState={ dataState }>
                 <CardHeader heading={ heading } { ...props }/>
+                <Abstract content={ abstract }/>
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }, index) =>
                         <TabLink key={ `tab-${ heading }-${ index }` } label={ heading }>
@@ -390,6 +450,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
                 <CardHeader heading={ heading } { ...props }>
                     { active && <Radio heading={ heading } options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
+                <Abstract content={ abstract }/>
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }, index) =>
                         <TabLink key={ `tab-${ heading }-${ index }` } label={ heading }>
@@ -406,6 +467,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
                 <CardHeader heading={ heading } { ...props }>
                     { active && <Radio heading={ heading } options={ options } value={ active } setValue={ setActive }/> }
                 </CardHeader>
+                <Abstract content={ abstract }/>
                 <TabLinkContainer>{
                     tabs?.map(({ heading, ...rest }, index) =>
                         <TabLink key={ `tab-${ heading }-${ index }` } label={ heading }>
