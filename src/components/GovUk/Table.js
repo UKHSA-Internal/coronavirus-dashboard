@@ -83,37 +83,39 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
             .pop()
             .map(({ type="" }) => type);
 
-    return <TableComponent
-        className={ `govuk-table ${ stickyHeader ? "sticky-header" : "" } ${ className }`  }
-        { ...props }>
-        <THead>{
-            head.map((item, rInd) => <TR key={ `head-tr-${ rInd }` }>{
-                item.map(({ value, ...props }, cInd) => <TH key={ `head-th-${rInd}-${ cInd }` } { ...props }>
-                    { value }
-                </TH>)
-            }</TR>)
-        }</THead>
-        <TBody>{
-            body.map((item, rInd) => <TR key={ `body-tr-${ rInd }` }>{
+    return <>
+        <TableComponent
+            className={ `govuk-table ${ stickyHeader ? "sticky-header" : "" } ${ className }`  }
+            { ...props }>
+            <THead>{
+                head.map((item, rInd) => <TR key={ `head-tr-${ rInd }` }>{
+                    item.map(({ value, ...props }, cInd) => <TH key={ `head-th-${rInd}-${ cInd }` } { ...props }>
+                        { value }
+                    </TH>)
+                }</TR>)
+            }</THead>
+            <TBody>{
+                body.map((item, rInd) => <TR key={ `body-tr-${ rInd }` }>{
 
-                item.map((value, cInd) =>
-                    <TD key={ `body-td-${rInd}-${cInd}` } type={ typeDefinitions[cInd] }>{
-                        typeDefinitions[cInd] === 'numeric'
-                            ? typeof value === 'number'
-                            ? numeral(value).format("0,0")
-                            : <NotAvailable/>
-                            : value
-                    }</TD>
-                )
+                    item.map((value, cInd) =>
+                        <TD key={ `body-td-${rInd}-${cInd}` } type={ typeDefinitions[cInd] }>{
+                            typeDefinitions[cInd] === 'numeric'
+                                ? typeof value === 'number'
+                                ? numeral(value).format("0,0")
+                                : <NotAvailable/>
+                                : value
+                        }</TD>
+                    )
 
-            }</TR>)
-        }</TBody>
+                }</TR>)
+            }</TBody>
+        </TableComponent>
         <ReactTooltip id={ "table-tooltip-text" }
                       place={ "right" }
                       backgroundColor={ "#0b0c0c" }
                       className={ "tooltip" }
                       effect={ "solid" }/>
-    </TableComponent>
+    </>
 
 };  // Table
 
