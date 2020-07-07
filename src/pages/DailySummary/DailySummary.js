@@ -1,21 +1,20 @@
 // @flow
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 
-import { Card, VisualSection, ValueBox, NumericReports, HalfCardSplitBody, CardHeader } from 'components/Card';
+import { Card, VisualSection, HalfCardSplitBody, CardHeader } from 'components/Card';
 
+import { NumericReports } from "components/HeadlineNumbers";
+import ValueBox from "components/ValueBox";
 import { Container } from './DailySummary.styles';
 
-import { max } from "d3-array";
-import { getParams, } from "common/utils";
-
-import { getPlotData } from "common/utils";
+import { getParams, getPlotData } from "common/utils";
 
 import useApi from "hooks/useApi";
 
-import { BarPlotter, Plotter } from "./plots";
+import { Plotter } from "./plots";
 
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
@@ -32,53 +31,53 @@ const
     ];
 
 
-const NationDeathsPlot = ({ ...props }) => {
-
-    const
-        latestNationDeaths = useApi({
-            conjunctiveFilters: [
-                { key: "areaType", sign: "=", value: "nation" }
-            ],
-            structure: { name: "areaName", death: "newDeathsByPublishDate" },
-            extraParams: [{ key: "latestBy", sign: "=", value: "date" }],
-            defaultResponse: []
-        }),
-        nationalDataDeaths = latestNationDeaths.map(item => item?.death ?? null),
-        maxDeath = max(nationalDataDeaths);
-
-    return <BarPlotter
-        data={[
-            {
-                name: "Daily deaths",
-                y: latestNationDeaths
-                    .map(({ name="" }) => name.replace(/Northern Ireland/g, "NI")),
-                x: nationalDataDeaths,
-                text: nationalDataDeaths
-                    .map(item => `${item}`),
-                type: "bar",
-                orientation: "h",
-                width: 0.7,
-                mode: 'marker+text',
-                marker: {
-                    color: '#005EA5'
-                },
-                texttemplate: '%{text:s}',
-                textposition: nationalDataDeaths
-                    .map(item => item !== 0 ? 'auto' : 'outside'),
-                cliponaxis: true,
-                showlegend: false,
-                textfont: {
-                    color: nationalDataDeaths
-                        .map(item => item === maxDeath ? '#fff' :  '#005EA5'),
-                    family: `"GDS Transport", Arial, sans-serif`,
-                    size: 11
-                }
-            }
-        ]}
-        { ...props }
-    />
-
-};  // DeathsCard
+// const NationDeathsPlot = ({ ...props }) => {
+//
+//     const
+//         latestNationDeaths = useApi({
+//             conjunctiveFilters: [
+//                 { key: "areaType", sign: "=", value: "nation" }
+//             ],
+//             structure: { name: "areaName", death: "newDeathsByPublishDate" },
+//             extraParams: [{ key: "latestBy", sign: "=", value: "date" }],
+//             defaultResponse: []
+//         }),
+//         nationalDataDeaths = latestNationDeaths.map(item => item?.death ?? null),
+//         maxDeath = max(nationalDataDeaths);
+//
+//     return <BarPlotter
+//         data={[
+//             {
+//                 name: "Daily deaths",
+//                 y: latestNationDeaths
+//                     .map(({ name="" }) => name.replace(/Northern Ireland/g, "NI")),
+//                 x: nationalDataDeaths,
+//                 text: nationalDataDeaths
+//                     .map(item => `${item}`),
+//                 type: "bar",
+//                 orientation: "h",
+//                 width: 0.7,
+//                 mode: 'marker+text',
+//                 marker: {
+//                     color: '#005EA5'
+//                 },
+//                 texttemplate: '%{text:s}',
+//                 textposition: nationalDataDeaths
+//                     .map(item => item !== 0 ? 'auto' : 'outside'),
+//                 cliponaxis: true,
+//                 showlegend: false,
+//                 textfont: {
+//                     color: nationalDataDeaths
+//                         .map(item => item === maxDeath ? '#fff' :  '#005EA5'),
+//                     family: `"GDS Transport", Arial, sans-serif`,
+//                     size: 11
+//                 }
+//             }
+//         ]}
+//         { ...props }
+//     />
+//
+// };  // DeathsCard
 
 
 
