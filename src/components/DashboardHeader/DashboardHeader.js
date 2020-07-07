@@ -2,26 +2,28 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router";
-
+import ReactTooltip from "react-tooltip";
+import deepEqual from "deep-equal";
 import 'moment/locale/en-gb';
-
-import { analytics, getParams } from "common/utils";
 
 import LocationPicker from "./LocationPicker";
 import LocationBanner from "components/LocationBanner";
+import { analytics, getParams } from "common/utils";
 import { getParamValueFor } from "./utils";
 import { getOrder } from "./GenericHooks";
+import {
+    PathNameMapper,
+    NoPickerPaths,
+    LocationBannerMapper
+} from "./Constants";
 
-import deepEqual from "deep-equal";
-
-import { PathNameMapper, NoPickerPaths, LocationBannerMapper } from "./Constants";
-// Styles
 import {
     MainContainer,
     HeaderContainer,
     Title,
     SectionBreak,
 } from './DashboardHeader.styles'
+
 import type { ComponentType } from 'react';
 import type { Props } from './DashboardHeader.types';
 
@@ -84,10 +86,16 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
     return <MainContainer>
         <HeaderContainer>
             <Title pageName={ `${ PathNameMapper[history.location.pathname] } in` }
+                   data-for={ "open-localisation-tooltip" }
+                   data-tip={ "Click to change location" }
                    className={ locationPickerState ? "open" : "" }
                    onClick={ LocationPickerCallback }>{
                 ( pathname && pathname !== "/" ) &&  areaName
-            }</Title>
+            }
+            <span className={ "govuk-visually-hidden" }>
+                Click to change location
+            </span>
+            </Title>
         </HeaderContainer>
         <SectionBreak/>
         {
@@ -99,6 +107,12 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
         <LocationBanner pageTitle={ LocationBannerMapper?.[pathname] ?? null }
                         areaTypes={ Object.keys(areaTypeOrder).map(key => areaTypeOrder[key]) }
                         pathname={ pathname }/>
+
+        <ReactTooltip id={ "open-localisation-tooltip" }
+                      place={ "right" }
+                      backgroundColor={ "#0b0c0c" }
+                      className={ "tooltip" }
+                      effect={ "solid" }/>
     </MainContainer>
 
 };  // DashboardHeader
