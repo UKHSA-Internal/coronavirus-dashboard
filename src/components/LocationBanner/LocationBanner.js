@@ -1,7 +1,10 @@
 // @flow
 
-import React, { useEffect, useState, Fragment, useRef } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import ReactTooltip from "react-tooltip";
+
+import usePrevious from "hooks/usePrevious";
+
 import { Container, Closer } from "./LocationBanner.styles";
 import type { ComponentType } from "react";
 
@@ -58,21 +61,6 @@ const setOrUpdateCookie = (cookieName: string, payload: {[string]: [string|numbe
     );
 
 };  // setOrUpdateCookie
-
-
-const usePrevious = (value) => {
-
-    const ref = useRef(value);
-
-    useEffect(() => {
-
-        ref.current = value
-
-    })
-
-    return ref.current
-
-};  // usePrevious
 
 
 const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
