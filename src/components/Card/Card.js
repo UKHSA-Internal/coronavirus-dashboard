@@ -1,35 +1,10 @@
 // @flow
 
 import React, { useState, useRef, useEffect } from 'react';
-import type { ComponentType } from 'react';
 import { Link } from "react-router-dom";
 
-import ModalTooltip from "components/Modal";
+import { fieldToStructure } from "common/utils";
 
-import type { Props, ValueItemType } from './Card.types';
-import {
-    HalfCard,
-    HalfCardHeader,
-    HalfCardHeading,
-    HalfCardSplitBody,
-    FullCard,
-    Caption,
-    BodySection,
-    DataContainer,
-    DataColour,
-    Heading,
-    DataNumbersContainer,
-    NumericData,
-    DataLabel,
-    Number,
-    HBodySection,
-    AbstractContainer
-} from './Card.styles';
-import numeral from 'numeral'
-import ReactTooltip from "react-tooltip";
-import { colours, fieldToStructure, analytics, strFormat } from "common/utils";
-import useApi from "hooks/useApi";
-import moment from "moment";
 import {
     AgeSexBreakdownTabContent,
     MultiAreaStaticTabContent,
@@ -40,142 +15,33 @@ import {
 } from "components/TabLink";
 import { Radio } from "components/GovUk";
 import DropdownButton from "components/DropdownButton";
-import Loading from "components/Loading";
-import { NotAvailable } from "components/Widgets";
+import HeadlineNumbers from "components/HeadlineNumbers";
+import Abstract from "components/Abstract";
+
+import DownloadOptions from "./DownloadOptions";
+
+import {
+    HalfCard,
+    HalfCardHeader,
+    HalfCardHeading,
+    HalfCardSplitBody,
+    FullCard,
+    Caption,
+    BodySection
+} from './Card.styles';
+
+import type { Props } from './Card.types';
+import type { ComponentType } from 'react';
 
 
-const VisualSection: ComponentType<Props> = ({ children }: Props) => {
+const VisualSection: ComponentType<Props> = ({ ...props }: Props) => {
 
-    return <BodySection>
-        { children }
-    </BodySection>
+    return <BodySection { ...props }/>
 
 }; // Visuals
 
 
-const NumericReports: ComponentType<Props> = ({ children, horizontal=false }: Props) => {
-
-    if ( horizontal )
-        return <HBodySection>{ children }</HBodySection>;
-
-    return <BodySection>{ children }</BodySection>
-
-}; // ValueItemContainer
-
-
-const HeadlineNumbers = ({ params, headlineNumbers=[] }) => {
-
-    return <NumericReports horizontal={ true }>{
-        headlineNumbers?.map((item, index) =>
-            <ValueBox params={ params }
-                      key={ `headline-number-${index}` }
-                      { ...item }/>
-        ) ?? null
-    }</NumericReports>
-
-} // HeadlineNumbers
-
-
-const ValueBox = ({ caption, valueItems, ...rest }) => {
-
-    const
-        { chart={}, isEnabled=true, setChartState=() => null } = rest,
-        tipId = encodeURI(caption);
-
-    const chartToggleCallback = () => {
-        analytics("Chart toggle", caption, isEnabled ? "ON" : "OFF" );
-        setChartState();
-    };
-
-    return <DataContainer>
-        {
-            ( chart?.colour ?? false ) === false
-                ?  null
-                : <DataColour role={ "button" }
-                              data-for={ tipId }
-                              data-tip={
-                                  `Click to ${ isEnabled ? "hide" : "show" } 
-                                  the "${ caption.toLowerCase() }" on the graph.`
-                              }
-                              onClick={ chartToggleCallback }
-                              colour={ isEnabled ? (colours?.[chart.colour] ?? "") : "none" } />
-        }
-        <Heading>{ caption }</Heading>
-        <DataNumbersContainer>{
-            valueItems.map((item, index) =>
-                item.value &&
-                <ValueItem key={ `value-item-${ index }` }
-                           value={ item.value }
-                           label={ item.label }
-                           tooltip={ item.tooltip }
-                           sign={ item.sign }
-                           params={ rest.params }/>
-            )
-        }</DataNumbersContainer>
-        <ReactTooltip id={ tipId }
-                      place={ "right" }
-                      backgroundColor={ "#0b0c0c" }
-                      className={ "tooltip" }
-                      effect={ "solid" }/>
-    </DataContainer>
-
-};  // getValueItemSections
-
-
-const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip=null, sign=null }: ValueItemType) => {
-
-    const
-        tipId = encodeURI(`${label}-${value}`),
-        data = useApi({
-            conjunctiveFilters: params,
-            extraParams: [
-                { key: "latestBy", sign: "=", value: value }
-            ],
-            structure: {
-                date: "date",
-                value: value
-            },
-            defaultResponse: null
-        }),
-        replacements = {
-            kwargs: {
-                ...(data?.[0] ?? {}),
-                date: moment(data?.[0]?.date ?? null).format("dddd, D MMMM YYYY")
-            }
-        },
-        formattedTooltip = strFormat(tooltip, replacements);
-
-    return <NumericData>
-        { label && <DataLabel>{ label }</DataLabel> }
-        <Number>
-            <ModalTooltip data-tip={ formattedTooltip }
-                          data-for={ tipId }
-                          markdownPath={ value }
-                          replacements={ replacements }>
-                {
-                    data !== null
-                        ? (data?.length ?? 0) > 0
-                        ? numeral(data[0].value).format("0,0")
-                        : <NotAvailable/>
-                        : <Loading/>
-                }{ (data && sign) ? sign : null }
-                <p className={ "govuk-visually-hidden" }>
-                    Abstract information on { label }: { formattedTooltip }<br/>
-                    Click for additional details.
-                </p>
-            </ModalTooltip>
-        </Number>
-        <ReactTooltip id={ tipId }
-                      place={ "right" }
-                      backgroundColor={ "#0b0c0c" }
-                      className={ "tooltip" }
-                      effect={ "solid" }/>
-    </NumericData>
-
-}; // ValueItem
-
-
-const CardHeader: ComponentType<*> = ({ heading, caption="", linkToHeading=false, children }: Props) => {
+const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false, children }: Props) => {
 
     return <>
         <HalfCardHeader className={ linkToHeading ? "" : "govuk-!-margin-bottom-2"}>
@@ -196,58 +62,9 @@ const CardHeader: ComponentType<*> = ({ heading, caption="", linkToHeading=false
             linkToHeading &&
             <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
         }
-    </>;
-
-};  // CardHeader
-
-
-const DownloadOptions = ({ heading, baseUrl, noCsv }) => {
-
-    analytics({
-        category: 'Downloads',
-        action: 'open',
-        label: 'Selection dropdown'
-    });
-
-    const downloadTriggered = ( type ) => analytics({
-        category: 'Downloads',
-        action: heading,
-        label: type
-    });
-
-    return <>
-        {
-            !noCsv
-                ? <a className={ 'govuk-link govuk-link--no-visited-state' }
-                     onClick={ () => downloadTriggered("CSV") }
-                     href={ `${ baseUrl }&format=csv` }
-                     aria-disabled={ !noCsv }>
-                    as CSV
-                </a>
-                : <span className={ 'govuk-link govuk-link--no-visited-state disabled' }>
-                    as CSV
-                    <span className={ "govuk-visually-hidden" }>
-                        CSV format is not available for this card.
-                    </span>
-                </span>
-        }
-        <a className={ 'govuk-link govuk-link--no-visited-state' }
-           href={ `${baseUrl}&format=json` }
-           onClick={ () => downloadTriggered("JSON") }
-           target={ '_blank' }
-           rel={ 'noreferrer noopener' }>
-            as JSON
-        </a>
-        <a className={ 'govuk-link govuk-link--no-visited-state' }
-           target={ '_blank' }
-           onClick={ () => downloadTriggered("XML") }
-           rel={ 'noreferrer noopener' }
-           href={ `${baseUrl}&format=xml` } download>
-            as XML
-        </a>
     </>
 
-};  // DownloadOptions
+};  // CardHeader
 
 
 const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, noCsv=false }: Props) => {
@@ -266,7 +83,7 @@ const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, n
             </DropdownButton>
         }
         { children }
-    </Container>;
+    </Container>
 
 };  // Card
 
@@ -291,61 +108,6 @@ const usePrevious = (value) => {
     return ref.current
 
 };  // usePrevious
-
-
-const Abstract: ComponentType = ({ content }) => {
-
-    if ( !content ) return null;
-
-
-    const
-        pattern = new RegExp("{([^:]+):([^}]+)}", "ig");
-
-    let result = [];
-
-    // console.log(pattern.exec(content.trim() + " " + content.trim()))
-    console.log()
-
-    let cnt = content.trim();
-
-    for ( const match of cnt.match(/{([^:]+):([^}]+)}/ig) ) {
-        if ( !match ) continue;
-
-        const [ text, variable ] = match.replace(/[{}]/g, "").split(":");
-
-        const cn = cnt.split(match);
-
-        if (cn.length < 2) continue;
-
-        result = [
-            ...result,
-            cnt
-                .split(match)
-                .reduce((acc, item, index) => {
-
-                    if (!index) return [ item ];
-
-                    return [
-                        ...acc,
-                        <ModalTooltip key={ `sub-${index}` }
-                                      markdownPath={ variable }>
-                            <span className={ "modal-opener-text" }>{ text }</span>
-                        </ModalTooltip>,
-                        item
-                    ]
-
-                }, [])
-        ];
-
-        cnt = cn[1];
-
-    }
-
-    return <AbstractContainer>
-        { result }
-    </AbstractContainer>
-
-};  // Abstract
 
 
 const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], params, options=null,
@@ -493,8 +255,5 @@ export {
     CardContent,
     HalfCardSplitBody,
     CardHeader,
-    VisualSection,
-    ValueItem,
-    ValueBox,
-    NumericReports,
+    VisualSection
 };
