@@ -87,7 +87,6 @@ const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
         cookieData = getCookie(cookieName)?.[pathname] ?? {},
         prevPathname = usePrevious(pathname);
 
-
     useEffect(() => {
 
         if ( prevPathname !== pathname && Object.keys(cookieData) ) {
@@ -118,6 +117,12 @@ const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
 
     }, [ cookieData, pathname, prevPathname ])
 
+    useEffect(() => {
+
+        if ( !pageTitle ) setDisplay(false)
+
+    })
+
     const dismiss = () => {
 
         const
@@ -133,13 +138,13 @@ const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
 
     };  // dismiss
 
-    if ( !display || !pageTitle ) return null;
+    if ( !display ) return null;
 
     return <Container>
         <p>
             { pageTitle } data are also available for&nbsp;{
             areaTypes.map((area, index) =>
-                <Fragment key={ `${ pageTitle }-${ area }` }>
+                <Fragment key={ `${ area }-${ index }` }>
                     <strong>{ area.suggestion }</strong>
                     { joiner(index, lenAreaTypes) }
                 </Fragment>
