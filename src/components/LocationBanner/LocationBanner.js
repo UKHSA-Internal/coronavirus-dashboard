@@ -115,13 +115,13 @@ const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
 
         }
 
-    }, [ cookieData, pathname, prevPathname ])
+    }, [ cookieData, pathname, prevPathname ]);
 
     useEffect(() => {
 
         if ( !pageTitle ) setDisplay(false)
 
-    })
+    });
 
     const dismiss = () => {
 
@@ -150,7 +150,7 @@ const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
                 </Fragment>
             ) }.
         </p>
-        <Closer type={ "button" } onClick={ dismiss }>
+        <Closer htmlType={ "button" } onClick={ dismiss }>
             <span className={ "govuk-visually-hidden" }>
                 Click to dismiss the banner.
             </span>
