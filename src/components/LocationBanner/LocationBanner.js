@@ -1,12 +1,9 @@
 // @flow
 
 import React, { useEffect, useState, Fragment, useRef } from "react";
-
+import ReactTooltip from "react-tooltip";
 import { Container, Closer } from "./LocationBanner.styles";
-
 import type { ComponentType } from "react";
-
-import moment from "moment";
 
 
 const joiner = (index, len) => {
@@ -21,7 +18,7 @@ const joiner = (index, len) => {
 
     }
 
-};
+};  // joiner
 
 
 const getCookie = ( cookieName: string ) => {
@@ -150,11 +147,19 @@ const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
                 </Fragment>
             ) }.
         </p>
-        <Closer htmlType={ "button" } onClick={ dismiss }>
+        <Closer htmlType={ "button" }
+                data-tip={ "Click to dismiss the banner" }
+                data-for={ "dismiss-banner-tooltip" }
+                onClick={ dismiss }>
             <span className={ "govuk-visually-hidden" }>
                 Click to dismiss the banner.
             </span>
         </Closer>
+        <ReactTooltip id={ "dismiss-banner-tooltip" }
+                      place={ "right" }
+                      backgroundColor={ "#0b0c0c" }
+                      className={ "tooltip" }
+                      effect={ "solid" }/>
     </Container>
 
 }; // LocationBanner

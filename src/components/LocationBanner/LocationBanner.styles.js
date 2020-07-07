@@ -26,7 +26,7 @@ export const Closer: ComponentType<*> = (() => {
     return styled.button`
         background: url("${ CloseIcon }");
         background-repeat: no-repeat;
-        background-size: 20px 20px;
+        background-size: 14px 14px;
         background-position: center center;
         width: 20px;
         height: 20px;
