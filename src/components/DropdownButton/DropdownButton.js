@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import ReactTooltip from "react-tooltip";
 
 import {
-    Laucher,
+    Launcher,
     DropdownContainer,
     OptionsContainer
 } from "./DropdownButton.styles";
@@ -36,13 +36,13 @@ const DropdownButton: ComponentType<DropdownButtonProps> = ({
     });
 
     return <DropdownContainer ref={ dropdown } { ...props }>
-        <Laucher data-tip={ tooltip }
-                 data-for={ "tooltip-text" }
-                 className={ `dropdown-launcher ${ open ? "open" : "" }` }
-                 onClick={ () => setOpen(open => !open) }
-                 { ...launcherProps }>
+        <Launcher data-tip={ tooltip }
+                  data-for={ "tooltip-text" }
+                  className={ `dropdown-launcher ${ open ? "open" : "" }` }
+                  onClick={ () => setOpen(open => !open) }
+                  { ...launcherProps }>
             <span className={ "govuk-visually-hidden" }>{ launcherSrOnly }</span>
-        </Laucher>
+        </Launcher>
         {
             open &&
             <OptionsContainer { ...optionsProps }>{ children }</OptionsContainer>
