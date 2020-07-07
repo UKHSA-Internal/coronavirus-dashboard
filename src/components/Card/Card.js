@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 import { fieldToStructure } from "common/utils";
-
+import usePrevious from "hooks/usePrevious";
 import {
     AgeSexBreakdownTabContent,
     MultiAreaStaticTabContent,
@@ -93,21 +93,6 @@ const MixedCardContainer: ComponentType<*> = ({ children }) => {
     return <section className={ 'util-flex util-flex-wrap' }>{ children }</section>
 
 };  // MixedCardContainer
-
-
-const usePrevious = (value) => {
-
-    const ref = useRef(value);
-
-    useEffect(() => {
-
-        ref.current = value
-
-    })
-
-    return ref.current
-
-};  // usePrevious
 
 
 const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], params, options=null,

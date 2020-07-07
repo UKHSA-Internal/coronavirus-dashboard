@@ -6,6 +6,7 @@ import ReactTooltip from "react-tooltip";
 import deepEqual from "deep-equal";
 import 'moment/locale/en-gb';
 
+import usePrevious from "hooks/usePrevious";
 import LocationPicker from "./LocationPicker";
 import LocationBanner from "components/LocationBanner";
 import { analytics, getParams } from "common/utils";
@@ -26,21 +27,6 @@ import {
 
 import type { ComponentType } from 'react';
 import type { Props } from './DashboardHeader.types';
-
-
-const usePrevious = (value) => {
-
-    const ref = useRef(value);
-
-    useEffect(() => {
-
-        ref.current = value
-
-    })
-
-    return ref.current
-
-};  // usePrevious
 
 
 const DashboardHeader: ComponentType<Props> = ({}: Props) => {

@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, Fragment, useEffect, useRef } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 
 import {
     MainContainer,
