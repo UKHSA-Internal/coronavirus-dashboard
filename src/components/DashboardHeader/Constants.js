@@ -1,4 +1,5 @@
 // Global constants
+
 export const PathNameMapper = {
     "/": "UK Summary",
     "/cases": "Cases",
@@ -10,6 +11,7 @@ export const PathNameMapper = {
     "/accessibility": "Accessibility",
     "/archive": "Archive"
 };
+
 
 export const PathNames = {
     // Only use lower case in paths.
@@ -33,9 +35,19 @@ export const NoPickerPaths = [
     "/archive"
 ];
 
+
 export const LocationBannerMapper = {
     "/cases": "Cases",
     "/testing": "Testing",
     "/healthcare": "Healthcare",
     "/deaths": "Deaths",
 };
+
+
+export const PathWithHeader = [
+    "/",
+    "/testing",
+    "/cases",
+    "/healthcare",
+    "/deaths",
+];
