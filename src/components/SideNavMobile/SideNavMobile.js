@@ -1,11 +1,9 @@
 // @flow
 
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 import { Link } from "react-router-dom";
-
-import useResponsiveLayout from 'hooks/useResponsiveLayout';
 
 import type { Props } from './SideNavMobile.types';
 import {
