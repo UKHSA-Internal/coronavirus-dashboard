@@ -15,7 +15,8 @@ import { getOrder } from "./GenericHooks";
 import {
     PathNameMapper,
     NoPickerPaths,
-    LocationBannerMapper
+    LocationBannerMapper,
+    PathWithHeader
 } from "./Constants";
 
 import {
@@ -27,6 +28,33 @@ import {
 
 import type { ComponentType } from 'react';
 import type { Props } from './DashboardHeader.types';
+
+
+const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
+
+    const
+        { location: { pathname } } = useHistory(),
+        pageName = PathNameMapper[pathname];
+
+    if ( !(PathWithHeader.indexOf(pathname) > -1) ) return null;
+
+    return <>
+    <HeaderContainer>
+        <Title pageName={ `${ pageName }${ pathname !== "/" ? " in" : "" }` }
+               data-for={ "open-localisation-tooltip" }
+               data-tip={ "Click to change location" }
+               className={ localisationState ? "open" : "" }
+               onClick={ localisationCallback }>
+            { ( pathname && pathname !== "/" ) && areaName }
+            <span className={ "govuk-visually-hidden" }>
+                Click to change location
+            </span>
+        </Title>
+    </HeaderContainer>
+    <SectionBreak/>
+    </>
+
+};  // PageHeader
 
 
 const DashboardHeader: ComponentType<Props> = ({}: Props) => {
@@ -64,26 +92,15 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
 
     }, [ pathname, prevPathname ])
 
-    const LocationPickerCallback = () => {
+    const locationPickerCallback = () => {
         analytics("Interaction", "Location picker", locationPickerState ? "OPEN" : "CLOSE");
         setLocationPickerState(state => !state)
     };
 
     return <MainContainer>
-        <HeaderContainer>
-            <Title pageName={ `${ PathNameMapper[history.location.pathname] } in` }
-                   data-for={ "open-localisation-tooltip" }
-                   data-tip={ "Click to change location" }
-                   className={ locationPickerState ? "open" : "" }
-                   onClick={ LocationPickerCallback }>{
-                ( pathname && pathname !== "/" ) &&  areaName
-            }
-            <span className={ "govuk-visually-hidden" }>
-                Click to change location
-            </span>
-            </Title>
-        </HeaderContainer>
-        <SectionBreak/>
+        <PageHeader areaName={ areaName }
+                    localisationState={ locationPickerState }
+                    localisationCallback={ locationPickerCallback }/>
         {
             !isExcluded &&
             <LocationPicker show={ locationPickerState }
