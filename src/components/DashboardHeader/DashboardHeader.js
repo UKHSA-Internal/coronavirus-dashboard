@@ -90,32 +90,11 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
 
     return <MainContainer>
         <HeaderContainer>
-            <Title>
-                { PathNameMapper[history.location.pathname] }
-                {
-                    (pathname && pathname !== "/") &&
-                    <>
-                        &nbsp;in&nbsp;{ areaName }
-                    </>
-                }
-            </Title>
-            { !isExcluded &&
-                <CollapsibleLinkContainer>
-                    <CollapsibleLink className={ locationPickerState ? "opened" : "closed" }
-                                     onClick={ () => {
-                                         analytics(
-                                             "Localisation",
-                                             "Panel interaction",
-                                             locationPickerState ? "OPEN" : "CLOSE"
-                                         )
-
-                                         setLocationPickerState(state => !state)
-                                     } }>
-                        Change&nbsp;location
-                        {/*:&nbsp;<CurrentLocation>{ areaName }</CurrentLocation>*/}
-                    </CollapsibleLink>
-                </CollapsibleLinkContainer>
-            }
+            <Title pageName={ `${ PathNameMapper[history.location.pathname] } in` }
+                   className={ locationPickerState ? "open" : "" }
+                   onClick={ () => setLocationPickerState(state => !state) }>{
+                (pathname && pathname !== "/") &&  areaName
+            }</Title>
                     {/*<CollapsibleLink htmlType={ "button" }*/}
                     {/*    onClick={ () => setDatePickerState(!datePickerState) }>*/}
                     {/*    { datePickerState ? <TriangleDown/> : <TriangleRight/> }*/}
