@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Switch, Route, withRouter } from 'react-router';
-import { Link } from "react-router-dom";
 import { Header, Footer } from 'govuk-react-jsx';
 
 import DailySummary from 'pages/DailySummary';
