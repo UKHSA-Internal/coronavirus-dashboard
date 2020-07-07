@@ -155,7 +155,7 @@ export const Number: ComponentType<*> = (() => {
 
 export const AbstractContainer: ComponentType<*> = (() => {
 
-    const Node = styled.span`
+    const Node = styled.summary`
         color: #626a6e;
         
         & .modal-opener-text {

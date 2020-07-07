@@ -13,9 +13,9 @@ import deepEqual from "deep-equal";
 import LocationPicker from "./LocationPicker";
 import { getParamValueFor, getParamDateFor } from "./utils";
 
-import { PathNameMapper, NoPickerPaths } from "./Constants";
+import { PathNameMapper, NoPickerPaths, LocationBannerMapper } from "./Constants";
 
-import LocationProposer from "./LocationProposer";
+// import LocationProposer from "./LocationProposer";
 
 // Styles
 import {
@@ -27,9 +27,10 @@ import {
     SectionBreak,
     CurrentLocation
 } from './DashboardHeader.styles'
-
+import { getOrder } from "./GenericHooks";
 import type { ComponentType } from 'react';
 import type { Props } from './DashboardHeader.types';
+import LocationBanner from "components/LocationBanner";
 
 
 const usePrevious = (value) => {
@@ -58,6 +59,7 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
         startDate = getParamDateFor(params, 'specimenDate', moment("2020-01-03"), ">"),
         endDate = getParamDateFor(params, "specimenDate", moment(), "<"),
         pathname = history.location.pathname,
+        areaTypeOrder = getOrder(history),
         // prevPathname
         isExcluded = NoPickerPaths.indexOf(pathname) > -1,
         prevPathname = usePrevious(pathname),
@@ -143,6 +145,9 @@ const DashboardHeader: ComponentType<Props> = ({ title }: Props) => {
                 {/*] } referrer={ prevPathnameState }/>*/}
             </>
         }
+        <LocationBanner pageTitle={ LocationBannerMapper?.[pathname] ?? null }
+                        areaTypes={ Object.keys(areaTypeOrder).map(key => areaTypeOrder[key]) }
+                        pathname={ pathname }/>
     </MainContainer>
 
 };  // DashboardHeader
