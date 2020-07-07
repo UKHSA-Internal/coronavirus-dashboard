@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { ComponentType } from 'react';
 import { Link } from "react-router-dom";
-import { renderToString } from 'react-dom/server'
 
 import ModalTooltip from "components/Modal";
 
