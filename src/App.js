@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Switch, Route, withRouter } from 'react-router';
-import { Header, Footer } from 'govuk-react-jsx';
+import { Header } from 'govuk-react-jsx';
 
 import DailySummary from 'pages/DailySummary';
 import CookieBanner from 'components/CookieBanner';
@@ -11,7 +11,6 @@ import ErrorBoundary from "components/ErrorBoundary";
 import axios from "axios";
 import URLs from "common/urls";
 import moment from "moment";
-import DashboardHeader from "components/DashboardHeader";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
 // import Announcement from "components/Announcement";
@@ -64,57 +63,15 @@ const LastUpdateTime = () => {
 }; // LastUpdateTime
 
 
-const FooterContents = () => (
-    <>
-        <p className={ "govuk-footer__meta-custom" }>
-            For feedback email&nbsp;
-            <a className="govuk-footer__link"
-               href={ encodeURI("mailto:coronavirus-tracker@phe.gov.uk?Subject=BETA dashboard feedback") }
-               rel="noopener noreferrer"
-               target="_blank"
-            >coronavirus-tracker@phe.gov.uk</a>
-        </p>
-        <p className={ "govuk-footer__meta-custom" }>
-            Developed by&nbsp;
-            <a className="govuk-footer__link"
-               href="https://www.gov.uk/government/organisations/public-health-england"
-               target="_blank"
-               rel="noopener noreferrer"
-            >Public Health England</a>
-            &nbsp;and&nbsp;
-            <a className="govuk-footer__link"
-               href="https://www.nhsx.nhs.uk/"
-               target="_blank"
-               rel="noopener noreferrer"
-            >NHSX</a>
-        </p>
-    </>
-);  // FooterContents
-
-
-const F = () => (
-    <Footer
-        meta={ {
-            children: <FooterContents/>,
-            items: [
-                // { children: ['Archive'], href: '/archive' },
-                { children: ['Accessibility'], href: '/accessibility' },
-                { children: ['Cookies'], href: '/cookies' }
-            ],
-            visuallyHiddenTitle: 'Items',
-        } }
-    />
-);  // Footer
-
-
-const PathWithSideMenu = [
-    "/",
-    "/testing",
-    "/cases",
-    "/healthcare",
-    "/deaths",
-    "/about-data"
-];
+const
+    PathWithSideMenu = [
+        "/",
+        "/testing",
+        "/cases",
+        "/healthcare",
+        "/deaths",
+        "/about-data"
+    ];
 
 
 const BetaBanner = ({ ...props }) => {
@@ -144,6 +101,15 @@ const BetaBanner = ({ ...props }) => {
 };
 
 
+const WebsiteHeader = ({ ...props }) => {
+
+    return <Header serviceName="Coronavirus (COVID-19) in the UK"
+                   serviceUrlTo="/"
+                   homepageUrlHref="https://gov.uk"/>
+
+};  // WebsiteHeader
+
+
 const Navigation = ({ layout, ...props }) => {
 
     const Nav = layout !== "mobile"
@@ -158,62 +124,65 @@ const Navigation = ({ layout, ...props }) => {
 
 
 const
+    DashboardHeader = lazy(() => import('components/DashboardHeader')),
     Cases = lazy(() => import('pages/Cases')),
     Healthcare = lazy(() => import('pages/Healthcare')),
     Deaths = lazy(() => import('pages/Deaths')),
     Tests = lazy(() => import('pages/Testing')),
     About = lazy(() => import('pages/About')),
     Accessibility = lazy(() => import('pages/Accessibility')),
-    Cookies = lazy(() => import('pages/Cookies'));
+    Cookies = lazy(() => import('pages/Cookies')),
+    Footer = lazy(() => import('components/Footer'));
 
 
 const App = ({ location: { pathname } }) => {
 
     const
-        hasMenu = PathWithSideMenu.indexOf(pathname) > -1,
         layout = useResponsiveLayout(768);
 
+    let hasMenu;
+
+    useEffect(() => {
+
+        hasMenu = PathWithSideMenu.indexOf(pathname) > -1;
+
+    }, [ pathname ]);
+
     return <>
-        <CookieBanner/>
-        <Header
-            // containerClassName="govuk-header__container--full-width"
-            // navigationClassName="govuk-header__navigation--end"
-            serviceName="Coronavirus (COVID-19) in the UK"
-            serviceUrlTo="/"
-            homepageUrlHref="https://gov.uk"
-        />
         { layout === "mobile" && <Navigation layout={ layout }/> }
+        <CookieBanner/>
+        <WebsiteHeader/>
         <BetaBanner/>
         <div className={ "govuk-width-container" }>
+            <LastUpdateTime/>
             <main className={ "govuk-main-wrapper" } role={ "main" }>
                 <ErrorBoundary>
-                    <Route path={ "/" } component={ hasMenu ? LastUpdateTime : null }/>
                     <div className={ "dashboard-container" }>
                         {
                             layout === "desktop" &&
                             <aside className={ "dashboard-menu" }>
                                 <Switch>
-                                    <Route path={ "/" } render={ props => <Navigation layout={ layout } { ...props}/> }/>
+                                    <Route path={ "/" }
+                                           render={ props => <Navigation layout={ layout } { ...props}/> }/>
                                 </Switch>
                             </aside>
                         }
                         <div className={ "dashboard-content" }>
-                            <DashboardHeader/>
-
-                            <Switch>
-                                <Suspense fallback={ <Loading/> }>
+                            <Suspense fallback={ <Loading/> }>
+                                <DashboardHeader/>
+                                <Switch>
                                     <Route path="/" exact component={ DailySummary }/>
                                     <Route path="/testing" component={ Tests }/>
                                     <Route path="/cases" component={ Cases }/>
                                     <Route path="/healthcare" component={ Healthcare }/>
                                     <Route path="/deaths" component={ Deaths }/>
-                                    <Route path="/about-data" component={ About }/>
 
+                                    <Route path="/about-data" component={ About }/>
                                     {/*<Route path="/archive" component={ Archive }/>*/}
                                     <Route path="/accessibility" component={ Accessibility }/>
                                     <Route path="/cookies" component={ Cookies }/>
-                                </Suspense>
-                            </Switch>
+                                </Switch>
+                            </Suspense>
                         </div>
                     </div>
                 </ErrorBoundary>
@@ -233,7 +202,9 @@ const App = ({ location: { pathname } }) => {
         </Switch>
 
         <Switch>
-            <Route path="/" component={ F }/>
+            <Suspense fallback={ <Loading/> }>
+                <Route path="/" component={ Footer }/>
+            </Suspense>
         </Switch>
     </>
 };  // App
