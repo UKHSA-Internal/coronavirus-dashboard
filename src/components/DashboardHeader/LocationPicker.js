@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
 
-import { analytics, createQuery, getParams, groupBy } from "common/utils";
+import { createQuery, getParams, groupBy } from "common/utils";
 
 import { getOrder } from "./GenericHooks";
 import useApi from "hooks/useApi";

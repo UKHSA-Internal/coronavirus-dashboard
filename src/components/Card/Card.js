@@ -83,6 +83,11 @@ const ValueBox = ({ caption, valueItems, ...rest }) => {
         { chart={}, isEnabled=true, setChartState=() => null } = rest,
         tipId = encodeURI(caption);
 
+    const chartToggleCallback = () => {
+        analytics("Chart toggle", caption, isEnabled ? "ON" : "OFF" );
+        setChartState();
+    };
+
     return <DataContainer>
         {
             ( chart?.colour ?? false ) === false
@@ -93,12 +98,7 @@ const ValueBox = ({ caption, valueItems, ...rest }) => {
                                   `Click to ${ isEnabled ? "hide" : "show" } 
                                   the "${ caption.toLowerCase() }" on the graph.`
                               }
-                              onClick={ () => {
-
-                                  analytics("Chart toggle", caption, isEnabled ? "ON" : "OFF" )
-
-                                  setChartState()
-                              } }
+                              onClick={ chartToggleCallback }
                               colour={ isEnabled ? (colours?.[chart.colour] ?? "") : "none" } />
         }
         <Heading>{ caption }</Heading>

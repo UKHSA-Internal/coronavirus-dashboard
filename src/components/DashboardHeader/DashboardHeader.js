@@ -7,14 +7,14 @@ import 'moment/locale/en-gb';
 
 import { analytics, getParams } from "common/utils";
 
+import LocationPicker from "./LocationPicker";
+import LocationBanner from "components/LocationBanner";
+import { getParamValueFor } from "./utils";
+import { getOrder } from "./GenericHooks";
+
 import deepEqual from "deep-equal";
 
-import LocationPicker from "./LocationPicker";
-import { getParamValueFor } from "./utils";
-
 import { PathNameMapper, NoPickerPaths, LocationBannerMapper } from "./Constants";
-
-
 // Styles
 import {
     MainContainer,
@@ -22,10 +22,8 @@ import {
     Title,
     SectionBreak,
 } from './DashboardHeader.styles'
-import { getOrder } from "./GenericHooks";
 import type { ComponentType } from 'react';
 import type { Props } from './DashboardHeader.types';
-import LocationBanner from "components/LocationBanner";
 
 
 const usePrevious = (value) => {
