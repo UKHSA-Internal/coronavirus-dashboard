@@ -32,3 +32,10 @@ export const NoPickerPaths = [
     "/accessibility",
     "/archive"
 ];
+
+export const LocationBannerMapper = {
+    "/cases": "Cases",
+    "/testing": "Testing",
+    "/healthcare": "Healthcare",
+    "/deaths": "Deaths",
+};

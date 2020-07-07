@@ -5,76 +5,11 @@ import { useHistory } from "react-router";
 
 import { analytics, createQuery, getParams, groupBy } from "common/utils";
 
+import { getOrder } from "./GenericHooks";
 import useApi from "hooks/useApi";
 import { PathNames } from "./Constants";
 import Select from "react-select";
 
-
-const getOrder = ( history ) => {
-
-    const
-        defaultOrder = {
-            "nation": {
-                key: "nation",
-                label: "Nations",
-                parent: null
-            },
-            "region": {
-                key: "region",
-                label: "Regions",
-                parent: "nation",
-            },
-            "la": {
-                key: "la",
-                label: "Local authorities",
-                parent: "region",
-            },
-            // "utla": {
-            //     key: "utla",
-            //     label: "Upper tier local authorities",
-            //     parent: "region",
-            // },
-            // "ltla": {
-            //     key: "ltla",
-            //     label: "Lower-tier local authorities",
-            //     parent: "utla"
-            // }
-        };
-
-
-    switch (history.location.pathname.toLowerCase()) {
-
-        case PathNames.testing:
-            return {
-                "nation": {
-                    key: "nation",
-                    label: "Nations",
-                    parent: null
-                }
-            };
-
-        case PathNames.healthcare:
-            return {
-                "nhsNation": {
-                    key: "nhsNation",
-                    label: "Nations",
-                    parent: null
-                },
-                "nhsRegion": {
-                    key: "nhsRegion",
-                    label: "NHS regions",
-                    parent: "nhsNation",
-                }
-            };
-
-        case PathNames.deaths:
-        case PathNames.cases:
-        default:
-            return defaultOrder;
-
-    }  // switch
-
-};  // getOrder
 
 
 const getDefaultOutput = ( pathname ) => {
