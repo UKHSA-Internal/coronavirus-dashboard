@@ -1,8 +1,12 @@
 // @flow
 
+import React from "react";
+
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
-import React from "react";
+
+import CarretUp from "assets/caret-up.svg";
+import CarretDown from "assets/caret-down.svg";
 
 
 export const MainContainer: ComponentType<*> = (() => {
@@ -27,9 +31,41 @@ export const HeaderContainer: ComponentType<*> = (() => {
 })();
 
 
-export const Title = ({ className, ...props }) => (
-  <h1 className={ `govuk-caption-l govuk-!-margin-0 ${className}` } { ...props }/>
-);
+export const Title: ComponentType<*> = (() => {
+
+     const Node = styled.button` 
+         display: a;
+         cursor: pointer;
+         background: url("${ CarretDown }");
+         background-repeat: no-repeat;
+         background-size: 20px 20px;
+         padding-right: 20px;
+         padding-left: 0;
+         margin-left: 0;
+         background-position: center right;
+         color: #1d70b8;
+         text-decoration: none;
+         outline: none;
+         
+         &.open {
+             background: url("${ CarretUp }");
+             background-repeat: no-repeat;
+             background-size: 20px 20px;
+             padding-right: 20px;
+             padding-left: 0;
+             margin-left: 0;
+             background-position: center right;
+         }
+     `
+
+    return ({ pageName, className, ...props }) =>
+        <h1 className={ `govuk-caption-l govuk-!-margin-0` }>
+            { pageName }&nbsp;<Node htmlType={ "button" }
+                                    className={ className }
+                                    { ...props }/>
+        </h1>
+
+})();
 
 
 export const CurrentLocation: ComponentType<*> = (() => {
