@@ -95,7 +95,6 @@ const LocationBanner: ComponentType = ({ pageTitle=null, areaTypes, pathname }) 
 
                     });
 
-            console.log(cookieData);
             setDisplay((!isDismissed) && pageTitle !== null)
 
         }
