@@ -5,7 +5,7 @@ import React from "react";
 import type { ComponentType } from "react";
 import ModalTooltip from "components/Modal";
 
-import { AbstractContainer } from "./Abstract.styles";
+import { AbstractContainer, Text } from "./Abstract.styles";
 
 
 const Abstract: ComponentType = ({ content }) => {
@@ -31,15 +31,16 @@ const Abstract: ComponentType = ({ content }) => {
                 .split(match)
                 .reduce((acc, item, index) => {
 
-                    if (!index) return [ item ];
+                    if (!index) return [ <Text>{ item }</Text> ];
 
                     return [
                         ...acc,
                         <ModalTooltip key={ `sub-${index}` }
+                                      replacements={{ kwargs: { date: "latest date available" }}}
                                       markdownPath={ variable }>
                             <span className={ "modal-opener-text" }>{ text }</span>
                         </ModalTooltip>,
-                        item
+                        <Text>{ item }</Text>
                     ]
 
                 }, [])
