@@ -8,6 +8,8 @@ export const Container: ComponentType<*> = (() => {
 
     return styled.div`
         display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
         justify-content: space-between;
         padding: .7em 1.5em;
         background-color: #E3F5FF;
@@ -16,6 +18,11 @@ export const Container: ComponentType<*> = (() => {
         & * {
             margin: 0;
         }
+        
+        // & > p {
+        //     display: inline-flex;
+        //     width: 100%;
+        // }
   `;
 
 })();  // Container
@@ -30,6 +37,7 @@ export const Closer: ComponentType<*> = (() => {
         background-position: center center;
         width: 20px;
         height: 20px;
+        margin-left: 1rem;
         cursor: pointer;
     `;
 

@@ -13,11 +13,11 @@ const joiner = (index, len) => {
 
     switch ( index ) {
         case len - 2:
-            return ", and "
+            return <>, and&nbsp;</>
         case len - 1:
             return null;
         default:
-            return ", "
+            return <>, </>
 
     }
 
@@ -26,23 +26,12 @@ const joiner = (index, len) => {
 
 const getCookie = ( cookieName: string ) => {
 
-    const
-        name = `${cookieName}=`,
-        decodedCookie = decodeURIComponent(document.cookie),
-        ca = decodedCookie.split(';');
-
-    for ( let ind = 0; ind < ca.length; ind++ ) {
-        let c = ca[ind];
-
-        while ( c.charAt(0) === ' ' ) {
-            c = c.substring(1);
-        }
-
-        if ( c.indexOf(name) === 0 ) {
-            return JSON.parse(c.substring(name.length, c.length));
-        }
-  }
-  return "";
+    return JSON.parse(
+        decodeURIComponent(document.cookie)
+            .split(';')
+            .find(cookie => cookie.trim().startsWith(`${cookieName}=`))
+            .replace(/^[^=]+=/i, "") || '{}'
+    )
 
 };  // getCookie
 
@@ -66,7 +55,7 @@ const setOrUpdateCookie = (cookieName: string, payload: {[string]: [string|numbe
 const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
 
     const
-        [ display, setDisplay ] = useState(false),
+        [ display, setDisplay ] = useState(true),
         lenAreaTypes = areaTypes.length,
         cookieName = "LocationBanner",
         cookieData = getCookie(cookieName)?.[pathname] ?? {},
@@ -74,7 +63,7 @@ const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
 
     useEffect(() => {
 
-        if ( prevPathname !== pathname && Object.keys(cookieData) ) {
+        if ( pageTitle && prevPathname !== pathname && Object.keys(cookieData) ) {
 
             const
                 today = new Date,
@@ -100,13 +89,7 @@ const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
 
         }
 
-    }, [ cookieData, pathname, prevPathname ]);
-
-    useEffect(() => {
-
-        if ( !pageTitle ) setDisplay(false)
-
-    });
+    }, [ pageTitle, cookieData, pathname, prevPathname ]);
 
     const dismiss = () => {
 
@@ -125,30 +108,32 @@ const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
 
     if ( !display ) return null;
 
-    return <Container>
-        <p>
-            { pageTitle } data are also available for&nbsp;{
-            areaTypes.map((area, index) =>
-                <Fragment key={ `${ area }-${ index }` }>
-                    <strong>{ area.suggestion }</strong>
-                    { joiner(index, lenAreaTypes) }
-                </Fragment>
-            ) }.
-        </p>
-        <Closer htmlType={ "button" }
-                data-tip={ "Click to dismiss the banner" }
-                data-for={ "dismiss-banner-tooltip" }
-                onClick={ dismiss }>
-            <span className={ "govuk-visually-hidden" }>
-                Click to dismiss the banner.
-            </span>
-        </Closer>
+    return <>
+        <Container>
+            <p>
+                { pageTitle } data are available for&nbsp;{
+                areaTypes.map((area, index) =>
+                    <Fragment key={ `${ area }-${ index }` }>
+                        <strong>{ area.suggestion }</strong>
+                        { joiner(index, lenAreaTypes) }
+                    </Fragment>
+                ) }.
+            </p>
+            <Closer htmlType={ "button" }
+                    data-tip={ "Click to dismiss banner" }
+                    data-for={ "dismiss-banner-tooltip" }
+                    onClick={ dismiss }>
+                <span className={ "govuk-visually-hidden" }>
+                    Click to dismiss the banner.
+                </span>
+            </Closer>
+        </Container>
         <ReactTooltip id={ "dismiss-banner-tooltip" }
                       place={ "right" }
                       backgroundColor={ "#0b0c0c" }
                       className={ "tooltip" }
                       effect={ "solid" }/>
-    </Container>
+    </>
 
 }; // LocationBanner
 
