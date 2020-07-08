@@ -170,7 +170,7 @@ export const hexToRgb = (hex: string): RGB => {
 }; // hexToRgb
 
 
-export const strFormat = (str, { args, kwargs }) => {
+export const strFormat = (str, { args=[], kwargs={} }) => {
 
     let unkeyedIndex = 0;
 
