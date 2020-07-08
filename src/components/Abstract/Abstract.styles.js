@@ -8,9 +8,7 @@ import type { ComponentType } from "react";
 
 export const AbstractContainer: ComponentType<*> = (() => {
 
-    const Node = styled.summary`
-        color: #626a6e;
-        
+    const Node = styled.summary`        
         & .modal-opener-text {
             color: #000;
         }
@@ -23,5 +21,14 @@ export const AbstractContainer: ComponentType<*> = (() => {
             </div>
         </div>
     </div>
+
+})();
+
+
+export const Text: ComponentType<*> = (() => {
+
+    return styled.span`
+        color: #626a6e;
+    `;
 
 })();

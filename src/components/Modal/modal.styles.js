@@ -43,7 +43,6 @@ export const ModalContent: ComponentType<*> = (() => {
 
 export const ModalOpener: ComponentType<*> = (() => {
     const
-        x = '#959595',
         classes = '',
         Node = styled.button`   
             cursor: pointer;
@@ -90,6 +89,6 @@ export const Markdown: ComponentType<*> = (() => {
         `;
 
     return ({ className, ...props }) =>
-        <Node className={ `markdown ${className}` } { ...props }/>
+        <Node className={ `modal markdown ${className}` } { ...props }/>
 
 })();
