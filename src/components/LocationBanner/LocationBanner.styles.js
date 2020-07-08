@@ -18,11 +18,6 @@ export const Container: ComponentType<*> = (() => {
         & * {
             margin: 0;
         }
-        
-        // & > p {
-        //     display: inline-flex;
-        //     width: 100%;
-        // }
   `;
 
 })();  // Container

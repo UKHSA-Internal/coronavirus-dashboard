@@ -13,7 +13,7 @@ const joiner = (index, len) => {
 
     switch ( index ) {
         case len - 2:
-            return <>, and&nbsp;</>
+            return <> and&nbsp;</>
         case len - 1:
             return null;
         default:
@@ -26,12 +26,20 @@ const joiner = (index, len) => {
 
 const getCookie = ( cookieName: string ) => {
 
-    return JSON.parse(
-        decodeURIComponent(document.cookie)
-            .split(';')
-            .find(cookie => cookie.trim().startsWith(`${cookieName}=`))
-            .replace(/^[^=]+=/i, "") || '{}'
-    )
+    const
+        name = `${cookieName}=`,
+        decodedCookie = decodeURIComponent(document.cookie);
+
+    for ( let cookie of decodedCookie.split(';') ) {
+        if ( cookie.indexOf(name) > -1 )
+            return JSON.parse(
+                cookie
+                    .replace(/^\s*/, "")
+                    .substring(name.length, cookie.length)
+            );
+    }
+
+    return {}
 
 };  // getCookie
 
@@ -52,10 +60,10 @@ const setOrUpdateCookie = (cookieName: string, payload: {[string]: [string|numbe
 };  // setOrUpdateCookie
 
 
-const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
+const LocationBanner: ComponentType = ({ pageTitle=null, areaTypes, pathname }) => {
 
     const
-        [ display, setDisplay ] = useState(true),
+        [ display, setDisplay ] = useState(false),
         lenAreaTypes = areaTypes.length,
         cookieName = "LocationBanner",
         cookieData = getCookie(cookieName)?.[pathname] ?? {},
@@ -63,33 +71,36 @@ const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
 
     useEffect(() => {
 
-        if ( pageTitle && prevPathname !== pathname && Object.keys(cookieData) ) {
+        if ( prevPathname !== pathname && cookieData ) {
 
             const
                 today = new Date,
                 appData = areaTypes
-                    .reduce((acc, item) => ({ ...acc, [item.suggestion]: item.lastUpdate }), {});
+                    .reduce((acc, item) => ({
+                        ...acc,
+                        [item.suggestion]: item.lastUpdate
+                    }), {}),
+                isDismissed = Object
+                    .keys(appData)
+                    .every(suggestion => {
+                        const
+                            pageCookieDateString = cookieData?.[suggestion] ?? "",
+                            pageCookieDate = new Date(pageCookieDateString);
 
-            const isDismissed = Object
-                .keys(appData)
-                .every(suggestion => {
-                    const
-                        pageCookieDateString = cookieData?.[suggestion] ?? "",
-                        pageCookieDate = new Date(pageCookieDateString);
+                        return (
+                            pageCookieDateString &&
+                            pageCookieDate <= today &&
+                            (cookieData?.[suggestion] ?? "") === appData[suggestion]
+                        )
 
-                    return (
-                        pageCookieDateString &&
-                        pageCookieDate <= today &&
-                        (cookieData?.[suggestion] ?? "") === appData[suggestion]
-                    )
+                    });
 
-                });
-
-            setDisplay(!isDismissed)
+            console.log(cookieData);
+            setDisplay((!isDismissed) && pageTitle !== null)
 
         }
 
-    }, [ pageTitle, cookieData, pathname, prevPathname ]);
+    }, [ cookieData, pathname, prevPathname, pageTitle ]);
 
     const dismiss = () => {
 
@@ -106,7 +117,7 @@ const LocationBanner: ComponentType = ({ pageTitle, areaTypes, pathname }) => {
 
     };  // dismiss
 
-    if ( !display ) return null;
+    if ( !display || !pageTitle ) return null;
 
     return <>
         <Container>
