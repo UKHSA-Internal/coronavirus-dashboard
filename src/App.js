@@ -149,9 +149,9 @@ const App = ({ location: { pathname } }) => {
     }, [ pathname ]);
 
     return <>
-        { layout === "mobile" && <Navigation layout={ layout }/> }
         <CookieBanner/>
         <WebsiteHeader/>
+        { layout === "mobile" && <Navigation layout={ layout }/> }
         <BetaBanner/>
         <div className={ "govuk-width-container" }>
             <LastUpdateTime/>
