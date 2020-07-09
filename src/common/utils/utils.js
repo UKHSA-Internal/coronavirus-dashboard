@@ -329,9 +329,10 @@ export const isIE = () => {
 export const analytics = ({ category, action, label, value }): void => {
 
     if ( "ga" in window ) {
-        const tracker = window.ga.getAll()[0];
-
-        tracker && tracker.send('event', category, action, label, value);
+        try {
+            const tracker = window?.ga?.getAll()?.[0] ?? null;
+            tracker && tracker.send('event', category, action, label, value);
+        } catch {}
     }
 
 };  // analytics
