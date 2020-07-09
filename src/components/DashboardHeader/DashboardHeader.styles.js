@@ -14,6 +14,7 @@ export const MainContainer: ComponentType<*> = (() => {
     classes = 'sticky-header govuk-!-padding-top-3',
     Node = styled.div`
       background-color: rgba(255, 255, 255, 0.95);
+      z-index: 999999;
     `;
 
   return ({ className, ...props }) =>
