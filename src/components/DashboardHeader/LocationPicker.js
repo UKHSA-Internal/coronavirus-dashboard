@@ -2,9 +2,9 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 
 import { createQuery, getParams, groupBy } from "common/utils";
-
 import { getOrder } from "./GenericHooks";
 import useApi from "hooks/useApi";
 import { PathNames } from "./Constants";
@@ -221,10 +221,10 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                     </div>
                 <div className={ "govuk-grid-column-one-quarter" }>
                     <div className={ "govuk-form-group govuk-!-margin-bottom-0" }>
-                        <input type={ "reset" }
-                               value={ "Reset to UK" }
-                               onClick={ () => setCurrentLocation({areaType: "overview", areaName: "United Kingdom"}) }
-                               className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }/>
+                        <Link to={ pathname }
+                              className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }>
+                            Reset to UK
+                        </Link>
                     </div>
                 </div>
                 </div>
