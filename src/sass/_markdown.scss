@@ -80,7 +80,9 @@
 
     & hr {
         @extend .govuk-section-break;
-        @extend .govuk-section-break--l;
+        @extend .govuk-section-break--m;
+        @extend .govuk-section-break--visible;
+        margin: 2px 0;
     }
 }
 
@@ -142,6 +144,10 @@
                 margin-left: 1rem;
             }
         }
+    }
+
+    & hr {
+        margin: 2rem 0 1rem;
     }
 
 }
