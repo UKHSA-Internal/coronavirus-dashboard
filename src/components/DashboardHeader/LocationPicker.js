@@ -96,7 +96,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
         order = getOrder(history),
         pathname = history.location.pathname,
         query = history.location.search,
-        newQuery = createQuery([
+        newQuery = currentLocation.areaName && createQuery([
                 ...getParams(query),
                     {
                         key: 'areaType',
@@ -109,6 +109,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                 ]),
         prevQuery = usePrevious(newQuery),
         [areaNameData, setAreaNameData] = useState({ grouped: {}, data: [] }),
+        defaultOutput = getDefaultOutput(pathname),
         data = useApi({
              disjunctiveFilters:
                  ( currentLocation.areaType ) !== "overview"
@@ -119,10 +120,10 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                      ]
                      : [{ key: "areaType", sign: '=', value: currentLocation.areaType }] // must be conjunctive
                      : [
-                         ...getDefaultOutput(pathname)
+                         ...defaultOutput
                              .filter(item => item !== "la")
                              .map(item => ({key: "areaType", sign: '=', value: item })),
-                         ...getDefaultOutput(pathname).indexOf("la") > -1
+                         ...defaultOutput.indexOf("la") > -1
                              ? [
                                  { key: "areaType", sign: '=', value: 'utla' },
                                  { key: "areaType", sign: '=', value: 'ltla' }
@@ -148,7 +149,10 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
     useEffect(() => {
 
         if ( currentLocation.areaName && prevQuery !== newQuery )
-            history.push({ pathname: pathname, search: newQuery });
+            history.push({
+                pathname: pathname,
+                search: newQuery
+            });
 
     }, [ currentLocation.areaName, query, prevQuery, pathname ]);
 
@@ -222,6 +226,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                 <div className={ "govuk-grid-column-one-quarter" }>
                     <div className={ "govuk-form-group govuk-!-margin-bottom-0" }>
                         <Link to={ pathname }
+                              onClick={ () => setCurrentLocation({ areaType: "overview", areaName: "United Kingdom" }) }
                               className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }>
                             Reset to UK
                         </Link>
