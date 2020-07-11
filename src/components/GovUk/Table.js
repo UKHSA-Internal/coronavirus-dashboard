@@ -101,7 +101,7 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
                         <TD key={ `body-td-${rInd}-${cInd}` } type={ typeDefinitions[cInd] }>{
                             typeDefinitions[cInd] === 'numeric'
                                 ? typeof value === 'number'
-                                ? numeral(value).format("0,0")
+                                ? numeral(value).format("0,0.[0]")
                                 : <NotAvailable/>
                                 : value
                         }</TD>
