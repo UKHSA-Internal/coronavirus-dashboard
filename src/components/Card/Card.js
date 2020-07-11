@@ -160,9 +160,9 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
             // FixMe: Small cards need min height
 
             const breakdownMetrics = [...tabs]?.reverse()?.[0]?.requiredMetrics ?? [];
-            // console.log(breakdownMetrics)
+
             apiUrl = fieldToStructure(
-                breakdownMetrics.map(metric => ({value: metric})),
+                breakdownMetrics,
                 params,
                 [
                     { key: "latestBy", sign: "=", value: breakdownMetrics?.[0] ?? "" }
