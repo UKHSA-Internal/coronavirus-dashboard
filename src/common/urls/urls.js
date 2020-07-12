@@ -19,7 +19,7 @@ const URLs = {
     timestamp:       `https://${ REACT_APP_MAIN_CDN      }/assets/dispatch/website_timestamp`,
     lookups:         `https://${ REACT_APP_MAIN_CDN      }/assets/lookups/`,
     lookupApi:       `https://${ REACT_APP_API_ENDPOINT  }/v1/lookup`,
-    pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN      }/assets/structural_layouts/`,
+    pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN      }/assets/cms/`,
     mainApi:         `https://${ REACT_APP_API_ENDPOINT  }/v1/data`,
     modals:          `https://${ REACT_APP_MAIN_CDN      }/assets/modals/`,
     latestCases: {
