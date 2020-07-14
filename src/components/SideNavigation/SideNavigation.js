@@ -26,25 +26,25 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
                 </SideNavListItem>
 
                 <SideNavListItem className={`${pathname === '/testing' ? "moj-side-navigation__item--active" : ""}`}>
-                    <Link to={ "testing" }>Testing</Link>
+                    <Link to={ "/testing" }>Testing</Link>
                 </SideNavListItem>
 
                 <SideNavListItem className={`${pathname === '/cases' ? "moj-side-navigation__item--active" : ""}`}>
-                    <Link to={ "cases" }>Cases</Link>
+                    <Link to={ "/cases" }>Cases</Link>
                 </SideNavListItem>
 
                 <SideNavListItem className={`${pathname === '/healthcare' ? "moj-side-navigation__item--active" : ""}`}>
-                    <Link to={ "healthcare" }>Healthcare</Link>
+                    <Link to={ "/healthcare" }>Healthcare</Link>
                 </SideNavListItem>
 
                 <SideNavListItem className={`${pathname === '/deaths' ? "moj-side-navigation__item--active" : ""}`}>
-                    <Link to={ "deaths" }>Deaths</Link>
+                    <Link to={ "/deaths" }>Deaths</Link>
                 </SideNavListItem>
 
                 <SectionBreak/>
 
                 <SideNavListItem className={`${pathname === '/about-data' ? "moj-side-navigation__item--active" : ""}`}>
-                    <Link to={ "about-data" }>About the data</Link>
+                    <Link to={ "/about-data" }>About the data</Link>
                 </SideNavListItem>
             </SideNavList>
         </SideNav>

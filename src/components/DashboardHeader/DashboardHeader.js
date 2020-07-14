@@ -35,21 +35,21 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
     const
         { location: { pathname } } = useHistory(),
         pageName = PathNameMapper[pathname],
-        hasPicker = NoPickerPaths.indexOf(pathname);
+        noPicker = NoPickerPaths.indexOf(pathname) > -1;
 
     if ( !(PathWithHeader.indexOf(pathname) > -1) ) return null;
 
     return <>
     <HeaderContainer>
-        <Title pageName={ `${ pageName }${ pathname !== "/" ? " in" : "" }` }
+        <Title pageName={ `${ pageName }${ noPicker ? "" : " in" }` }
                data-for={ "open-localisation-tooltip" }
                data-tip={ "Click to change location" }
-               hasPicker={ hasPicker }
+               hasPicker={ !noPicker }
                className={ localisationState ? "open" : "" }
                onClick={ localisationCallback }>
             { ( pathname && pathname !== "/" ) && areaName }
             {
-                hasPicker
+                !noPicker
                     ? <span className={ "govuk-visually-hidden" }>
                         Click to change location
                     </span>
