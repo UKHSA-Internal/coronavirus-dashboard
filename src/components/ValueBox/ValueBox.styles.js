@@ -8,7 +8,7 @@ import type { ComponentType } from "react";
 
 export const NumericData: ComponentType<*> = (() => {
 
-    const Node = styled.h3`
+    const Node = styled.div`
         margin-top: 0;
     `
 
