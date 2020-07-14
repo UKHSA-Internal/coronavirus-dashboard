@@ -34,7 +34,8 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
 
     const
         { location: { pathname } } = useHistory(),
-        pageName = PathNameMapper[pathname];
+        pageName = PathNameMapper[pathname],
+        hasPicker = NoPickerPaths.indexOf(pathname);
 
     if ( !(PathWithHeader.indexOf(pathname) > -1) ) return null;
 
@@ -43,12 +44,17 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
         <Title pageName={ `${ pageName }${ pathname !== "/" ? " in" : "" }` }
                data-for={ "open-localisation-tooltip" }
                data-tip={ "Click to change location" }
+               hasPicker={ hasPicker }
                className={ localisationState ? "open" : "" }
                onClick={ localisationCallback }>
             { ( pathname && pathname !== "/" ) && areaName }
-            <span className={ "govuk-visually-hidden" }>
-                Click to change location
-            </span>
+            {
+                hasPicker
+                    ? <span className={ "govuk-visually-hidden" }>
+                        Click to change location
+                    </span>
+                    : null
+            }
         </Title>
     </HeaderContainer>
     <SectionBreak/>

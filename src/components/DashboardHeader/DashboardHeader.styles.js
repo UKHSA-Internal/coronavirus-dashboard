@@ -59,11 +59,17 @@ export const Title: ComponentType<*> = (() => {
          }
      `
 
-    return ({ pageName, className, ...props }) =>
+    return ({ pageName, className, hasPicker, ...props }) =>
         <h1 className={ `govuk-caption-l govuk-!-margin-0` }>
-            { pageName }&nbsp;<Node htmlType={ "button" }
+            { pageName }
+            {
+                hasPicker
+                    ? <>&nbsp;<Node htmlType={ "button" }
                                     className={ className }
                                     { ...props }/>
+                    </>
+                    : null
+            }
         </h1>
 
 })();
