@@ -62,10 +62,10 @@ const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip
                         : <NotAvailable/>
                         : <Loading/>
                 }{ (data && sign) ? sign : null }
-                <p className={ "govuk-visually-hidden" }>
+                <span className={ "govuk-visually-hidden" }>
                     Abstract information on { label }: { formattedTooltip }<br/>
                     Click for additional details.
-                </p>
+                </span>
             </ModalTooltip>
         </Number>
         <ReactTooltip id={ tipId }
