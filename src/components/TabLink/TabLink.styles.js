@@ -22,10 +22,10 @@ export const Tab: ComponentType<*> = (() => {
             padding-bottom: 2px;
             color: #1e70b8;
             cursor: pointer;
-            outline: none;
 
-            &.active {
-                border-bottom: 4px solid #1e70b8;
+            &.active,
+            &.focus {
+                border-bottom: 4px solid #1e70b8 !important;
                 color: #1e70b8;
             }
         `;

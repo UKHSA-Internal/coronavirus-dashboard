@@ -46,7 +46,6 @@ export const Title: ComponentType<*> = (() => {
          background-position: center right;
          color: #1d70b8;
          text-decoration: none;
-         outline: none;
          
          &.open {
              background: url("${ CarretUp }");
