@@ -63,7 +63,7 @@ const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip
                         : <Loading/>
                 }{ (data && sign) ? sign : null }
                 <span className={ "govuk-visually-hidden" }>
-                    Abstract information on { label }: { formattedTooltip }<br/>
+                    Abstract information: { formattedTooltip }<br/>
                     Click for additional details.
                 </span>
             </ModalTooltip>
@@ -97,10 +97,15 @@ const ValueBox: ComponentType<*> = ({ caption, valueItems, ...rest }) => {
                               data-for={ tipId }
                               data-tip={
                                   `Click to ${ isEnabled ? "hide" : "show" } 
-                                  the "${ caption.toLowerCase() }" on the graph.`
+                                  ${ caption.toLowerCase() }" on the graph.`
                               }
                               onClick={ chartToggleCallback }
-                              colour={ isEnabled ? (colours?.[chart.colour] ?? "") : "none" } />
+                              colour={ isEnabled ? (colours?.[chart.colour] ?? "") : "none" }>
+                    <span className={ "govuk-visually-hidden" }>
+                        Click to { isEnabled ? "hide" : "show" }
+                        "{ caption.toLowerCase() }" on the graph.
+                    </span>
+                </DataColour>
         }
         <Heading>{ caption }</Heading>
         <DataNumbersContainer>{
