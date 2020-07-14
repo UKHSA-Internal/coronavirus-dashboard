@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Switch, Route, withRouter } from 'react-router';
-import { Header } from 'govuk-react-jsx';
-
+// import { Header } from 'govuk-react-jsx';
+import Header from "components/Header";
 import DailySummary from 'pages/DailySummary';
 import CookieBanner from 'components/CookieBanner';
 import BackToTop from 'components/BackToTop';
@@ -101,15 +101,6 @@ const BetaBanner = ({ ...props }) => {
 };
 
 
-const WebsiteHeader = ({ ...props }) => {
-
-    return <Header serviceName="Coronavirus (COVID-19) in the UK"
-                   serviceUrlTo="/"
-                   homepageUrlHref="https://gov.uk"/>
-
-};  // WebsiteHeader
-
-
 const Navigation = ({ layout, ...props }) => {
 
     const Nav = layout !== "mobile"
@@ -150,7 +141,7 @@ const App = ({ location: { pathname } }) => {
 
     return <>
         <CookieBanner/>
-        <WebsiteHeader/>
+        <Header/>
         { layout === "mobile" && <Navigation layout={ layout }/> }
         <BetaBanner/>
         <div className={ "govuk-width-container" }>
@@ -167,7 +158,7 @@ const App = ({ location: { pathname } }) => {
                                 </Switch>
                             </aside>
                         }
-                        <div className={ "dashboard-content" }>
+                        <div className={ "dashboard-content" } id={ 'main-content' }>
                             <Suspense fallback={ <Loading/> }>
                                 <DashboardHeader/>
                                 <Switch>
