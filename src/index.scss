@@ -8,6 +8,8 @@ $govuk-breakpoints: (
   desktop: 769px
 ) !default;
 
+$primary-colour: #1d70b8;
+
 // GOVUK Frontend
 @import 'node_modules/govuk-frontend/govuk/all';
 
