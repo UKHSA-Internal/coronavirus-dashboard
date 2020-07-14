@@ -38,17 +38,22 @@ export const Heading = ({ className="", ...props }) => {
 };
 
 
-export const DataContainer = ({ className="", ...props }) => {
+export const DataContainer = (() => {
 
-    return <div className={ `${ className }` } { ...props }/>
+    const Node = styled.div`
+        margin-bottom: 1rem !important;
+    `;
 
-};
+    return ({ className="", ...props }) =>
+        <Node className={ `${ className }` } { ...props }/>
+
+})();
 
 
 export const DataLabel = ({ className="", ...props }) => {
 
-    return <small className={ `govuk-caption-m govuk-!-font-size-16 ${ className }` }
-                  { ...props }/>
+    return <span className={ `govuk-caption-m govuk-!-font-size-16 ${ className }` }
+                 { ...props }/>
 
 };
 
