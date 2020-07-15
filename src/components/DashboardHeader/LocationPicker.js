@@ -183,7 +183,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
 
     return <>
-            <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" }>
+            <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" } role={ 'form' }>
                 <div className={ "govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2" }>
                     <div className={ "govuk-grid-column-two-thirds" }>
                         <h4 className={ "govuk-heading-s govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
@@ -200,7 +200,9 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                         <div className="govuk-form-group govuk-!-margin-bottom-0">
                             <span className={ "govuk-label govuk-label--s" }>Area type</span>
                             <span className={ "govuk-visually-hidden" }>
-                                Select or type in an area type
+                                Select or type in an area type then press enter (return).
+                                The options in the area name selector update based on the
+                                selected area type.
                             </span>
                             <Select area-label={ "select area type" }
                                     options={ areaTypeData }
@@ -216,7 +218,9 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                         <div className="govuk-form-group govuk-!-margin-bottom-0">
                             <span className={ "govuk-label govuk-label--s" }>Area name</span>
                             <span className={ "govuk-visually-hidden" }>
-                                Select or type in an area name
+                                Select or type in an area name then press enter (return).
+                                The page will immediately update to display the data for
+                                the selected area.
                             </span>
                             <Select
                                 area-label={ "select area type" }
@@ -238,7 +242,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                                   onClick={ () => setCurrentLocation({ areaType: "overview", areaName: "United Kingdom" }) }
                                   className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }>
                                 <span className={ "govuk-visually-hidden" }>
-                                    Click to reset the page back to UK level
+                                    Click to reset the page back to UK level.
                                 </span>
                                 Reset to UK
                             </Link>
