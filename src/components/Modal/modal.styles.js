@@ -9,7 +9,7 @@ export const ModalContainer: ComponentType<*> = (() => {
     return styled.section`
         display: flex;
         position: fixed;
-        z-index: 999999999;
+        z-index: 99999999999;
         justify-content: center;
         align-items: center;
         left: 0;
