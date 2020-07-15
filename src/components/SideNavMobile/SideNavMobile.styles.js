@@ -21,26 +21,36 @@ export const MobileNavTogglerWrapper: ComponentType<*> = (() => {
 })();
 
 
-export const MobileNavToggler = ({ className, ...props }) => (
+export const MobileNavToggler = ({ className="", ...props }) => (
   <button className={ `govuk-button ${className}` } { ...props }/>
 );
 
 
-export const SideNav = ({ className, ...props }) => (
+export const SideNav = ({ className="", ...props }) => (
   <nav className={ `moj-side-navigation moj-side-navigation-mobile ${className}` } { ...props }/>
 );
 
 
-export const SideNavList = ({ className, ...props }) => (
-  <ul className={ `moj-side-navigation__list ${className}` } { ...props }/>
-);
+export const SideNavList: ComponentType<*> = (() => {
+
+  const Node = styled.ul`
+      padding: 0;
+      margin: 0;
+      list-style: none;
+  `;
+
+  return ({ className="", ...props }) => (
+      <Node className={ `moj-side-navigation__list ${className}` } { ...props }/>
+  );
+
+})();
 
 
-export const SideNavListItem = ({ className, ...props }) => (
+export const SideNavListItem = ({ className="", ...props }) => (
   <li className={ `moj-side-navigation__item ${className}` } { ...props }/>
 );
 
 
-export const SectionBreak = ({ className, ...props }) => (
+export const SectionBreak = ({ className="", ...props }) => (
   <hr className={ `govuk-section-break govuk-section-break--m govuk-!-margin-top-3 govuk-!-margin-bottom-3 govuk-section-break--visible ${className}` } { ...props }/>
 );
