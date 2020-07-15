@@ -47,7 +47,7 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
 
         {
             modalStatus &&
-            <ModalContainer ref={ modalRef } role={ 'dialog' }>
+            <ModalContainer ref={ modalRef } role={ 'alertdialog' }>
                 <ModalContent>
                     <Modal markdownPath={ markdownPath } replacements={ replacements }/>
                     <ModalCloser className={ "govuk-button" }
