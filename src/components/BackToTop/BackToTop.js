@@ -52,19 +52,21 @@ const BackToTop: ComponentType<Props> = ({ mode }: Props) => {
 
     const visible = useBackToTopOverlayVisible('footer');
 
-    if ( mode === 'overlay' ) {
+    if ( mode === 'overlay' && visible ) {
 
-        return<OverlayContainer style={ { opacity: visible ? 1 : 0 } }>
+        return<OverlayContainer style={ { opacity: visible ? 1 : 0, tabIndex: visible ? 0 : -1 } }>
             <BackToTopLink/>
         </OverlayContainer>
 
-    } else {
+    } else if ( mode !== 'overlay' ) {
 
-        return <InlineContainer style={ { opacity: visible ? 0 : 1 } }>
+        return <InlineContainer style={ { opacity: visible ? 0 : 1, tabIndex: visible ? -1 : 0  } }>
             <BackToTopLink/>
         </InlineContainer>
 
     }
+
+    return null
 
 }; // BackToTop
 
