@@ -8,7 +8,7 @@ import type { ComponentType } from "react";
 
 export const AbstractContainer: ComponentType<*> = (() => {
 
-    const Node = styled.summary`        
+    const Node = styled.p`        
         & .modal-opener-text {
             color: #000;
             line-height: 2rem;

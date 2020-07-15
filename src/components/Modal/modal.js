@@ -65,6 +65,7 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
 
     return <>
         <ModalOpener { ...props }
+                     tabIndex={ 0 }
                      area-label={ "Open dialogue" }
                      onClick={ () => setModalStatus(true) }
                      children={ children }/>
