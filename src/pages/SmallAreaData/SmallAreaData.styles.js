@@ -9,7 +9,9 @@ import { ComponentType } from "react";
 export const Frame: ComponentType<*> = (() => {
 
     return styled.iframe`
+        display: flex;
         height: 74vh;
+        width: 100%;
         border: unset;
     `
 
