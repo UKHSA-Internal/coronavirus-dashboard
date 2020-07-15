@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
 export const PlotContainer: ComponentType<*> = (() => {
-    return styled.article`
+    return styled.figure`
         padding: 0 10px;
     `;
 })();

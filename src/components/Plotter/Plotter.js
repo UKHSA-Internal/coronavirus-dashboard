@@ -86,7 +86,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
 
     const width = useResponsiveLayout(640);
 
-    return <PlotContainer className={ "govuk-grid-row" }>
+    return <PlotContainer className={ "govuk-grid-row" } role={ 'figure' }>
         <Plot
             data={ data }
             config={ {

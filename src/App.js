@@ -51,7 +51,7 @@ const LastUpdateTime = () => {
             Last updated on&nbsp;{
                 !timestamp
                     ? <Loading/>
-                    : <time dateTime={ timestamp }>{
+                    : <time dateTime={ timestamp } role={ "banner" }>{
                         moment(timestamp)
                             .local(true)
                             .format("dddd D MMMM YYYY [at] h:mma")
@@ -77,7 +77,7 @@ const
 const BetaBanner = ({ ...props }) => {
 
     return <div className={ "govuk-phase-banner" }
-                style={{ padding: "1rem" }} { ...props }>
+                style={{ padding: "1rem" }} role={ "banner" } { ...props }>
         <p className="govuk-phase-banner__content">
             <strong className="govuk-tag govuk-phase-banner__content__tag">
                 beta
