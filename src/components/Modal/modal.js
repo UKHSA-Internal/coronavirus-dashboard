@@ -1,10 +1,20 @@
 // @flow
+import 'react-app-polyfill/ie11';
 
 import React, { useState, useEffect, useRef } from "react";
-import { ModalContainer, ModalContent, ModalOpener, Markdown, ModalCloser } from "./modal.styles";
+import FocusTrap from "react-focus-trap";
+
 import useModalData from "hooks/useModalData";
 import { strFormat } from "common/utils";
 import Loading from "components/Loading";
+
+import {
+    ModalContainer,
+    ModalContent,
+    ModalOpener,
+    Markdown,
+    ModalCloser
+} from "./modal.styles";
 
 
 const Modal = ({ markdownPath, replacements }) => {
@@ -55,25 +65,30 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
 
     return <>
         <ModalOpener { ...props }
+                     area-label={ "Open dialogue" }
                      onClick={ () => setModalStatus(true) }
                      children={ children }/>
 
         {
             modalStatus &&
-            <ModalContainer ref={ modalRef }
-                            className={ 'modal' }
-                            area-modal={ true }
-                            tabIndex={ -1 }
-                            aria-label={ "Additional information" }
-                            role={ 'alertdialog' }>
-                <ModalContent id={ "modal-body" }>
-                    <Modal markdownPath={ markdownPath } replacements={ replacements }/>
-                    <ModalCloser className={ "govuk-button" }
-                                 onClick={ () => setModalStatus(false) }>
-                        Continue
-                    </ModalCloser>
-                </ModalContent>
-            </ModalContainer>
+            <FocusTrap activate initialFocus={ "#close-modal" }>
+                <ModalContainer ref={ modalRef }
+                                className={ 'modal' }
+                                area-modal={ true }
+                                tabIndex={ -1 }
+                                aria-label={ "Additional information" }
+                                role={ 'alertdialog' }>
+                    <ModalContent id={ "modal-body" }>
+                        <Modal markdownPath={ markdownPath } replacements={ replacements }/>
+                        <ModalCloser className={ "govuk-button" }
+                                     id={ "close-modal" }
+                                     area-label={ "Close dialogue" }
+                                     onClick={ () => setModalStatus(false) }>
+                            Continue
+                        </ModalCloser>
+                    </ModalContent>
+                </ModalContainer>
+            </FocusTrap>
         }
 
     </>
