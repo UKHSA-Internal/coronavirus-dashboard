@@ -36,7 +36,6 @@ export const ModalContent: ComponentType<*> = (() => {
     width: min(400px, 95vw);
     border: 5px solid black;
     background-color: #fff;
-    overflow-x: scroll;
     
     & > :first-child {
         margin-top: 0;
