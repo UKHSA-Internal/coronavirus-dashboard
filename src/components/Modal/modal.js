@@ -25,24 +25,26 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
         modalRef = useRef(null);
 
     const handleKeyPressEvent = event => {
-
         // Escape key: 27
         if ( modalRef.current && event.keyCode === 27 )
-            setModalStatus(false);
-
+            setModalStatus(true);
     };
 
     const onClickAway = ({ target }) => {
-
         if ( modalRef.current && target.className === modalRef.current.className && modalStatus )
             setModalStatus(false);
-
-    }
+    };
 
     useEffect(() => {
 
         document.addEventListener("keyup", handleKeyPressEvent);
-        document.addEventListener("click", onClickAway)
+        document.addEventListener("click", onClickAway);
+
+        const htmlElm = document.querySelector('html').classList;
+
+        modalStatus
+            ? htmlElm.add(['u-lock-scroll'])
+            : htmlElm.toggle('u-lock-scroll');
 
         return () => {
             document.removeEventListener("keyup", handleKeyPressEvent);
