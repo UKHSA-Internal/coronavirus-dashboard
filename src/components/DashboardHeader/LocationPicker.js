@@ -9,6 +9,7 @@ import { getOrder } from "./GenericHooks";
 import useApi from "hooks/useApi";
 import { PathNames } from "./Constants";
 import Select from "react-select";
+import { Launcher } from "../DropdownButton/DropdownButton.styles";
 
 
 
@@ -194,9 +195,13 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                     </div>
                 </div>
 
-                <div className={ "govuk-grid-row" }>
+                <div className={ "govuk-grid-row" } style={{ display: "flex", alignItems: "flex-end" }}>
                     <div className="govuk-grid-column-one-quarter">
                         <div className="govuk-form-group govuk-!-margin-bottom-0">
+                            <span className={ "govuk-label govuk-label--s" }>Area type</span>
+                            <span className={ "govuk-visually-hidden" }>
+                                Select or type in an area type
+                            </span>
                             <Select area-label={ "select area type" }
                                     options={ areaTypeData }
                                     value={ areaTypeData.filter(item => item.value === currentLocation.areaType) }
@@ -209,6 +214,10 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                     </div>
                     <div className="govuk-grid-column-one-quarter">
                         <div className="govuk-form-group govuk-!-margin-bottom-0">
+                            <span className={ "govuk-label govuk-label--s" }>Area name</span>
+                            <span className={ "govuk-visually-hidden" }>
+                                Select or type in an area name
+                            </span>
                             <Select
                                 area-label={ "select area type" }
                                 options={ areaNameData.data }
@@ -223,15 +232,18 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                                 className={ 'select' }/>
                         </div>
                     </div>
-                <div className={ "govuk-grid-column-one-quarter" }>
-                    <div className={ "govuk-form-group govuk-!-margin-bottom-0" }>
-                        <Link to={ pathname }
-                              onClick={ () => setCurrentLocation({ areaType: "overview", areaName: "United Kingdom" }) }
-                              className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }>
-                            Reset to UK
-                        </Link>
+                    <div className={ "govuk-grid-column-one-quarter" }>
+                        <div className={ "govuk-form-group govuk-!-margin-bottom-0" }>
+                            <Link to={ pathname }
+                                  onClick={ () => setCurrentLocation({ areaType: "overview", areaName: "United Kingdom" }) }
+                                  className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }>
+                                <span className={ "govuk-visually-hidden" }>
+                                    Click to reset the page back to UK level
+                                </span>
+                                Reset to UK
+                            </Link>
+                        </div>
                     </div>
-                </div>
                 </div>
 
             </form>
