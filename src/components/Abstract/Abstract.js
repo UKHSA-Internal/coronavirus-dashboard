@@ -6,7 +6,6 @@ import type { ComponentType } from "react";
 import ModalTooltip from "components/Modal";
 
 import { AbstractContainer, Text } from "./Abstract.styles";
-import Accessibility from "../../pages/Accessibility";
 
 
 const Abstract: ComponentType = ({ content }) => {
