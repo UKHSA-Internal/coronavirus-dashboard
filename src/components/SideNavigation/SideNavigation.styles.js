@@ -3,6 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
+import { SideNavList } from "../SideNavMobile/SideNavMobile.styles";
 
 
 export const SideNav: ComponentType<*> = (() => {
@@ -18,13 +19,37 @@ export const SideNav: ComponentType<*> = (() => {
 })();
 
 
-export const SideNavList = ({ className, ...props }) => (
-  <ul className={ `moj-side-navigation__list ${className}` } { ...props }/>
+export const SideNavMainContainer: ComponentType<*> = (() => {
+
+    const Node = styled.ul`
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    `;
+
+    return ({ className, ...props }) =>
+        <Node className={ `${ className } moj-side-navigation__list` }
+              { ...props }/>
+
+})();
+
+
+export const SideNavSecondaryContainer: ComponentType<*> = ({ className, ...props }) => (
+
+  <SideNavMainContainer
+      className={ `${className} govuk-!-font-size-14 govuk-!-margin-left-0` }
+      { ...props }/>
+
 );
 
 
 export const SideNavListItem = ({ className, ...props }) => (
-  <li className={ `moj-side-navigation__item ${className}` } { ...props }/>
+    <li className={ `moj-side-navigation__item ${className}` } { ...props }/>
+);
+
+
+export const SideNavListSecondaryItem = ({ className, ...props }) => (
+    <SideNavListItem className={ `${className} govuk-!-margin-left-0 govuk-!-margin-bottom-0` } { ...props }/>
 );
 
 
