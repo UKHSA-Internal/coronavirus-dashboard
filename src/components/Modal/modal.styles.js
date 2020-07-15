@@ -8,15 +8,20 @@ export const ModalContainer: ComponentType<*> = (() => {
 
     return styled.section`
         display: flex;
+        position: fixed;
+        z-index: 999999999;
         justify-content: center;
         align-items: center;
-        position: fixed;
-        z-index: 99999999;
         left: 0;
         top: 0;
         right: 0;
         bottom: 0;
         background-color: rgba(0, 0, 0, 0.7);
+        
+        &::not(:focus-within) {
+            background-color: rgb(255, 255, 254);
+            transition: background-color 0.01s ease;
+        }
   `;
 
 })();
