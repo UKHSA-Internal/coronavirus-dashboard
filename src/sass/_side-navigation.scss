@@ -16,10 +16,6 @@
 }
 
 .moj-side-navigation__list {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-
     @include govuk-media-query($from: tablet) {
         margin-bottom: govuk-spacing(4);
     }
