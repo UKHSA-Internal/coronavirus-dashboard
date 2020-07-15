@@ -32,11 +32,22 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
 
     };
 
+    const onClickAway = ({ target }) => {
+
+        if ( modalRef.current && target.className === modalRef.current.className && modalStatus )
+            setModalStatus(false);
+
+    }
+
     useEffect(() => {
 
         document.addEventListener("keyup", handleKeyPressEvent);
+        document.addEventListener("click", onClickAway)
 
-        return () => document.removeEventListener("keyup", handleKeyPressEvent);
+        return () => {
+            document.removeEventListener("keyup", handleKeyPressEvent);
+            document.removeEventListener("click", onClickAway);
+        }
 
     });
 
@@ -47,8 +58,13 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
 
         {
             modalStatus &&
-            <ModalContainer ref={ modalRef } role={ 'alertdialog' }>
-                <ModalContent>
+            <ModalContainer ref={ modalRef }
+                            className={ 'modal' }
+                            area-modal={ true }
+                            tabIndex={ -1 }
+                            aria-label={ "Additional information" }
+                            role={ 'alertdialog' }>
+                <ModalContent id={ "modal-body" }>
                     <Modal markdownPath={ markdownPath } replacements={ replacements }/>
                     <ModalCloser className={ "govuk-button" }
                                  onClick={ () => setModalStatus(false) }>
