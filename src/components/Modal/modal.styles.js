@@ -52,6 +52,9 @@ export const ModalOpener: ComponentType<*> = (() => {
             cursor: pointer;
             outline: none;
             border-bottom: 1px dashed #959595;
+            word-wrap: normal;
+            text-align: left;
+            display: inherit;
              
             &:active,
             &:hover {

@@ -11,12 +11,14 @@ export const AbstractContainer: ComponentType<*> = (() => {
     const Node = styled.summary`        
         & .modal-opener-text {
             color: #000;
+            line-height: 2rem;
+            margin-bottom: 1.5rem;
         }
     `;
 
     return ({ ...props }) => <div className={ "govuk-grid-row" }>
         <div className={ "govuk-grid-column-one-half" }>
-            <div className={ "govuk-body govuk-body-m" }>
+            <div className={ "govuk-body-s" }>
                 <Node { ...props }/>
             </div>
         </div>
