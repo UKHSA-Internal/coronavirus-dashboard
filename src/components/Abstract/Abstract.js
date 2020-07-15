@@ -6,6 +6,7 @@ import type { ComponentType } from "react";
 import ModalTooltip from "components/Modal";
 
 import { AbstractContainer, Text } from "./Abstract.styles";
+import Accessibility from "../../pages/Accessibility";
 
 
 const Abstract: ComponentType = ({ content }) => {
@@ -16,7 +17,12 @@ const Abstract: ComponentType = ({ content }) => {
         result = [],
         cnt = content.trim();
 
-    for ( const match of cnt.match(/{([^:]+):([^}]+)}/ig) ) {
+    const matches = cnt.match(/{([^:]+):([^}]+)}/ig);
+
+    if ( !matches )
+        return <AbstractContainer>{ content }</AbstractContainer>;
+
+    for ( const match of matches ) {
         if ( !match ) continue;
 
         const
