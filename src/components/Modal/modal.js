@@ -52,9 +52,9 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
 
         const htmlElm = document.querySelector('html').classList;
 
-        modalStatus
-            ? htmlElm.add(['u-lock-scroll'])
-            : htmlElm.toggle('u-lock-scroll');
+        modalStatus && modalStatus
+            ? htmlElm.add('u-lock-scroll')
+            : htmlElm.remove('u-lock-scroll');
 
         return () => {
             document.removeEventListener("keyup", handleKeyPressEvent);
@@ -70,25 +70,26 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
                      children={ children }/>
 
         {
-            modalStatus &&
-            <FocusTrap activate initialFocus={ "#close-modal" }>
-                <ModalContainer ref={ modalRef }
-                                className={ 'modal' }
-                                area-modal={ true }
-                                tabIndex={ -1 }
-                                aria-label={ "Additional information" }
-                                role={ 'alertdialog' }>
-                    <ModalContent id={ "modal-body" }>
-                        <Modal markdownPath={ markdownPath } replacements={ replacements }/>
-                        <ModalCloser className={ "govuk-button" }
-                                     id={ "close-modal" }
-                                     area-label={ "Close dialogue" }
-                                     onClick={ () => setModalStatus(false) }>
-                            Continue
-                        </ModalCloser>
-                    </ModalContent>
-                </ModalContainer>
-            </FocusTrap>
+            !modalStatus
+                ? null
+                : <FocusTrap activate>
+                    <ModalContainer ref={ modalRef }
+                                    className={ 'modal' }
+                                    area-modal={ true }
+                                    tabIndex={ -1 }
+                                    aria-label={ "Additional information" }
+                                    role={ 'alertdialog' }>
+                        <ModalContent id={ "modal-body" }>
+                            <Modal markdownPath={ markdownPath } replacements={ replacements }/>
+                            <ModalCloser className={ "govuk-button" }
+                                         id={ "close-modal" }
+                                         area-label={ "Close dialogue" }
+                                         onClick={ () => setModalStatus(false) }>
+                                Continue
+                            </ModalCloser>
+                        </ModalContent>
+                    </ModalContainer>
+                </FocusTrap>
         }
 
     </>
