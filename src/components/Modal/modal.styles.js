@@ -50,11 +50,11 @@ export const ModalOpener: ComponentType<*> = (() => {
         classes = '',
         Node = styled.button`   
             cursor: pointer;
-            outline: none;
-            border-bottom: 1px dashed #959595;
-            word-wrap: normal;
+            border-bottom: 1px dashed #959595 !important;
+            // word-wrap: normal;
             text-align: left;
-            display: inherit;
+            // display: contents;
+            // font-weight: 600;
              
             &:active,
             &:hover {
