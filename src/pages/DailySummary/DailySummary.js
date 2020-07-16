@@ -4,9 +4,13 @@ import React, { useState } from 'react';
 import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 
-import { Card, VisualSection, HalfCardSplitBody, CardHeader } from 'components/Card';
+import {
+    Card,
+    ContentBox,
+    HalfCardSplitBody,
+    CardHeader
+} from 'components/Card';
 
-import { NumericReports } from "components/HeadlineNumbers";
 import ValueBox from "components/ValueBox";
 import { Container } from './DailySummary.styles';
 
@@ -119,7 +123,7 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
     return <Card heading={ heading }>
         <CardHeader heading={ heading } linkToHeading={ "More detail" }/>
         <HalfCardSplitBody>
-            <VisualSection>{
+            <ContentBox>{
                 data === null
                     ? <Loading size={ 8 } margin={ 2 } color={ '#adadad' }/>
                     : <Plotter
@@ -131,8 +135,8 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
                         ) }
 
                     />
-            }</VisualSection>
-            <NumericReports>
+            }</ContentBox>
+            <ContentBox>
                 {
                     layout.map((item, index) =>
                         <ValueBox { ...item }
@@ -155,7 +159,7 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
                 {/*        ? <NationDeathsPlot/>*/}
                 {/*        : null*/}
                 {/*}*/}
-            </NumericReports>
+            </ContentBox>
         </HalfCardSplitBody>
     </Card>
 

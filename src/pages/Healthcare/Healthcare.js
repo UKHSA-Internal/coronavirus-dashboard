@@ -5,7 +5,8 @@ import type { ComponentType } from 'react';
 
 import { withRouter } from 'react-router';
 
-import { MixedCardContainer, HeadlineNumbers, CardContent } from 'components/Card';
+import { MixedCardContainer, CardContent, ContentBox } from 'components/Card';
+import HeadlineNumbers from "components/HeadlineNumbers";
 import type {Props } from './Healthcare.types';
 import { getParams } from "common/utils";
 import usePageLayout from "hooks/usePageLayout";
@@ -30,7 +31,9 @@ const Healthcare: ComponentType<Props> = ({ location: { search: query }}: Props)
     if ( !layout ) return <Loading large={ true }/>;
 
     return <>
-        <HeadlineNumbers params={ params } { ...layout }/>
+        <ContentBox horizontal>
+            <HeadlineNumbers params={ params } { ...layout }/>
+        </ContentBox>
         <MixedCardContainer>{
             layout?.cards.map(( cardProps, index ) =>
                 <CardContent key={ `card-${ index }` } params={ params } { ...cardProps }/>
