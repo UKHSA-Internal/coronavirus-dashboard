@@ -19,7 +19,7 @@ const Abstract: ComponentType = ({ content }) => {
     const matches = cnt.match(/{([^:]+):([^}]+)}/ig);
 
     if ( !matches )
-        return <AbstractContainer>{ content }</AbstractContainer>;
+        return <AbstractContainer role={ "region" }>{ content }</AbstractContainer>;
 
     for ( const match of matches ) {
         if ( !match ) continue;
@@ -55,7 +55,7 @@ const Abstract: ComponentType = ({ content }) => {
 
     }
 
-    return <AbstractContainer>{ result }</AbstractContainer>
+    return <AbstractContainer role={ "region" }>{ result }</AbstractContainer>
 
 };  // Abstract
 
