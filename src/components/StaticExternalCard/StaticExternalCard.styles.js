@@ -17,7 +17,7 @@ export const ExternalLink: ComponentType<*> = (() => {
 
 export const LinkDescription: ComponentType<*> = (() => {
 
-    return styled.span`
+    return styled.p`
         color: #626a6e;
     `
 
