@@ -23,7 +23,8 @@ const Modal = ({ markdownPath, replacements }) => {
 
     if ( !data ) return <Loading/>
 
-    return <Markdown dangerouslySetInnerHTML={{ __html: strFormat(data, replacements) }}/>
+    return <Markdown role={ "feed" }
+                     dangerouslySetInnerHTML={{ __html: strFormat(data, replacements) }}/>
 
 }; // Modal
 
@@ -80,7 +81,7 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
                                     tabIndex={ -1 }
                                     aria-label={ "Additional information" }
                                     role={ 'alertdialog' }>
-                        <ModalContent id={ "modal-body" }>
+                        <ModalContent id={ "modal-body" } role={ "article" }>
                             <Modal markdownPath={ markdownPath } replacements={ replacements }/>
                             <ModalCloser className={ "govuk-button" }
                                          id={ "close-modal" }
