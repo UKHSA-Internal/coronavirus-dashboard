@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Link } from "react-router-dom";
 
 import { fieldToStructure } from "common/utils";
@@ -32,7 +32,8 @@ import {
 
 import type { Props } from './Card.types';
 import type { ComponentType } from 'react';
-import MSOAs from "../MSOAs";
+import StaticExternalCard from "../StaticExternalCard";
+import Loading from "../Loading";
 
 
 const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) => {
@@ -228,12 +229,16 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
             </Card>;
 
         case "simpleExternalStatic":
-            console.log(props);
+
+            const StaticExternalCard = lazy(() => import('components/StaticExternalCard'));
+
             return <Card heading={ heading } fullWidth={ fullWidth }>
-                <MSOAs download={ download || null }
-                       heading={ heading }
-                       abstract={ abstract }
-                       { ...props }/>
+                <Suspense fallback={ <Loading/> }>
+                    <StaticExternalCard download={ download || null }
+                                        heading={ heading }
+                                        abstract={ abstract }
+                                        { ...props }/>
+                </Suspense>
             </Card>;
 
         default:
