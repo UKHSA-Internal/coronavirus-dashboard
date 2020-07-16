@@ -1,1 +1,1 @@
-export { default, NumericReports } from "./HeadlineNumbers"
+export { default } from "./HeadlineNumbers"
