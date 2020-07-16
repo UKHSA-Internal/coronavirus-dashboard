@@ -117,7 +117,6 @@ const Navigation = ({ layout, ...props }) => {
 const
     DashboardHeader = lazy(() => import('components/DashboardHeader')),
     Cases = lazy(() => import('pages/Cases')),
-    SmallAreaData = lazy(() => import('pages/SmallAreaData')),
     Healthcare = lazy(() => import('pages/Healthcare')),
     Deaths = lazy(() => import('pages/Deaths')),
     Tests = lazy(() => import('pages/Testing')),
@@ -165,7 +164,6 @@ const App = ({ location: { pathname } }) => {
                                 <Switch>
                                     <Route path="/" exact component={ DailySummary }/>
                                     <Route path="/testing" component={ Tests }/>
-                                    <Route path="/cases/msoa" exact component={ SmallAreaData }/>
                                     <Route path="/cases" exact component={ Cases }/>
                                     <Route path="/healthcare" component={ Healthcare }/>
                                     <Route path="/deaths" component={ Deaths }/>

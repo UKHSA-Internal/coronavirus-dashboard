@@ -24,6 +24,8 @@ const DownloadOptions = ({ download=[], heading }) => {
 
     if ( !heading ) return null;
 
+    const browserFormats = ['xml', 'json'];
+
     analytics({
         category: 'Downloads',
         action: 'open',
@@ -40,6 +42,8 @@ const DownloadOptions = ({ download=[], heading }) => {
         <a className={ 'govuk-link govuk-link--no-visited-state' }
            key={ format }
            href={ url }
+           rel={ browserFormats.indexOf(format.toLowerCase()) > -1 ? 'noreferrer noopener' :  '' }
+           target={ browserFormats.indexOf(format.toLowerCase()) > -1 ? '_blank' :  '' }
            onClick={ () => downloadTriggered(format) }>
             as { format.toLowerCase() }
         </a>
@@ -51,6 +55,12 @@ const DownloadOptions = ({ download=[], heading }) => {
 const StaticExternalCard: ComponentType<*> = ({ download=[], abstract=null, heading, resource=null, image=null, ...props }) => {
 
     if ( !resource ) return null;
+
+    const extLinkTriggered = ( link ) => analytics({
+        category: 'External link',
+        action: "click",
+        label: link
+    });
 
     return <>
         <DropdownButton tooltip={ "Download card data" }
@@ -66,6 +76,7 @@ const StaticExternalCard: ComponentType<*> = ({ download=[], abstract=null, head
                 </LinkDescription>
                 <p>
                     <ExternalLink className={ "govuk-button" }
+                                  onClick={ () => extLinkTriggered(resource.url) }
                                   target={ '_blank' }
                                   rel={ 'noreferrer noopener' }
                                   href={ resource.url }>
