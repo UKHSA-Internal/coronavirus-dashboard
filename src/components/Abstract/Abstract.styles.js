@@ -8,7 +8,9 @@ import type { ComponentType } from "react";
 
 export const AbstractContainer: ComponentType<*> = (() => {
 
-    const Node = styled.p`        
+    const Node = styled.p`   
+        color: #626a6e;
+             
         & .modal-opener-text {
             color: #000;
             line-height: 2rem;
@@ -16,8 +18,8 @@ export const AbstractContainer: ComponentType<*> = (() => {
         }
     `;
 
-    return ({ ...props }) => <div className={ "govuk-grid-row" }>
-        <div className={ "govuk-grid-column-one-half" }>
+    return ({ fullWidth, ...props }) => <div className={ "govuk-grid-row" }>
+        <div className={ fullWidth ? "govuk-grid-column-one-half" : "govuk-grid-column-two-thirds" }>
             <div className={ "govuk-body-s" }>
                 <Node { ...props }/>
             </div>
