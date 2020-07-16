@@ -36,14 +36,27 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
         modalRef = useRef(null);
 
     const handleKeyPressEvent = event => {
+
         // Escape key: 27
         if ( modalRef.current && event.keyCode === 27 )
-            setModalStatus(true);
+            setModalStatus(false);
+
     };
 
+    const onKeyUpOpener = event => {
+
+        event.preventDefault();
+
+        if ( event.key === 'Enter' || event.key === ' ' )
+            setModalStatus(true);
+
+    }
+
     const onClickAway = ({ target }) => {
+
         if ( modalRef.current && target.className === modalRef.current.className && modalStatus )
             setModalStatus(false);
+
     };
 
     useEffect(() => {
@@ -69,8 +82,8 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
                      tabIndex={ 0 }
                      area-label={ "Open dialogue" }
                      onClick={ () => setModalStatus(true) }
+                     onKeyPress={ onKeyUpOpener }
                      children={ children }/>
-
         {
             !modalStatus
                 ? null
@@ -93,7 +106,6 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
                     </ModalContainer>
                 </FocusTrap>
         }
-
     </>
 
 }; // ModalTooltip

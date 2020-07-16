@@ -48,7 +48,7 @@ export const ModalContent: ComponentType<*> = (() => {
 export const ModalOpener: ComponentType<*> = (() => {
     const
         classes = '',
-        Node = styled.button`   
+        Node = styled.a`   
             cursor: pointer;
             border-bottom: 1px dashed #959595 !important;
             // word-wrap: normal;
