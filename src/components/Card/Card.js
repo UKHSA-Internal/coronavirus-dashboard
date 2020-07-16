@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 import { fieldToStructure } from "common/utils";
@@ -15,7 +15,6 @@ import {
 } from "components/TabLink";
 import { Radio } from "components/GovUk";
 import DropdownButton from "components/DropdownButton";
-import HeadlineNumbers from "components/HeadlineNumbers";
 import Abstract from "components/Abstract";
 
 import DownloadOptions from "./DownloadOptions";
@@ -27,18 +26,23 @@ import {
     HalfCardSplitBody,
     FullCard,
     Caption,
-    BodySection
+    BodySection,
+    HBodySection
 } from './Card.styles';
 
 import type { Props } from './Card.types';
 import type { ComponentType } from 'react';
+import MSOAs from "../MSOAs";
 
 
-const VisualSection: ComponentType<Props> = ({ ...props }: Props) => {
+const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) => {
 
-    return <BodySection { ...props }/>
+    if ( horizontal )
+        return <HBodySection { ...props }>{ children }</HBodySection>;
 
-}; // Visuals
+    return <BodySection { ...props }>{ children }</BodySection>
+
+}; // ContentBox
 
 
 const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false, children }: Props) => {
@@ -222,7 +226,16 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
                     ) ?? null
                 }</TabLinkContainer>
             </Card>;
-        
+
+        case "simpleExternalStatic":
+            console.log(props);
+            return <Card heading={ heading } fullWidth={ fullWidth }>
+                <MSOAs download={ download || null }
+                       heading={ heading }
+                       abstract={ abstract }
+                       { ...props }/>
+            </Card>;
+
         default:
             console.warn(`Invalid card type: "${cardType}"`)
             return null;
@@ -235,10 +248,9 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
 
 export {
     Card,
-    HeadlineNumbers,
     MixedCardContainer,
     CardContent,
     HalfCardSplitBody,
     CardHeader,
-    VisualSection
+    ContentBox
 };
