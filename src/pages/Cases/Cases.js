@@ -12,7 +12,6 @@ import { getParams } from "common/utils";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import Loading from "components/Loading";
-import MSOAs from "components/MSOAs";
 
 
 const
@@ -40,7 +39,6 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
                 <CardContent key={ `card-${ index }` } params={ params } { ...cardProps }/>
             ) ?? null
         }
-        <MSOAs/>
         </MixedCardContainer>
     </>
 };
