@@ -8,7 +8,7 @@ import ModalTooltip from "components/Modal";
 import { AbstractContainer, Text } from "./Abstract.styles";
 
 
-const Abstract: ComponentType = ({ content }) => {
+const Abstract: ComponentType = ({ content, fullWidth=false }) => {
 
     if ( !content ) return null;
 
@@ -19,7 +19,9 @@ const Abstract: ComponentType = ({ content }) => {
     const matches = cnt.match(/{([^:]+):([^}]+)}/ig);
 
     if ( !matches )
-        return <AbstractContainer role={ "region" }>{ content }</AbstractContainer>;
+        return <AbstractContainer role={ "region" } fullWidth={ fullWidth }>
+            { content }
+        </AbstractContainer>;
 
     for ( const match of matches ) {
         if ( !match ) continue;
@@ -55,7 +57,9 @@ const Abstract: ComponentType = ({ content }) => {
 
     }
 
-    return <AbstractContainer role={ "region" }>{ result }</AbstractContainer>
+    return <AbstractContainer role={ "region" } fullWidth={ fullWidth }>
+        { result }
+    </AbstractContainer>
 
 };  // Abstract
 
