@@ -70,26 +70,32 @@ const StaticExternalCard: ComponentType<*> = ({ download=[], abstract=null, head
         <CardHeader heading={ heading } { ...props }/>
         <Abstract content={ abstract }/>
         <HalfCardSplitBody>
-            <ContentBox className={ "govuk-!-margin-top-5" }>
-                <LinkDescription className={ 'govuk-body-s' }>
-                    Link to a different website:
-                </LinkDescription>
-                <p>
-                    <ExternalLink className={ "govuk-button" }
-                                  onClick={ () => extLinkTriggered(resource.url) }
-                                  target={ '_blank' }
-                                  rel={ 'noreferrer noopener' }
-                                  href={ resource.url }>
-                        { resource.label }
-                    </ExternalLink>
-                </p>
-            </ContentBox>
-            {
-                image &&
-                <ContentBox>
-                    <Image src={ image.url } alt={ image.alt }/>
-                </ContentBox>
-            }
+            <div className={ "govuk-grid-row" }>
+                <div className={ 'govuk-grid-column-one-half' }>
+                    <ContentBox className={ "govuk-!-margin-top-5" }>
+                        <LinkDescription className={ 'govuk-body-s' }>
+                            Link to a different website:
+                        </LinkDescription>
+                        <p>
+                            <ExternalLink className={ "govuk-button" }
+                                          onClick={ () => extLinkTriggered(resource.url) }
+                                          target={ '_blank' }
+                                          rel={ 'noreferrer noopener' }
+                                          href={ resource.url }>
+                                { resource.label }
+                            </ExternalLink>
+                        </p>
+                    </ContentBox>
+                </div>
+                {
+                    image &&
+                    <div className={ 'govuk-grid-column-one-half' }>
+                        <ContentBox>
+                            <Image src={ image.url } alt={ image.alt }/>
+                        </ContentBox>
+                    </div>
+                }
+            </div>
         </HalfCardSplitBody>
     </>
 

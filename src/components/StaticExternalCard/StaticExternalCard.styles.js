@@ -27,7 +27,8 @@ export const LinkDescription: ComponentType<*> = (() => {
 export const Image: ComponentType<*> = (() => {
 
     return styled.img`
-        max-height: 300px;
+        height: auto;
+        width: 100%;
     `
 
 })();  // Image
