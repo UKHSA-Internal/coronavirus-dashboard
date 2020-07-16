@@ -90,3 +90,20 @@ export const BodySection: ComponentType<*> = (() => {
     `;
 
 })();
+
+
+export const HBodySection: ComponentType<*> = (() => {
+    return styled.section`
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        margin: 1rem 0 0 0;
+        
+        & > * {
+            margin-right: 2rem;
+            margin-bottom: 0;
+        }
+    `;
+})();
+
