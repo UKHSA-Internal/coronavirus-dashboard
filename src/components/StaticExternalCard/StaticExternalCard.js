@@ -68,11 +68,13 @@ const StaticExternalCard: ComponentType<*> = ({ download=[], abstract=null, head
             <DownloadOptions download={ download } heading={ heading }/>
         </DropdownButton>
         <CardHeader heading={ heading } { ...props }/>
-        <Abstract content={ abstract }/>
         <HalfCardSplitBody>
             <div className={ "govuk-grid-row" }>
                 <div className={ 'govuk-grid-column-one-half' }>
                     <ContentBox className={ "govuk-!-margin-top-5" }>
+                        <LinkDescription className={ "govuk-body-s" }>
+                            { abstract }
+                        </LinkDescription>
                         <LinkDescription className={ 'govuk-body-s' }>
                             Link to a different website:
                         </LinkDescription>
