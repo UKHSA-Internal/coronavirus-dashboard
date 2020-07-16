@@ -28,7 +28,7 @@ const Abstract: ComponentType = ({ content }) => {
             [ text, variable ] = match.replace(/[{}]/g, "").split(":"),
             cn = cnt.split(match);
 
-        if (cn.length < 2) continue;
+        if ( cn.length < 2 ) continue;
 
         result = [
             ...result,
@@ -36,7 +36,7 @@ const Abstract: ComponentType = ({ content }) => {
                 .split(match)
                 .reduce((acc, item, index) => {
 
-                    if (!index) return [ <Text>{ item }</Text> ];
+                    if ( !index ) return [ <Text key={ item }>{ item }</Text> ];
 
                     return [
                         ...acc,
@@ -45,7 +45,7 @@ const Abstract: ComponentType = ({ content }) => {
                                       markdownPath={ variable }>
                             <span className={ "modal-opener-text" }>{ text }</span>
                         </ModalTooltip>,
-                        <Text>{ item }</Text>
+                        <Text key={ `${item}-${index}` }>{ item }</Text>
                     ]
 
                 }, [])
