@@ -86,7 +86,7 @@ const TabContentWithData: ComponentType<TabContentProps> = ({ fields, tabType, b
 };
 
 
-export const TabContent: TabContentType<TabContentProps> = ({ fields, setDataState, params, tabType, barType=null }: TabContentProps): React$Component => {
+export const TabContent: ComponentType<TabContentProps> = ({ fields, setDataState, params, tabType, barType=null }: TabContentProps): React$Component => {
 
     const  structure = { date: "date" };
 
