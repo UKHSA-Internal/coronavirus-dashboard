@@ -15,10 +15,15 @@ export const HalfCard: ComponentType<*> = (() => {
         background-color: #f8f8f8;
         margin-top: 30px;
         
+        @media only screen and (max-width: 768px) {
+            flex: 1 1 100%;
+        }
+        
         &:nth-of-type(2n) {
             margin-left: 30px;
             
-            @media only screen and (max-width: 640px) {
+            @media only screen and (max-width: 1074px) {
+                flex: 1 1 100%;
                 margin-left: 0;
             }
         }
@@ -87,6 +92,14 @@ export const BodySection: ComponentType<*> = (() => {
     return styled.div`
         flex: 1 1 43%;
         margin: 0 15px;
+        
+        &:nth-of-type(2n) {
+            @media only screen and (max-width: 550px) {
+                flex: 1 1 100%;
+                margin-top: 2rem;
+            }
+        }
+
     `;
 
 })();
@@ -106,4 +119,18 @@ export const HBodySection: ComponentType<*> = (() => {
         }
     `;
 })();
+
+
+export const MixedCardContainer: ComponentType<*> = ({ children }) => {
+
+    const Node = styled.section`
+        display: flex;
+        flex-wrap: wrap;
+        
+        justify-items: space-between;
+    `;
+
+    return <Node>{ children }</Node>
+
+};  // MixedCardContainer
 

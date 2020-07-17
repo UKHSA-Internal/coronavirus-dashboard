@@ -27,7 +27,8 @@ import {
     FullCard,
     Caption,
     BodySection,
-    HBodySection
+    HBodySection,
+    MixedCardContainer
 } from './Card.styles';
 
 import type { Props } from './Card.types';
@@ -93,9 +94,11 @@ const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, n
 };  // Card
 
 
-const MixedCardContainer: ComponentType<*> = ({ children }) => {
+const CardsContainer: ComponentType<*> = ({ children }) => {
 
-    return <section className={ 'util-flex util-flex-wrap' }>{ children }</section>
+    return <MixedCardContainer>
+        { children }
+    </MixedCardContainer>
 
 };  // MixedCardContainer
 
@@ -253,7 +256,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
 
 export {
     Card,
-    MixedCardContainer,
+    CardsContainer,
     CardContent,
     HalfCardSplitBody,
     CardHeader,
