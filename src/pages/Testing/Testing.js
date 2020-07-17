@@ -5,7 +5,7 @@ import type { ComponentType } from 'react';
 
 import { withRouter } from 'react-router';
 
-import { MixedCardContainer, CardContent, ContentBox } from 'components/Card';
+import { CardsContainer, CardContent, ContentBox } from 'components/Card';
 import HeadlineNumbers from "components/HeadlineNumbers";
 import type { Props } from './Testing.types';
 import { getParams, } from "common/utils";
@@ -34,11 +34,11 @@ const Testing: ComponentType<Props> = ({ location: { search: query }}: Props) =>
         <ContentBox horizontal>
             <HeadlineNumbers params={ params } { ...layout }/>
         </ContentBox>
-        <MixedCardContainer>{
+        <CardsContainer>{
             layout?.cards.map(( cardProps, index ) =>
                 <CardContent key={ `card-${ index }` } params={ params } { ...cardProps }/>
             ) ?? null
-        }</MixedCardContainer>
+        }</CardsContainer>
     </>
 };
 

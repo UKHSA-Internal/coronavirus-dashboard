@@ -146,51 +146,49 @@ const App = ({ location: { pathname } }) => {
         <BetaBanner/>
         <div className={ "govuk-width-container" }>
             <LastUpdateTime/>
-            <main className={ "govuk-main-wrapper" }>
-                <ErrorBoundary>
-                    <div className={ "dashboard-container" }>
-                        {
-                            layout === "desktop" &&
-                            <aside className={ "dashboard-menu" }>
-                                <Switch>
-                                    <Route path={ "/" }
-                                           render={ props => <Navigation layout={ layout } { ...props}/> }/>
-                                </Switch>
-                            </aside>
-                        }
-                        <div className={ "dashboard-content" } role={ "main" } id={ 'main-content' }>
-                            <Suspense fallback={ <Loading/> }>
-                                <DashboardHeader/>
-                                <Switch>
-                                    <Route path="/" exact component={ DailySummary }/>
-                                    <Route path="/testing" component={ Tests }/>
-                                    <Route path="/cases" exact component={ Cases }/>
-                                    <Route path="/healthcare" component={ Healthcare }/>
-                                    <Route path="/deaths" component={ Deaths }/>
+            <ErrorBoundary>
+                <div className={ "dashboard-container" }>
+                    {
+                        layout === "desktop" &&
+                        <aside className={ "dashboard-menu" }>
+                            <Switch>
+                                <Route path={ "/" }
+                                       render={ props => <Navigation layout={ layout } { ...props}/> }/>
+                            </Switch>
+                        </aside>
+                    }
+                    <main className={ "govuk-main-wrapper" } role={ "main" } id={ 'main-content' }>
+                        <Suspense fallback={ <Loading/> }>
+                            <DashboardHeader/>
+                            <Switch>
+                                <Route path="/" exact component={ DailySummary }/>
+                                <Route path="/testing" component={ Tests }/>
+                                <Route path="/cases" exact component={ Cases }/>
+                                <Route path="/healthcare" component={ Healthcare }/>
+                                <Route path="/deaths" component={ Deaths }/>
 
-                                    <Route path="/about-data" component={ About }/>
-                                    {/*<Route path="/archive" component={ Archive }/>*/}
-                                    <Route path="/accessibility" component={ Accessibility }/>
-                                    <Route path="/cookies" component={ Cookies }/>
-                                </Switch>
-                            </Suspense>
-                        </div>
-                    </div>
-                </ErrorBoundary>
-            </main>
+                                <Route path="/about-data" component={ About }/>
+                                {/*<Route path="/archive" component={ Archive }/>*/}
+                                <Route path="/accessibility" component={ Accessibility }/>
+                                <Route path="/cookies" component={ Cookies }/>
+                            </Switch>
+                        </Suspense>
+                    </main>
+                </div>
+            </ErrorBoundary>
+
+            <Switch>
+                {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */ }
+                <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> }/>
+            </Switch>
+
+            {/* We only want back-to-top links on the main & about pages. */ }
+            <Switch>
+                {/* These back-to-top links are the 'inline' style that sits
+                    statically between the end of the content and the footer. */ }
+                <Route path="/" render={ props => <BackToTop { ...props } mode="inline"/> }/>
+            </Switch>
         </div>
-
-        <Switch>
-            {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */ }
-            <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> }/>
-        </Switch>
-
-        {/* We only want back-to-top links on the main & about pages. */ }
-        <Switch>
-            {/* These back-to-top links are the 'inline' style that sits
-                statically between the end of the content and the footer. */ }
-            <Route path="/" render={ props => <BackToTop { ...props } mode="inline"/> }/>
-        </Switch>
 
         <Switch>
             <Suspense fallback={ <Loading/> }>
