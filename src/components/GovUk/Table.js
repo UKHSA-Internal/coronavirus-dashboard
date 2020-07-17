@@ -9,6 +9,7 @@ import moment from "moment";
 import ReactTooltip from "react-tooltip";
 
 import { NotAvailable } from "components/Widgets/Widgets";
+import { PlotContainer } from "../Plotter/Plotter.styles";
 
 
 const TH = ({ className, children, type='string', colSpan=1, ...props }) => {
@@ -124,18 +125,23 @@ export const DataTable = ({ fields, data }) => {
 
     const fieldNames = fields.map(item => item.value)
 
-    return <Table
-        head={[
-            fields.map(item => ({ value: item.label, type: item.type }))
-        ]}
-        body={
-            data.map(item => fieldNames.map(name =>
-                name === "date"
-                    ? moment(item[name]).format("DD-MM-YYYY")
-                    : item[name]
+    return <>
+        <span className={ "govuk-visually-hidden" }>
+            Showing a table of the data
+        </span>
+        <Table
+            head={[
+                fields.map(item => ({ value: item.label, type: item.type }))
+            ]}
+            body={
+                data.map(item => fieldNames.map(name =>
+                    name === "date"
+                        ? moment(item[name]).format("DD-MM-YYYY")
+                        : item[name]
 
-            ))
-        }
-    />
+                ))
+            }
+        />
+    </>
 
 };  // DataTable

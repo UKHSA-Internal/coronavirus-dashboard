@@ -3,6 +3,7 @@ import Plot from "react-plotly.js";
 import URLs from "common/urls";
 import { PlotContainer } from "./Plotter.styles";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
+import { Tab } from "../TabLink/TabLink.styles";
 
 
 // export const Plotter = ({ layout={}, xaxis={}, yaxis={}, ...props }) => {
@@ -87,6 +88,9 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
     const width = useResponsiveLayout(640);
 
     return <PlotContainer className={ "govuk-grid-row" }>
+        <span className={ "govuk-visually-hidden" }>
+            Showing a graph of the data
+        </span>
         <Plot
             data={ data }
             config={ {

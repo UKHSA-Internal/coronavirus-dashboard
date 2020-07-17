@@ -45,6 +45,9 @@ export const TabLinkContainer: ComponentType<TabLinkContainerProps> = ({ childre
                      className={ `${label === current ? 'active govuk-!-font-weight-bold' : '' }` }
                      onClick={ () => setCurrent(label)  }
                 >
+                    <span className={ "govuk-visually-hidden" }>
+                        Click to display content
+                    </span>
                      { label }
                 </Tab>
             )
