@@ -51,11 +51,8 @@ export const ModalOpener: ComponentType<*> = (() => {
         Node = styled.a`   
             cursor: pointer;
             border-bottom: 1px dashed #959595 !important;
-            // word-wrap: normal;
             text-align: left;
-            // display: contents;
-            // font-weight: 600;
-             
+
             &:active,
             &:hover {
                 background-colour: #f1f1f1;
