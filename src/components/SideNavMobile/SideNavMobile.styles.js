@@ -27,7 +27,8 @@ export const MobileNavToggler = ({ className="", ...props }) => (
 
 
 export const SideNav = ({ className="", ...props }) => (
-  <nav className={ `moj-side-navigation moj-side-navigation-mobile ${className}` } { ...props }/>
+  <nav role={ 'navigation' }
+       className={ `moj-side-navigation moj-side-navigation-mobile ${className}` } { ...props }/>
 );
 
 

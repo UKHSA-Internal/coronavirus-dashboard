@@ -146,7 +146,7 @@ const App = ({ location: { pathname } }) => {
         <BetaBanner/>
         <div className={ "govuk-width-container" }>
             <LastUpdateTime/>
-            <main className={ "govuk-main-wrapper" } role={ "main" }>
+            <main className={ "govuk-main-wrapper" }>
                 <ErrorBoundary>
                     <div className={ "dashboard-container" }>
                         {
@@ -158,7 +158,7 @@ const App = ({ location: { pathname } }) => {
                                 </Switch>
                             </aside>
                         }
-                        <div className={ "dashboard-content" } id={ 'main-content' }>
+                        <div className={ "dashboard-content" } role={ "main" } id={ 'main-content' }>
                             <Suspense fallback={ <Loading/> }>
                                 <DashboardHeader/>
                                 <Switch>
