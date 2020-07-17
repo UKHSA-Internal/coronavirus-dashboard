@@ -93,7 +93,7 @@ export const BodySection: ComponentType<*> = (() => {
         flex: 1 1 43%;
         margin: 0 15px;
         
-        &:nth-of-type(2n) {
+        &:nth-child(2n) {
             @media only screen and (max-width: 550px) {
                 flex: 1 1 100%;
                 margin-top: 2rem;
