@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Switch, Route, withRouter } from 'react-router';
-// import { Header } from 'govuk-react-jsx';
 import Header from "components/Header";
 import DailySummary from 'pages/DailySummary';
 import CookieBanner from 'components/CookieBanner';
@@ -13,7 +12,6 @@ import URLs from "common/urls";
 import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
-// import Announcement from "components/Announcement";
 
 
 const useTimestamp = () => {
