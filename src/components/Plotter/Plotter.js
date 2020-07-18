@@ -82,14 +82,18 @@ import useResponsiveLayout from "hooks/useResponsiveLayout";
 // }; // Plotter
 
 
-export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin={}, style={}, isTimeSeries=true, ...props }) => {
+export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin={}, style={}, isTimeSeries=true, SrOnly="", ...props }) => {
 
     const width = useResponsiveLayout(640);
 
-    return <PlotContainer className={ "govuk-grid-row" }>
-        <span className={ "govuk-visually-hidden" }>
-            Showing a graph of the data
-        </span>
+    return <PlotContainer className={ "govuk-grid-row" }
+                          area-label={ "Displaying a graph of the data" }>
+        <p className={ "govuk-visually-hidden" }>
+            The data that is visualised in the chart is that which is tabulated
+            under the "Data" tab. The tables do not include the rolling average metric
+            (where the metric is included).
+            { SrOnly }
+        </p>
         <Plot
             data={ data }
             config={ {
