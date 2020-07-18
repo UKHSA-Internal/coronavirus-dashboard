@@ -8,21 +8,22 @@ import type { ComponentType } from "react";
 
 export const Markdown: ComponentType<*> = (() => {
 
-    const
-        Node = styled.div`
-            padding: 30px;
+    return styled
+        .div
+        .attrs(({ className="" }) => ({
+            className: `${ className } markdown modal`
+        }))`
+            padding: 0 30px;
             overflow-x: scroll;
+            max-height: 300px;
             font-size: 80%;
-            border-bottom: 1px solid #6F777B;
+            border-bottom: unset;
             margin-bottom: 0;
 
             & > :first-child {
                 margin-top: 0;
             }            
-        `;
-
-    return ({ className, ...props }) =>
-        <Node className={ `modal markdown ${className}` } { ...props }/>
+        `
 
 })();
 
