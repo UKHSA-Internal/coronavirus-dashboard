@@ -83,7 +83,7 @@ import { Tab } from "../TabLink/TabLink.styles";
 // }; // Plotter
 
 
-export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin={}, isTimeSeries=true, ...props }) => {
+export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin={}, style={}, isTimeSeries=true, ...props }) => {
 
     const width = useResponsiveLayout(640);
 
@@ -120,7 +120,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                 // onLegendItem
             } }
             useResizeHandler={ true }
-            style={{ display: "block", height: 350 }}
+            style={{ display: "block", height: 350, ...style }}
             layout={ {
                 hovermode: "x unified",
                 // barmode: "overlay",

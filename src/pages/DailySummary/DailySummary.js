@@ -107,6 +107,7 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
     }
 
     const
+        // Plotter = lazy(() => import('components/Plotter')),
         [ plotData, setPlotData ] = useState(
             layout.reduce((acc, { chart={} }) =>
                 chart && !((chart?.value ?? null) in chartData)
@@ -120,20 +121,21 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
             defaultResponse: null
         });
 
+
     return <Card heading={ heading }>
         <CardHeader heading={ heading } linkToHeading={ "More detail" }/>
         <HalfCardSplitBody>
             <ContentBox>{
                 data === null
                     ? <Loading size={ 8 } margin={ 2 } color={ '#adadad' }/>
-                    : <Plotter
-                        data={ getPlotData(
-                            layout
-                                .filter(({ chart = false }) => chart && (plotData?.[chart.value] ?? true))
-                                .map(item => item.chart),
-                            data
-                        ) }
-
+                    : <Plotter data={
+                            getPlotData(
+                                layout
+                                    .filter(({ chart = false }) => chart && (plotData?.[chart.value] ?? true))
+                                    .map(item => item.chart),
+                                data
+                            )
+                        }
                     />
             }</ContentBox>
             <ContentBox>
