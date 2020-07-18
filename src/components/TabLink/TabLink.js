@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 
 import {
     MainContainer,
@@ -11,7 +11,7 @@ import {
 
 import type { ComponentType } from "react";
 
-import { Plotter } from "components/Plotter";
+// import { Plotter } from "components/Plotter";
 import { dropLeadingZeros, getPlotData, groupBy } from "common/utils";
 import { DataTable } from "components/GovUk";
 import useApi from "hooks/useApi";
@@ -89,10 +89,16 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
     switch ( tabType ) {
 
         case "chart":
-            const layout = {};
+            const
+                layout = {},
+                Plotter = lazy(() => import('components/Plotter'));
+
             if ( barType ) layout["barmode"] = barType;
 
-            return <Plotter data={ getPlotData(fields, data, xKey) } layout={ layout } { ...props }/>
+
+            return <Suspense fallback={ <Loading/> }>
+                <Plotter data={ getPlotData(fields, data, xKey) } layout={ layout } { ...props }/>
+            </Suspense>
 
         case "table":
             return <DataTable fields={ fields } data={ data } { ...props }/>;
