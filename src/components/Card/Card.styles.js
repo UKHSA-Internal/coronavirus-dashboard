@@ -27,37 +27,45 @@ export const HalfCard: ComponentType<*> = (() => {
                 margin-left: 0;
             }
         }
-    `;
+    `
 
 })();
 
 
-export const HalfCardHeader = ({ className="", ...props }) => {
+export const HalfCardHeader: ComponentType<*> = (() => {
 
-    return <header className={ `util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2 ${ className }` }
-                   { ...props }/>
+    return styled
+        .header
+        .attrs(({ className="" }) => ({
+            className: `${ className } govuk-!-padding-bottom-2`
+        }))`
+            display: flex;
+            justify-content: space-between !important;
+            align-items: center !important;
+        `
 
-};
+})();
 
 
-export const HalfCardHeading = ({ className="", ...props }) => {
+export const HalfCardHeading: ComponentType<*> = (() => {
 
-    return <h2 className={ `govuk-heading-m govuk-!-margin-bottom-0 ${ className }` }
-               { ...props }/>
+    return styled
+        .h2
+        .attrs(({ className="" }) => ({
+            className: `${ className } govuk-heading-m govuk-!-margin-bottom-0`
+        }))``
 
-};
+})();
 
 
 export const HalfCardSplitBody: ComponentType<*> = (() => {
 
-    const
-        classes = 'util-flex util-flex-wrap',
-        Node = styled.div`
+    return styled
+        .div`
+            display: flex;
+            flex-wrap: wrap !important;
             margin: 0 -15px;
-        `;
-
-    return ({ className="", ...props }) =>
-        <Node className={ `${classes} ${className}` } { ...props }/>
+        `
 
 })();
 
@@ -75,16 +83,20 @@ export const FullCard: ComponentType<*> = (() => {
         &:first-of-type {
             margin-top: 0;
         }
-    `;
+    `
 
 })();
 
 
-export const Caption = ({ className="", ...props }) => {
+export const Caption: ComponentType<*> = (() => {
 
-    return <span className={ `govuk-caption-m ${className}` } { ...props }/>
+    return styled
+        .span
+        .attrs(({ className="" }) => ({
+            className: `${ className } govuk-caption-m`
+        }))``
 
-};
+})();
 
 
 export const BodySection: ComponentType<*> = (() => {
@@ -99,13 +111,13 @@ export const BodySection: ComponentType<*> = (() => {
                 margin-top: 2rem;
             }
         }
-
-    `;
+    `
 
 })();
 
 
 export const HBodySection: ComponentType<*> = (() => {
+
     return styled.section`
         display: flex;
         flex-direction: row;
@@ -117,20 +129,19 @@ export const HBodySection: ComponentType<*> = (() => {
             margin-right: 2rem;
             margin-bottom: 0;
         }
-    `;
+    `
+
 })();
 
 
-export const MixedCardContainer: ComponentType<*> = ({ children }) => {
+export const MixedCardContainer: ComponentType<*> = (() => {
 
-    const Node = styled.section`
+    return styled.section`
         display: flex;
         flex-wrap: wrap;
         
         justify-items: space-between;
-    `;
+    `
 
-    return <Node>{ children }</Node>
-
-};  // MixedCardContainer
+})();  // MixedCardContainer
 
