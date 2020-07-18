@@ -17,12 +17,10 @@ export const AbstractContainer: ComponentType<*> = (() => {
             line-height: 1.7rem;
             
             ${
-                props => {
-                    console.log(props);
-                    return props.fullWidth
+                props => 
+                    props.fullWidth
                         ? css`width: 50% !important;`
                         : css`width: 85%  !important;`
-                }
             }
                  
             & .modal-opener-text {
