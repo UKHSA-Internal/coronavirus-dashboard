@@ -11,6 +11,11 @@ export const Plotter = ({ ...props }) => {
 
     return <Suspense fallback={ <Loading/> }>
         <Plotter
+            SrOnly={
+                'Charts in the current (UK Summary) page do not have a "Data" tab. ' +
+                'They are smaller, more abstract versions of the same ones that are ' +
+                'included on each page topic-specific page.'
+            }
             config={ {
                 showLink: false,
                 responsive: true,
