@@ -11,7 +11,6 @@ import {
 
 import type { ComponentType } from "react";
 
-// import { Plotter } from "components/Plotter";
 import { dropLeadingZeros, getPlotData, groupBy } from "common/utils";
 import { DataTable } from "components/GovUk";
 import useApi from "hooks/useApi";
@@ -57,8 +56,10 @@ const TabLinkContainer: ComponentType<*> = ({ tabs, abstract=null, ...props }) =
         <MainContainer>
             <TabsContainer>{
                 tabs.map(({ heading: label }, index) =>
-                    <Tab type={ "link" }
+                    <Tab type={ "button" }
                          key={ `${label}-${index}` }
+                         role={ "button" }
+                         area-label={ label }
                          className={ `${label === current ? 'active govuk-!-font-weight-bold' : '' }` }
                          onClick={ () => setCurrent(label)  }>
                         <span className={ "govuk-visually-hidden" }>
@@ -72,6 +73,9 @@ const TabLinkContainer: ComponentType<*> = ({ tabs, abstract=null, ...props }) =
                 tabs.reduce((acc, { heading: label, ...rest }, index) =>
                     label === current
                         ? <Body key={ `${label}-child-${index}` }>
+                            <h3 role={ "heading" }
+                                aria-level={ 3 }
+                                className={ "govuk-visually-hidden" }>{ label }</h3>
                             <TabLink heading={ label } { ...props } { ...rest }/>
                         </Body>
                         : acc,

@@ -41,9 +41,11 @@ const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) 
 
 const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false, children }: Props) => {
 
+    const preppedLabel = heading.toLowerCase().replace(/\s/g, "_");
+
     return <>
         <HalfCardHeader className={ linkToHeading ? "" : "govuk-!-margin-bottom-2"}>
-            <HalfCardHeading>
+            <HalfCardHeading role={ 'heading' } aria-level={ 2 } id={ `card-heading-${ preppedLabel }` }>
             { heading }
             <Caption>{ caption }</Caption>
             </HalfCardHeading>
@@ -65,19 +67,27 @@ const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=f
 };  // CardHeader
 
 
-const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, noCsv=false }: Props) => {
+const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, noCsv=false, ...props }: Props) => {
 
-    const Container = ({ ...props }) =>
-        !fullWidth
-            ? <HalfCard {...props}/>
-            : <FullCard {...props}/>;
+    const
+        preppedLabel = heading.toLowerCase().replace(/\s/g, "_"),
+        Container = ({ ...props }) =>
+            !fullWidth
+                ? <HalfCard {...props}/>
+                : <FullCard {...props}/>;
 
-    return <Container>
+    return <Container role={ "article" }
+                      aria-labelledby={ `card-heading-${preppedLabel}` }>
         {
             url &&
             <DropdownButton tooltip={ "Download card data" }
-                            launcherSrOnly={ "Download card data" }>
-                <DownloadOptions heading={ heading } baseUrl={ url } noCsv={ noCsv }/>
+                            launcherSrOnly={ `Download card data for "${ heading }"` }
+                            heading={ heading }
+                            { ...props }>
+                <DownloadOptions heading={ heading }
+                                 baseUrl={ url }
+                                 noCsv={ noCsv }
+                                 { ...props }/>
             </DropdownButton>
         }
         { children }
@@ -177,7 +187,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
         noTabCards.indexOf(cardType) > -1
             ? <NoTabCard { ...cardProps }/>
             : <>
-                <CardHeader heading={ heading }{ ...props }>{
+                <CardHeader heading={ heading } { ...cardProps }>{
                     active &&
                     <Radio heading={ heading }
                            options={ options }

@@ -13,6 +13,7 @@ const HeadlineNumbers: ComponentType<Props> = ({ params, headlineNumbers=[] }) =
     return headlineNumbers?.map((item, index) =>
             <ValueBox params={ params }
                       key={ `headline-number-${index}` }
+                      heading={ item.caption }
                       { ...item }/>
         ) ?? null
 

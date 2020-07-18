@@ -142,8 +142,10 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
                 {
                     layout.map((item, index) =>
                         <ValueBox { ...item }
+                                  heading={ heading }
                                   params={ params }
                                   data={ data }
+                                  embedded={ true }
                                   isEnabled={ plotData?.[(item?.chart?.value ?? null)] ?? true }
                                   setChartState={ () => {
                                       const name = item?.chart?.value ?? null;

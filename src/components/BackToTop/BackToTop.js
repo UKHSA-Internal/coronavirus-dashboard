@@ -28,8 +28,8 @@ const BackToTopLink: ComponentType<Props> = () => {
 
     return <Container>
         <Link role={ "button" }
-            href={ "" }
-            onClick={ backToTopClickHandler }>
+              aria-label={ "Click to scroll back to top" }
+              onClick={ backToTopClickHandler }>
             <ArrowUp/>
             Back to top
         </Link>

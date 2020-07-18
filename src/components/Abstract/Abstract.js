@@ -19,7 +19,9 @@ const Abstract: ComponentType = ({ content, fullWidth=false }) => {
     const matches = cnt.match(/{([^:]+):([^}]+)}/ig);
 
     if ( !matches )
-        return <AbstractContainer role={ "region" } fullWidth={ fullWidth }>
+        return <AbstractContainer role={ "region" }
+                                  aria-label={ "Abstract description of the contents" }
+                                  fullWidth={ fullWidth }>
             { content }
         </AbstractContainer>;
 
@@ -57,7 +59,9 @@ const Abstract: ComponentType = ({ content, fullWidth=false }) => {
 
     }
 
-    return <AbstractContainer role={ "region" } fullWidth={ fullWidth }>
+    return <AbstractContainer role={ "region" }
+                              aria-label={ "Abstract description of the contents" }
+                              fullWidth={ fullWidth }>
         { result }
     </AbstractContainer>
 

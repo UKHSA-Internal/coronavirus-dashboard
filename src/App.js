@@ -45,17 +45,21 @@ const LastUpdateTime = () => {
         {/*        Click <strong><span>►</span>&nbsp;Change location</strong> at the top of each page.*/}
         {/*    </p>*/}
         {/*</Announcement>*/}
-        <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
-            Last updated on&nbsp;{
-                !timestamp
-                    ? <Loading/>
-                    : <time dateTime={ timestamp } role={ "region" }>{
-                        moment(timestamp)
-                            .local(true)
-                            .format("dddd D MMMM YYYY [at] h:mma")
-                    }</time>
-            }
-        </p>
+        <div className={ "govuk-!-margin-top-5 govuk-!-margin-bottom-5" }
+             role={ "region" }
+             aria-labelledby={ "last-update" }>
+            <p className={ "govuk-body-s" } id={ "last-update" }>
+                Last updated on&nbsp;{
+                    !timestamp
+                        ? <Loading/>
+                        : <time dateTime={ timestamp }>{
+                            moment(timestamp)
+                                .local(true)
+                                .format("dddd D MMMM YYYY [at] h:mma")
+                        }</time>
+                }
+            </p>
+        </div>
     </>
 
 }; // LastUpdateTime
@@ -75,8 +79,11 @@ const
 const BetaBanner = ({ ...props }) => {
 
     return <div className={ "govuk-phase-banner" }
-                style={{ padding: "1rem" }} role={ "alert" } { ...props }>
-        <p className="govuk-phase-banner__content">
+                style={{ padding: "1rem" }}
+                role={ "region" }
+                aria-label={ "Phase banner" }
+                { ...props }>
+        <p className="govuk-phase-banner__content" id={ "phase-banner-content" }>
             <strong className="govuk-tag govuk-phase-banner__content__tag">
                 beta
             </strong>
