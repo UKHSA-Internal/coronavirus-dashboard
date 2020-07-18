@@ -104,7 +104,6 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
             return <DataTable fields={ fields } data={ data } { ...props }/>;
 
         case "metadata":
-            console.log(props);
             return <Metadata { ...props }/>;
 
         default:
@@ -144,12 +143,16 @@ const TabContentRaw: ComponentType<*> = ({ fields, setDataState, params, tabType
 };  // TabContentRaw
 
 
- const TabContent: ComponentType<*> = ({ filename=null, ...props }) => {
+ const TabContent: ComponentType<*> = ({ tabType, ...props }) => {
 
-    if ( !filename )
-        return <TabContentRaw { ...props }/>;
+     const RawDataTabs = [
+         "metadata"
+     ];
 
-    return <TabContentWithData filename={ filename } { ...props }/>
+     if ( !(RawDataTabs.indexOf(tabType) > -1) )
+         return <TabContentRaw tabType={ tabType } { ...props }/>;
+
+     return <TabContentWithData tabType={ tabType } { ...props }/>
 
 };  // TabContent
 
