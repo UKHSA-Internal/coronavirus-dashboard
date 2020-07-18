@@ -58,12 +58,20 @@ export const Title: ComponentType<*> = (() => {
          }
      `
 
+    // ToDo: This section must be moved to the main module.
     return ({ pageName, className, hasPicker, ...props }) =>
         <h1 className={ `govuk-caption-l govuk-!-margin-0` }>
             { pageName }
             {
                 hasPicker
                     ? <>&nbsp;<Node htmlType={ "button" }
+                                    role={ "button" }
+                                    aria-label={ "Click to change location" }
+                                    aria-description={
+                                        "Opens the localisation banner, which provides " +
+                                        "options to switch location and receive data at" +
+                                        "different geographical levels."
+                                    }
                                     className={ className }
                                     { ...props }/>
                     </>
@@ -150,3 +158,27 @@ export const Select: ComponentType<*> = (() => {
         </div>
       </div>
 })();
+
+
+export const LocalisationForm = styled.form`
+    padding: 0 1rem;
+    
+    @media only screen and (max-width: 768px) {
+        padding: 0;
+    }
+`;
+
+
+export const LocalisationFormInputs = styled.div`
+    display: flex !important;
+    align-items: flex-end;
+    
+    @media only screen and (max-width: 768px) {
+        flex-direction: column;
+        
+        & > * {
+            padding: 0;
+            margin-top: 1rem;
+        }
+    }
+`;

@@ -8,62 +8,89 @@ import type { ComponentType } from "react";
 
 export const NumericData: ComponentType<*> = (() => {
 
-    const Node = styled.div`
-        margin-top: 0;
-    `
+    return styled
+        .div
+        .attrs(({ className="" }) => ({
+            className: `${ className } govuk-!-margin-right-4`
+        }))`
+            margin-top: 0;
+        `
 
-    return ({ className="", ...props }) =>
-        <Node className={ `govuk-!-margin-right-4 ${className}` } { ...props }/>
 })();
 
 
 export const Number: ComponentType<*> = (() => {
 
-    const Node = styled.span`
-        font-size: 1.4rem;
-    `;
-
-    return ({ className="", ...props }) =>
-        <Node className={ `govuk-heading-m govuk-!-font-weight-regular govuk-!-margin-bottom-2 govuk-!-padding-top-0 ${ className }` }
-            { ...props }/>
+    return styled
+        .p
+        .attrs(({ className="" }) => ({
+            className: `${ className } govuk-heading-m govuk-!-font-weight-regular govuk-!-margin-bottom-2 govuk-!-padding-top-0`
+        }))`
+            font-size: 1.4rem;
+        `
 
 })();
 
 
-export const Heading = ({ className="", ...props }) => {
+export const Heading: ComponentType<*> = ({ embedded, ...props }) => {
 
-    return <h3 className={ `govuk-heading-s govuk-!-margin-bottom-1 govuk-!-margin-left-4 ${className}` }
-               { ...props }/>
+    const Node = (
+        embedded
+            ? styled.h3
+            : styled.h2
+    ).attrs(({ className="" }) => ({
+        className: `${ className } ${embedded ? "govuk-heading-s" : "govuk-heading-m"} govuk-!-margin-bottom-1 govuk-!-margin-left-4`,
+        role: "heading",
+        "aria-level": embedded ? 3 : 2
+    }))``
+
+    return <Node { ...props }/>
 
 };
 
 
 export const DataContainer = (() => {
 
-    const Node = styled.div`
+    return styled.div`
         margin-bottom: 1rem !important;
-    `;
-
-    return ({ className="", ...props }) =>
-        <Node className={ `${ className }` } { ...props }/>
+    `
 
 })();
 
 
-export const DataLabel = ({ className="", ...props }) => {
+export const DataLabel: ComponentType<*> = ({ embedded, ...props }) => {
 
-    return <span className={ `govuk-caption-m govuk-!-font-size-16 ${ className }` }
-                 { ...props }/>
+    const Node = (
+        embedded
+            ? styled.h4
+            : styled.h3
+    ).attrs(({ className="" }) => ({
+        className: `${ className } govuk-caption-m govuk-!-font-size-16`,
+        role: "heading",
+        "aria-level": embedded ? 4 : 3
+    }))`
+        margin: 0
+    `
+
+    return <Node { ...props }/>
 
 };
 
 
-export const DataNumbersContainer = ({ className="", ...props }) => {
+export const DataNumbersContainer: ComponentType<*> = (() => {
 
-    return <div className={ `util-flex util-flex-wrap govuk-!-margin-bottom-21 govuk-!-margin-left-4 ${ className }` }
-                { ...props }/>
 
-};
+    return styled
+        .div
+        .attrs(({ className="" }) => ({
+            className: `${ className } govuk-!-margin-bottom-21 govuk-!-margin-left-4`
+        }))`
+            display: flex;
+            flex-wrap: wrap !important;
+        `
+
+})();
+
 
 export const DataColour: ComponentType<*> = (() => {
 

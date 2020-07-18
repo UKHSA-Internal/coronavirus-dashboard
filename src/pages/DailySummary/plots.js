@@ -14,7 +14,7 @@ export const Plotter = ({ ...props }) => {
             SrOnly={
                 'Charts in the current (UK Summary) page do not have a "Data" tab. ' +
                 'They are smaller, more abstract versions of the same ones that are ' +
-                'included on each page topic-specific page.'
+                'included on each topic-specific page.'
             }
             config={ {
                 showLink: false,

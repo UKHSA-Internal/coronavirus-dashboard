@@ -28,11 +28,13 @@ import {
 
 import type { ComponentType } from 'react';
 import type { Props } from './DashboardHeader.types';
+import { HalfCardHeader } from "../Card/Card.styles";
 
 
 const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
 
     const
+        preppedLabel = areaName.toLowerCase().replace(/\s/g, "_"),
         pageHead = document.querySelector("head>title"),
         { location: { pathname } } = useHistory(),
         pageName = PathNameMapper[pathname],
@@ -43,24 +45,27 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
     if ( !(PathWithHeader.indexOf(pathname) > -1) ) return null;
 
     return <>
-    <HeaderContainer>
-        <Title pageName={ `${ pageName }${ noPicker ? "" : " in" }` }
-               data-for={ "open-localisation-tooltip" }
-               data-tip={ "Click to change location" }
-               hasPicker={ !noPicker }
-               className={ localisationState ? "open" : "" }
-               onClick={ localisationCallback }>
-            { ( pathname && pathname !== "/" ) && areaName }
-            {
-                !noPicker
-                    ? <span className={ "govuk-visually-hidden" }>
-                        Click to change location
-                    </span>
-                    : null
-            }
-        </Title>
-    </HeaderContainer>
-    <SectionBreak/>
+        <HeaderContainer role={ "heading" }
+                         aria-level={ 1 }
+                         aria-labelledby={ `page-heading-${preppedLabel}` }>
+            <Title pageName={ `${ pageName }${ noPicker ? "" : " in" }` }
+                   data-for={ "open-localisation-tooltip" }
+                   data-tip={ "Click to change location" }
+                   id={ `page-heading-${ preppedLabel }` }
+                   hasPicker={ !noPicker }
+                   className={ localisationState ? "open" : "" }
+                   onClick={ localisationCallback }>
+                { ( pathname && pathname !== "/" ) && areaName }
+                {
+                    !noPicker
+                        ? <span className={ "govuk-visually-hidden" }>
+                            Click to change location
+                        </span>
+                        : null
+                }
+            </Title>
+        </HeaderContainer>
+        <SectionBreak/>
     </>
 
 };  // PageHeader

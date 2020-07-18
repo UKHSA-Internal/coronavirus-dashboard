@@ -17,6 +17,7 @@ const DropdownButton: ComponentType<DropdownButtonProps> = ({
             launcherProps={}, ...props }) => {
 
     const
+        preppedLabel = (props?.heading ?? "").toLowerCase().replace(/\s/g, "_"),
         [ open, setOpen ] = useState(false),
         dropdown = useRef(null);
 
@@ -38,10 +39,12 @@ const DropdownButton: ComponentType<DropdownButtonProps> = ({
     return <DropdownContainer ref={ dropdown } { ...props }>
         <Launcher data-tip={ tooltip }
                   data-for={ "tooltip-text" }
+                  aria-labelledby={ `sr-only-download-${ preppedLabel }` }
                   className={ `dropdown-launcher ${ open ? "open" : "" }` }
                   onClick={ () => setOpen(open => !open) }
                   { ...launcherProps }>
-            <span className={ "govuk-visually-hidden" }>{ launcherSrOnly }</span>
+            <span id={ `sr-only-download-${ preppedLabel }` }
+                className={ "govuk-visually-hidden" }>{ launcherSrOnly }</span>
         </Launcher>
         {
             open &&

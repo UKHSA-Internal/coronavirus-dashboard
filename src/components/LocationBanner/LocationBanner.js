@@ -119,8 +119,10 @@ const LocationBanner: ComponentType = ({ pageTitle=null, areaTypes, pathname }) 
     if ( !display || !pageTitle ) return null;
 
     return <>
-        <Container>
-            <p>
+        <Container role={ "region" }
+                   aria-label={ 'Available locations' }
+                   aria-describedby={ 'location-banner-description' }>
+            <p id={ "location-banner-description" }>
                 { pageTitle } data are available for&nbsp;{
                 areaTypes.map((area, index) =>
                     <Fragment key={ `${ area }-${ index }` }>
@@ -130,11 +132,15 @@ const LocationBanner: ComponentType = ({ pageTitle=null, areaTypes, pathname }) 
                 ) }.
             </p>
             <Closer htmlType={ "button" }
+                    role={ "button" }
+                    aria-label={ "Dismiss banner" }
+                    aria-describedby={ "dismiss-location-banner" }
                     data-tip={ "Click to dismiss banner" }
                     data-for={ "dismiss-banner-tooltip" }
                     onClick={ dismiss }>
-                <span className={ "govuk-visually-hidden" }>
-                    Click to dismiss the banner.
+                <span className={ "govuk-visually-hidden" }
+                      id={ "dismiss-location-banner" }>
+                    Click to dismiss the banner so that it won't display again.
                 </span>
             </Closer>
         </Container>

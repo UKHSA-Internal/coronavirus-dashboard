@@ -23,13 +23,14 @@ const Modal = ({ markdownPath, replacements }) => {
 
     if ( !data ) return <Loading/>
 
-    return <Markdown role={ "feed" }
+    return <Markdown role={ "article" }
+                     aria-label={ "Additional information" }
                      dangerouslySetInnerHTML={{ __html: strFormat(data, replacements) }}/>
 
 }; // Modal
 
 
-const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => {
+const  ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => {
 
     const
         [ modalStatus, setModalStatus ] = useState(false),
@@ -78,33 +79,34 @@ const ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) => 
     });
 
     return <>
-        <ModalOpener { ...props }
-                     tabIndex={ 0 }
-                     area-label={ "Open dialogue" }
+        <ModalOpener aria-label={ "Open dialogue" }
                      onClick={ () => setModalStatus(true) }
                      onKeyPress={ onKeyUpOpener }
-                     children={ children }/>
+                     children={ children }
+                     { ...props }/>
         {
             !modalStatus
                 ? null
-                : <FocusTrap activate>
-                    <ModalContainer ref={ modalRef }
-                                    className={ 'modal' }
-                                    area-modal={ true }
-                                    tabIndex={ -1 }
-                                    aria-label={ "Additional information" }
-                                    role={ 'alertdialog' }>
-                        <ModalContent id={ "modal-body" } role={ "article" }>
-                            <Modal markdownPath={ markdownPath } replacements={ replacements }/>
+                : <ModalContainer>
+                    <FocusTrap className={ 'modal' }>
+                        <ModalContent id={ "modal-body" }
+                                      aria-modal={ true }
+                                      ref={ modalRef }
+                                      role={ "alertdialog" }
+                                      className={ 'modal' }
+                                      aria-label={ "Modal dialogue" }>
+                            <Modal markdownPath={ markdownPath }
+                                   replacements={ replacements }/>
                             <ModalCloser className={ "govuk-button" }
                                          id={ "close-modal" }
-                                         area-label={ "Close dialogue" }
+                                         role={ "button" }
+                                         aria-label={ "Close dialogue" }
                                          onClick={ () => setModalStatus(false) }>
                                 Continue
                             </ModalCloser>
                         </ModalContent>
-                    </ModalContainer>
-                </FocusTrap>
+                    </FocusTrap>
+                </ModalContainer>
         }
     </>
 

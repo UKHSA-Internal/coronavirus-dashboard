@@ -6,9 +6,9 @@ import { analytics, colours, strFormat } from "common/utils";
 import {
     DataColour,
     DataContainer,
-    DataLabel,
     DataNumbersContainer,
     Heading,
+    DataLabel,
     Number,
     NumericData
 } from "./ValueBox.styles";
@@ -25,9 +25,11 @@ import type { ComponentType } from "react";
 import type { ValueItemType } from "./ValueBox.types";
 
 
-const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip=null, sign=null }: ValueItemType) => {
+const ValueItem: ComponentType<ValueItemType> = ({ heading, label, value, params,
+                                                     embedded, tooltip=null, sign=null }) => {
 
     const
+        preppedLabel = `value-item_${heading}-${label}`.replace(/\s/g, "_"),
         tipId = encodeURI(`${label}-${value}`),
         data = useApi({
             conjunctiveFilters: params,
@@ -49,10 +51,12 @@ const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip
         formattedTooltip = strFormat(tooltip, replacements);
 
     return <NumericData>
-        { label && <DataLabel>{ label }</DataLabel> }
+        { label && <DataLabel embedded={ embedded }>{ label }</DataLabel> }
         <Number>
             <ModalTooltip data-tip={ formattedTooltip }
                           data-for={ tipId }
+                          aria-describedby={ `${preppedLabel}-description` }
+                          aria-label={ `${ heading }: ${ label }` }
                           markdownPath={ value }
                           replacements={ replacements }>
                 {
@@ -62,8 +66,9 @@ const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip
                         : <NotAvailable/>
                         : <Loading/>
                 }{ (data && sign) ? sign : null }
-                <span className={ "govuk-visually-hidden" }>
-                    Abstract information: { formattedTooltip }<br/>
+                <span id={ `${preppedLabel}-description` }
+                      className={ "govuk-visually-hidden" }>
+                    Abstract information: { formattedTooltip }.<br/>
                     Click for additional details.
                 </span>
             </ModalTooltip>
@@ -78,7 +83,7 @@ const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip
 }; // ValueItem
 
 
-const ValueBox: ComponentType<*> = ({ caption, valueItems, ...rest }) => {
+const ValueBox: ComponentType<*> = ({ heading, caption, valueItems, embedded=false, ...rest }) => {
 
     const
         { chart={}, isEnabled=true, setChartState=() => null } = rest,
@@ -107,7 +112,7 @@ const ValueBox: ComponentType<*> = ({ caption, valueItems, ...rest }) => {
                     </span>
                 </DataColour>
         }
-        <Heading>{ caption }</Heading>
+        <Heading embedded={ embedded }>{ caption }</Heading>
         <DataNumbersContainer>{
             valueItems.map((item, index) =>
                 item.value &&
@@ -116,6 +121,8 @@ const ValueBox: ComponentType<*> = ({ caption, valueItems, ...rest }) => {
                            label={ item.label }
                            tooltip={ item.tooltip }
                            sign={ item.sign }
+                           heading={ heading }
+                           embedded={ embedded }
                            params={ rest.params }/>
             )
         }</DataNumbersContainer>
