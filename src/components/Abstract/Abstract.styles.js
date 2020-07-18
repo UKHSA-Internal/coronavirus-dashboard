@@ -28,6 +28,14 @@ export const AbstractContainer: ComponentType<*> = (() => {
                 line-height: 2rem;
                 margin-bottom: 1.5rem;
             }
+            
+            @media only screen and (max-width: 1070px) {
+                width: 85% !important;
+            }
+            
+            @media only screen and (max-width: 550px) {
+                width: 100% !important;
+            }
         `;
 
 })();
