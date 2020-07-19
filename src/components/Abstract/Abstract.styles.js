@@ -39,12 +39,3 @@ export const AbstractContainer: ComponentType<*> = (() => {
         `;
 
 })();
-
-
-export const Text: ComponentType<*> = (() => {
-
-    return styled.span`
-        color: #626a6e;
-    `;
-
-})();

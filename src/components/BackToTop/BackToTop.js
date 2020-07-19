@@ -28,7 +28,6 @@ const BackToTopLink: ComponentType<Props> = () => {
 
     return <Container>
         <Link role={ "button" }
-              aria-label={ "Click to scroll back to top" }
               onClick={ backToTopClickHandler }>
             <ArrowUp/>
             Back to top
@@ -54,13 +53,17 @@ const BackToTop: ComponentType<Props> = ({ mode }: Props) => {
 
     if ( mode === 'overlay' && visible ) {
 
-        return<OverlayContainer style={ { opacity: visible ? 1 : 0, tabIndex: visible ? 0 : -1 } }>
+        return<OverlayContainer role={ "complementary" }
+                                aria-label={ "Scroll back to top" }
+                                style={ { opacity: visible ? 1 : 0, tabIndex: visible ? 0 : -1 } }>
             <BackToTopLink/>
         </OverlayContainer>
 
     } else if ( mode !== 'overlay' ) {
 
-        return <InlineContainer style={ { opacity: visible ? 0 : 1, tabIndex: visible ? -1 : 0  } }>
+        return <InlineContainer role={ "complementary" }
+                                aria-label={ "Scroll back to top" }
+                                style={ { opacity: visible ? 0 : 1, tabIndex: visible ? -1 : 0  } }>
             <BackToTopLink/>
         </InlineContainer>
 

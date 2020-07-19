@@ -79,7 +79,7 @@ const  ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) =>
     });
 
     return <>
-        <ModalOpener aria-label={ "Open dialogue" }
+        <ModalOpener aria-label={ "Open dialogue for additional information" }
                      onClick={ () => setModalStatus(true) }
                      onKeyPress={ onKeyUpOpener }
                      children={ children }
