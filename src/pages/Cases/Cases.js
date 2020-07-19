@@ -5,7 +5,7 @@ import type { ComponentType } from 'react';
 
 import { withRouter } from 'react-router';
 
-import { CardContent, CardsContainer, ContentBox } from 'components/Card';
+import { CardContent, CardsContainer } from 'components/Card';
 import HeadlineNumbers from "components/HeadlineNumbers";
 import type { Props } from './Cases.types';
 import { getParams } from "common/utils";
@@ -31,15 +31,12 @@ const Cases: ComponentType<Props> = ({ location: { search: query }}: Props) => {
     if ( !layout ) return <Loading large={ true }/>;
 
     return <>
-        <ContentBox horizontal>
-            <HeadlineNumbers params={ params } { ...layout }/>
-        </ContentBox>
+        <HeadlineNumbers params={ params } { ...layout }/>
         <CardsContainer>{
             layout?.cards.map((cardProps, index) =>
                 <CardContent key={ `card-${ index }` } params={ params } { ...cardProps }/>
             ) ?? null
-        }
-        </CardsContainer>
+        }</CardsContainer>
     </>
 };
 
