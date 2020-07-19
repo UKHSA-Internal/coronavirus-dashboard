@@ -26,6 +26,7 @@ import type {
     DailySummaryCardProps
 } from "./DailySummary.types";
 import Loading from "components/Loading";
+import { DataContainer } from "../../components/ValueBox/ValueBox.styles";
 
 
 const
@@ -88,6 +89,7 @@ const
 const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout=[], heading }: DailySummaryCardProps) => {
 
     const
+        headingLabel = heading.toLowerCase().replace(/[\s:]/g, "_"),
         structure = { date: "date" },
         chartData = {};
 
@@ -138,7 +140,13 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
                         }
                     />
             }</ContentBox>
-            <ContentBox>
+            <ContentBox role={ "region" }
+                        aria-label={ `${ heading }: Latest data` }
+                        aria-describedby={ `container_${ headingLabel }-description` }>
+                <span id={ `container_${ headingLabel }-description` }
+                      className={ "govuk-visually-hidden" }>
+                    Latest available data on "{ heading }".
+                </span>
                 {
                     layout.map((item, index) =>
                         <ValueBox { ...item }

@@ -17,7 +17,9 @@ const DropdownButton: ComponentType<DropdownButtonProps> = ({
             launcherProps={}, ...props }) => {
 
     const
-        preppedLabel = (props?.heading ?? "").toLowerCase().replace(/\s/g, "_"),
+        preppedLabel = (props?.heading ?? "")
+            .toLowerCase()
+            .replace(/\s/g, "_"),
         [ open, setOpen ] = useState(false),
         dropdown = useRef(null);
 
@@ -38,7 +40,7 @@ const DropdownButton: ComponentType<DropdownButtonProps> = ({
 
     return <DropdownContainer ref={ dropdown } { ...props }>
         <Launcher data-tip={ tooltip }
-                  data-for={ "tooltip-text" }
+                  data-for={ `tooltip-text-${ preppedLabel }` }
                   aria-labelledby={ `sr-only-download-${ preppedLabel }` }
                   className={ `dropdown-launcher ${ open ? "open" : "" }` }
                   onClick={ () => setOpen(open => !open) }
@@ -52,7 +54,7 @@ const DropdownButton: ComponentType<DropdownButtonProps> = ({
         }
         {
             tooltip &&
-            <ReactTooltip id={ "tooltip-text" }
+            <ReactTooltip id={ `tooltip-text-${ preppedLabel }` }
                           place={ "right" }
                           backgroundColor={ "#0b0c0c" }
                           className={ "tooltip" }

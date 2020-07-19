@@ -87,7 +87,6 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
     const width = useResponsiveLayout(640);
 
     return <PlotContainer className={ "govuk-grid-row" }
-                          role={ "figure" }
                           aria-label={ "Displaying a graph of the data" }>
         <p className={ "govuk-visually-hidden" }>
             The data that is visualised in the chart is that which is tabulated

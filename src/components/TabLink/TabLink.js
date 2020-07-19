@@ -59,7 +59,7 @@ const TabLinkContainer: ComponentType<*> = ({ tabs, abstract=null, ...props }) =
                     <Tab type={ "button" }
                          key={ `${label}-${index}` }
                          role={ "button" }
-                         area-label={ label }
+                         aria-label={ label }
                          className={ `${label === current ? 'active govuk-!-font-weight-bold' : '' }` }
                          onClick={ () => setCurrent(label)  }>
                         <span className={ "govuk-visually-hidden" }>

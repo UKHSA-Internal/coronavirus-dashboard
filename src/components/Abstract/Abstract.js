@@ -1,11 +1,11 @@
 // @flow
 
-import React from "react";
+import React, { Fragment } from "react";
 
 import type { ComponentType } from "react";
 import ModalTooltip from "components/Modal";
 
-import { AbstractContainer, Text } from "./Abstract.styles";
+import { AbstractContainer } from "./Abstract.styles";
 
 
 const Abstract: ComponentType = ({ content, fullWidth=false }) => {
@@ -19,8 +19,7 @@ const Abstract: ComponentType = ({ content, fullWidth=false }) => {
     const matches = cnt.match(/{([^:]+):([^}]+)}/ig);
 
     if ( !matches )
-        return <AbstractContainer role={ "region" }
-                                  aria-label={ "Abstract description of the contents" }
+        return <AbstractContainer aria-label={ "Abstract description of the contents" }
                                   fullWidth={ fullWidth }>
             { content }
         </AbstractContainer>;
@@ -40,7 +39,7 @@ const Abstract: ComponentType = ({ content, fullWidth=false }) => {
                 .split(match)
                 .reduce((acc, item, index) => {
 
-                    if ( !index ) return [ <Text key={ item }>{ item }</Text> ];
+                    if ( !index ) return [ <Fragment key={ item }>{ item }</Fragment> ];
 
                     return [
                         ...acc,
@@ -49,7 +48,7 @@ const Abstract: ComponentType = ({ content, fullWidth=false }) => {
                                       markdownPath={ variable }>
                             <span className={ "modal-opener-text" }>{ text }</span>
                         </ModalTooltip>,
-                        <Text key={ `${item}-${index}` }>{ item }</Text>
+                        <Fragment key={ `${item}-${index}` }>{ item }</Fragment>
                     ]
 
                 }, [])
@@ -59,8 +58,7 @@ const Abstract: ComponentType = ({ content, fullWidth=false }) => {
 
     }
 
-    return <AbstractContainer role={ "region" }
-                              aria-label={ "Abstract description of the contents" }
+    return <AbstractContainer aria-label={ "Abstract description of the contents" }
                               fullWidth={ fullWidth }>
         { result }
     </AbstractContainer>

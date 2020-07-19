@@ -22,7 +22,7 @@ export const NumericData: ComponentType<*> = (() => {
 export const Number: ComponentType<*> = (() => {
 
     return styled
-        .p
+        .div
         .attrs(({ className="" }) => ({
             className: `${ className } govuk-heading-m govuk-!-font-weight-regular govuk-!-margin-bottom-2 govuk-!-padding-top-0`
         }))`
