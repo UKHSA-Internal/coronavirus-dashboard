@@ -87,6 +87,10 @@ const SelectOptions = {
         ":before": {
             content: state.isSelected ? '"✓ "' : '""'
         }
+    }),
+    placeholder: styles => ({
+        ...styles,
+        color: "#6B7276"
     })
 };
 

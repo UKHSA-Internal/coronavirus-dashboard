@@ -6,7 +6,7 @@ import type { ComponentType } from 'react';
 export const NotAvailableContainer: ComponentType<*> = (() => {
 
     return styled.span`
-      color: #808080;
+      color: #6B7276;
     `;
 
 })();

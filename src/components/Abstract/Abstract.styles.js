@@ -13,7 +13,7 @@ export const AbstractContainer: ComponentType<*> = (() => {
         .attrs(({ className="" }) => ({
             className: `${ className } govuk-body-s`
         }))`   
-            color: #626a6e;
+            color: #6B7276;
             line-height: 1.7rem;
             
             ${
