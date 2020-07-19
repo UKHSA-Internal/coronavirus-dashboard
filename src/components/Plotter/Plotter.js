@@ -161,7 +161,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     tickfont:{
                         family: `"GDS Transport", Arial, sans-serif`,
                         size : 14,
-                        color: "#6f777b"
+                        color: "#6B7276"
                     },
                     // rangeslider: {range: ['20202-01-01', new Date().toString()]},
                     // rangeselector: {buttons: [
@@ -197,7 +197,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     tickfont:{
                         family: `"GDS Transport", Arial, sans-serif`,
                         size : 14,
-                        color: "#6f777b",
+                        color: "#6B7276",
                     },
                     ...yaxis
                 },
