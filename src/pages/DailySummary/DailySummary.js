@@ -125,7 +125,8 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
 
 
     return <Card heading={ heading }>
-        <CardHeader heading={ heading } linkToHeading={ "More detail" }/>
+        <CardHeader heading={ heading }
+                    linkToHeading={ `More on ${ heading.toLowerCase() }` }/>
         <HalfCardSplitBody>
             <ContentBox>{
                 data === null
