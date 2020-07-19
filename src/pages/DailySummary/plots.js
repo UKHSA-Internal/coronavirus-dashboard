@@ -1,7 +1,6 @@
 // @flow
 
 import React, { lazy, Suspense } from "react";
-import Plot from "react-plotly.js";
 import Loading from "components/Loading";
 
 
