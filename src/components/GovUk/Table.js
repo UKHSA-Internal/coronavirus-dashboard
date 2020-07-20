@@ -4,66 +4,19 @@ import React from "react";
 
 import numeral from "numeral";
 
-import { TableComponent } from "./Table.styles"
+import {
+    TableContainer,
+    GovUKTable,
+    THead,
+    TBody,
+    TR,
+    TH,
+    TD
+} from "./Table.styles"
 import moment from "moment";
 import ReactTooltip from "react-tooltip";
 
 import { NotAvailable } from "components/Widgets/Widgets";
-import { PlotContainer } from "../Plotter/Plotter.styles";
-
-
-const TH = ({ className, children, type='string', colSpan=1, ...props }) => {
-
-    return <th
-        scope={ 'col' }
-        colSpan={ colSpan }
-        className={ `govuk-table__header govuk-table__header--${ type } ${ className }` }
-        { ...props }
-    >
-        { children }
-    </th>
-
-};  // Row
-
-
-const TD = ({ className, children, type, ...props }) => {
-
-    return <td className={ `govuk-table__cell  govuk-table__cell--${ type } ${ className }` } { ...props }>
-        { children }
-    </td>
-
-};  // Row
-
-
-const TR = ({ className, children, ...props }) => {
-
-    return <tr className={ `govuk-table__row  ${ className }` } { ...props }>
-        { children }
-    </tr>
-
-};  // Row
-
-
-const TBody = ({ className, children, ...props }) => {
-
-    return <thead
-        className={ `govuk-table__body ${ className }`  }
-        { ...props }>
-        { children }
-    </thead>
-
-};  // THead
-
-
-const THead = ({ className, children, ...props }) => {
-
-    return <thead
-        className={ `govuk-table__head ${ className }`  }
-        { ...props }>
-        { children }
-    </thead>
-
-};  // THead
 
 
 /**
@@ -84,8 +37,8 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
             .pop()
             .map(({ type="" }) => type);
 
-    return <>
-        <TableComponent
+    return <TableContainer>
+        <GovUKTable
             className={ `govuk-table ${ stickyHeader ? "sticky-header" : "" } ${ className }`  }
             { ...props }>
             <THead>{
@@ -110,13 +63,13 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
 
                 }</TR>)
             }</TBody>
-        </TableComponent>
+        </GovUKTable>
         <ReactTooltip id={ "table-tooltip-text" }
                       place={ "right" }
                       backgroundColor={ "#0b0c0c" }
                       className={ "tooltip" }
                       effect={ "solid" }/>
-    </>
+    </TableContainer>
 
 };  // Table
 
