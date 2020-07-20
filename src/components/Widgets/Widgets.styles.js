@@ -10,3 +10,23 @@ export const NotAvailableContainer: ComponentType<*> = (() => {
     `;
 
 })();
+
+
+export const AdmonitionText =
+    styled
+        .strong
+        .attrs(({ className="" }) => ({
+            className: `govuk-warning-text__text ${ className }`
+        }))``;
+
+
+export const AdmonitionContainer =
+    styled
+        .div
+        .attrs(({ className="" }) => ({
+            className: `govuk-warning-text ${ className }`
+        }))`
+            padding: 0;
+            width: 80%;
+            margin: 2rem auto;
+        `;

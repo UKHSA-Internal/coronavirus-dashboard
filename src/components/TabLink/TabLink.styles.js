@@ -19,13 +19,11 @@ export const MainContainer = (() => {
 export const TabsContainer = (() => {
 
     return styled
-        .div
-        .attrs(({ className="" }) => ({
-            className: `${ className } govuk-!-margin-bottom-6`
-        }))`
+        .div`
             display: flex !important;
             flex-wrap: wrap !important;
             align-items: flex-start !important;
+            margin-bottom: 1rem;
         `
 
 })();

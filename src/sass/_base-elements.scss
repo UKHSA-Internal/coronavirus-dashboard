@@ -10,8 +10,12 @@ body {
     }
 }
 
+pre,
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 10pt;
+    line-height: 1;
+    max-height: 60vh;
 }
 
 button {

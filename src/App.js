@@ -128,6 +128,7 @@ const
     About = lazy(() => import('pages/About')),
     Accessibility = lazy(() => import('pages/Accessibility')),
     Cookies = lazy(() => import('pages/Cookies')),
+    ApiDocs = lazy(() => import('pages/ApiDocs')),
     Footer = lazy(() => import('components/Footer'));
 
 
@@ -176,6 +177,7 @@ const App = ({ location: { pathname } }) => {
                                 {/*<Route path="/archive" component={ Archive }/>*/}
                                 <Route path="/accessibility" component={ Accessibility }/>
                                 <Route path="/cookies" component={ Cookies }/>
+                                <Route path="/api" exact component={ ApiDocs }/>
                             </Switch>
                         </Suspense>
                     </main>
