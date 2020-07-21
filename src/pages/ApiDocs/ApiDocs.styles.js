@@ -12,7 +12,7 @@ export const Container: ComponentType<*> =
         .attrs(({ className }) => ({
             className: `govuk-body ${ className }`
         }))`
-            max-width: 50em;
+            max-width: 40em;
         `;
 
 
