@@ -88,7 +88,7 @@ const ApiDocs: ComponentType<*> = ({ ...props }) => {
         </p>
 
         <CodeBox language={ "bash" }>
-            curl -si 'https://api.coronavirus-staging.data.gov.uk/v1/data?filters=areaType=nation;areaName=england&structure=\&#123;%22name%22:%22areaName%22\&#125;'
+            curl -si 'https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=nation;areaName=england&structure=\&#123;%22name%22:%22areaName%22\&#125;'
 </CodeBox>
         <CodeBox>{`HTTP/1.1 200 OK
 Cache-Control: no-store, must-revalidate, no-cache
@@ -115,13 +115,20 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
             the data was last update.
         </p>
 
+            <CodeBox language={ 'bash' }>
+                {`curl -sI 'https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=nation;areaName=england&structure=\{"name":"areaName"\}' | grep -i 'last-modified'`}
+            </CodeBox>
+            <CodeBox>
+                {`Last-Modified: Mon, 20 Jul 2020 14:28:09 GMT`}
+            </CodeBox>
 
-        <Admonition>
-            The <Code>Last-Modified</Code> timestamp is not identical to that which is
-            displayed on the website. It signifies the time when the data was uploaded
-            to our database. The delay in the release is due to the Quality Assurance
-            process that takes place everyday before the data is released.
-        </Admonition>
+            <Admonition>
+                The <Code>Last-Modified</Code> timestamp is not identical to that which is
+                displayed on the website. It signifies the time when the data was uploaded
+                to our database. The delay in the release is due to the Quality Assurance
+                process that takes place everyday before the data is released.
+            </Admonition>
+
 
         <h4>Request headers</h4>
         <p>
@@ -153,6 +160,19 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
                 Parameters and responses are identical to the <MethodBadge>GET</MethodBadge> method
                 for a given request, but omits the response body.
             </p>
+
+            <p>
+                The <MethodBadge>HEAD</MethodBadge> may be used to validate a query without
+                downloading its content. It may also be used to quickly check the timestamp
+                of the latest data available on the API.
+            </p>
+
+            <CodeBox language={ 'bash' }>
+                {`curl -sI 'https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=nation;areaName=england&structure=\{"name":"areaName"\}' | grep -i 'http'`}
+            </CodeBox>
+            <CodeBox>
+                {`HTTP/1.1 200 OK`}
+            </CodeBox>
 
             <Method>OPTIONS</Method>
             <p>
@@ -255,6 +275,10 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
 
             <Query>filters</Query>
             <BlueBadge>Required</BlueBadge>
+
+            <CodeBox>
+                filters=[parameter]=[string]
+            </CodeBox>
             <p>
                 Provides the functionality to filter the data that you receive in response
                 to a request.
@@ -264,9 +288,6 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
                 <Code>[parameter]</Code> is the name of an authorised filter parameter
                 and <Code>[value]</Code> is aggregation parameter:
             </p>
-            <CodeBox>
-                filters=[parameter]=[string]
-            </CodeBox>
             <p>
                 For instance, to retrieve data for Cambridge, the filter is defined
                 as <Code>filters=areaName=Cambridge</Code>.
@@ -294,16 +315,16 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
             <details className="govuk-details" data-module="govuk-details">
                 <summary className="govuk-details__summary">
                     <span className="govuk-details__summary-text">
-                      See a list of all authorised parameters
+                      See a list of valid parameters for <Code>filters</Code>
                     </span>
                 </summary>
                 <div className="govuk-details__text">
-                    <ul>
-                        <li><Code>areaType</Code></li>
-                        <li><Code>areaName</Code></li>
-                        <li><Code>areaCode</Code></li>
-                        <li><Code>date</Code></li>
-                    </ul>
+                    <dl>
+                        <dt><Code>areaType</Code></dt><dd>Area type as string</dd>
+                        <dt><Code>areaName</Code></dt><dd>Area name as string</dd>
+                        <dt><Code>areaCode</Code></dt><dd>Area Code as string</dd>
+                        <dt><Code>date</Code></dt><dd>Date as string [<Code>YYYY-MM-DD</Code>]</dd>
+                    </dl>
                 </div>
             </details>
 
@@ -311,16 +332,15 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
                           content={[
                               <>
 <CodeBox language={ "python" }>{`from requests import get
-from json import loads
 
 
-def get_data(url: str) -> str:
+def get_data(url):
     response = get(endpoint)
     
-    if response.status_code < 400:
+    if response.status_code >= 400:
         raise RuntimeError(f'Request failed: { response.text }')
         
-    return loads(response.text)
+    return response.json()
     
 
 if __name__ == '__main__':
@@ -387,12 +407,22 @@ main().catch(err => {
 ]}`}</CodeBox>
 </>,
                               <>
-<CodeBox language={ "r" }>{`library(jsonlite)
+<CodeBox language={ "r" }>{`endpoint <- 'https://api.coronavirus-staging.data.gov.uk/v1/data?filters=areaType=nation;areaName=england&structure={"date":"date","newCases":"newCasesByPublishDate"}'
+
+httr::GET(
+  url = endpoint,
+  timeout(10)
+) -> response
 
 
-endpoint <- 'https://api.coronavirus-staging.data.gov.uk/v1/data?filters=areaType=nation;areaName=england&structure={"date":"date","newCases":"newCasesByPublishDate"}'
+if (response$status_code >= 400) {
+  err_msg = httr::http_status(response)
+  stop(err_msg)
+}
 
-data <- fromJSON(endpoint)
+json_text <- content(response, "text")
+
+data <- jsonlite::fromJSON(json_text)
 
 print(data)
 `}</CodeBox>
@@ -413,16 +443,571 @@ $data
             <Query>structure</Query>
             <BlueBadge>Required</BlueBadge>
 
+            <CodeBox>
+                {`structure=\{[responseName]:[metricName], [responseName]:[metricName]}`}
+            </CodeBox>
+            <CodeBox>
+                {`structure=[metricName, metricName]`}
+            </CodeBox>
+            <p>The structure parameter defines:</p>
+            <ul>
+                <li>The metrics that you wish to receive in the response</li>
+                <li>The structure in which you wish to receive the response</li>
+            </ul>
+
+            <p>
+                You may additionally use the structure parameter to rename the parameters.
+                This feature is primarily designed to provide backward compatibility and
+                minimise disruption to services that rely on legacy downloads.
+            </p>
+
+            <p>
+                The value of the structure parameter is a JSON-formatted string, where:
+            </p>
+
+            <ul>
+                <li>The keys define the name of a parameter in the response</li>
+                <li>The values define the metric that you wish to receive in the response</li>
+                <li>The structure defines the overall structure of the JSON / XML response</li>
+            </ul>
+
+            <details className="govuk-details" data-module="govuk-details">
+                <summary className="govuk-details__summary">
+                    <span className="govuk-details__summary-text">
+                      See a list of valid parameters for <Code>structure</Code>
+                    </span>
+                </summary>
+                <div className="govuk-details__text">
+                    <div className={ "govuk-!-margin-bottom-5" }>
+                        <p className={ "govuk-!-margin-bottom-0" }>
+                            Last updated on <time dateTime={ "2020-07-22T10:40:00.0000000Z" }>
+                            22nd of July 2020 at 10:40am</time></p>
+                        <p className={ "govuk-body-s" }>This list updated regularly as we release new metrics.</p>
+                    </div>
+                    <dl>
+                        <dt><Code>areaType</Code></dt><dd>Area type as string</dd>
+                        <dt><Code>areaName</Code></dt><dd>Area name as string</dd>
+                        <dt><Code>areaCode</Code></dt><dd>Area Code as string</dd>
+                        <dt><Code>date</Code></dt><dd>Date as string [<Code>YYYY-MM-DD</Code>]</dd>
+
+                        <dt><Code>hash</Code></dt><dd>Unique ID as string</dd>
+
+                        <dt><Code>newCasesByPublishDate</Code></dt><dd>New cases by publish date</dd>
+                        <dt><Code>cumCasesByPublishDate</Code></dt><dd>Cumulative cases by publish date</dd>
+                        <dt><Code>newCasesBySpecimenDate</Code></dt><dd>New cases by specimen date</dd>
+                        <dt><Code>cumCasesBySpecimenDate</Code></dt><dd>Cumulative cases by specimen date</dd>
+                        <dt><Code>maleCases</Code></dt><dd>Male cases (by age)</dd>
+                        <dt><Code>femaleCases</Code></dt><dd>Female cases (by age)</dd>
+
+                        <dt><Code>newPillarOneTestsByPublishDate</Code></dt><dd>New pillar one tests by publish date</dd>
+                        <dt><Code>cumPillarOneTestsByPublishDate</Code></dt><dd>Cumulative pillar one tests by publish date</dd>
+                        <dt><Code>newPillarTwoTestsByPublishDate</Code></dt><dd>New pillar two tests by publish date</dd>
+                        <dt><Code>cumPillarTwoTestsByPublishDate</Code></dt><dd>Cumulative pillar two tests by publish date</dd>
+                        <dt><Code>newPillarThreeTestsByPublishDate</Code></dt><dd>New pillar three tests by publish date</dd>
+                        <dt><Code>cumPillarThreeTestsByPublishDate</Code></dt><dd>Cumulative pillar three tests by publish date</dd>
+                        <dt><Code>newPillarFourTestsByPublishDate</Code></dt><dd>New pillar four tests by publish date</dd>
+                        <dt><Code>cumPillarFourTestsByPublishDate</Code></dt><dd>Cumulative pillar four tests by publish date</dd>
+
+                        <dt><Code>newAdmissions</Code></dt><dd>New admissions</dd>
+                        <dt><Code>cumAdmissions</Code></dt><dd>Cumulative number of admissions</dd>
+                        <dt><Code>cumAdmissionsByAge</Code></dt><dd>Cumulative admissions by age</dd>
+
+                        <dt><Code>cumTestsByPublishDate</Code></dt><dd>Cumulative tests by publish date</dd>
+                        <dt><Code>newTestsByPublishDate</Code></dt><dd>New tests by publish date</dd>
+
+                        <dt><Code>covidOccupiedMVBeds</Code></dt><dd>COVID-19 occupied beds with mechanical ventilators</dd>
+                        <dt><Code>hospitalCases</Code></dt><dd>Hospital cases</dd>
+                        <dt><Code>plannedCapacityByPublishDate</Code></dt><dd>Planned capacity by publish date</dd>
+
+                        <dt><Code>newDeathsByPublishDate</Code></dt><dd>New deaths by publish date</dd>
+                        <dt><Code>cumDeathsByPublishDate</Code></dt><dd>Cumulative deaths by publish date</dd>
+                        <dt><Code>newDeathsByDeathDate</Code></dt><dd>New deaths by death date</dd>
+                        <dt><Code>cumDeathsByDeathDate</Code></dt><dd>Cumulative deaths by death date</dd>
+                        <dt><Code>femaleDeaths</Code></dt><dd>Female deaths (by age)</dd>
+                        <dt><Code>maleDeaths</Code></dt><dd>Male deaths (by age)</dd>
+                    </dl>
+                </div>
+            </details>
+
+
+            <h5>Example</h5>
+            <p>
+                We would like to extract the number of new cases, cumulative cases, and
+                new deaths and cumulative deaths for England using the API.
+            </p>
+
+            <p>
+                We start off by constructing the value for the <Code>filters</Code> parameter:
+            </p>
+            <CodeBox>{`/v1/data?filters=areaType=nation;areaName=england`}</CodeBox>
+            <p>
+                Next step is to construct the value for the <Code>structure</Code> parameter.
+                To do so, we need to find out the name for the metric in which we are interested.
+                In the case of this example, the metric are as follows:
+            </p>
+            <dl>
+                <dt><Code>newCasesByPublishDate</Code></dt><dd>New cases (by publish date)</dd>
+                <dt><Code>cumCasesByPublishDate</Code></dt><dd>Cumulative cases (by publish date)</dd>
+                <dt><Code>newDeathsByDeathDate</Code></dt><dd>New deaths (by death date)</dd>
+                <dt><Code>cumDeathsByDeathDate</Code></dt><dd>Cumulative deaths (by death date)</dd>
+            </dl>
+            <p>
+                In its simplest form, we could construct the our structure as follows:
+            </p>
+            <CodeBox language={ 'json' }>{`{
+    "date":"date",
+    "areaName":"areaName",
+    "areaCode":"areaCode",
+    "newCasesByPublishDate":"newCasesByPublishDate",
+    "cumCasesByPublishDate":"cumCasesByPublishDate",
+    "newDeathsByDeathDate":"newDeathsByDeathDate",
+    "cumDeathsByDeathDate":"cumDeathsByDeathDate"
+}`}</CodeBox>
+
+            <p>We may simply include the above structure in our URL:</p>
+            <CodeBox>
+                {`/v1/data?filters=areaType=nation;areaName=england&structure={"date":"date","areaName":"areaName","areaCode":"areaCode","newCasesByPublishDate":"newCasesByPublishDate","cumCasesByPublishDate":"cumCasesByPublishDate","newDeathsByDeathDate":"newDeathsByDeathDate","cumDeathsByDeathDate":"cumDeathsByDeathDate"}`}
+            </CodeBox>
+
+            <p>When called, the above URL would produce a response similar to the following JSON:</p>
+            <CodeBox>
+{`{
+    "length":141,
+    "maxPageLimit":1000,
+    "data":[
+        {
+            "date":"2020-07-20",
+            "areaName":"England",
+            "areaCode":"E92000001",
+            "newCasesByPublishDate":535,
+            "cumCasesByPublishDate":254120,
+            "newDeathsByDeathDate":null,
+            "cumDeathsByDeathDate":null
+        },
+        {
+            "date":"2020-07-19",
+            "areaName":"England",
+            "areaCode":"E92000001",
+            "newCasesByPublishDate":672,
+            "cumCasesByPublishDate":253585,
+            "newDeathsByDeathDate":5,
+            "cumDeathsByDeathDate":40718
+        },
+        ...
+    ]
+}`}
+            </CodeBox>
+            <p>
+                You may find that the metric names are not expressive enough, or perhaps
+                they are incompatible with an existing service that you have already
+                created. The <Code>structure</Code> parameters provides the ability
+                to change both the structure and the name of the metrics.
+            </p>
+            <p>
+                We can change metric names or the structure of the JSON / XML response by
+                altering the value of the <Code>structure</Code> parameter:
+            </p>
+            <CodeBox language={ 'json' }>{`{
+    "date":"date",
+    "name":"areaName",
+    "code":"areaCode",
+    "cases": {
+        "daily":"newCasesByPublishDate",
+        "cumulative":"cumCasesByPublishDate"
+    },
+    "deaths": {
+        "daily":"newDeathsByDeathDate",
+        "cumulative":"cumDeathsByDeathDate"
+    }
+}`}</CodeBox>
+            <p>and incorporate the into the URL:</p>
+            <CodeBox>
+                {`/v1/data?filters=areaType=nation;areaName=england&structure={"date":"date","name":"areaName","code":"areaCode","cases":{"daily":"newCasesByPublishDate","cumulative":"cumCasesByPublishDate"},"deaths":{"daily":"newDeathsByDeathDate","cumulative":"cumDeathsByDeathDate"}}`}
+            </CodeBox>
+
+            <p>When called, the above URL would produce a response similar to the following JSON:</p>
+            <CodeBox>
+{`{
+    "length":141,
+    "maxPageLimit":1000,
+    "data":[
+        {
+            "date":"2020-07-20",
+            "name":"England",
+            "code":"E92000001",
+            "cases":{"daily":535,"cumulative":254120},
+            "deaths":{"daily":null,"cumulative":null}
+        },
+        {
+            "date":"2020-07-19",
+            "name":"England",
+            "code":"E92000001",
+            "cases": {"daily":672, "cumulative":253585},
+            "deaths": {"daily":5, "cumulative":40718}
+        },
+        ...
+    ]
+}`}
+            </CodeBox>
+
+            <Admonition type={ "Warning" }>
+                It may be necessary to encode the URL to ensure that the data is correctly
+                transmitted and parsed. Modern browsers encode the URL automatically before
+                transmission.
+            </Admonition>
+
+            <p>
+                Programming languages provide tools to encode string values and make
+                them URL-safe.
+            </p>
+
+                        <LanguageTabs tabs={[ "Python", "JavaScript", "R" ]}
+                          content={[
+                              <>
+<CodeBox language={ "python" }>{`from urllib.parse import urlencode
+from json import dumps
+
+
+AREA_TYPE = "nation"
+AREA_NAME = "england"
+
+filters = [
+    f"areaType={ AREA_TYPE }",
+    f"areaName={ AREA_NAME }"
+]
+
+structure = {
+    "date": "date",
+    "name": "areaName",
+    "code": "areaCode",
+    "cases": {
+        "daily": "newCasesByPublishDate",
+        "cumulative": "cumCasesByPublishDate"
+    },
+    "deaths": {
+        "daily": "newDeathsByDeathDate",
+        "cumulative": "cumDeathsByDeathDate"
+    }
+}
+
+api_params = {
+    "filters": str.join(";", filters),
+    "structure": dumps(structure, separators=(",", ":"))
+}
+
+encoded_params = urlencode(api_params)
+
+print(f"/v1/data?{ encoded_params }")
+`}</CodeBox>
+                                  <CodeBox>{`/v1/data?filters=areaType%3Dnation%3BareaName%3Dengland&structure=%7B%22date%22%3A%22date%22%2C%22name%22%3A%22areaName%22%2C%22code%22%3A%22areaCode%22%2C%22cases%22%3A%7B%22daily%22%3A%22newCasesByPublishDate%22%2C%22cumulative%22%3A%22cumCasesByPublishDate%22%7D%2C%22deaths%22%3A%7B%22new%22%3A%22newDeathsByDeathDate%22%2C%22cumulative%22%3A%22cumDeathsByDeathDate%22%7D%7D`}</CodeBox>
+
+                              </>,
+                              <>
+<CodeBox language={ "javascript" }>{`const
+    AreaType = "nation",
+    AreaName = "england";
+
+const
+    filters = [
+        \`areaType=$\{ AreaType }\`,
+        \`areaName=$\{ AreaName }\`
+    ],
+    structure = {
+        date: "date",
+        name: "areaName",
+        code: "areaCode",
+        cases: {
+            daily: "newCasesByPublishDate",
+            cumulative: "cumCasesByPublishDate"
+        },
+        deaths: {
+            daily: "newDeathsByDeathDate",
+            cumulative: "cumDeathsByDeathDate"
+        }
+    };
+
+const
+    apiParams = \`filters=$\{ filters.join(";") }&structure=$\{ JSON.stringify(structure) }\`,
+    encodedParams = encodeURI(apiParams)
+
+console.log(\`/v1/data?$\{ encodedParams }\`)
+`}</CodeBox>
+                                  <CodeBox>{`/v1/data?filters=areaType=nation;areaName=england&structure=%7B%22date%22:%22date%22,%22name%22:%22areaName%22,%22code%22:%22areaCode%22,%22cases%22:%7B%22daily%22:%22newCasesByPublishDate%22,%22cumulative%22:%22cumCasesByPublishDate%22%7D,%22deaths%22:%7B%22new%22:%22newDeathsByDeathDate%22,%22cumulative%22:%22cumDeathsByDeathDate%22%7D%7D`}</CodeBox>
+</>,
+                              <>
+<CodeBox language={ "r" }>{`AREA_TYPE = "nation"
+AREA_NAME = "england"
+
+endpoint <- "https://api.coronavirus-staging.data.gov.uk/v1/data"
+
+# Create filters:
+filters <- c(
+  sprintf("areaType=%s", AREA_TYPE),
+  sprintf("areaName=%s", AREA_NAME)
+)
+
+# Create the structure as a list or a list of lists:
+structure <- list(
+    date = "date", 
+    name = "areaName", 
+    code = "areaCode", 
+    cases = list(
+        daily = "newCasesByPublishDate",
+        cumulative = "cumCasesByPublishDate"
+    ), 
+    deaths = list(
+        daily = "newDeathsByDeathDate",
+        cumulative = "cumDeathsByDeathDate"
+    )
+)
+
+# The "httr::GET" method automatically encodes 
+# the URL and its parameters:
+httr::GET(
+    # Concatenate the filters vector using a semicolon.
+    url = endpoint,
+    
+    # Convert the structure to JSON (ensure 
+    # that "auto_unbox" is set to TRUE).
+    query = list(
+        filters = paste(filters, collapse = ";"),
+        structure = jsonlite::toJSON(structure, auto_unbox = TRUE)
+    ),
+    
+    # The API server will automatically reject any
+    # requests that take longer than 10 seconds to 
+    # process.
+    timeout(10)
+) -> response
+
+# Handle errors:
+if (response$status_code >= 400) {
+    err_msg = httr::http_status(response)
+    stop(err_msg)
+}
+
+# Convert response text from binary to text:
+json_text <- content(response, "text")
+
+# Store the encoded URL for inspection:
+url <- response$url
+
+# Parse JSON response to a data frame:
+data <- jsonlite::fromJSON(json_text)
+
+print(url)`}</CodeBox>
+                              <CodeBox>{`https://api.coronavirus.data.gov.uk/v1/data?filters=areaType%3Dnation%3BareaName%3Dengland&structure=%7B%22date%22%3A%22date%22%2C%22name%22%3A%22areaName%22%2C%22code%22%3A%22areaCode%22%2C%22cases%22%3A%7B%22daily%22%3A%22newCasesByPublishDate%22%2C%22cumulative%22%3A%22cumCasesByPublishDate%22%7D%2C%22deaths%22%3A%7B%22daily%22%3A%22newDeathsByDeathDate%22%2C%22cumulative%22%3A%22cumDeathsByDeathDate%22%7D%7D`}</CodeBox></>
+                          ]}/>
+
+
             <Query>latestBy</Query>
             <BlueBadge>Optional</BlueBadge>
+
             <CodeBox>
                 latestBy=[parameter]
             </CodeBox>
-            <CodeBox>
-                filters=[parameter_a]=[string];[param_b]=[string]&latestBy=[string]
-            </CodeBox>
 
-            <Query>pagination</Query>
+            <p>Produces the latest available value (non-null) relative to the value.</p>
+
+            <Admonition type={ "Warning" }>
+                The value defined for <Code>latestBy</Code> must be included in the
+                the <Code>structure</Code>.
+            </Admonition>
+
+            <Admonition type={ "Warning" }>
+                The <Code>latestBy</Code> query only accepts one value. You may still
+                include multiple metrics in the <Code>structure</Code>, but beware that
+                the response will only include data for the date on which the latest
+                value for the metric defined for <Code>latestBy</Code> was published.
+            </Admonition>
+
+            <h5>Example</h5>
+                                    <LanguageTabs tabs={[ "Python", "JavaScript", "R" ]}
+                          content={[
+                              <>
+<CodeBox language={ "python" }>{`from urllib.parse import urlencode
+from json import dumps
+from requests import get
+
+ENDPOINT = "https://api.coronavirus-staging.data.gov.uk/v1/data"
+AREA_TYPE = "nation"
+AREA_NAME = "england"
+
+filters = [
+    f"areaType={ AREA_TYPE }",
+    f"areaName={ AREA_NAME }"
+]
+
+structure = {
+    "date": "date",
+    "name": "areaName",
+    "code": "areaCode",
+    "cases": {
+        "daily": "newCasesByPublishDate",
+        "cumulative": "cumCasesByPublishDate"
+    },
+    "deaths": {
+        "daily": "newDeathsByDeathDate",
+        "cumulative": "cumDeathsByDeathDate"
+    }
+}
+
+api_params = {
+    "filters": str.join(";", filters),
+    "structure": dumps(structure, separators=(",", ":")),
+    "latestBy": "newCasesByPublishDate"
+}
+
+encoded_params = urlencode(api_params)
+
+response = get(f"{ ENDPOINT }?{ encoded_params }")
+
+if response.status_code >= 400:
+    raise RuntimeError(f'Request failed: { response.text }')
+
+data = response.json()
+
+print(data)`}</CodeBox>
+                                  <CodeBox>
+{`{'length': 1, 'maxPageLimit': 1, 'data': [{'date': '2020-07-20', 'name': 'England', 'code': 'E92000001', 'cases': {'daily': 535, 'cumulative': 254120}, 'deaths': {'daily': None, 'cumulative': None}}]}`}
+                                  </CodeBox>
+
+                              </>,
+                              <>
+<CodeBox language={ "javascript" }>{`const axios = require("axios");
+
+
+const endpoint = 'https://api.coronavirus-staging.data.gov.uk/v1/data';
+
+
+const getData = async ( url, queries={}, callBack ) => {
+
+    const { data, status, statusText } = await axios.get(url, {params: queries});
+
+    status < 400
+        ? callBack(data)
+        : console.error(statusText);
+
+};  // getData
+
+
+const processData = ( data ) => {
+
+    console.log(JSON.stringify(data));
+
+};  // processData
+
+
+const main = async () => {
+
+    const
+        AreaType = "nation",
+        AreaName = "england";
+
+    const
+        filters = [
+            \`areaType=$\{ AreaType }\`,
+            \`areaName=$\{ AreaName }\`
+        ],
+        structure = {
+            date: "date",
+            name: "areaName",
+            code: "areaCode",
+            cases: {
+                new: "newCasesByPublishDate",
+                cumulative: "cumCasesByPublishDate"
+            },
+            deaths: {
+                new: "newDeathsByDeathDate",
+                cumulative: "cumDeathsByDeathDate"
+            }
+        };
+
+
+    const
+        apiParams = {
+            filters: filters.join(";"),
+            structure: JSON.stringify(structure),
+            latestBy: "newCasesByPublishDate"
+        };
+
+    await getData(endpoint, apiParams, processData);
+
+};  // main
+
+
+main().catch(err => {
+    console.error(err);
+    process.exitCode = 1;
+});`}</CodeBox>
+                                  <CodeBox>{`{"length":1,"maxPageLimit":1,"data":[{"date":"2020-07-20","name":"England","code":"E92000001","cases":{"new":535,"cumulative":254120},"deaths":{"new":null,"cumulative":null}}]}`}</CodeBox>
+</>,
+                              <>
+<CodeBox language={ "r" }>{`AREA_TYPE = "nation"
+AREA_NAME = "england"
+
+endpoint <- "https://api.coronavirus-staging.data.gov.uk/v1/data"
+
+# Create filters:
+filters <- c(
+  sprintf("areaType=%s", AREA_TYPE),
+  sprintf("areaName=%s", AREA_NAME)
+)
+
+# Create the structure as a list or a list of lists:
+structure <- list(
+    date = "date", 
+    name = "areaName", 
+    code = "areaCode", 
+    cases = list(
+        daily = "newCasesByPublishDate",
+        cumulative = "cumCasesByPublishDate"
+    ), 
+    deaths = list(
+        daily = "newDeathsByDeathDate",
+        cumulative = "cumDeathsByDeathDate"
+    )
+)
+
+# The "httr::GET" method automatically encodes 
+# the URL and its parameters:
+httr::GET(
+    # Concatenate the filters vector using a semicolon.
+    url = endpoint,
+    
+    # Convert the structure to JSON (ensure 
+    # that "auto_unbox" is set to TRUE).
+    query = list(
+        filters = paste(filters, collapse = ";"),
+        structure = jsonlite::toJSON(structure, auto_unbox = TRUE)
+    ),
+    
+    # The API server will automatically reject any
+    # requests that take longer than 10 seconds to 
+    # process.
+    timeout(10)
+) -> response
+
+# Handle errors:
+if (response$status_code >= 400) {
+    err_msg = httr::http_status(response)
+    stop(err_msg)
+}
+
+# Convert response text from binary to text:
+json_text <- content(response, "text")
+
+# Store the encoded URL for inspection:
+url <- response$url
+
+# Parse JSON response to a data frame:
+data <- jsonlite::fromJSON(json_text)
+
+print(url)`}</CodeBox>
+                              <CodeBox>{`https://api.coronavirus.data.gov.uk/v1/data?filters=areaType%3Dnation%3BareaName%3Dengland&structure=%7B%22date%22%3A%22date%22%2C%22name%22%3A%22areaName%22%2C%22code%22%3A%22areaCode%22%2C%22cases%22%3A%7B%22daily%22%3A%22newCasesByPublishDate%22%2C%22cumulative%22%3A%22cumCasesByPublishDate%22%7D%2C%22deaths%22%3A%7B%22daily%22%3A%22newDeathsByDeathDate%22%2C%22cumulative%22%3A%22cumDeathsByDeathDate%22%7D%7D`}</CodeBox></>
+                          ]}/>
+
+            <Query>page</Query>
             <BlueBadge>Optional</BlueBadge>
 
             <CodeBox>

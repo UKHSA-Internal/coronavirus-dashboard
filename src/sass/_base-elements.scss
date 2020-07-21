@@ -15,7 +15,39 @@ code {
     font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
     font-size: 10pt;
     line-height: 1;
-    max-height: 60vh;
+    max-height: 35vh;
+}
+
+dl {
+    display: flex;
+    flex-wrap: wrap;
+    & > * {
+        margin-bottom: 1rem;
+    }
+
+    & dt {
+        font-size: smaller !important;
+        display: inline-flex;
+        flex: 1 2 30%;
+        justify-content: flex-end;
+        align-self: flex-start;
+
+        & > * {
+            font-size: smaller !important;
+        }
+    }
+
+    & dd {
+        font-size: smaller !important;
+        display: inline-flex;
+        flex: 1 4 50%;
+        max-width: 50%;
+        margin-left: 1rem;
+
+        & > * {
+            font-size: smaller !important;
+        }
+    }
 }
 
 button {
