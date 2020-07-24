@@ -204,7 +204,7 @@ const LatestBy: ComponentType<*> = () =>
         <p>Produces the latest available value (non-null) relative to the value.</p>
 
         <Admonition type={ "Warning" }>
-            The value defined for <Code>latestBy</Code> must be included in the
+            The value defined for <Code>latestBy</Code> must be included in
             the <Code>structure</Code>.
         </Admonition>
 
