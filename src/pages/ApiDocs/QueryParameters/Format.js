@@ -69,7 +69,7 @@ const JavaScriptExample = `const axios = require("axios");
 
 const getData = async ( queries={} ) => {
 
-    const endpoint = 'https://api.coronavirus-staging.data.gov.uk/v1/data';
+    const endpoint = 'https://api.coronavirus.data.gov.uk/v1/data';
 
     const { data, status, statusText } = await axios.get(endpoint, { 
         params: queries,
@@ -146,7 +146,7 @@ csv data:
 const RExample = `AREA_TYPE = "nation"
 AREA_NAME = "england"
 
-endpoint <- "https://api.coronavirus-staging.data.gov.uk/v1/data"
+endpoint <- "https://api.coronavirus.data.gov.uk/v1/data"
 
 filters <- c(
     sprintf("areaType=%s", AREA_TYPE),
