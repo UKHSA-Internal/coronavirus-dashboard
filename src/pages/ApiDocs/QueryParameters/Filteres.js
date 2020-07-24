@@ -49,7 +49,7 @@ const endpoint = (
 
 const getData = async ( url ) => {
 
-    const { data, status, statusText } = await axios.get(url);
+    const { data, status, statusText } = await axios.get(url, { timeout: 10000 });
 
     if ( status >= 400 )
         throw new Error(statusText);
