@@ -30,3 +30,13 @@ export const AdmonitionContainer =
             width: 80%;
             margin: 2rem auto;
         `;
+
+
+export const Code: ComponentType<*> =
+    styled
+        .code`
+            background-color: #f8f8f8;
+            border: 1px #f3f2f1 solid;
+            padding: 1px 4px;
+            font-size: 12pt;
+        `;
