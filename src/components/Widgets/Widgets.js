@@ -30,3 +30,11 @@ export const Admonition: ComponentType<*> = ({ type="Warning", children }) => {
     </AdmonitionContainer>
 
 };  // Admonition
+
+
+export const HorizontalRule: ComponentType<*> = ({ ...props }) => {
+
+    return <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }
+               { ...props }/>
+
+};  // HorizontalRule
