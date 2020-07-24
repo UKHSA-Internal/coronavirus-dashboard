@@ -177,7 +177,8 @@ const getPaginatedData = async ( filters, structure ) => {
             params: {
                 ...apiParams,
                 page: currentPage
-            }
+            },
+            timeout: 10000 
         });
 
         if ( status >= 400 )
