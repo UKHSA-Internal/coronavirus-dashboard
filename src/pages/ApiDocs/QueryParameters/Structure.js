@@ -515,7 +515,7 @@ const Structure: ComponentType<*> = () =>
         "cumulative":"cumDeathsByDeathDate"
     }
 }`}</CodeBox>
-            <p>and incorporate the into the URL:</p>
+            <p>and incorporate the structure JSON text into the URL:</p>
             <CodeBox>
                 {`/v1/data?filters=areaType=nation;areaName=england&structure={"date":"date","name":"areaName","code":"areaCode","cases":{"daily":"newCasesByPublishDate","cumulative":"cumCasesByPublishDate"},"deaths":{"daily":"newDeathsByDeathDate","cumulative":"cumDeathsByDeathDate"}}`}
             </CodeBox>

@@ -82,7 +82,7 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
 
         <p>
             The <Code>Last-Modified</Code> header in the response signifies the time when
-            the data was last update.
+            the data was last updated.
         </p>
 
             <CodeBox language={ 'bash' }>
