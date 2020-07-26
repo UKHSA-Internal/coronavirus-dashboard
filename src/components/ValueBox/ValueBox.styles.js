@@ -32,19 +32,31 @@ export const Number: ComponentType<*> = (() => {
 })();
 
 
+const Level2Heading =
+    styled
+        .h2
+        .attrs(({ className="", embedded }) => ({
+            className: `${ className } ${embedded ? "govuk-heading-s" : "govuk-heading-m"} govuk-!-margin-bottom-1 govuk-!-margin-left-4`,
+            role: "heading",
+            "aria-level": embedded ? 3 : 2
+        }))``;
+
+
+const Level3Heading =
+    styled
+        .h3
+        .attrs(({ className="", embedded }) => ({
+            className: `${ className } ${embedded ? "govuk-heading-s" : "govuk-heading-m"} govuk-!-margin-bottom-1 govuk-!-margin-left-4`,
+            role: "heading",
+            "aria-level": embedded ? 3 : 2
+        }))``;
+
+
 export const Heading: ComponentType<*> = ({ embedded, ...props }) => {
 
-    const Node = (
-        embedded
-            ? styled.h3
-            : styled.h2
-    ).attrs(({ className="" }) => ({
-        className: `${ className } ${embedded ? "govuk-heading-s" : "govuk-heading-m"} govuk-!-margin-bottom-1 govuk-!-margin-left-4`,
-        role: "heading",
-        "aria-level": embedded ? 3 : 2
-    }))``
+    const Node = embedded ? Level3Heading : Level2Heading;
 
-    return <Node { ...props }/>
+    return <Node embedded={ embedded } { ...props }/>
 
 };
 
@@ -58,21 +70,35 @@ export const DataContainer = (() => {
 })();
 
 
+const Level3Label =
+    styled
+        .h3
+        .attrs(({ className="", embedded }) => ({
+            className: `${ className } govuk-caption-m govuk-!-font-size-16`,
+            role: "heading",
+            "aria-level": embedded ? 4 : 3
+        }))`
+            margin: 0
+        `;
+
+
+const Level4Label =
+    styled
+        .h4
+        .attrs(({ className="", embedded }) => ({
+            className: `${ className } govuk-caption-m govuk-!-font-size-16`,
+            role: "heading",
+            "aria-level": embedded ? 4 : 3
+        }))`
+            margin: 0
+        `;
+
+
 export const DataLabel: ComponentType<*> = ({ embedded, ...props }) => {
 
-    const Node = (
-        embedded
-            ? styled.h4
-            : styled.h3
-    ).attrs(({ className="" }) => ({
-        className: `${ className } govuk-caption-m govuk-!-font-size-16`,
-        role: "heading",
-        "aria-level": embedded ? 4 : 3
-    }))`
-        margin: 0
-    `
+    const Node = embedded ? Level4Label : Level3Label
 
-    return <Node { ...props }/>
+    return <Node embedded={ embedded } { ...props }/>
 
 };
 
