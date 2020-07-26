@@ -3,7 +3,7 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Link } from "react-router-dom";
 
-import { fieldToStructure } from "common/utils";
+import { fieldToStructure, getParamValueFor } from "common/utils";
 import usePrevious from "hooks/usePrevious";
 import TabLinkContainer from "components/TabLink";
 import { Radio } from "components/GovUk";
@@ -23,7 +23,7 @@ import {
     MixedCardContainer
 } from './Card.styles';
 
-import type { Props } from './Card.types';
+import type { IsIncludedTypeProps, Props } from './Card.types';
 import type { ComponentType } from 'react';
 import StaticExternalCard from "components/StaticExternalCard";
 import Loading from "components/Loading";
@@ -125,6 +125,44 @@ const NoTabCard: ComponentType<*> = ({ cardType, ...props }) => {
 };  // NoTabCards
 
 
+const isIncluded = ({ params, locationAware={} }: IsIncludedTypeProps): boolean => {
+
+    if ( !Object.keys(locationAware).length )
+        return true;
+
+    const
+        areaType = getParamValueFor(
+            params,
+            "areaType",
+            "overview"
+        ).toLowerCase(),
+        areaName = getParamValueFor(
+            params,
+            "areaName",
+            "United Kingdom"
+        ).toLowerCase(),
+        {
+        included: {
+            areaType: includedAreaType=[],
+            areaName: includedAreaName=[]
+        },
+        excluded: {
+            areaType: excludedAreaType=[],
+            areaName: excludedAreaName=[]
+        }
+    } = locationAware;
+
+    return (
+        includedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
+        includedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
+    ) && !(
+        excludedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
+        excludedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
+    )
+
+};  // isIncluded
+
+
 const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], params, options=null,
                          heading, fullWidth, abstract=null, ...props }) => {
 
@@ -183,21 +221,22 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
         ...customProps?.[cardType] ?? {}
     };
 
-    return <Card heading={ heading } fullWidth={ fullWidth } dataState={ dataState } { ...cardProps }>{
-        noTabCards.indexOf(cardType) > -1
-            ? <NoTabCard { ...cardProps }/>
-            : <>
-                <CardHeader heading={ heading } { ...cardProps }>{
-                    active &&
-                    <Radio heading={ heading }
-                           options={ options }
-                           dataState={ dataState }
-                           value={ active }
-                           setValue={ setActive }/>
-                }</CardHeader>
-                <TabLinkContainer { ...cardProps }/>
-            </>
-    }</Card>;
+    return isIncluded(cardProps) &&
+        <Card heading={ heading } fullWidth={ fullWidth } dataState={ dataState } { ...cardProps }>{
+            noTabCards.indexOf(cardType) > -1
+                ? <NoTabCard { ...cardProps }/>
+                : <>
+                    <CardHeader heading={ heading } { ...cardProps }>{
+                        active &&
+                        <Radio heading={ heading }
+                               options={ options }
+                               dataState={ dataState }
+                               value={ active }
+                               setValue={ setActive }/>
+                    }</CardHeader>
+                    <TabLinkContainer { ...cardProps }/>
+                </>
+        }</Card>;
 
 };  // TestingCard
 
