@@ -13,7 +13,7 @@ import URLs from "common/urls";
 import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
-// import Announcement from "components/Announcement";
+import Announcement from "components/Announcement";
 
 
 const useTimestamp = () => {
@@ -37,16 +37,14 @@ const LastUpdateTime = () => {
     const timestamp = useTimestamp();
 
     return <>
-        {/*<Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }} lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>*/}
-        {/*    <p className={ "govuk-body govuk-!-margin-top-0" }>*/}
-        {/*        Local authority data are now available*/}
-        {/*        for&nbsp;<Link className={ "govuk-link govuk-link--no-visited-state" }*/}
-        {/*                  to={ '/cases' }>Cases</Link>&nbsp;and&nbsp;*/}
-        {/*        <Link className={ "govuk-link govuk-link--no-visited-state" }*/}
-        {/*              to={ '/deaths' }>Deaths</Link>.*/}
-        {/*        Click <strong><span>►</span>&nbsp;Change location</strong> at the top of each page.*/}
-        {/*    </p>*/}
-        {/*</Announcement>*/}
+        <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }}
+                      lastDisplayDate={{ day: 28, month: 7, year: 2020, hour: 15, minute: 0 }}>
+            <p className={ "govuk-body govuk-!-margin-top-0" }>
+                Owing to technical issues, some data relating to cases have not been
+                updated or are incorrectly dated. We are working to fix this as soon
+                as possible.
+            </p>
+        </Announcement>
         <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
             Last updated on&nbsp;{
                 !timestamp
