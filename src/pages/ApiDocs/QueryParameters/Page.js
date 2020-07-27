@@ -427,7 +427,7 @@ const Page: ComponentType<*> = () =>
 
         <Admonition>
             Although pagination is available for CSV formatted responses, the CSV
-            structure is strict and does not provision the means to include metadata.
+            structure is strict and does not provide the means to include metadata.
         </Admonition>
 
         <h5>Example</h5>

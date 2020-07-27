@@ -82,7 +82,7 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
 
         <p>
             The <Code>Last-Modified</Code> header in the response signifies the time when
-            the data was last updated.
+            the data were last updated.
         </p>
 
             <CodeBox language={ 'bash' }>
@@ -94,15 +94,15 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
 
             <Admonition>
                 The <Code>Last-Modified</Code> timestamp is not identical to that which is
-                displayed on the website. It signifies the time when the data was uploaded
+                displayed on the website. It signifies the time when the data were uploaded
                 to our database. The delay in the release is due to the Quality Assurance
-                process that takes place everyday before the data is released.
+                process that takes place everyday before the data are released.
             </Admonition>
 
 
         <h4>Request headers</h4>
         <p>
-            The API requires all requests to include the certain headers. If these headers
+            The API requires all requests to include certain headers. If these headers
             are missing, they will be implicitly added:
         </p>
 
@@ -118,7 +118,7 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
 
         <h4>Timestamps</h4>
         <p>
-            All timestamps are formatted as ISO-8601, and are presented
+            All timestamps are formatted as ISO 8601, and are presented
             as either <Code>YYYY-MM-DDTHH:MM:SS.sssssssZ</Code> or <Code>YYYY-MM-DD</Code>.
         </p>
         </section>

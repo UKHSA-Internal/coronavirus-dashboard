@@ -40,7 +40,7 @@ const Get: ComponentType<*> = () =>
                     <TD><SuccessCode>204</SuccessCode></TD>
                     <TD>OK</TD>
                     <TD>Successful &mdash; The request was successfully processed, but
-                        but were no records matching the requested criteria.</TD>
+                        there were no records matching the requested criteria.</TD>
                 </TR>
                 <TR>
                     <TD><ErrorCode>400</ErrorCode></TD>
@@ -74,9 +74,9 @@ const Get: ComponentType<*> = () =>
                     <TD><ErrorCode>417</ErrorCode></TD>
                     <TD>Expectation failed</TD>
                     <TD>
-                        Either the structure if not a correctly formatted JSON, or
+                        Either the structure is not a correctly formatted JSON, or
                         the value assigned to a filter parameter is not the correct
-                        type.
+                        type &mdash; e.g. incorrectly formatted date.
                     </TD>
                 </TR>
                 <TR>
@@ -94,7 +94,7 @@ const Get: ComponentType<*> = () =>
                     <TD>Server error</TD>
                     <TD>
                         Either an internal server error has occurred, or processing
-                        the request has taken longer that permitted.
+                        the request has taken longer than permitted.
                     </TD>
                 </TR>
             </TBody>

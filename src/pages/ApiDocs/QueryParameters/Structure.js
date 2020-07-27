@@ -432,13 +432,13 @@ const Structure: ComponentType<*> = () =>
         </p>
 
         <p>
-            We start off by constructing the value for the <Code>filters</Code> parameter:
+            We start off by constructing the value of the <Code>filters</Code> parameter:
         </p>
         <CodeBox>{`/v1/data?filters=areaType=nation;areaName=england`}</CodeBox>
         <p>
-            Next step is to construct the value for the <Code>structure</Code> parameter.
-            To do so, we need to find out the name for the metric in which we are interested.
-            In the case of this example, the metric are as follows:
+            Next step is to construct the value of the <Code>structure</Code> parameter.
+            To do so, we need to find out the name of the metric in which we are interested.
+            In the case of this example, the metrics are as follows:
         </p>
         <dl>
             <dt><Code>newCasesByPublishDate</Code></dt><dd>New cases (by publish date)</dd>
@@ -447,7 +447,7 @@ const Structure: ComponentType<*> = () =>
             <dt><Code>cumDeathsByDeathDate</Code></dt><dd>Cumulative deaths (by death date)</dd>
         </dl>
         <p>
-            In its simplest form, we could construct the our structure as follows:
+            In its simplest form, we construct the structure as follows:
         </p>
         <CodeBox language={ 'json' }>{`{
     "date":"date",
@@ -496,7 +496,7 @@ const Structure: ComponentType<*> = () =>
                 You may find that the metric names are not expressive enough, or perhaps
                 they are incompatible with an existing service that you have already
                 created. The <Code>structure</Code> parameters provides the ability
-                to change both the structure and the name of the metrics.
+                to change both the structure and the names of the metrics.
             </p>
             <p>
                 We can change metric names or the structure of the JSON / XML response by
@@ -546,7 +546,7 @@ const Structure: ComponentType<*> = () =>
             </CodeBox>
 
             <Admonition type={ "Warning" }>
-                It may be necessary to encode the URL to ensure that the data is correctly
+                It may be necessary to encode the URL to ensure that the data are correctly
                 transmitted and parsed. Modern browsers encode the URL automatically before
                 transmission.
             </Admonition>
