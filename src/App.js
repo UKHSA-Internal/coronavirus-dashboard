@@ -177,7 +177,7 @@ const App = ({ location: { pathname } }) => {
                                 {/*<Route path="/archive" component={ Archive }/>*/}
                                 <Route path="/accessibility" component={ Accessibility }/>
                                 <Route path="/cookies" component={ Cookies }/>
-                                <Route path="/api" exact component={ ApiDocs }/>
+                                <Route path="/developers-guide" exact component={ ApiDocs }/>
                             </Switch>
                         </Suspense>
                     </main>
