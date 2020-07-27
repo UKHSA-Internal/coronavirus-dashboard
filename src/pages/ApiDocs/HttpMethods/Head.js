@@ -20,8 +20,8 @@ const Head: ComponentType<*> = () =>
 
         <p>
             The <MethodBadge>HEAD</MethodBadge> may be used to validate a query without
-            downloading its content. It may also be used to quickly check the timestamp
-            of the latest data available on the API.
+            downloading its content. It may also be used to check the timestamp of the
+            latest data available on the API.
         </p>
 
         <CodeBox language={ 'bash' }>
