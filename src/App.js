@@ -41,6 +41,8 @@ const LastUpdateTime = () => {
             <p className={ "govuk-body govuk-!-margin-top-0" }>
                 This website is moving into production and will replace
                 the <a className={ "govuk-link govuk-link--no-visited-state" }
+                       target={ "_blank" }
+                       rel={ "noreferrer noopener" }
                        href={ 'https://coronavirus.data.gov.uk/' }>official website</a>. Please
                 read <Link className={ "govuk-link govuk-link--no-visited-state" }
                           to={ '/new-service' }>the announcement</Link> to learn more
