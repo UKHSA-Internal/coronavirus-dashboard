@@ -121,15 +121,15 @@ const Navigation = ({ layout, ...props }) => {
 
 const
     DashboardHeader = lazy(() => import('components/DashboardHeader')),
-    Cases = lazy(() => import('pages/Cases')),
-    Healthcare = lazy(() => import('pages/Healthcare')),
-    Deaths = lazy(() => import('pages/Deaths')),
-    Tests = lazy(() => import('pages/Testing')),
-    About = lazy(() => import('pages/About')),
-    Accessibility = lazy(() => import('pages/Accessibility')),
-    Cookies = lazy(() => import('pages/Cookies')),
-    ApiDocs = lazy(() => import('pages/ApiDocs')),
-    Footer = lazy(() => import('components/Footer'));
+    Cases           = lazy(() => import('pages/Cases')),
+    Healthcare      = lazy(() => import('pages/Healthcare')),
+    Deaths          = lazy(() => import('pages/Deaths')),
+    Tests           = lazy(() => import('pages/Testing')),
+    About           = lazy(() => import('pages/About')),
+    Accessibility   = lazy(() => import('pages/Accessibility')),
+    Cookies         = lazy(() => import('pages/Cookies')),
+    ApiDocs         = lazy(() => import('pages/ApiDocs')),
+    Footer          = lazy(() => import('components/Footer'));
 
 
 const App = ({ location: { pathname } }) => {
