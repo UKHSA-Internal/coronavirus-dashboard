@@ -42,6 +42,25 @@ const ApiDocs: ComponentType<*> = ({ ...props }) => {
             {/*<p>*/}
             {/*    The API service maintains the following URL template:*/}
             {/*</p>*/}
+            <h3>Software Development Kits (SDK)</h3>
+            <p>
+                In addition to the examples in this document, we have also developed
+                software development kits (dedicated libraries) for Python, JavaScript and
+                R to facilitate access to the API. The Python SDK is currently available
+                on both&nbsp;
+                <a href={ "https://github.com/publichealthengland/coronavirus-dashboard-api-python-sdk" }
+                   target={ "_blank" }
+                   className={ "govuk-link" }
+                   rel={ "noopenner noreferrer" }>GitHub</a>&reg; and&nbsp;
+                <a href={ "https://pypi.org/project/uk-covid19/1.0.0/" }
+                   target={ "_blank" }
+                   className={ "govuk-link" }
+                   rel={ "noopenner noreferrer" }>Python Packaging Index (PyPI)</a>.
+            </p>
+
+            <Admonition type={ "Information" }>
+                We will be publishing the libraries for JavaScript and R in the coming weeks.
+            </Admonition>
         </section>
 
         <HorizontalRule/>
