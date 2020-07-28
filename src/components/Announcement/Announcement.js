@@ -15,7 +15,7 @@ import type { AnnouncementProps } from "./Announcement.types";
  * @param lastDisplayDate { DateTime } Must include year, month, and day. Hour and minute are optional.
  * @returns {null | ReactNode} The banner.
  */
-const Announcement: ComponentType<AnnouncementProps> = ({ children, firstDisplayDate, lastDisplayDate }: AnnouncementProps): ReactNode|null => {
+const Announcement: ComponentType<AnnouncementProps> = ({ children, firstDisplayDate, lastDisplayDate, ...props }): ReactNode|null => {
 
     const
         now = new Date(),
@@ -36,7 +36,7 @@ const Announcement: ComponentType<AnnouncementProps> = ({ children, firstDisplay
 
     if (start > now || end < now) return null;
 
-    return <Style.Container>
+    return <Style.Container aria={ "region" } aria-label={ "Announcement" } { ...props }>
         { children }
     </Style.Container>
 
