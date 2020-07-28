@@ -78,6 +78,7 @@ const ValueItem: ComponentType<ValueItemType> = ({ heading, label, value, params
                 }{ (data && sign) ? sign : null }
                 <span id={ `${ preppedLabel }_description` }
                       className={ "govuk-visually-hidden" }>
+                    Value: { data?.[0]?.value ?? "" } &mdash;
                     Abstract information: { formattedTooltip }.<br/>
                     Click for additional details.
                 </span>
