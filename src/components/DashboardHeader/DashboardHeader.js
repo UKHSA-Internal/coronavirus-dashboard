@@ -44,30 +44,31 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
 
     pageHead.innerText = `Coronavirus (COVID-19) in the UK: ${ pageName }`;
 
-    if ( !(PathWithHeader.indexOf(pathname) > -1) ) return null;
+    // if ( !(PathWithHeader.indexOf(pathname) > -1) ) return null;
 
     return <>
         <HeaderContainer role={ "heading" }
                          aria-level={ 1 }>
-            <Title data-for={ "open-localisation-tooltip" }
-                   data-tip={ "Click to change location" }
+            <Title data-for={  !noPicker && "open-localisation-tooltip" }
+                   data-tip={ !noPicker && "Click to change location" }
                    id={ `page-heading-${ preppedLabel }` }
                    className={ localisationState ? "open" : "" }
                    onClick={ localisationCallback }>
                 { `${ pageName }${ noPicker ? "" : " in" }` }
-                {
-                    ( pathname && pathname !== "/" ) &&
-                    <>
-                        <TitleButton aria-describedby={ `${ preppedLabel }-loc-desc` }>
-                            { areaName }
-                            <span id={ `${ preppedLabel }-loc-desc` }
-                                  className={ "govuk-visually-hidden" }>
-                                Opens the localisation banner, which provides options to
-                                switch location and receive data at different geographical
-                                levels.
-                            </span>
-                        </TitleButton>
-                    </>
+                { noPicker
+                    ? null
+                    : ( pathname && pathname !== "/" ) &&
+                        <>
+                            <TitleButton aria-describedby={ `${ preppedLabel }-loc-desc` }>
+                                { areaName }
+                                <span id={ `${ preppedLabel }-loc-desc` }
+                                      className={ "govuk-visually-hidden" }>
+                                    Opens the localisation banner, which provides options to
+                                    switch location and receive data at different geographical
+                                    levels.
+                                </span>
+                            </TitleButton>
+                        </>
                 }
             </Title>
         </HeaderContainer>

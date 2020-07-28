@@ -215,22 +215,27 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
         ...customProps?.[cardType] ?? {}
     };
 
-    return isIncluded(cardProps) &&
-        <Card heading={ heading } fullWidth={ fullWidth } dataState={ dataState } { ...cardProps }>{
-            noTabCards.indexOf(cardType) > -1
-                ? <NoTabCard { ...cardProps }/>
-                : <>
-                    <CardHeader heading={ heading } { ...cardProps }>{
-                        active &&
-                        <Radio heading={ heading }
-                               options={ options }
-                               dataState={ dataState }
-                               value={ active }
-                               setValue={ setActive }/>
-                    }</CardHeader>
-                    <TabLinkContainer { ...cardProps }/>
-                </>
-        }</Card>;
+    if ( !isIncluded(cardProps) )
+        return null;
+
+    return <Card heading={ heading }
+                 fullWidth={ fullWidth }
+                 dataState={ dataState }
+                 { ...cardProps }>{
+        noTabCards.indexOf(cardType) > -1
+            ? <NoTabCard { ...cardProps }/>
+            : <>
+                <CardHeader heading={ heading } { ...cardProps }>{
+                    active &&
+                    <Radio heading={ heading }
+                           options={ options }
+                           dataState={ dataState }
+                           value={ active }
+                           setValue={ setActive }/>
+                }</CardHeader>
+                <TabLinkContainer { ...cardProps }/>
+            </>
+    }</Card>;
 
 };  // TestingCard
 

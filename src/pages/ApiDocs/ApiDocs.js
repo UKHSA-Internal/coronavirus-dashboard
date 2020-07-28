@@ -16,7 +16,6 @@ import type { ComponentType } from "react";
 const ApiDocs: ComponentType<*> = ({ ...props }) => {
 
     return <Container>
-        <h1>Developer's Guide</h1>
         <h2>Documentations for the API &mdash; v.1</h2>
         <section>
             <h3>Version</h3>
