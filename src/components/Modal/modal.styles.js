@@ -7,6 +7,7 @@ import type { ComponentType } from 'react';
 export const ModalContainer: ComponentType<*> = (() => {
 
     return styled.div`
+        overflow: auto;
         display: flex;
         position: fixed;
         z-index: 99999999999;
@@ -30,6 +31,7 @@ export const ModalContainer: ComponentType<*> = (() => {
 export const ModalContent: ComponentType<*> = (() => {
 
     return styled.article`
+    overflow: auto;
     display: flex;
     flex-direction: column;
     max-height: 500px;
@@ -83,11 +85,11 @@ export const Markdown: ComponentType<*> = (() => {
 
     return styled
         .div
-        .attrs(({ className }) => ({
+        .attrs(({ className="" }) => ({
             className: `${ className } modal markdown`
         }))`
             padding: 30px;
-            overflow-x: scroll;
+            overflow: auto;
             font-size: 80%;
             border-bottom: 1px solid #6F777B;
             margin-bottom: 0;
