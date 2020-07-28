@@ -32,7 +32,9 @@ export const ModalContent: ComponentType<*> = (() => {
     return styled.article`
     display: flex;
     flex-direction: column;
+    max-height: 500px;
     max-height: min(80vh, 500px);
+    width: 400px;
     width: min(400px, 95vw);
     border: 5px solid black;
     background-color: #fff;
