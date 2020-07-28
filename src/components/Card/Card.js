@@ -141,16 +141,10 @@ const isIncluded = ({ params, locationAware={} }: IsIncludedTypeProps): boolean 
             "areaName",
             "United Kingdom"
         ).toLowerCase(),
-        {
-        included: {
-            areaType: includedAreaType=[],
-            areaName: includedAreaName=[]
-        },
-        excluded: {
-            areaType: excludedAreaType=[],
-            areaName: excludedAreaName=[]
-        }
-    } = locationAware;
+        includedAreaType = locationAware?.included?.areaType ?? [],
+        includedAreaName = locationAware?.included?.areaName ?? [],
+        excludedAreaType = locationAware?.excluded?.areaType ?? [],
+        excludedAreaName = locationAware?.excluded?.areaName ?? [];
 
     return (
         includedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
