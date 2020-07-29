@@ -32,46 +32,64 @@ export const HeaderContainer: ComponentType<*> = (() => {
 })();
 
 
-export const Title: ComponentType<*> = (() => {
-
-     const Node = styled.button` 
-         display: a;
-         cursor: pointer;
-         background: url("${ CarretDown }");
-         background-repeat: no-repeat;
-         background-size: 20px 20px;
-         padding-right: 20px;
-         padding-left: 0;
-         margin-left: 0;
-         background-position: center right;
-         color: #1d70b8;
-         text-decoration: none;
-         
-         &.open {
-             background: url("${ CarretUp }");
-             background-repeat: no-repeat;
-             background-size: 20px 20px;
-             padding-right: 20px;
-             padding-left: 0;
-             margin-left: 0;
-             background-position: center right;
-         }
-     `
-
-    return ({ pageName, className, hasPicker, ...props }) =>
-        <h1 className={ `govuk-caption-l govuk-!-margin-0` }>
-            { pageName }
-            {
-                hasPicker
-                    ? <>&nbsp;<Node htmlType={ "button" }
-                                    className={ className }
-                                    { ...props }/>
-                    </>
-                    : null
+export const TitleButton: ComponentType<*> =
+    styled
+        .button
+        .attrs(() => ({
+            role: 'button',
+            htmlType: 'button',
+            'aria-label': 'Click to change location'
+        }))` 
+            display: a;
+            cursor: pointer;
+            background: url("${ CarretDown }");
+            background-repeat: no-repeat;
+            background-size: 20px 20px;
+            padding-right: 20px;
+            padding-left: 0;
+            margin-left: 5px;
+            background-position: center right;
+            color: #1d70b8;
+            text-decoration: none;
+            
+            &.open {
+            background: url("${ CarretUp }");
+                background-repeat: no-repeat;
+                background-size: 20px 20px;
+                padding-right: 20px;
+                padding-left: 0;
+                margin-left: 0;
+                background-position: center right;
             }
-        </h1>
+        `
 
-})();
+
+export const Title: ComponentType<*> =
+    styled
+        .h1
+        .attrs(({ className }) => ({
+            className: `govuk-caption-l govuk-!-margin-0 ${ className }`
+        }))``;
+    // <h1 className={  }>
+    //         { pageName }
+    //         {
+    //             hasPicker
+    //                 ? <>&nbsp;<Node htmlType={ "button" }
+    //                                 role={ "button" }
+    //                                 className={ className }
+    //                                 { ...props }/>
+    //                 </>
+    //                 : null
+    //         }
+    //     </h1>
+
+
+//     (() => {
+//
+//     return ({ pageName, className, hasPicker, ...props }) =>
+//
+//
+// })();
 
 
 export const CurrentLocation: ComponentType<*> = (() => {
@@ -150,3 +168,27 @@ export const Select: ComponentType<*> = (() => {
         </div>
       </div>
 })();
+
+
+export const LocalisationForm = styled.form`
+    padding: 0 1rem;
+    
+    @media only screen and (max-width: 768px) {
+        padding: 0;
+    }
+`;
+
+
+export const LocalisationFormInputs = styled.div`
+    display: flex !important;
+    align-items: flex-end;
+    
+    @media only screen and (max-width: 768px) {
+        flex-direction: column;
+        
+        & > * {
+            padding: 0;
+            margin-top: 1rem;
+        }
+    }
+`;

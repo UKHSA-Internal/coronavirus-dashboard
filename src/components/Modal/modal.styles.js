@@ -6,7 +6,8 @@ import type { ComponentType } from 'react';
 
 export const ModalContainer: ComponentType<*> = (() => {
 
-    return styled.section`
+    return styled.div`
+        overflow: auto;
         display: flex;
         position: fixed;
         z-index: 99999999999;
@@ -30,9 +31,12 @@ export const ModalContainer: ComponentType<*> = (() => {
 export const ModalContent: ComponentType<*> = (() => {
 
     return styled.article`
+    overflow: auto;
     display: flex;
     flex-direction: column;
+    max-height: 500px;
     max-height: min(80vh, 500px);
+    width: 400px;
     width: min(400px, 95vw);
     border: 5px solid black;
     background-color: #fff;
@@ -46,47 +50,46 @@ export const ModalContent: ComponentType<*> = (() => {
 
 
 export const ModalOpener: ComponentType<*> = (() => {
-    const
-        classes = '',
-        Node = styled.button`   
+
+    return styled
+        .a
+        .attrs(() => ({
+            role: "button",
+            tabIndex: 0
+        }))`   
             cursor: pointer;
             border-bottom: 1px dashed #959595 !important;
-            // word-wrap: normal;
             text-align: left;
-            // display: contents;
-            // font-weight: 600;
-             
+
             &:active,
             &:hover {
                 background-colour: #f1f1f1;
                 border-bottom: 1px dashed #3e3e3e;
             }
-        `;
+        `
 
-    return ({ className="", ...props }) =>
-        <Node className={ `${classes} ${className}` } role={ 'button' } { ...props }/>
 })();
 
 
 export const ModalCloser: ComponentType<*> = (() => {
-    const
-        classes = '',
-        Node = styled.button` 
-            min-height: 40px;
-            margin: 20px 30px 30px 30px;
-        `;
 
-    return ({ className="", ...props }) =>
-        <Node className={ `${classes} ${className}` } { ...props }/>
+    return styled.button` 
+        min-height: 40px;
+        margin: 20px 30px 30px 30px;
+    `
+
 })();
 
 
 export const Markdown: ComponentType<*> = (() => {
 
-    const
-        Node = styled.div`
+    return styled
+        .div
+        .attrs(({ className="" }) => ({
+            className: `${ className } modal markdown`
+        }))`
             padding: 30px;
-            overflow-x: scroll;
+            overflow: auto;
             font-size: 80%;
             border-bottom: 1px solid #6F777B;
             margin-bottom: 0;
@@ -94,9 +97,6 @@ export const Markdown: ComponentType<*> = (() => {
             & > :first-child {
                 margin-top: 0;
             }            
-        `;
-
-    return ({ className, ...props }) =>
-        <Node className={ `modal markdown ${className}` } { ...props }/>
+        `
 
 })();

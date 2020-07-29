@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 
 import {
     MainContainer,
@@ -10,73 +10,105 @@ import {
 } from "./TabLink.styles";
 
 import type { ComponentType } from "react";
-import type {
-    TabLinkContainerProps,
-    TabLinkProps
-} from "./TabLink.types";
-import { Plotter } from "components/Plotter";
+
 import { dropLeadingZeros, getPlotData, groupBy } from "common/utils";
 import { DataTable } from "components/GovUk";
 import useApi from "hooks/useApi";
 import Loading from "components/Loading";
+import Metadata from "components/Metadata";
+import Abstract from "components/Abstract";
 
 
-// This is a pseudo-component created to make the implementation of
-// containers easier and more consistent.
-export const TabLink: ComponentType<TabLinkProps> = function ({ label, children }) {
+const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
 
-    return <Fragment/>
+    switch ( cardType ) {
+
+        case "chart":
+            return <TabContent { ...props }/>;
+
+        case "map":
+            return <p>Not implemented.</p>;
+
+        case "ageSexBreakdown":
+            return <AgeSexBreakdownTabContent { ...props }/>
+
+        case "multiAreaStatic":
+            return <MultiAreaStaticTabContent { ...props }/>
+
+        case "simpleTableStatic":
+            return <SimpleTable { ...props }/>
+
+        default:
+            console.warn(`Invalid card type: "${cardType}"`)
+            return null;
+
+    }
 
 }  // TabLink
 
 
-export const TabLinkContainer: ComponentType<TabLinkContainerProps> = ({ children }) => {
+const TabLinkContainer: ComponentType<*> = ({ tabs, abstract=null, ...props }) => {
 
-    if ( !(children?.length ?? 0) )
-        throw new Error(`Component "TabLinkContainer" must have at least two children (of type "TabLink").`);
+    const [ current, setCurrent ] = useState(tabs[0].heading);
 
-    const [ current, setCurrent ] = useState(children[0].props.label);
-
-    return <MainContainer>
-        <TabsContainer>{
-            children.map(({ props: { label } }, index) =>
-                <Tab type={ "link" }
-                     key={ `${label}-${index}` }
-                     className={ `${label === current ? 'active govuk-!-font-weight-bold' : '' }` }
-                     onClick={ () => setCurrent(label)  }
-                >
-                     { label }
-                </Tab>
-            )
-        }</TabsContainer>
-        {
-            children.map(({ props: { label, children } }, index) =>
-                label === current
-                    ? <Body key={ `${label}-child-${index}` }>
-                        { children }
-                    </Body>
-                    : null
-            )
-        }
-    </MainContainer>
+    return <>
+        <Abstract content={ abstract } { ...props }/>
+        <MainContainer>
+            <TabsContainer>{
+                tabs.map(({ heading: label }, index) =>
+                    <Tab type={ "button" }
+                         key={ `${label}-${index}` }
+                         role={ "button" }
+                         aria-label={ label }
+                         className={ `${label === current ? 'active govuk-!-font-weight-bold' : '' }` }
+                         onClick={ () => setCurrent(label)  }>
+                        <span className={ "govuk-visually-hidden" }>
+                            Click to display content
+                        </span>
+                         { label }
+                    </Tab>
+                )
+            }</TabsContainer>
+            {
+                tabs.reduce((acc, { heading: label, ...rest }, index) =>
+                    label === current
+                        ? <Body key={ `${label}-child-${index}` }>
+                            <h3 role={ "heading" }
+                                aria-level={ 3 }
+                                className={ "govuk-visually-hidden" }>{ label }</h3>
+                            <TabLink heading={ label } { ...props } { ...rest }/>
+                        </Body>
+                        : acc,
+                    null
+                )
+            }
+        </MainContainer>
+    </>
 
 };  // TabLinkContainer
 
 
-
-const TabContentWithData: ComponentType<TabContentProps> = ({ fields, tabType, barType=null, data=[], xKey="date", ...props }) => {
+const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, data=[], xKey="date", ...props }) => {
 
     switch ( tabType ) {
 
         case "chart":
-            const layout = {};
+            const
+                layout = {},
+                Plotter = lazy(() => import('components/Plotter'));
+
             if ( barType ) layout["barmode"] = barType;
 
 
-            return <Plotter data={ getPlotData(fields, data, xKey) } layout={ layout } { ...props }/>
+            return <Suspense fallback={ <Loading/> }>
+                <Plotter data={ getPlotData(fields, data, xKey) } layout={ layout } { ...props }/>
+            </Suspense>
 
         case "table":
             return <DataTable fields={ fields } data={ data } { ...props }/>;
+
+        case "metadata":
+            return <Metadata { ...props }/>;
 
         default:
             return null;
@@ -86,7 +118,7 @@ const TabContentWithData: ComponentType<TabContentProps> = ({ fields, tabType, b
 };
 
 
-export const TabContent: TabContentType<TabContentProps> = ({ fields, setDataState, params, tabType, barType=null }: TabContentProps): React$Component => {
+const TabContentRaw: ComponentType<*> = ({ fields, setDataState, params, tabType, barType=null }) => {
 
     const  structure = { date: "date" };
 
@@ -112,6 +144,20 @@ export const TabContent: TabContentType<TabContentProps> = ({ fields, setDataSta
 
     return <TabContentWithData data={ data } fields={ fields } tabType={ tabType } barType={ barType }/>
 
+};  // TabContentRaw
+
+
+ const TabContent: ComponentType<*> = ({ tabType, ...props }) => {
+
+     const RawDataTabs = [
+         "metadata"
+     ];
+
+     if ( !(RawDataTabs.indexOf(tabType) > -1) )
+         return <TabContentRaw tabType={ tabType } { ...props }/>;
+
+     return <TabContentWithData tabType={ tabType } { ...props }/>
+
 };  // TabContent
 
 
@@ -126,7 +172,7 @@ const ageSortByKey = (a, b) => {
 }; // ageSexSort
 
 
-export const AgeSexBreakdownTabContent = ({ params, setDataState, groupKey, groupValues, requiredMetrics=[], fields=[], ...props }) => {
+const AgeSexBreakdownTabContent = ({ params, setDataState, groupKey, groupValues, requiredMetrics=[], fields=[], ...props }) => {
 
     // Assumptions:
     // Both categories have the same data type, same groups, same
@@ -189,7 +235,7 @@ export const AgeSexBreakdownTabContent = ({ params, setDataState, groupKey, grou
 };  // AgeSexBreakdownTabContent
 
 
-export const MultiAreaStaticTabContent = ({ params, setDataState, groupKey, groupValues, requiredMetrics=[], fields=[], ...props }) => {
+const MultiAreaStaticTabContent = ({ params, setDataState, groupKey, groupValues, requiredMetrics=[], fields=[], ...props }) => {
 
     const
         data = useApi({
@@ -263,7 +309,7 @@ export const MultiAreaStaticTabContent = ({ params, setDataState, groupKey, grou
 };  // CustomTabContent
 
 
-export const SimpleTable = ({ setDataState, params, latestBy="", fields=[], sortBy="", ...props }) => {
+const SimpleTable = ({ setDataState, params, latestBy="", fields=[], sortBy="", ...props }) => {
 
     const
         data = useApi({
@@ -295,3 +341,6 @@ export const SimpleTable = ({ setDataState, params, latestBy="", fields=[], sort
                                }/>
 
 };  // Tabulation
+
+
+export default TabLinkContainer;

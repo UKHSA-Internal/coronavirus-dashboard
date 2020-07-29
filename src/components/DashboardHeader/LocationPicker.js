@@ -10,6 +10,7 @@ import useApi from "hooks/useApi";
 import { PathNames } from "./Constants";
 import Select from "react-select";
 import { Launcher } from "../DropdownButton/DropdownButton.styles";
+import { LocalisationForm, LocalisationFormInputs } from "./DashboardHeader.styles";
 
 
 
@@ -86,6 +87,10 @@ const SelectOptions = {
         ":before": {
             content: state.isSelected ? '"✓ "' : '""'
         }
+    }),
+    placeholder: styles => ({
+        ...styles,
+        color: "#6B7276"
     })
 };
 
@@ -183,28 +188,30 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
 
     return <>
-            <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" } role={ 'form' }>
+            <LocalisationForm role={ 'form' }>
                 <div className={ "govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2" }>
                     <div className={ "govuk-grid-column-two-thirds" }>
-                        <h4 className={ "govuk-heading-s govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                        <h2 className={ "govuk-heading-s govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
                             Select a location to customise data
-                        </h4>
+                        </h2>
                         <p className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1 govuk-body-s" }>
                             Please note not all data is available for every location.
                         </p>
                     </div>
                 </div>
 
-                <div className={ "govuk-grid-row" } style={{ display: "flex", alignItems: "flex-end" }}>
+                <LocalisationFormInputs>
                     <div className="govuk-grid-column-one-quarter">
                         <div className="govuk-form-group govuk-!-margin-bottom-0">
                             <span className={ "govuk-label govuk-label--s" }>Area type</span>
-                            <span className={ "govuk-visually-hidden" }>
+                            <span id={ "area-type-description" }
+                                  className={ "govuk-visually-hidden" }>
                                 Select or type in an area type then press enter (return).
                                 The options in the area name selector update based on the
                                 selected area type.
                             </span>
-                            <Select area-label={ "select area type" }
+                            <Select aria-label={ "select area type" }
+                                    aria-describedby={ "area-type-description" }
                                     options={ areaTypeData }
                                     value={ areaTypeData.filter(item => item.value === currentLocation.areaType) }
                                     onChange={ item => setCurrentLocation({ areaType: item.value }) }
@@ -217,13 +224,15 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                     <div className="govuk-grid-column-one-quarter">
                         <div className="govuk-form-group govuk-!-margin-bottom-0">
                             <span className={ "govuk-label govuk-label--s" }>Area name</span>
-                            <span className={ "govuk-visually-hidden" }>
+                            <span id={ "area-name-description" }
+                                  className={ "govuk-visually-hidden" }>
                                 Select or type in an area name then press enter (return).
                                 The page will immediately update to display the data for
                                 the selected area.
                             </span>
                             <Select
-                                area-label={ "select area type" }
+                                aria-label={ "select area type" }
+                                aria-describedby={ 'area-name-description' }
                                 options={ areaNameData.data }
                                 styles={ SelectOptions }
                                 value={ areaNameData.data.filter(item => item.label === currentLocation.areaName) }
@@ -248,9 +257,9 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                             </Link>
                         </div>
                     </div>
-                </div>
+                </LocalisationFormInputs>
 
-            </form>
+            </LocalisationForm>
         <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
     </>
 

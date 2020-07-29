@@ -3,7 +3,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
-import { SideNavList } from "../SideNavMobile/SideNavMobile.styles";
 
 
 export const SideNav: ComponentType<*> = (() => {
@@ -14,7 +13,8 @@ export const SideNav: ComponentType<*> = (() => {
     `;
 
     return ({ className, ...props }) =>
-        <Node className={ `moj-side-navigation govuk-!-padding-right-4 govuk-!-padding-top-2 ${className}` }
+        <Node role={ 'navigation' }
+              className={ `moj-side-navigation govuk-!-padding-right-4 govuk-!-padding-top-2 ${className}` }
               { ...props }/>
 })();
 

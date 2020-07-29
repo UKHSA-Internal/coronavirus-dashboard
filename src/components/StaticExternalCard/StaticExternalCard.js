@@ -79,7 +79,7 @@ const StaticExternalCard: ComponentType<*> = ({ download=[], abstract=null, head
                             Link to a different website:
                         </LinkDescription>
                         <p>
-                            <ExternalLink className={ "govuk-button" }
+                            <ExternalLink className={ "govuk-button govuk-!-margin-bottom-0" }
                                           onClick={ () => extLinkTriggered(resource.url) }
                                           target={ '_blank' }
                                           rel={ 'noreferrer noopener' }

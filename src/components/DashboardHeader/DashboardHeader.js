@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import ReactTooltip from "react-tooltip";
 import deepEqual from "deep-equal";
@@ -23,6 +23,7 @@ import {
     MainContainer,
     HeaderContainer,
     Title,
+    TitleButton,
     SectionBreak,
 } from './DashboardHeader.styles'
 
@@ -33,31 +34,45 @@ import type { Props } from './DashboardHeader.types';
 const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
 
     const
+        preppedLabel = areaName
+            .toLowerCase()
+            .replace(/[\s:]/g, "_"),
+        pageHead = document.querySelector("head>title"),
         { location: { pathname } } = useHistory(),
         pageName = PathNameMapper[pathname],
         noPicker = NoPickerPaths.indexOf(pathname) > -1;
 
-    if ( !(PathWithHeader.indexOf(pathname) > -1) ) return null;
+    pageHead.innerText = `Coronavirus (COVID-19) in the UK: ${ pageName }`;
+
+    // if ( !(PathWithHeader.indexOf(pathname) > -1) ) return null;
 
     return <>
-    <HeaderContainer>
-        <Title pageName={ `${ pageName }${ noPicker ? "" : " in" }` }
-               data-for={ "open-localisation-tooltip" }
-               data-tip={ "Click to change location" }
-               hasPicker={ !noPicker }
-               className={ localisationState ? "open" : "" }
-               onClick={ localisationCallback }>
-            { ( pathname && pathname !== "/" ) && areaName }
-            {
-                !noPicker
-                    ? <span className={ "govuk-visually-hidden" }>
-                        Click to change location
-                    </span>
-                    : null
-            }
-        </Title>
-    </HeaderContainer>
-    <SectionBreak/>
+        <HeaderContainer role={ "heading" }
+                         aria-level={ 1 }>
+            <Title data-for={  !noPicker && "open-localisation-tooltip" }
+                   data-tip={ !noPicker && "Click to change location" }
+                   id={ `page-heading-${ preppedLabel }` }
+                   className={ localisationState ? "open" : "" }
+                   onClick={ localisationCallback }>
+                { `${ pageName }${ noPicker ? "" : " in" }` }
+                { noPicker
+                    ? null
+                    : ( pathname && pathname !== "/" ) &&
+                        <>
+                            <TitleButton aria-describedby={ `${ preppedLabel }-loc-desc` }>
+                                { areaName }
+                                <span id={ `${ preppedLabel }-loc-desc` }
+                                      className={ "govuk-visually-hidden" }>
+                                    Opens the localisation banner, which provides options to
+                                    switch location and receive data at different geographical
+                                    levels.
+                                </span>
+                            </TitleButton>
+                        </>
+                }
+            </Title>
+        </HeaderContainer>
+        <SectionBreak/>
     </>
 
 };  // PageHeader

@@ -26,6 +26,7 @@ import type {
     DailySummaryCardProps
 } from "./DailySummary.types";
 import Loading from "components/Loading";
+import { DataContainer } from "../../components/ValueBox/ValueBox.styles";
 
 
 const
@@ -88,6 +89,7 @@ const
 const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout=[], heading }: DailySummaryCardProps) => {
 
     const
+        headingLabel = heading.toLowerCase().replace(/[\s:]/g, "_"),
         structure = { date: "date" },
         chartData = {};
 
@@ -107,6 +109,7 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
     }
 
     const
+        // Plotter = lazy(() => import('components/Plotter')),
         [ plotData, setPlotData ] = useState(
             layout.reduce((acc, { chart={} }) =>
                 chart && !((chart?.value ?? null) in chartData)
@@ -120,28 +123,38 @@ const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout
             defaultResponse: null
         });
 
+
     return <Card heading={ heading }>
-        <CardHeader heading={ heading } linkToHeading={ "More detail" }/>
+        <CardHeader heading={ heading }
+                    linkToHeading={ `More on ${ heading.toLowerCase() }` }/>
         <HalfCardSplitBody>
             <ContentBox>{
                 data === null
                     ? <Loading size={ 8 } margin={ 2 } color={ '#adadad' }/>
-                    : <Plotter
-                        data={ getPlotData(
-                            layout
-                                .filter(({ chart = false }) => chart && (plotData?.[chart.value] ?? true))
-                                .map(item => item.chart),
-                            data
-                        ) }
-
+                    : <Plotter data={
+                            getPlotData(
+                                layout
+                                    .filter(({ chart = false }) => chart && (plotData?.[chart.value] ?? true))
+                                    .map(item => item.chart),
+                                data
+                            )
+                        }
                     />
             }</ContentBox>
-            <ContentBox>
+            <ContentBox role={ "region" }
+                        aria-label={ `${ heading }: Latest data` }
+                        aria-describedby={ `container_${ headingLabel }-description` }>
+                <span id={ `container_${ headingLabel }-description` }
+                      className={ "govuk-visually-hidden" }>
+                    Latest available data on "{ heading }".
+                </span>
                 {
                     layout.map((item, index) =>
                         <ValueBox { ...item }
+                                  heading={ heading }
                                   params={ params }
                                   data={ data }
+                                  embedded={ true }
                                   isEnabled={ plotData?.[(item?.chart?.value ?? null)] ?? true }
                                   setChartState={ () => {
                                       const name = item?.chart?.value ?? null;

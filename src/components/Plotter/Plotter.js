@@ -82,11 +82,18 @@ import useResponsiveLayout from "hooks/useResponsiveLayout";
 // }; // Plotter
 
 
-export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin={}, isTimeSeries=true, ...props }) => {
+export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin={}, style={}, isTimeSeries=true, SrOnly="", ...props }) => {
 
     const width = useResponsiveLayout(640);
 
-    return <PlotContainer className={ "govuk-grid-row" } role={ 'figure' }>
+    return <PlotContainer className={ "govuk-grid-row" }
+                          aria-label={ "Displaying a graph of the data" }>
+        <p className={ "govuk-visually-hidden" }>
+            The data that is visualised in the chart is that which is tabulated
+            under the "Data" tab. The tables do not include the rolling average metric
+            (where the metric is included).
+            { SrOnly }
+        </p>
         <Plot
             data={ data }
             config={ {
@@ -116,7 +123,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                 // onLegendItem
             } }
             useResizeHandler={ true }
-            style={{ display: "block", height: 350 }}
+            style={{ display: "block", height: 350, ...style }}
             layout={ {
                 hovermode: "x unified",
                 // barmode: "overlay",
@@ -154,7 +161,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     tickfont:{
                         family: `"GDS Transport", Arial, sans-serif`,
                         size : 14,
-                        color: "#6f777b"
+                        color: "#6B7276"
                     },
                     // rangeslider: {range: ['20202-01-01', new Date().toString()]},
                     // rangeselector: {buttons: [
@@ -190,7 +197,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     tickfont:{
                         family: `"GDS Transport", Arial, sans-serif`,
                         size : 14,
-                        color: "#6f777b",
+                        color: "#6B7276",
                     },
                     ...yaxis
                 },

@@ -32,6 +32,7 @@ const URLs = {
     },
     about:         `https://${ REACT_APP_MAIN_CDN      }/assets/about.md`,
     accessibility: `https://${ REACT_APP_MAIN_CDN      }/assets/accessibility.md`,
+    newWebsite:    `https://${ REACT_APP_MAIN_CDN      }/assets/new_website.md`,
     archiveList:   `https://${ REACT_APP_DOWNLOADS_CDN }/downloads?restype=container&comp=list`,
     baseUrl:        REACT_APP_BASE_URL
 

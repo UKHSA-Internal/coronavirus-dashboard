@@ -6,9 +6,9 @@ import { analytics, colours, strFormat } from "common/utils";
 import {
     DataColour,
     DataContainer,
-    DataLabel,
     DataNumbersContainer,
     Heading,
+    DataLabel,
     Number,
     NumericData
 } from "./ValueBox.styles";
@@ -25,10 +25,14 @@ import type { ComponentType } from "react";
 import type { ValueItemType } from "./ValueBox.types";
 
 
-const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip=null, sign=null }: ValueItemType) => {
+const ValueItem: ComponentType<ValueItemType> = ({ heading, label, value, params, order=0,
+                                                     embedded, tooltip=null, sign=null }) => {
 
     const
-        tipId = encodeURI(`${label}-${value}`),
+        preppedLabel = `value-item-${heading}-${label}-${ value }-${ order }`
+            .toLowerCase()
+            .replace(/[\s:]/g, "_"),
+        tipId = `${ preppedLabel }_tooltip`,
         data = useApi({
             conjunctiveFilters: params,
             extraParams: [
@@ -40,36 +44,49 @@ const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip
             },
             defaultResponse: null
         }),
+        dataAvailable = (data?.length ?? 0) > 0,
         replacements = {
             kwargs: {
                 ...(data?.[0] ?? {}),
-                date: moment(data?.[0]?.date ?? null).format("dddd, D MMMM YYYY")
+                date: dataAvailable
+                    ? moment(data?.[0]?.date ?? null)
+                        .format("dddd, D MMMM YYYY")
+                    : "(where available) the day of the latest update"
             }
         },
-        formattedTooltip = strFormat(tooltip, replacements);
+        formattedTooltip = strFormat(tooltip, replacements),
+        noDataMsg = "Data not currently available for this metric";
 
     return <NumericData>
-        { label && <DataLabel>{ label }</DataLabel> }
+        {
+            label &&
+            <DataLabel embedded={ embedded }>{ label }</DataLabel>
+        }
         <Number>
-            <ModalTooltip data-tip={ formattedTooltip }
+            <ModalTooltip data-tip={ dataAvailable ? formattedTooltip : noDataMsg }
                           data-for={ tipId }
+                          aria-describedby={ `${ preppedLabel }_description` }
                           markdownPath={ value }
-                          replacements={ replacements }>
+                          replacements={ replacements }
+                          id={ `${preppedLabel}_modal` }>
                 {
                     data !== null
-                        ? (data?.length ?? 0) > 0
+                        ? dataAvailable
                         ? numeral(data[0].value).format("0,0")
                         : <NotAvailable/>
                         : <Loading/>
                 }{ (data && sign) ? sign : null }
-                <span className={ "govuk-visually-hidden" }>
-                    Abstract information: { formattedTooltip }<br/>
+                <span id={ `${ preppedLabel }_description` }
+                      className={ "govuk-visually-hidden" }>
+                    Value: { data?.[0]?.value ?? "" } &mdash;
+                    Abstract information: { formattedTooltip }.<br/>
                     Click for additional details.
                 </span>
             </ModalTooltip>
         </Number>
         <ReactTooltip id={ tipId }
-                      place={ "right" }
+                      delayHide={ 300 }
+                      place={ "bottom" }
                       backgroundColor={ "#0b0c0c" }
                       className={ "tooltip" }
                       effect={ "solid" }/>
@@ -78,16 +95,18 @@ const ValueItem: ComponentType<ValueItemType> = ({ label, value, params, tooltip
 }; // ValueItem
 
 
-const ValueBox: ComponentType<*> = ({ caption, valueItems, ...rest }) => {
+const ValueBox: ComponentType<*> = ({ heading, caption, valueItems, embedded=false, ...rest }) => {
 
     const
+        label = `value-item_${heading}_${caption}`
+            .toLowerCase()
+            .replace(/[\s:]/g, "_"),
+        tipId = `${ label }_tooltip`,
         { chart={}, isEnabled=true, setChartState=() => null } = rest,
-        tipId = encodeURI(caption);
-
-    const chartToggleCallback = () => {
-        analytics("Chart toggle", caption, isEnabled ? "ON" : "OFF" );
-        setChartState();
-    };
+        chartToggleCallback = () => {
+            analytics("Chart toggle", caption, isEnabled ? "ON" : "OFF" );
+            setChartState();
+        };
 
     return <DataContainer>
         {
@@ -99,29 +118,35 @@ const ValueBox: ComponentType<*> = ({ caption, valueItems, ...rest }) => {
                                   `Click to ${ isEnabled ? "hide" : "show" } 
                                   ${ caption.toLowerCase() }" on the graph.`
                               }
+                              aria-labelledby={ `${label}_toggle` }
                               onClick={ chartToggleCallback }
                               colour={ isEnabled ? (colours?.[chart.colour] ?? "") : "none" }>
-                    <span className={ "govuk-visually-hidden" }>
+                    <span id={ `${label}_toggle` }
+                          className={ "govuk-visually-hidden" }>
                         Click to { isEnabled ? "hide" : "show" }
                         "{ caption.toLowerCase() }" on the graph.
                     </span>
                 </DataColour>
         }
-        <Heading>{ caption }</Heading>
+        <Heading embedded={ embedded }>{ caption }</Heading>
         <DataNumbersContainer>{
             valueItems.map((item, index) =>
                 item.value &&
                 <ValueItem key={ `value-item-${ index }` }
+                           order={ index }
                            value={ item.value }
                            label={ item.label }
                            tooltip={ item.tooltip }
                            sign={ item.sign }
+                           heading={ heading }
+                           embedded={ embedded }
                            params={ rest.params }/>
             )
         }</DataNumbersContainer>
         <ReactTooltip id={ tipId }
-                      place={ "right" }
+                      place={ "left" }
                       backgroundColor={ "#0b0c0c" }
+                      delayHide={ 300 }
                       className={ "tooltip" }
                       effect={ "solid" }/>
     </DataContainer>

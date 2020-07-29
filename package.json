@@ -1,6 +1,6 @@
 {
   "name": "covid-public",
-  "version": "2.0.0-beta-104",
+  "version": "2.0.0-beta-130",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
@@ -32,7 +32,8 @@
     "styled-components": "^5.0.1",
     "react-select": "^3.1.0",
     "react-spinners": "^0.9.0",
-    "react-focus-trap": "^2.7.1"
+    "react-focus-trap": "^2.7.1",
+    "react-syntax-highlighter": "^12.2.1"
   },
   "scripts": {
     "lint": "yarn flow",

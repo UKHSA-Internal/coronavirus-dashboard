@@ -29,6 +29,14 @@ export const Image: ComponentType<*> = (() => {
     return styled.img`
         height: auto;
         width: 100%;
+        
+        @media only screen and (max-width: 768px) {
+            display: none;
+            visibility: hidden;
+            width: 0;
+            height: 0;
+        }
+
     `
 
 })();  // Image

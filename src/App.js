@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Switch, Route, withRouter } from 'react-router';
-// import { Header } from 'govuk-react-jsx';
+import { Link } from 'react-router-dom';
 import Header from "components/Header";
 import DailySummary from 'pages/DailySummary';
 import CookieBanner from 'components/CookieBanner';
@@ -13,8 +13,7 @@ import URLs from "common/urls";
 import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
-// import Announcement from "components/Announcement";
-
+import Announcement from "components/Announcement";
 
 const useTimestamp = () => {
 
@@ -37,25 +36,34 @@ const LastUpdateTime = () => {
     const timestamp = useTimestamp();
 
     return <>
-        {/*<Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }}*/}
-        {/*              lastDisplayDate={{ day: 28, month: 7, year: 2020, hour: 15, minute: 0 }}>*/}
-        {/*    <p className={ "govuk-body govuk-!-margin-top-0" }>*/}
-        {/*        Owing to technical issues, some data relating to cases have not been*/}
-        {/*        updated or are incorrectly dated. We are working to fix this as soon*/}
-        {/*        as possible.*/}
-        {/*    </p>*/}
-        {/*</Announcement>*/}
-        <p className={ "govuk-body-s govuk-!-margin-top-5 govuk-!-margin-bottom-5" }>
-            Last updated on&nbsp;{
-                !timestamp
-                    ? <Loading/>
-                    : <time dateTime={ timestamp } role={ "region" }>{
-                        moment(timestamp)
-                            .local(true)
-                            .format("dddd D MMMM YYYY [at] h:mma")
-                    }</time>
-            }
-        </p>
+        <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }}
+                      lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>
+            <p className={ "govuk-body govuk-!-margin-top-0" }>
+                This website is moving into production and will replace
+                the <a className={ "govuk-link govuk-link--no-visited-state" }
+                       target={ "_blank" }
+                       rel={ "noreferrer noopener" }
+                       href={ 'https://coronavirus.data.gov.uk/' }>official website</a>. Please
+                read <Link className={ "govuk-link govuk-link--no-visited-state" }
+                          to={ '/new-service' }>the announcement</Link> to learn more
+                about how this change might affect you or your service.
+            </p>
+        </Announcement>
+        <div className={ "govuk-!-margin-top-5 govuk-!-margin-bottom-5" }
+             role={ "region" }
+             aria-labelledby={ "last-update" }>
+            <p className={ "govuk-body-s" } id={ "last-update" }>
+                Last updated on&nbsp;{
+                    !timestamp
+                        ? <Loading/>
+                        : <time dateTime={ timestamp }>{
+                            moment(timestamp)
+                                .local(true)
+                                .format("dddd D MMMM YYYY [at] h:mma")
+                        }</time>
+                }
+            </p>
+        </div>
     </>
 
 }; // LastUpdateTime
@@ -75,8 +83,11 @@ const
 const BetaBanner = ({ ...props }) => {
 
     return <div className={ "govuk-phase-banner" }
-                style={{ padding: "1rem" }} role={ "alert" } { ...props }>
-        <p className="govuk-phase-banner__content">
+                style={{ padding: "1rem" }}
+                role={ "region" }
+                aria-label={ "Phase banner" }
+                { ...props }>
+        <p className="govuk-phase-banner__content" id={ "phase-banner-content" }>
             <strong className="govuk-tag govuk-phase-banner__content__tag">
                 beta
             </strong>
@@ -114,14 +125,16 @@ const Navigation = ({ layout, ...props }) => {
 
 const
     DashboardHeader = lazy(() => import('components/DashboardHeader')),
-    Cases = lazy(() => import('pages/Cases')),
-    Healthcare = lazy(() => import('pages/Healthcare')),
-    Deaths = lazy(() => import('pages/Deaths')),
-    Tests = lazy(() => import('pages/Testing')),
-    About = lazy(() => import('pages/About')),
-    Accessibility = lazy(() => import('pages/Accessibility')),
-    Cookies = lazy(() => import('pages/Cookies')),
-    Footer = lazy(() => import('components/Footer'));
+    Cases           = lazy(() => import('pages/Cases')),
+    Healthcare      = lazy(() => import('pages/Healthcare')),
+    Deaths          = lazy(() => import('pages/Deaths')),
+    Tests           = lazy(() => import('pages/Testing')),
+    About           = lazy(() => import('pages/About')),
+    Accessibility   = lazy(() => import('pages/Accessibility')),
+    Cookies         = lazy(() => import('pages/Cookies')),
+    ApiDocs         = lazy(() => import('pages/ApiDocs')),
+    NewWebsite      = lazy(() => import('pages/NewWebsite')),
+    Footer          = lazy(() => import('components/Footer'));
 
 
 const App = ({ location: { pathname } }) => {
@@ -144,51 +157,51 @@ const App = ({ location: { pathname } }) => {
         <BetaBanner/>
         <div className={ "govuk-width-container" }>
             <LastUpdateTime/>
-            <main className={ "govuk-main-wrapper" } role={ "main" }>
-                <ErrorBoundary>
-                    <div className={ "dashboard-container" }>
-                        {
-                            layout === "desktop" &&
-                            <aside className={ "dashboard-menu" }>
-                                <Switch>
-                                    <Route path={ "/" }
-                                           render={ props => <Navigation layout={ layout } { ...props}/> }/>
-                                </Switch>
-                            </aside>
-                        }
-                        <div className={ "dashboard-content" } id={ 'main-content' }>
-                            <Suspense fallback={ <Loading/> }>
-                                <DashboardHeader/>
-                                <Switch>
-                                    <Route path="/" exact component={ DailySummary }/>
-                                    <Route path="/testing" component={ Tests }/>
-                                    <Route path="/cases" exact component={ Cases }/>
-                                    <Route path="/healthcare" component={ Healthcare }/>
-                                    <Route path="/deaths" component={ Deaths }/>
+            <ErrorBoundary>
+                <div className={ "dashboard-container" }>
+                    {
+                        layout === "desktop" &&
+                        <aside className={ "dashboard-menu" }>
+                            <Switch>
+                                <Route path={ "/" }
+                                       render={ props => <Navigation layout={ layout } { ...props}/> }/>
+                            </Switch>
+                        </aside>
+                    }
+                    <main className={ "govuk-main-wrapper" } role={ "main" } id={ 'main-content' }>
+                        <Suspense fallback={ <Loading/> }>
+                            <DashboardHeader/>
+                            <Switch>
+                                <Route path="/" exact component={ DailySummary }/>
+                                <Route path="/testing" component={ Tests }/>
+                                <Route path="/cases" exact component={ Cases }/>
+                                <Route path="/healthcare" component={ Healthcare }/>
+                                <Route path="/deaths" component={ Deaths }/>
 
-                                    <Route path="/about-data" component={ About }/>
-                                    {/*<Route path="/archive" component={ Archive }/>*/}
-                                    <Route path="/accessibility" component={ Accessibility }/>
-                                    <Route path="/cookies" component={ Cookies }/>
-                                </Switch>
-                            </Suspense>
-                        </div>
-                    </div>
-                </ErrorBoundary>
-            </main>
+                                <Route path="/about-data" component={ About }/>
+                                {/*<Route path="/archive" component={ Archive }/>*/}
+                                <Route path="/accessibility" component={ Accessibility }/>
+                                <Route path="/cookies" component={ Cookies }/>
+                                <Route path="/developers-guide" exact component={ ApiDocs }/>
+                                <Route path="/new-service" exact component={ NewWebsite }/>
+                            </Switch>
+                        </Suspense>
+                    </main>
+                </div>
+            </ErrorBoundary>
+
+            <Switch>
+                {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */ }
+                <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> }/>
+            </Switch>
+
+            {/* We only want back-to-top links on the main & about pages. */ }
+            <Switch>
+                {/* These back-to-top links are the 'inline' style that sits
+                    statically between the end of the content and the footer. */ }
+                <Route path="/" render={ props => <BackToTop { ...props } mode="inline"/> }/>
+            </Switch>
         </div>
-
-        <Switch>
-            {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */ }
-            <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> }/>
-        </Switch>
-
-        {/* We only want back-to-top links on the main & about pages. */ }
-        <Switch>
-            {/* These back-to-top links are the 'inline' style that sits
-                statically between the end of the content and the footer. */ }
-            <Route path="/" render={ props => <BackToTop { ...props } mode="inline"/> }/>
-        </Switch>
 
         <Switch>
             <Suspense fallback={ <Loading/> }>

@@ -3,14 +3,15 @@
 export const PathNameMapper = {
     "/": "UK Summary",
     "/cases": "Cases",
-    "/cases/msoa": "Cases: Small areas",
     "/testing": "Testing",
     "/healthcare": "Healthcare",
     "/deaths": "Deaths",
-    "/about-data": "About data",
+    "/about-data": "About the data",
     "/cookies": "Cookies",
     "/accessibility": "Accessibility",
-    "/archive": "Archive"
+    "/archive": "Archive",
+    "/new-service": "Announcement: New service",
+    "/developers-guide": "Developers guide"
 };
 
 
@@ -18,24 +19,26 @@ export const PathNames = {
     // Only use lower case in paths.
     summary: "/",
     cases: "/cases",
-    msoa: "/cases/msoa",
     testing: "/testing",
     healthcare: "/healthcare",
     deaths: "/deaths",
     aboutData: "/about-data",
     cookies: "cookies",
     accessibility: "/accessibility",
-    archive: "/archive"
+    archive: "/archive",
+    newWebsite: "/new-service",
+    devGuide: "/developers-guide"
 }
 
 
 export const NoPickerPaths = [
     "/",
-    "/cases/msoa",
     "/about-data",
     "/cookies",
     "/accessibility",
-    "/archive"
+    "/archive",
+    "/new-service",
+    "/developers-guide"
 ];
 
 
@@ -43,7 +46,7 @@ export const LocationBannerMapper = {
     "/cases": "Cases",
     "/testing": "Testing",
     "/healthcare": "Healthcare",
-    "/deaths": "Deaths",
+    "/deaths": "Deaths"
 };
 
 
@@ -51,7 +54,8 @@ export const PathWithHeader = [
     "/",
     "/testing",
     "/cases",
-    "/cases/msoa",
     "/healthcare",
     "/deaths",
+    "/new-service",
+    "/developers-guide"
 ];

@@ -20,7 +20,7 @@ const useModalData = (fileName: string): string | null => {
 
         (async () => {
             const { data } = await axios.get(
-                    `${fileName}.md`,
+                    fileName.endsWith(".md") ? fileName : `${fileName}.md`,
                     { baseURL: URLs.modals }
                 );
 

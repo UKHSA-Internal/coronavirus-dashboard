@@ -8,62 +8,115 @@ import type { ComponentType } from "react";
 
 export const NumericData: ComponentType<*> = (() => {
 
-    const Node = styled.div`
-        margin-top: 0;
-    `
+    return styled
+        .div
+        .attrs(({ className="" }) => ({
+            className: `${ className } govuk-!-margin-right-4`
+        }))`
+            margin-top: 0;
+        `
 
-    return ({ className="", ...props }) =>
-        <Node className={ `govuk-!-margin-right-4 ${className}` } { ...props }/>
 })();
 
 
 export const Number: ComponentType<*> = (() => {
 
-    const Node = styled.span`
-        font-size: 1.4rem;
-    `;
-
-    return ({ className="", ...props }) =>
-        <Node className={ `govuk-heading-m govuk-!-font-weight-regular govuk-!-margin-bottom-2 govuk-!-padding-top-0 ${ className }` }
-            { ...props }/>
+    return styled
+        .div
+        .attrs(({ className="" }) => ({
+            className: `${ className } govuk-heading-m govuk-!-font-weight-regular govuk-!-margin-bottom-2 govuk-!-padding-top-0`
+        }))`
+            font-size: 1.4rem;
+        `
 
 })();
 
 
-export const Heading = ({ className="", ...props }) => {
+const Level2Heading =
+    styled
+        .h2
+        .attrs(({ className="", embedded }) => ({
+            className: `${ className } ${embedded ? "govuk-heading-s" : "govuk-heading-m"} govuk-!-margin-bottom-1 govuk-!-margin-left-4`,
+            role: "heading",
+            "aria-level": embedded ? 3 : 2
+        }))``;
 
-    return <h3 className={ `govuk-heading-s govuk-!-margin-bottom-1 govuk-!-margin-left-4 ${className}` }
-               { ...props }/>
+
+const Level3Heading =
+    styled
+        .h3
+        .attrs(({ className="", embedded }) => ({
+            className: `${ className } ${embedded ? "govuk-heading-s" : "govuk-heading-m"} govuk-!-margin-bottom-1 govuk-!-margin-left-4`,
+            role: "heading",
+            "aria-level": embedded ? 3 : 2
+        }))``;
+
+
+export const Heading: ComponentType<*> = ({ embedded, ...props }) => {
+
+    const Node = embedded ? Level3Heading : Level2Heading;
+
+    return <Node embedded={ embedded } { ...props }/>
 
 };
 
 
 export const DataContainer = (() => {
 
-    const Node = styled.div`
+    return styled.div`
         margin-bottom: 1rem !important;
-    `;
-
-    return ({ className="", ...props }) =>
-        <Node className={ `${ className }` } { ...props }/>
+    `
 
 })();
 
 
-export const DataLabel = ({ className="", ...props }) => {
+const Level3Label =
+    styled
+        .h3
+        .attrs(({ className="", embedded }) => ({
+            className: `${ className } govuk-caption-m govuk-!-font-size-16`,
+            role: "heading",
+            "aria-level": embedded ? 4 : 3
+        }))`
+            margin: 0
+        `;
 
-    return <span className={ `govuk-caption-m govuk-!-font-size-16 ${ className }` }
-                 { ...props }/>
+
+const Level4Label =
+    styled
+        .h4
+        .attrs(({ className="", embedded }) => ({
+            className: `${ className } govuk-caption-m govuk-!-font-size-16`,
+            role: "heading",
+            "aria-level": embedded ? 4 : 3
+        }))`
+            margin: 0
+        `;
+
+
+export const DataLabel: ComponentType<*> = ({ embedded, ...props }) => {
+
+    const Node = embedded ? Level4Label : Level3Label
+
+    return <Node embedded={ embedded } { ...props }/>
 
 };
 
 
-export const DataNumbersContainer = ({ className="", ...props }) => {
+export const DataNumbersContainer: ComponentType<*> = (() => {
 
-    return <div className={ `util-flex util-flex-wrap govuk-!-margin-bottom-21 govuk-!-margin-left-4 ${ className }` }
-                { ...props }/>
 
-};
+    return styled
+        .div
+        .attrs(({ className="" }) => ({
+            className: `${ className } govuk-!-margin-bottom-21 govuk-!-margin-left-4`
+        }))`
+            display: flex;
+            flex-wrap: wrap !important;
+        `
+
+})();
+
 
 export const DataColour: ComponentType<*> = (() => {
 
