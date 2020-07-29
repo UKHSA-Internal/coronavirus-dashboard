@@ -144,15 +144,18 @@ const isIncluded = ({ params, locationAware={} }: IsIncludedTypeProps): boolean 
         includedAreaType = locationAware?.included?.areaType ?? [],
         includedAreaName = locationAware?.included?.areaName ?? [],
         excludedAreaType = locationAware?.excluded?.areaType ?? [],
-        excludedAreaName = locationAware?.excluded?.areaName ?? [];
+        excludedAreaName = locationAware?.excluded?.areaName ?? [],
+        hasExclusion = excludedAreaType.length > 0 && !excludedAreaName.length > 0,
+        isExcluded = (
+            excludedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
+            excludedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
+        ),
+        isIncluded = (
+            includedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
+            includedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
+        );
 
-    return (
-        includedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
-        includedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
-    ) && !(
-        excludedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
-        excludedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
-    )
+    return !hasExclusion ? isIncluded : !isExcluded
 
 };  // isIncluded
 
