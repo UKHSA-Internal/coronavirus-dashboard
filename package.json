@@ -1,6 +1,6 @@
 {
   "name": "covid-public",
-  "version": "2.0.0-beta-130",
+  "version": "2.0.0-beta-132",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
@@ -13,7 +13,7 @@
     "moment": "^2.24.0",
     "node-sass": "^4.13.1",
     "numeral": "^2.0.6",
-    "plotly.js": "^1.54.1",
+    "plotly.js": "^1.54.7",
     "react": "^16.13.0",
     "react-app-polyfill": "^1.0.6",
     "react-day-picker": "^7.4.8",
@@ -22,18 +22,18 @@
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.0",
-    "react-tooltip": "^4.2.6",
+    "react-tooltip": "^4.2.7",
     "remark": "^12.0.0",
     "remark-external-links": "^6.0.0",
     "remark-html": "^11.0.1",
     "remark-slug": "^6.0.0",
     "remark-toc": "^7.0.0",
     "replacestream": "^4.0.3",
-    "styled-components": "^5.0.1",
+    "styled-components": "^5.1.1",
     "react-select": "^3.1.0",
     "react-spinners": "^0.9.0",
     "react-focus-trap": "^2.7.1",
-    "react-syntax-highlighter": "^12.2.1"
+    "react-syntax-highlighter": "^13.0.0"
   },
   "scripts": {
     "lint": "yarn flow",
