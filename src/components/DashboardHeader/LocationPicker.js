@@ -203,46 +203,49 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                 <LocalisationFormInputs>
                     <div className="govuk-grid-column-one-quarter">
                         <div className="govuk-form-group govuk-!-margin-bottom-0">
-                            <span className={ "govuk-label govuk-label--s" }>Area type</span>
-                            <span id={ "area-type-description" }
+                            <span id={ "aria-type-label" }
+                                  className={ "govuk-label govuk-label--s" }>Area type</span>
+                            <span id={ "aria-type-description" }
                                   className={ "govuk-visually-hidden" }>
                                 Select or type in an area type then press enter (return).
                                 The options in the area name selector update based on the
                                 selected area type.
                             </span>
-                            <Select aria-label={ "select area type" }
-                                    aria-describedby={ "area-type-description" }
-                                    options={ areaTypeData }
-                                    value={ areaTypeData.filter(item => item.value === currentLocation.areaType) }
-                                    onChange={ item => setCurrentLocation({ areaType: item.value }) }
-                                    styles={ SelectOptions }
-                                    isLoading={ areaTypeData.length < 1 }
-                                    placeholder={ "Select area type" }
-                                    className={ 'select' }/>
+                            <div aria-labelledby={ "aria-type-label" }
+                                  aria-describedby={ 'aria-type-description' }>
+                                <Select options={ areaTypeData }
+                                        value={ areaTypeData.filter(item => item.value === currentLocation.areaType) }
+                                        onChange={ item => setCurrentLocation({ areaType: item.value }) }
+                                        styles={ SelectOptions }
+                                        isLoading={ areaTypeData.length < 1 }
+                                        placeholder={ "Select area type" }
+                                        className={ 'select' }/>
+                            </div>
                         </div>
                     </div>
                     <div className="govuk-grid-column-one-quarter">
                         <div className="govuk-form-group govuk-!-margin-bottom-0">
-                            <span className={ "govuk-label govuk-label--s" }>Area name</span>
-                            <span id={ "area-name-description" }
+                            <span id={ "aria-name-label" }
+                                  className={ "govuk-label govuk-label--s" }>Area name</span>
+                            <span id={ "aria-name-description" }
                                   className={ "govuk-visually-hidden" }>
                                 Select or type in an area name then press enter (return).
                                 The page will immediately update to display the data for
                                 the selected area.
                             </span>
-                            <Select
-                                aria-label={ "select area type" }
-                                aria-describedby={ 'area-name-description' }
-                                options={ areaNameData.data }
-                                styles={ SelectOptions }
-                                value={ areaNameData.data.filter(item => item.label === currentLocation.areaName) }
-                                isLoading={ data.length < 1 }
-                                placeholder={ "Select area" }
-                                onChange={ item => setCurrentLocation({
-                                    areaType: areaNameData.grouped[item.value][0].areaType,
-                                    areaName: item.value
-                                }) }
-                                className={ 'select' }/>
+                            <div aria-labelledby={ "aria-name-label" }
+                                  aria-describedby={ 'aria-name-description' }>
+                                <Select options={ areaNameData.data }
+                                        styles={ SelectOptions }
+                                        value={ areaNameData.data.filter(item => item.label === currentLocation.areaName) }
+                                        isLoading={ data.length < 1 }
+                                        placeholder={ "Select area" }
+                                        onChange={ item => setCurrentLocation({
+                                            areaType: areaNameData.grouped[item.value][0].areaType,
+                                            areaName: item.value
+                                        }) }
+                                        className={ 'select' }/>
+                            </div>
                         </div>
                     </div>
                     <div className={ "govuk-grid-column-one-quarter" }>
