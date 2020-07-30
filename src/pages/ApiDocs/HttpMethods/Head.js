@@ -3,7 +3,7 @@
 import React from "react";
 
 import { Method, MethodBadge } from "./HttpMethods.styles";
-import { Prism as CodeBox } from "react-syntax-highlighter";
+import CodeBox from "components/CodeBox";
 
 import type { ComponentType } from "react";
 
