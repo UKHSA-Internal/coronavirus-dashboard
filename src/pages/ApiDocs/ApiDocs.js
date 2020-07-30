@@ -1,16 +1,17 @@
 // @flow
 
 import React from "react";
-import { Prism as CodeBox } from 'react-syntax-highlighter';
+
+import CodeBox from "components/CodeBox";
 import { Admonition, HorizontalRule } from "components/Widgets";
+import { Code } from "components/Widgets/Widgets.styles";
 
 import HttpMethods from "./HttpMethods/HttpMethods";
+
 import QueryParameters from "./QueryParameters/QueryParameters";
-
-import { Code } from "components/Widgets/Widgets.styles";
 import { Container } from "./ApiDocs.styles";
-import type { ComponentType } from "react";
 
+import type { ComponentType } from "react";
 
 
 const ApiDocs: ComponentType<*> = ({ ...props }) => {
@@ -52,7 +53,7 @@ const ApiDocs: ComponentType<*> = ({ ...props }) => {
                    target={ "_blank" }
                    className={ "govuk-link" }
                    rel={ "noopenner noreferrer" }>GitHub</a>&reg; and&nbsp;
-                <a href={ "https://pypi.org/project/uk-covid19/1.0.0/" }
+                <a href={ "https://pypi.org/project/uk-covid19" }
                    target={ "_blank" }
                    className={ "govuk-link" }
                    rel={ "noopenner noreferrer" }>Python Packaging Index (PyPI)</a>.

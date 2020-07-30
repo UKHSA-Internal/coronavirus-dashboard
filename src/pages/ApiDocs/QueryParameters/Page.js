@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react";
-import { Prism as CodeBox } from "react-syntax-highlighter";
+import CodeBox from "components/CodeBox";
 
 import { Admonition } from "components/Widgets";
 import LanguageTabs from "./LanguageTabLink";
