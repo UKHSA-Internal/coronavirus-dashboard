@@ -10,6 +10,7 @@ export const InlineContainer: ComponentType<*> = (() => {
     return styled.div`
         width: 100%;
         margin: 0;
+        margin-bottom: 32px;
     `
 
 })();
@@ -19,7 +20,7 @@ export const OverlayContainer: ComponentType<*> = (() => {
 
     return styled.div`
         position: fixed;
-        bottom: 0;
+        bottom: 30px;
         width: 100%;
         z-index: 1234567;
         padding: 0;
@@ -32,7 +33,7 @@ export const OverlayContainer: ComponentType<*> = (() => {
 export const Link: ComponentType<*> = (() => {
 
     return styled
-        .button
+        .a
         .attrs(({ className="" }) => ({
             className: `${ className } govuk-link govuk-link--no-visited-state govuk-body-s`
         }))`
@@ -42,21 +43,5 @@ export const Link: ComponentType<*> = (() => {
             cursor: pointer;
             margin-bottom: 0;
         `
-
-})();
-
-
-export const Container = (() => {
-
-  return styled
-      .button
-      .attrs(({ className="" }) => ({
-          className: `${ className } govuk-width-container`
-      }))`
-          padding: 0;
-          margin: 0;
-      `
-
-  // <div className={ `govuk-width-container ${className}` } { ...props }/>
 
 })();
