@@ -34,3 +34,29 @@
 .smaller {
     font-size: 90%;
 }
+
+.toc {
+    margin-bottom: 2em;
+
+    &,
+    & * {
+        font-size: 12pt;
+        margin-top: 0;
+    }
+
+    & li {
+        @extend .govuk-list;
+        margin-bottom: .2rem;
+        margin-top: 0 !important;
+    }
+
+    & a {
+        @extend .govuk-link--no-visited-state;
+    }
+
+    & ul {
+        margin-bottom: 0;
+        margin-left: 1em;
+        padding-left: 1em;
+    }
+}

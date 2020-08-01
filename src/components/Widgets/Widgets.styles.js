@@ -31,12 +31,12 @@ export const AdmonitionContainer =
             margin: 2rem auto;
         `;
 
-
+const x = "#ffffff"
 export const Code: ComponentType<*> =
     styled
         .code`
             background-color: #f8f8f8;
-            border: 1px #f3f2f1 solid;
-            padding: 1px 4px;
+            border: 1px #d2d2d2 solid;
+            padding: 1px 5px;
             font-size: 12pt;
         `;

@@ -11,7 +11,7 @@ import type { ComponentType } from "react";
 const Head: ComponentType<*> = () =>
     <article>
         <header>
-            <Method>HEAD</Method>
+            <Method id={ "methods-head" }>HEAD</Method>
         </header>
         <p>
             Parameters and responses are identical to the <MethodBadge>GET</MethodBadge> method

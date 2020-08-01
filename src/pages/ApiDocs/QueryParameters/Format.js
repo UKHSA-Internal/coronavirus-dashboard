@@ -199,7 +199,7 @@ const RExampleResponse = `[1] "json data:"
 
 const Format: ComponentType<*> = () =>
     <article>
-        <Title>
+        <Title id={ "params-format" }>
             <Query>format</Query>
             <BlueBadge>Optional</BlueBadge>
         </Title>
@@ -215,7 +215,7 @@ const Format: ComponentType<*> = () =>
             in lowercase characters.
         </Admonition>
 
-        <h5>Example</h5>
+        <h5 id={ "format-example" }>Example</h5>
         <LanguageTabs
             tabs={ ["Python", "JavaScript", "R"] }
             content={[

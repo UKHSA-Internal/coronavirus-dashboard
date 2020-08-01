@@ -19,9 +19,9 @@ import type { ComponentType } from "react";
 const Get: ComponentType<*> = () =>
     <article>
         <header>
-            <Method>GET</Method>
+            <Method id={ "methods-get" }>GET</Method>
         </header>
-        <h4>Responses</h4>
+        <h4 id={ "get-responses" }>Responses</h4>
         <GovUKTable>
             <THead>
                 <TR>

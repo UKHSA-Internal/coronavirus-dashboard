@@ -123,11 +123,10 @@ $data
 
 const Filters: ComponentType<*> = () =>
     <article>
-        <Title>
+        <Title id={ "params-filters" }>
             <Query>filters</Query>
             <BlueBadge>Required</BlueBadge>
         </Title>
-
 
         <CodeBox>{`filters=[metricName]=[string]`}</CodeBox>
         <p>
@@ -149,7 +148,7 @@ const Filters: ComponentType<*> = () =>
             The <Code>value</Code> section of the filters is case-insensitive.
         </Admonition>
 
-        <h5>Multiple parameters</h5>
+        <h5 id={ "filters-multiple_params" }>Multiple parameters</h5>
         <p>
             It is possible to implement conjunctive conditions &mdash; i.e. use "and"
             to chain multiple filters. We separate multiple filters using
@@ -160,7 +159,7 @@ const Filters: ComponentType<*> = () =>
         </CodeBox>
 
 
-        <h5>Authorised filter metrics</h5>
+        <h5 id={ "filters-authorised_filter_metrics" }>Authorised filter metrics</h5>
         <p>
             You may use any combination of the authorised metrics to filter the
             data API response.
@@ -186,7 +185,33 @@ const Filters: ComponentType<*> = () =>
             all queries.
         </Admonition>
 
-        <h5>Example</h5>
+        <p>
+            The <Code>areaType</Code> metric value is limited to specific, pre-defined
+            options.
+        </p>
+        <details className="govuk-details" data-module="govuk-details">
+            <summary className="govuk-details__summary">
+                <span className="govuk-details__summary-text">
+                  See a list of valid values for the <Code>areaType</Code> metric
+                </span>
+            </summary>
+            <div className="govuk-details__text">
+                <p>
+                    Please note that the values of the <Code>areaType</Code> metric are
+                    case-sensitive.
+                </p>
+                <dl>
+                    <dt><Code>overview</Code></dt><dd>Overview data for the United Kingdom</dd>
+                    <dt><Code>nation</Code></dt><dd>Nation data (England, Northern Ireland, Scotland, and Wales)</dd>
+                    <dt><Code>region</Code></dt><dd>Region data</dd>
+                    <dt><Code>nhsRegion</Code></dt><dd>NHS Region data</dd>
+                    <dt><Code>utla</Code></dt><dd>Upper-tier local authority data</dd>
+                    <dt><Code>ltla</Code></dt><dd>Lower-tier local authority data</dd>
+                </dl>
+            </div>
+        </details>
+
+        <h5 id={ "filters-example" }>Example</h5>
         <LanguageTabs
             tabs={[ "Python", "JavaScript", "R" ]}
             content={[
