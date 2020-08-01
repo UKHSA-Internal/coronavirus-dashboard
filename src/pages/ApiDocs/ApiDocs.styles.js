@@ -8,9 +8,6 @@ import type { ComponentType } from "react";
 
 export const Container: ComponentType<*> =
     styled
-        .div
-        .attrs(({ className="" }) => ({
-            className: `govuk-body ${ className }`
-        }))`
+        .div`
             max-width: 40em;
         `;
