@@ -194,7 +194,7 @@ $data
 
 const LatestBy: ComponentType<*> = () =>
     <article>
-        <Title>
+        <Title id={ "params-latestby" }>
             <Query>latestBy</Query>
             <BlueBadge>Optional</BlueBadge>
         </Title>
@@ -215,7 +215,7 @@ const LatestBy: ComponentType<*> = () =>
             value for the metric defined for <Code>latestBy</Code> was published.
         </Admonition>
 
-        <h5>Example</h5>
+        <h5 id={ "latestby-example" }>Example</h5>
         <LanguageTabs
             tabs={[ "Python", "JavaScript", "R" ]}
             content={[

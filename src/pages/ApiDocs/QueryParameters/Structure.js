@@ -330,7 +330,7 @@ $data
 
 const Structure: ComponentType<*> = () =>
     <article>
-        <Title>
+        <Title id={ "params-structure" }>
             <Query>structure</Query>
             <BlueBadge>Required</BlueBadge>
         </Title>
@@ -366,6 +366,15 @@ const Structure: ComponentType<*> = () =>
             </li>
         </ul>
 
+        <h5 id={ "structure-metrics" }>Metrics</h5>
+        <p>
+            Some metrics are not available for specific <Code>areaType</Code> values. For
+            instance, we have <Code>newCasesByPublishDate</Code> and <Code>cumCasesByPublishDate</Code> only
+            available for <Code>areaType=nation</Code> but not for <Code>region</Code>,<Code>utla</Code>, or <Code>ltla</Code>.
+            Conversely, we have  <Code>newCasesBySpecimenDate</Code> and <Code>cumCasesBySpecimenDate</Code> available
+            for <Code>region</Code>, <Code>utla</Code>, and <Code>ltla</Code> but
+            not for <Code>nation</Code>.
+        </p>
         <details className="govuk-details" data-module="govuk-details">
             <summary className="govuk-details__summary">
                 <span className="govuk-details__summary-text">
@@ -425,7 +434,7 @@ const Structure: ComponentType<*> = () =>
         </details>
 
 
-        <h5>Example</h5>
+        <h5 id={ "structure-example" }>Example</h5>
         <p>
             We would like to extract the number of new cases, cumulative cases, and
             new deaths and cumulative deaths for England using the API.
@@ -492,6 +501,8 @@ const Structure: ComponentType<*> = () =>
     ]
 }`}
             </CodeBox>
+
+        <h5 id={ "structure-renaming_metrics" }>Renaming metrics</h5>
             <p>
                 You may find that the metric names are not expressive enough, or perhaps
                 they are incompatible with an existing service that you have already
@@ -545,6 +556,7 @@ const Structure: ComponentType<*> = () =>
 }`}
             </CodeBox>
 
+        <h5 id={ "structure-url_encoding" }>URL encoding</h5>
             <Admonition type={ "Warning" }>
                 It may be necessary to encode the URL to ensure that the data are correctly
                 transmitted and parsed. Modern browsers encode the URL automatically before

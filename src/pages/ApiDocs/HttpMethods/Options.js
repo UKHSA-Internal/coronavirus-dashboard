@@ -22,7 +22,7 @@ import type { ComponentType } from "react";
 const Options: ComponentType<*> = () =>
     <article>
         <header>
-            <Method>OPTIONS</Method>
+            <Method id={ "methods-options" }>OPTIONS</Method>
         </header>
         <p>
             Provides the options available for the API &mdash; an abstract version of
@@ -34,7 +34,7 @@ const Options: ComponentType<*> = () =>
             The <MethodBadge>OPTIONS</MethodBadge> method discards all query parameters.
         </Admonition>
 
-        <h4>Responses</h4>
+        <h4 id={ "options-responses" }>Responses</h4>
         <TableContainer>
             <GovUKTable className={ "govuk-table" }>
                 <THead>
