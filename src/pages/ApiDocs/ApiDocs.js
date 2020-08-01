@@ -16,7 +16,7 @@ import type { ComponentType } from "react";
 
 const ApiDocs: ComponentType<*> = ({ ...props }) => {
 
-    const Docs = <Container>
+    return <Container className={ "developers-guide" }>
         <h2>Documentations for the API &mdash; v.1</h2>
 
         <section>
@@ -229,9 +229,7 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
             <h3 id={ "query-parameters" }>Query parameters</h3>
             <QueryParameters/>
         </section>
-    </Container>;
-
-    return <>{ Docs }</>
+    </Container>
 
 };  // ApiDocs
 
