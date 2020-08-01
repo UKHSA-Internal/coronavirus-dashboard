@@ -7,7 +7,6 @@ import { ArrowUp } from "common/Icons";
 import {
     OverlayContainer,
     InlineContainer,
-    Container,
     Link
 } from './BackToTop.styles';
 import type { Props } from './BackToTop.types';
@@ -15,24 +14,12 @@ import type { Props } from './BackToTop.types';
 import useBackToTopOverlayVisible from 'hooks/useBackToTopOverlayVisible';
 
 
-const backToTopClickHandler = event => {
-
-    event.preventDefault();
-
-    window.scrollTo(0, 0);
-
-}; // backToTopClickHandler
-
-
 const BackToTopLink: ComponentType<Props> = () => {
 
-    return <Container>
-        <Link role={ "button" }
-              onClick={ backToTopClickHandler }>
-            <ArrowUp/>
-            Back to top
-        </Link>
-    </Container>
+    return <Link href={ "#main-content" }>
+        <ArrowUp/>
+        Back to top
+    </Link>
 
 }; // BackToTopLink
 
@@ -53,7 +40,8 @@ const BackToTop: ComponentType<Props> = ({ mode }: Props) => {
 
     if ( mode === 'overlay' && visible ) {
 
-        return<OverlayContainer role={ "complementary" }
+        return<OverlayContainer tabIndex={ "-1" }
+                                role={ "complementary" }
                                 aria-label={ "Scroll back to top" }
                                 style={ { opacity: visible ? 1 : 0, tabIndex: visible ? 0 : -1 } }>
             <BackToTopLink/>
@@ -61,7 +49,8 @@ const BackToTop: ComponentType<Props> = ({ mode }: Props) => {
 
     } else if ( mode !== 'overlay' ) {
 
-        return <InlineContainer role={ "complementary" }
+        return <InlineContainer tabIndex={ "-1" }
+                                role={ "complementary" }
                                 aria-label={ "Scroll back to top" }
                                 style={ { opacity: visible ? 0 : 1, tabIndex: visible ? -1 : 0  } }>
             <BackToTopLink/>
