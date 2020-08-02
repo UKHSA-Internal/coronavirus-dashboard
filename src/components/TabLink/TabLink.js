@@ -24,19 +24,22 @@ const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
     switch ( cardType ) {
 
         case "chart":
-            return <TabContent { ...props }/>;
+            return <TabContent Component={ TabContentRaw } { ...props }/>;
 
         case "map":
             return <p>Not implemented.</p>;
 
         case "ageSexBreakdown":
-            return <AgeSexBreakdownTabContent { ...props }/>
+            // return <AgeSexBreakdownTabContent { ...props }/>
+            return <TabContent Component={ AgeSexBreakdownTabContent } { ...props }/>;
 
         case "multiAreaStatic":
-            return <MultiAreaStaticTabContent { ...props }/>
+            // return <MultiAreaStaticTabContent { ...props }/>
+            return <TabContent Component={ MultiAreaStaticTabContent } { ...props }/>;
 
         case "simpleTableStatic":
-            return <SimpleTable { ...props }/>
+            // return <SimpleTable { ...props }/>
+            return <TabContent Component={ SimpleTable } { ...props }/>;
 
         default:
             console.warn(`Invalid card type: "${cardType}"`)
@@ -147,16 +150,16 @@ const TabContentRaw: ComponentType<*> = ({ fields, setDataState, params, tabType
 };  // TabContentRaw
 
 
- const TabContent: ComponentType<*> = ({ tabType, ...props }) => {
+const TabContent: ComponentType<*> = ({ Component, tabType=null, ...props }) => {
 
-     const RawDataTabs = [
-         "metadata"
-     ];
+    const RawDataTabs = [
+        "metadata"
+    ];
 
-     if ( !(RawDataTabs.indexOf(tabType) > -1) )
-         return <TabContentRaw tabType={ tabType } { ...props }/>;
+    if ( tabType && !(RawDataTabs.indexOf(tabType) > -1) )
+        return <Component tabType={ tabType } { ...props }/>;
 
-     return <TabContentWithData tabType={ tabType } { ...props }/>
+    return <TabContentWithData tabType={ tabType } { ...props }/>
 
 };  // TabContent
 
