@@ -1907,6 +1907,14 @@
     d3-collection "1"
     d3-shape "^1.2.0"
 
+"@publichealthengland/uk-covid19@^1.2.5":
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@publichealthengland/uk-covid19/-/uk-covid19-1.2.5.tgz#2d165ed671e9d2c2009b8ed72fb81ef12d65a3c4"
+  integrity sha512-0H7c8gW9U4mErAgSOBf4RLxz1vrwcaTjzerMQZS9VopWbvSikI3cGp2Hnrdn5mbaiQyRMLGwu1v8OrtGYdaODA==
+  dependencies:
+    axios "^0.19.2"
+    moment "^2.27.0"
+
 "@stylelint/postcss-css-in-js@^0.37.1":
   version "0.37.1"
   resolved "https://registry.yarnpkg.com/@stylelint/postcss-css-in-js/-/postcss-css-in-js-0.37.1.tgz#41e5e7660f73d88227610e18c6ebb262d56ac125"
@@ -9837,6 +9845,11 @@ moment@^2.24.0:
   version "2.26.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.26.0.tgz#5e1f82c6bafca6e83e808b30c8705eed0dcbd39a"
   integrity sha512-oIixUO+OamkUkwjhAVE18rAMfRJNsNe/Stid/gwHSOfHrOtw9EhAY2AHvdKZ/k/MggcYELFCJz/Sn2pL8b8JMw==
+
+moment@^2.27.0:
+  version "2.27.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
+  integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
 
 monotone-convex-hull-2d@^1.0.1:
   version "1.0.1"

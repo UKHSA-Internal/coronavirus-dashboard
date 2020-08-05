@@ -30,7 +30,7 @@ const URLs = {
         csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-deaths_latest.csv`,
         json: `${ REACT_APP_BASE_URL }/downloads/json/coronavirus-deaths_latest.json`
     },
-    about:         `https://${ REACT_APP_MAIN_CDN      }/assets/about.md`,
+    about:         `https://${ REACT_APP_MAIN_CDN      }/assets/modals/about.md`,
     accessibility: `https://${ REACT_APP_MAIN_CDN      }/assets/accessibility.md`,
     newWebsite:    `https://${ REACT_APP_MAIN_CDN      }/assets/new_website.md`,
     archiveList:   `https://${ REACT_APP_DOWNLOADS_CDN }/downloads?restype=container&comp=list`,

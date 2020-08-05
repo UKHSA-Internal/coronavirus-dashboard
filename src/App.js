@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Switch, Route, withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
 import Header from "components/Header";
 import DailySummary from 'pages/DailySummary';
-import CookieBanner from 'components/CookieBanner';
+// import CookieBanner from 'components/CookieBanner';
 import BackToTop from 'components/BackToTop';
 import ErrorBoundary from "components/ErrorBoundary";
 import axios from "axios";
@@ -13,7 +12,6 @@ import URLs from "common/urls";
 import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
-import Announcement from "components/Announcement";
 
 const useTimestamp = () => {
 
@@ -36,19 +34,6 @@ const LastUpdateTime = () => {
     const timestamp = useTimestamp();
 
     return <>
-        <Announcement firstDisplayDate={{ day: 15, month: 6, year: 2020 }}
-                      lastDisplayDate={{ day: 1, month: 1, year: 2021 }}>
-            <p className={ "govuk-body govuk-!-margin-top-0" }>
-                This website is moving into production and will replace
-                the <a className={ "govuk-link govuk-link--no-visited-state" }
-                       target={ "_blank" }
-                       rel={ "noreferrer noopener" }
-                       href={ 'https://coronavirus.data.gov.uk/' }>official website</a>. Please
-                read <Link className={ "govuk-link govuk-link--no-visited-state" }
-                          to={ '/new-service' }>the announcement</Link> to learn more
-                about how this change might affect you or your service.
-            </p>
-        </Announcement>
         <div className={ "govuk-!-margin-top-5 govuk-!-margin-bottom-5" }
              role={ "region" }
              aria-labelledby={ "last-update" }>
@@ -80,36 +65,6 @@ const
     ];
 
 
-const BetaBanner = ({ ...props }) => {
-
-    return <div className={ "govuk-phase-banner" }
-                style={{ padding: "1rem" }}
-                role={ "region" }
-                aria-label={ "Phase banner" }
-                { ...props }>
-        <p className="govuk-phase-banner__content" id={ "phase-banner-content" }>
-            <strong className="govuk-tag govuk-phase-banner__content__tag">
-                beta
-            </strong>
-            <span className="govuk-phase-banner__text">
-                This is a new service &ndash; your&nbsp;
-                <a className="govuk-footer__link"
-                   href={ encodeURI("mailto:coronavirus-tracker@phe.gov.uk?Subject=BETA dashboard feedback") }
-                   rel={ "noopener noreferrer" }
-                   target={ "_blank" }>
-                    feedback</a>&nbsp;
-                will help us to improve it.
-                The&nbsp;<a className="govuk-footer__link"
-                   href={ "https://coronavirus.data.gov.uk/" }
-                   rel={ "noopener noreferrer" }
-                   target={ "_blank" }>current official website</a>&nbsp;is still
-                available.</span>
-        </p>
-    </div>
-
-};
-
-
 const Navigation = ({ layout, ...props }) => {
 
     const Nav = layout !== "mobile"
@@ -133,7 +88,7 @@ const
     Accessibility   = lazy(() => import('pages/Accessibility')),
     Cookies         = lazy(() => import('pages/Cookies')),
     ApiDocs         = lazy(() => import('pages/ApiDocs')),
-    NewWebsite      = lazy(() => import('pages/NewWebsite')),
+    // NewWebsite      = lazy(() => import('pages/NewWebsite')),
     Footer          = lazy(() => import('components/Footer'));
 
 
@@ -151,10 +106,9 @@ const App = ({ location: { pathname } }) => {
     }, [ pathname ]);
 
     return <>
-        <CookieBanner/>
+        {/*<CookieBanner/>*/}
         <Header/>
         { layout === "mobile" && <Navigation layout={ layout }/> }
-        <BetaBanner/>
         <div className={ "govuk-width-container" }>
             <LastUpdateTime/>
             <ErrorBoundary>
@@ -183,7 +137,6 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/accessibility" component={ Accessibility }/>
                                 <Route path="/cookies" component={ Cookies }/>
                                 <Route path="/developers-guide" exact component={ ApiDocs }/>
-                                <Route path="/new-service" exact component={ NewWebsite }/>
                             </Switch>
                         </Suspense>
                     </main>
