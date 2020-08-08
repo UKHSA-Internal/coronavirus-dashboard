@@ -11,9 +11,13 @@ export const Container: ComponentType<*> = (() => {
       padding: 20px;
       border: 5px solid #1d70b8;
       margin-top: 1rem;
-      
+      width: 70%;
+      margin-left: auto;
+      margin-right: auto;
+            
       @media only screen and (max-width: 768px) {
         grid-column: span 3;
+        width: auto;
       }
       
       &>*:first-child {
@@ -23,5 +27,6 @@ export const Container: ComponentType<*> = (() => {
       &>*:last-child {
         margin-bottom: 0;
       }
+      
     `;
 })();
