@@ -13,6 +13,20 @@ import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
 
+const
+    DashboardHeader = lazy(() => import('components/DashboardHeader')),
+    Cases           = lazy(() => import('pages/Cases')),
+    Healthcare      = lazy(() => import('pages/Healthcare')),
+    Deaths          = lazy(() => import('pages/Deaths')),
+    Tests           = lazy(() => import('pages/Testing')),
+    About           = lazy(() => import('pages/About')),
+    Accessibility   = lazy(() => import('pages/Accessibility')),
+    Cookies         = lazy(() => import('pages/Cookies')),
+    ApiDocs         = lazy(() => import('pages/ApiDocs')),
+    Announcement    = lazy(() => import("components/Announcement")),
+    Footer          = lazy(() => import('components/Footer'));
+
+
 const useTimestamp = () => {
 
     const [ timestamp, setTimestamp ] = useState("");
@@ -34,6 +48,19 @@ const LastUpdateTime = () => {
     const timestamp = useTimestamp();
 
     return <>
+        <Suspense fallback={ <Loading/> }>
+            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 8, hour: 12 }}
+                          lastDisplayDate={{ year: 2020, month: 8, day: 13, hour: 12 }}>
+                <p className={ "govuk-body" }>
+                    This is a new service &mdash; please complete a
+                    brief <a href={ "https://forms.gle/NkBM5dVXgYCkryE17" }
+                             className={ "govuk-link" }
+                             target={ "_blank" }
+                             rel={ "noopener noreferrer" }>survey</a> to
+                    help us improve it.
+                </p>
+            </Announcement>
+        </Suspense>
         <div className={ "govuk-!-margin-top-5 govuk-!-margin-bottom-5" }
              role={ "region" }
              aria-labelledby={ "last-update" }>
@@ -76,20 +103,6 @@ const Navigation = ({ layout, ...props }) => {
     </Suspense>
 
 };  // MobileNavigation
-
-
-const
-    DashboardHeader = lazy(() => import('components/DashboardHeader')),
-    Cases           = lazy(() => import('pages/Cases')),
-    Healthcare      = lazy(() => import('pages/Healthcare')),
-    Deaths          = lazy(() => import('pages/Deaths')),
-    Tests           = lazy(() => import('pages/Testing')),
-    About           = lazy(() => import('pages/About')),
-    Accessibility   = lazy(() => import('pages/Accessibility')),
-    Cookies         = lazy(() => import('pages/Cookies')),
-    ApiDocs         = lazy(() => import('pages/ApiDocs')),
-    // NewWebsite      = lazy(() => import('pages/NewWebsite')),
-    Footer          = lazy(() => import('components/Footer'));
 
 
 const App = ({ location: { pathname } }) => {
