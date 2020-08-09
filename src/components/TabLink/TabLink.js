@@ -18,6 +18,8 @@ import Loading from "components/Loading";
 import Metadata from "components/Metadata";
 import Abstract from "components/Abstract";
 
+const Plotter = lazy(() => import('components/Plotter'));
+
 
 const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
 
@@ -30,15 +32,12 @@ const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
             return <p>Not implemented.</p>;
 
         case "ageSexBreakdown":
-            // return <AgeSexBreakdownTabContent { ...props }/>
             return <TabContent Component={ AgeSexBreakdownTabContent } { ...props }/>;
 
         case "multiAreaStatic":
-            // return <MultiAreaStaticTabContent { ...props }/>
             return <TabContent Component={ MultiAreaStaticTabContent } { ...props }/>;
 
         case "simpleTableStatic":
-            // return <SimpleTable { ...props }/>
             return <TabContent Component={ SimpleTable } { ...props }/>;
 
         default:
@@ -96,15 +95,15 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
     switch ( tabType ) {
 
         case "chart":
-            const
-                layout = {},
-                Plotter = lazy(() => import('components/Plotter'));
+            const layout = {};
 
             if ( barType ) layout["barmode"] = barType;
 
 
             return <Suspense fallback={ <Loading/> }>
-                <Plotter data={ getPlotData(fields, data, xKey) } layout={ layout } { ...props }/>
+                <Plotter data={ getPlotData(fields, data, xKey) }
+                         layout={ layout }
+                         { ...props }/>
             </Suspense>
 
         case "table":
@@ -296,17 +295,18 @@ const MultiAreaStaticTabContent = ({ params, setDataState, groupKey, groupValues
                 : [],
             ...fields
                 .filter(item => item.value !== 'date')
-                .reduce((acc, { value, label, ...rest }) => ([
+                .reduce((acc, { value, label, colour: colour = null, ...rest }) => ([
                 ...acc,
                 ...areaNames.map((areaName, index) => ({
                     ...rest,
                     value: `${ areaName }${ value }`,
                     label: `${ areaName }${ isTable ? " " : "" } ${ label }`,
-                    colour: props?.colours?.[index] ?? index
+                    colour: colour ? colour : (props?.colours?.[index] ?? index)
                 }))
             ]), [])
         ];
 
+    console.log(newFields)
     return <TabContentWithData { ...props } fields={ newFields } data={ newData }/>
 
 };  // CustomTabContent
