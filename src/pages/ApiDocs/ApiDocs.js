@@ -153,7 +153,7 @@ const ApiDocs: ComponentType<*> = ({ ...props }) => {
                     is possible to request a response in CSV or XML too.
                 </p>
             <CodeBox language={ "bash" }>
-                {`curl -si 'https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=nation;areaName=england&structure=\&#123;%22name%22:%22areaName%22\&#125;'`}
+                {`curl -si 'https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=nation;areaName=england&structure=%7B%22name%22:%22areaName%22%7D'`}
             </CodeBox>
             <CodeBox>{`HTTP/1.1 200 OK
 Cache-Control: no-store, must-revalidate, no-cache
@@ -181,7 +181,7 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
             </p>
 
                 <CodeBox language={ 'bash' }>
-                    {`curl -sI 'https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=nation;areaName=england&structure=\{"name":"areaName"\}' | grep -i 'last-modified'`}
+                    {`curl -sI 'https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=nation;areaName=england&structure=%7B%22name%22:%22areaName%22%7D' | grep -i 'last-modified'`}
                 </CodeBox>
                 <CodeBox>
                     {`Last-Modified: Mon, 20 Jul 2020 14:28:09 GMT`}
