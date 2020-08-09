@@ -49,7 +49,7 @@ const LastUpdateTime = () => {
 
     return <>
         <Suspense fallback={ <Loading/> }>
-            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 8, hour: 12 }}
+            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 9, hour: 12 }}
                           lastDisplayDate={{ year: 2020, month: 8, day: 13, hour: 12 }}>
                 <p className={ "govuk-body" }>
                     This is a new service &mdash; please complete a
