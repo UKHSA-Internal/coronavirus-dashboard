@@ -306,7 +306,6 @@ const MultiAreaStaticTabContent = ({ params, setDataState, groupKey, groupValues
             ]), [])
         ];
 
-    console.log(newFields)
     return <TabContentWithData { ...props } fields={ newFields } data={ newData }/>
 
 };  // CustomTabContent
