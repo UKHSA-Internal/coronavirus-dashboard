@@ -6,24 +6,35 @@ name: Build test for pull and push requests
 on:
   push:
     branches:
-      - development
-  
+      - v2-development
+      - master
+
   pull_request:
     branches: 
-      - development
+      - v2-development
       - master
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+        node-version:
+          - 13.7.0
+          - 14.5.0
 
     steps:
     - uses: actions/checkout@master
 
-    - name: Set up Node.js version
+    - name: Set up Node.js version ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
-        node-version: '12.13.0'
+        node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
       run: |
