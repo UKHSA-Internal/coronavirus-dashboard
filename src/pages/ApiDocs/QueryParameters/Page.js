@@ -8,7 +8,7 @@ import LanguageTabs from "./LanguageTabLink";
 
 import { BlueBadge, Query, Title } from "./QueryParameters.styles";
 import { Code } from "components/Widgets/Widgets.styles";
-import { ComponentType } from "react";
+import type { ComponentType } from "react";
 
 
 const PythonExample = `from typing import Iterable, Dict, Union, List
