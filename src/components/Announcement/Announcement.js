@@ -1,6 +1,6 @@
 // @flow
 
-import React, { ReactNode } from "react";
+import React  from "react";
 import type { ComponentType } from 'react';
 
 import * as Style from "./Announcement.style"
@@ -10,10 +10,10 @@ import type { AnnouncementProps } from "./Announcement.types";
 /**
  * Create a blue announcement banner.
  *
- * @param children { ReactNode } Child elements - contents of the banner.
+ * @param children { any } Child elements - contents of the banner.
  * @param firstDisplayDate { DateTime } Must include year, month, and day. Hour and minute are optional.
  * @param lastDisplayDate { DateTime } Must include year, month, and day. Hour and minute are optional.
- * @returns {null | ReactNode} The banner.
+ * @returns {null | any } The banner.
  */
 const Announcement: ComponentType<AnnouncementProps> = ({ children, firstDisplayDate, lastDisplayDate }): ReactNode|null => {
 
