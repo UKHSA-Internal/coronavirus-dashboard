@@ -1,6 +1,5 @@
 import React from "react";
 import Plot from "react-plotly.js";
-import URLs from "common/urls";
 
 
 export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, ...props }) => {
