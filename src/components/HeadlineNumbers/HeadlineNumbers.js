@@ -7,7 +7,7 @@ import ValueBox from "components/ValueBox";
 
 import { Container } from "./HeadlineNumbers.styles";
 
-import { ComponentType } from "react";
+import type { ComponentType } from "react";
 
 
 const HeadlineNumbers: ComponentType<Props> = ({ params, headlineNumbers=[] }) => {
