@@ -89,7 +89,7 @@ export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionC
             fullQuery = `${key}${sign}${value}`,
             partialQueryWithSign = `${key}${sign}`,
             fullPattern = new RegExp(`(${fullQuery})`),
-            partialPattern = new RegExp(`(${partialQueryWithSign}[A-Za-z0-9\-,'\\s]*)`);
+            partialPattern = new RegExp(`(${partialQueryWithSign}[A-Za-z0-9,'\\s-]*)`);
 
         if ( fullPattern.exec(params) && removeDuplicates ) continue;
 
@@ -305,6 +305,14 @@ export const fieldToStructure = (fields, params, extraParams=[]) => {
 
     for ( const value of fields )
         structure[value] = value;
+
+
+    console.log(generateUrl({
+        conjunctiveFilters: params,
+        structure: structure,
+        defaultResponse: [],
+        extraParams: extraParams
+    }))
 
     return generateUrl({
         conjunctiveFilters: params,
