@@ -1,11 +1,11 @@
 // @flow
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 
 import useDestinationLookup from "hooks/useDestinationLookup";
 
-import { getParams } from "common/utils";
+// import { getParams } from "common/utils";
 // import { PathNameMapper } from "./Constants";
 
 
