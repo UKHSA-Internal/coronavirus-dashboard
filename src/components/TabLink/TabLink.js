@@ -46,7 +46,7 @@ const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
 
     }
 
-}  // TabLink
+};  // TabLink
 
 
 const TabLinkContainer: ComponentType<*> = ({ tabs, abstract=null, ...props }) => {
