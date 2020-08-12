@@ -7,7 +7,6 @@ import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash';
 import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
 import python from 'react-syntax-highlighter/dist/esm/languages/prism/python';
 import r from 'react-syntax-highlighter/dist/esm/languages/prism/r';
-import prism from 'react-syntax-highlighter/dist/esm/styles/prism/prism';
 
 import { CodeBoxStyles } from "./CodeBox.styles"
 
