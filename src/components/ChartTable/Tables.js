@@ -1,4 +1,4 @@
-import React, { Fragment, ReactNode } from "react";
+import React, { Fragment } from "react";
 import AltChartTable from "components/AltChartTable";
 
 import moment from "moment";
