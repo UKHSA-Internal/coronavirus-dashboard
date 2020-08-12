@@ -50,14 +50,21 @@ const LastUpdateTime = () => {
     return <>
         <Suspense fallback={ <Loading/> }>
             <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 9, hour: 12 }}
-                          lastDisplayDate={{ year: 2020, month: 8, day: 13, hour: 12 }}>
+                          lastDisplayDate={{ year: 2020, month: 8, day: 12, hour: 8 }}>
                 <p className={ "govuk-body" }>
                     This is a new service &mdash; please complete a
                     brief <a href={ "https://forms.gle/NkBM5dVXgYCkryE17" }
                              className={ "govuk-link" }
                              target={ "_blank" }
-                             rel={ "noopener noreferrer" }>survey</a> to
+                    rel={ "noopener noreferrer" }>survey</a> to
                     help us improve it.
+                </p>
+            </Announcement>
+            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 11, hour: 16 }}
+                          lastDisplayDate={{ year: 2020, month: 8, day: 12, hour: 15, minute: 59 }}>
+                <p className={ "govuk-body" }>
+                    Owing to technical difficulties, the data will not be updated
+                    until <time dateTime={ '2020-08-12' }>12 August 2020</time>.
                 </p>
             </Announcement>
         </Suspense>
