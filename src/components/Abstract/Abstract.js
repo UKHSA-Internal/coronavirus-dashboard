@@ -61,7 +61,7 @@ const Abstract: ComponentType = ({ content, fullWidth=false }) => {
     return <AbstractContainer aria-label={ "Abstract description of the contents" }
                               fullWidth={ fullWidth }>
         { result }
-    </AbstractContainer>
+    </AbstractContainer>;
 
 };  // Abstract
 
