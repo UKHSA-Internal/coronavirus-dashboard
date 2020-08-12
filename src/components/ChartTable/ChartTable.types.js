@@ -53,7 +53,7 @@ declare export type TitleOrDescriptionValues = {
     totalCases:  string,
     dailyCases:  string,
     totalDeaths: string,
-    dailyDeaths: string
+    dailyDeaths: string,
     ageSex:      string
 
 } // TitleOrDescriptionValues
