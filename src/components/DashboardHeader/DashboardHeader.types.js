@@ -34,7 +34,7 @@ export type HierarchyItem = {
 export type FlatHierarchyItem = {
 
     key:   string,
-    value: string
+    value: string,
     type:  string
 
 }  // HierarchyItem
