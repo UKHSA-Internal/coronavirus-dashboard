@@ -145,7 +145,7 @@ const isIncluded = ({ params, locationAware={} }: IsIncludedTypeProps): boolean 
         includedAreaName = locationAware?.included?.areaName ?? [],
         excludedAreaType = locationAware?.excluded?.areaType ?? [],
         excludedAreaName = locationAware?.excluded?.areaName ?? [],
-        hasExclusion = excludedAreaType.length > 0 && !excludedAreaName.length > 0,
+        hasExclusion = excludedAreaType.length > 0 && !(excludedAreaName.length > 0),
         isExcluded = (
             excludedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
             excludedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
