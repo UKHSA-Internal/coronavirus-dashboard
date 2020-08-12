@@ -2,8 +2,6 @@
 
 import React from "react";
 
-import { Container } from "./Header.styles";
-
 import type { ComponentType } from "react";
 
 
