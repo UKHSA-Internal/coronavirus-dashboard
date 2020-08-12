@@ -40,7 +40,7 @@ declare export type ValuesDataType = {
 
 declare export type HeadingType = {
 
-    id: string
+    id: string,
     label: string,
     format: string,
     getter: (ValuesDataType) => string,
