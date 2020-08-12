@@ -15,7 +15,7 @@ export type CardNumberDataType = {
 export type UKSummaryField = CardNumberDataType & {
     chart?: {
         value: string,
-        colour: number
+        colour: number,
         type: string,
         display: boolean,
         fill: boolean,
