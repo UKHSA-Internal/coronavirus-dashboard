@@ -25,7 +25,7 @@ const setCookies = () => {
     window.ga('govuk_shared.set', 'allowAdFeatures', false);
     window.ga('govuk_shared.linker:autoLink', ['www.gov.uk']);
     window.ga('send', 'pageview');
-    window.ga('govuk_shared.send', 'pageview')
+    window.ga('govuk_shared.send', 'pageview');
 };
 
 const Cookies: ComponentType<Props> = ({ }: Props) => {
