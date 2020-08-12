@@ -1,4 +1,4 @@
-import React, { Component, Fragment, ReactNode } from "react";
+import React, { Component, Fragment } from "react";
 
 import ViewAs from 'components/ViewAs';
 
