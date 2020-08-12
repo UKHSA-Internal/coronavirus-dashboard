@@ -108,7 +108,7 @@ export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionC
 
     return definitionChar + encodeURI(params)
 
-} // createHash
+};  // createHash
 
 
 export const getParams = (uri: string, separator: string="&"): ParsedParams => {
@@ -305,14 +305,6 @@ export const fieldToStructure = (fields, params, extraParams=[]) => {
 
     for ( const value of fields )
         structure[value] = value;
-
-
-    console.log(generateUrl({
-        conjunctiveFilters: params,
-        structure: structure,
-        defaultResponse: [],
-        extraParams: extraParams
-    }))
 
     return generateUrl({
         conjunctiveFilters: params,
