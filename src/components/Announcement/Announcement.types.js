@@ -1,6 +1,5 @@
 // @flow
 
-import { ReactNode } from "react";
 
 declare export type DateTime = {
     year: number,
