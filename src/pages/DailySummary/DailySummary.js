@@ -26,7 +26,6 @@ import type {
     DailySummaryCardProps
 } from "./DailySummary.types";
 import Loading from "components/Loading";
-import { DataContainer } from "../../components/ValueBox/ValueBox.styles";
 
 
 const
