@@ -25,7 +25,6 @@ import {
 
 import type { IsIncludedTypeProps, Props } from './Card.types';
 import type { ComponentType } from 'react';
-import StaticExternalCard from "components/StaticExternalCard";
 import Loading from "components/Loading";
 
 
