@@ -15,7 +15,7 @@ import { getOrder } from "./GenericHooks";
 import {
     PathNameMapper,
     NoPickerPaths,
-    LocationBannerMapperr
+    LocationBannerMapper
 } from "./Constants";
 
 import {
