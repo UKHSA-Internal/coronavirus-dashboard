@@ -17,7 +17,6 @@ import {
 import type { ComponentType } from "react";
 import { analytics } from "common/utils";
 import DropdownButton from "components/DropdownButton";
-import Abstract from "components/Abstract";
 
 
 const DownloadOptions = ({ download=[], heading }) => {
