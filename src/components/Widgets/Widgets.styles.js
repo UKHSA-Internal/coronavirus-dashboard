@@ -1,3 +1,5 @@
+// @flow
+
 import styled from "styled-components";
 
 import type { ComponentType } from 'react';
@@ -31,7 +33,7 @@ export const AdmonitionContainer =
             margin: 2rem auto;
         `;
 
-const x = "#ffffff"
+
 export const Code: ComponentType<*> =
     styled
         .code`
