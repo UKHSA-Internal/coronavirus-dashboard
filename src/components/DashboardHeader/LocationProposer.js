@@ -9,20 +9,20 @@ import { getParams } from "common/utils";
 // import { PathNameMapper } from "./Constants";
 
 
-const usePrevious = ( value ) => {
-
-    const
-        ref = useRef("");
-
-    useEffect(() => {
-
-        ref.current = value
-
-    })
-
-    return ref.current
-
-};  // usePrevious
+// const usePrevious = ( value ) => {
+//
+//     const
+//         ref = useRef("");
+//
+//     useEffect(() => {
+//
+//         ref.current = value
+//
+//     })
+//
+//     return ref.current
+//
+// };  // usePrevious
 
 
 export const Mapper = {
@@ -33,31 +33,31 @@ export const Mapper = {
     "/deaths": "deaths",
 };
 
-const DestinationProposal = ({ queries, pathname }) => {
-
-    const
-        params = getParams(queries),
-        destinationPage = Mapper?.[pathname] ?? "",
-        destination = useDestinationLookup(params),
-        [ dispatch, setDispatch ] = useState(null);
-
-    console.log(">>", pathname);
-    console.log(queries);
-    console.log(destinationPage, destination);
-
-    useEffect(() => {
-
-        if ( destinationPage && destination ) {
-            setDispatch(<p>
-                Not available. Go to { destination[pathname].areaType }&nbsp;{ destination[pathname].areaCode } instead.
-            </p>)
-        }
-
-    }, [ destination ])
-
-    return dispatch
-
-};  // DestinationProposal
+// const DestinationProposal = ({ queries, pathname }) => {
+//
+//     const
+//         params = getParams(queries),
+//         destinationPage = Mapper?.[pathname] ?? "",
+//         destination = useDestinationLookup(params),
+//         [ dispatch, setDispatch ] = useState(null);
+//
+//     console.log(">>", pathname);
+//     console.log(queries);
+//     console.log(destinationPage, destination);
+//
+//     useEffect(() => {
+//
+//         if ( destinationPage && destination ) {
+//             setDispatch(<p>
+//                 Not available. Go to { destination[pathname].areaType }&nbsp;{ destination[pathname].areaCode } instead.
+//             </p>)
+//         }
+//
+//     }, [ destination ])
+//
+//     return dispatch
+//
+// };  // DestinationProposal
 
 
 const LocationProposer = ({ lastParams, referrer }) => {
