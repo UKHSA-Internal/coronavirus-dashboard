@@ -72,7 +72,7 @@ const DateRangePicker = ({ query, startDate, endDate }: Props) => {
             </div>
             <div className="govuk-grid-row govuk-!-margin-top-0">
                 <div className="govuk-grid-column-one-quarter">
-                    <div id="myDatepicker" className="datepicker">
+                    <div className="datepicker">
                         <div className="date govuk-form-group govuk-!-margin-bottom-0">
                             <label className="govuk-label" htmlFor="id-textbox-1">
                                 From date
@@ -86,7 +86,7 @@ const DateRangePicker = ({ query, startDate, endDate }: Props) => {
                 </div>
 
                 <div className="govuk-grid-column-one-quarter">
-                    <div id="myDatepicker" className="datepicker">
+                    <div className="datepicker">
                         <div className="date govuk-form-group govuk-!-margin-bottom-0">
                             <label className="govuk-label" htmlFor="id-textbox-2">
                                 To date
