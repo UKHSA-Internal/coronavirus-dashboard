@@ -41,8 +41,6 @@ export class MapTable extends Component<MapTableProps, {}> {
         data: {},
         category: Content[0].textLabel,
         viewMapAs: "rate",
-        area: "",
-        populationData: null,
         geoData: null,
         loading: false,
         mapObject: null,
