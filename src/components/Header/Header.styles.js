@@ -1,7 +1,8 @@
 // @flow
 
 import styled from 'styled-components';
-import { ComponentType } from "react";
+import type { ComponentType } from "react";
+
 
 export const Container: ComponentType<*> = (() => {
 
