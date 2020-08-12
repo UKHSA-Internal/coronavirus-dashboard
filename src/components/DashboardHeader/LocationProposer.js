@@ -5,8 +5,8 @@ import { useHistory } from "react-router";
 
 import useDestinationLookup from "hooks/useDestinationLookup";
 
-import { getParams, getParamValueFor } from "common/utils";
-import { PathNameMapper } from "./Constants";
+import { getParams } from "common/utils";
+// import { PathNameMapper } from "./Constants";
 
 
 const usePrevious = ( value ) => {
