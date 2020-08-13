@@ -154,7 +154,7 @@ export class Map extends Component<MapProps, {}> {
             );
 
         } else if ( prevProps.geoKey !== currentProps.geoKey && currentProps.geoData) {
-            this.setState({ geoData: currentProps.geoData })
+            this.setState((pState, props) => ({ geoData: props.geoData }))
         }
 
     } // componentDidUpdate
