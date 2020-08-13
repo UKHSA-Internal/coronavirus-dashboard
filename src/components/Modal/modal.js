@@ -67,11 +67,9 @@ const  ModalTooltip = ({ markdownPath, children, replacements={}, ...props }) =>
 
         const htmlElm = document.querySelector('html').classList;
 
-        modalStatus && (
-            modalStatus
-                ? htmlElm.add('u-lock-scroll')
-                : htmlElm.remove('u-lock-scroll')
-        );
+        modalStatus
+            ? htmlElm.add('u-lock-scroll')
+            : htmlElm.remove('u-lock-scroll');
 
         return () => {
             document.removeEventListener("keyup", handleKeyPressEvent);
