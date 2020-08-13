@@ -1,5 +1,5 @@
-import moment from "moment";
-import numeral from "numeral";
+import type moment from "moment";
+import type numeral from "numeral";
 
 import type { CountryData, Data } from "types/Data";
 
