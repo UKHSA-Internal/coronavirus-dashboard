@@ -32,7 +32,7 @@ const Description = ({ text, show = true, ...props }): React.ReactNode => {
 }; // Footnote
 
 
-export class MapTable extends Component<MapTableProps, {}> {
+export class MapTable extends Component<*> {
 
     #populationData = URLs.populationData;
 

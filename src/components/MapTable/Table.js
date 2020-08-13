@@ -93,7 +93,7 @@ const SortIcon = ({ headingId, sortBy, updater }) => {
 }; // SortIcon
 
 
-export class Table extends Component<TableProps, {}> {
+export class Table extends Component<*> {
 
     #baseUrl = URLs.baseData;
     #excluded = [
