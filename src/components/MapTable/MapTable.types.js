@@ -97,9 +97,9 @@ declare export type PopulationDataType = {
 export interface TableState {
 
     state: {
-        loading: boolean
-        data: any | null
-        populationData: PopulationDataType | null,
+        loading: boolean,
+        data: any | null,
+        populationData: PopulationDataType | null
     }
 } // TableState
 
