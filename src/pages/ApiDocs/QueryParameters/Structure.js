@@ -384,8 +384,8 @@ const Structure: ComponentType<*> = () =>
             <div className="govuk-details__text">
                 <div className={ "govuk-!-margin-bottom-5" }>
                     <p className={ "govuk-!-margin-bottom-0" }>
-                        Last updated on <time dateTime={ "2020-07-22T10:40:00.0000000Z" }>
-                        22nd of July 2020 at 10:40am</time></p>
+                        Last updated on <time dateTime={ "2020-08-13T17:30:00.0000000Z" }>
+                        13th of August 2020 at 17:30pm</time></p>
                     <p className={ "govuk-body-s" }>This list updated regularly as we release new metrics.</p>
                 </div>
                 <dl>
@@ -398,7 +398,9 @@ const Structure: ComponentType<*> = () =>
 
                     <dt><Code>newCasesByPublishDate</Code></dt><dd>New cases by publish date</dd>
                     <dt><Code>cumCasesByPublishDate</Code></dt><dd>Cumulative cases by publish date</dd>
+                    <dt><Code>cumCasesBySpecimenDateRate</Code></dt><dd>Rate of cumulative cases by publish date per 100k resident population</dd>
                     <dt><Code>newCasesBySpecimenDate</Code></dt><dd>New cases by specimen date</dd>
+                    <dt><Code>cumCasesBySpecimenDateRate</Code></dt><dd>Rate of cumulative cases by specimen date per 100k resident population</dd>
                     <dt><Code>cumCasesBySpecimenDate</Code></dt><dd>Cumulative cases by specimen date</dd>
                     <dt><Code>maleCases</Code></dt><dd>Male cases (by age)</dd>
                     <dt><Code>femaleCases</Code></dt><dd>Female cases (by age)</dd>
@@ -423,12 +425,15 @@ const Structure: ComponentType<*> = () =>
                     <dt><Code>hospitalCases</Code></dt><dd>Hospital cases</dd>
                     <dt><Code>plannedCapacityByPublishDate</Code></dt><dd>Planned capacity by publish date</dd>
 
-                    <dt><Code>newDeathsByPublishDate</Code></dt><dd>New deaths by publish date</dd>
-                    <dt><Code>cumDeathsByPublishDate</Code></dt><dd>Cumulative deaths by publish date</dd>
-                    <dt><Code>newDeathsByDeathDate</Code></dt><dd>New deaths by death date</dd>
-                    <dt><Code>cumDeathsByDeathDate</Code></dt><dd>Cumulative deaths by death date</dd>
-                    <dt><Code>femaleDeaths</Code></dt><dd>Female deaths (by age)</dd>
-                    <dt><Code>maleDeaths</Code></dt><dd>Male deaths (by age)</dd>
+                    {/*<dt><Code>newDeathsByPublishDate</Code></dt><dd>New deaths by publish date</dd>*/}
+                    {/*<dt><Code>cumDeathsByPublishDate</Code></dt><dd>Cumulative deaths by publish date</dd>*/}
+                    {/*<dt><Code>cumDeathsByPublishDateRate</Code></dt><dd>Rate of cumulative cases by publish date per 100k resident population</dd>*/}
+                    <dt><Code>newDeaths28DaysByPublishDate</Code></dt><dd>Deaths within 28 days of positive test</dd>
+                    <dt><Code>cumDeaths28DaysByPublishDate</Code></dt><dd>Cumulative deaths within 28 days of positive test</dd>
+                    {/*<dt><Code>newDeathsByDeathDate</Code></dt><dd>New deaths by death date</dd>*/}
+                    {/*<dt><Code>cumDeathsByDeathDate</Code></dt><dd>Cumulative deaths by death date</dd>*/}
+                    {/*<dt><Code>femaleDeaths</Code></dt><dd>Female deaths (by age)</dd>*/}
+                    {/*<dt><Code>maleDeaths</Code></dt><dd>Male deaths (by age)</dd>*/}
                 </dl>
             </div>
         </details>

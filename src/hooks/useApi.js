@@ -79,7 +79,7 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
                 )
             ) {
                 try {
-                    const { data: dt } = await axios.get(generateUrl({
+                    const { data: dt, status } = await axios.get(generateUrl({
                         conjunctiveFilters:  conjunctiveFilters,
                         disjunctiveFilters: disjunctiveFilters,
                         structure: structure,
@@ -87,9 +87,10 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
                         endpoint: endpoint
                     }));
 
-                    setData(dt.data)
+                    setData(status < 400 ? dt.data : [])
                 } catch (e) {
                     console.error(e)
+                    setData([])
                 }
             }
 

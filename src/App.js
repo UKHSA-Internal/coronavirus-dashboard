@@ -56,15 +56,28 @@ const LastUpdateTime = () => {
                     brief <a href={ "https://forms.gle/NkBM5dVXgYCkryE17" }
                              className={ "govuk-link" }
                              target={ "_blank" }
-                    rel={ "noopener noreferrer" }>survey</a> to
+                             rel={ "noopener noreferrer" }>survey</a> to
                     help us improve it.
                 </p>
             </Announcement>
             <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 11, hour: 16 }}
-                          lastDisplayDate={{ year: 2020, month: 8, day: 12, hour: 15, minute: 59 }}>
+                          lastDisplayDate={{ year: 2020, month: 8, day: 17, hour: 15, minute: 59 }}>
                 <p className={ "govuk-body" }>
-                    Owing to technical difficulties, the data will not be updated
-                    until <time dateTime={ '2020-08-12' }>12 August 2020</time>.
+                    Data for deaths limited to those that occurred within 28 days of the
+                    first laboratory&ndash;confirmed test are included for the UK from today.
+                    The data on old and new measures can be
+                    downloaded <a href={ "https://www.gov.uk/government/publications/phe-data-series-on-deaths-in-people-with-covid-19-technical-summary" }
+                                  className={ "govuk-link" }
+                                  target={ "_blank" }
+                                  rel={ "noopener noreferrer" }>here</a>.
+                </p>
+            </Announcement>
+            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 13, hour: 15, minute: 0 }}
+                          lastDisplayDate={{ year: 2020, month: 8, day: 14, hour: 15, minute: 59 }}>
+                <p className={ "govuk-body" }>
+                    We have not received the latest data for cases and tests in England. We
+                    will update today's records as soon as they become available.<br/>The deaths
+                    page is being re&ndash;developed.
                 </p>
             </Announcement>
         </Suspense>
@@ -150,7 +163,7 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/testing" component={ Tests }/>
                                 <Route path="/cases" exact component={ Cases }/>
                                 <Route path="/healthcare" component={ Healthcare }/>
-                                <Route path="/deaths" component={ Deaths }/>
+                                {/*<Route path="/deaths" component={ Deaths }/>*/}
 
                                 <Route path="/about-data" component={ About }/>
                                 {/*<Route path="/archive" component={ Archive }/>*/}
