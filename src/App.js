@@ -63,9 +63,9 @@ const LastUpdateTime = () => {
             <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 11, hour: 16 }}
                           lastDisplayDate={{ year: 2020, month: 8, day: 17, hour: 15, minute: 59 }}>
                 <p className={ "govuk-body" }>
-                    Data for deaths limited to those that occurred within 28 days of the
-                    first laboratory&ndash;confirmed test are included for the UK from today.
-                    The data on old and new measures can be
+                    Daily reported COVID deaths are now measured across the UK as deaths
+                    that occurred within 28 days of the first laboratory-confirmed positive
+                    COVID test. Data using the old and new measures can be
                     downloaded <a href={ "https://www.gov.uk/government/publications/phe-data-series-on-deaths-in-people-with-covid-19-technical-summary" }
                                   className={ "govuk-link" }
                                   target={ "_blank" }
