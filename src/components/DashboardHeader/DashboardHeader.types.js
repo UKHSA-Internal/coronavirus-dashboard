@@ -42,7 +42,7 @@ export type FlatHierarchyItem = {
 
 export type HierarchyDataType = {
 
-    overview:  Array<HierarchyItem>
+    overview:  Array<HierarchyItem>,
     nation:    Array<HierarchyItem>,
     region:    Array<HierarchyItem>,
     nhsRegion: Array<HierarchyItem>,
