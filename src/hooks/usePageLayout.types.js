@@ -45,7 +45,7 @@ export type GenericChartType = {
 };
 
 export type GenericTabType = {
-    heading: string,
+    heading:  string,
     barType?: null
             | "normal"
             | "overlay"
@@ -54,21 +54,21 @@ export type GenericTabType = {
 }
 
 export type GenericTableTabType = GenericChartType & {
-    label: string,
-    value: string,
+    label:   string,
+    value:   string,
     tooltip: string,
-    type: "numeric"
-        | "date"
-        | "string"
+    type:    "numeric"
+           | "date"
+           | "string"
 }
 
 export type ChartTabType = GenericTabType & {
-    tabType: "chart"
+    tabType: "chart",
     fields?: Array<GenericChartType>
 }
 
 export type TableTabType = GenericTabType & {
-    tabType: "table"
+    tabType: "table",
     fields?: Array<GenericTableTabType>
 }
 
