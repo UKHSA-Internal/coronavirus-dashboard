@@ -43,7 +43,6 @@ export class MapTable extends Component<*> {
         viewMapAs: "rate",
         geoData: null,
         loading: false,
-        mapObject: null,
         hash: "",
         tableSort: {}
 

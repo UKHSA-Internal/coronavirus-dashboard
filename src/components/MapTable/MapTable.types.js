@@ -172,7 +172,6 @@ export interface MapTableState {
     populationData: any  | null,
     geoData: any | null,
     loading: boolean,
-    mapObject: any,
     hash: string,
     tableSort: {
         [string]: {
