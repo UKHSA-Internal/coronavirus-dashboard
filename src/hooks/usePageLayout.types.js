@@ -104,7 +104,7 @@ export type usePageLayoutReturnType<T> =
     T extends TestingInput ? Testing :
     T extends HealthcareInput ? Healthcare :
     T extends DeathsInput ? Deaths :
-    T extends CasesInput ? Cases : void
+    T extends CasesInput ? Cases : void;
 
 
 export type LayoutInput =
