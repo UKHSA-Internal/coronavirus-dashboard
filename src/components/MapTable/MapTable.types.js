@@ -136,12 +136,12 @@ declare export type GeoDataType = Array<{
 
 export interface MapState {
 
-    layerGroup: any | null
+    layerGroup: any | null,
     map: any | null,
-    canvas: any | null
-    loading: boolean
-    geoData: GeoDataType | null
-    glStatus: boolean
+    canvas: any | null,
+    loading: boolean,
+    geoData: GeoDataType | null,
+    glStatus: boolean,
     centrePoint: [number, number] | null
 
 } // MapState
@@ -166,13 +166,13 @@ declare export type MapProps = {
 
 export interface MapTableState {
 
-    data: any
-    category: string
-    viewMapAs: "rate" | "case"
-    area: string
-    populationData: any  | null
-    geoData: any | null
-    loading: boolean
+    data: any,
+    category: string,
+    viewMapAs: "rate" | "case",
+    area: string,
+    populationData: any  | null,
+    geoData: any | null,
+    loading: boolean,
     mapObject: any,
     hash: string,
     tableSort: {
