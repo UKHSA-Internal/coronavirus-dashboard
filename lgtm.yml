@@ -1,0 +1,12 @@
+extraction:
+  javascript:
+    index:
+      exclude:
+        - build
+        - node_modules
+        - .github
+        - .vscode
+      filters:
+        - exclude:
+          - "**/usePageLayout.types.js"
+          - "**/web.config"
