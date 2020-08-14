@@ -330,7 +330,7 @@ export const analytics = ({ category, action, label, value }): void => {
 
     if ( "gtag" in window ) {
         try {
-            gtag('event', category, { action, label, value })
+            window.gtag('event', category, { action, label, value })
         } catch {}
     }
 
