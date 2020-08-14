@@ -6779,10 +6779,10 @@ govuk-frontend@3.4.0:
   resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.4.0.tgz#f6694245fbec2dd476d8e161c36be2a4ea785ce3"
   integrity sha512-rmYPtcCtWgz92QBejYwOnfSxbPGYfvSruLwB4CBk/yJtySHRY0whG1e2/iFRRSj0pMx1Bu+zh/IqCTo+84hbFw==
 
-govuk-frontend@3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.7.0.tgz#2eb2130c3c9f7c701c7ecdb300cc91106275a414"
-  integrity sha512-G3bqoKGGF8YQ18UJH9tTARrwB8i7iPwN1xc8RXwWyx91q0p/Xl10uNywZLkzGWcJDzEz1vwmBTTL3SLDU/KxNg==
+govuk-frontend@3.8.1:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.8.1.tgz#1a0456426174b798763429ea6cd06b32af986b8e"
+  integrity sha512-1995FVvBSnwizhJ63BHFzd7T8uoOLUKO6NOOT0fAOYE7bdl8Ncf6yC5n3TqiwCJ4lPMc/dCGkN9Z4QRJchwoYQ==
 
 govuk-react-jsx@2.0.1:
   version "2.0.1"
