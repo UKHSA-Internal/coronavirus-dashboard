@@ -17,7 +17,7 @@ const
     DashboardHeader = lazy(() => import('components/DashboardHeader')),
     Cases           = lazy(() => import('pages/Cases')),
     Healthcare      = lazy(() => import('pages/Healthcare')),
-    Deaths          = lazy(() => import('pages/Deaths')),
+    // Deaths          = lazy(() => import('pages/Deaths')),
     Tests           = lazy(() => import('pages/Testing')),
     About           = lazy(() => import('pages/About')),
     Accessibility   = lazy(() => import('pages/Accessibility')),
