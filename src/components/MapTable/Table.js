@@ -102,8 +102,7 @@ export class Table extends Component<*> {
 
     state: TableState = {
         loading: true,
-        data: null,
-        populationData: null
+        data: null
     } // state
 
     getData = async () => {
