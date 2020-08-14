@@ -71,13 +71,15 @@ const LastUpdateTime = () => {
                                   target={ "_blank" }
                                   rel={ "noopener noreferrer" }>here</a>.
                 </p>
+                <p className={ "govuk-body" }>
+                    The deaths page is being re&ndash;developed.
+                </p>
             </Announcement>
             <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 13, hour: 15, minute: 0 }}
                           lastDisplayDate={{ year: 2020, month: 8, day: 14, hour: 15, minute: 59 }}>
                 <p className={ "govuk-body" }>
                     We have not received the latest data for cases and tests in England. We
-                    will update today's records as soon as they become available.<br/>The deaths
-                    page is being re&ndash;developed.
+                    will update today's records as soon as they become available.
                 </p>
             </Announcement>
         </Suspense>
