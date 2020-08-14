@@ -82,6 +82,12 @@ const LastUpdateTime = () => {
                     will update today's records as soon as they become available.
                 </p>
             </Announcement>
+            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 14, hour: 16, minute: 0 }}
+                          lastDisplayDate={{ year: 2020, month: 8, day: 15, hour: 15, minute: 59 }}>
+                <p className={ "govuk-body" }>
+                    We have not received the latest data for tests in England and Wales.
+                </p>
+            </Announcement>
         </Suspense>
         <div className={ "govuk-!-margin-top-5 govuk-!-margin-bottom-5" }
              role={ "region" }
