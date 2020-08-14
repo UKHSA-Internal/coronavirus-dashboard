@@ -98,8 +98,7 @@ export interface TableState {
 
     state: {
         loading: boolean,
-        data: any | null,
-        populationData: PopulationDataType | null
+        data: any | null
     }
 } // TableState
 
