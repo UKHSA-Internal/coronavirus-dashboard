@@ -25,7 +25,6 @@ jobs:
           - ubuntu-latest
         node-version:
           - 13.7.0
-          - 14.5.0
 
     steps:
     - uses: actions/checkout@master
