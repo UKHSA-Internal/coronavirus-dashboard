@@ -17,6 +17,7 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
 
     strategy:
       matrix:
