@@ -17,6 +17,7 @@ const
     DashboardHeader = lazy(() => import('components/DashboardHeader')),
     Cases           = lazy(() => import('pages/Cases')),
     Healthcare      = lazy(() => import('pages/Healthcare')),
+    InteractiveMap  = lazy(() => import('pages/InteractiveMap')),
     Deaths          = lazy(() => import('pages/Deaths')),
     Tests           = lazy(() => import('pages/Testing')),
     About           = lazy(() => import('pages/About')),
@@ -152,6 +153,7 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/cases" exact component={ Cases }/>
                                 <Route path="/healthcare" component={ Healthcare }/>
                                 <Route path="/deaths" component={ Deaths }/>
+                                <Route path="/interactive-map" component={ InteractiveMap }/>
 
                                 <Route path="/about-data" component={ About }/>
                                 {/*<Route path="/archive" component={ Archive }/>*/}
