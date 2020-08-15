@@ -26,3 +26,21 @@ export type generateUrlInputs = {
     endpoint: "lookupApi"
             | "mainApi"
 }
+
+
+
+
+declare type GeoDataResponseItem = {
+    properties: {
+        [string]: {
+            lat: number,
+            long: number
+        },
+        [string]: any
+    },
+    id?: string,
+    [string]: any
+}; // GeoDataType
+
+
+export type GeoDataResponseType = GeoDataResponseItem[];
