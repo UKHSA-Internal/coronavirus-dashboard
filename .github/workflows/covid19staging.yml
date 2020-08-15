@@ -44,5 +44,5 @@ jobs:
       with:
         app-name: 'Covid19StaticSTAGING'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppServiceStaging }}
+        publish-profile: ${{ secrets.AZUREAPPSERVICESTAGING }}
         package: ./build

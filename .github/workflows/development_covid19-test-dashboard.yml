@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'covid19-test-dashboard'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppServiceDev }}
+        publish-profile: ${{ secrets.AZUREAPPSERVICEDEV }}
         package: ./build
