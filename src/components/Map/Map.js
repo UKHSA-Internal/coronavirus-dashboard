@@ -93,13 +93,12 @@ const initialiseMap: MapType<*> = () => {
 };  // initialiseMap
 
 
-const Map: ComponentType<*> = ({ data, geoKey, isRate = true, date, minData, maxData, children, ...props }) => {
+const Map: ComponentType<*> = ({ data, geoKey, isRate = true, children, ...props }) => {
 
     const
-        geoData = useGeoData("countries_v2.geojson", geoKey),
+        geoData = useGeoData("countries_v1.geojson", geoKey),
         { location: { hash } } = useHistory(),
-        [ areaName, areaCode, Rate, Date ] = [0, 1, 2, 3],
-        [mapControl, setMapControl] = useState(null);
+        [ areaName, areaCode, Rate ] = [0, 1, 2];
 
 
     const
@@ -110,35 +109,38 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, date, minData, max
             ? `rgba(${ rgb.r },${ rgb.g },${ rgb.b },.9)`
             : `rgba(${ rgb.r },${ rgb.g },${ rgb.b },1)`;
 
-    // let map, layerGroup, centrePoint;
+    let map, layerGroup, centrePoint;
 
     // console.log(geoData)
     // console.log(shadeScale(data.filter(d => d[areaCode] === p.id)?.[0] ?? 0));
 
     useEffect(() => {
-        if ( geoData )
-            setMapControl(initialiseMap());
-    }, [ geoData ]);
+        if ( geoData ) {
+            const mapCtl = initialiseMap();
+            map = mapCtl.map;
+            layerGroup = mapCtl.layerGroup;
+            centrePoint = mapCtl.centrePoint;
+        }
+    }, [ geoData ])
 
     useEffect(() => {
 
         // console.log(geoData);
         // const { map, layerGroup, centrePoint } = initialiseMap();
-        // console.log(index)
-        // console.log(data?.[index] ?? null)
-        // console.log(map)
-        if ( mapControl && data ) {
+
+        if ( map && data ) {
             const
-                { map, layerGroup, centrePoint } = mapControl,
                 areaCodeKey = `${ geoKey }cd`,
                 maxValue = max(data, d => d[Rate]),
                 // max(
                 // data.values,
                 // isRate ? (d => d.rateData.value) : (d => d.rawData.value)
                 // ),
-                radiusScale = scaleSqrt().range([0, maxCircleRadius]).domain([0, maxData]),
-                shadeScale = scaleLinear().range([0, 1]).domain([minData, maxData]);
+                radiusScale = scaleSqrt().range([0, maxCircleRadius]).domain([0, maxValue]),
+                shadeScale = scaleLinear().range([0, 1]).domain([0, maxValue]);
 
+            // console.log(maxValue)
+            // console.log(shadeScale)
             layerGroup.clearLayers();
 
             const boundaryLayer = L.geoJSON(geoData, {
@@ -147,7 +149,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, date, minData, max
                     weight: isRate ? .2 : .6,
                     opacity: .7,
                     fillColor: colour,
-                    fillOpacity: shadeScale(data.filter(d => d[areaCode] === p.id).pop()?.[Rate] ?? 0)
+                    fillOpacity: shadeScale(data.filter(d => d[areaCode] === p.id).pop()[Rate])
                     // fillOpacity: isRate
                     //     ? shadeScale(data.getByKey(p.id)?.rateData?.value ?? 0)
                     //     : (parsedHash?.area ?? -1) === p.id ? .2 : 0,
@@ -193,7 +195,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, date, minData, max
             //
             // }
 
-            layerGroup.addLayer(boundaryLayer);
+            layerGroup.addLayer(boundaryLayer)
 
             if ( parsedHash.hasOwnProperty("area") ) {
 
@@ -221,7 +223,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, date, minData, max
             }
         }
 
-    }, [ geoData, date, mapControl, data ]);
+    }, [ geoData, map, layerGroup, centrePoint, data ]);
 
     // if ( !(map && layerGroup && data && geoData) )
     //     return <Loading/>;
