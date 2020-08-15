@@ -7,6 +7,5 @@ extraction:
         - .github
         - .vscode
       filters:
-        - exclude:
-          - "**/usePageLayout.types.js"
-          - "**/web.config"
+        - exclude: "**/usePageLayout.types.js"
+        - exclude: "**/web.config"
