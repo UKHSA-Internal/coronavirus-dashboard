@@ -18,6 +18,7 @@ const
     Cases           = lazy(() => import('pages/Cases')),
     Healthcare      = lazy(() => import('pages/Healthcare')),
     // Deaths          = lazy(() => import('pages/Deaths')),
+    InteractiveMap  = lazy(() => import('pages/InteractiveMap')),
     Tests           = lazy(() => import('pages/Testing')),
     About           = lazy(() => import('pages/About')),
     Accessibility   = lazy(() => import('pages/Accessibility')),
@@ -165,6 +166,7 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/testing" component={ Tests }/>
                                 <Route path="/cases" exact component={ Cases }/>
                                 <Route path="/healthcare" component={ Healthcare }/>
+                                <Route path="/interactive-map" component={ InteractiveMap }/>
                                 {/*<Route path="/deaths" component={ Deaths }/>*/}
 
                                 <Route path="/about-data" component={ About }/>
