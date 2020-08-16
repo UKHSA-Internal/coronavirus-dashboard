@@ -1,4 +1,4 @@
-name: Build and deploy Node.js app to Azure Web App - Covid19StaticSTAGING
+name: STAGING deployment
 
 on:
   push:
