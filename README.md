@@ -1,14 +1,33 @@
 # Coronavirus (COVID-19) in the UK
 
-![Build test for pull and push requests](https://github.com/PublicHealthEngland/coronavirus-dashboard/workflows/Build%20test%20for%20pull%20and%20push%20requests/badge.svg) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/publichealthengland/coronavirus-dashboard) ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/publichealthengland/coronavirus-dashboard/development) ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/publichealthengland/coronavirus-dashboard)
+![Build test for pull and push requests](https://github.com/PublicHealthEngland/coronavirus-dashboard/workflows/Build/badge.svg)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/publichealthengland/coronavirus-dashboard)
+![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/publichealthengland/coronavirus-dashboard/v2-development)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/y/publichealthengland/coronavirus-dashboard)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/publichealthengland/coronavirus-dashboard.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/publichealthengland/coronavirus-dashboard/context:javascript)
 
+This is the frontend source code for the [Coronavirus Dashboard](https://coronavirus.data.gov.uk) service.
 
+## The API service
 
-This is the main source code for the [Coronavirus Dashboard](https://coronavirus.data.gov.uk) service.
+The API supplies the latest data for the COVID-19 outbreak in the United Kingdom. 
 
-There are two additional repositories associated with this project:
-- The [Pipeline ETL repository](https://github.com/PublicHealthEngland/coronavirus-dashboard-pipeline-etl) for data transformation.
-- The [Terraform repository](https://github.com/PublicHealthEngland/coronavirus-dashboard-terraform) for building the test, staging and deployment environments.
+The endpoint for the data provided using this SDK is:
+
+    https://api.coronavirus.data.gov.uk/v1/data
+
+Documentations for the API, including the latest metrics, are available on 
+the [Developers Guide](https://coronavirus.data.gov.uk/developers-guide) page.
+
+We have also developed software development kits (dedicated libraries) in several programming 
+languages to facilitate access to the API:
+ 
+- **Python** library is available on [GitHub®](https://github.com/publichealthengland/coronavirus-dashboard-api-python-sdk) and is published on [PyPI](https://pypi.org/project/uk-covid19/).   
+- **JavaScript** library is available on [GitHub®](https://github.com/publichealthengland/coronavirus-dashboard-api-javascript-sdk) and is published on [GitHub® Packages](https://github.com/publichealthengland/coronavirus-dashboard-api-javascript-sdk/packages/343170) and [NPM](https://www.npmjs.com/package/@publichealthengland/uk-covid19).
+- **R** library is available on [GitHub®](https://github.com/publichealthengland/coronavirus-dashboard-api-r-sdk) and has been submitted to [CRAN](https://cran.r-project.org) for publication.
+- **.Net** library is available of [GitHub®](https://github.com/publichealthengland/coronavirus-dashboard-api-net-sdk) and is pending submission to [NuGet](https://www.nuget.org).
+- **Elixir** library is available on [GitHub®](https://github.com/publichealthengland/coronavirus-dashboard-api-elixir-sdk) and is pending submission to [Hex](https://hex.pm).
+
 
 ## Development and contribution
 
@@ -46,4 +65,4 @@ Please note that other branches may contain experimental development contents an
 You are welcome to use the `development` branch as describeed in the [Contributors' Guide](https://github.com/PublicHealthEngland/coronavirus-dashboard/blob/master/CONTRIBUTING.md) to help us improve the service and make a contribution.
 
 ## Credits
-This service is developed and maintained by [NHSX](https://www.nhsx.nhs.uk/) and [Public Health England](https://www.gov.uk/government/organisations/public-health-england).
+This service is developed and maintained by [Public Health England](https://www.gov.uk/government/organisations/public-health-england).
