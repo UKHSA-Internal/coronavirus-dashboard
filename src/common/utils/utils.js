@@ -17,18 +17,18 @@ export const sortByDate = (a, b) => {
 };  // sortByDate
 
 
-const dateRange = (startDate, stopDate): Array<string> => {
+export const dateRange = (startDate: string, stopDate: string, step: number = 1, unit: string = 'days'): Array<string> => {
 
     const
         stop = moment(stopDate),
-        days = stop.diff(moment(startDate), "days"),
+        days = stop.diff(moment(startDate), unit),
         dateArray = Array(days).fill("YYYY-MM-DD");
 
     let currentDate = moment(startDate);
 
     for ( let index = 0; index <= days; index ++ ) {
         dateArray[index] = currentDate.format('YYYY-MM-DD');
-        currentDate = currentDate.add(1, 'days');
+        currentDate = currentDate.add(step, unit);
     }
 
     return dateArray;
@@ -89,7 +89,7 @@ export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionC
             fullQuery = `${key}${sign}${value}`,
             partialQueryWithSign = `${key}${sign}`,
             fullPattern = new RegExp(`(${fullQuery})`),
-            partialPattern = new RegExp(`(${partialQueryWithSign}[A-Za-z0-9,'\\s-]*)`);
+            partialPattern = new RegExp(`(${partialQueryWithSign}[A-Za-z0-9,'\\s-_]*)`);
 
         if ( fullPattern.exec(params) && removeDuplicates ) continue;
 
@@ -117,7 +117,7 @@ export const getParams = (uri: string, separator: string="&"): ParsedParams => {
         .replace("?", "")
         .split(separator)
         .reduce((acc, item) => {
-            const found = /^([a-z]+)([=<>!]{1,2})(.+)$/i.exec(item)
+            const found = /^([a-z]+)([=<>!]{1,2})([a-z-_\s0-9]+)$/i.exec(item)
 
             if (!found) return acc;
 
@@ -134,7 +134,7 @@ export const getParams = (uri: string, separator: string="&"): ParsedParams => {
 }; // getParams
 
 
-export const getParamValueFor = (params: Array<ParsedParams>, keyName: string, defaultValue: string|null=null): string | null => {
+export const getParamValueFor = (params: ParsedParams, keyName: string, defaultValue: string|null=null): string | null => {
 
     return params
         .reduce((acc, { key, value }) =>

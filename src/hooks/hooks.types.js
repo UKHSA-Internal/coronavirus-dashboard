@@ -14,7 +14,8 @@ export type useApiInputs = {
     defaultResponse: useApiResponseInput,
     extraParams: ParsedParams,
     endpoint: "lookupApi"
-            | "mainApi"
+            | "mainApi",
+    cache: boolean
 }
 
 

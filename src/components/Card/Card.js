@@ -231,7 +231,6 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
                     active &&
                     <Radio heading={ heading }
                            options={ options }
-                           dataState={ dataState }
                            value={ active }
                            setValue={ setActive }/>
                 }</CardHeader>
