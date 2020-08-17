@@ -11905,10 +11905,10 @@ react-spinners@^0.9.0:
   dependencies:
     "@emotion/core" "^10.0.15"
 
-react-syntax-highlighter@^13.0.0:
-  version "13.3.1"
-  resolved "https://registry.yarnpkg.com/react-syntax-highlighter/-/react-syntax-highlighter-13.3.1.tgz#80cf556902859238628b1b9c2d6e28d5d396adb8"
-  integrity sha512-GfIduBKlc7oebsEU4dpJPo04kVTEhSxe9F9hGWrzYVgGssJ06Kmf74LVOPp6pzj0Tj5pr5en8SKI8H2al4XeRA==
+react-syntax-highlighter@^13.4.0:
+  version "13.4.0"
+  resolved "https://registry.yarnpkg.com/react-syntax-highlighter/-/react-syntax-highlighter-13.4.0.tgz#299996b15f27bde322079c429073fca0e8eb10c6"
+  integrity sha512-LL4idMEOyGNro/BCaW1yRjGB1OO8n0OrXnuGg/NJoWvP1dtkHTy5paJfRc/SQdAFfvl0pPRRxvATzkxkKegOcQ==
   dependencies:
     "@babel/runtime" "^7.3.1"
     highlight.js "^10.1.1"
