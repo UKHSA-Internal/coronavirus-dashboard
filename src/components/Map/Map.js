@@ -93,10 +93,10 @@ const initialiseMap: MapType<*> = () => {
 };  // initialiseMap
 
 
-const Map: ComponentType<*> = ({ data, geoKey, isRate = true, date, minData, maxData, children, ...props }) => {
+const Map: ComponentType<*> = ({ data, geoKey, isRate = true, geoJSON, date, minData, maxData, children, ...props }) => {
 
     const
-        geoData = useGeoData("countries_v2.geojson", geoKey),
+        geoData = useGeoData(geoJSON, geoKey),
         { location: { hash } } = useHistory(),
         [ areaName, areaCode, Rate, Date ] = [0, 1, 2, 3],
         [mapControl, setMapControl] = useState(null);
@@ -116,9 +116,8 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, date, minData, max
     // console.log(shadeScale(data.filter(d => d[areaCode] === p.id)?.[0] ?? 0));
 
     useEffect(() => {
-        if ( geoData )
-            setMapControl(initialiseMap());
-    }, [ geoData ]);
+        setMapControl(initialiseMap());
+    }, []);
 
     useEffect(() => {
 
@@ -221,7 +220,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, date, minData, max
             }
         }
 
-    }, [ geoData, date, mapControl, data ]);
+    }, [ geoData, date, mapControl, data, geoJSON ]);
 
     // if ( !(map && layerGroup && data && geoData) )
     //     return <Loading/>;

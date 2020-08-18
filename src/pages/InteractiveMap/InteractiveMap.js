@@ -46,18 +46,21 @@ const LookupTable = {
 
 const AreaLevel = {
     nation: {
-        geoJson: "countries_v2.geojson",
+        geoJSON: "countries_v2.geojson",
         type: "nation",
+        geoKey: "ctry19",
         label: "Nations"
     },
     region: {
-        geoJson: "regions_v2.geojson",
+        geoJSON: "regions_v2.geojson",
         type: "region",
+        geoKey: "rgn18",
         label: "Regions"
     },
     ltla: {
-        geoJson: "ltlas_v2.geojson",
+        geoJSON: "ltlas_v2.geojson",
         type: "ltla",
+        geoKey: "lad19",
         label: "Local authorities"
     }
 };
@@ -122,20 +125,37 @@ const SideTable: ComponentType<*> = ({ data }) => {
 
     const
         defaultAreaType = "nation",
-        [areaType, setAreaType] = useState(defaultAreaType)
+        [ areaType, setAreaType ] = useState(defaultAreaType),
+        history = useHistory(),
+        { location: { pathname, search: query } } = history;
+
+    useEffect(() => {
+
+        history.push({
+            pathname: pathname,
+            search: createQuery([
+                ...getParams(query),
+                { key: "areaType", sign: "=", value: areaType },
+            ])
+        })
+
+    }, [ pathname, query, areaType ]);
 
     return <SideDataContainer>
         <Selector onChange={ event => setAreaType(event.target.value) }>{
             Object.keys(AreaLevel).map(id =>
-                <option key={ id } value={ id }>{ AreaLevel?.[id]?.label ?? "" }</option>
+                <option key={ id } value={ AreaLevel?.[id]?.type ?? "" }>
+                    { AreaLevel?.[id]?.label ?? "" }
+                </option>
             )
         }</Selector>
         <DataTable
             fields={[
                 { value: "areaName", label: "Area name", type: "string" },
-                { value: "rate", label: "Rate", type: "number" }
+                { value: "rate", label: "Rate", type: "numeric" }
             ]}
             data={ data.map(item => ({ areaName: item[0], rate: item[2] })) }
+            style={{ maxHeight: "75vh" }}
         />
     </SideDataContainer>
 
@@ -153,13 +173,14 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
         metric = getParamValueFor(params, "metric", "cases"),
         period = getParamValueFor(params, "period", "by_week"),
         metricName = LookupTable?.[metric]?.[period] ?? LookupTable.cases.metric.by_week,
-        [ currentDate, setCurrentDate ] = useState(weeklyDates.length - 1);
+        [ currentDate, setCurrentDate ] = useState(weeklyDates.length - 1),
+        areaType = getParamValueFor(params, "areaType", "nation");
 
     const
         data = useApi({
             conjunctiveFilters: metricName && [
-                {key: 'areaType', sign: '=', value: params?.areaType ?? "nation"},
-                {key: 'date', sign: '=', value: weeklyDates[currentDate]},
+                { key: 'areaType', sign: '=', value: AreaLevel?.[areaType]?.type ?? "nation" },
+                { key: 'date', sign: '=', value: weeklyDates[currentDate] },
             ],
             structure: metricName && [
                 "areaName",
@@ -201,8 +222,9 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                         onChange={ event => setCurrentDate(parseInt(event.target.value)) }/>
                 <Map data={ data }
                      date={ weeklyDates[currentDate] }
-                     geoKey={ "ctry19" }
-                     minData={ minData }
+                     geoKey={ AreaLevel?.[areaType]?.geoKey ?? "ctry19" }
+                     geoJSON={ AreaLevel?.[areaType]?.geoJSON ?? "countries_v2.geojson" }
+                     minData={ minData !== maxData ? minData : 0 }
                      maxData={ maxData !== minData ? maxData : 1 }
                 />
             </MapContainer>
