@@ -62,7 +62,7 @@ const LastUpdateTime = () => {
                 </p>
             </Announcement>
             <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 18, hour: 16, minute: 0 }}
-                          lastDisplayDate={{ year: 2020, month: 8, day: 18, hour: 20, minute: 0 }}>
+                          lastDisplayDate={{ year: 2020, month: 8, day: 18, hour: 18, minute: 30 }}>
                 <p className={ "govuk-body" }>
                     We have not received the latest breakdown of cases in England. We will
                     update today's records as soon as they become available.
