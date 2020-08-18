@@ -7,5 +7,6 @@ import type { ComponentType } from "react";
 
 export const MapContainer: ComponentType<*> =
     styled.div`
-        height: 580px;
+        height: 75vh;
+        
     `;

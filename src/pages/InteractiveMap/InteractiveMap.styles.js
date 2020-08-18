@@ -34,7 +34,9 @@ export const Selector: ComponentType<*> =
         .select
         .attrs(({ className="" }) => ({
             className: `${className} govuk-select govuk-!-margin-right-2`
-        }))``;
+        }))`
+            margin-bottom: 1rem;
+        `;
 
 
 export const MainContainer: ComponentType<*> =
@@ -42,6 +44,7 @@ export const MainContainer: ComponentType<*> =
         .div`
             display: flex;
             flex: 2 1 30%;
+            max-height: 80vh;
         `;
 
 
@@ -51,6 +54,7 @@ export const MapContainer: ComponentType<*> =
             display: flex;
             flex-direction: column;
             width: 100%;
+            align-self: stretch;
         `;
 
 
@@ -67,5 +71,6 @@ export const Slider: ComponentType<*> =
 export const SideDataContainer: ComponentType<*> =
     styled
         .div`
-            min-width: 300px;
+            min-width: 400px;
+            margin: 0 .5rem 0 1rem;
         `;

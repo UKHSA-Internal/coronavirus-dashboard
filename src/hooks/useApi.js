@@ -80,6 +80,8 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
                 )
             ) {
 
+                setData(defaultResponse);
+
                 const requestURL = generateUrl({
                     conjunctiveFilters:  conjunctiveFilters,
                     disjunctiveFilters: disjunctiveFilters,
