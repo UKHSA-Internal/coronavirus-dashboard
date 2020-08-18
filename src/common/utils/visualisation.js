@@ -6,29 +6,35 @@ import { movingAverage } from "../stats";
 
 export const
     colours = [
-        // Base blue
-        '#5694CA',
-        // Base blue tint 1
-        '#ABCBE5',
-        // Base blue tint 2
-        '#DEEAF4',
-        // Dark blue
-        '#003078',
-        // Dark blue tint 1
-        '#8098BC',
-        // Dark blue tint 2
-        '#CCD6E4',
-        // Grey
-        '#B1B4B6',
-        // Grey tint 1
-        '#D8DADB',
-        // Grey tint 2
-        '#EFF0F0',
-        // Yellow:
-        '#FFDD00',
-        // Red:
-        '#d4351c',
-    ];
+        '#5694CA',  // Base blue
+        '#ABCBE5',  // Base blue tint 1
+        '#DEEAF4',  // Base blue tint 2
+        '#003078',  // Dark blue
+        '#8098BC',  // Dark blue tint 1
+        '#CCD6E4',  // Dark blue tint 2
+        '#B1B4B6',  // Grey
+        '#D8DADB',  // Grey tint 1
+        '#EFF0F0',  // Grey tint 2
+        '#FFDD00',  // Yellow
+        '#d4351c',  // Red
+        // New colours
+        // '#206BC9',  // blue
+        // '#90C1FE',  // blue (tint 3)
+        // '#4691EC',  // blue (tint 2)
+        // '#002A7F',  // dark blue
+        // '#134D96',  // blue (tint 1)
+        // '#000C24',  // dark blue (tint1)
+        // '#8B8E92',  // grey
+        // '#4065B0',  // dark blue (tint2)
+        // '#84A3E4',  // dark blue (tint3)
+        // '#E0E543',  // yellow
+        // '#40A080',  // teal
+        // '#6B7276',  // grey (tint1)
+        // '#B9BCBD',  // grey (tint2)
+        // '#E0E1E2',  // grey (tint3)
+        // '#DB4325',  // red
+        // '#00703C'   // green
+];
 
 
 export const getPlotData = (fields: Array<{}>, rawData, xKey="date" ) => {
