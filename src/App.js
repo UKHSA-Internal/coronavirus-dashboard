@@ -61,26 +61,11 @@ const LastUpdateTime = () => {
                     information on the dashboard.
                 </p>
             </Announcement>
-            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 11, hour: 16 }}
-                          lastDisplayDate={{ year: 2020, month: 8, day: 17, hour: 15, minute: 59 }}>
+            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 18, hour: 16, minute: 0 }}
+                          lastDisplayDate={{ year: 2020, month: 8, day: 18, hour: 20, minute: 0 }}>
                 <p className={ "govuk-body" }>
-                    Daily reported COVID deaths are now measured across the UK as deaths
-                    that occurred within 28 days of the first laboratory-confirmed positive
-                    COVID test. Data using the old and new measures can be
-                    downloaded <a href={ "https://www.gov.uk/government/publications/phe-data-series-on-deaths-in-people-with-covid-19-technical-summary" }
-                                  className={ "govuk-link" }
-                                  target={ "_blank" }
-                                  rel={ "noopener noreferrer" }>here</a>.
-                </p>
-                <p className={ "govuk-body" }>
-                    The deaths page is being re&ndash;developed.
-                </p>
-            </Announcement>
-            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 13, hour: 15, minute: 0 }}
-                          lastDisplayDate={{ year: 2020, month: 8, day: 14, hour: 15, minute: 59 }}>
-                <p className={ "govuk-body" }>
-                    We have not received the latest data for cases and tests in England. We
-                    will update today's records as soon as they become available.
+                    We have not received the latest breakdown of cases in England. We will
+                    update today's records as soon as they become available.
                 </p>
             </Announcement>
         </Suspense>
