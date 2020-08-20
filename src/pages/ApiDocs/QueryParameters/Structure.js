@@ -430,6 +430,10 @@ const Structure: ComponentType<*> = () =>
                     {/*<dt><Code>cumDeathsByPublishDateRate</Code></dt><dd>Rate of cumulative cases by publish date per 100k resident population</dd>*/}
                     <dt><Code>newDeaths28DaysByPublishDate</Code></dt><dd>Deaths within 28 days of positive test</dd>
                     <dt><Code>cumDeaths28DaysByPublishDate</Code></dt><dd>Cumulative deaths within 28 days of positive test</dd>
+                    <dt><Code>cumDeaths28DaysByPublishDateRate</Code></dt><dd>Rate of cumulative deaths within 28 days of positive test per 100k resident population</dd>
+                    <dt><Code>newDeaths28DaysByDeathDate</Code></dt><dd>Deaths within 28 days of positive test by death date</dd>
+                    <dt><Code>cumDeaths28DaysByDeathDate</Code></dt><dd>Cumulative deaths within 28 days of positive test by death date</dd>
+                    <dt><Code>cumDeaths28DaysByDeathDateRate</Code></dt><dd>Rate of cumulative deaths within 28 days of positive test by death date per 100k resident population</dd>
                     {/*<dt><Code>newDeathsByDeathDate</Code></dt><dd>New deaths by death date</dd>*/}
                     {/*<dt><Code>cumDeathsByDeathDate</Code></dt><dd>Cumulative deaths by death date</dd>*/}
                     {/*<dt><Code>femaleDeaths</Code></dt><dd>Female deaths (by age)</dd>*/}
