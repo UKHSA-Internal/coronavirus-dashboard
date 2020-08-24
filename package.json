@@ -6,7 +6,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "d3-array": "^2.5.1",
-    "d3-scale": "^3.2.1",
+    "d3-scale": "^3.2.2",
     "deep-equal": "^2.0.3",
     "govuk-frontend": "3.8.1",
     "govuk-react-jsx": "2.0.1",
