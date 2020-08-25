@@ -162,6 +162,44 @@ const SideTable: ComponentType<*> = ({ data }) => {
 };  // Table
 
 
+const GenericMap: ComponentType<*> = ({ areaType, period, metricName, weeklyDates, currentDate }) => {
+
+    const
+        data = useApi({
+            conjunctiveFilters: metricName && [
+                { key: 'areaType', sign: '=', value: AreaLevel?.[areaType]?.type ?? "nation" },
+                { key: 'date', sign: '=', value: weeklyDates[currentDate] },
+            ],
+            structure: metricName && [
+                "areaName",
+                "areaCode",
+                metricName
+                // "date"
+            ],
+            defaultResponse: [],
+            cache: true,
+            extraParams: (metricName && period === "all_time")
+                ? [
+                    { key: 'latestBy', sign: '=', value: metricName }
+                ]
+                : []
+        });
+
+    if ( !data ) return <Loading/>
+
+    const
+        minData = min(data, item => item[2]),
+        maxData = max(data, item => item[2]);
+
+    return <Map data={ data }
+                date={ weeklyDates[currentDate] }
+                geoKey={ AreaLevel?.[areaType]?.geoKey ?? "ctry19" }
+                geoJSON={ AreaLevel?.[areaType]?.geoJSON ?? "countries_v2.geojson" }
+                minData={ minData !== maxData ? minData : 0 }
+                maxData={ maxData !== minData ? maxData : 1 }/>
+
+};  // GenericMap
+
 
 const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
 
@@ -197,13 +235,6 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                 : []
         });
 
-
-    // const
-        // grouped = groupBy(data, item => item[3]),
-        // dates = Object.keys(grouped).sort(sortByDate).reverse();
-
-
-
     if ( !data ) return <Loading/>
 
     const
@@ -220,6 +251,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                         max={ weeklyDates.length - 1 }
                         value={ currentDate }
                         onChange={ event => setCurrentDate(parseInt(event.target.value)) }/>
+                {/*<GenericMap*/}
                 <Map data={ data }
                      date={ weeklyDates[currentDate] }
                      geoKey={ AreaLevel?.[areaType]?.geoKey ?? "ctry19" }
@@ -227,7 +259,12 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                      minData={ minData !== maxData ? minData : 0 }
                      maxData={ maxData !== minData ? maxData : 1 }
                 />
-            </MapContainer>
+                            </MapContainer>
+
+            {/*<MapContainer areaType={ areaType }*/}
+            {/*              period={ period }*/}
+            {/*              metricName={ metricName }*/}
+            {/*              weeklyDates={ weeklyDates, currentDate/>*/}
             <SideTable data={ data }/>
         </MainContainer>
     </article>
