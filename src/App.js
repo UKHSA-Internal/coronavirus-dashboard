@@ -50,16 +50,15 @@ const LastUpdateTime = () => {
 
     return <>
         <Suspense fallback={ <Loading/> }>
-            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 18, hour: 8 }}
-                          lastDisplayDate={{ year: 2020, month: 8, day: 21, hour: 8 }}>
+            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 25, hour: 9 }}
+                          lastDisplayDate={{ year: 2020, month: 8, day: 28, hour: 8 }}>
                 <p className={ "govuk-body" }>
-                    Information design survey: Please help us make this service better by
-                    completing our
-                    new <a href={ "https://forms.gle/SVDZpcNfioSvheUt5" }
+                    Do we explain the data well? Please help us make this service better
+                    by completing our
+                    new&nbsp;<a href={ "https://forms.gle/RiLFWfyo62xD2V1w7" }
                            className={ "govuk-link" }
                            target={ "_blank" }
-                           rel={ "noopener noreferrer" }>survey</a> about how we display
-                    information on the dashboard.
+                           rel={ "noopener noreferrer" }>survey</a>.
                 </p>
             </Announcement>
             <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 18, hour: 16, minute: 0 }}
