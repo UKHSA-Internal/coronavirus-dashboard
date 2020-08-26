@@ -62,18 +62,21 @@
 
         &:first-of-type {
             margin-bottom: 3em;
-
+            font-size: 1rem;
             & a {
                 @extend .govuk-link--no-visited-state;
+                font-size: 1rem;
             }
 
             & p {
                 margin-bottom: .8rem;
+                font-size: 1rem;
             }
 
             & ul {
                 margin-bottom: 1em;
                 margin-left: 1em;
+                font-size: 1rem;
             }
         }
     }

@@ -12,7 +12,7 @@ const FooterContents: ComponentType<*> = () => (
         <p className={ "govuk-footer__meta-custom" }>
             For feedback email&nbsp;
             <a className="govuk-footer__link"
-               href={ encodeURI("mailto:coronavirus-tracker@phe.gov.uk?Subject=BETA dashboard feedback") }
+               href={ encodeURI("mailto:coronavirus-tracker@phe.gov.uk?Subject=Dashboard feedback") }
                rel="noopener noreferrer"
                target="_blank"
             >coronavirus-tracker@phe.gov.uk</a>

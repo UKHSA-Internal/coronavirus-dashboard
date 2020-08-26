@@ -60,12 +60,12 @@ const LastUpdateTime = () => {
                            rel={ "noopener noreferrer" }>survey</a>.
                 </p>
             </Announcement>
-            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 18, hour: 16, minute: 0 }}
-                          lastDisplayDate={{ year: 2020, month: 8, day: 18, hour: 18, minute: 30 }}>
-                <p className={ "govuk-body" }>
-                    We have not received the latest breakdown of cases in England. We will
-                    update today's records as soon as they become available.
-                </p>
+            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 25, hour: 16, minute: 0 }}
+                          lastDisplayDate={{ year: 2020, month: 8, day: 26, hour: 16, minute: 0 }}>
+                <p className={ "govuk-body" }><strong>
+                    We are experiencing technical difficulties and are working to restore the service as soon as possible.
+                    We apologise for any inconvenience.
+                </strong></p>
             </Announcement>
         </Suspense>
         <div className={ "govuk-!-margin-top-5 govuk-!-margin-bottom-5" }

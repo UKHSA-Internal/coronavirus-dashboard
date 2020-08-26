@@ -87,7 +87,7 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
                         endpoint: endpoint
                     }));
 
-                    setData(status < 400 ? dt.data : [])
+                    setData(status < 400 ? dt.data : null)
                 } catch (e) {
                     console.error(e)
                     setData([])
