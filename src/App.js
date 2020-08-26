@@ -61,10 +61,11 @@ const LastUpdateTime = () => {
                 </p>
             </Announcement>
             <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 25, hour: 16, minute: 0 }}
-                          lastDisplayDate={{ year: 2020, month: 8, day: 26, hour: 16, minute: 0 }}>
+                          lastDisplayDate={{ year: 2020, month: 8, day: 27, hour: 16, minute: 0 }}>
                 <p className={ "govuk-body" }><strong>
-                    We are experiencing technical difficulties and are working to restore the service as soon as possible.
-                    We apologise for any inconvenience.
+                    The service is currently operational but owing to technical difficulties,
+                    the data is taking longer than usual to load. We apologise for any
+                    inconvenience are working to restore optimal speed as soon as possible.
                 </strong></p>
             </Announcement>
         </Suspense>
