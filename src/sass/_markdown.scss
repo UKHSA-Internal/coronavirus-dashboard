@@ -3,6 +3,7 @@
 .accessibility .markdown,
 .disclaimer .markdown,
 .modal.markdown {
+    margin-top: 2rem;
     @extend .govuk-body;
 
     #table-of-contents {
