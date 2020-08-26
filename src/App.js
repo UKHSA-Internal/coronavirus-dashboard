@@ -65,7 +65,7 @@ const LastUpdateTime = () => {
                 <p className={ "govuk-body" }><strong>
                     The service is currently operational but owing to technical difficulties,
                     the data is taking longer than usual to load. We apologise for any
-                    inconvenience are working to restore optimal speed as soon as possible.
+                    inconvenience and are working to restore optimal speed as soon as possible.
                 </strong></p>
             </Announcement>
         </Suspense>
