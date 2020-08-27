@@ -9,7 +9,7 @@
     "d3-scale": "^3.2.2",
     "deep-equal": "^2.0.3",
     "govuk-frontend": "3.8.1",
-    "govuk-react-jsx": "2.0.1",
+    "govuk-react-jsx": "4.0.2",
     "moment": "^2.24.0",
     "node-sass": "^4.13.1",
     "numeral": "^2.0.6",
