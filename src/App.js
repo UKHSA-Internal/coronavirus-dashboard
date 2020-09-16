@@ -12,6 +12,7 @@ import URLs from "common/urls";
 import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
+import time from "d3-scale/src/time";
 
 const
     DashboardHeader = lazy(() => import('components/DashboardHeader')),
@@ -47,27 +48,58 @@ const LastUpdateTime = () => {
 
     const timestamp = useTimestamp();
 
+    const tmStart = moment(timestamp).local(true);
+    const tmEnd = moment(timestamp).local(true).add(15, 'minute');
+
+    const parsedTimestamp = {
+        start: {
+            year: tmStart.year(),
+            month: tmStart.month(),
+            day: tmStart.date(),
+            hour: tmStart.hour(),
+            minute: tmStart.minute()
+        },
+        end: {
+            year: tmEnd.year(),
+            month: tmEnd.month(),
+            day: tmEnd.date(),
+            hour: tmEnd.hour(),
+            minute: tmEnd.minute()
+        },
+        endTimestamp: tmEnd
+            .format("h:mma")
+    };
+
     return <>
         <Suspense fallback={ <Loading/> }>
-            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 25, hour: 9 }}
-                          lastDisplayDate={{ year: 2020, month: 8, day: 28, hour: 8 }}>
-                <p className={ "govuk-body" }>
-                    Do we explain the data well? Please help us make this service better
-                    by completing our
-                    new&nbsp;<a href={ "https://forms.gle/RiLFWfyo62xD2V1w7" }
-                           className={ "govuk-link" }
-                           target={ "_blank" }
-                           rel={ "noopener noreferrer" }>survey</a>.
-                </p>
-            </Announcement>
-            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 25, hour: 16, minute: 0 }}
-                          lastDisplayDate={{ year: 2020, month: 8, day: 27, hour: 16, minute: 0 }}>
-                <p className={ "govuk-body" }><strong>
-                    The service is currently operational but owing to technical difficulties,
-                    the data is taking longer than usual to load. We apologise for any
-                    inconvenience and are working to restore optimal speed as soon as possible.
-                </strong></p>
-            </Announcement>
+            {/*{ parsedTimestamp.start.day === 13*/}
+            {/*    ? <Announcement firstDisplayDate={ parsedTimestamp.start }*/}
+            {/*              lastDisplayDate={{ year: 2020, month: 9, day: 15, hour: 16 }}>*/}
+            {/*    <p className={ "govuk-body" }>*/}
+            {/*        Due to an ongoing issue with <a className={ "govuk-link govuk-link--no-visited-state" }*/}
+            {/*                                        href={ "https://status.azure.com/en-gb/status" }*/}
+            {/*                                        rel={ "noopener noreferrer" }*/}
+            {/*                                        target={ "_blank" }>Microsoft Azure</a>,*/}
+            {/*        we are currently unable*/}
+            {/*        to update the data. We are monitoring the situation closely and will*/}
+            {/*        update the website as soon as the services are restored.*/}
+            {/*    </p>*/}
+            {/*</Announcement> : null}*/}
+
+            {
+                timestamp
+                    ? <Announcement firstDisplayDate={ parsedTimestamp.start }
+                                  lastDisplayDate={ parsedTimestamp.end }>
+                        <p className={ "govuk-body" }>
+                            <strong>We are updating the data&hellip;</strong>
+                        </p>
+                        <p className={ "govuk-body" }>The process takes
+                            approximately 15 minutes to complete. Please do not refresh the
+                            website until { parsedTimestamp.endTimestamp }.
+                        </p>
+                    </Announcement>
+                    : null
+            }
         </Suspense>
         <div className={ "govuk-!-margin-top-5 govuk-!-margin-bottom-5" }
              role={ "region" }
