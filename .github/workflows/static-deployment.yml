@@ -1,0 +1,57 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: DEVELOPMENT [static] deployment
+
+on:
+  push:
+    branches:
+      - v2-static
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v2.1.1
+        with:
+          node-version: '14.5.0'
+
+      - name: Install dependencies
+        run: |
+          npm install -g yarn
+          npm install
+          yarn install
+
+      # NOTE: Do NOT use trailing slashes in the URLs.
+      # ATTENTION: `BASE_URL` must have the HTTP(S) protocol, but other URLs must not.
+      - name: Build yarn
+        env:
+          CI: false
+          BUILD_ENV: development
+          BASE_URL: ""
+          MAIN_CDN: ""
+          DOWNLOADS_CDN: ""
+          API_ENDPOINT: api.coronavirus.data.gov.uk
+          NODE_ENV: production
+
+        run: |
+          yarn run build
+
+    - name: Prepare deployment environment
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.0.100'
+
+    - name: Deploy to storage
+    - uses: lauchacarro/Azure-Storage-Action@master
+      with:
+        enabled-static-website: 'true'
+        folder: 'build'
+        index-document: 'index.html'
+        error-document: '404.html'
+        connection-string: ${{ secrets.PROD_CSTR }}
