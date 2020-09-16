@@ -21,14 +21,14 @@ const Announcement: ComponentType<AnnouncementProps> = ({ children, firstDisplay
         now = new Date(),
         start = new Date(
             firstDisplayDate.year,
-            firstDisplayDate.month - 1,
+            firstDisplayDate.month,
             firstDisplayDate.day,
             firstDisplayDate?.hour ?? 0,
             firstDisplayDate?.minute ?? 0
         ),
         end = new Date(
             lastDisplayDate.year,
-            lastDisplayDate.month - 1,
+            lastDisplayDate.month,
             lastDisplayDate.day,
             lastDisplayDate?.hour ?? 0,
             lastDisplayDate?.minute ?? 0
