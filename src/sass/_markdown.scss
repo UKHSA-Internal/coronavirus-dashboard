@@ -6,6 +6,21 @@
     margin-top: 2rem;
     @extend .govuk-body;
 
+    blockquote {
+        margin: 1rem 0 !important;
+        padding: 1rem;
+        background: #f8f8f8;
+        border: 3px #f3f2f1 solid;
+
+        &>p:first-child {
+            margin-top: 0 !important;
+        }
+
+        &>p:last-child {
+            margin-bottom: 0 !important;
+        }
+    }
+
     #table-of-contents {
         @extend .govuk-heading-m;
     }
