@@ -48,7 +48,7 @@ jobs:
           dotnet-version: '3.0.100'
 
       - name: Deploy to storage
-      - uses: lauchacarro/Azure-Storage-Action@master
+        uses: lauchacarro/Azure-Storage-Action@master
         with:
           enabled-static-website: 'true'
           folder: 'build'
