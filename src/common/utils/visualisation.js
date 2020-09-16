@@ -79,7 +79,15 @@ export const getPlotData = (fields: Array<{}>, rawData, xKey="date" ) => {
 
         }
 
-        yData = field.rollingAverage ? movingAverage(yData, 7) : yData
+        const trimLength = (field?.rollingAverage?.clipEnd ?? 0) + 3;
+
+        yData = field.rollingAverage
+            ? [
+                ...new Array(trimLength).fill(null),
+                ...movingAverage(yData, field.rollingAverage.window)
+                    .slice(trimLength, yData.length),
+            ]
+            : yData
 
         return {
             name: field.label,
