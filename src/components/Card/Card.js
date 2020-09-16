@@ -188,7 +188,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
                 const breakdownMetrics = [...tabs]?.reverse()?.[0]?.requiredMetrics ?? [];
 
                 return fieldToStructure(
-                    breakdownMetrics,
+                    [...breakdownMetrics, ...download],
                     params,
                     [
                         { key: "latestBy", sign: "=", value: breakdownMetrics?.[0] ?? "" }
@@ -199,6 +199,9 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
         },
         multiAreaStatic: {
             url: fieldToStructure(download, tabs?.[0]?.params ?? [])
+        },
+        simpleTableStatic: {
+            url: false
         }
     };
 
@@ -219,6 +222,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
 
     if ( !isIncluded(cardProps) )
         return null;
+
 
     return <Card heading={ heading }
                  fullWidth={ fullWidth }
