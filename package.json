@@ -1,6 +1,6 @@
 {
   "name": "covid-public",
-  "version": "2.0.31",
+  "version": "2.0.32",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
@@ -39,6 +39,7 @@
     "lint": "yarn flow",
     "start": "unset HOST && react-scripts start",
     "build": "react-scripts build && node scripts/patchUrls.js",
+    "postbuild": "react-snap",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -67,6 +68,7 @@
     "stylelint-config-standard": "^20.0.0",
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-processor-styled-components": "^1.10.0",
-    "stylelint-scss": "^3.17.2"
+    "stylelint-scss": "^3.17.2",
+    "react-snap": "^1.23.0"
   }
 }
