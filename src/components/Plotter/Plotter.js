@@ -164,27 +164,27 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                         color: "#6B7276"
                     },
                     // rangeslider: {range: ['20202-01-01', new Date().toString()]},
-                    // rangeselector: {buttons: [
-                    //     {
-                    //       count: 7,
-                    //       label: '7d',
-                    //       step: 'day',
-                    //       stepmode: 'backward'
-                    //     },
-                    //         {
-                    //       count: 1,
-                    //       label: '1m',
-                    //       step: 'month',
-                    //       stepmode: 'backward'
-                    //     },
-                    //         {
-                    //       count: 3,
-                    //       label: '3m',
-                    //       step: 'month',
-                    //       stepmode: 'backward'
-                    //     },
-                    //     {step: 'all'}
-                    //   ]},
+                    rangeselector: {buttons: [
+                        {
+                          count: 7,
+                          label: '7d',
+                          step: 'day',
+                          stepmode: 'backward'
+                        },
+                            {
+                          count: 1,
+                          label: '1m',
+                          step: 'month',
+                          stepmode: 'backward'
+                        },
+                            {
+                          count: 3,
+                          label: '3m',
+                          step: 'month',
+                          stepmode: 'backward'
+                        },
+                        {step: 'all'}
+                      ]},
                     ...xaxis
                 },
                 yaxis: {
