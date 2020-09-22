@@ -86,6 +86,16 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
 
     const width = useResponsiveLayout(640);
 
+    // const zoomScale = (layout, xrange) => {
+    //     const in_view = data.loc[fig.layout.xaxis.range[0],
+    //     fig.layout.xaxis.range[1]
+    //         ]
+    //
+    //     fig.layout.yaxis.range = [in_view.High.min(), in_view.High.max() + 10]
+    //     fig.layout.on_change(zoom, 'xaxis.range')
+    //
+    // }
+
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
         <p className={ "govuk-visually-hidden" }>
@@ -164,30 +174,32 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                         color: "#6B7276"
                     },
                     // rangeslider: {range: ['20202-01-01', new Date().toString()]},
-                    rangeselector: {buttons: [
-                        {
-                          count: 7,
-                          label: '7d',
-                          step: 'day',
-                          stepmode: 'backward'
-                        },
-                            {
-                          count: 1,
-                          label: '1m',
-                          step: 'month',
-                          stepmode: 'backward'
-                        },
-                            {
-                          count: 3,
-                          label: '3m',
-                          step: 'month',
-                          stepmode: 'backward'
-                        },
-                        {step: 'all'}
-                      ]},
+                    // rangeselector: {buttons: [
+                    //     {
+                    //       count: 7,
+                    //       label: '7d',
+                    //       step: 'day',
+                    //       stepmode: 'backward'
+                    //     },
+                    //         {
+                    //       count: 1,
+                    //       label: '1m',
+                    //       step: 'month',
+                    //       stepmode: 'backward'
+                    //     },
+                    //         {
+                    //       count: 3,
+                    //       label: '3m',
+                    //       step: 'month',
+                    //       stepmode: 'backward'
+                    //     },
+                    //     {step: 'all'}
+                    //   ]},
                     ...xaxis
                 },
                 yaxis: {
+                    // autorange: true,
+                    // fixedrange: false,
                     tickslen: 5,
                     ticks: "outside",
                     tickson: "boundaries",
