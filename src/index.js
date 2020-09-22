@@ -1,6 +1,9 @@
 import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/ie9';
+import 'react-app-polyfill/stable';
+
 import React from 'react';
-// import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { initAll } from 'govuk-frontend'
 import { hydrate, render } from "react-dom";
@@ -8,32 +11,18 @@ import { hydrate, render } from "react-dom";
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import 'react-app-polyfill/ie9';
-import 'react-app-polyfill/ie11';
-import 'react-app-polyfill/stable';
 
 import './index.scss';
 
 initAll()
 
-// ReactDOM.render(
-//     <Router>
-//       <App />
-//     </Router>,
-//
-//   // Bind via a class selector, to leave the element's id available for in-page
-//   // navigation.
-//   document.querySelector('.app-root'),
-// );
-//
-
 
 const rootElement = document.querySelector('.app-root');
-if (rootElement.hasChildNodes()) {
-  hydrate(<Router><App /></Router>, rootElement);
-} else {
-  render(<Router><App /></Router>, rootElement);
-}
+
+rootElement.hasChildNodes()
+    ? hydrate(<Router basename={ "/details" }><App /></Router>, rootElement)
+    : render(<Router basename={ "/details" }><App /></Router>, rootElement);
+
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

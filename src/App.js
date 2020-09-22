@@ -13,19 +13,34 @@ import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
 import time from "d3-scale/src/time";
+import DashboardHeader from "components/DashboardHeader";
+import Cases from "pages/Cases";
+import Healthcare from "pages/Healthcare";
+import Deaths from "pages/Deaths";
+import Testing from "pages/Testing";
+import About from "pages/About";
+import Accessibility from "pages/Accessibility";
+import Cookies from "pages/Cookies";
+import ApiDocs from "pages/ApiDocs";
+import Announcement from "components/Announcement";
+import Footer from "components/Footer";
+import SideNavigation from "components/SideNavigation";
+import SideNavMobile from "components/SideNavMobile";
 
-const
-    DashboardHeader = lazy(() => import('components/DashboardHeader')),
-    Cases           = lazy(() => import('pages/Cases')),
-    Healthcare      = lazy(() => import('pages/Healthcare')),
-    Deaths          = lazy(() => import('pages/Deaths')),
-    Tests           = lazy(() => import('pages/Testing')),
-    About           = lazy(() => import('pages/About')),
-    Accessibility   = lazy(() => import('pages/Accessibility')),
-    Cookies         = lazy(() => import('pages/Cookies')),
-    ApiDocs         = lazy(() => import('pages/ApiDocs')),
-    Announcement    = lazy(() => import("components/Announcement")),
-    Footer          = lazy(() => import('components/Footer'));
+
+
+// const
+//     DashboardHeader = lazy(() => import('components/DashboardHeader')),
+//     Cases           = lazy(() => import('pages/Cases')),
+//     Healthcare      = lazy(() => import('pages/Healthcare')),
+//     Deaths          = lazy(() => import('pages/Deaths')),
+//     Testing         = lazy(() => import('pages/Testing')),
+//     About           = lazy(() => import('pages/About')),
+//     Accessibility   = lazy(() => import('pages/Accessibility')),
+//     Cookies         = lazy(() => import('pages/Cookies')),
+//     ApiDocs         = lazy(() => import('pages/ApiDocs')),
+//     Announcement    = lazy(() => import("components/Announcement")),
+//     Footer          = lazy(() => import('components/Footer'));
 
 
 const useTimestamp = () => {
@@ -71,7 +86,7 @@ const LastUpdateTime = () => {
     };
 
     return <>
-        <Suspense fallback={ <Loading/> }>
+        {/*<Suspense fallback={ <Loading/> }>*/}
             {/*{ parsedTimestamp.start.day === 13*/}
             {/*    ? <Announcement firstDisplayDate={ parsedTimestamp.start }*/}
             {/*              lastDisplayDate={{ year: 2020, month: 9, day: 15, hour: 16 }}>*/}
@@ -100,7 +115,7 @@ const LastUpdateTime = () => {
                     </Announcement>
                     : null
             }
-        </Suspense>
+        {/*</Suspense>*/}
         <div className={ "govuk-!-margin-top-5 govuk-!-margin-bottom-5" }
              role={ "region" }
              aria-labelledby={ "last-update" }>
@@ -135,12 +150,15 @@ const
 const Navigation = ({ layout, ...props }) => {
 
     const Nav = layout !== "mobile"
-        ? React.lazy(() => import('components/SideNavigation'))
-        : React.lazy(() => import('components/SideNavMobile'));
+        ? SideNavigation
+        : SideNavMobile;
+        // ? React.lazy(() => import('components/SideNavigation'))
+        // : React.lazy(() => import('components/SideNavMobile'));
 
-    return <Suspense fallback={ <Loading/> }>
-        <Nav { ...props }/>
-    </Suspense>
+    return <Nav { ...props }/>
+    // <Suspense fallback={ <Loading/> }>
+    //     <Nav { ...props }/>
+    // </Suspense>
 
 };  // MobileNavigation
 
@@ -171,16 +189,18 @@ const App = ({ location: { pathname } }) => {
                         <aside className={ "dashboard-menu" }>
                             <Switch>
                                 <Route path={ "/" }
-                                       render={ props => <Navigation layout={ layout } { ...props}/> }/>
+                                       render={ props =>
+                                           <Navigation layout={ layout }{ ...props}/>
+                                       }/>
                             </Switch>
                         </aside>
                     }
                     <main className={ "govuk-main-wrapper" } role={ "main" } id={ 'main-content' }>
-                        <Suspense fallback={ <Loading/> }>
+                        {/*<Suspense fallback={ <Loading/> }>*/}
                             <DashboardHeader/>
                             <Switch>
-                                <Route path="/" exact component={ DailySummary }/>
-                                <Route path="/testing" component={ Tests }/>
+                                {/*<Route path="/" exact render={ () => window. }/>*/}
+                                <Route path="/testing" component={ Testing }/>
                                 <Route path="/cases" exact component={ Cases }/>
                                 <Route path="/healthcare" component={ Healthcare }/>
                                 <Route path="/deaths" component={ Deaths }/>
@@ -191,7 +211,7 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/cookies" component={ Cookies }/>
                                 <Route path="/developers-guide" exact component={ ApiDocs }/>
                             </Switch>
-                        </Suspense>
+                        {/*</Suspense>*/}
                     </main>
                 </div>
             </ErrorBoundary>
@@ -210,9 +230,9 @@ const App = ({ location: { pathname } }) => {
         </div>
 
         <Switch>
-            <Suspense fallback={ <Loading/> }>
+            {/*<Suspense fallback={ <Loading/> }>*/}
                 <Route path="/" component={ Footer }/>
-            </Suspense>
+            {/*</Suspense>*/}
         </Switch>
     </>
 };  // App

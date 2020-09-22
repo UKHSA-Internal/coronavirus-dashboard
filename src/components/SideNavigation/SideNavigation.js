@@ -21,7 +21,7 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
     return <SideNav aria-label="Side navigation">
         <SideNavMainContainer>
             <SideNavListItem className={`${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/" } aria-current="location">UK Summary</Link>
+                <a href={ "/" } aria-current="location">UK Summary</a>
             </SideNavListItem>
 
             <SideNavListItem className={`${pathname === '/testing' ? "moj-side-navigation__item--active" : ""}`}>

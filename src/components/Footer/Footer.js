@@ -41,8 +41,8 @@ const Footer = () => (
             children: <FooterContents/>,
             items: [
                 // { children: ['Archive'], href: '/archive' },
-                { children: ['Accessibility'], href: '/accessibility' },
-                { children: ['Cookies'], href: '/cookies' }
+                { children: ['Accessibility'], href: '/details/accessibility' },
+                { children: ['Cookies'], href: '/details/cookies' }
             ],
             visuallyHiddenTitle: 'Items',
         } }

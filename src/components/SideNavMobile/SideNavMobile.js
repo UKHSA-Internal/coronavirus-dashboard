@@ -31,8 +31,7 @@ const SideNavMobile: ComponentType<Props> = ({ location: { pathname }}: Props) =
                     <SideNav aria-label="Side navigation">
                         <SideNavList>
                             <SideNavListItem className={`${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
-                                <Link to={ "/" }
-                                      onClick={ () => setMenuState(state => !state) } aria-current="location">UK Summary</Link>
+                                <a href={ "/" } aria-current="location">UK Summary</a>
                             </SideNavListItem>
 
                             <SideNavListItem className={`${pathname === '/testing' ? "moj-side-navigation__item--active" : ""}`}>
