@@ -280,11 +280,12 @@ export const dropLeadingZeros = (data: Array<{ [any]: any }>, ...keys) => {
 
     for ( let index = data.length - 1; index > 0; index-- ) {
 
-        sum = keys.reduce((acc, key) => acc + data[index][key], 0);
+        sum = keys.reduce((acc, key) => acc + (data[index][key] || 0), 0);
 
         if ( sum !== 0 ) return data.slice(0, index + 1);
 
     }
+
 
     return []
 
