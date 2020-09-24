@@ -23,7 +23,7 @@ export const PathNames = {
     healthcare: "/healthcare",
     deaths: "/deaths",
     aboutData: "/about-data",
-    cookies: "cookies",
+    cookies: "/cookies",
     accessibility: "/accessibility",
     archive: "/archive",
     newWebsite: "/new-service",

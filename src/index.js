@@ -3,7 +3,7 @@ import 'react-app-polyfill/ie9';
 import 'react-app-polyfill/stable';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { initAll } from 'govuk-frontend'
 import { hydrate, render } from "react-dom";
@@ -18,10 +18,17 @@ initAll()
 
 
 const rootElement = document.querySelector('.app-root');
+if (rootElement.hasChildNodes()) {
+  hydrate(<Router><App /></Router>, rootElement);
+} else {
+  render(<Router><App /></Router>, rootElement);
+}
 
-rootElement.hasChildNodes()
-    ? hydrate(<Router basename={ "/details" }><App /></Router>, rootElement)
-    : render(<Router basename={ "/details" }><App /></Router>, rootElement);
+// if ( rootElement.hasChildNodes() ) {
+//     ReactDOM.hydrate(<Router><App/></Router>, rootElement)
+// } else {
+//     ReactDOM.render(<Router basename={ "/details" }><App/></Router>, rootElement)
+// }
 
 
 // If you want your app to work offline and load faster, you can change

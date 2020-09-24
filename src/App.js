@@ -200,15 +200,15 @@ const App = ({ location: { pathname } }) => {
                             <DashboardHeader/>
                             <Switch>
                                 {/*<Route path="/" exact render={ () => window. }/>*/}
-                                <Route path="/testing" component={ Testing }/>
+                                <Route path="/testing" exact component={ Testing }/>
                                 <Route path="/cases" exact component={ Cases }/>
-                                <Route path="/healthcare" component={ Healthcare }/>
-                                <Route path="/deaths" component={ Deaths }/>
+                                <Route path="/healthcare" exact component={ Healthcare }/>
+                                <Route path="/deaths" exact component={ Deaths }/>
 
-                                <Route path="/about-data" component={ About }/>
+                                <Route path="/about-data" exact component={ About }/>
                                 {/*<Route path="/archive" component={ Archive }/>*/}
-                                <Route path="/accessibility" component={ Accessibility }/>
-                                <Route path="/cookies" component={ Cookies }/>
+                                <Route path="/accessibility" exact component={ Accessibility }/>
+                                <Route path="/cookies" exact component={ Cookies }/>
                                 <Route path="/developers-guide" exact component={ ApiDocs }/>
                             </Switch>
                         {/*</Suspense>*/}
