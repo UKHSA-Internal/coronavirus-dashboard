@@ -72,19 +72,17 @@ const LastUpdateTime = () => {
 
     return <>
         <Suspense fallback={ <Loading/> }>
-            {/*{ parsedTimestamp.start.day === 13*/}
-            {/*    ? <Announcement firstDisplayDate={ parsedTimestamp.start }*/}
-            {/*              lastDisplayDate={{ year: 2020, month: 9, day: 15, hour: 16 }}>*/}
-            {/*    <p className={ "govuk-body" }>*/}
-            {/*        Due to an ongoing issue with <a className={ "govuk-link govuk-link--no-visited-state" }*/}
-            {/*                                        href={ "https://status.azure.com/en-gb/status" }*/}
-            {/*                                        rel={ "noopener noreferrer" }*/}
-            {/*                                        target={ "_blank" }>Microsoft Azure</a>,*/}
-            {/*        we are currently unable*/}
-            {/*        to update the data. We are monitoring the situation closely and will*/}
-            {/*        update the website as soon as the services are restored.*/}
-            {/*    </p>*/}
-            {/*</Announcement> : null}*/}
+            { parsedTimestamp.start.day === 25
+                ? <Announcement firstDisplayDate={ parsedTimestamp.start }
+                          lastDisplayDate={{ year: 2020, month: 9, day: 26, hour: 16 }}>
+                <p className={ "govuk-body" }>
+                    Due to a power outage at National Records of Scotland we have not been
+                    able to update the deaths figures for Scotland.
+                </p>
+                <p className={ "govuk-body" }>
+                    <strong>Today's deaths figure does not include Scotland.</strong>
+                </p>
+            </Announcement> : null}
 
             {
                 timestamp
