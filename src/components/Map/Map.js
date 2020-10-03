@@ -28,6 +28,7 @@ import moment from "moment";
 import { Histogram, Plotter } from "../Plotter/Plotter";
 import numeral from "numeral";
 import { Row } from "../../pages/InteractiveMap/InteractiveMap.styles";
+import turf from "turf";
 
 
 const OpenStreetMapAttrib: ComponentType<*> = () => {
@@ -111,9 +112,9 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
         [styleDataStatus, setStyleDataStatus] = useState(false);
 
     const
-        [ currentLocation, setCurrentLocation ] = useState(null),
-        [ locationData, setLocationData ] = useState(null),
-        [ isLoading, setIsLoading ] = useState(true),
+        [currentLocation, setCurrentLocation] = useState(null),
+        [locationData, setLocationData] = useState(null),
+        [isLoading, setIsLoading] = useState(true),
         dataDate = moment().subtract(5, "days"),
         apiData = useApi({
             ...currentLocation
@@ -151,6 +152,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
         });
 
     let hoveredStateId = null;
+    let isAtStart = true;
     // let map;
 
     // let map, layerGroup, centrePoint;
@@ -294,7 +296,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                         'type': 'line',
                         'source': 'geo-nation',
                         'minzoom': .1,
-                        'maxzoom': 3,
+                        'maxzoom': 5,
                         'layout': {
                             'line-join': 'round',
                             'line-cap': 'round'
@@ -328,7 +330,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                             'line-width': [
                                 'case',
                                 ['boolean', ['feature-state', 'hover'], false],
-                                3,
+                                5,
                                 .5
                             ]
                         }
@@ -357,7 +359,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                             'line-width': [
                                 'case',
                                 ['boolean', ['feature-state', 'hover'], false],
-                                3,
+                                5,
                                 .5
                             ]
                         }
@@ -386,7 +388,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                             'line-width': [
                                 'case',
                                 ['boolean', ['feature-state', 'hover'], false],
-                                3,
+                                5,
                                 .5
                             ]
                         }
@@ -568,8 +570,6 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                 // });
 
 
-
-
                 // const createLayer = (areaType) => {
                 //     const zoomLevels = {
                 //         nation: {
@@ -688,27 +688,35 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                         setCurrentLocation(e.features[0].properties.code)
 
                         const outlineId = map
-                            .queryRenderedFeatures({ layers: [loc[1]] } )
+                            .queryRenderedFeatures({ layers: [loc[1]] })
                             .find(item => item.properties.code === e.features[0].properties.code)
                             .id;
 
                         // if ( e.features.length > 0 ) {
-                            if ( hoveredStateId?.id ) {
-                                map.setFeatureState(
-                                    { source: `geo-${hoveredStateId.location}`, id: hoveredStateId.id },
-                                    { hover: false }
-                                );
-                            }
-                            hoveredStateId = {id: outlineId, location: loc[1]};
-                            // console.log(hoveredStateId)
+                        if ( hoveredStateId?.id ) {
                             map.setFeatureState(
-                                { source: `geo-${hoveredStateId.location}`, id: hoveredStateId.id },
-                                { hover: true }
+                                { source: `geo-${ hoveredStateId.location }`, id: hoveredStateId.id },
+                                { hover: false }
                             );
-                        // }
+                        }
+                        hoveredStateId = { id: outlineId, location: loc[1] };
+                        // console.log(hoveredStateId)
+                        map.setFeatureState(
+                            { source: `geo-${ hoveredStateId.location }`, id: hoveredStateId.id },
+                            { hover: true }
+                        );
+
+                        map.fitBounds(turf.bbox(e.features[0]), {
+                            padding: 20,
+                            maxZoom: map.getLayer(loc[1]).maxzoom - 0.2
+                        });
+
                     });
+
                 });
 
+
+                // map.legendControl.addLegend(ReactDomServer.renderToStaticMarkup(children));
 
                 map.on('styledata', function (e) {
                     setStyleDataStatus(true)
@@ -733,7 +741,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
         setLocationData(apiData?.[0] ?? null)
 
-    }, [ apiData ]);
+    }, [apiData]);
 
     // if ( !(map && layerGroup && data && geoData) )
     //     return <Loading/>;
@@ -741,7 +749,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
     return <>
         { isLoading && <Loading/> }
-        <MapContainer id={ "map" } style={{ visibility: isLoading ? "hidden" : "visible" }}/>
+        <MapContainer id={ "map" } style={ { visibility: isLoading ? "hidden" : "visible" } }/>
 
         { !isLoading && <SliderContainer>{ children }</SliderContainer> }
         { !isLoading && locationData
