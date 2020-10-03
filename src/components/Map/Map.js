@@ -4,8 +4,9 @@ import React, { useState, useEffect } from "react";
 import ReactDomServer from "react-dom/server";
 
 import { useHistory } from "react-router";
-import 'mapbox-gl-leaflet';
+// import 'mapbox-gl-leaflet';
 import L from "leaflet";
+import mapboxgl from "mapbox-gl";
 import { max } from "d3-array";
 import { scaleLinear, scaleSqrt } from "d3-scale";
 
@@ -19,7 +20,14 @@ import type { MapType } from "./Map.types";
 
 import 'leaflet/dist/leaflet.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { MapContainer } from "./Map.styles";
+import { MapContainer, MapToolbox, NumberBox, NumbersContainer, SliderContainer } from "./Map.styles";
+import usePrevious from "hooks/usePrevious";
+import { CurrentLocation } from "../DashboardHeader/DashboardHeader.styles";
+import useApi from "../../hooks/useApi";
+import moment from "moment";
+import { Histogram, Plotter } from "../Plotter/Plotter";
+import numeral from "numeral";
+import { Row } from "../../pages/InteractiveMap/InteractiveMap.styles";
 
 
 const OpenStreetMapAttrib: ComponentType<*> = () => {
@@ -61,8 +69,8 @@ const initialiseMap: MapType<*> = () => {
             attribution: ReactDomServer.renderToStaticMarkup(<OpenStreetMapAttrib/>),
             style: URLs.mapStyle
         }),
-        bounds = new L.LatLngBounds(new L.LatLng(52.5, -6.5), new L.LatLng(58.8, 1)),
-        maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -8.5), new L.LatLng(61, 2)),
+        bounds = new L.LatLngBounds(new L.LatLng(52.5, -10.5), new L.LatLng(58.8, 15)),
+        maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -10.5), new L.LatLng(61, 15)),
         centrePoint = bounds.getCenter(),
         map = L.map('map', {
             center: centrePoint,
@@ -93,31 +101,84 @@ const initialiseMap: MapType<*> = () => {
 };  // initialiseMap
 
 
-const Map: ComponentType<*> = ({ data, geoKey, isRate = true, geoJSON, date, minData, maxData, children, ...props }) => {
+const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, geoData, date, extrema, minData, maxData, valueIndex, children, dates, ...props }) => {
 
     const
-        geoData = useGeoData(geoJSON, geoKey),
-        { location: { hash } } = useHistory(),
-        [ areaName, areaCode, Rate, Date ] = [0, 1, 2, 3],
-        [mapControl, setMapControl] = useState(null);
-
+        bounds = new L.LatLngBounds(new L.LatLng(50.5, -14.5), new L.LatLng(58.8, 10)),
+        maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -12.5), new L.LatLng(61, 10)),
+        centrePoint = bounds.getCenter(),
+        [map, setMap] = useState(null),
+        [styleDataStatus, setStyleDataStatus] = useState(false);
 
     const
-        { maxCircleRadius = 40, blobColour = "#367E93", zoom = { min: 1, max: 7 } } = props,
-        parsedHash = utils.getParams(hash),
-        rgb = utils.hexToRgb(blobColour),
-        colour = isRate
-            ? `rgba(${ rgb.r },${ rgb.g },${ rgb.b },.9)`
-            : `rgba(${ rgb.r },${ rgb.g },${ rgb.b },1)`;
+        [ currentLocation, setCurrentLocation ] = useState(null),
+        [ locationData, setLocationData ] = useState(null),
+        [ isLoading, setIsLoading ] = useState(true),
+        dataDate = moment().subtract(5, "days"),
+        apiData = useApi({
+            ...currentLocation
+                ? {
+                    conjunctiveFilters: [
+                        { key: "areaCode", sign: "=", value: currentLocation },
+                        { key: "date", sign: "=", value: dataDate.toISOString().split("T")[0] },
+                    ],
+                }
+                : {},
+            cache: true,
+            structure: {
+                date: "date",
+                name: "areaName",
+                type: "areaType",
+                value: "newCasesBySpecimenDate",
+                incidenceRate: "newCasesBySpecimenDateRate",
+                rollingRate: "newCasesBySpecimenDateRollingRate",
+            }
+        }),
+        casesData = useApi({
+            ...locationData
+                ? {
+                    conjunctiveFilters: [
+                        { key: "areaType", sign: "=", value: locationData.type },
+                        { key: "date", sign: "=", value: dataDate.toISOString().split("T")[0] },
+                    ],
+                }
+                : {},
+            structure: [
+                "newCasesBySpecimenDateRollingRate",
+            ],
+            cache: true,
+            defaultResponse: []
+        });
+
+    let hoveredStateId = null;
+    // let map;
 
     // let map, layerGroup, centrePoint;
 
     // console.log(geoData)
     // console.log(shadeScale(data.filter(d => d[areaCode] === p.id)?.[0] ?? 0));
 
-    useEffect(() => {
-        setMapControl(initialiseMap());
-    }, []);
+    // useEffect(() => {
+    //     setMapControl(initialiseMap());
+    // }, []);
+
+    const filterBy = (date: string) => {
+
+        const filters = ['==', 'date', date.split(/T/)[0]];
+        // const filters = ['get', 'value'];
+
+        if ( map ) {
+            map.setFilter('choropleth-msoa', filters);
+            map.setFilter('choropleth-utla', filters);
+            map.setFilter('choropleth-ltla', filters);
+            map.setFilter('lsoa', filters);
+        }
+        // map.setPaintProperty('choropleth', 'fill-color.input', ['get', 'value']);
+
+        // Set the label to the month
+        // document.getElementById('month').textContent = months[month];
+    };
+
 
     useEffect(() => {
 
@@ -126,107 +187,586 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, geoJSON, date, min
         // console.log(index)
         // console.log(data?.[index] ?? null)
         // console.log(map)
-        if ( mapControl && data ) {
-            const
-                { map, layerGroup, centrePoint } = mapControl,
-                areaCodeKey = `${ geoKey }cd`,
-                maxValue = max(data, d => d[Rate]),
-                // max(
-                // data.values,
-                // isRate ? (d => d.rateData.value) : (d => d.rawData.value)
-                // ),
-                radiusScale = scaleSqrt().range([0, maxCircleRadius]).domain([0, maxData]),
-                shadeScale = scaleLinear().range([0, 1]).domain([minData, maxData]);
 
-            layerGroup.clearLayers();
+        if ( !map ) {
+            setMap(new mapboxgl.Map({
+                container: 'map',
+                style: URLs.mapStyle,
+                center: centrePoint,
 
-            const boundaryLayer = L.geoJSON(geoData, {
-                style: ({ properties: p }) => ({
-                    color: '#0b0c0c',
-                    weight: isRate ? .2 : .6,
-                    opacity: .7,
-                    fillColor: colour,
-                    fillOpacity: shadeScale(data.filter(d => d[areaCode] === p.id).pop()?.[Rate] ?? 0)
-                    // fillOpacity: isRate
-                    //     ? shadeScale(data.getByKey(p.id)?.rateData?.value ?? 0)
-                    //     : (parsedHash?.area ?? -1) === p.id ? .2 : 0,
-                }),
-                // onEachFeature: (feature, layer) => {
-                //     layer.on({
-                //         click: () => {
-                //             const
-                //                 parent = document.getElementById(parsedHash.category),
-                //                 id = utils.createHash({
-                //                     category: parsedHash.category,
-                //                     map: parsedHash.map,
-                //                     area: feature.properties.id
-                //                 }),
-                //                 element = document.getElementById(id.substring(1));
-                //
-                //             if ( element && element.offsetParent )
-                //                 parent.scrollTop = element.offsetParent.offsetTop - 80;
-                //
-                //             if ( element ) element.click();
-                //
-                //         },
-                //     });
-                // },
-            });
-
-            // if ( !isRate ) {
-            //
-            //     const
-            //         blobOptions = getBlobOptions(data, geoData, areaCodeKey),
-            //         blobs = L.geoJSON(blobOptions, {
-            //                 pointToLayer:
-            //                     (feature, latlng) => L.circleMarker(latlng, {
-            //                         radius: feature.properties.count && radiusScale(feature.properties.count),
-            //                         fillColor: blobColour,
-            //                         fillOpacity: 0.4,
-            //                         weight: 0,
-            //                     }),
-            //             }
-            //         );
-            //
-            //     layerGroup.addLayer(blobs)
-            //
-            // }
-
-            layerGroup.addLayer(boundaryLayer);
-
-            if ( parsedHash.hasOwnProperty("area") ) {
-
-                const
-                    flyCoords = geoData
-                        .filter(({ properties: { [areaCodeKey]: key = "" } }) =>
-                            utils.prepAsKey(key) === parsedHash.area
-                        )
-                        .pop();
-
-                try {
-                    map.flyTo(
-                        [flyCoords.properties.lat, flyCoords.properties.long],
-                        zoom.max,
-                        { animate: false }
-                    );
-                } catch (e) {
-                    console.warn(`No "${ parsedHash.category }" with code "#${ parsedHash.area }".`)
-                }
-
-            } else {
-
-                map.flyTo(centrePoint, 5.4, { animate: false })
-
-            }
+                // maxBounds: [
+                //     [40.653782, -20.130489],
+                //     [71.090472, 10.316913]
+                // ],
+                zoom: 5
+            }));
         }
 
-    }, [ geoData, date, mapControl, data, geoJSON ]);
+    }, [])
+
+    useEffect(() => {
+
+        if ( map && !styleDataStatus ) {
+
+            map.on("load", function () {
+                // map.addSource("geo-data", {
+                //     type: 'geojson',
+                //     data: `https://uk-covid19.azurefd.net/${geoJSON}`
+                // });
+
+                map.addSource("timeseries-geo-data-msoa", {
+                    type: 'geojson',
+                    data: `https://uk-covid19.azurefd.net/downloads/maps/msoa_data_latest.geojson`,
+                    buffer: 1,
+                    tolerance: 1,
+                    maxzoom: 12
+                    // minzoom: 8.5
+                });
+
+                map.addSource("geo-msoa", {
+                    type: 'geojson',
+                    data: "https://uk-covid19.azurefd.net/downloads/maps/msoa-ref.geojson",
+                    buffer: 1,
+                    tolerance: 1,
+                    maxzoom: 12.5
+                    // minzoom: 8.5
+                });
+
+                map.addSource("geo-lsoa", {
+                    type: 'geojson',
+                    data: "https://uk-covid19.azurefd.net/downloads/maps/lsoa_data_latest.geojson",
+                    buffer: 1,
+                    tolerance: 1,
+                    maxzoom: 14
+                    // minzoom: 8.5
+                });
+
+                map.addSource("timeseries-geo-data-ltla", {
+                    type: 'geojson',
+                    data: `https://uk-covid19.azurefd.net/downloads/maps/ltla_data_latest.geojson`,
+                    buffer: 1,
+                    tolerance: 1,
+                    maxzoom: 8.5,
+                    // minzoom: 7
+                });
+
+                map.addSource("geo-ltla", {
+                    type: 'geojson',
+                    data: "https://uk-covid19.azurefd.net/downloads/maps/ltla-ref.geojson",
+                    buffer: 1,
+                    tolerance: 1,
+                    maxzoom: 8.5,
+                    attribution: "ONS layouts © Crown copyright",
+                    // minzoom: 7
+                });
+
+                map.addSource("geo-utla", {
+                    type: 'geojson',
+                    data: "https://uk-covid19.azurefd.net/downloads/maps/utla-ref.geojson",
+                    buffer: 32,
+                    maxzoom: 7,
+                    attribution: "ONS layouts © Crown copyright",
+                    // minzoom: 3
+                });
+
+                map.addSource("timeseries-geo-data-utla", {
+                    type: 'geojson',
+                    data: `https://uk-covid19.azurefd.net/downloads/maps/utla_data_latest.geojson`,
+                    buffer: 32,
+                    maxzoom: 7,
+                    attribution: "ONS layouts © Crown copyright",
+                    // minzoom: 3
+                });
+
+                map.addSource("geo-nation", {
+                    type: 'geojson',
+                    data: "https://uk-covid19.azurefd.net/downloads/maps/nation-ref.geojson",
+                    buffer: 8,
+                    attribution: "",
+                    maxzoom: 3,
+                    // minzoom: .1
+                });
+
+
+                map.addLayer(
+                    {
+                        'id': 'nation',
+                        'type': 'line',
+                        'source': 'geo-nation',
+                        'minzoom': .1,
+                        'maxzoom': 3,
+                        'layout': {
+                            'line-join': 'round',
+                            'line-cap': 'round'
+                        },
+                        'paint': {
+                            'line-color': '#888',
+                            'line-width': 1
+                        }
+                    },
+                    "water"
+                );
+
+                map.addLayer(
+                    {
+                        'id': 'utla',
+                        'type': 'line',
+                        'source': 'geo-utla',
+                        'minzoom': 3,
+                        'maxzoom': 7,
+                        'layout': {
+                            'line-join': 'round',
+                            'line-cap': 'round'
+                        },
+                        'paint': {
+                            'line-color': [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                '#000000',
+                                '#888'
+                            ],
+                            'line-width': [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                3,
+                                .5
+                            ]
+                        }
+                    },
+                    'nation'
+                );
+
+                map.addLayer(
+                    {
+                        'id': 'ltla',
+                        'type': 'line',
+                        'source': 'geo-ltla',
+                        'minzoom': 7,
+                        'maxzoom': 8.5,
+                        'layout': {
+                            'line-join': 'round',
+                            'line-cap': 'round'
+                        },
+                        'paint': {
+                            'line-color': [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                '#000000',
+                                '#888'
+                            ],
+                            'line-width': [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                3,
+                                .5
+                            ]
+                        }
+                    },
+                    'utla'
+                );
+
+                map.addLayer(
+                    {
+                        'id': 'msoa',
+                        'type': 'line',
+                        'source': 'geo-msoa',
+                        'minzoom': 8.5,
+                        'maxzoom': 13.5,
+                        'layout': {
+                            'line-join': 'round',
+                            'line-cap': 'round'
+                        },
+                        'paint': {
+                            'line-color': [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                '#000000',
+                                '#888'
+                            ],
+                            'line-width': [
+                                'case',
+                                ['boolean', ['feature-state', 'hover'], false],
+                                3,
+                                .5
+                            ]
+                        }
+                    },
+                    'ltla'
+                );
+
+                map.addLayer(
+                    {
+                        'id': 'lsoa',
+                        'type': 'circle',
+                        'source': 'geo-lsoa',
+                        'minzoom': 11.5,
+                        // layout: {
+                        //   'icon-allow-overlap': false,
+                        // },
+                        'paint': {
+                            'circle-radius': {
+                                'base': 5,
+                                'stops': [
+                                    [12, 12],
+                                    [22, 180]
+                                ]
+                                // '*',
+                                // ['get', 'value'],
+                                // 2
+                                // 3, 3,
+                                // 5, 10,
+                                // 10, 20,
+                                // 20, 30,
+                                // 30, 40,
+                            },
+                            'circle-color': [
+                                "step",
+                                ['get', 'value'],
+                                colours[0],
+                                5, colours[1],
+                                10, colours[2],
+                                20, colours[3],
+                                30, colours[4],
+                            ]
+                        }
+                    },
+                    'msoa'
+                );
+
+                //
+                // //
+                //
+                // // console.log(extrema)
+                //
+                //
+                map.addLayer(
+                    {
+                        'id': 'choropleth-utla',
+                        'type': 'fill',
+                        'source': 'timeseries-geo-data-utla',
+                        // 'minzoom': 5.5,
+                        'maxzoom': 7,
+                        'paint': {
+                            'fill-color': [
+                                "step",
+                                ['get', 'value'],
+                                colours[0],
+                                500, colours[1],
+                                1500, colours[2],
+                                3000, colours[3],
+                                5000, colours[4],
+                            ],
+                            'fill-opacity': 1,
+                            // 'line-color': '#888',
+                            // 'line-width': [
+                            //     'case',
+                            //     ['boolean', ['feature-state', 'hover'], false],
+                            //     2,
+                            //     .5
+                            // ]
+                        }
+                    },
+                    'utla'
+                );
+
+                map.addLayer(
+                    {
+                        'id': 'choropleth-ltla',
+                        'type': 'fill',
+                        'source': 'timeseries-geo-data-ltla',
+                        'minzoom': 7,
+                        'maxzoom': 8.5,
+                        'paint': {
+                            'fill-color': [
+                                "step",
+                                ['get', 'value'],
+                                colours[0],
+                                500, colours[1],
+                                1500, colours[2],
+                                3000, colours[3],
+                                5000, colours[4],
+                            ],
+                            'fill-opacity': 1,
+
+                            // 'line-color': '#888',
+                            // 'line-width': [
+                            //     'case',
+                            //     ['boolean', ['feature-state', 'hover'], false],
+                            //     2,
+                            //     .5
+                            // ]
+                        }
+                    },
+                    'ltla'
+                );
+
+
+                map.addLayer(
+                    {
+                        'id': 'choropleth-msoa',
+                        'type': 'fill',
+                        'source': 'timeseries-geo-data-msoa',
+                        'minzoom': 8.5,
+                        'maxzoom': 11.5,
+                        'paint': {
+                            'fill-color': [
+                                "step",
+                                ['get', 'value'],
+                                colours[0],
+                                10, colours[1],
+                                20, colours[2],
+                                30, colours[3],
+                                50, colours[4],
+                            ],
+                            'fill-opacity': 1
+                        }
+                    },
+                    'msoa'
+                );
+
+                // map.on('mouseleave', 'utla', () => {
+                //     if ( hoveredStateId ) {
+                //         map.setFeatureState(
+                //             { source: 'timeseries-geo-data-utla', id: hoveredStateId },
+                //             { hover: false }
+                //         );
+                //     }
+                //     hoveredStateId = null;
+                // });
+
+
+                // map.on('mouseover', `utla`, function (e) {
+                //     if ( e.features.length > 0 ) {
+                //         if ( hoveredStateId ) {
+                //             map.setFeatureState(
+                //                 { source: `geo-utla`, id: hoveredStateId },
+                //                 { hover: false }
+                //             );
+                //         }
+                //         hoveredStateId = e.features[0].id;
+                //         map.setFeatureState(
+                //             { source: 'geo-utla', id: hoveredStateId },
+                //             { hover: true }
+                //         );
+                //     }
+                // });
+                //
+                // map.on('mousemove', `ltla`, function (e) {
+                //     if ( e.features.length > 0 ) {
+                //         if ( hoveredStateId ) {
+                //             map.setFeatureState(
+                //                 { source: `geo-ltla`, id: hoveredStateId },
+                //                 { hover: false }
+                //             );
+                //         }
+                //         hoveredStateId = e.features[0].id;
+                //         map.setFeatureState(
+                //             { source: 'geo-ltla', id: hoveredStateId },
+                //             { hover: true }
+                //         );
+                //     }
+                // });
+
+
+
+
+                // const createLayer = (areaType) => {
+                //     const zoomLevels = {
+                //         nation: {
+                //             minzoom: .2,
+                //             maxzoom: 3
+                //         },
+                //         utla: {
+                //             minzoom: 3,
+                //             maxzoom: 7
+                //         },
+                //         ltla: {
+                //             minzoom: 7,
+                //             maxzoom: 8.5
+                //         },
+                //         msoa: {
+                //             minzoom: 8.5,
+                //             maxzoom: 12
+                //         }
+                //     };
+                //
+                //     const colourScales = {
+                //         default: [
+                //             colours[0],
+                //             500, colours[1],
+                //             1500, colours[2],
+                //             3000, colours[3],
+                //             5000, colours[4]
+                //         ],
+                //         msoa: [
+                //             colours[0],
+                //             10, colours[1],
+                //             20, colours[2],
+                //             30, colours[3],
+                //             50, colours[4],
+                //         ]
+                //     };
+                //
+                //     map.addLayer(
+                //         {
+                //             'id': `outline-${areaType}`,
+                //             'type': 'line',
+                //             'source': `geo-${areaType}`,
+                //             // 'minzoom': 3,
+                //             // 'maxzoom': 7,
+                //             ...zoomLevels[areaType],
+                //             'layout': {
+                //                 'line-join': 'round',
+                //                 'line-cap': 'round'
+                //             },
+                //             'paint': {
+                //                 'line-color': [
+                //                     'case',
+                //                     ['boolean', ['feature-state', 'hover'], false],
+                //                     '#000000',
+                //                     '#888'
+                //                 ],
+                //                 'line-width': [
+                //                     'case',
+                //                     ['boolean', ['feature-state', 'hover'], false],
+                //                     3,
+                //                     .5
+                //                 ]
+                //             }
+                //         },
+                //         'water'
+                //     );
+                //
+                //     map.addLayer(
+                //         {
+                //             'id': `choropleth-${areaType}`,
+                //             'type': 'fill',
+                //             'source': `timeseries-geo-data-${areaType}`,
+                //             // 'minzoom': 5.5,
+                //             // 'maxzoom': 7,
+                //             ...zoomLevels[areaType],
+                //             'paint': {
+                //                 'fill-color': [
+                //                     "step",
+                //                     ['get', 'value'],
+                //                     ...(colourScales?.[areaType] ?? colourScales?.default)
+                //                 ],
+                //                 'fill-opacity': 1,
+                //             }
+                //         },
+                //         `outline-${areaType}`
+                //     );
+                //
+                // };
+
+                // map.on('mouseover', function (e) {
+                //     console.log(e);
+                //         if ( e.features.length > 0 ) {
+                //             if ( hoveredStateId ) {
+                //                 map.setFeatureState(
+                //                     { source: `geo-$${areaType}`, id: hoveredStateId },
+                //                     { hover: false }
+                //                 );
+                //             }
+                //             hoveredStateId = e.features[0].id;
+                //             map.setFeatureState(
+                //                 { source: `geo-${areaType}`, id: hoveredStateId },
+                //                 { hover: true }
+                //             );
+                //         }
+                //     });
+
+                map.on("sourcedata", function (e) {
+                    if ( e.sourceId.startsWith("geo") > -1 ) {
+                        // createLayer(e.sourceId.split(/-/g).slice(-1))
+                    }
+
+                });
+
+                [['choropleth-utla', 'utla'], ['choropleth-ltla', 'ltla'], ['choropleth-msoa', 'msoa'], ['lsoa', 'lsoa']].map(loc => {
+                    map.on('click', loc[0], function (e) {
+                        setCurrentLocation(e.features[0].properties.code)
+
+                        const outlineId = map
+                            .queryRenderedFeatures({ layers: [loc[1]] } )
+                            .find(item => item.properties.code === e.features[0].properties.code)
+                            .id;
+
+                        // if ( e.features.length > 0 ) {
+                            if ( hoveredStateId?.id ) {
+                                map.setFeatureState(
+                                    { source: `geo-${hoveredStateId.location}`, id: hoveredStateId.id },
+                                    { hover: false }
+                                );
+                            }
+                            hoveredStateId = {id: outlineId, location: loc[1]};
+                            // console.log(hoveredStateId)
+                            map.setFeatureState(
+                                { source: `geo-${hoveredStateId.location}`, id: hoveredStateId.id },
+                                { hover: true }
+                            );
+                        // }
+                    });
+                });
+
+
+                map.on('styledata', function (e) {
+                    setStyleDataStatus(true)
+                });
+
+                map.addControl(new mapboxgl.NavigationControl({ showCompass: false }));
+                map.addControl(new mapboxgl.FullscreenControl());
+
+                map.on("render", () => setIsLoading(false));
+
+            })
+        }
+    }, [map]);
+
+    useEffect(() => {
+
+        if ( styleDataStatus ) filterBy(date)
+
+    }, [date, styleDataStatus]);
+
+    useEffect(() => {
+
+        setLocationData(apiData?.[0] ?? null)
+
+    }, [ apiData ]);
 
     // if ( !(map && layerGroup && data && geoData) )
     //     return <Loading/>;
 
 
-    return <MapContainer id={ "map" }>{ children }</MapContainer>
+    return <>
+        { isLoading && <Loading/> }
+        <MapContainer id={ "map" } style={{ visibility: isLoading ? "hidden" : "visible" }}/>
+
+        { !isLoading && <SliderContainer>{ children }</SliderContainer> }
+        { !isLoading && locationData
+            ? <MapToolbox>
+                <h2>{ locationData.name }<small>as of { dataDate.format("DD MMMM YYYY") }</small></h2>
+                <NumbersContainer>
+                    <NumberBox>
+                        <h3>Cases</h3>
+                        <p>{ numeral(locationData.value).format("0,0") }</p>
+                    </NumberBox>
+                    <NumberBox>
+                        <h3>Incidence rate</h3>
+                        <p>{ numeral(locationData.incidenceRate).format("0,0.0") ?? "N/A" }</p>
+                    </NumberBox>
+                    <NumberBox>
+                        <h3>7-day rolling rate</h3>
+                        <p>{ numeral(locationData.rollingRate).format("0,0.0") ?? "N/A" }</p>
+                    </NumberBox>
+                </NumbersContainer>
+                <strong>How does this area compare?</strong>
+                <Histogram data={ casesData.map(item => item[0]) } currentLocation={ locationData.rollingRate }/>
+            </MapToolbox>
+            : null
+        }
+    </>
 
 };  // Map
 

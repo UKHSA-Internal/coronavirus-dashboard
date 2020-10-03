@@ -64,13 +64,58 @@ export const Slider: ComponentType<*> =
         .attrs(() => ({
             type: "range"
         }))`
-            display: flex;
         `;
 
 
 export const SideDataContainer: ComponentType<*> =
     styled
         .div`
-            min-width: 400px;
+            min-width: auto;
             margin: 0 .5rem 0 1rem;
         `;
+
+
+export const ScaleLegend: ComponentType<*> =
+    styled
+        .div`
+            font-family: "GDS Transport", Arial, sans-serif;
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: row;
+        `;
+
+
+export const ScaleGroup: ComponentType<*> =
+    styled
+        .div`
+            display: inline-flex;
+            flex-direction: row;
+            align-items: center;
+        `;
+
+export const ScaleColor: ComponentType<*> =
+    styled
+        .span`
+            width: 30px;
+            height: 10px;
+            border: 2px solid black;
+        `;
+
+
+export const ScaleValue: ComponentType<*> =
+    styled
+        .span`
+            width: 100px;
+            margin-left: 0.5rem;
+            margin-right: 2rem;             
+        `;
+
+
+export const ScaleLegendLabel: ComponentType<*> =
+    styled
+        .span`
+            font-wight: bold;
+            width: 200px;       
+        `;
+
+

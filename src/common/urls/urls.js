@@ -13,8 +13,10 @@ const URLs = {
 
     populationData:  `https://${ REACT_APP_MAIN_CDN      }/assets/population/population.json`,
     baseData:        `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/data/`,
+    mapData:         `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/map_content/`,
+    downloads:       `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/`,
     baseGeo:         `https://${ REACT_APP_MAIN_CDN      }/assets/geo/`,
-    mapStyle:        `https://${ REACT_APP_MAIN_CDN      }/assets/map/style_v3.json`,
+    mapStyle:        `https://${ REACT_APP_DOWNLOADS_CDN }/geo/style_v3.json`,
     landingData:     `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/data/landing.json`,
     timestamp:       `https://${ REACT_APP_MAIN_CDN      }/assets/dispatch/website_timestamp`,
     lookups:         `https://${ REACT_APP_MAIN_CDN      }/assets/lookups/`,

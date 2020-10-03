@@ -6,13 +6,20 @@ import type { RGB } from "components/MapTable/MapTable.types";
 import { generateUrl } from "hooks/useApi";
 
 
+export const sort = (a, b) => {
+
+    return (a < b) || -((a > b) || 0)
+
+};  // sort
+
+
 export const sortByDate = (a, b) => {
 
     const
         dateA = new Date(a),
         dateB = new Date(b);
 
-    return (dateA < dateB) || -((dateA > dateB) || 0)
+    return sort(dateA, dateB)
 
 };  // sortByDate
 
