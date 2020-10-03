@@ -76,10 +76,12 @@ const LastUpdateTime = () => {
                 ? <Announcement firstDisplayDate={ parsedTimestamp.start }
                           lastDisplayDate={{ year: 2020, month: 9, day: 26, hour: 16 }}>
                 <p className={ "govuk-body" }>
-                    Due to a power outage at National Records of Scotland we have not been
-                    able to update the deaths figures for Scotland.
+                    Due to a technical issue &ndash; which has now been resolved &ndash;
+                    reporting of some cases in England over the last week has been delayed.
                 </p>
                 <p className={ "govuk-body" }>
+                    The total number of cases by publish date reported on the 3rd and 4th
+                    of October 2020 are therefore artificially high for England and the UK.
                     <strong>Today's deaths figure does not include Scotland.</strong>
                 </p>
             </Announcement> : null}
