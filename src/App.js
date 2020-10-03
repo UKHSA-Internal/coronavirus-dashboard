@@ -72,17 +72,16 @@ const LastUpdateTime = () => {
 
     return <>
         <Suspense fallback={ <Loading/> }>
-            { parsedTimestamp.start.day === 25
+            { parsedTimestamp.start.day === 3
                 ? <Announcement firstDisplayDate={ parsedTimestamp.start }
-                          lastDisplayDate={{ year: 2020, month: 9, day: 26, hour: 16 }}>
+                          lastDisplayDate={{ year: 2020, month: 10, day: 5, hour: 15, minute: 55 }}>
                 <p className={ "govuk-body" }>
-                    Due to a technical issue &ndash; which has now been resolved &ndash;
-                    reporting of some cases in England over the last week has been delayed.
-                </p>
-                <p className={ "govuk-body" }>
-                    The total number of cases by publish date reported on the 3rd and 4th
-                    of October 2020 are therefore artificially high for England and the UK.
-                    <strong>Today's deaths figure does not include Scotland.</strong>
+                    Due to a technical issue, which has now been resolved, there has been
+                    a delay in publishing a number of COVID-19 cases to the dashboard in
+                    England. This means the total reported over the coming days will include
+                    some additional cases from the period between 24 September and 1 October,
+                    increasing the number of cases reported.
+
                 </p>
             </Announcement> : null}
 
