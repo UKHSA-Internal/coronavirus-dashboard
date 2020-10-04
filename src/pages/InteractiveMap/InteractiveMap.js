@@ -22,7 +22,7 @@ import {
     MainContainer,
     MapContainer,
     SideDataContainer,
-    ScaleLegend, ScaleGroup, ScaleColor, ScaleValue, ScaleLegendLabel
+    ScaleLegend, ScaleGroup, ScaleColor, ScaleValue, ScaleLegendLabel, LegendContainer
 } from "./InteractiveMap.styles"
 
 import type { ComponentType } from "react";
@@ -362,7 +362,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
     //     y: movingAverage(ukData.map(item => item[1]), 7),
     // })
 
-    return <article>
+    return <article className={ "govuk-body" }>
         {/*<Plotter data={{*/}
         {/*    data: {x: ukData.map(item => item.data),*/}
         {/*    y: ukData.map(item => item.value)}*/}
@@ -381,7 +381,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
             }
         }]} style={{ maxWidth: 600, height: 200 }} layout={{ showlegend: false }}/>
         <MainContainer>
-            <MapContainer>
+            <>
                 {/*<GenericMap*/}
                 <Map
                     // data={ data.data }
@@ -397,14 +397,19 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                      // minData={ extrema.min }
                      // maxData={ extrema.max }
                 >
-                    <label id={ "month" } htmlFor={ "slider" }>7-day rolling rate of cases by specimen date ending on <strong>{ moment(currentDate).format("DD MMM YYYY") }</strong></label>
-                        <Slider id="slider"
+                    <label id={ "month" }
+                           className={ "govuk-body govuk-!-font-size-14" }
+                           htmlFor={ "slider" }>
+                        7-day rolling rate of cases by specimen date ending
+                        on <strong>{ moment(currentDate).format("DD MMM YYYY") }</strong>
+                    </label>
+                    <Slider id="slider"
                         min={ 0 }
                         max={ ( dates.length ?? 0 ) - 1 }
                         value={ dates.indexOf(currentDate) ?? 0 }
                         onChange={ event => setCurrentDate(dates[parseInt(event.target.value)]) }/>
                 </Map>
-            </MapContainer>
+            </>
 
             {/*<MapContainer areaType={ areaType }*/}
             {/*              period={ period }*/}
@@ -412,92 +417,9 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
             {/*              weeklyDates={ weeklyDates, currentDate/>*/}
             {/*<SideTable/>*/}
         </MainContainer>
-        <ScaleLegend>
-            <ScaleLegendLabel>LSOAs (England only)</ScaleLegendLabel>
-            <ScaleGroup>
-                <ScaleColor style={{ background: "#fff" }}/>
-                <ScaleValue>0 &ndash; 2</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[0] }}/>
-                <ScaleValue>3 &ndash; 5</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[1] }}/>
-                <ScaleValue>6 &ndash; 10</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[2] }}/>
-                <ScaleValue>11 &ndash; 20</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[3] }}/>
-                <ScaleValue>21 &ndash; 30</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[4] }}/>
-                <ScaleValue>31+</ScaleValue>
-            </ScaleGroup>
-        </ScaleLegend>
-
-        <ScaleLegend>
-            <ScaleLegendLabel>MSOAs (England only)</ScaleLegendLabel>
-            <ScaleGroup>
-                <ScaleColor style={{ background: "#fff" }}/>
-                <ScaleValue>0 &ndash; 2</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[0] }}/>
-                <ScaleValue>3 &ndash; 10</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[1] }}/>
-                <ScaleValue>11 &ndash; 20</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[2] }}/>
-                <ScaleValue>21 &ndash; 30</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[3] }}/>
-                <ScaleValue>31 &ndash; 50</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[4] }}/>
-                <ScaleValue>51+</ScaleValue>
-            </ScaleGroup>
-        </ScaleLegend>
-
-        <ScaleLegend>
-            <ScaleLegendLabel>Local authorities</ScaleLegendLabel>
-            <ScaleGroup>
-                <ScaleColor style={{ background: "#fff" }}/>
-                <ScaleValue>Missing data</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[0] }}/>
-                <ScaleValue>0 &ndash; 500</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[1] }}/>
-                <ScaleValue>501 &ndash; 1500</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[2] }}/>
-                <ScaleValue>1501 &ndash; 3000</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[3] }}/>
-                <ScaleValue>3001 &ndash; 5000</ScaleValue>
-            </ScaleGroup>
-            <ScaleGroup>
-                <ScaleColor style={{ background: colours[4] }}/>
-                <ScaleValue>5001+</ScaleValue>
-            </ScaleGroup>
-        </ScaleLegend>
-        <div>
+        <div className={ "markdown modal govuk-!-margin-top-8" }>
             <h3>Attributions</h3>
-            <ul>
+            <ul className={ "govuk-list govuk-list--bullet" }>
                 <li>Contains Ordnance Survey data &copy; Crown copyright and database right 2020</li>
                 <li>Contains Royal Mail data &copy; Royal Mail copyright and database right 2020</li>
                 <li>Contains Public Health England data &copy; Crown copyright and database right 2020</li>

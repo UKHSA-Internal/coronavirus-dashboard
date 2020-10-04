@@ -73,6 +73,52 @@ export const useMapData = (path): any => {
 };  // useMapData
 
 
+export const useFullRollingRates = (areaType): any => {
+
+    const cachedData = useRef([]);
+    const [ data, setData ] = useState(null);
+
+    useEffect(() => {
+
+        (async () => {
+
+            if ( !areaType ) {
+
+                setData([]);
+
+            }
+            else if ( areaType in cachedData.current ) {
+
+                setData(cachedData.current[areaType])
+
+            }
+            else {
+
+                try {
+                    const { data, status } = await axios.get(`/maps/data/${areaType}-RollingRate.json`, { baseURL: URLs.downloads });
+
+                    if ( status < 400 ) {
+                        cachedData.current[areaType] = data;
+                        setData(data)
+                    } else {
+                        setData([])
+                    }
+                } catch (e) {
+                    console.error(e)
+                    setData([])
+                }
+
+            }
+
+        })()
+
+    }, [ areaType ]);
+
+    return data
+
+};  // useFullRollingRates
+
+
 export const useMapLookupTable = (): any => {
 
     const [ lookupTable, setLookupTable ] = useState(null);

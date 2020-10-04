@@ -27,8 +27,15 @@ import useApi from "../../hooks/useApi";
 import moment from "moment";
 import { Histogram, Plotter } from "../Plotter/Plotter";
 import numeral from "numeral";
-import { Row } from "../../pages/InteractiveMap/InteractiveMap.styles";
+import {
+    LegendContainer,
+    Row, ScaleColor,
+    ScaleGroup,
+    ScaleLegend,
+    ScaleLegendLabel, ScaleValue
+} from "../../pages/InteractiveMap/InteractiveMap.styles";
 import turf from "turf";
+import { useFullRollingRates } from "../../hooks/useMapData";
 
 
 const OpenStreetMapAttrib: ComponentType<*> = () => {
@@ -135,22 +142,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                 rollingRate: "newCasesBySpecimenDateRollingRate",
             }
         }),
-        casesData = useApi({
-            ...locationData
-                ? {
-                    conjunctiveFilters: [
-                        { key: "areaType", sign: "=", value: locationData.type },
-                        { key: "date", sign: "=", value: dataDate.toISOString().split("T")[0] },
-                    ],
-                }
-                : {},
-            structure: [
-                "newCasesBySpecimenDateRollingRate",
-            ],
-            cache: true,
-            defaultResponse: []
-        });
+        casesData = useFullRollingRates(locationData?.type);
 
+    console.log(locationData)
+    console.log(casesData)
     let hoveredStateId = null;
     let isAtStart = true;
     // let map;
@@ -258,7 +253,6 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     buffer: 1,
                     tolerance: 1,
                     maxzoom: 8.5,
-                    attribution: "ONS layouts © Crown copyright",
                     // minzoom: 7
                 });
 
@@ -267,7 +261,6 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     data: "https://uk-covid19.azurefd.net/downloads/maps/utla-ref.geojson",
                     buffer: 32,
                     maxzoom: 7,
-                    attribution: "ONS layouts © Crown copyright",
                     // minzoom: 3
                 });
 
@@ -276,7 +269,6 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     data: `https://uk-covid19.azurefd.net/downloads/maps/utla_data_latest.geojson`,
                     buffer: 32,
                     maxzoom: 7,
-                    attribution: "ONS layouts © Crown copyright",
                     // minzoom: 3
                 });
 
@@ -284,7 +276,6 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     type: 'geojson',
                     data: "https://uk-covid19.azurefd.net/downloads/maps/nation-ref.geojson",
                     buffer: 8,
-                    attribution: "",
                     maxzoom: 3,
                     // minzoom: .1
                 });
@@ -412,14 +403,6 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                                     [12, 12],
                                     [22, 180]
                                 ]
-                                // '*',
-                                // ['get', 'value'],
-                                // 2
-                                // 3, 3,
-                                // 5, 10,
-                                // 10, 20,
-                                // 20, 30,
-                                // 30, 40,
                             },
                             'circle-color': [
                                 "step",
@@ -526,155 +509,6 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     'msoa'
                 );
 
-                // map.on('mouseleave', 'utla', () => {
-                //     if ( hoveredStateId ) {
-                //         map.setFeatureState(
-                //             { source: 'timeseries-geo-data-utla', id: hoveredStateId },
-                //             { hover: false }
-                //         );
-                //     }
-                //     hoveredStateId = null;
-                // });
-
-
-                // map.on('mouseover', `utla`, function (e) {
-                //     if ( e.features.length > 0 ) {
-                //         if ( hoveredStateId ) {
-                //             map.setFeatureState(
-                //                 { source: `geo-utla`, id: hoveredStateId },
-                //                 { hover: false }
-                //             );
-                //         }
-                //         hoveredStateId = e.features[0].id;
-                //         map.setFeatureState(
-                //             { source: 'geo-utla', id: hoveredStateId },
-                //             { hover: true }
-                //         );
-                //     }
-                // });
-                //
-                // map.on('mousemove', `ltla`, function (e) {
-                //     if ( e.features.length > 0 ) {
-                //         if ( hoveredStateId ) {
-                //             map.setFeatureState(
-                //                 { source: `geo-ltla`, id: hoveredStateId },
-                //                 { hover: false }
-                //             );
-                //         }
-                //         hoveredStateId = e.features[0].id;
-                //         map.setFeatureState(
-                //             { source: 'geo-ltla', id: hoveredStateId },
-                //             { hover: true }
-                //         );
-                //     }
-                // });
-
-
-                // const createLayer = (areaType) => {
-                //     const zoomLevels = {
-                //         nation: {
-                //             minzoom: .2,
-                //             maxzoom: 3
-                //         },
-                //         utla: {
-                //             minzoom: 3,
-                //             maxzoom: 7
-                //         },
-                //         ltla: {
-                //             minzoom: 7,
-                //             maxzoom: 8.5
-                //         },
-                //         msoa: {
-                //             minzoom: 8.5,
-                //             maxzoom: 12
-                //         }
-                //     };
-                //
-                //     const colourScales = {
-                //         default: [
-                //             colours[0],
-                //             500, colours[1],
-                //             1500, colours[2],
-                //             3000, colours[3],
-                //             5000, colours[4]
-                //         ],
-                //         msoa: [
-                //             colours[0],
-                //             10, colours[1],
-                //             20, colours[2],
-                //             30, colours[3],
-                //             50, colours[4],
-                //         ]
-                //     };
-                //
-                //     map.addLayer(
-                //         {
-                //             'id': `outline-${areaType}`,
-                //             'type': 'line',
-                //             'source': `geo-${areaType}`,
-                //             // 'minzoom': 3,
-                //             // 'maxzoom': 7,
-                //             ...zoomLevels[areaType],
-                //             'layout': {
-                //                 'line-join': 'round',
-                //                 'line-cap': 'round'
-                //             },
-                //             'paint': {
-                //                 'line-color': [
-                //                     'case',
-                //                     ['boolean', ['feature-state', 'hover'], false],
-                //                     '#000000',
-                //                     '#888'
-                //                 ],
-                //                 'line-width': [
-                //                     'case',
-                //                     ['boolean', ['feature-state', 'hover'], false],
-                //                     3,
-                //                     .5
-                //                 ]
-                //             }
-                //         },
-                //         'water'
-                //     );
-                //
-                //     map.addLayer(
-                //         {
-                //             'id': `choropleth-${areaType}`,
-                //             'type': 'fill',
-                //             'source': `timeseries-geo-data-${areaType}`,
-                //             // 'minzoom': 5.5,
-                //             // 'maxzoom': 7,
-                //             ...zoomLevels[areaType],
-                //             'paint': {
-                //                 'fill-color': [
-                //                     "step",
-                //                     ['get', 'value'],
-                //                     ...(colourScales?.[areaType] ?? colourScales?.default)
-                //                 ],
-                //                 'fill-opacity': 1,
-                //             }
-                //         },
-                //         `outline-${areaType}`
-                //     );
-                //
-                // };
-
-                // map.on('mouseover', function (e) {
-                //     console.log(e);
-                //         if ( e.features.length > 0 ) {
-                //             if ( hoveredStateId ) {
-                //                 map.setFeatureState(
-                //                     { source: `geo-$${areaType}`, id: hoveredStateId },
-                //                     { hover: false }
-                //                 );
-                //             }
-                //             hoveredStateId = e.features[0].id;
-                //             map.setFeatureState(
-                //                 { source: `geo-${areaType}`, id: hoveredStateId },
-                //                 { hover: true }
-                //             );
-                //         }
-                //     });
 
                 map.on("sourcedata", function (e) {
                     if ( e.sourceId.startsWith("geo") > -1 ) {
@@ -725,7 +559,18 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                 map.addControl(new mapboxgl.NavigationControl({ showCompass: false }));
                 map.addControl(new mapboxgl.FullscreenControl());
 
-                map.on("render", () => setIsLoading(false));
+                // function sourceCallback() {
+                //     // assuming 'map' is defined globally, or you can use 'this'
+                //     if (map.getSource('my-data') && map.isSourceLoaded('my-data')) {
+                //         console.log('source loaded!');
+                //     }
+                // }
+                //
+                // map.on('sourcedata', sourceCallback)
+                map.on("render", (e) => {
+                    // console.log(e);
+                    setIsLoading(false)
+                });
 
             })
         }
@@ -747,11 +592,103 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
     //     return <Loading/>;
 
 
-    return <>
+    return <MapContainer>
         { isLoading && <Loading/> }
-        <MapContainer id={ "map" } style={ { visibility: isLoading ? "hidden" : "visible" } }/>
+        <div id={ "map" } style={ { visibility: isLoading ? "hidden" : "visible" } }/>
+        {
+            !isLoading &&
+            <>
+                <SliderContainer>
+                    { children }
+                </SliderContainer>
+                <LegendContainer>
+                    <ScaleLegend>
+                        <ScaleLegendLabel>LSOAs</ScaleLegendLabel>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: "#fff" }}/>
+                            <ScaleValue>0 &ndash; 2</ScaleValue>
+                        </ScaleGroup>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: colours[0] }}/>
+                            <ScaleValue>3 &ndash; 5</ScaleValue>
+                        </ScaleGroup>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: colours[1] }}/>
+                            <ScaleValue>6 &ndash; 10</ScaleValue>
+                        </ScaleGroup>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: colours[2] }}/>
+                            <ScaleValue>11 &ndash; 20</ScaleValue>
+                        </ScaleGroup>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: colours[3] }}/>
+                            <ScaleValue>21 &ndash; 30</ScaleValue>
+                        </ScaleGroup>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: colours[4] }}/>
+                            <ScaleValue>31+</ScaleValue>
+                        </ScaleGroup>
+                    </ScaleLegend>
 
-        { !isLoading && <SliderContainer>{ children }</SliderContainer> }
+                    {/*<ScaleLegend>*/}
+                    {/*    <ScaleLegendLabel>MSOAs (England only)</ScaleLegendLabel>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: "#fff" }}/>*/}
+                    {/*        <ScaleValue>0 &ndash; 2</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[0] }}/>*/}
+                    {/*        <ScaleValue>3 &ndash; 10</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[1] }}/>*/}
+                    {/*        <ScaleValue>11 &ndash; 20</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[2] }}/>*/}
+                    {/*        <ScaleValue>21 &ndash; 30</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[3] }}/>*/}
+                    {/*        <ScaleValue>31 &ndash; 50</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[4] }}/>*/}
+                    {/*        <ScaleValue>51+</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*</ScaleLegend>*/}
+
+                    {/*<ScaleLegend>*/}
+                    {/*    <ScaleLegendLabel>Local authorities</ScaleLegendLabel>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: "#fff" }}/>*/}
+                    {/*        <ScaleValue>Missing data</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[0] }}/>*/}
+                    {/*        <ScaleValue>0 &ndash; 500</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[1] }}/>*/}
+                    {/*        <ScaleValue>501 &ndash; 1500</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[2] }}/>*/}
+                    {/*        <ScaleValue>1501 &ndash; 3000</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[3] }}/>*/}
+                    {/*        <ScaleValue>3001 &ndash; 5000</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[4] }}/>*/}
+                    {/*        <ScaleValue>5001+</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*</ScaleLegend>*/}
+                </LegendContainer>
+            </>
+
+        }
         { !isLoading && locationData
             ? <MapToolbox>
                 <h2>{ locationData.name }<small>as of { dataDate.format("DD MMMM YYYY") }</small></h2>
@@ -770,11 +707,11 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     </NumberBox>
                 </NumbersContainer>
                 <strong>How does this area compare?</strong>
-                <Histogram data={ casesData.map(item => item[0]) } currentLocation={ locationData.rollingRate }/>
+                <Histogram data={ casesData } currentLocation={ locationData.rollingRate }/>
             </MapToolbox>
             : null
         }
-    </>
+        </MapContainer>
 
 };  // Map
 
