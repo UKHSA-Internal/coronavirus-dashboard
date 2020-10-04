@@ -72,18 +72,29 @@ const LastUpdateTime = () => {
 
     return <>
         <Suspense fallback={ <Loading/> }>
-            { parsedTimestamp.start.day >= 3
+            { parsedTimestamp.start.day === 3
                 ? <Announcement firstDisplayDate={ parsedTimestamp.start }
                           lastDisplayDate={{ year: 2020, month: 10, day: 5, hour: 15, minute: 55 }}>
                 <p className={ "govuk-body" }>
-                    A technical issue was identified overnight on Friday 2 October in the
-                    automated process that transfers COVID-19 positive lab results into
-                    reporting dashboards.
+                    Due to a technical issue, which has now been resolved, there has been
+                    a delay in publishing a number of COVID-19 cases to the dashboard in
+                    England. This means the total reported over the coming days will include
+                    some additional cases from the period between 24 September and 1 October,
+                    increasing the number of cases reported.
+                </p>
+            </Announcement> : null}
+            { parsedTimestamp.start.day === 4
+                ? <Announcement firstDisplayDate={ parsedTimestamp.start }
+                          lastDisplayDate={{ year: 2020, month: 10, day: 5, hour: 15, minute: 55 }}>
+                <p className={ "govuk-body" }>
+                    An issue was identified overnight on Friday 2 October in the automated
+                    process that transfers positive cases data to PHE. It has now been
+                    resolved.
                 </p>
                 <p className={ "govuk-body" }>
-                    This issue has now been resolved and 15,841 cases
-                    that were transferred between 24 September and 1 October have now been
-                    included.
+                    The cases by publish date for 3 and 4 October include 15,841 additional
+                    cases with specimen dates between 25 September and 2&nbsp;October&nbsp;&mdash;&nbsp;they
+                    are therefore artificially high for England and the UK.
                 </p>
             </Announcement> : null}
             {
