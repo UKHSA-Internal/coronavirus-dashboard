@@ -20,7 +20,14 @@ import type { MapType } from "./Map.types";
 
 import 'leaflet/dist/leaflet.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { MapContainer, MapToolbox, NumberBox, NumbersContainer, SliderContainer } from "./Map.styles";
+import {
+    MapContainer,
+    MapToolbox,
+    NumberBox,
+    NumbersContainer,
+    PostcodeSearchForm,
+    SliderContainer
+} from "./Map.styles";
 import usePrevious from "hooks/usePrevious";
 import { CurrentLocation } from "../DashboardHeader/DashboardHeader.styles";
 import useApi from "../../hooks/useApi";
@@ -109,6 +116,30 @@ const initialiseMap: MapType<*> = () => {
 };  // initialiseMap
 
 
+const getChangeFactor = (data: Array<number>[]) => {
+
+    const
+        sigma_this_week = data.slice(0, 7).reduce((acc, item) => item[0] + acc, 0),
+        sigma_last_week = data.slice(7).reduce((acc, item) => item[0] + acc, 0),
+        delta = sigma_this_week - sigma_last_week,
+        delta_percentage = (sigma_this_week / Math.max(sigma_last_week, 1) - 1) * 100,
+        trend = delta_percentage > 0
+            ? 0
+            : delta_percentage < 0
+            ? 180
+            : 90;
+
+    return {
+        percentage: numeral(delta_percentage).format("0,0.0"),
+        change: numeral(Math.round(delta)).format("0,0"),
+        totalThisWeek: numeral(sigma_this_week).format("0,0"),
+        totalLastWeek: numeral(sigma_last_week).format("0,0"),
+        trend: trend
+    }
+
+};
+
+
 const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, geoData, date, extrema, minData, maxData, valueIndex, children, dates, ...props }) => {
 
     const
@@ -122,12 +153,14 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
         [currentLocation, setCurrentLocation] = useState(null),
         [locationData, setLocationData] = useState(null),
         [isLoading, setIsLoading] = useState(true),
+        [areaType, setAreaType] = useState("utla"),
         dataDate = moment().subtract(5, "days"),
         apiData = useApi({
             ...currentLocation
                 ? {
                     conjunctiveFilters: [
                         { key: "areaCode", sign: "=", value: currentLocation },
+                        { key: "areaType", sign: "=", value: areaType },
                         { key: "date", sign: "=", value: dataDate.toISOString().split("T")[0] },
                     ],
                 }
@@ -142,10 +175,28 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                 rollingRate: "newCasesBySpecimenDateRollingRate",
             }
         }),
-        casesData = useFullRollingRates(locationData?.type);
+        fortnightData = useApi({
+            ...currentLocation
+                ? {
+                    conjunctiveFilters: [
+                        { key: "areaCode", sign: "=", value: currentLocation },
+                        { key: "areaType", sign: "=", value: areaType },
+                        { key: "date", sign: "<=", value: dataDate.toISOString().split("T")[0] },
+                        { key: "date", sign: ">=", value: dataDate.subtract(13, 'days').toISOString().split("T")[0] },
+                    ],
+                }
+                : {},
+            cache: true,
+            structure: [
+                "newCasesBySpecimenDate",
+                "date"
+            ],
+            defaultResponse: []
+        }),
+        casesData = useFullRollingRates(locationData?.type),
+        changeFactor = getChangeFactor(fortnightData);
 
-    console.log(locationData)
-    console.log(casesData)
+    console.log(changeFactor)
     let hoveredStateId = null;
     let isAtStart = true;
     // let map;
@@ -520,7 +571,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                 [['choropleth-utla', 'utla'], ['choropleth-ltla', 'ltla'], ['choropleth-msoa', 'msoa'], ['lsoa', 'lsoa']].map(loc => {
                     map.on('click', loc[0], function (e) {
                         setCurrentLocation(e.features[0].properties.code)
-
+                        setAreaType(loc[1])
                         const outlineId = map
                             .queryRenderedFeatures({ layers: [loc[1]] })
                             .find(item => item.properties.code === e.features[0].properties.code)
@@ -601,6 +652,11 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                 <SliderContainer>
                     { children }
                 </SliderContainer>
+                <PostcodeSearchForm>
+                    <labe className={ "govuk-visually-hidden" }>Search by postcode</labe>
+                    <input className={ "govuk-input govuk-input--width-10" } maxLength={10} type={ "text" } placeholder={ "Search by postcode" }/>
+                    <button type={ "submit" }>Submit</button>
+                </PostcodeSearchForm>
                 <LegendContainer>
                     <ScaleLegend>
                         <ScaleLegendLabel>LSOAs</ScaleLegendLabel>
@@ -691,19 +747,23 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
         }
         { !isLoading && locationData
             ? <MapToolbox>
-                <h2>{ locationData.name }<small>as of { dataDate.format("DD MMMM YYYY") }</small></h2>
+                <h2>{ locationData.name }<small>7 days to { dataDate.format("DD MMMM YYYY") }</small></h2>
                 <NumbersContainer>
                     <NumberBox>
                         <h3>Cases</h3>
-                        <p>{ numeral(locationData.value).format("0,0") }</p>
+                        <p>{ changeFactor.totalThisWeek }</p>
                     </NumberBox>
-                    <NumberBox>
-                        <h3>Incidence rate</h3>
-                        <p>{ numeral(locationData.incidenceRate).format("0,0.0") ?? "N/A" }</p>
-                    </NumberBox>
+                    {/*<NumberBox>*/}
+                    {/*    <h3>Incidence rate</h3>*/}
+                    {/*    <p>{ numeral(locationData.incidenceRate).format("0,0.0") ?? "N/A" }</p>*/}
+                    {/*</NumberBox>*/}
                     <NumberBox>
                         <h3>7-day rolling rate</h3>
                         <p>{ numeral(locationData.rollingRate).format("0,0.0") ?? "N/A" }</p>
+                    </NumberBox>
+                    <NumberBox>
+                        <h3>Change</h3>
+                        <p>{ changeFactor.change } ({ changeFactor.percentage }%)</p>
                     </NumberBox>
                 </NumbersContainer>
                 <strong>How does this area compare?</strong>

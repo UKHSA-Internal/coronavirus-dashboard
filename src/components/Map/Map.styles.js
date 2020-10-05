@@ -41,10 +41,26 @@ export const SliderContainer: ComponentType<*> =
     width: 30%;
     left: 0;
     top: 0;
+    height: 50px;
     
     &>label {
         margin-bottom: 0.5rem;
     }
+    `;
+
+
+export const PostcodeSearchForm: ComponentType<*> =
+    styled.div`
+    font-family: "GDS Transport", Arial, sans-serif;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    background: rgba(255,255,255,0.9);
+    margin: 10px;
+    width: max-content;
+    left: 0px;
+    top: 80px;
+    
     `;
 
 
