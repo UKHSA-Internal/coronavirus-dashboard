@@ -72,31 +72,27 @@ const LastUpdateTime = () => {
 
     return <>
         <Suspense fallback={ <Loading/> }>
-            { parsedTimestamp.start.day === 3
-                ? <Announcement firstDisplayDate={ parsedTimestamp.start }
-                          lastDisplayDate={{ year: 2020, month: 10, day: 5, hour: 15, minute: 55 }}>
+            <Announcement firstDisplayDate={{ year: 2020, month: 9, day: 9, hour: 16 }}
+                                  lastDisplayDate={{ year: 2020, month: 9, day: 10, hour: 6 }}>
                 <p className={ "govuk-body" }>
-                    Due to a technical issue, which has now been resolved, there has been
-                    a delay in publishing a number of COVID-19 cases to the dashboard in
-                    England. This means the total reported over the coming days will include
-                    some additional cases from the period between 24 September and 1 October,
-                    increasing the number of cases reported.
+                    Due to essential updates, the website and the API may be unstable or
+                    unresponsive between 5pm Friday (9 Oct) and 5am Saturday (10 Oct).
                 </p>
-            </Announcement> : null}
-            { parsedTimestamp.start.day === 4
-                ? <Announcement firstDisplayDate={ parsedTimestamp.start }
-                          lastDisplayDate={{ year: 2020, month: 10, day: 5, hour: 15, minute: 55 }}>
-                <p className={ "govuk-body" }>
-                    An issue was identified overnight on Friday 2 October in the automated
-                    process that transfers positive cases data to PHE. It has now been
-                    resolved.
-                </p>
-                <p className={ "govuk-body" }>
-                    The cases by publish date for 3 and 4 October include 15,841 additional
-                    cases with specimen dates between 25 September and 2&nbsp;October&nbsp;&mdash;&nbsp;they
-                    are therefore artificially high for England and the UK.
-                </p>
-            </Announcement> : null}
+
+            </Announcement>
+
+            {/*{ parsedTimestamp.start.day === 3*/}
+            {/*    ? <Announcement firstDisplayDate={ parsedTimestamp.start }*/}
+            {/*              lastDisplayDate={{ year: 2020, month: 10, day: 5, hour: 15, minute: 55 }}>*/}
+            {/*    <p className={ "govuk-body" }>*/}
+            {/*        Due to a technical issue, which has now been resolved, there has been*/}
+            {/*        a delay in publishing a number of COVID-19 cases to the dashboard in*/}
+            {/*        England. This means the total reported over the coming days will include*/}
+            {/*        some additional cases from the period between 24 September and 1 October,*/}
+            {/*        increasing the number of cases reported.*/}
+            {/*    </p>*/}
+            {/*</Announcement> : null}*/}
+
             {
                 timestamp
                     ? <Announcement firstDisplayDate={ parsedTimestamp.start }
