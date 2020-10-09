@@ -32,7 +32,7 @@ import usePrevious from "hooks/usePrevious";
 import { CurrentLocation } from "../DashboardHeader/DashboardHeader.styles";
 import useApi from "../../hooks/useApi";
 import moment from "moment";
-import { Histogram, Plotter } from "../Plotter/Plotter";
+import { Histogram, IndicatorLine, Plotter } from "../Plotter/Plotter";
 import numeral from "numeral";
 import {
     LegendContainer,
@@ -43,6 +43,8 @@ import {
 } from "../../pages/InteractiveMap/InteractiveMap.styles";
 import turf from "turf";
 import { useFullRollingRates } from "../../hooks/useMapData";
+import axios from "axios";
+import MapMarker from "assets/icon-mapmarker.svg";
 
 
 const OpenStreetMapAttrib: ComponentType<*> = () => {
@@ -150,6 +152,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
         [styleDataStatus, setStyleDataStatus] = useState(false);
 
     const
+        [postcodeData, setPostcodeData] = useState(null),
         [currentLocation, setCurrentLocation] = useState(null),
         [locationData, setLocationData] = useState(null),
         [isLoading, setIsLoading] = useState(true),
@@ -241,12 +244,19 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                 container: 'map',
                 style: URLs.mapStyle,
                 center: centrePoint,
-
                 // maxBounds: [
                 //     [40.653782, -20.130489],
                 //     [71.090472, 10.316913]
                 // ],
-                zoom: 5
+                // maxBounds: [
+                //     [40.653782, -20.130489],
+                //     [71.090472, 10.316913]
+                // ],
+                zoom: 4.9,
+                minZoom: 4.9,
+                maxZoom: 15,
+                        preserveDrawingBuffer: true
+
             }));
         }
 
@@ -280,14 +290,14 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     // minzoom: 8.5
                 });
 
-                map.addSource("geo-lsoa", {
-                    type: 'geojson',
-                    data: "https://uk-covid19.azurefd.net/downloads/maps/lsoa_data_latest.geojson",
-                    buffer: 1,
-                    tolerance: 1,
-                    maxzoom: 14
-                    // minzoom: 8.5
-                });
+                // map.addSource("geo-lsoa", {
+                //     type: 'geojson',
+                //     data: "https://uk-covid19.azurefd.net/downloads/maps/lsoa_data_latest.geojson",
+                //     buffer: 1,
+                //     tolerance: 1,
+                //     maxzoom: 14
+                //     // minzoom: 8.5
+                // });
 
                 map.addSource("timeseries-geo-data-ltla", {
                     type: 'geojson',
@@ -415,7 +425,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                         'type': 'line',
                         'source': 'geo-msoa',
                         'minzoom': 8.5,
-                        'maxzoom': 13.5,
+                        'maxzoom': 15,
                         'layout': {
                             'line-join': 'round',
                             'line-cap': 'round'
@@ -438,36 +448,37 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     'ltla'
                 );
 
-                map.addLayer(
-                    {
-                        'id': 'lsoa',
-                        'type': 'circle',
-                        'source': 'geo-lsoa',
-                        'minzoom': 11.5,
-                        // layout: {
-                        //   'icon-allow-overlap': false,
-                        // },
-                        'paint': {
-                            'circle-radius': {
-                                'base': 5,
-                                'stops': [
-                                    [12, 12],
-                                    [22, 180]
-                                ]
-                            },
-                            'circle-color': [
-                                "step",
-                                ['get', 'value'],
-                                colours[0],
-                                5, colours[1],
-                                10, colours[2],
-                                20, colours[3],
-                                30, colours[4],
-                            ]
-                        }
-                    },
-                    'msoa'
-                );
+                // map.addLayer(
+                //     {
+                //         'id': 'lsoa',
+                //         'type': 'circle',
+                //         'source': 'geo-lsoa',
+                //         'minzoom': 11.5,
+                //         // layout: {
+                //         //   'icon-allow-overlap': false,
+                //         // },
+                //         'paint': {
+                //             'circle-radius': {
+                //                 'base': 5,
+                //                 'stops': [
+                //                     [11, 15],
+                //                     [15, 70],
+                //                     // [20, 180]
+                //                 ]
+                //             },
+                //             'circle-color': [
+                //                 "step",
+                //                 ['get', 'value'],
+                //                 colours[0],
+                //                 5, colours[1],
+                //                 10, colours[2],
+                //                 20, colours[3],
+                //                 30, colours[4],
+                //             ]
+                //         }
+                //     },
+                //     'msoa'
+                // );
 
                 //
                 // //
@@ -491,6 +502,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                                 1500, colours[2],
                                 3000, colours[3],
                                 5000, colours[4],
+                                10000, colours[5],
                             ],
                             'fill-opacity': 1,
                             // 'line-color': '#888',
@@ -521,6 +533,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                                 1500, colours[2],
                                 3000, colours[3],
                                 5000, colours[4],
+                                10000, colours[5],
                             ],
                             'fill-opacity': 1,
 
@@ -543,7 +556,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                         'type': 'fill',
                         'source': 'timeseries-geo-data-msoa',
                         'minzoom': 8.5,
-                        'maxzoom': 11.5,
+                        'maxzoom': 15,
                         'paint': {
                             'fill-color': [
                                 "step",
@@ -568,7 +581,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
                 });
 
-                [['choropleth-utla', 'utla'], ['choropleth-ltla', 'ltla'], ['choropleth-msoa', 'msoa'], ['lsoa', 'lsoa']].map(loc => {
+                [['choropleth-utla', 'utla'], ['choropleth-ltla', 'ltla'], ['choropleth-msoa', 'msoa']].map(loc => {
                     map.on('click', loc[0], function (e) {
                         setCurrentLocation(e.features[0].properties.code)
                         setAreaType(loc[1])
@@ -605,6 +618,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
                 map.on('styledata', function (e) {
                     setStyleDataStatus(true)
+                    // map.
                 });
 
                 map.addControl(new mapboxgl.NavigationControl({ showCompass: false }));
@@ -639,52 +653,101 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
     }, [apiData]);
 
+    useEffect(() => {
+
+        if ( map && postcodeData ) {
+            // console.log(MapMarker)
+
+            const el = document.createElement("div");
+            el.className = "marker";
+            el.style.backgroundImage = `url(${MapMarker})`;
+            el.style.backgroundRepeat = "no-repeat";
+            el.style.backgroundSize = "100% 100%";
+            el.style.width = "70px";
+            el.style.height = "70px";
+
+            new mapboxgl.Marker(el, {anchor: "bottom"})
+                .setLngLat(postcodeData.geometry.coordinates)
+                .addTo(map);
+
+            map.flyTo({
+                center: [
+                    postcodeData.geometry.coordinates[0],
+                    postcodeData.geometry.coordinates[1]
+                ],
+                zoom: 7
+            });
+
+        }
+
+    }, [postcodeData, map])
+
     // if ( !(map && layerGroup && data && geoData) )
     //     return <Loading/>;
+    function downloadImage (e) {
+        // e.preventDefault();
+        const img = map.getCanvas().toDataURL('image/png')
+        e.target.href = img
+    }
 
+    return <>
+            <SliderContainer>
+            { children }
+        </SliderContainer>
+    <MapContainer>
 
-    return <MapContainer>
         { isLoading && <Loading/> }
         <div id={ "map" } style={ { visibility: isLoading ? "hidden" : "visible" } }/>
         {
             !isLoading &&
             <>
-                <SliderContainer>
-                    { children }
-                </SliderContainer>
-                <PostcodeSearchForm>
-                    <labe className={ "govuk-visually-hidden" }>Search by postcode</labe>
-                    <input className={ "govuk-input govuk-input--width-10" } maxLength={10} type={ "text" } placeholder={ "Search by postcode" }/>
-                    <button type={ "submit" }>Submit</button>
+                <PostcodeSearchForm onSubmit={  (e) => {
+                        e.preventDefault();
+                        const postcode = document.getElementById("postcode").value;
+                        (async () => {
+                            const { data } = await axios.get(URLs.postcode, { params: { category: "postcode", search: postcode } });
+                            setPostcodeData(data)
+                        })();
+                    } }>
+                    <labe htmlFor={ "postcode" } className={ "govuk-visually-hidden" }>Search by postcode</labe>
+                    <input className={ "govuk-input govuk-input--width-10" }
+                           name={ "postcode" }
+                           maxLength={ 10 }
+                           type={ "text" }
+                           id={ "postcode" }
+                           pattern={ "[A-Za-z]{1,2}\\d{1,2}[A-Za-z]?\\s?\\d{1,2}[A-Za-z]{1,2}" }
+                           placeholder={ "Search by postcode" }/>
+                    <labe htmlFor={ "submit-postcode" } className={ "govuk-visually-hidden" }>Search by postcode</labe>
+                    <input name={ "submit-postcode" } className={ "govuk-button" } id={ "submit-postcode" } type={ "submit" } value={ "" }/>
                 </PostcodeSearchForm>
                 <LegendContainer>
-                    <ScaleLegend>
-                        <ScaleLegendLabel>LSOAs</ScaleLegendLabel>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: "#fff" }}/>
-                            <ScaleValue>0 &ndash; 2</ScaleValue>
-                        </ScaleGroup>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: colours[0] }}/>
-                            <ScaleValue>3 &ndash; 5</ScaleValue>
-                        </ScaleGroup>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: colours[1] }}/>
-                            <ScaleValue>6 &ndash; 10</ScaleValue>
-                        </ScaleGroup>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: colours[2] }}/>
-                            <ScaleValue>11 &ndash; 20</ScaleValue>
-                        </ScaleGroup>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: colours[3] }}/>
-                            <ScaleValue>21 &ndash; 30</ScaleValue>
-                        </ScaleGroup>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: colours[4] }}/>
-                            <ScaleValue>31+</ScaleValue>
-                        </ScaleGroup>
-                    </ScaleLegend>
+                    {/*<ScaleLegend>*/}
+                    {/*    <ScaleLegendLabel>LSOAs</ScaleLegendLabel>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: "#fff" }}/>*/}
+                    {/*        <ScaleValue>0 &ndash; 2</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[0] }}/>*/}
+                    {/*        <ScaleValue>3 &ndash; 5</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[1] }}/>*/}
+                    {/*        <ScaleValue>6 &ndash; 10</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[2] }}/>*/}
+                    {/*        <ScaleValue>11 &ndash; 20</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[3] }}/>*/}
+                    {/*        <ScaleValue>21 &ndash; 30</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*    <ScaleGroup>*/}
+                    {/*        <ScaleColor style={{ background: colours[4] }}/>*/}
+                    {/*        <ScaleValue>31+</ScaleValue>*/}
+                    {/*    </ScaleGroup>*/}
+                    {/*</ScaleLegend>*/}
 
                     {/*<ScaleLegend>*/}
                     {/*    <ScaleLegendLabel>MSOAs (England only)</ScaleLegendLabel>*/}
@@ -714,33 +777,37 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     {/*    </ScaleGroup>*/}
                     {/*</ScaleLegend>*/}
 
-                    {/*<ScaleLegend>*/}
-                    {/*    <ScaleLegendLabel>Local authorities</ScaleLegendLabel>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: "#fff" }}/>*/}
-                    {/*        <ScaleValue>Missing data</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[0] }}/>*/}
-                    {/*        <ScaleValue>0 &ndash; 500</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[1] }}/>*/}
-                    {/*        <ScaleValue>501 &ndash; 1500</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[2] }}/>*/}
-                    {/*        <ScaleValue>1501 &ndash; 3000</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[3] }}/>*/}
-                    {/*        <ScaleValue>3001 &ndash; 5000</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[4] }}/>*/}
-                    {/*        <ScaleValue>5001+</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*</ScaleLegend>*/}
+                    <ScaleLegend>
+                        <ScaleLegendLabel>Local authorities</ScaleLegendLabel>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: "#fff" }}/>
+                            <ScaleValue>Missing data</ScaleValue>
+                        </ScaleGroup>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: colours[0] }}/>
+                            <ScaleValue>0 &ndash; 500</ScaleValue>
+                        </ScaleGroup>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: colours[1] }}/>
+                            <ScaleValue>501 &ndash; 1500</ScaleValue>
+                        </ScaleGroup>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: colours[2] }}/>
+                            <ScaleValue>1501 &ndash; 3000</ScaleValue>
+                        </ScaleGroup>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: colours[3] }}/>
+                            <ScaleValue>3001 &ndash; 5000</ScaleValue>
+                        </ScaleGroup>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: colours[4] }}/>
+                            <ScaleValue>5001-10,000</ScaleValue>
+                        </ScaleGroup>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: colours[5] }}/>
+                            <ScaleValue>10,001+</ScaleValue>
+                        </ScaleGroup>
+                    </ScaleLegend>
                 </LegendContainer>
             </>
 
@@ -767,11 +834,16 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     </NumberBox>
                 </NumbersContainer>
                 <strong>How does this area compare?</strong>
-                <Histogram data={ casesData } currentLocation={ locationData.rollingRate }/>
+                {/*<Histogram data={ casesData } currentLocation={ locationData.rollingRate }/>*/}
+                <IndicatorLine data={ casesData } currentLocation={ locationData.rollingRate }/>
             </MapToolbox>
             : null
         }
         </MapContainer>
+                <a onClick={ downloadImage }
+                   className={ "govuk-link govuk-link--no-visited-state" }
+                   download={ "map.png" } href={ "" }>Download image</a>
+        </>
 
 };  // Map
 

@@ -3,6 +3,7 @@
 import styled from "styled-components";
 
 import type { ComponentType } from "react";
+import Magnifier from "assets/icon-magnify.svg";
 
 
 // export const MapContainer: ComponentType<*> =
@@ -31,17 +32,12 @@ export const MapContainer: ComponentType<*> =
 export const SliderContainer: ComponentType<*> =
     styled.div`
     font-family: "GDS Transport", Arial, sans-serif;
-    position: absolute;
     display: flex;
     flex-direction: column;
     background: rgba(255,255,255,0.9);
-    border: 2px solid black;
-    padding: 0.5rem 1rem;
-    margin: 10px;
-    width: 30%;
+    padding: 0.5rem 0;
     left: 0;
     top: 0;
-    height: 50px;
     
     &>label {
         margin-bottom: 0.5rem;
@@ -50,17 +46,26 @@ export const SliderContainer: ComponentType<*> =
 
 
 export const PostcodeSearchForm: ComponentType<*> =
-    styled.div`
+    styled.form`
     font-family: "GDS Transport", Arial, sans-serif;
     position: absolute;
     display: flex;
     flex-direction: row;
-    background: rgba(255,255,255,0.9);
     margin: 10px;
     width: max-content;
     left: 0px;
-    top: 80px;
+    top: 0px;
     
+    & > input[type="submit"] {
+        background: #000;
+        background-image: url(${Magnifier});
+        background-repeat: no-repeat;
+        background-size: 70% 70%;
+        background-position: center center;
+        width: 45px;
+        height: 38px;
+        margin-left: 2px;    
+    }
     `;
 
 

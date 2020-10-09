@@ -99,8 +99,9 @@ const colours = [
     "#e0e543",
     "#74bb68",
     "#399384",
-    "#1c5a96",
-    "#0b2c5c",
+    "#2067AB",
+    "#12407F",
+    "#53084A"
 ];
 
 
@@ -138,16 +139,16 @@ const Options: ComponentType<*> = ({}) => {
                     </option>
                 )
             }</Selector>
-            <Radio heading={ "period" }
-                   options={{
-                       choices: [
-                           { label: "Daily", value: "daily" },
-                           { label: "All time", value: "all_time", disabled: areaType === "msoa" }
-                       ]
-                   }}
-                   value={ areaType !== "msoa" ? period : "daily" }
-                   setValue={ setPeriod }
-                   groupClassName={ "govuk-!-margin-left-7 govuk-!-margin-top-0 govuk-!-margin-left-4 govuk-!-padding-top-0" }/>
+            {/*<Radio heading={ "period" }*/}
+            {/*       options={{*/}
+            {/*           choices: [*/}
+            {/*               { label: "Daily", value: "daily" },*/}
+            {/*               { label: "All time", value: "all_time", disabled: areaType === "msoa" }*/}
+            {/*           ]*/}
+            {/*       }}*/}
+            {/*       value={ areaType !== "msoa" ? period : "daily" }*/}
+            {/*       setValue={ setPeriod }*/}
+            {/*       groupClassName={ "govuk-!-margin-left-7 govuk-!-margin-top-0 govuk-!-margin-left-4 govuk-!-padding-top-0" }/>*/}
         </Row>
 
         {/*<Row>*/}
@@ -368,18 +369,18 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
         {/*    y: ukData.map(item => item.value)}*/}
         {/*}}/>*/}
         <Options/>
-        <Plotter data={[{
-            name: "New cases by specimen date",
-            x: ukData.map(item => item[0]).slice(3, -3,),
-            y: movingAverage(ukData.map(item => item[1]), 7).slice(3,-3),
-            type: "line",
-            mode: "lines",
-            hovertemplate: "%{y}",
-            line: {
-                width: 3,
-                color: "#003078"
-            }
-        }]} style={{ maxWidth: 600, height: 200 }} layout={{ showlegend: false }}/>
+        {/*<Plotter data={[{*/}
+        {/*    name: "New cases by specimen date",*/}
+        {/*    x: ukData.map(item => item[0]).slice(3, -3,),*/}
+        {/*    y: movingAverage(ukData.map(item => item[1]), 7).slice(3,-3),*/}
+        {/*    type: "line",*/}
+        {/*    mode: "lines",*/}
+        {/*    hovertemplate: "%{y}",*/}
+        {/*    line: {*/}
+        {/*        width: 3,*/}
+        {/*        color: "#003078"*/}
+        {/*    }*/}
+        {/*}]} style={{ maxWidth: 600, height: 200 }} layout={{ showlegend: false }}/>*/}
         <MainContainer>
             <>
                 {/*<GenericMap*/}
@@ -398,7 +399,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                      // maxData={ extrema.max }
                 >
                     <label id={ "month" }
-                           className={ "govuk-body govuk-!-font-size-14" }
+                           className={ "govuk-body" }
                            htmlFor={ "slider" }>
                         7-day rolling rate of cases by specimen date ending
                         on <strong>{ moment(currentDate).format("DD MMM YYYY") }</strong>

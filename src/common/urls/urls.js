@@ -24,6 +24,7 @@ const URLs = {
     pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN      }/assets/cms/`,
     mainApi:         `https://${ REACT_APP_API_ENDPOINT  }/v1/data`,
     modals:          `https://${ REACT_APP_MAIN_CDN      }/assets/modals/`,
+    postcode:        `https://api.coronavirus.data.gov.uk/code`,
     latestCases: {
         csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-cases_latest.csv`,
         json: `${ REACT_APP_BASE_URL }/downloads/json/coronavirus-cases_latest.json`

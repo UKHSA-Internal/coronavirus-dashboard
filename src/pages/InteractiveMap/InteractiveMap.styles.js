@@ -43,6 +43,7 @@ export const MainContainer: ComponentType<*> =
     styled
         .div`
             display: flex;
+            flex-direction: column;
             flex: 2 1 30%;
             max-height: 80vh;
         `;
