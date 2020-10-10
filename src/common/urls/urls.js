@@ -11,19 +11,19 @@ const
 
 const URLs = {
 
-    populationData:  `https://${ REACT_APP_MAIN_CDN      }/assets/population/population.json`,
+    populationData:  `https://${ REACT_APP_MAIN_CDN      }/public/assets/population/population.json`,
     baseData:        `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/data/`,
     mapData:         `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/map_content/`,
     downloads:       `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/`,
-    baseGeo:         `https://${ REACT_APP_MAIN_CDN      }/assets/geo/`,
-    mapStyle:        `https://${ REACT_APP_DOWNLOADS_CDN }/geo/style_v3.json`,
+    baseGeo:         `https://${ REACT_APP_MAIN_CDN      }/public/assets/geo/`,
+    mapStyle:        `https://${ REACT_APP_DOWNLOADS_CDN }/public/assets/geo/style_v3.json`,
     landingData:     `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/data/landing.json`,
-    timestamp:       `https://${ REACT_APP_MAIN_CDN      }/assets/dispatch/website_timestamp`,
-    lookups:         `https://${ REACT_APP_MAIN_CDN      }/assets/lookups/`,
+    timestamp:       `https://${ REACT_APP_MAIN_CDN      }/public/assets/dispatch/website_timestamp`,
+    lookups:         `https://${ REACT_APP_MAIN_CDN      }/public/assets/lookups/`,
     lookupApi:       `https://${ REACT_APP_API_ENDPOINT  }/v1/lookup`,
-    pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN      }/assets/cms/`,
+    pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/`,
     mainApi:         `https://${ REACT_APP_API_ENDPOINT  }/v1/data`,
-    modals:          `https://${ REACT_APP_MAIN_CDN      }/assets/modals/`,
+    modals:          `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/`,
     postcode:        `https://api.coronavirus.data.gov.uk/code`,
     latestCases: {
         csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-cases_latest.csv`,
@@ -33,9 +33,9 @@ const URLs = {
         csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-deaths_latest.csv`,
         json: `${ REACT_APP_BASE_URL }/downloads/json/coronavirus-deaths_latest.json`
     },
-    about:         `https://${ REACT_APP_MAIN_CDN      }/assets/modals/about.md`,
-    accessibility: `https://${ REACT_APP_MAIN_CDN      }/assets/modals/accessibility.md`,
-    newWebsite:    `https://${ REACT_APP_MAIN_CDN      }/assets/new_website.md`,
+    about:         `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/about.md`,
+    accessibility: `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/accessibility.md`,
+    newWebsite:    `https://${ REACT_APP_MAIN_CDN      }/public/assets/new_website.md`,
     archiveList:   `https://${ REACT_APP_DOWNLOADS_CDN }/downloads?restype=container&comp=list`,
     baseUrl:        REACT_APP_BASE_URL
 
