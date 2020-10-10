@@ -3,7 +3,7 @@ import Plot from "react-plotly.js";
 import URLs from "common/urls";
 import { PlotContainer } from "./Plotter.styles";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
-
+import { hexToRgb } from "../../common/utils";
 
 // export const Plotter = ({ layout={}, xaxis={}, yaxis={}, ...props }) => {
 //
@@ -82,7 +82,7 @@ import useResponsiveLayout from "hooks/useResponsiveLayout";
 // }; // Plotter
 
 
-export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin={}, style={}, isTimeSeries=true, SrOnly="", ...props }) => {
+export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}, margin = {}, style = {}, isTimeSeries = true, SrOnly = "", ...props }) => {
 
     const width = useResponsiveLayout(640);
 
@@ -123,7 +123,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                 // onLegendItem
             } }
             useResizeHandler={ true }
-            style={{ display: "block", height: 350, ...style }}
+            style={ { display: "block", height: 350, ...style } }
             layout={ {
                 hovermode: "x unified",
                 // barmode: "overlay",
@@ -158,9 +158,9 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     ticklen: 'labels',
                     type: isTimeSeries ? "date" : "category",
                     tickformat: '%d %b',
-                    tickfont:{
+                    tickfont: {
                         family: `"GDS Transport", Arial, sans-serif`,
-                        size : 14,
+                        size: 14,
                         color: "#6B7276"
                     },
                     // rangeslider: {range: ['20202-01-01', new Date().toString()]},
@@ -193,19 +193,19 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     tickson: "boundaries",
                     ticklen: 'labels',
                     tickcolor: "#f1f1f1",
-                    tickformat: width === "desktop" ? ',r': '.2s',
-                    tickfont:{
+                    tickformat: width === "desktop" ? ',r' : '.2s',
+                    tickfont: {
                         family: `"GDS Transport", Arial, sans-serif`,
-                        size : 14,
+                        size: 14,
                         color: "#6B7276",
                     },
                     ...yaxis
                 },
                 plot_bgcolor: "rgba(231,231,231,0)",
-                paper_bgcolor: "rgba(255,255,255,0)",
+                paper_bgcolor: "rgba(255,255,255,.9)",
                 ...layout
             } }
-            {...props}
+            { ...props }
         />
     </PlotContainer>
 
@@ -249,7 +249,7 @@ export const Choropleth = ({ data, layout, config, ...props }) => {
                 },
                 ...data
             }
-        ]}
+        ] }
         config={ {
             toImageButtonOptions: {
                 format: 'png',
@@ -275,8 +275,8 @@ export const Choropleth = ({ data, layout, config, ...props }) => {
             mapbox: {
                 style: URLs.mapStyle,
                 center: {
-                  lat: 55.5,
-                  lon: -2.5
+                    lat: 55.5,
+                    lon: -2.5
                 },
                 zoom: 4.2,
                 layers: [
@@ -292,19 +292,19 @@ export const Choropleth = ({ data, layout, config, ...props }) => {
                 ]
             },
             ...layout
-        }}
-        margin={{
+        } }
+        margin={ {
             l: 0,
             r: 0,
             b: 0,
             t: 0,
             pad: 0
-        }}
-        xaxis={{
+        } }
+        xaxis={ {
             showgrid: false,
             zeroline: false,
             showline: false,
-        }}
+        } }
         { ...props }
     />
 
@@ -314,7 +314,7 @@ export const Choropleth = ({ data, layout, config, ...props }) => {
 export const ScatterPlotWithTrendLine = ({ scatterData, trendLineData, layout, config, ...props }) => {
 
     return <Plotter
-        data={[
+        data={ [
             {
                 type: 'scatter',
                 mode: 'markers',
@@ -336,7 +336,7 @@ export const ScatterPlotWithTrendLine = ({ scatterData, trendLineData, layout, c
                 },
                 ...trendLineData
             }
-        ]}
+        ] }
         config={ {
             displayModeBar: true,
             showLink: false,
@@ -404,3 +404,246 @@ export const ScatterPlotWithTrendLine = ({ scatterData, trendLineData, layout, c
     />
 
 };  // ScatterPlot
+
+
+export const Histogram = ({ data, currentLocation }) => {
+
+    const width = useResponsiveLayout(640);
+
+    return <Plot
+        data={ [{
+            x: data, type: "histogram",
+            autobinx: true,
+            histnorm: "percent"
+        }] }
+        config={ {
+            showLink: false,
+            responsive: true,
+            displaylogo: false,
+            staticPlot: true
+        } }
+        useResizeHandler={ true }
+        style={ { display: "block", height: 150 } }
+        layout={ {
+            // hovermode: "x unified",
+            // barmode: "overlay",
+            // barmode: "stack",
+            // height: 320,
+            shapes: [{
+                type: 'line',
+                x0: currentLocation,
+                xref: 'x',
+                y0: 0,
+                x1: currentLocation,
+                yref: 'paper',
+                y1: 1,
+                line: {
+                    color: '#cb0000',
+                    width: 3,
+                    // dash: 'dot'
+                }
+            }],
+            legend: {
+                orientation: 'h',
+                font: {
+                    family: `"GDS Transport", Arial, sans-serif`,
+                    size: 8,
+                },
+                xanchor: 'auto',
+                // yanchor: 'auto'
+                // y: -.2
+            },
+            showlegend: false,
+            margin: {
+                l: 0,
+                r: 0,
+                b: 20,
+                t: 0,
+                pad: 0,
+            },
+            xaxis: {
+                showgrid: false,
+                zeroline: false,
+                showline: false,
+                tickslen: 10,
+                ticks: "outside",
+                tickson: "boundaries",
+                ticklen: 'labels',
+                // type: "histogram",
+                tickfont: {
+                    family: `"GDS Transport", Arial, sans-serif`,
+                    size: 10,
+                    color: "#6B7276"
+                },
+                // rangeslider: {range: ['20202-01-01', new Date().toString()]},
+                // rangeselector: {buttons: [
+                //     {
+                //       count: 7,
+                //       label: '7d',
+                //       step: 'day',
+                //       stepmode: 'backward'
+                //     },
+                //         {
+                //       count: 1,
+                //       label: '1m',
+                //       step: 'month',
+                //       stepmode: 'backward'
+                //     },
+                //         {
+                //       count: 3,
+                //       label: '3m',
+                //       step: 'month',
+                //       stepmode: 'backward'
+                //     },
+                //     {step: 'all'}
+                //   ]},
+            },
+            yaxis: {
+                tickslen: 5,
+                ticks: "outside",
+                tickson: "boundaries",
+                ticklen: 'labels',
+                tickcolor: "#f1f1f1",
+                tickformat: width === "desktop" ? ',r' : '.2s',
+                tickfont: {
+                    family: `"GDS Transport", Arial, sans-serif`,
+                    size: 14,
+                    color: "#6B7276",
+                },
+            },
+            plot_bgcolor: "rgba(231,231,231,0)",
+            paper_bgcolor: "rgba(255,255,255,0)",
+        } }
+    />
+
+}; // Histogram
+
+
+export const IndicatorLine = ({ data, currentLocation }) => {
+
+    const width = useResponsiveLayout(640);
+
+    let range = [];
+
+    const toRgba = (hex) => {
+        const rgb = hexToRgb(hex);
+        return `rgba(${rgb.r},${rgb.g},${rgb.b},1)`
+    };
+
+    const
+        sum = data.reduce((acc, val) => acc + val, 0),
+        mean = Math.round(sum / data.length),
+        [min, max] = [Math.min(...data), Math.max(...data)];
+
+    for ( let ind = -max; ind <= max; ind = ind + 10 ) {
+        range.push(ind)
+    }
+
+    console.log(mean)
+    console.log(sum)
+    console.log(mean / max)
+    return <Plot
+        data={ [
+            {
+                z: [range],
+                type: "heatmap",
+                zsmooth: "best",
+                autocolorscale: false,
+                x: [0 - max, max ],
+                y: [0, 1],
+                cmin: 0,
+                // colorscale: "Viridis",
+                colorscale: [
+                    [0, 'rgb(0,89,195)'],
+                    [.5, 'rgba(255,255,255,1)'],
+                    [1, 'rgba(214,39,40,1)'],
+                //     [0 / max, toRgba("#e0e543")],
+                //     [1 / max, toRgba("#74bb68")],
+                //     [1500 / max, toRgba("#399384")],
+                //     [3000 / max, toRgba("#12407F")],
+                //     [5000 / max, toRgba("#0b2c5c")],
+                //     [10000 / max, toRgba("#610256")],
+                //     [1, toRgba("#610256")],
+                ],
+                // reversescale: true,
+                showscale: false,
+            },
+            {
+                x: [currentLocation - mean],
+                y: [.5],
+                type: "scatter",
+                mode: "markers",
+                marker: {
+                    color: "#000000",
+                    size: 8,
+                    symbol: "diamond"
+                }
+            },
+            {
+                x: [0, 0],
+                y: [-.5, 1.5],
+                // type: "lines",
+                mode: "lines",
+                line: {
+                    color: "#626262",
+                    width: 4,
+                }
+            }
+        ] }
+        config={ {
+            showLink: false,
+            responsive: true,
+            displaylogo: false,
+            staticPlot: true
+        } }
+        useResizeHandler={ true }
+        style={{
+            display: "block",
+            height: 20,
+            line: {
+                color: '#ffffff',
+                width: 6
+            }
+        }}
+        layout={{
+            // shapes: [{
+            //     type: 'line',
+            //     x0: mean,
+            //     xref: 'x',
+            //     y0: -.15,
+            //     x1: mean,
+            //     yref: 'paper',
+            //     y1: .5,
+            //     line: {
+            //         color: '#000000',
+            //         width: 1,
+            //     }
+            // }],
+            showlegend: false,
+            margin: {
+                l: 4,
+                r: 4,
+                b: 0,
+                t: 0,
+                pad: 0,
+            },
+            xaxis: {
+                showgrid: false,
+                zeroline: false,
+                showline: false,
+                ticks: "",
+                showticklabels: false,
+            },
+            yaxis: {
+                showgrid: false,
+                zeroline: false,
+                showline: false,
+                ticks: "",
+                showticklabels: false,
+            },
+            plot_bgcolor: "rgba(231,231,231,0)",
+            paper_bgcolor: "rgba(255,255,255,0)",
+        }}
+    />
+
+}; // Histogram

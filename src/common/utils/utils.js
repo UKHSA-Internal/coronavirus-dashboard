@@ -6,29 +6,36 @@ import type { RGB } from "components/MapTable/MapTable.types";
 import { generateUrl } from "hooks/useApi";
 
 
+export const sort = (a, b) => {
+
+    return (a < b) || -((a > b) || 0)
+
+};  // sort
+
+
 export const sortByDate = (a, b) => {
 
     const
         dateA = new Date(a),
         dateB = new Date(b);
 
-    return (dateA < dateB) || -((dateA > dateB) || 0)
+    return sort(dateA, dateB)
 
 };  // sortByDate
 
 
-const dateRange = (startDate, stopDate): Array<string> => {
+export const dateRange = (startDate: string, stopDate: string, step: number = 1, unit: string = 'days'): Array<string> => {
 
     const
         stop = moment(stopDate),
-        days = stop.diff(moment(startDate), "days"),
+        days = stop.diff(moment(startDate), unit),
         dateArray = Array(days).fill("YYYY-MM-DD");
 
     let currentDate = moment(startDate);
 
     for ( let index = 0; index <= days; index ++ ) {
         dateArray[index] = currentDate.format('YYYY-MM-DD');
-        currentDate = currentDate.add(1, 'days');
+        currentDate = currentDate.add(step, unit);
     }
 
     return dateArray;

@@ -14,7 +14,8 @@ export type useApiInputs = {
     defaultResponse: useApiResponseInput,
     extraParams: ParsedParams,
     endpoint: "lookupApi"
-            | "mainApi"
+            | "mainApi",
+    cache: boolean
 }
 
 
@@ -26,3 +27,21 @@ export type generateUrlInputs = {
     endpoint: "lookupApi"
             | "mainApi"
 }
+
+
+
+
+declare type GeoDataResponseItem = {
+    properties: {
+        [string]: {
+            lat: number,
+            long: number
+        },
+        [string]: any
+    },
+    id?: string,
+    [string]: any
+}; // GeoDataType
+
+
+export type GeoDataResponseType = GeoDataResponseItem[];

@@ -53,9 +53,10 @@ export const generateUrl = ({ conjunctiveFilters=[], disjunctiveFilters=[], stru
 
 const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
                     defaultResponse=[], extraParams=[],
-                    endpoint="mainApi"}: useApiInputs): useApiResponse => {
+                    endpoint="mainApi", cache=false}: useApiInputs): useApiResponse => {
 
     const
+        cachedData = useRef({}),
         [ data, setData ] = useState(defaultResponse),
         prevConjunctiveParams =  usePrevious(conjunctiveFilters),
         prevDisjunctiveParams =  usePrevious(disjunctiveFilters),
@@ -78,19 +79,42 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
                     !deepEqual(prevExtraParams, extraParams)
                 )
             ) {
-                try {
-                    const { data: dt, status } = await axios.get(generateUrl({
-                        conjunctiveFilters:  conjunctiveFilters,
-                        disjunctiveFilters: disjunctiveFilters,
-                        structure: structure,
-                        extraParams: extraParams,
-                        endpoint: endpoint
-                    }));
 
-                    setData(status < 400 ? dt.data : null)
-                } catch (e) {
-                    console.error(e)
-                    setData([])
+                setData(defaultResponse);
+
+                const requestURL = generateUrl({
+                    conjunctiveFilters:  conjunctiveFilters,
+                    disjunctiveFilters: disjunctiveFilters,
+                    structure: structure,
+                    extraParams: extraParams,
+                    endpoint: endpoint
+                });
+
+                if ( cache && requestURL in cachedData.current ) {
+
+                    setData(cachedData.current?.[requestURL] ?? [])
+
+                } else {
+
+                    try {
+                        const { data: dt, status } = await axios.get(requestURL);
+
+                        if ( status < 400 ) {
+
+                            if ( cache )
+                                cachedData.current[requestURL] = dt.data;
+
+                            setData(dt.data)
+
+                        } else {
+                            setData([])
+                        }
+
+                    } catch (e) {
+                        console.error(e)
+                        setData([])
+                    }
+
                 }
             }
 

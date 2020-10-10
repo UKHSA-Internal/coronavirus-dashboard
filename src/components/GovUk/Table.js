@@ -37,7 +37,7 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
             .pop()
             .map(({ type="" }) => type);
 
-    return <TableContainer>
+    return <TableContainer { ...props }>
         <GovUKTable
             className={ `govuk-table ${ stickyHeader ? "sticky-header" : "" } ${ className }`  }
             { ...props }>
@@ -74,7 +74,7 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
 };  // Table
 
 
-export const DataTable = ({ fields, data }) => {
+export const DataTable = ({ fields, data, ...props }) => {
 
     const fieldNames = fields.map(item => item.value)
 
@@ -94,6 +94,7 @@ export const DataTable = ({ fields, data }) => {
 
                 ))
             }
+            { ...props }
         />
     </>
 

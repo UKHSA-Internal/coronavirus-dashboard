@@ -12,35 +12,19 @@ import URLs from "common/urls";
 import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
-import time from "d3-scale/src/time";
-import DashboardHeader from "components/DashboardHeader";
-import Cases from "pages/Cases";
-import Healthcare from "pages/Healthcare";
-import Deaths from "pages/Deaths";
-import Testing from "pages/Testing";
-import About from "pages/About";
-import Accessibility from "pages/Accessibility";
-import Cookies from "pages/Cookies";
-import ApiDocs from "pages/ApiDocs";
-import Announcement from "components/Announcement";
-import Footer from "components/Footer";
-import SideNavigation from "components/SideNavigation";
-import SideNavMobile from "components/SideNavMobile";
 
-
-
-// const
-//     DashboardHeader = lazy(() => import('components/DashboardHeader')),
-//     Cases           = lazy(() => import('pages/Cases')),
-//     Healthcare      = lazy(() => import('pages/Healthcare')),
-//     Deaths          = lazy(() => import('pages/Deaths')),
-//     Testing         = lazy(() => import('pages/Testing')),
-//     About           = lazy(() => import('pages/About')),
-//     Accessibility   = lazy(() => import('pages/Accessibility')),
-//     Cookies         = lazy(() => import('pages/Cookies')),
-//     ApiDocs         = lazy(() => import('pages/ApiDocs')),
-//     Announcement    = lazy(() => import("components/Announcement")),
-//     Footer          = lazy(() => import('components/Footer'));
+const
+    DashboardHeader = lazy(() => import('components/DashboardHeader')),
+    Cases           = lazy(() => import('pages/Cases')),
+    Healthcare      = lazy(() => import('pages/Healthcare')),
+    Deaths          = lazy(() => import('pages/Deaths')),
+    Tests           = lazy(() => import('pages/Testing')),
+    About           = lazy(() => import('pages/About')),
+    Accessibility   = lazy(() => import('pages/Accessibility')),
+    Cookies         = lazy(() => import('pages/Cookies')),
+    ApiDocs         = lazy(() => import('pages/ApiDocs')),
+    Announcement    = lazy(() => import("components/Announcement")),
+    Footer          = lazy(() => import('components/Footer'));
 
 
 const useTimestamp = () => {
@@ -63,59 +47,27 @@ const LastUpdateTime = () => {
 
     const timestamp = useTimestamp();
 
-    const tmStart = moment(timestamp).local(true);
-    const tmEnd = moment(timestamp).local(true).add(15, 'minute');
-
-    const parsedTimestamp = {
-        start: {
-            year: tmStart.year(),
-            month: tmStart.month(),
-            day: tmStart.date(),
-            hour: tmStart.hour(),
-            minute: tmStart.minute()
-        },
-        end: {
-            year: tmEnd.year(),
-            month: tmEnd.month(),
-            day: tmEnd.date(),
-            hour: tmEnd.hour(),
-            minute: tmEnd.minute()
-        },
-        endTimestamp: tmEnd
-            .format("h:mma")
-    };
-
     return <>
-        {/*<Suspense fallback={ <Loading/> }>*/}
-            {/*{ parsedTimestamp.start.day === 13*/}
-            {/*    ? <Announcement firstDisplayDate={ parsedTimestamp.start }*/}
-            {/*              lastDisplayDate={{ year: 2020, month: 9, day: 15, hour: 16 }}>*/}
-            {/*    <p className={ "govuk-body" }>*/}
-            {/*        Due to an ongoing issue with <a className={ "govuk-link govuk-link--no-visited-state" }*/}
-            {/*                                        href={ "https://status.azure.com/en-gb/status" }*/}
-            {/*                                        rel={ "noopener noreferrer" }*/}
-            {/*                                        target={ "_blank" }>Microsoft Azure</a>,*/}
-            {/*        we are currently unable*/}
-            {/*        to update the data. We are monitoring the situation closely and will*/}
-            {/*        update the website as soon as the services are restored.*/}
-            {/*    </p>*/}
-            {/*</Announcement> : null}*/}
-
-            {
-                timestamp
-                    ? <Announcement firstDisplayDate={ parsedTimestamp.start }
-                                  lastDisplayDate={ parsedTimestamp.end }>
-                        <p className={ "govuk-body" }>
-                            <strong>We are updating the data&hellip;</strong>
-                        </p>
-                        <p className={ "govuk-body" }>The process takes
-                            approximately 15 minutes to complete. Please do not refresh the
-                            website until { parsedTimestamp.endTimestamp }.
-                        </p>
-                    </Announcement>
-                    : null
-            }
-        {/*</Suspense>*/}
+        <Suspense fallback={ <Loading/> }>
+            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 25, hour: 9 }}
+                          lastDisplayDate={{ year: 2020, month: 8, day: 28, hour: 8 }}>
+                <p className={ "govuk-body" }>
+                    Do we explain the data well? Please help us make this service better
+                    by completing our
+                    new&nbsp;<a href={ "https://forms.gle/RiLFWfyo62xD2V1w7" }
+                           className={ "govuk-link" }
+                           target={ "_blank" }
+                           rel={ "noopener noreferrer" }>survey</a>.
+                </p>
+            </Announcement>
+            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 18, hour: 16, minute: 0 }}
+                          lastDisplayDate={{ year: 2020, month: 8, day: 18, hour: 18, minute: 30 }}>
+                <p className={ "govuk-body" }>
+                    We have not received the latest breakdown of cases in England. We will
+                    update today's records as soon as they become available.
+                </p>
+            </Announcement>
+        </Suspense>
         <div className={ "govuk-!-margin-top-5 govuk-!-margin-bottom-5" }
              role={ "region" }
              aria-labelledby={ "last-update" }>
@@ -204,6 +156,8 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/cases" exact component={ Cases }/>
                                 <Route path="/healthcare" exact component={ Healthcare }/>
                                 <Route path="/deaths" exact component={ Deaths }/>
+                                <Route path="/interactive-map" component={ InteractiveMap }/>
+
 
                                 <Route path="/about-data" exact component={ About }/>
                                 {/*<Route path="/archive" component={ Archive }/>*/}

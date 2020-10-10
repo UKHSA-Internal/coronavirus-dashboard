@@ -2,6 +2,7 @@
 
 export const PathNameMapper = {
     "/": "UK Summary",
+    "/interactive-map": "Interactive Map",
     "/cases": "Cases",
     "/testing": "Testing",
     "/healthcare": "Healthcare",
@@ -18,6 +19,7 @@ export const PathNameMapper = {
 export const PathNames = {
     // Only use lower case in paths.
     summary: "/",
+    interactiveMap: "/interactive-map",
     cases: "/cases",
     testing: "/testing",
     healthcare: "/healthcare",
@@ -33,6 +35,7 @@ export const PathNames = {
 
 export const NoPickerPaths = [
     "/",
+    "/interactive-map",
     "/about-data",
     "/cookies",
     "/accessibility",
