@@ -71,14 +71,21 @@ const LastUpdateTime = () => {
     };
 
     return <>
+
         <Suspense fallback={ <Loading/> }>
-            <Announcement firstDisplayDate={{ year: 2020, month: 9, day: 9, hour: 16 }}
-                                  lastDisplayDate={{ year: 2020, month: 9, day: 10, hour: 6 }}>
+            { parsedTimestamp.start.day === 9
+                ? <Announcement firstDisplayDate={ parsedTimestamp.start }
+                                lastDisplayDate={{ year: 2020, month: 9, day: 11, hour: 16 }}>
+                <p className={ "govuk-body" }>
+                    We are awaiting data for cases in England. We will update the data as soon as possible.
+                </p>
+            </Announcement> : null}
+            <Announcement firstDisplayDate={{ year: 2020, month: 9, day: 10, hour: 16 }}
+                                  lastDisplayDate={{ year: 2020, month: 9, day: 11, hour: 7 }}>
                 <p className={ "govuk-body" }>
                     Due to essential updates, the website and the API may be unstable or
-                    unresponsive between 5pm Friday (9 Oct) and 5am Saturday (10 Oct).
+                    unresponsive between 10pm Saturday (10&nbsp;Oct) and 6am Sunday (11&nbsp;Oct).
                 </p>
-
             </Announcement>
 
             {/*{ parsedTimestamp.start.day === 3*/}
