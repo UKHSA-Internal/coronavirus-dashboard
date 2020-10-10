@@ -13,18 +13,20 @@ import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
 
-const
-    DashboardHeader = lazy(() => import('components/DashboardHeader')),
-    Cases           = lazy(() => import('pages/Cases')),
-    Healthcare      = lazy(() => import('pages/Healthcare')),
-    Deaths          = lazy(() => import('pages/Deaths')),
-    Tests           = lazy(() => import('pages/Testing')),
-    About           = lazy(() => import('pages/About')),
-    Accessibility   = lazy(() => import('pages/Accessibility')),
-    Cookies         = lazy(() => import('pages/Cookies')),
-    ApiDocs         = lazy(() => import('pages/ApiDocs')),
-    Announcement    = lazy(() => import("components/Announcement")),
-    Footer          = lazy(() => import('components/Footer'));
+import DashboardHeader from 'components/DashboardHeader';
+import Cases           from 'pages/Cases';
+import Healthcare      from 'pages/Healthcare';
+import Deaths          from 'pages/Deaths';
+import Tests           from 'pages/Testing';
+import About           from 'pages/About';
+import Accessibility   from 'pages/Accessibility';
+import Cookies         from 'pages/Cookies';
+import ApiDocs         from 'pages/ApiDocs';
+import Announcement    from "components/Announcement";
+import Footer          from 'components/Footer';
+import SideNavMobile from "components/SideNavMobile";
+import SideNavigation from "components/SideNavigation";
+import InteractiveMap from "pages/InteractiveMap";
 
 
 const useTimestamp = () => {
@@ -152,7 +154,7 @@ const App = ({ location: { pathname } }) => {
                             <DashboardHeader/>
                             <Switch>
                                 {/*<Route path="/" exact render={ () => window. }/>*/}
-                                <Route path="/testing" exact component={ Testing }/>
+                                <Route path="/testing" exact component={ Tests }/>
                                 <Route path="/cases" exact component={ Cases }/>
                                 <Route path="/healthcare" exact component={ Healthcare }/>
                                 <Route path="/deaths" exact component={ Deaths }/>

@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import ReactDomServer from "react-dom/server";
 
 import { useHistory } from "react-router";
-// import 'mapbox-gl-leaflet';
 import L from "leaflet";
 import mapboxgl from "mapbox-gl";
 import { max } from "d3-array";
@@ -77,45 +76,6 @@ const getBlobOptions = (data, geoData, areaCodeKey) => {
         }))
 
 }; // getBlobOptions
-
-
-const initialiseMap: MapType<*> = () => {
-
-    const
-        mapbox = L.mapboxGL({
-            attribution: ReactDomServer.renderToStaticMarkup(<OpenStreetMapAttrib/>),
-            style: URLs.mapStyle
-        }),
-        bounds = new L.LatLngBounds(new L.LatLng(52.5, -10.5), new L.LatLng(58.8, 15)),
-        maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -10.5), new L.LatLng(61, 15)),
-        centrePoint = bounds.getCenter(),
-        map = L.map('map', {
-            center: centrePoint,
-            maxBounds: maxBounds,
-            zoom: 5.4,
-            minZoom: 5.4,
-            maxZoom: 12,
-            layers: [mapbox]
-        }),
-        canvas = mapbox.getCanvas();
-
-    if ( canvas )
-        canvas.setAttribute(
-            'aria-label',
-            'Map showing number of COVID-19 cases by nation, region, or local authority in the UK.'
-        );
-
-    map.zoomControl.setPosition('bottomright');
-
-    return {
-        map: map,
-        layerGroup: L.layerGroup().addTo(map),
-        canvas: canvas,
-        centrePoint: centrePoint
-    }
-
-
-};  // initialiseMap
 
 
 const getChangeFactor = (data: Array<number>[]) => {

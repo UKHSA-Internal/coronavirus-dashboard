@@ -1,7 +1,7 @@
 // Global constants
 
 export const PathNameMapper = {
-    "/": "UK Summary",
+    "/": "Daily update",
     "/interactive-map": "Interactive Map",
     "/cases": "Cases",
     "/testing": "Testing",
