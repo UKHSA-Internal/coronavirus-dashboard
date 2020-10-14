@@ -6,6 +6,30 @@ import axios from "axios";
 import URLs from "common/urls";
 
 
+interface CodeApiResponse {
+    postcode: string,
+    trimmedPostcode: string,
+    geometry: {
+        type: "Point",
+        coordinates: number[],
+    },
+    lsoa: string,
+    lsoaName: string,
+    msoa: string,
+    msoaName: string,
+    ltla: string,
+    ltlaName: string,
+    utla: string,
+    utlaName: string,
+    region: string,
+    regionName: string,
+    nhsRegion: string,
+    nhsRegionName: string,
+    nation: string,
+    nationName: string
+}
+
+
 export const useMapReference = (areaType, category): any => {
 
     const [ reference, setReference ] = useState(null);

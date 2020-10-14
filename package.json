@@ -1,8 +1,8 @@
 {
   "name": "covid-public",
-  "version": "2.0.40",
+  "version": "2.0.59",
   "private": true,
-  "homepage": "https://coronavirus.data.gov.uk/",
+  "homepage": "https://coronavirus-staging.data.gov.uk/",
   "dependencies": {
     "d3-array": "^2.6.0",
     "axios": "^0.20.0",
@@ -42,12 +42,21 @@
     "lint": "yarn flow",
     "start": "unset HOST && react-scripts start",
     "build": "react-scripts build && node scripts/patchUrls.js",
-    "postbuild": "react-snap",
+    "ppostbuild": "react-snap",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "reactSnap": {
+    "source": "build",
+    "minifyHtml": {
+      "collapseWhitespace": false,
+      "removeComments": false
+    },
+    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"],
+    "cacheAjaxRequests": false
   },
   "browserslist": {
     "production": [

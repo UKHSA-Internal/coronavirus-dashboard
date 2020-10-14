@@ -23,6 +23,7 @@ const URLs = {
     lookupApi:       `https://${ REACT_APP_API_ENDPOINT  }/v1/lookup`,
     pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/`,
     mainApi:         `https://${ REACT_APP_API_ENDPOINT  }/v1/data`,
+    soaApi:          `https://${ REACT_APP_API_ENDPOINT  }/v1/soa`,
     modals:          `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/`,
     postcode:        `https://api.coronavirus.data.gov.uk/code`,
     latestCases: {

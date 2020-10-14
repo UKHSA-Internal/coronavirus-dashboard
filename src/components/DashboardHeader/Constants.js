@@ -1,64 +1,64 @@
 // Global constants
 
 export const PathNameMapper = {
-    "/": "Daily update",
-    "/interactive-map": "Interactive Map",
-    "/cases": "Cases",
-    "/testing": "Testing",
-    "/healthcare": "Healthcare",
-    "/deaths": "Deaths",
-    "/about-data": "About the data",
-    "/cookies": "Cookies",
-    "/accessibility": "Accessibility",
-    "/archive": "Archive",
-    "/new-service": "Announcement: New service",
-    "/developers-guide": "Developers guide"
+    "/details/": "Daily update",
+    "/details/interactive-map": "Interactive Map",
+    "/details/cases": "Cases",
+    "/details/testing": "Testing",
+    "/details/healthcare": "Healthcare",
+    "/details/deaths": "Deaths",
+    "/details/about-data": "About the data",
+    "/details/cookies": "Cookies",
+    "/details/accessibility": "Accessibility",
+    "/details/archive": "Archive",
+    "/details/new-service": "Announcement: New service",
+    "/details/developers-guide": "Developers guide"
 };
 
 
 export const PathNames = {
     // Only use lower case in paths.
-    summary: "/",
-    interactiveMap: "/interactive-map",
-    cases: "/cases",
-    testing: "/testing",
-    healthcare: "/healthcare",
-    deaths: "/deaths",
-    aboutData: "/about-data",
-    cookies: "/cookies",
-    accessibility: "/accessibility",
-    archive: "/archive",
-    newWebsite: "/new-service",
-    devGuide: "/developers-guide"
+    summary: "/details/",
+    interactiveMap: "/details/interactive-map",
+    cases: "/details/cases",
+    testing: "/details/testing",
+    healthcare: "/details/healthcare",
+    deaths: "/details/deaths",
+    aboutData: "/details/about-data",
+    cookies: "/details/cookies",
+    accessibility: "/details/accessibility",
+    archive: "/details/archive",
+    newWebsite: "/details/new-service",
+    devGuide: "/details/developers-guide"
 }
 
 
 export const NoPickerPaths = [
-    "/",
-    "/interactive-map",
-    "/about-data",
-    "/cookies",
-    "/accessibility",
-    "/archive",
-    "/new-service",
-    "/developers-guide"
+    "/details/",
+    "/details/interactive-map",
+    "/details/about-data",
+    "/details/cookies",
+    "/details/accessibility",
+    "/details/archive",
+    "/details/new-service",
+    "/details/developers-guide"
 ];
 
 
 export const LocationBannerMapper = {
-    "/cases": "Cases",
-    "/testing": "Testing",
-    "/healthcare": "Healthcare",
-    "/deaths": "Deaths"
+    "/details/cases": "Cases",
+    "/details/testing": "Testing",
+    "/details/healthcare": "Healthcare",
+    "/details/deaths": "Deaths"
 };
 
 
 export const PathWithHeader = [
-    "/",
-    "/testing",
-    "/cases",
-    "/healthcare",
-    "/deaths",
-    "/new-service",
-    "/developers-guide"
+    "/details/",
+    "/details/testing",
+    "/details/cases",
+    "/details/healthcare",
+    "/details/deaths",
+    "/details/new-service",
+    "/details/developers-guide"
 ];

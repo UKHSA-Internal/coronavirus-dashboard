@@ -1,25 +1,16 @@
 // @flow
 
 import React, { useState, useEffect } from "react";
-import ReactDomServer from "react-dom/server";
-
-import { useHistory } from "react-router";
 import L from "leaflet";
 import mapboxgl from "mapbox-gl";
-import { max } from "d3-array";
-import { scaleLinear, scaleSqrt } from "d3-scale";
-
-import useGeoData from "hooks/useGeoData";
 import Loading from "components/Loading";
 import URLs from "common/urls";
-import * as utils from "./utils";
-
 import type ComponentType from "react";
-import type { MapType } from "./Map.types";
 
 import 'leaflet/dist/leaflet.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {
+    IndicatorLegend,
     MapContainer,
     MapToolbox,
     NumberBox,
@@ -27,36 +18,99 @@ import {
     PostcodeSearchForm,
     SliderContainer
 } from "./Map.styles";
-import usePrevious from "hooks/usePrevious";
-import { CurrentLocation } from "../DashboardHeader/DashboardHeader.styles";
-import useApi from "../../hooks/useApi";
+import useApi from "hooks/useApi";
 import moment from "moment";
-import { Histogram, IndicatorLine, Plotter } from "../Plotter/Plotter";
+import { IndicatorLine } from "components/Plotter/Plotter";
 import numeral from "numeral";
 import {
     LegendContainer,
-    Row, ScaleColor,
+    ScaleColor,
     ScaleGroup,
     ScaleLegend,
     ScaleLegendLabel, ScaleValue
-} from "../../pages/InteractiveMap/InteractiveMap.styles";
+} from "pages/InteractiveMap/InteractiveMap.styles";
 import turf from "turf";
-import { useFullRollingRates } from "../../hooks/useMapData";
+import { useFullRollingRates } from "hooks/useMapData";
 import axios from "axios";
 import MapMarker from "assets/icon-mapmarker.svg";
+import useTimestamp from "hooks/useTimestamp";
 
 
-const OpenStreetMapAttrib: ComponentType<*> = () => {
+const colours = [
+    "#e0e543",
+    "#74bb68",
+    "#399384",
+    "#2067AB",
+    "#12407F",
+    "#53084A"
+];
 
-    return <a
-        href={ "http://www.openstreetmap.org/about/" }
-        target={ "_blank" }
-        rel={ "noopener noreferrer" }
-    >
-        &copy; OpenStreetMap contributors
-    </a>
 
-}; // OpenStreetMapAttrib
+const MapLayers = [
+    {
+        label: "utla",
+        name: "UTLA",
+        paths: {
+            timeSeries: "https://coronavirus.data.gov.uk/downloads/maps/utla_data_latest.geojson",
+            outline: "https://coronavirus.data.gov.uk/downloads/maps/utla-ref.geojson"
+        },
+        foreground: "water",
+        tolerance: .8,
+        buffer: 1,
+        minZoom: 1,
+        maxZoom: 7,
+        buckets: [
+            colours[0],
+            10, colours[1],
+            50, colours[2],
+            100, colours[3],
+            200, colours[4],
+            400, colours[5],
+        ]
+    },
+    {
+        label: "ltla",
+        name: "LTLA",
+        paths: {
+            timeSeries: "https://coronavirus.data.gov.uk/downloads/maps/ltla_data_latest.geojson",
+            outline: "https://coronavirus.data.gov.uk/downloads/maps/ltla-ref.geojson"
+        },
+        tolerance: 1,
+        buffer: 1,
+        minZoom: 7,
+        maxZoom: 8.5,
+        foreground: "utla",
+        buckets: [
+            colours[0],
+            10, colours[1],
+            50, colours[2],
+            100, colours[3],
+            200, colours[4],
+            400, colours[5],
+        ]
+    },
+    {
+        label: "msoa",
+        name: "MSOA",
+        paths: {
+            timeSeries: "https://coronavirus.data.gov.uk/downloads/maps/msoa_data_latest.geojson",
+            outline: "https://coronavirus.data.gov.uk/downloads/maps/msoa-ref.geojson"
+        },
+        tolerance: 1,
+        buffer: 1,
+        minZoom: 8.5,
+        maxZoom: 15,
+        foreground: "ltla",
+        buckets: [
+            colours[0],
+            10, colours[1],
+            50, colours[2],
+            100, colours[3],
+            200, colours[4],
+            400, colours[5],
+        ]
+    }
+];
 
 
 const getBlobOptions = (data, geoData, areaCodeKey) => {
@@ -78,11 +132,11 @@ const getBlobOptions = (data, geoData, areaCodeKey) => {
 }; // getBlobOptions
 
 
-const getChangeFactor = (data: Array<number>[]) => {
+const getChangeFactor = (data: Array<number>[], sliceBy: number = 7) => {
 
     const
-        sigma_this_week = data.slice(0, 7).reduce((acc, item) => item[0] + acc, 0),
-        sigma_last_week = data.slice(7).reduce((acc, item) => item[0] + acc, 0),
+        sigma_this_week = data.slice(0, sliceBy).reduce((acc, item) => item[0] + acc, 0),
+        sigma_last_week = data.slice(sliceBy).reduce((acc, item) => item[0] + acc, 0),
         delta = sigma_this_week - sigma_last_week,
         delta_percentage = (sigma_this_week / Math.max(sigma_last_week, 1) - 1) * 100,
         trend = delta_percentage > 0
@@ -102,24 +156,109 @@ const getChangeFactor = (data: Array<number>[]) => {
 };
 
 
-const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, geoData, date, extrema, minData, maxData, valueIndex, children, dates, ...props }) => {
+const SoaCard = ({ currentLocation, areaType }) => {
 
     const
-        bounds = new L.LatLngBounds(new L.LatLng(50.5, -14.5), new L.LatLng(58.8, 10)),
-        maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -12.5), new L.LatLng(61, 10)),
-        centrePoint = bounds.getCenter(),
-        [map, setMap] = useState(null),
-        [styleDataStatus, setStyleDataStatus] = useState(false);
-
-    const
-        [postcodeData, setPostcodeData] = useState(null),
-        [currentLocation, setCurrentLocation] = useState(null),
         [locationData, setLocationData] = useState(null),
-        [isLoading, setIsLoading] = useState(true),
-        [areaType, setAreaType] = useState("utla"),
-        dataDate = moment().subtract(5, "days"),
         apiData = useApi({
-            ...currentLocation
+            extraParams: [
+                {key: "areaType", sign: "=", value: "msoa"},
+                {key: "areaCode", sign: "=", value: currentLocation}
+            ],
+            cache: false,
+            structure: {
+                areaCode: "areaCode",
+                release: "release",
+                newCasesBySpecimenDate: [{
+                    date: "date",
+                    rollingSum: "rollingSum",
+                    rollingRate: "rollingRate"
+                }]
+            },
+            defaultResponse: null,
+            endpoint: "soaApi"
+        }),
+        [fortnightData, setFortnightData] = useState(null),
+        casesData = useFullRollingRates(areaType);
+
+    useEffect(() => {
+
+        if ( apiData ) {
+            const
+                latestDate = apiData?.newCasesBySpecimenDate?.[0]?.date ?? "",
+                precedingWeek = moment(latestDate).subtract(1, "week").format("YYYY-MM-DD"),
+                fortnightDates = [latestDate, precedingWeek];
+
+            setFortnightData(
+                fortnightDates.map(date => {
+                    const value = apiData?.newCasesBySpecimenDate?.find(item => item.date === date);
+                    return [value?.rollingSum ?? 2]
+                })
+            );
+                // apiData?.newCasesBySpecimenDate?.map(item => {
+                //     if ( fortnightDates.indexOf(item.date) > -1 )
+                //         return item.rollingSum
+                // }) ?? null
+
+        }
+
+    }, [ apiData?.newCasesBySpecimenDate ])
+
+    useEffect(() => {
+        (async () => {
+            const { data } = await axios.get(URLs.postcode, { params: { category: "msoa", search: currentLocation } });
+            setLocationData(data)
+        })();
+    }, [currentLocation])
+
+    if ( !locationData || !currentLocation || !casesData || !fortnightData || !apiData )
+        return <MapToolbox><Loading/></MapToolbox>;
+
+    const
+        changeFactor = getChangeFactor([[0], ...fortnightData, [0]], 2);
+
+    return <MapToolbox>
+        <h2 className={ 'govuk-heading-m' }>
+            { locationData?.msoaName ?? "" }
+            <small className={ "govuk-caption-m" }>7
+                days to { moment(apiData.newCasesBySpecimenDate?.[0]?.date).format("DD MMMM YYYY") }
+            </small>
+        </h2>
+        <NumbersContainer>
+            <NumberBox>
+                <h3>Cases</h3>
+                <p>{ changeFactor.totalThisWeek }</p>
+            </NumberBox>
+            <NumberBox>
+                <h3>7&ndash;day rolling rate</h3>
+                <p>{ numeral(apiData.newCasesBySpecimenDate?.[0]?.rollingRate).format("0,0.0") ?? "N/A" }</p>
+            </NumberBox>
+            <NumberBox>
+                <h3>Change</h3>
+                <p>{ changeFactor.change } ({ changeFactor.percentage }%)</p>
+            </NumberBox>
+        </NumbersContainer>
+        <strong>Case rate compared to national average</strong>
+        <IndicatorLine data={ casesData }
+                       currentLocation={ apiData.newCasesBySpecimenDate?.[0]?.rollingRate }>
+            <IndicatorLegend>
+                <span>Below average</span>
+                <span>Above average</span>
+            </IndicatorLegend>
+        </IndicatorLine>
+    </MapToolbox>
+
+};
+
+
+const LocalAuthorityCard = ({ currentLocation, areaType }) => {
+
+    const
+        timestamp = useTimestamp(),
+        [locationData, setLocationData] = useState(null),
+        dataDate = moment(timestamp).subtract(5, "days"),
+        apiData = useApi({
+            ...(currentLocation && areaType !== "msoa")
                 ? {
                     conjunctiveFilters: [
                         { key: "areaCode", sign: "=", value: currentLocation },
@@ -134,12 +273,12 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                 name: "areaName",
                 type: "areaType",
                 value: "newCasesBySpecimenDate",
-                incidenceRate: "newCasesBySpecimenDateRate",
                 rollingRate: "newCasesBySpecimenDateRollingRate",
-            }
+            },
+            defaultResponse: null
         }),
         fortnightData = useApi({
-            ...currentLocation
+            ...(currentLocation && areaType !== "msoa")
                 ? {
                     conjunctiveFilters: [
                         { key: "areaCode", sign: "=", value: currentLocation },
@@ -156,178 +295,129 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
             ],
             defaultResponse: []
         }),
-        casesData = useFullRollingRates(locationData?.type),
-        changeFactor = getChangeFactor(fortnightData);
+        casesData = useFullRollingRates(locationData?.type);
 
-    console.log(changeFactor)
+    useEffect(() => {
+
+        setLocationData(apiData?.[0] ?? null)
+
+    }, [apiData]);
+
+    if ( !currentLocation || areaType === "msoa" ) return null;
+
+    if ( !locationData || !casesData || !fortnightData )
+        return <MapToolbox><Loading/></MapToolbox>;
+
+    const changeFactor = getChangeFactor(fortnightData);
+
+    return <MapToolbox>
+        <h2>{ locationData.name }<small>7 days to { moment(fortnightData?.[0]?.[1] ?? "").format("DD MMMM YYYY") }</small></h2>
+        <NumbersContainer>
+            <NumberBox>
+                <h3>Cases</h3>
+                <p>{ changeFactor.totalThisWeek }</p>
+            </NumberBox>
+            <NumberBox>
+                <h3>7&ndash;day rolling rate</h3>
+                <p>{ numeral(locationData.rollingRate).format("0,0.0") ?? "N/A" }</p>
+            </NumberBox>
+            <NumberBox>
+                <h3>Change</h3>
+                <p>{ changeFactor.change } ({ changeFactor.percentage }%)</p>
+            </NumberBox>
+        </NumbersContainer>
+        <strong>Case rate compared to national average</strong>
+        <IndicatorLine data={ casesData } currentLocation={ locationData.rollingRate }>
+            <IndicatorLegend>
+                <span>Below average</span>
+                <span>Above average</span>
+            </IndicatorLegend>
+        </IndicatorLine>
+    </MapToolbox>
+
+};
+
+
+
+const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, geoData, date,
+                                   extrema, minData, maxData, valueIndex, children, dates, ...props }) => {
+
+    const
+        bounds = new L.LatLngBounds(new L.LatLng(50.5, -14.5), new L.LatLng(58.8, 10)),
+        maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -12.5), new L.LatLng(61, 10)),
+        centrePoint = bounds.getCenter(),
+        [map, setMap] = useState(null),
+        [styleDataStatus, setStyleDataStatus] = useState(false);
+
+    const
+        [postcodeData, setPostcodeData] = useState(null),
+        [currentLocation, setCurrentLocation] = useState(null),
+        [isLoading, setIsLoading] = useState(true),
+        [zoomLayerIndex, setZoomLayerIndex] = useState(0),
+        [areaType, setAreaType] = useState("utla");
+
     let hoveredStateId = null;
     let isAtStart = true;
-    // let map;
-
-    // let map, layerGroup, centrePoint;
-
-    // console.log(geoData)
-    // console.log(shadeScale(data.filter(d => d[areaCode] === p.id)?.[0] ?? 0));
-
-    // useEffect(() => {
-    //     setMapControl(initialiseMap());
-    // }, []);
 
     const filterBy = (date: string) => {
 
         const filters = ['==', 'date', date.split(/T/)[0]];
-        // const filters = ['get', 'value'];
 
-        if ( map ) {
-            map.setFilter('choropleth-msoa', filters);
-            map.setFilter('choropleth-utla', filters);
-            map.setFilter('choropleth-ltla', filters);
-            map.setFilter('lsoa', filters);
-        }
-        // map.setPaintProperty('choropleth', 'fill-color.input', ['get', 'value']);
+        if ( map )
+            MapLayers.map(layer => {
+                const mapLayer = map.getLayer(`choropleth-${layer.label}`);
 
-        // Set the label to the month
-        // document.getElementById('month').textContent = months[month];
+                if ( mapLayer ) map.setFilter(`choropleth-${layer.label}`, filters);
+
+            });
+
     };
 
-
     useEffect(() => {
-
-        // console.log(geoData);
-        // const { map, layerGroup, centrePoint } = initialiseMap();
-        // console.log(index)
-        // console.log(data?.[index] ?? null)
-        // console.log(map)
-
         if ( !map ) {
             setMap(new mapboxgl.Map({
                 container: 'map',
                 style: URLs.mapStyle,
                 center: centrePoint,
-                // maxBounds: [
-                //     [40.653782, -20.130489],
-                //     [71.090472, 10.316913]
-                // ],
-                // maxBounds: [
-                //     [40.653782, -20.130489],
-                //     [71.090472, 10.316913]
-                // ],
                 zoom: 4.9,
                 minZoom: 4.9,
                 maxZoom: 15,
-                        preserveDrawingBuffer: true
-
+                preserveDrawingBuffer: true
             }));
         }
-
-    }, [])
+    }, []);
 
     useEffect(() => {
 
         if ( map && !styleDataStatus ) {
 
             map.on("load", function () {
-                // map.addSource("geo-data", {
-                //     type: 'geojson',
-                //     data: `https://uk-covid19.azurefd.net/${geoJSON}`
-                // });
 
-                map.addSource("timeseries-geo-data-msoa", {
-                    type: 'geojson',
-                    data: `https://uk-covid19.azurefd.net/downloads/maps/msoa_data_latest.geojson`,
-                    buffer: 1,
-                    tolerance: 1,
-                    maxzoom: 12
-                    // minzoom: 8.5
+                MapLayers.map( layer => {
+                    map.addSource(`timeSeries-${layer.label}`, {
+                        type: 'geojson',
+                        data: layer.paths.timeSeries,
+                        buffer: layer.buffer,
+                        tolerance: layer.tolerance,
+                        maxzoom: layer.maxZoom
+                    });
+
+                    map.addSource(`geo-${layer.label}`, {
+                        type: 'geojson',
+                        data: layer.paths.outline,
+                        buffer: layer.buffer,
+                        tolerance: layer.tolerance,
+                        maxzoom: layer.maxZoom
+                    });
                 });
 
-                map.addSource("geo-msoa", {
-                    type: 'geojson',
-                    data: "https://uk-covid19.azurefd.net/downloads/maps/msoa-ref.geojson",
-                    buffer: 1,
-                    tolerance: 1,
-                    maxzoom: 12.5
-                    // minzoom: 8.5
-                });
-
-                // map.addSource("geo-lsoa", {
-                //     type: 'geojson',
-                //     data: "https://uk-covid19.azurefd.net/downloads/maps/lsoa_data_latest.geojson",
-                //     buffer: 1,
-                //     tolerance: 1,
-                //     maxzoom: 14
-                //     // minzoom: 8.5
-                // });
-
-                map.addSource("timeseries-geo-data-ltla", {
-                    type: 'geojson',
-                    data: `https://uk-covid19.azurefd.net/downloads/maps/ltla_data_latest.geojson`,
-                    buffer: 1,
-                    tolerance: 1,
-                    maxzoom: 8.5,
-                    // minzoom: 7
-                });
-
-                map.addSource("geo-ltla", {
-                    type: 'geojson',
-                    data: "https://uk-covid19.azurefd.net/downloads/maps/ltla-ref.geojson",
-                    buffer: 1,
-                    tolerance: 1,
-                    maxzoom: 8.5,
-                    // minzoom: 7
-                });
-
-                map.addSource("geo-utla", {
-                    type: 'geojson',
-                    data: "https://uk-covid19.azurefd.net/downloads/maps/utla-ref.geojson",
-                    buffer: 32,
-                    maxzoom: 7,
-                    // minzoom: 3
-                });
-
-                map.addSource("timeseries-geo-data-utla", {
-                    type: 'geojson',
-                    data: `https://uk-covid19.azurefd.net/downloads/maps/utla_data_latest.geojson`,
-                    buffer: 32,
-                    maxzoom: 7,
-                    // minzoom: 3
-                });
-
-                map.addSource("geo-nation", {
-                    type: 'geojson',
-                    data: "https://uk-covid19.azurefd.net/downloads/maps/nation-ref.geojson",
-                    buffer: 8,
-                    maxzoom: 3,
-                    // minzoom: .1
-                });
-
-
-                map.addLayer(
-                    {
-                        'id': 'nation',
+                MapLayers.map( layer => {
+                    map.addLayer({
+                        'id': layer.label,
                         'type': 'line',
-                        'source': 'geo-nation',
-                        'minzoom': .1,
-                        'maxzoom': 5,
-                        'layout': {
-                            'line-join': 'round',
-                            'line-cap': 'round'
-                        },
-                        'paint': {
-                            'line-color': '#888',
-                            'line-width': 1
-                        }
-                    },
-                    "water"
-                );
-
-                map.addLayer(
-                    {
-                        'id': 'utla',
-                        'type': 'line',
-                        'source': 'geo-utla',
-                        'minzoom': 3,
-                        'maxzoom': 7,
+                        'source': `geo-${layer.label}`,
+                        'minzoom': layer.minZoom,
+                        'maxzoom': layer.maxZoom,
                         'layout': {
                             'line-join': 'round',
                             'line-cap': 'round'
@@ -346,210 +436,36 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                                 .5
                             ]
                         }
-                    },
-                    'nation'
-                );
+                    }, layer.foreground);
 
-                map.addLayer(
-                    {
-                        'id': 'ltla',
-                        'type': 'line',
-                        'source': 'geo-ltla',
-                        'minzoom': 7,
-                        'maxzoom': 8.5,
-                        'layout': {
-                            'line-join': 'round',
-                            'line-cap': 'round'
-                        },
-                        'paint': {
-                            'line-color': [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                '#000000',
-                                '#888'
-                            ],
-                            'line-width': [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                5,
-                                .5
-                            ]
-                        }
-                    },
-                    'utla'
-                );
-
-                map.addLayer(
-                    {
-                        'id': 'msoa',
-                        'type': 'line',
-                        'source': 'geo-msoa',
-                        'minzoom': 8.5,
-                        'maxzoom': 15,
-                        'layout': {
-                            'line-join': 'round',
-                            'line-cap': 'round'
-                        },
-                        'paint': {
-                            'line-color': [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                '#000000',
-                                '#888'
-                            ],
-                            'line-width': [
-                                'case',
-                                ['boolean', ['feature-state', 'hover'], false],
-                                5,
-                                .5
-                            ]
-                        }
-                    },
-                    'ltla'
-                );
-
-                // map.addLayer(
-                //     {
-                //         'id': 'lsoa',
-                //         'type': 'circle',
-                //         'source': 'geo-lsoa',
-                //         'minzoom': 11.5,
-                //         // layout: {
-                //         //   'icon-allow-overlap': false,
-                //         // },
-                //         'paint': {
-                //             'circle-radius': {
-                //                 'base': 5,
-                //                 'stops': [
-                //                     [11, 15],
-                //                     [15, 70],
-                //                     // [20, 180]
-                //                 ]
-                //             },
-                //             'circle-color': [
-                //                 "step",
-                //                 ['get', 'value'],
-                //                 colours[0],
-                //                 5, colours[1],
-                //                 10, colours[2],
-                //                 20, colours[3],
-                //                 30, colours[4],
-                //             ]
-                //         }
-                //     },
-                //     'msoa'
-                // );
-
-                //
-                // //
-                //
-                // // console.log(extrema)
-                //
-                //
-                map.addLayer(
-                    {
-                        'id': 'choropleth-utla',
+                    map.addLayer({
+                        'id': `choropleth-${layer.label}`,
                         'type': 'fill',
-                        'source': 'timeseries-geo-data-utla',
-                        // 'minzoom': 5.5,
-                        'maxzoom': 7,
+                        'source': `timeSeries-${layer.label}`,
+                        'minzoom': layer.minZoom,
+                        'maxzoom': layer.maxZoom,
                         'paint': {
                             'fill-color': [
                                 "step",
                                 ['get', 'value'],
-                                colours[0],
-                                500, colours[1],
-                                1500, colours[2],
-                                3000, colours[3],
-                                5000, colours[4],
-                                10000, colours[5],
+                                ...layer.buckets,
                             ],
                             'fill-opacity': 1,
-                            // 'line-color': '#888',
-                            // 'line-width': [
-                            //     'case',
-                            //     ['boolean', ['feature-state', 'hover'], false],
-                            //     2,
-                            //     .5
-                            // ]
                         }
-                    },
-                    'utla'
-                );
-
-                map.addLayer(
-                    {
-                        'id': 'choropleth-ltla',
-                        'type': 'fill',
-                        'source': 'timeseries-geo-data-ltla',
-                        'minzoom': 7,
-                        'maxzoom': 8.5,
-                        'paint': {
-                            'fill-color': [
-                                "step",
-                                ['get', 'value'],
-                                colours[0],
-                                500, colours[1],
-                                1500, colours[2],
-                                3000, colours[3],
-                                5000, colours[4],
-                                10000, colours[5],
-                            ],
-                            'fill-opacity': 1,
-
-                            // 'line-color': '#888',
-                            // 'line-width': [
-                            //     'case',
-                            //     ['boolean', ['feature-state', 'hover'], false],
-                            //     2,
-                            //     .5
-                            // ]
-                        }
-                    },
-                    'ltla'
-                );
+                    }, layer.label);
 
 
-                map.addLayer(
-                    {
-                        'id': 'choropleth-msoa',
-                        'type': 'fill',
-                        'source': 'timeseries-geo-data-msoa',
-                        'minzoom': 8.5,
-                        'maxzoom': 15,
-                        'paint': {
-                            'fill-color': [
-                                "step",
-                                ['get', 'value'],
-                                colours[0],
-                                100, colours[1],
-                                250, colours[2],
-                                500, colours[3],
-                                5000, colours[4],
-                            ],
-                            'fill-opacity': 1
-                        }
-                    },
-                    'msoa'
-                );
+                    map.on('click', `choropleth-${layer.label}`, function (e) {
 
+                        setCurrentLocation(e.features[0].properties.code);
+                        // setAreaType(layer.label);
+                        setAreaType(layer.label);
 
-                map.on("sourcedata", function (e) {
-                    if ( e.sourceId.startsWith("geo") > -1 ) {
-                        // createLayer(e.sourceId.split(/-/g).slice(-1))
-                    }
-
-                });
-
-                [['choropleth-utla', 'utla'], ['choropleth-ltla', 'ltla'], ['choropleth-msoa', 'msoa']].map(loc => {
-                    map.on('click', loc[0], function (e) {
-                        setCurrentLocation(e.features[0].properties.code)
-                        setAreaType(loc[1])
                         const outlineId = map
-                            .queryRenderedFeatures({ layers: [loc[1]] })
+                            .queryRenderedFeatures({ layers: [layer.label] })
                             .find(item => item.properties.code === e.features[0].properties.code)
                             .id;
-
+                        console.log(outlineId);
                         // if ( e.features.length > 0 ) {
                         if ( hoveredStateId?.id ) {
                             map.setFeatureState(
@@ -557,8 +473,12 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                                 { hover: false }
                             );
                         }
-                        hoveredStateId = { id: outlineId, location: loc[1] };
-                        // console.log(hoveredStateId)
+
+                        hoveredStateId = {
+                            id: outlineId,
+                            location: layer.label
+                        };
+
                         map.setFeatureState(
                             { source: `geo-${ hoveredStateId.location }`, id: hoveredStateId.id },
                             { hover: true }
@@ -566,13 +486,28 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
                         map.fitBounds(turf.bbox(e.features[0]), {
                             padding: 20,
-                            maxZoom: map.getLayer(loc[1]).maxzoom - 0.2
+                            maxZoom: map.getLayer(layer.label).maxzoom - 0.2
                         });
 
                     });
 
                 });
 
+                map.on('zoom', function() {
+
+                    const zoomLevel = map.getZoom();
+
+                    if ( zoomLevel < 7 ) {
+                        setZoomLayerIndex(0);
+                    }
+                    else if ( zoomLevel >= 7 && zoomLevel < 8.5 ) {
+                        setZoomLayerIndex(1);
+                    }
+                    else if ( zoomLevel >= 8.5 ) {
+                        setZoomLayerIndex(2);
+                    }
+
+                });
 
                 // map.legendControl.addLegend(ReactDomServer.renderToStaticMarkup(children));
 
@@ -609,14 +544,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
     useEffect(() => {
 
-        setLocationData(apiData?.[0] ?? null)
-
-    }, [apiData]);
-
-    useEffect(() => {
-
         if ( map && postcodeData ) {
-            // console.log(MapMarker)
 
             const el = document.createElement("div");
             el.className = "marker";
@@ -645,13 +573,11 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
     // if ( !(map && layerGroup && data && geoData) )
     //     return <Loading/>;
     function downloadImage (e) {
-        // e.preventDefault();
-        const img = map.getCanvas().toDataURL('image/png')
-        e.target.href = img
+        e.target.href =  map.getCanvas().toDataURL('image/png');
     }
 
     return <>
-            <SliderContainer>
+        <SliderContainer>
             { children }
         </SliderContainer>
     <MapContainer>
@@ -669,7 +595,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                             setPostcodeData(data)
                         })();
                     } }>
-                    <labe htmlFor={ "postcode" } className={ "govuk-visually-hidden" }>Search by postcode</labe>
+                    <label htmlFor={ "postcode" } className={ "govuk-visually-hidden" }>Search by postcode</label>
                     <input className={ "govuk-input govuk-input--width-10" }
                            name={ "postcode" }
                            maxLength={ 10 }
@@ -677,132 +603,60 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                            id={ "postcode" }
                            pattern={ "[A-Za-z]{1,2}\\d{1,2}[A-Za-z]?\\s?\\d{1,2}[A-Za-z]{1,2}" }
                            placeholder={ "Search by postcode" }/>
-                    <labe htmlFor={ "submit-postcode" } className={ "govuk-visually-hidden" }>Search by postcode</labe>
+                    <label htmlFor={ "submit-postcode" } className={ "govuk-visually-hidden" }>Search by postcode</label>
                     <input name={ "submit-postcode" } className={ "govuk-button" } id={ "submit-postcode" } type={ "submit" } value={ "" }/>
                 </PostcodeSearchForm>
                 <LegendContainer>
-                    {/*<ScaleLegend>*/}
-                    {/*    <ScaleLegendLabel>LSOAs</ScaleLegendLabel>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: "#fff" }}/>*/}
-                    {/*        <ScaleValue>0 &ndash; 2</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[0] }}/>*/}
-                    {/*        <ScaleValue>3 &ndash; 5</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[1] }}/>*/}
-                    {/*        <ScaleValue>6 &ndash; 10</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[2] }}/>*/}
-                    {/*        <ScaleValue>11 &ndash; 20</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[3] }}/>*/}
-                    {/*        <ScaleValue>21 &ndash; 30</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[4] }}/>*/}
-                    {/*        <ScaleValue>31+</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*</ScaleLegend>*/}
-
-                    {/*<ScaleLegend>*/}
-                    {/*    <ScaleLegendLabel>MSOAs (England only)</ScaleLegendLabel>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: "#fff" }}/>*/}
-                    {/*        <ScaleValue>0 &ndash; 2</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[0] }}/>*/}
-                    {/*        <ScaleValue>3 &ndash; 10</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[1] }}/>*/}
-                    {/*        <ScaleValue>11 &ndash; 20</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[2] }}/>*/}
-                    {/*        <ScaleValue>21 &ndash; 30</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[3] }}/>*/}
-                    {/*        <ScaleValue>31 &ndash; 50</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*    <ScaleGroup>*/}
-                    {/*        <ScaleColor style={{ background: colours[4] }}/>*/}
-                    {/*        <ScaleValue>51+</ScaleValue>*/}
-                    {/*    </ScaleGroup>*/}
-                    {/*</ScaleLegend>*/}
-
                     <ScaleLegend>
-                        <ScaleLegendLabel>Local authorities</ScaleLegendLabel>
+                        <ScaleLegendLabel>{ MapLayers?.[zoomLayerIndex]?.name ?? "" } rate</ScaleLegendLabel>
                         <ScaleGroup>
                             <ScaleColor style={{ background: "#fff" }}/>
-                            <ScaleValue>Missing data</ScaleValue>
+                            <ScaleValue>{
+                                MapLayers[zoomLayerIndex].label === "msoa"
+                                    ? <>Suppressed</>
+                                    : "Missing data"
+                            } </ScaleValue>
                         </ScaleGroup>
+                        {
+
+                            MapLayers[zoomLayerIndex].buckets.map( (item, index) => {
+                                if ( index % 2 > 0 ) {
+                                    return <ScaleGroup>
+                                        <ScaleColor style={ { background: MapLayers[zoomLayerIndex].buckets?.[index - 1] ?? 0 } }/>
+                                        <ScaleValue>
+                                            {
+                                                (MapLayers[zoomLayerIndex].label === "msoa" && index === 1)
+                                                    ? 0
+                                                    : MapLayers[zoomLayerIndex].buckets?.[index - 2] ?? 0
+                                            }
+                                            &nbsp;&ndash;&nbsp;
+                                            { MapLayers[zoomLayerIndex].buckets?.[index] ?? "+" }
+                                        </ScaleValue>
+                                    </ScaleGroup>
+                                }
+                            })
+                        }
                         <ScaleGroup>
-                            <ScaleColor style={{ background: colours[0] }}/>
-                            <ScaleValue>0 &ndash; 500</ScaleValue>
-                        </ScaleGroup>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: colours[1] }}/>
-                            <ScaleValue>501 &ndash; 1500</ScaleValue>
-                        </ScaleGroup>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: colours[2] }}/>
-                            <ScaleValue>1501 &ndash; 3000</ScaleValue>
-                        </ScaleGroup>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: colours[3] }}/>
-                            <ScaleValue>3001 &ndash; 5000</ScaleValue>
-                        </ScaleGroup>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: colours[4] }}/>
-                            <ScaleValue>5001-10,000</ScaleValue>
-                        </ScaleGroup>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: colours[5] }}/>
-                            <ScaleValue>10,001+</ScaleValue>
+                            <ScaleColor style={ { background: MapLayers[zoomLayerIndex].buckets.slice(-1) } }/>
+                            <ScaleValue>
+                                { MapLayers[zoomLayerIndex].buckets.slice(-2, -1) }&nbsp;+
+                            </ScaleValue>
                         </ScaleGroup>
                     </ScaleLegend>
                 </LegendContainer>
             </>
 
         }
-        { !isLoading && locationData
-            ? <MapToolbox>
-                <h2>{ locationData.name }<small>7 days to { dataDate.format("DD MMMM YYYY") }</small></h2>
-                <NumbersContainer>
-                    <NumberBox>
-                        <h3>Cases</h3>
-                        <p>{ changeFactor.totalThisWeek }</p>
-                    </NumberBox>
-                    {/*<NumberBox>*/}
-                    {/*    <h3>Incidence rate</h3>*/}
-                    {/*    <p>{ numeral(locationData.incidenceRate).format("0,0.0") ?? "N/A" }</p>*/}
-                    {/*</NumberBox>*/}
-                    <NumberBox>
-                        <h3>7-day rolling rate</h3>
-                        <p>{ numeral(locationData.rollingRate).format("0,0.0") ?? "N/A" }</p>
-                    </NumberBox>
-                    <NumberBox>
-                        <h3>Change</h3>
-                        <p>{ changeFactor.change } ({ changeFactor.percentage }%)</p>
-                    </NumberBox>
-                </NumbersContainer>
-                <strong>How does this area compare?</strong>
-                {/*<Histogram data={ casesData } currentLocation={ locationData.rollingRate }/>*/}
-                <IndicatorLine data={ casesData } currentLocation={ locationData.rollingRate }/>
-            </MapToolbox>
-            : null
+        {
+            areaType !== "msoa"
+                ? <LocalAuthorityCard currentLocation={ currentLocation } areaType={ areaType }/>
+                : <SoaCard currentLocation={ currentLocation } areaType={ areaType }/>
         }
         </MapContainer>
-                <a onClick={ downloadImage }
+        <span style={{ textAlign: "right" }}>
+            Download as <a onClick={ downloadImage }
                    className={ "govuk-link govuk-link--no-visited-state" }
-                   download={ "map.png" } href={ "" }>Download image</a>
+                   download={ "map.png" } href={ "" }>image</a>.</span>
         </>
 
 };  // Map

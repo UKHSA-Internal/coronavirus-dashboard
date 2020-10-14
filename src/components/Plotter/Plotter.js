@@ -164,27 +164,27 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                         color: "#6B7276"
                     },
                     // rangeslider: {range: ['20202-01-01', new Date().toString()]},
-                    rangeselector: {buttons: [
-                        {
-                          count: 7,
-                          label: '7d',
-                          step: 'day',
-                          stepmode: 'backward'
-                        },
-                            {
-                          count: 1,
-                          label: '1m',
-                          step: 'month',
-                          stepmode: 'backward'
-                        },
-                            {
-                          count: 3,
-                          label: '3m',
-                          step: 'month',
-                          stepmode: 'backward'
-                        },
-                        {step: 'all'}
-                      ]},
+                    // rangeselector: {buttons: [
+                    //     {
+                    //       count: 7,
+                    //       label: '7d',
+                    //       step: 'day',
+                    //       stepmode: 'backward'
+                    //     },
+                    //         {
+                    //       count: 1,
+                    //       label: '1m',
+                    //       step: 'month',
+                    //       stepmode: 'backward'
+                    //     },
+                    //         {
+                    //       count: 3,
+                    //       label: '3m',
+                    //       step: 'month',
+                    //       stepmode: 'backward'
+                    //     },
+                    //     {step: 'all'}
+                    //   ]},
                     ...xaxis
                 },
                 yaxis: {
@@ -202,7 +202,7 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                     ...yaxis
                 },
                 plot_bgcolor: "rgba(231,231,231,0)",
-                paper_bgcolor: "rgba(255,255,255,.9)",
+                paper_bgcolor: "rgba(255,255,255,0)",
                 ...layout
             } }
             { ...props }
@@ -519,7 +519,7 @@ export const Histogram = ({ data, currentLocation }) => {
 }; // Histogram
 
 
-export const IndicatorLine = ({ data, currentLocation }) => {
+export const IndicatorLine = ({ data, currentLocation, children }) => {
 
     const width = useResponsiveLayout(640);
 
@@ -531,53 +531,42 @@ export const IndicatorLine = ({ data, currentLocation }) => {
     };
 
     const
-        sum = data.reduce((acc, val) => acc + val, 0),
-        mean = Math.round(sum / data.length),
-        [min, max] = [Math.min(...data), Math.max(...data)];
+        dataSum = data.reduce((acc, val) => acc + val, 0),
+        dataMean = Math.round(dataSum / data.length),
+        [min, max] = [Math.min(...data, currentLocation), Math.max(...data, currentLocation)];
 
-    for ( let ind = -max; ind <= max; ind = ind + 10 ) {
+    for ( let ind = -(max - dataMean); ind <= max - dataMean; ind = ind + 10 ) {
         range.push(ind)
     }
 
-    console.log(mean)
+    const
+        sum = range.reduce((acc, val) => acc + val, 0),
+        mean = Math.round(sum / range.length);
+
+    console.log(`current location: ${currentLocation}`);
+    console.log(range)
+
+    console.log(`mean: ${mean}`)
     console.log(sum)
     console.log(mean / max)
-    return <Plot
+    return <>
+        <Plot
         data={ [
             {
                 z: [range],
                 type: "heatmap",
                 zsmooth: "best",
                 autocolorscale: false,
-                x: [0 - max, max ],
+                x: range,
                 y: [0, 1],
                 cmin: 0,
-                // colorscale: "Viridis",
                 colorscale: [
                     [0, 'rgb(0,89,195)'],
                     [.5, 'rgba(255,255,255,1)'],
                     [1, 'rgba(214,39,40,1)'],
-                //     [0 / max, toRgba("#e0e543")],
-                //     [1 / max, toRgba("#74bb68")],
-                //     [1500 / max, toRgba("#399384")],
-                //     [3000 / max, toRgba("#12407F")],
-                //     [5000 / max, toRgba("#0b2c5c")],
-                //     [10000 / max, toRgba("#610256")],
-                //     [1, toRgba("#610256")],
                 ],
                 // reversescale: true,
                 showscale: false,
-            },
-            {
-                x: [currentLocation - mean],
-                y: [.5],
-                type: "scatter",
-                mode: "markers",
-                marker: {
-                    color: "#000000",
-                    size: 8,
-                    symbol: "diamond"
-                }
             },
             {
                 x: [0, 0],
@@ -588,22 +577,35 @@ export const IndicatorLine = ({ data, currentLocation }) => {
                     color: "#626262",
                     width: 4,
                 }
-            }
+            },
+            {
+                x: [currentLocation - dataMean],
+                y: [.5],
+                type: "scatter",
+                mode: "markers",
+                size: 10,
+                marker: {
+                    color: "#000000",
+                    size: 8,
+                    symbol: "diamond",
+                    line: {
+                        color: '#fff',
+                        width: 1
+                    }
+                }
+            },
         ] }
         config={ {
             showLink: false,
-            responsive: true,
+            // responsive: true,
             displaylogo: false,
             staticPlot: true
         } }
         useResizeHandler={ true }
         style={{
             display: "block",
-            height: 20,
-            line: {
-                color: '#ffffff',
-                width: 6
-            }
+            height: 30,
+            width: 300
         }}
         layout={{
             // shapes: [{
@@ -621,9 +623,9 @@ export const IndicatorLine = ({ data, currentLocation }) => {
             // }],
             showlegend: false,
             margin: {
-                l: 4,
-                r: 4,
-                b: 0,
+                l: 0,
+                r: 0,
+                b: 5,
                 t: 0,
                 pad: 0,
             },
@@ -631,8 +633,10 @@ export const IndicatorLine = ({ data, currentLocation }) => {
                 showgrid: false,
                 zeroline: false,
                 showline: false,
-                ticks: "",
-                showticklabels: false,
+                // ticks: "",
+                // showticklabels: false,
+                tickvals: [Math.min(...range), Math.max(...range)],
+                ticktext : ["", ""],
             },
             yaxis: {
                 showgrid: false,
@@ -645,5 +649,7 @@ export const IndicatorLine = ({ data, currentLocation }) => {
             paper_bgcolor: "rgba(255,255,255,0)",
         }}
     />
+        { children }
+    </>
 
 }; // Histogram

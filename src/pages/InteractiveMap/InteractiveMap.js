@@ -22,7 +22,7 @@ import {
     MainContainer,
     MapContainer,
     SideDataContainer,
-    ScaleLegend, ScaleGroup, ScaleColor, ScaleValue, ScaleLegendLabel, LegendContainer
+    ScaleLegend, ScaleGroup, ScaleColor, ScaleValue, ScaleLegendLabel, LegendContainer, Container
 } from "./InteractiveMap.styles"
 
 import type { ComponentType } from "react";
@@ -363,24 +363,15 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
     //     y: movingAverage(ukData.map(item => item[1]), 7),
     // })
 
-    return <article className={ "govuk-body" }>
-        {/*<Plotter data={{*/}
-        {/*    data: {x: ukData.map(item => item.data),*/}
-        {/*    y: ukData.map(item => item.value)}*/}
-        {/*}}/>*/}
-        <Options/>
-        {/*<Plotter data={[{*/}
-        {/*    name: "New cases by specimen date",*/}
-        {/*    x: ukData.map(item => item[0]).slice(3, -3,),*/}
-        {/*    y: movingAverage(ukData.map(item => item[1]), 7).slice(3,-3),*/}
-        {/*    type: "line",*/}
-        {/*    mode: "lines",*/}
-        {/*    hovertemplate: "%{y}",*/}
-        {/*    line: {*/}
-        {/*        width: 3,*/}
-        {/*        color: "#003078"*/}
-        {/*    }*/}
-        {/*}]} style={{ maxWidth: 600, height: 200 }} layout={{ showlegend: false }}/>*/}
+    return <Container>
+        <Header>
+            <p className={ "govuk-body" } style={{ maxWidth: 40 + "em" }}>
+                Browse cases data for specific areas within the UK. The map displays weekly data &mdash; use
+                the slider to select a week-ending date. Click on an area to see more detailed cases data for
+                the most recent time period available including seven day case rates and direction of change.
+                When zoomed to very small areas, data for Northern Ireland, Scotland and Wales are not available.
+            </p>
+        </Header>
         <MainContainer>
             <>
                 {/*<GenericMap*/}
@@ -401,7 +392,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                     <label id={ "month" }
                            className={ "govuk-body" }
                            htmlFor={ "slider" }>
-                        7-day rolling rate of cases by specimen date ending
+                        7&ndash;day rolling rate of new cases by specimen date ending
                         on <strong>{ moment(currentDate).format("DD MMM YYYY") }</strong>
                     </label>
                     <Slider id="slider"
@@ -418,23 +409,30 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
             {/*              weeklyDates={ weeklyDates, currentDate/>*/}
             {/*<SideTable/>*/}
         </MainContainer>
-        <div className={ "markdown modal govuk-!-margin-top-8" }>
-            <h3>Attributions</h3>
-            <ul className={ "govuk-list govuk-list--bullet" }>
-                <li>Contains Ordnance Survey data &copy; Crown copyright and database right 2020</li>
-                <li>Contains Royal Mail data &copy; Royal Mail copyright and database right 2020</li>
-                <li>Contains Public Health England data &copy; Crown copyright and database right 2020</li>
-                <li>Office for National Statistics licensed under the Open Government Licence v.3.0</li>
-            </ul>
-
+        <div className={ "markdown govuk-!-margin-top-5" } style={{ maxWidth: 40 + "em" }}>
             <p>
-                Lookup products and data are supplied under the Open Government Licence.
-                You must use the above copyright statements when you reproduce or use the
-                materials, data, or digital boundaries or postcode products used in this
-                page.
+                Seven day rates are expressed per 100,000 population and are calculated
+                by dividing the seven day count by the area population and multiplying
+                by 100,000.
             </p>
+            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Attributions</h3>
+            <div className={ "govuk-body-s" }>
+                <ul className={ "govuk-list govuk-list--bullet govuk-body-s" }>
+                    <li>Contains Ordnance Survey data &copy; Crown copyright and database right 2020</li>
+                    <li>Contains Royal Mail data &copy; Royal Mail copyright and database right 2020</li>
+                    <li>Contains Public Health England data &copy; Crown copyright and database right 2020</li>
+                    <li>Office for National Statistics licensed under the Open Government Licence v.3.0</li>
+                </ul>
+
+                <p>
+                    Lookup products and data are supplied under the Open Government Licence.
+                    You must use the above copyright statements when you reproduce or use the
+                    materials, data, or digital boundaries or postcode products used in this
+                    page.
+                </p>
+            </div>
         </div>
-    </article>
+    </Container>
 
 };
 

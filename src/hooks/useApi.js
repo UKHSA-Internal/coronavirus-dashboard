@@ -104,7 +104,7 @@ const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
                             if ( cache )
                                 cachedData.current[requestURL] = dt.data;
 
-                            setData(dt.data)
+                            setData(dt?.data ?? dt)
 
                         } else {
                             setData([])

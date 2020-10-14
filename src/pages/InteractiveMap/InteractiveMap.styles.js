@@ -39,13 +39,22 @@ export const Selector: ComponentType<*> =
         `;
 
 
+export const Container: ComponentType<*> =
+    styled
+        .article
+        .attrs(({ className="" }) => ({
+            className: `govuk-body ${className}`
+        }))`
+            display: flex;
+            flex-direction: column;
+        `;
+
+
 export const MainContainer: ComponentType<*> =
     styled
         .div`
             display: flex;
             flex-direction: column;
-            flex: 2 1 30%;
-            max-height: 80vh;
         `;
 
 export const Slider: ComponentType<*> =
@@ -122,7 +131,6 @@ export const ScaleValue: ComponentType<*> =
 
 export const ScaleLegendLabel: ComponentType<*> =
     styled
-
         .h3
         .attrs(({ className="" }) => ({
             className: `govuk-body govuk-!-font-size-14 ${className}`

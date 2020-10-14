@@ -3,46 +3,29 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Switch, Route, withRouter } from 'react-router';
 import Header from "components/Header";
-import DailySummary from 'pages/DailySummary';
-// import CookieBanner from 'components/CookieBanner';
+// import DailySummary from 'pages/DailySummary';
 import BackToTop from 'components/BackToTop';
 import ErrorBoundary from "components/ErrorBoundary";
-import axios from "axios";
-import URLs from "common/urls";
+import useTimestamp from "hooks/useTimestamp";
 import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
 
-import DashboardHeader from 'components/DashboardHeader';
-import Cases           from 'pages/Cases';
-import Healthcare      from 'pages/Healthcare';
-import Deaths          from 'pages/Deaths';
-import Tests           from 'pages/Testing';
-import About           from 'pages/About';
-import Accessibility   from 'pages/Accessibility';
-import Cookies         from 'pages/Cookies';
-import ApiDocs         from 'pages/ApiDocs';
-import Announcement    from "components/Announcement";
-import Footer          from 'components/Footer';
-import SideNavMobile from "components/SideNavMobile";
-import SideNavigation from "components/SideNavigation";
-import InteractiveMap from "pages/InteractiveMap";
+import * as styles from './index.scss';
 
-
-const useTimestamp = () => {
-
-    const [ timestamp, setTimestamp ] = useState("");
-
-    useEffect(() => {
-        (async () => {
-            const { data } = await axios.get(URLs.timestamp, { responseType: 'text' })
-            setTimestamp(data)
-        })();
-    }, []);
-
-    return timestamp
-
-};  // useTimestamp
+const
+    DashboardHeader = lazy(() => import('components/DashboardHeader')),
+    Cases           = lazy(() => import('pages/Cases')),
+    Healthcare      = lazy(() => import('pages/Healthcare')),
+    Deaths          = lazy(() => import('pages/Deaths')),
+    Tests           = lazy(() => import('pages/Testing')),
+    About           = lazy(() => import('pages/About')),
+    Accessibility   = lazy(() => import('pages/Accessibility')),
+    Cookies         = lazy(() => import('pages/Cookies')),
+    ApiDocs         = lazy(() => import('pages/ApiDocs')),
+    Announcement    = lazy(() => import("components/Announcement")),
+    InteractiveMap  = lazy(() => import("pages/InteractiveMap")),
+    Footer          = lazy(() => import('components/Footer'));
 
 
 const LastUpdateTime = () => {
@@ -92,27 +75,24 @@ const LastUpdateTime = () => {
 
 const
     PathWithSideMenu = [
-        "/",
-        "/testing",
-        "/cases",
-        "/healthcare",
-        "/deaths",
-        "/about-data"
+        "/details/",
+        "/details/testing",
+        "/details/cases",
+        "/details/healthcare",
+        "/details/deaths",
+        "/details/about-data"
     ];
 
 
 const Navigation = ({ layout, ...props }) => {
 
     const Nav = layout !== "mobile"
-        ? SideNavigation
-        : SideNavMobile;
-        // ? React.lazy(() => import('components/SideNavigation'))
-        // : React.lazy(() => import('components/SideNavMobile'));
+        ? React.lazy(() => import('components/SideNavigation'))
+        : React.lazy(() => import('components/SideNavMobile'));
 
-    return <Nav { ...props }/>
-    // <Suspense fallback={ <Loading/> }>
-    //     <Nav { ...props }/>
-    // </Suspense>
+    return <Suspense fallback={ <Loading/> }>
+         <Nav { ...props }/>
+    </Suspense>
 
 };  // MobileNavigation
 
@@ -133,6 +113,18 @@ const App = ({ location: { pathname } }) => {
     return <>
         {/*<CookieBanner/>*/}
         <Header/>
+        <div className="govuk-phase-banner" style={{ padding: ".7rem 30px" }}>
+            <p className="govuk-phase-banner__content">
+                <strong className="govuk-tag govuk-phase-banner__content__tag">
+                    experimental
+                </strong>
+                <span className="govuk-phase-banner__text">
+                    This is a new version of the
+                    service &mdash; your <a className="govuk-link govuk-link--no-visited-state"
+                                            href="mailto:coronavirus-tracker@phe.gov.uk?subject=Feedback on version 3">feedback</a> will
+                    help us to improve it.</span>
+            </p>
+        </div>
         { layout === "mobile" && <Navigation layout={ layout }/> }
         <div className={ "govuk-width-container" }>
             <LastUpdateTime/>
@@ -142,7 +134,7 @@ const App = ({ location: { pathname } }) => {
                         layout === "desktop" &&
                         <aside className={ "dashboard-menu" }>
                             <Switch>
-                                <Route path={ "/" }
+                                <Route path={ "/details" }
                                        render={ props =>
                                            <Navigation layout={ layout }{ ...props}/>
                                        }/>
@@ -150,45 +142,45 @@ const App = ({ location: { pathname } }) => {
                         </aside>
                     }
                     <main className={ "govuk-main-wrapper" } role={ "main" } id={ 'main-content' }>
-                        {/*<Suspense fallback={ <Loading/> }>*/}
+                        <Suspense fallback={ <Loading/> }>
                             <DashboardHeader/>
                             <Switch>
                                 {/*<Route path="/" exact render={ () => window. }/>*/}
-                                <Route path="/testing" exact component={ Tests }/>
-                                <Route path="/cases" exact component={ Cases }/>
-                                <Route path="/healthcare" exact component={ Healthcare }/>
-                                <Route path="/deaths" exact component={ Deaths }/>
-                                <Route path="/interactive-map" component={ InteractiveMap }/>
+                                <Route path="/details/testing" exact component={ Tests }/>
+                                <Route path="/details/cases" exact component={ Cases }/>
+                                <Route path="/details/healthcare" exact component={ Healthcare }/>
+                                <Route path="/details/deaths" exact component={ Deaths }/>
+                                <Route path="/details/interactive-map" component={ InteractiveMap }/>
 
 
-                                <Route path="/about-data" exact component={ About }/>
+                                <Route path="/details/about-data" exact component={ About }/>
                                 {/*<Route path="/archive" component={ Archive }/>*/}
-                                <Route path="/accessibility" exact component={ Accessibility }/>
-                                <Route path="/cookies" exact component={ Cookies }/>
-                                <Route path="/developers-guide" exact component={ ApiDocs }/>
+                                <Route path="/details/accessibility" exact component={ Accessibility }/>
+                                <Route path="/details/cookies" exact component={ Cookies }/>
+                                <Route path="/details/developers-guide" exact component={ ApiDocs }/>
                             </Switch>
-                        {/*</Suspense>*/}
+                        </Suspense>
                     </main>
                 </div>
             </ErrorBoundary>
 
             <Switch>
                 {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */ }
-                <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> }/>
+                <Route path="/details" render={ () => <BackToTop mode={ "overlay" }/> }/>
             </Switch>
 
             {/* We only want back-to-top links on the main & about pages. */ }
             <Switch>
                 {/* These back-to-top links are the 'inline' style that sits
                     statically between the end of the content and the footer. */ }
-                <Route path="/" render={ props => <BackToTop { ...props } mode="inline"/> }/>
+                <Route path="/details" render={ props => <BackToTop { ...props } mode="inline"/> }/>
             </Switch>
         </div>
 
         <Switch>
-            {/*<Suspense fallback={ <Loading/> }>*/}
-                <Route path="/" component={ Footer }/>
-            {/*</Suspense>*/}
+            <Suspense fallback={ <Loading/> }>
+                <Route path="/details" component={ Footer }/>
+            </Suspense>
         </Switch>
     </>
 };  // App

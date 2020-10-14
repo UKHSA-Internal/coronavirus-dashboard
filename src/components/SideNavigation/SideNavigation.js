@@ -21,23 +21,23 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
     return <SideNav aria-label="Side navigation">
         <SideNavMainContainer>
             <SideNavListItem className={`${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
-                <a href={ "/" } aria-current="location">UK Summary</a>
+                <a href={ "/" } aria-current="location">Daily update</a>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/testing' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/testing" }>Testing</Link>
+            <SideNavListItem className={`${pathname === '/details/testing' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/testing" }>Testing</Link>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/cases' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/cases" }>Cases</Link>
+            <SideNavListItem className={`${pathname === '/details/cases' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/cases" }>Cases</Link>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/healthcare' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/healthcare" }>Healthcare</Link>
+            <SideNavListItem className={`${pathname === '/details/healthcare' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/healthcare" }>Healthcare</Link>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/deaths' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/deaths" }>Deaths</Link>
+            <SideNavListItem className={`${pathname === '/details/deaths' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/deaths" }>Deaths</Link>
             </SideNavListItem>
 
         </SideNavMainContainer>
@@ -45,11 +45,11 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
         <SectionBreak/>
 
         <SideNavSecondaryContainer>
-            <SideNavListSecondaryItem className={`${pathname === '/about-data' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/about-data" }>About the data</Link>
+            <SideNavListSecondaryItem className={`${pathname === '/details/about-data' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/about-data" }>About the data</Link>
             </SideNavListSecondaryItem>
-            <SideNavListSecondaryItem className={`${pathname === '/developers-guide' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/developers-guide" }>Developer's guide</Link>
+            <SideNavListSecondaryItem className={`${pathname === '/details/developers-guide' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/developers-guide" }>Developer's guide</Link>
             </SideNavListSecondaryItem>
         </SideNavSecondaryContainer>
     </SideNav>

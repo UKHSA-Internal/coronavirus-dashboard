@@ -12,17 +12,18 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 
-import './index.scss';
-
 initAll()
 
 
 const rootElement = document.querySelector('.app-root');
-if (rootElement.hasChildNodes()) {
-  hydrate(<Router><App /></Router>, rootElement);
-} else {
-  render(<Router><App /></Router>, rootElement);
-}
+
+render(<Router><App /></Router>, rootElement);
+
+// if (rootElement.hasChildNodes()) {
+//   hydrate(<Router><App /></Router>, rootElement);
+// } else {
+//   render(<Router><App /></Router>, rootElement);
+// }
 
 // if ( rootElement.hasChildNodes() ) {
 //     ReactDOM.hydrate(<Router><App/></Router>, rootElement)

@@ -71,6 +71,7 @@ export const PostcodeSearchForm: ComponentType<*> =
 
 export const MapToolbox: ComponentType<*> =
     styled.legend`
+    width: 300px;
     font-family: "GDS Transport", Arial, sans-serif;
     position: absolute;
     background: rgba(255,255,255,0.9);
@@ -82,6 +83,7 @@ export const MapToolbox: ComponentType<*> =
     
     &>h2 {
         margin-top: 0;
+        max-width: 280px;
     }
     
     &>h2>small {
@@ -124,3 +126,17 @@ export const NumbersContainer: ComponentType<*> =
     display: flex;
     flex-direction: row;
     `;
+
+
+export const IndicatorLegend: ComponentType<*> =
+    styled
+        .div
+        .attrs(({ className="" }) => ({
+            className: `govuk-body-xs ${className}`
+        }))`
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            color: #636A6D;
+            margin: 0;
+        `;
