@@ -55,8 +55,8 @@ const MapLayers = [
             outline: "https://coronavirus.data.gov.uk/downloads/maps/utla-ref.geojson"
         },
         foreground: "water",
-        tolerance: .8,
-        buffer: 1,
+        tolerance: .5,
+        buffer: 32,
         minZoom: 1,
         maxZoom: 7,
         buckets: [
@@ -75,8 +75,8 @@ const MapLayers = [
             timeSeries: "https://coronavirus.data.gov.uk/downloads/maps/ltla_data_latest.geojson",
             outline: "https://coronavirus.data.gov.uk/downloads/maps/ltla-ref.geojson"
         },
-        tolerance: 1,
-        buffer: 1,
+        tolerance: .5,
+        buffer: 32,
         minZoom: 7,
         maxZoom: 8.5,
         foreground: "utla",
@@ -96,8 +96,8 @@ const MapLayers = [
             timeSeries: "https://coronavirus.data.gov.uk/downloads/maps/msoa_data_latest.geojson",
             outline: "https://coronavirus.data.gov.uk/downloads/maps/msoa-ref.geojson"
         },
-        tolerance: 1,
-        buffer: 1,
+        tolerance: .5,
+        buffer: 32,
         minZoom: 8.5,
         maxZoom: 15,
         foreground: "ltla",
