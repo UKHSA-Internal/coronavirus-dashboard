@@ -88,6 +88,20 @@ const LastUpdateTime = () => {
                 </p>
             </Announcement>
 
+            <Announcement firstDisplayDate={{ year: 2020, month: 9, day: 10, hour: 16 }}
+                                  lastDisplayDate={{ year: 2021, month: 9, day: 11, hour: 7 }}>
+                <p className={ "govuk-body" }>
+                    We are launching a new version of the dashboard. We welcome your
+                    feedback on the <a href={ "https://coronavirus-staging.data.gov.uk/" }
+                                       className={ "govuk-link govuk-link--no-visited-state" }
+                                       target={ "_blank" }
+                                       rel={ "noopener noreferrer" }>
+                        experimental release
+                    </a> of the new service.
+                </p>
+            </Announcement>
+
+
             {/*{ parsedTimestamp.start.day === 3*/}
             {/*    ? <Announcement firstDisplayDate={ parsedTimestamp.start }*/}
             {/*              lastDisplayDate={{ year: 2020, month: 10, day: 5, hour: 15, minute: 55 }}>*/}
