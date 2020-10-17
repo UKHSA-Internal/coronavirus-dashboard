@@ -178,14 +178,6 @@ const App = ({ location: { pathname } }) => {
     const
         layout = useResponsiveLayout(768);
 
-    let hasMenu;
-
-    useEffect(() => {
-
-        hasMenu = PathWithSideMenu.indexOf(pathname) > -1;
-
-    }, [ pathname ]);
-
     return <>
         {/*<CookieBanner/>*/}
         <Header/>
