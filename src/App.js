@@ -149,17 +149,6 @@ const LastUpdateTime = () => {
 }; // LastUpdateTime
 
 
-const
-    PathWithSideMenu = [
-        "/",
-        "/testing",
-        "/cases",
-        "/healthcare",
-        "/deaths",
-        "/about-data"
-    ];
-
-
 const Navigation = ({ layout, ...props }) => {
 
     const Nav = layout !== "mobile"
