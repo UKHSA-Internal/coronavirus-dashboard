@@ -12,9 +12,6 @@ const Header: ComponentType<*> = ({ ...props }) => {
         <div className="govuk-header__container govuk-width-container">
             <div className="govuk-header__logo">
             <Link to={ "/" }
-
-
-
                    className="govuk-header__link govuk-header__link--homepage">
                     <span className="govuk-header__logotype">
                         <svg aria-hidden="true"
@@ -74,7 +71,7 @@ const Header: ComponentType<*> = ({ ...props }) => {
                     <span className="govuk-header__product-name">
                         Coronavirus (COVID-19) in the UK
                     </span>
-                    </Link>
+                </Link>
             </div>
         </div>
     </header>
