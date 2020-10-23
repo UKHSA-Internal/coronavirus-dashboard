@@ -13,7 +13,6 @@ module.file_ext=.js
 module.file_ext=.json
 module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=src
-suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 esproposal.optional_chaining=enable
 
 [libs]
