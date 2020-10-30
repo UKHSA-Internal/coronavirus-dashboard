@@ -191,7 +191,7 @@ Date: Mon, 20 Jul 2020 09:45:58 GMT`}
                     The <Code>Last-Modified</Code> timestamp is not identical to that which is
                     displayed on the website. It signifies the time when the data were uploaded
                     to our database. The delay in the release is due to the Quality Assurance
-                    process that takes place everyday before the data are released.
+                    process that takes place every day before the data are released.
                 </Admonition>
 
 
