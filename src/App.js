@@ -87,7 +87,6 @@ const LastUpdateTime = () => {
                     unresponsive between 10pm Saturday (10&nbsp;Oct) and 6am Sunday (11&nbsp;Oct).
                 </p>
             </Announcement>
-
             <Announcement firstDisplayDate={{ year: 2020, month: 9, day: 10, hour: 16 }}
                                   lastDisplayDate={{ year: 2021, month: 9, day: 11, hour: 7 }}>
                 <p className={ "govuk-body" }>
@@ -98,6 +97,14 @@ const LastUpdateTime = () => {
                                        rel={ "noopener noreferrer" }>
                         experimental release
                     </a> of the new service.
+                </p>
+            </Announcement>
+            <Announcement firstDisplayDate={{ year: 2020, month: 9, day: 31, hour: 16 }}
+                          lastDisplayDate={{ year: 2021, month: 10, day: 2, hour: 17 }}>
+                <p className={ "govuk-body" }>
+                    Please note: In line with our standard reporting procedure, capacity
+                    figures for Friday, Saturday and Sunday will be updated on the
+                    dashboard on Monday.
                 </p>
             </Announcement>
 
