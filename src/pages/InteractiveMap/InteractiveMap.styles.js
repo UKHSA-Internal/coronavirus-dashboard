@@ -86,6 +86,12 @@ export const LegendContainer: ComponentType<*> =
         background: rgba(255,255,255,0.9);
         width: max-content;
         border: 1px solid black;
+        
+        @media only screen and (max-width: 600px) {
+            font-size: 0.8rem !important;
+            padding: .3rem !important;
+            bottom: 10px;
+        }
         `;
 
 
@@ -107,6 +113,10 @@ export const ScaleGroup: ComponentType<*> =
             width: max-content;
             align-items: flex-end;
             margin-top: .5rem;
+            
+            @media only screen and (max-width: 600px) {
+                margin-top: 0.3rem !important;
+            }
         `;
 
 
@@ -117,6 +127,9 @@ export const ScaleColor: ComponentType<*> =
             border-radius: 100%;
             padding: 7px;
             border: 2px solid #6e6e6e;
+            @media only screen and (max-width: 600px) {
+                padding: 5px;
+            }
         `;
 
 

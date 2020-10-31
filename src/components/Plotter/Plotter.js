@@ -543,12 +543,6 @@ export const IndicatorLine = ({ data, currentLocation, children }) => {
         sum = range.reduce((acc, val) => acc + val, 0),
         mean = Math.round(sum / range.length);
 
-    console.log(`current location: ${currentLocation}`);
-    console.log(range)
-
-    console.log(`mean: ${mean}`)
-    console.log(sum)
-    console.log(mean / max)
     return <>
         <Plot
         data={ [
@@ -608,19 +602,6 @@ export const IndicatorLine = ({ data, currentLocation, children }) => {
             width: 300
         }}
         layout={{
-            // shapes: [{
-            //     type: 'line',
-            //     x0: mean,
-            //     xref: 'x',
-            //     y0: -.15,
-            //     x1: mean,
-            //     yref: 'paper',
-            //     y1: .5,
-            //     line: {
-            //         color: '#000000',
-            //         width: 1,
-            //     }
-            // }],
             showlegend: false,
             margin: {
                 l: 0,
@@ -633,8 +614,6 @@ export const IndicatorLine = ({ data, currentLocation, children }) => {
                 showgrid: false,
                 zeroline: false,
                 showline: false,
-                // ticks: "",
-                // showticklabels: false,
                 tickvals: [Math.min(...range), Math.max(...range)],
                 ticktext : ["", ""],
             },
@@ -653,3 +632,70 @@ export const IndicatorLine = ({ data, currentLocation, children }) => {
     </>
 
 }; // Histogram
+
+
+export const XAxis = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}, margin = {}, style = {}, isTimeSeries = true, SrOnly = "", ...props }) => {
+
+    const width = useResponsiveLayout(640);
+
+    return <PlotContainer className={ "govuk-grid-row" }
+                          aria-label={ "Displaying a graph of the data" }>
+        <Plot
+            data={ data }
+            config={ {
+                showLink: false,
+                responsive: true,
+                staticPlot: true,
+                displaylogo: false,
+                displayModeBar: false,
+                ...config
+                // onLegendItem
+            } }
+            useResizeHandler={ true }
+            style={ { display: "block", height: 30, marginTop: -27, zIndex: 1, ...style } }
+            layout={ {
+                showlegend: false,
+                margin: {
+                    l: 6,
+                    r: 3,
+                    b: 25,
+                    t: 0,
+                    pad: 0,
+                    ...margin
+                },
+                xaxis: {
+                    showgrid: false,
+                    zeroline: false,
+                    showline: false,
+                    tickslen: 15,
+                    ticks: "outside",
+                    tickson: "boundaries",
+                    ticklen: 'labels',
+                    type: isTimeSeries ? "date" : "category",
+                    autorange: true,
+                    tickformat: '%b',
+                    tickfont: {
+                        family: `"GDS Transport", Arial, sans-serif`,
+                        size: 14,
+                        color: "#6B7276"
+                    },
+                    ...xaxis
+                },
+                yaxis: {
+                    showgrid: false,
+                    zeroline: false,
+                    showline: false,
+                    ticks: "",
+                    showticklabels: false,
+                    tickslen: 0,
+                    ...yaxis
+                },
+                plot_bgcolor: "rgba(231,231,231,0)",
+                paper_bgcolor: "rgba(255,255,255,0)",
+                ...layout
+            } }
+            { ...props }
+        />
+    </PlotContainer>
+
+}; // Plotter

@@ -20,7 +20,6 @@ import {
 } from "./Map.styles";
 import useApi from "hooks/useApi";
 import moment from "moment";
-import { IndicatorLine } from "components/Plotter/Plotter";
 import numeral from "numeral";
 import {
     LegendContainer,
@@ -34,7 +33,10 @@ import { useFullRollingRates } from "hooks/useMapData";
 import axios from "axios";
 import MapMarker from "assets/icon-mapmarker.svg";
 import useTimestamp from "hooks/useTimestamp";
-
+import usePrevious from "hooks/usePrevious";
+import useResponsiveLayout from "hooks/useResponsiveLayout";
+import GreenArrow from "assets/icon-arrow-green.svg";
+import RedArrow from "assets/icon-arrow-red.svg";
 
 const colours = [
     "#e0e543",
@@ -54,7 +56,7 @@ const MapLayers = [
             timeSeries: "https://coronavirus.data.gov.uk/downloads/maps/utla_data_latest.geojson",
             outline: "https://coronavirus.data.gov.uk/downloads/maps/utla-ref.geojson"
         },
-        foreground: "water",
+        foreground: "building",
         tolerance: .5,
         buffer: 32,
         minZoom: 1,
@@ -99,7 +101,7 @@ const MapLayers = [
         tolerance: .5,
         buffer: 32,
         minZoom: 8.5,
-        maxZoom: 15,
+        maxZoom: 15.5,
         foreground: "ltla",
         buckets: [
             colours[0],
@@ -111,25 +113,6 @@ const MapLayers = [
         ]
     }
 ];
-
-
-const getBlobOptions = (data, geoData, areaCodeKey) => {
-
-    return geoData
-        .filter(({ properties: { [areaCodeKey]: key } }) => (data.getByKey(key)?.rawData?.value ?? 0) > 0)
-        .map(({ properties: p, properties: { [areaCodeKey]: key } }) => ({
-            type: 'Feature',
-            properties: {
-                name: data?.[key]?.name?.value ?? 0,
-                count: data.getByKey(key)?.rawData?.value ?? 0
-            },
-            geometry: {
-                type: 'Point',
-                coordinates: [p.long, p.lat],
-            },
-        }))
-
-}; // getBlobOptions
 
 
 const getChangeFactor = (data: Array<number>[], sliceBy: number = 7) => {
@@ -156,7 +139,58 @@ const getChangeFactor = (data: Array<number>[], sliceBy: number = 7) => {
 };
 
 
-const SoaCard = ({ currentLocation, areaType }) => {
+const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, trend,
+                      percentageChange, areaType, areaCode, setShowInfo, ...props }) => {
+
+    const viewPort = useResponsiveLayout(600);
+
+    if ( !setShowInfo ) return null;
+
+    return <MapToolbox>
+        <button style={{ position: "absolute", top: 3, right: 8, margin: 0, padding: 0, cursor: "pointer", fontSize: 1.5 + "rem" }}
+                role={ "button" }
+                onClick={ () => setShowInfo(false) }>×</button>
+        <h2 className={ 'govuk-heading-m' }>
+            { areaName }
+            <small className={ "govuk-caption-s" }>
+                Seven days to { moment(date).format("DD MMMM YYYY") }
+            </small>
+        </h2>
+        <NumbersContainer>
+            <NumberBox>
+                <h3 className={ "govuk-heading-s" }>Total cases</h3>
+                <div className={ "number-row" }>
+                    <span className={ "number" }>{ totalThisWeek }</span>
+                    <strong className={ `govuk-tag ${percentageChange > 0 ? "red" : "green" } number` }>
+                        {
+                            percentageChange === 0
+                                ? null
+                                : <img src={ percentageChange > 0 ? RedArrow : GreenArrow }
+                                     width={ "14px" }
+                                     alt={ "arrow" }
+                                     style={{ transform: `rotate(${ trend }deg)`, marginRight: 5 }}/>
+                        }
+                        { numeral(totalChange)?.format("0,0") }&nbsp;{ `(${numeral(percentageChange).format("0,0.0")}%)` }
+                    </strong>
+                </div>
+            </NumberBox>
+            <NumberBox>
+                <h3 className={ "govuk-heading-s" }>Rolling rate</h3>
+                <div className={ "number-row" }>
+                    <span className={ "number" }>{ numeral(rollingRate)?.format("0,0.0") ?? "N/A" }</span>
+                </div>
+            </NumberBox>
+        </NumbersContainer>
+        <h3 className={ "govuk-heading-s" }>Case rate compared to { areaType === "msoa" ? "England" : "the UK" } average</h3>
+        <img src={ `https://coronavirus.data.gov.uk/public/assets/frontpage/scales/${areaType}/${areaCode}.svg` }
+             style={{ maxWidth: viewPort === "mobile" ? 250 : 300, marginBottom: -15 }}
+             alt={ `Scale showing the comparison of ${ areaName } compared to national average.` }/>
+    </MapToolbox>
+
+};  // InfoCard
+
+
+const SoaCard = ({ currentLocation, areaType, ...props }) => {
 
     const
         [locationData, setLocationData] = useState(null),
@@ -217,53 +251,37 @@ const SoaCard = ({ currentLocation, areaType }) => {
     const
         changeFactor = getChangeFactor([[0], ...fortnightData, [0]], 2);
 
-    return <MapToolbox>
-        <h2 className={ 'govuk-heading-m' }>
-            { locationData?.msoaName ?? "" }
-            <small className={ "govuk-caption-m" }>7
-                days to { moment(apiData.newCasesBySpecimenDate?.[0]?.date).format("DD MMMM YYYY") }
-            </small>
-        </h2>
-        <NumbersContainer>
-            <NumberBox>
-                <h3>Cases</h3>
-                <p>{ changeFactor.totalThisWeek }</p>
-            </NumberBox>
-            <NumberBox>
-                <h3>7&ndash;day rolling rate</h3>
-                <p>{ numeral(apiData.newCasesBySpecimenDate?.[0]?.rollingRate).format("0,0.0") ?? "N/A" }</p>
-            </NumberBox>
-            <NumberBox>
-                <h3>Change</h3>
-                <p>{ changeFactor.change } ({ changeFactor.percentage }%)</p>
-            </NumberBox>
-        </NumbersContainer>
-        <strong>Case rate compared to national average</strong>
-        <IndicatorLine data={ casesData }
-                       currentLocation={ apiData.newCasesBySpecimenDate?.[0]?.rollingRate }>
-            <IndicatorLegend>
-                <span>Below average</span>
-                <span>Above average</span>
-            </IndicatorLegend>
-        </IndicatorLine>
-    </MapToolbox>
+    return <InfoCard areaName={ locationData?.msoaName ?? "" }
+                     date={ apiData.newCasesBySpecimenDate?.[0]?.date }
+                     totalThisWeek={ changeFactor.totalThisWeek }
+                     rollingRate={ apiData.newCasesBySpecimenDate?.[0]?.rollingRate }
+                     percentageChange={ changeFactor.percentage }
+                     totalChange={ changeFactor.change }
+                     areaCode={ currentLocation }
+                     areaType={ areaType }
+                     trend={ changeFactor.trend }
+                     { ...props }/>
 
 };
 
 
-const LocalAuthorityCard = ({ currentLocation, areaType }) => {
+const LocalAuthorityCard = ({ currentLocation, areaType, ...props }) => {
 
     const
         timestamp = useTimestamp(),
         [locationData, setLocationData] = useState(null),
         dataDate = moment(timestamp).subtract(5, "days"),
         apiData = useApi({
-            ...(currentLocation && areaType !== "msoa")
+            ...(currentLocation && areaType !== "msoa" && timestamp !== "" )
                 ? {
                     conjunctiveFilters: [
                         { key: "areaCode", sign: "=", value: currentLocation },
                         { key: "areaType", sign: "=", value: areaType },
-                        { key: "date", sign: "=", value: dataDate.toISOString().split("T")[0] },
+                        {
+                            key: "date",
+                            sign: "=",
+                            value: dataDate.toISOString().split("T")[0]
+                        },
                     ],
                 }
                 : {},
@@ -278,13 +296,24 @@ const LocalAuthorityCard = ({ currentLocation, areaType }) => {
             defaultResponse: null
         }),
         fortnightData = useApi({
-            ...(currentLocation && areaType !== "msoa")
+            ...(currentLocation && areaType !== "msoa" && timestamp !== "")
                 ? {
                     conjunctiveFilters: [
                         { key: "areaCode", sign: "=", value: currentLocation },
                         { key: "areaType", sign: "=", value: areaType },
-                        { key: "date", sign: "<=", value: dataDate.toISOString().split("T")[0] },
-                        { key: "date", sign: ">=", value: dataDate.subtract(13, 'days').toISOString().split("T")[0] },
+                        {
+                            key: "date",
+                            sign: "<=",
+                            value: dataDate.toISOString().split("T")[0]
+                        },
+                        {
+                            key: "date",
+                            sign: ">=",
+                            value: dataDate
+                                .subtract(13, 'days')
+                                .toISOString()
+                                .split("T")[0]
+                        },
                     ],
                 }
                 : {},
@@ -310,30 +339,16 @@ const LocalAuthorityCard = ({ currentLocation, areaType }) => {
 
     const changeFactor = getChangeFactor(fortnightData);
 
-    return <MapToolbox>
-        <h2>{ locationData.name }<small>7 days to { moment(fortnightData?.[0]?.[1] ?? "").format("DD MMMM YYYY") }</small></h2>
-        <NumbersContainer>
-            <NumberBox>
-                <h3>Cases</h3>
-                <p>{ changeFactor.totalThisWeek }</p>
-            </NumberBox>
-            <NumberBox>
-                <h3>7&ndash;day rolling rate</h3>
-                <p>{ numeral(locationData.rollingRate).format("0,0.0") ?? "N/A" }</p>
-            </NumberBox>
-            <NumberBox>
-                <h3>Change</h3>
-                <p>{ changeFactor.change } ({ changeFactor.percentage }%)</p>
-            </NumberBox>
-        </NumbersContainer>
-        <strong>Case rate compared to national average</strong>
-        <IndicatorLine data={ casesData } currentLocation={ locationData.rollingRate }>
-            <IndicatorLegend>
-                <span>Below average</span>
-                <span>Above average</span>
-            </IndicatorLegend>
-        </IndicatorLine>
-    </MapToolbox>
+    return <InfoCard areaName={ locationData.name }
+                     date={ fortnightData?.[0]?.[1] ?? "" }
+                     totalThisWeek={ changeFactor.totalThisWeek }
+                     rollingRate={ locationData.rollingRate }
+                     percentageChange={ changeFactor.percentage }
+                     totalChange={ changeFactor.change }
+                     areaCode={ currentLocation }
+                     areaType={ areaType }
+                     trend={ changeFactor.trend }
+                     { ...props }/>
 
 };
 
@@ -344,20 +359,20 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
     const
         bounds = new L.LatLngBounds(new L.LatLng(50.5, -14.5), new L.LatLng(58.8, 10)),
-        maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -12.5), new L.LatLng(61, 10)),
+        // maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -12.5), new L.LatLng(61, 10)),
         centrePoint = bounds.getCenter(),
         [map, setMap] = useState(null),
-        [styleDataStatus, setStyleDataStatus] = useState(false);
+        [styleDataStatus, setStyleDataStatus] = useState(false),
+        [showInfo, setShowInfo] = useState(false);
 
     const
         [postcodeData, setPostcodeData] = useState(null),
-        [currentLocation, setCurrentLocation] = useState(null),
+        [currentLocation, setCurrentLocation] = useState({ currentLocation: null, areaType: "utla" }),
         [isLoading, setIsLoading] = useState(true),
         [zoomLayerIndex, setZoomLayerIndex] = useState(0),
-        [areaType, setAreaType] = useState("utla");
+        prevAreaType = usePrevious(currentLocation.areaType);
 
     let hoveredStateId = null;
-    let isAtStart = true;
 
     const filterBy = (date: string) => {
 
@@ -457,15 +472,20 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
                     map.on('click', `choropleth-${layer.label}`, function (e) {
 
-                        setCurrentLocation(e.features[0].properties.code);
+                        setCurrentLocation(prev => ({
+                            ...prev,
+                            currentLocation: e.features[0].properties.code
+                            // areaType: layer.label
+                        }));
+                        setShowInfo(true);
                         // setAreaType(layer.label);
-                        setAreaType(layer.label);
+                        // setAreaType(layer.label);
 
                         const outlineId = map
                             .queryRenderedFeatures({ layers: [layer.label] })
                             .find(item => item.properties.code === e.features[0].properties.code)
                             .id;
-                        console.log(outlineId);
+
                         // if ( e.features.length > 0 ) {
                         if ( hoveredStateId?.id ) {
                             map.setFeatureState(
@@ -486,7 +506,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
                         map.fitBounds(turf.bbox(e.features[0]), {
                             padding: 20,
-                            maxZoom: map.getLayer(layer.label).maxzoom - 0.2
+                            maxZoom: Math.max(map.getLayer(layer.label).minzoom + 0.5, map.getZoom())
                         });
 
                     });
@@ -528,7 +548,6 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                 //
                 // map.on('sourcedata', sourceCallback)
                 map.on("render", (e) => {
-                    // console.log(e);
                     setIsLoading(false)
                 });
 
@@ -563,12 +582,31 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     postcodeData.geometry.coordinates[0],
                     postcodeData.geometry.coordinates[1]
                 ],
-                zoom: 7
+                zoom: 10.8
             });
 
         }
 
     }, [postcodeData, map])
+
+
+    useEffect(() => {
+        setCurrentLocation(prev => ({
+            ...prev,
+            areaType: MapLayers[zoomLayerIndex].label
+        }));
+    }, [ zoomLayerIndex, currentLocation.currentLocation ]);
+
+    // useEffect(() => {
+    //
+    //     if (  )
+    //         setShowInfo(false)
+    //
+    // }, [ currentLocation.areaType, prevAreaType ]);
+
+    // useEffect(() => {
+    //     setShowInfo(true)
+    // }, [currentLocation.currentLocation])
 
     // if ( !(map && layerGroup && data && geoData) )
     //     return <Loading/>;
@@ -602,7 +640,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                            type={ "text" }
                            id={ "postcode" }
                            pattern={ "[A-Za-z]{1,2}\\d{1,2}[A-Za-z]?\\s?\\d{1,2}[A-Za-z]{1,2}" }
-                           placeholder={ "Search by postcode" }/>
+                           placeholder={ "Postcode" }/>
                     <label htmlFor={ "submit-postcode" } className={ "govuk-visually-hidden" }>Search by postcode</label>
                     <input name={ "submit-postcode" } className={ "govuk-button" } id={ "submit-postcode" } type={ "submit" } value={ "" }/>
                 </PostcodeSearchForm>
@@ -612,22 +650,25 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                         <ScaleGroup>
                             <ScaleColor style={{ background: "#fff" }}/>
                             <ScaleValue>{
-                                MapLayers[zoomLayerIndex].label === "msoa"
-                                    ? <>Suppressed</>
+                                currentLocation.areaType === "msoa"
+                                    ? "Suppressed"
                                     : "Missing data"
-                            } </ScaleValue>
+                            }</ScaleValue>
                         </ScaleGroup>
                         {
 
                             MapLayers[zoomLayerIndex].buckets.map( (item, index) => {
+                                const firstValue = MapLayers[zoomLayerIndex].buckets?.[index - 2] ?? 0;
                                 if ( index % 2 > 0 ) {
-                                    return <ScaleGroup>
+                                    return <ScaleGroup key={ `legend-${index}` }>
                                         <ScaleColor style={ { background: MapLayers[zoomLayerIndex].buckets?.[index - 1] ?? 0 } }/>
                                         <ScaleValue>
                                             {
                                                 (MapLayers[zoomLayerIndex].label === "msoa" && index === 1)
                                                     ? 0
-                                                    : MapLayers[zoomLayerIndex].buckets?.[index - 2] ?? 0
+                                                    : firstValue === 0
+                                                    ? 0
+                                                    : firstValue + 1
                                             }
                                             &nbsp;&ndash;&nbsp;
                                             { MapLayers[zoomLayerIndex].buckets?.[index] ?? "+" }
@@ -648,9 +689,11 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
         }
         {
-            areaType !== "msoa"
-                ? <LocalAuthorityCard currentLocation={ currentLocation } areaType={ areaType }/>
-                : <SoaCard currentLocation={ currentLocation } areaType={ areaType }/>
+            (currentLocation.areaType !== prevAreaType || !showInfo)
+                ? null
+                : currentLocation.areaType !== "msoa"
+                ? <LocalAuthorityCard { ...currentLocation } setShowInfo={ setShowInfo }/>
+                : <SoaCard { ...currentLocation } setShowInfo={ setShowInfo }/>
         }
         </MapContainer>
         <span style={{ textAlign: "right" }}>

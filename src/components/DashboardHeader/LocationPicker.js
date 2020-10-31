@@ -31,12 +31,6 @@ const getDefaultOutput = ( pathname ) => {
             ];
 
         case PathNames.deaths:
-            return [
-                // These must be ordered.
-                "nation",
-                "region"
-            ]
-
         case PathNames.cases:
         default:
             return [

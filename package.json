@@ -1,6 +1,6 @@
 {
   "name": "covid-public",
-  "version": "2.0.60",
+  "version": "2.0.69",
   "private": true,
   "homepage": "https://coronavirus-staging.data.gov.uk/",
   "dependencies": {

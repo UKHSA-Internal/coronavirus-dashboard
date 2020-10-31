@@ -28,7 +28,7 @@ import {
 import type { ComponentType } from "react";
 import { Tab } from "../../components/TabLink/TabLink.styles";
 import { useMapData, useMapReference, useMapLookupTable } from "hooks/useMapData";
-import { Plotter } from "components/Plotter/Plotter";
+import { Plotter, XAxis } from "components/Plotter/Plotter";
 import { movingAverage } from "../../common/stats";
 
 
@@ -211,95 +211,23 @@ const SideTable: ComponentType<*> = ({ data=[] }) => {
 };  // Table
 
 
-const GenericMap: ComponentType<*> = ({ areaType, period, metricName, weeklyDates, currentDate }) => {
-
-    // const
-    //     data = useApi({
-    //         conjunctiveFilters: metricName && [
-    //             { key: 'areaType', sign: '=', value: AreaLevel?.[areaType]?.type ?? "nation" },
-    //             { key: 'date', sign: '=', value: weeklyDates[currentDate] },
-    //         ],
-    //         structure: metricName && [
-    //             "areaName",
-    //             "areaCode",
-    //             metricName
-    //             // "date"
-    //         ],
-    //         defaultResponse: [],
-    //         cache: true,
-    //         extraParams: (metricName && period === "all_time")
-    //             ? [
-    //                 { key: 'latestBy', sign: '=', value: metricName }
-    //             ]
-    //             : []
-    //     });
-
-    const data = useMapData(`${areaType}/m`);
-
-    if ( !data ) return <Loading/>
-
-    const
-        minData = min(data, item => item[2]),
-        maxData = max(data, item => item[2]);
-
-    return <Map data={ data }
-                date={ weeklyDates[currentDate] }
-                geoKey={ AreaLevel?.[areaType]?.geoKey ?? "ctry19" }
-                geoJSON={ AreaLevel?.[areaType]?.geoJSON ?? "countries_v2.geojson" }
-                minData={ minData !== maxData ? minData : 0 }
-                maxData={ maxData !== minData ? maxData : 1 }/>
-
-};  // GenericMap
-
-
 const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
 
     const
-        // startDate = '2020-01-03',
-        // endDate = moment().subtract(1, "day").format("YYYY-MM-DD"),
-        // weeklyDates = dateRange(startDate, endDate, 1, 'weeks'),
         params = getParams(query),
-        // metric = getParamValueFor(params, "metric", "cases"),
         period = getParamValueFor(params, "period", "daily"),
-        [ metric, setMetric ] = useState(getParamValueFor(params, "metric", "cases")),
-        metricName = LookupTable?.[metric]?.[period] ?? LookupTable.cases.metric.daily,
-        areaType = getParamValueFor(params, "areaType", "nation"),
-        ukData = useApi({
-                conjunctiveFilters: [
-                    { key: 'areaType', sign: '=', value: "overview" },
-                    { key: 'date', sign: '>=', value: "2020-02-27" }
-                ],
-                structure: [
-                    "date",
-                    "newCasesBySpecimenDate"
-                ],
-                defaultResponse: null,
-                cache: true,
-            });
+        areaType = getParamValueFor(params, "areaType", "nation");
 
     const
-        // ukData = useApi({
-        //    conjunctiveFilters: [
-        //        {key: "areaType", sign: "=", value: "overview"}
-        //    ],
-        //    structure: {
-        //        date: "date",
-        //        value: "newCasesByPublishDate"
-        //    }
-        // }),
-        // refData = useMapReference(areaType, metricName),
         refData = useMapData(`maps/${areaType}_percentiles.json`),
 
         [ dates, setDates ] = useState(null) ,
         [ currentDate, setCurrentDate ] = useState(null),
-        [ dataPath, setDataPath ] = useState(null),
         [ extrema, setExtrema ] = useState({ min: 0, first: .25, second: .5, third: .75, max: 1 });
-        // data = useMapData(dataPath);
 
     useEffect(() => {
         if ( refData?.complete ) {
             setDates(Object.keys(refData).filter(key => key !== "complete"));
-            console.log(refData)
         }
     }, [refData?.complete]);
 
@@ -309,42 +237,11 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
     }, [dates]);
 
     useEffect(() => {
-        if ( currentDate && (refData?.paths ?? null) ) {
-            setDataPath(refData.paths[currentDate]);
-        }
-        else if ( period === "all_time" && areaType !== "msoa" ) {
-            setDataPath(`map_content/${areaType}/${metricName}/incidence_rate.json`)
-        }
-    }, [ refData?.paths ?? null, currentDate, period ]);
-
-    useEffect(() => {
 
         if ( refData?.complete )
             setExtrema(refData?.[currentDate] ?? refData.complete);
 
     }, [currentDate, refData?.complete])
-
-    // useEffect(() => {
-    //     if ( (refData?.value && refData?.rate && data?.rate) || data?.value ) {
-    //         if ( areaType === "msoa" ) {
-    //             setExtrema({
-    //                 min: data.value.min,
-    //                 max: data.value.max
-    //             });
-    //         } else if ( period === "all_time" ) {
-    //             setExtrema({
-    //                 min: 0,
-    //                 max: data.rate.max
-    //             });
-    //             setDataPath(`map_content/${areaType}/${metricName}/incidence_rate.json`)
-    //         } else if ( period === "daily" ) {
-    //             setExtrema({
-    //                 min: 0,
-    //                 max: refData.rate.max
-    //             });
-    //         }
-    //     }
-    // }, [ areaType, period, refData?.rate , refData?.value, data?.rate, data?.value ]);
 
     useEffect(() =>{
         if ( period === "all_time" ) {
@@ -352,72 +249,88 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
         }
     }, [period])
 
-    if ( !dates || !extrema || !ukData ) return <Loading/>
-
-    // console.log(currentDate);
-    // console.log(areaType);
-    // console.log(extrema);
-
-    // console.log({
-    //     x: ukData.map(item => item[0]),
-    //     y: movingAverage(ukData.map(item => item[1]), 7),
-    // })
+    if ( !dates || !extrema ) return <Loading/>
 
     return <Container>
         <Header>
             <p className={ "govuk-body" } style={{ maxWidth: 40 + "em" }}>
-                Browse cases data for specific areas within the UK. The map displays weekly data &mdash; use
-                the slider to select a week-ending date. Click on an area to see more detailed cases data for
-                the most recent time period available including seven day case rates and direction of change.
-                When zoomed to very small areas, data for Northern Ireland, Scotland and Wales are not available.
+                Browse cases data for specific areas within the UK.
             </p>
         </Header>
+        <div className={ "govuk-!-margin-bottom-5" }>
+            {/*<h2 className={ "govuk-heading-m" }>How to use the map?</h2>*/}
+            <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
+                The map displays weekly data, which are updated everyday. Use the slider to
+                select a week-ending date.
+            </p>
+            <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
+                <strong>Local view:</strong> The default zoom level shows Upper Tier Local
+                Authorities (UTLA). Zoom in for more details, including Lower
+                Tier Local Authorities (LTLA) and Middle layer Super Output Areas (MSOA).
+            </p>
+            <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
+                <strong>Suppressed rates:</strong> MSOA level rates are suppressed where
+                there have been fewer than&nbsp;3&nbsp;cases in a seven-day period. This
+                is to protect the privacy of individuals and prevent disclosure.
+            </p>
+            <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
+                <strong>More details:</strong> Click on an area to see more detailed cases
+                data for the most recent time period available &ndash; including seven day
+                case rates and direction of change. When zoomed to very small areas, data
+                for Northern Ireland, Scotland and Wales are not available.
+            </p>
+        </div>
         <MainContainer>
             <>
-                {/*<GenericMap*/}
                 <Map
-                    // data={ data.data }
                      date={ currentDate }
                      geoKey={ AreaLevel?.[areaType]?.geoKey ?? "ctry19" }
                      geoJSON={ AreaLevel?.[areaType]?.geoJSON }
                      geoData={ AreaLevel?.[areaType]?.data }
                      valueIndex={ areaType !== "msoa" ? 2 : 1 }
-                     // currentDate={ currentDate }
                      dates={ dates }
                      extrema={ extrema }
                      colours={ colours }
-                     // minData={ extrema.min }
-                     // maxData={ extrema.max }
                 >
                     <label id={ "month" }
                            className={ "govuk-body" }
                            htmlFor={ "slider" }>
-                        7&ndash;day rolling rate of new cases by specimen date ending
+                        Seven&ndash;day rolling rate of new cases by specimen date ending
                         on <strong>{ moment(currentDate).format("DD MMM YYYY") }</strong>
                     </label>
                     <Slider id="slider"
                         min={ 0 }
                         max={ ( dates.length ?? 0 ) - 1 }
                         value={ dates.indexOf(currentDate) ?? 0 }
+                        length={ dates.length }
+                        onInput={ e => {
+                            e.target.style.background = `linear-gradient(to right, #12407F 0%, #12407F ${ Math.ceil(parseInt(e.target.value) * 100 / dates.length + .7) }%, white  ${ Math.ceil((parseInt(e.target.value) + .7) * 100 / dates.length) }%, white 100%)`
+                        } }
                         onChange={ event => setCurrentDate(dates[parseInt(event.target.value)]) }/>
+                    <XAxis data={[{
+                        x: dates,
+                        y: Array(dates.length).fill(null)
+                        // xticktext: [
+                        //     "2020-03-15"
+                        // ]
+                    }]}/>
                 </Map>
             </>
-
-            {/*<MapContainer areaType={ areaType }*/}
-            {/*              period={ period }*/}
-            {/*              metricName={ metricName }*/}
-            {/*              weeklyDates={ weeklyDates, currentDate/>*/}
-            {/*<SideTable/>*/}
         </MainContainer>
         <div className={ "markdown govuk-!-margin-top-5" } style={{ maxWidth: 40 + "em" }}>
             <p>
-                Seven day rates are expressed per 100,000 population and are calculated
+                Seven&ndash;day rates are expressed per 100,000 population and are calculated
                 by dividing the seven day count by the area population and multiplying
                 by 100,000.
+            </p>
+            <p>
+                All data used in the map are available in the public domain and may be
+                downloaded from the relevant section of the website or via the API.
             </p>
             <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Attributions</h3>
             <div className={ "govuk-body-s" }>
                 <ul className={ "govuk-list govuk-list--bullet govuk-body-s" }>
+                    <li>Contains MSOA names &copy; Open Parliament copyright and database right 2020</li>
                     <li>Contains Ordnance Survey data &copy; Crown copyright and database right 2020</li>
                     <li>Contains Royal Mail data &copy; Royal Mail copyright and database right 2020</li>
                     <li>Contains Public Health England data &copy; Crown copyright and database right 2020</li>
@@ -427,7 +340,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                 <p>
                     Lookup products and data are supplied under the Open Government Licence.
                     You must use the above copyright statements when you reproduce or use the
-                    materials, data, or digital boundaries or postcode products used in this
+                    materials, data, digital boundaries, or postcode products used in this
                     page.
                 </p>
             </div>

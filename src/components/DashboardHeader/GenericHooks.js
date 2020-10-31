@@ -63,23 +63,6 @@ export const getOrder = ( history ) => {
             };
 
         case PathNames.deaths:
-            return {
-            "nation": {
-                key: "nation",
-                label: "Nations",
-                lastUpdate: "2020-07-07",
-                suggestion: "nations",
-                parent: null
-            },
-            "region": {
-                key: "region",
-                label: "Regions",
-                lastUpdate: "2020-07-07",
-                suggestion: "regions",
-                parent: "nation",
-            }
-        };
-
         case PathNames.cases:
         default:
             return defaultOrder;

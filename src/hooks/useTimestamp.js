@@ -22,12 +22,12 @@ const useTimestamp = () => {
 
                 if ( status < 400 ) {
 
-                    if ( cache )
-                        cache.current["timestamp"] = data;
+                    cache.current.timestamp = data;
 
-                    setTimestamp(data)
+                    setTimestamp(cache.current.timestamp)
 
                 } else {
+                    console.error(`Failed timestamp request - status ${status}`)
                     setTimestamp("")
                 }
 
