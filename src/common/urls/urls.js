@@ -25,7 +25,7 @@ const URLs = {
     mainApi:         `https://${ REACT_APP_API_ENDPOINT  }/v1/data`,
     soaApi:          `https://${ REACT_APP_API_ENDPOINT  }/v1/soa`,
     modals:          `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/`,
-    postcode:        `https://api.coronavirus.data.gov.uk/code`,
+    postcode:        `https://api.coronavirus.data.gov.uk/v1/code`,
     latestCases: {
         csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-cases_latest.csv`,
         json: `${ REACT_APP_BASE_URL }/downloads/json/coronavirus-cases_latest.json`
