@@ -99,14 +99,6 @@ const LastUpdateTime = () => {
                     </a> of the new service.
                 </p>
             </Announcement>
-            {/*<Announcement firstDisplayDate={{ year: 2020, month: 10, day: 3, hour: 14 }}*/}
-            {/*              lastDisplayDate={{ year: 2021, month: 10, day: 3, hour: 18 }}>*/}
-            {/*    <p className={ "govuk-body" }>*/}
-            {/*        Owing to technical difficulties, we have not received cases data for*/}
-            {/*        England. We will update the service as soon as possible.*/}
-            {/*    </p>*/}
-            {/*</Announcement>*/}
-
 
             { parsedTimestamp.start.day === 2
                 ? <Announcement firstDisplayDate={{ year: 2020, month: 10, day: 3, hour: 15 }}
