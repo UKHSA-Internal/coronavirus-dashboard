@@ -99,27 +99,23 @@ const LastUpdateTime = () => {
                     </a> of the new service.
                 </p>
             </Announcement>
-            <Announcement firstDisplayDate={{ year: 2020, month: 9, day: 31, hour: 16 }}
-                          lastDisplayDate={{ year: 2021, month: 10, day: 2, hour: 17 }}>
-                <p className={ "govuk-body" }>
-                    Please note: In line with our standard reporting procedure, capacity
-                    figures for Friday, Saturday and Sunday will be updated on the
-                    dashboard on Monday.
-                </p>
-            </Announcement>
-
-
-            {/*{ parsedTimestamp.start.day === 3*/}
-            {/*    ? <Announcement firstDisplayDate={ parsedTimestamp.start }*/}
-            {/*              lastDisplayDate={{ year: 2020, month: 10, day: 5, hour: 15, minute: 55 }}>*/}
+            {/*<Announcement firstDisplayDate={{ year: 2020, month: 10, day: 3, hour: 14 }}*/}
+            {/*              lastDisplayDate={{ year: 2021, month: 10, day: 3, hour: 18 }}>*/}
             {/*    <p className={ "govuk-body" }>*/}
-            {/*        Due to a technical issue, which has now been resolved, there has been*/}
-            {/*        a delay in publishing a number of COVID-19 cases to the dashboard in*/}
-            {/*        England. This means the total reported over the coming days will include*/}
-            {/*        some additional cases from the period between 24 September and 1 October,*/}
-            {/*        increasing the number of cases reported.*/}
+            {/*        Owing to technical difficulties, we have not received cases data for*/}
+            {/*        England. We will update the service as soon as possible.*/}
             {/*    </p>*/}
-            {/*</Announcement> : null}*/}
+            {/*</Announcement>*/}
+
+
+            { parsedTimestamp.start.day === 2
+                ? <Announcement firstDisplayDate={{ year: 2020, month: 10, day: 3, hour: 15 }}
+                          lastDisplayDate={{ year: 2020, month: 10, day: 3, hour: 18 }}>
+                <p className={ "govuk-body" }>
+                    Owing to technical difficulties, we have not received cases data for
+                    England. We will update the service as soon as possible.
+                </p>
+            </Announcement> : null}
 
             {
                 timestamp
