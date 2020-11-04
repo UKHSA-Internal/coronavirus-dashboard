@@ -80,6 +80,7 @@ const LastUpdateTime = () => {
                     We are awaiting data for cases in England. We will update the data as soon as possible.
                 </p>
             </Announcement> : null}
+
             <Announcement firstDisplayDate={{ year: 2020, month: 9, day: 10, hour: 16 }}
                                   lastDisplayDate={{ year: 2020, month: 9, day: 11, hour: 7 }}>
                 <p className={ "govuk-body" }>
@@ -87,6 +88,7 @@ const LastUpdateTime = () => {
                     unresponsive between 10pm Saturday (10&nbsp;Oct) and 6am Sunday (11&nbsp;Oct).
                 </p>
             </Announcement>
+
             <Announcement firstDisplayDate={{ year: 2020, month: 9, day: 10, hour: 16 }}
                                   lastDisplayDate={{ year: 2021, month: 9, day: 11, hour: 7 }}>
                 <p className={ "govuk-body" }>
@@ -100,9 +102,10 @@ const LastUpdateTime = () => {
                 </p>
             </Announcement>
 
+
             { parsedTimestamp.start.day === 2
                 ? <Announcement firstDisplayDate={{ year: 2020, month: 10, day: 3, hour: 15 }}
-                          lastDisplayDate={{ year: 2020, month: 10, day: 3, hour: 18 }}>
+                          lastDisplayDate={{ year: 2020, month: 10, day: 3, hour: 23 }}>
                 <p className={ "govuk-body" }>
                     Owing to technical difficulties, we have not received cases data for
                     England. We will update the service as soon as possible.
@@ -182,7 +185,6 @@ const App = ({ location: { pathname } }) => {
     }, [ pathname ]);
 
     return <>
-        {/*<CookieBanner/>*/}
         <Header/>
         { layout === "mobile" && <Navigation layout={ layout }/> }
         <div className={ "govuk-width-container" }>
