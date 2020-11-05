@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { Switch, Route, withRouter } from 'react-router';
+import { Switch, Route, withRouter, Redirect } from 'react-router';
 import Header from "components/Header";
 // import DailySummary from 'pages/DailySummary';
 import BackToTop from 'components/BackToTop';
@@ -113,18 +113,19 @@ const App = ({ location: { pathname } }) => {
     return <>
         {/*<CookieBanner/>*/}
         <Header/>
-        <div className="govuk-phase-banner" style={{ padding: ".7rem 30px" }}>
-            <p className="govuk-phase-banner__content">
-                <strong className="govuk-tag govuk-phase-banner__content__tag">
-                    experimental
-                </strong>
-                <span className="govuk-phase-banner__text">
-                    This is a new version of the
-                    service &mdash; your <a className="govuk-link govuk-link--no-visited-state"
-                                            href="mailto:coronavirus-tracker@phe.gov.uk?subject=Feedback on version 3">feedback</a> will
-                    help us to improve it.</span>
-            </p>
-        </div>
+        {/*<div className="govuk-phase-banner" style={{ padding: ".7rem 30px" }}>*/}
+        {/*    <p className="govuk-phase-banner__content">*/}
+        {/*        <strong className="govuk-tag govuk-phase-banner__content__tag">*/}
+        {/*            experimental*/}
+        {/*        </strong>*/}
+        {/*        <span className="govuk-phase-banner__text">*/}
+        {/*            This is a new version of the*/}
+        {/*            service &mdash; your <a className="govuk-link govuk-link--no-visited-state"*/}
+        {/*                                    href="mailto:coronavirus-tracker@phe.gov.uk?subject=Feedback on version 3">feedback</a> will*/}
+        {/*            help us to improve it.</span>*/}
+        {/*    </p>*/}
+        {/*</div>*/}
+
         { layout === "mobile" && <Navigation layout={ layout }/> }
         <div className={ "govuk-width-container" }>
             <LastUpdateTime/>
@@ -145,13 +146,12 @@ const App = ({ location: { pathname } }) => {
                         <Suspense fallback={ <Loading/> }>
                             <DashboardHeader/>
                             <Switch>
-                                {/*<Route path="/" exact render={ () => window. }/>*/}
+                                <Route path="/details" exact render={ () => <Redirect to={ "/" }/> }/>
                                 <Route path="/details/testing" exact component={ Tests }/>
                                 <Route path="/details/cases" exact component={ Cases }/>
                                 <Route path="/details/healthcare" exact component={ Healthcare }/>
                                 <Route path="/details/deaths" exact component={ Deaths }/>
                                 <Route path="/details/interactive-map" component={ InteractiveMap }/>
-
 
                                 <Route path="/details/about-data" exact component={ About }/>
                                 {/*<Route path="/archive" component={ Archive }/>*/}
