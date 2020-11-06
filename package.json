@@ -1,8 +1,8 @@
 {
-  "name": "covid-public",
-  "version": "2.0.71",
+  "name": "uk-covid19-dashboard",
+  "version": "2.0.77",
   "private": true,
-  "homepage": "https://coronavirus-staging.data.gov.uk/",
+  "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
     "d3-array": "^2.6.0",
     "axios": "^0.20.0",
