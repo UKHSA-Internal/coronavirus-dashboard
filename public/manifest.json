@@ -1,6 +1,6 @@
 {
-  "short_name": "covid-19-tracking",
-  "name": "Tracking Coronavirus (COVID-19)",
+  "short_name": "COVID-19 Dashboard",
+  "name": "Official UK Coronavirus Dashboard",
   "icons": [
     {
       "src": "favicon.ico",
@@ -13,7 +13,7 @@
       "sizes": "80x80"
     }
   ],
-  "start_url": "/details",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
