@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { Switch, Route, withRouter, Redirect } from 'react-router';
+import { Switch, Route, withRouter, Redirect, useParams } from 'react-router';
 import Header from "components/Header";
 // import DailySummary from 'pages/DailySummary';
 import BackToTop from 'components/BackToTop';
@@ -97,6 +97,19 @@ const Navigation = ({ layout, ...props }) => {
 };  // MobileNavigation
 
 
+const RedirectToDetails = () => {
+
+    const urlParams = useParams();
+
+    if ( urlParams.page.indexOf("details") < 0 ) {
+        return <Redirect to={ `/details/${ urlParams.page }` }/>;
+    }
+
+    window.location.href = "/";
+
+};  // RedirectToDetails
+
+
 const App = ({ location: { pathname } }) => {
 
     const
@@ -146,7 +159,7 @@ const App = ({ location: { pathname } }) => {
                         <Suspense fallback={ <Loading/> }>
                             <DashboardHeader/>
                             <Switch>
-                                <Route path="/details" exact render={ () => <Redirect to={ "/" }/> }/>
+                                {/*<Route path="/details" exact render={ () => <Redirect to={ "/" }/> }/>*/}
                                 <Route path="/details/testing" exact component={ Tests }/>
                                 <Route path="/details/cases" exact component={ Cases }/>
                                 <Route path="/details/healthcare" exact component={ Healthcare }/>
@@ -158,6 +171,7 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
                                 <Route path="/details/developers-guide" exact component={ ApiDocs }/>
+                                <Route path={ "/:page" } component={ RedirectToDetails }/>
                             </Switch>
                         </Suspense>
                     </main>
