@@ -44,7 +44,7 @@ jobs:
 
 
     - name: 'Deploy to Azure Web App'
-      uses: azure/webapps-deploy@v1
+      uses: azure/webapps-deploy@v2.1.3
       with:
         app-name: 'covid19static'
         slot-name: 'production'
