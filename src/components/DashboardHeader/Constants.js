@@ -8,6 +8,7 @@ export const PathNameMapper = {
     "/details/healthcare": "Healthcare",
     "/details/deaths": "Deaths",
     "/details/about-data": "About the data",
+    "/details/download": "Download the data",
     "/details/cookies": "Cookies",
     "/details/accessibility": "Accessibility",
     "/details/archive": "Archive",
@@ -36,6 +37,7 @@ export const PathNames = {
 export const NoPickerPaths = [
     "/details/",
     "/details/interactive-map",
+    "/details/download",
     "/details/about-data",
     "/details/cookies",
     "/details/accessibility",

@@ -13,12 +13,19 @@ import {
     Markdown,
     Article
 } from './Download.styles';
+import { Radios } from 'govuk-react-jsx/govuk/components/radios';
+import { Radio } from 'components/GovUk';
 
-const DataFormatOptions = [
+const dataFormatOptions = {   
+    choices: [
+        { label: "CSV", value: "csv" },
+        { label: "JSON", value: "json"},
+        { label: "XML", value: "xml"},
+        { label: "JSONL", value: "jsonl"}     
+    ]
+}
 
-]
-
-
+    
 const SelectOptions = {
     control: ( base, state ) => ({
         ...base,
@@ -54,9 +61,28 @@ const Download: ComponentType<Props> = ({}: Props) => {
         const [dataReleaseDate, setDataReleaseDate] = useState(null); // set to today as default
         const [dataFormat, setDataFormat] = useState('CSV'); // use array
 
+        const handleAreaTypeChange = (item) => {
+            setAreaType({ areaType: item.value });
+            setAreaNames([]);
+            setMetrics([]);
+        }
+
+        const handleAreaNameChange = (item) => {
+            setMetrics([]);
+        }
+
+        const handleMetricChange = (item) => {
+        }
+
+        const getDropDownData = () => {
+            setAreaType([]);
+            setAreaNames([]);
+            setMetrics([]);
+        }
 
         useEffect(() => {
             setLoading(false);
+            getDropDownData();
         }, []);
 
         if ( loading ) return <Loading>Loading&hellip;</Loading>
@@ -68,7 +94,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
                         aria-describedby={ 'aria-type-description' }>
                         <Select options={[]}
                                 value={areaType}
-                                onChange={ item => setAreaType({ areaType: item.value }) }
+                                onChange={handleAreaTypeChange}
                                 styles={ SelectOptions }
                                 isLoading={false}
                                 placeholder={ "Select area type" }
@@ -79,23 +105,36 @@ const Download: ComponentType<Props> = ({}: Props) => {
                         aria-describedby={ 'aria-type-description' }>
                         <Select options={[]}
                                 value={areaNames}
-                                //onChange={ item => setAreaNames({ areaType: item.value }) }
+                                onChange={handleAreaNameChange}
                                 styles={ SelectOptions }
                                 isLoading={false}
                                 placeholder={ "Select area(s)" }
-                                className={ 'select' }/>
+                                className={ 'select' }
+                                isMulti/>
                     </div>
 
                     <div aria-labelledby={ "aria-type-label" }
                         aria-describedby={ 'aria-type-description' }>
                         <Select options={[]}
                                 value={metrics}
-                                //onChange={ item => setMetrics({ areaType: item.value }) }
+                                onChange={handleMetricChange}
                                 styles={ SelectOptions }
                                 isLoading={false}
                                 placeholder={ "Select Metrics" }
-                                className={ 'select' }/>
+                                className={ 'select' }
+                                isMulti/>
                     </div>
+
+                    <div aria-labelledby={ "aria-type-label" }
+                        aria-describedby={ 'aria-type-description' }>
+                              <Radio
+                                  heading={"Data Format"}
+                                  value={dataFormat}
+                                  options={dataFormatOptions}
+                                  setValue={setDataFormat}
+                              />
+                     </div>        
+
 
 
                </div>
