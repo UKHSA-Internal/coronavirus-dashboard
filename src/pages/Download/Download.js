@@ -90,6 +90,12 @@ const Download: ComponentType<Props> = ({}: Props) => {
         return (
                 <div>
                 
+                <div className="govuk-form-group govuk-!-margin-bottom-0">
+                    <span 
+                        id={ "aria-type-label" }
+                        className={ "govuk-label govuk-label--s" }>
+                            Area type
+                    </span>
                     <div aria-labelledby={ "aria-type-label" }
                         aria-describedby={ 'aria-type-description' }>
                         <Select options={[]}
@@ -100,9 +106,16 @@ const Download: ComponentType<Props> = ({}: Props) => {
                                 placeholder={ "Select area type" }
                                 className={ 'select' }/>
                     </div>
+                </div>
 
-                    <div aria-labelledby={ "aria-type-label" }
-                        aria-describedby={ 'aria-type-description' }>
+                <div className="govuk-form-group govuk-!-margin-bottom-0">
+                    <span 
+                        id={ "aria-name-label" }
+                        className={ "govuk-label govuk-label--s" }>
+                            Area names
+                    </span>
+                    <div aria-labelledby={ "aria-name-label" }
+                        aria-describedby={ 'aria-name-description' }>
                         <Select options={[]}
                                 value={areaNames}
                                 onChange={handleAreaNameChange}
@@ -112,9 +125,17 @@ const Download: ComponentType<Props> = ({}: Props) => {
                                 className={ 'select' }
                                 isMulti/>
                     </div>
+                </div>
 
-                    <div aria-labelledby={ "aria-type-label" }
-                        aria-describedby={ 'aria-type-description' }>
+                <div className="govuk-form-group govuk-!-margin-bottom-0">
+                    <span 
+                        id={ "aria-metric-label" }
+                        className={ "govuk-label govuk-label--s" }>
+                            Metrics
+                    </span>
+
+                    <div aria-labelledby={ "aria-metric-label" }
+                        aria-describedby={ 'aria-metric-description' }>
                         <Select options={[]}
                                 value={metrics}
                                 onChange={handleMetricChange}
@@ -124,6 +145,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
                                 className={ 'select' }
                                 isMulti/>
                     </div>
+                </div>
 
                     <div aria-labelledby={ "aria-type-label" }
                         aria-describedby={ 'aria-type-description' }>
