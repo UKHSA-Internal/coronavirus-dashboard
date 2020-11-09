@@ -93,26 +93,32 @@ const Download: ComponentType<Props> = ({}: Props) => {
         const [throttleMesage, setThrottleMessage] = useState(false);
         const [downloadButton, setDownloadButton] = useState(false);
         const [archiveDate, setArchiveDate] = useState(null);
-        const [archivedDateDisabled, setArchivedDateDisabled] = useState(false);
+        const [archivedDateDisabled, setArchivedDateDisabled] = useState(true);
 
         const handleAreaTypeChange = (item) => {
-            setAreaType(item);
+            setAreaType(item.value);
             setAreaNames([]);
         };
 
         const handleAreaNameChange = (item) => {
-            setAreaNames(item);
+            setAreaNames(item.value);
         };
 
         const handleMetricChange = (item) => {
             if(metrics.length <= MAX_METRICS) {
-                setMetrics(item);
+                setMetrics(item.value);
             }
         };
 
         const handleDataReleaseDate = (item) => {
             setDataReleaseDate(item);
             setArchiveDate(null)
+            if (item === 'archive') {
+                setArchivedDateDisabled(false);
+            }
+            else {
+                setArchivedDateDisabled(true);
+            }
         }
 
         const handleArchiveDateChange = (archiveDate) => {
@@ -126,7 +132,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
         const getDropDownData = () => {
             const metricsURL = URLs.metrics;
             const getMetricsData = async () => {
-                const { data } = await axios.get(metricsURL);
+                const { data } = await axios.get("api_variables.json", { baseURL: metricsURL });
                 let m = [];
                 for (var key of Object.keys(data)) {
                     m.push({"value": key, "label": key});
@@ -155,22 +161,21 @@ const Download: ComponentType<Props> = ({}: Props) => {
 
         const buildDownloadLink = () => {
             const baseUrl = URLs.downloadData;
-            let downloadUrl = baseUrl + "areaType=" + areaType.value;
+            let downloadUrl = baseUrl + "?areaType=" + areaType;
             if (areaNames.length > 0) {
                 areaNames.forEach(name => {
-                    downloadUrl = downloadUrl + "&areaName=" + name.value;
+                    downloadUrl = downloadUrl + "&areaName=" + name;
                 });
             };
            
             if (dataReleaseDate === 'archive') {
-                alert  (archiveDate)
                 downloadUrl = downloadUrl + "&release=" + formatDate(archiveDate, "YYYY-MM-DD");
             }
             else if (dataReleaseDate === 'today') {
                 downloadUrl = downloadUrl + "&release=" + formatDate(new Date(), "YYYY-MM-DD");
             };
             metrics.forEach(metric => {
-                downloadUrl = downloadUrl + "&metric=" + metric.value;
+                downloadUrl = downloadUrl + "&metric=" + metric;
             });
             if (dataFormat) {
                 downloadUrl = downloadUrl + "&format=" + dataFormat;
@@ -231,7 +236,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
                         </div>
 
                         <div className="govuk-grid-row govuk-!-margin-top-2">
-                            <div className="govuk-grid-column-one-quarter">
+                            <div className="govuk-grid-column-one-half">
                                 <span 
                                     id={ "aria-name-label" }
                                     className={ "govuk-label govuk-label--s" }>
@@ -253,7 +258,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
 
 
                         <div className="govuk-grid-row govuk-!-margin-top-2">
-                            <div className="govuk-grid-column-one-quarter">
+                            <div className="govuk-grid-column-one-half">
                                 <span 
                                     id={ "aria-metric-label" }
                                     className={ "govuk-label govuk-label--s" }>
