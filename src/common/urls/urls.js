@@ -38,6 +38,8 @@ const URLs = {
     accessibility: `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/accessibility.md`,
     newWebsite:    `https://${ REACT_APP_MAIN_CDN      }/public/assets/new_website.md`,
     archiveList:   `https://${ REACT_APP_DOWNLOADS_CDN }/downloads?restype=container&comp=list`,
+    metrics:       "https://coronavirus.data.gov.uk/public/assets/dispatch/api_variables.json",
+    downloadData:  "https://api.coronavirus.data.gov.uk/v2/data?",
     baseUrl:        REACT_APP_BASE_URL
 
 };

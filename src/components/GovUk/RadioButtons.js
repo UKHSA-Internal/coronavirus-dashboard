@@ -3,16 +3,21 @@ import { Radios } from "govuk-react-jsx";
 import type { ComponentType } from "react";
 
 
-export const Radio: ComponentType<*> = ({ heading, options, value, setValue, ...props }) => {
+export const Radio: ComponentType<*> = ({ heading, options, value, setValue, inline=true, ...props }) => {
 
     if ( !heading ) return null;
 
     const radioId = heading.toLowerCase().replace(/[^a-z0-9_]+/g, "-");
 
+    let clsName = "govuk-!-margin-bottom-0";
+    if (inline) {
+        clsName = clsName + " " + "govuk-radios--inline";
+    }
+
     return <Radios
         value={ value }
         onChange={ e => setValue(e.target.value) }
-        className={ `govuk-radios--inline govuk-!-margin-bottom-0` }
+        className={ clsName }
         items={
             options
                 .choices

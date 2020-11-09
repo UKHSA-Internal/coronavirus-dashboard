@@ -1,6 +1,6 @@
 // @flow
 
-export interface AboutState {
+export interface DownloadState {
 
     loading: true,
     data: string
@@ -8,7 +8,7 @@ export interface AboutState {
 } // ArchiveState
 
 
-export interface AboutProps {
+export interface DownloadProps {
 
     value: string
 

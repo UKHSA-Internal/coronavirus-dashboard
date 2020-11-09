@@ -8,7 +8,7 @@ export const PathNameMapper = {
     "/details/healthcare": "Healthcare",
     "/details/deaths": "Deaths",
     "/details/about-data": "About the data",
-    "/details/download": "Download the data",
+    "/details/download": "Data download",
     "/details/cookies": "Cookies",
     "/details/accessibility": "Accessibility",
     "/details/archive": "Archive",
@@ -64,3 +64,12 @@ export const PathWithHeader = [
     "/details/new-service",
     "/details/developers-guide"
 ];
+
+export const AreaTypes = [
+    { value: "overview", label: "overview" },
+    { value: "nation", label: "nation" },
+    { value: "region", label: "region" },
+    { value: "nhsRegion", label: "nhsRegion" },
+    { value: "utla", label: "utla" },
+    { value: "ltla", label: "ltla" }
+]

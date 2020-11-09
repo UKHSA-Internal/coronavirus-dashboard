@@ -56,7 +56,7 @@ const SideNavMobile: ComponentType<Props> = ({ location: { pathname }}: Props) =
 
                             <SideNavListItem className={`${pathname === '/details/download' ? "moj-side-navigation__item--active" : ""}`}>
                                 <Link to={ "/details/download" }
-                                onClick={ () => setMenuState(state => !state) }>Download the data</Link>
+                                onClick={ () => setMenuState(state => !state) }>Download data</Link>
                             </SideNavListItem>
                             <SideNavListItem className={`${pathname === '/details/about-data' ? "moj-side-navigation__item--active" : ""}`}>
                                 <Link to={ "/details/about-data" }
