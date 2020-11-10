@@ -1,9 +1,8 @@
 // @flow
 
 import React, { Component, useState, useEffect } from 'react';
-import Select from "react-select"; 
 
-import axios from "axios";
+import Select from "react-select"; 
 
 import DayPickerInput from "react-day-picker/DayPickerInput";
 
@@ -18,24 +17,17 @@ import URLs from "common/urls";
 
 import { DownloadProps, DownloadState } from './Download.types';
 import {
-    Loading,
-    Markdown,
-    Article
+    Loading
 } from './Download.styles';
 import { Radios } from 'govuk-react-jsx/govuk/components/radios';
 import { Radio } from 'components/GovUk';
-
-
-const DOWNLOAD_LINK = "http://localhost:3000";
-
-const AreaNames = [
-    { value: "England", label: "England" },
-    { value: "Northern Ireland", label: "Northern Ireland" },
-    { value: "Scotland", label: "Scotland" },
-    { value: "Wales", label: "Wales" },
-]
+import useDownloadData, {disabledDownload} from 'hooks/useDownloadData';
 
 const MAX_METRICS = 5;
+
+const enabledDownload = {
+    color: 'currentColor'
+};
 
 const dataFormatOptions = {   
     choices: [
@@ -46,14 +38,13 @@ const dataFormatOptions = {
     ]
 }
 
-
 const dataReleaseDateOptions = {   
     choices: [
         { label: "Today", value: "today" },
         { label: "Archive", value: "archive"} 
     ]
 }
-    
+
 const SelectOptions = {
     control: ( base, state ) => ({
         ...base,
@@ -82,22 +73,38 @@ const SelectOptions = {
 const Download: ComponentType<Props> = ({}: Props) => {
 
         
-        const [loading, setLoading] = useState(true);
-        const [areaType, setAreaType] = useState('');
-        const [areaNames, setAreaNames] = useState([]);
-        const [areaNameOptions, setAreaNameOptions] = useState([]);
-        const [metricOptions, setMetricOptions] = useState([]);
-        const [metrics, setMetrics] = useState([]);
-        const [dataReleaseDate, setDataReleaseDate] = useState('today');
-        const [dataFormat, setDataFormat] = useState('json');
-        const [throttleMesage, setThrottleMessage] = useState(false);
-        const [downloadButton, setDownloadButton] = useState(false);
-        const [archiveDate, setArchiveDate] = useState(null);
-        const [archivedDateDisabled, setArchivedDateDisabled] = useState(true);
+       
+        const { loading, 
+                setLoading,
+                areaType, 
+                setAreaType, 
+                areaNames, 
+                setAreaNames,
+                areaNameOptions, 
+                setAreaNameOptions, 
+                metricOptions, 
+                setMetricOptions, 
+                metrics, 
+                setMetrics,
+                dataReleaseDate, 
+                setDataReleaseDate,
+                dataFormat, 
+                setDataFormat,
+                throttleMesage, 
+                setThrottleMessage,
+                archiveDate, 
+                setArchiveDate,
+                archivedDateDisabled, 
+                setArchivedDateDisabled,
+                isEnabled, 
+                setIsEnabled } = useDownloadData()
 
         const handleAreaTypeChange = (item) => {
             setAreaType(item.value);
             setAreaNames([]);
+            if (metrics.length > 0) {
+                setIsEnabled(enabledDownload);
+            }
         };
 
         const handleAreaNameChange = (item) => {
@@ -107,6 +114,9 @@ const Download: ComponentType<Props> = ({}: Props) => {
         const handleMetricChange = (item) => {
             if(metrics.length <= MAX_METRICS) {
                 setMetrics(item.value);
+                if (areaType.length > 0) {
+                    setIsEnabled(enabledDownload);
+                }
             }
         };
 
@@ -129,20 +139,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
             setDataFormat(format);
         };
 
-        const getDropDownData = () => {
-            const metricsURL = URLs.metrics;
-            const getMetricsData = async () => {
-                const { data } = await axios.get("api_variables.json", { baseURL: metricsURL });
-                let m = [];
-                for (var key of Object.keys(data)) {
-                    m.push({"value": key, "label": key});
-                }
-                setMetricOptions(m);
-            }
-    
-            getMetricsData();
-            setAreaNameOptions(AreaNames);
-        };
+       
 
         const showThrottleMessage = () => {
             setThrottleMessage(true);
@@ -153,10 +150,9 @@ const Download: ComponentType<Props> = ({}: Props) => {
         }
         
         const downloadData = () => {
-            setDownloadButton(true);
+            setIsEnabled(disabledDownload)
             showThrottleMessage();
             setTimeout(() => { cancelThrottleMessage(); }, 10000);
-            setDownloadButton(false);
         }
 
         const buildDownloadLink = () => {
@@ -187,10 +183,6 @@ const Download: ComponentType<Props> = ({}: Props) => {
             
         }
 
-        useEffect(() => {
-            setLoading(false);
-            getDropDownData();
-        }, []);
 
         if ( loading ) return <Loading>Loading&hellip;</Loading>
 
@@ -344,7 +336,10 @@ const Download: ComponentType<Props> = ({}: Props) => {
 
                         <div className="govuk-grid-row govuk-!-margin-top-2">
                             <div className="govuk-grid-column-one-quarter">
-                                <button onClick={buildDownloadLink}>Download data</button>
+                                <a  style={isEnabled}
+                                    href={`build`}
+                                    target="_blank">Download data
+                                </a>
                             </div>
                         </div>
 
