@@ -6,7 +6,7 @@ import Select from "react-select";
 
 import DayPickerInput from "react-day-picker/DayPickerInput";
 
-import {AreaTypes} from "../../components/DashboardHeader/Constants";
+import {AreaTypeOptions} from "../../components/DashboardHeader/Constants";
 
 import MomentLocaleUtils, {
     formatDate,
@@ -70,14 +70,20 @@ const SelectOptions = {
     })
 };
 
-const Download: ComponentType<Props> = ({}: Props) => {
+const ExtendedOptionStyles = Object.create(SelectOptions);
+ExtendedOptionStyles.control = ( base, state ) => ({
+    ...base,
+    boxShadow: state.isFocused ? "0 0 0 3px #fd0" : "none",
+    height: "100px",
+    minHeight: "100px"
+});
 
-        
+const Download: ComponentType<Props> = ({}: Props) => {
        
         const { loading, 
                 setLoading,
-                areaType, 
-                setAreaType, 
+                areaType,
+                setAreaType,
                 areaNames, 
                 setAreaNames,
                 areaNameOptions, 
@@ -97,27 +103,37 @@ const Download: ComponentType<Props> = ({}: Props) => {
                 archivedDateDisabled, 
                 setArchivedDateDisabled,
                 isEnabled, 
-                setIsEnabled } = useDownloadData()
+                setIsEnabled,
+                isButtonDisabled,
+                setIsButtonDisabled } = useDownloadData();
+
+
+        const checkValidData = () => {
+
+            if (areaType && metrics && Object.values(metrics).length > 0) {
+                setIsEnabled(enabledDownload);
+                setIsButtonDisabled(false);
+            }
+            else {
+                setIsEnabled(disabledDownload);
+                setIsButtonDisabled(true);
+            }
+
+        }
 
         const handleAreaTypeChange = (item) => {
-            setAreaType(item.value);
-            setAreaNames([]);
-            if (metrics.length > 0) {
-                setIsEnabled(enabledDownload);
-            }
-        };
+            setAreaType(item);
+            checkValidData()
+        }
 
         const handleAreaNameChange = (item) => {
-            setAreaNames(item.value);
+            setAreaNames(item);
+            checkValidData()
         };
 
         const handleMetricChange = (item) => {
-            if(metrics.length <= MAX_METRICS) {
-                setMetrics(item.value);
-                if (areaType.length > 0) {
-                    setIsEnabled(enabledDownload);
-                }
-            }
+            setMetrics(item);
+            checkValidData();
         };
 
         const handleDataReleaseDate = (item) => {
@@ -129,59 +145,36 @@ const Download: ComponentType<Props> = ({}: Props) => {
             else {
                 setArchivedDateDisabled(true);
             }
+            checkValidData();
         }
 
         const handleArchiveDateChange = (archiveDate) => {
             setArchiveDate(archiveDate);
+            checkValidData();
         };
 
         const handletDataFormatChange = (format) => {
             setDataFormat(format);
+            checkValidData();
         };
-
-       
-
-        const showThrottleMessage = () => {
-            setThrottleMessage(true);
-        };
-
-        const cancelThrottleMessage = () => {
-            setThrottleMessage(false);
-        }
         
-        const downloadData = () => {
-            setIsEnabled(disabledDownload)
-            showThrottleMessage();
-            setTimeout(() => { cancelThrottleMessage(); }, 10000);
-        }
+        const showTrottleMessage = () => {
+            const href  = URLs.downloadData + 
+                "?areaType=" + (areaType && areaType.value ? areaType.value : "") +
+              (areaNames && Object.values(areaNames).length > 0 ?
+                areaNames.map(areaName => "&areaName=" + areaName.value) : ""
+              ) +
+              (metrics && Object.values(metrics).length > 0 ?
+                metrics.slice(0, MAX_METRICS).map(metric => "&metric=" + metric.value) : ""
+              ) +
+              (dataReleaseDate == 'today' ? "&release=" + formatDate(new Date(), "YYYY-MM-DD") : 
+               dataReleaseDate == 'archive' ? "&release=" + formatDate(archiveDate, "YYYY-MM-DD") : "") +
+              (dataFormat ? "&format=" + dataFormat : "json");
 
-        const buildDownloadLink = () => {
-            const baseUrl = URLs.downloadData;
-            let downloadUrl = baseUrl + "?areaType=" + areaType;
-            if (areaNames.length > 0) {
-                areaNames.forEach(name => {
-                    downloadUrl = downloadUrl + "&areaName=" + name;
-                });
-            };
-           
-            if (dataReleaseDate === 'archive') {
-                downloadUrl = downloadUrl + "&release=" + formatDate(archiveDate, "YYYY-MM-DD");
-            }
-            else if (dataReleaseDate === 'today') {
-                downloadUrl = downloadUrl + "&release=" + formatDate(new Date(), "YYYY-MM-DD");
-            };
-            metrics.forEach(metric => {
-                downloadUrl = downloadUrl + "&metric=" + metric;
-            });
-            if (dataFormat) {
-                downloadUrl = downloadUrl + "&format=" + dataFormat;
-            }
-            else {
-                downloadUrl = downloadUrl + "&format=" + "json";
-            }
-            alert(downloadUrl);
-            
-        }
+            window.open(href)
+            setThrottleMessage(true);
+            setTimeout(() => { setThrottleMessage(false); }, 20000);
+        };
 
 
         if ( loading ) return <Loading>Loading&hellip;</Loading>
@@ -189,13 +182,17 @@ const Download: ComponentType<Props> = ({}: Props) => {
         return (
                 <div id={ "downloadData" } className={ "govuk-!-margin-top-3" } style={ { display: 'block' } }>    
 
-                    {throttleMesage && 
-                        <div className="govuk-form-group govuk-!-margin-bottom-0">
-                            Throttle Message
-                        </div>
-                    }
-
                     <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" } >
+
+                        {throttleMesage && 
+                            <div className="govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2">
+                                <div className="govuk-grid-column-two-thirds">
+                                    <h4 className="govuk-heading-s govuk-!-margin-top-1 govuk-!-margin-bottom-0">
+                                        There is a restriction of 10 download requests per approximately 100 seconds.
+                                    </h4>
+                                </div>
+                            </div>
+                        }
 
 
                         <div className="govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2">
@@ -216,7 +213,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
                                 </span>
                                 <div aria-labelledby={ "aria-type-label" }
                                     aria-describedby={ 'aria-type-description' }>
-                                    <Select options={AreaTypes}
+                                    <Select options={AreaTypeOptions}
                                             value={areaType}
                                             onChange={handleAreaTypeChange}
                                             styles={ SelectOptions }
@@ -239,7 +236,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
                                     <Select options={areaNameOptions}
                                             value={areaNames}
                                             onChange={handleAreaNameChange}
-                                            styles={ SelectOptions }
+                                            styles={ ExtendedOptionStyles }
                                             isLoading={false}
                                             placeholder={ "Select area(s)" }
                                             className={ 'select' }
@@ -259,10 +256,10 @@ const Download: ComponentType<Props> = ({}: Props) => {
 
                                 <div aria-labelledby={ "aria-metric-label" }
                                     aria-describedby={ 'aria-metric-description' }>
-                                    <Select options={metricOptions}
+                                    <Select options={Object.values(metrics).length >= MAX_METRICS ? [] : metricOptions}
                                             value={metrics}
                                             onChange={handleMetricChange}
-                                            styles={ SelectOptions }
+                                            styles={ ExtendedOptionStyles }
                                             isLoading={false}
                                             placeholder={ "Select Metrics" }
                                             className={ 'select' }
@@ -337,8 +334,11 @@ const Download: ComponentType<Props> = ({}: Props) => {
                         <div className="govuk-grid-row govuk-!-margin-top-2">
                             <div className="govuk-grid-column-one-quarter">
                                 <a  style={isEnabled}
-                                    href={`build`}
-                                    target="_blank">Download data
+                                    className={ "govuk-link" }
+                                    href="#"
+                                    onClick={showTrottleMessage}>
+                                        Download data
+                                  
                                 </a>
                             </div>
                         </div>

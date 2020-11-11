@@ -25,17 +25,18 @@ export const disabledDownload = {
 const useDownloadData  = () => {
 
     const [loading, setLoading] = useState(true);
-    const [areaType, setAreaType] = useState('');
+    const [areaType, setAreaType] = useState(null);
     const [areaNames, setAreaNames] = useState([]);
     const [areaNameOptions, setAreaNameOptions] = useState([]);
     const [metricOptions, setMetricOptions] = useState([]);
     const [metrics, setMetrics] = useState([]);
-    const [dataReleaseDate, setDataReleaseDate] = useState('today');
-    const [dataFormat, setDataFormat] = useState('json');
+    const [dataReleaseDate, setDataReleaseDate] = useState("today");
+    const [dataFormat, setDataFormat] = useState(null);
     const [throttleMesage, setThrottleMessage] = useState(false);
     const [archiveDate, setArchiveDate] = useState(null);
     const [archivedDateDisabled, setArchivedDateDisabled] = useState(true); 
     const [isEnabled, setIsEnabled] = useState(disabledDownload);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
 
     const getDropDownData = () => {
@@ -61,8 +62,8 @@ const useDownloadData  = () => {
 
     const retObject =  {loading, 
                         setLoading,
-                        areaType, 
-                        setAreaType, 
+                        areaType,
+                        setAreaType,
                         areaNames, 
                         setAreaNames, 
                         areaNameOptions, 
@@ -82,7 +83,9 @@ const useDownloadData  = () => {
                         archivedDateDisabled, 
                         setArchivedDateDisabled,
                         isEnabled, 
-                        setIsEnabled}
+                        setIsEnabled,
+                        isButtonDisabled,
+                        setIsButtonDisabled}
         
     return retObject;
 

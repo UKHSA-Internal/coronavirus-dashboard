@@ -65,7 +65,7 @@ export const PathWithHeader = [
     "/details/developers-guide"
 ];
 
-export const AreaTypes = [
+export const AreaTypeOptions = [
     { value: "overview", label: "overview" },
     { value: "nation", label: "nation" },
     { value: "region", label: "region" },
