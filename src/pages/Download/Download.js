@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Select from "react-select"; 
 
@@ -15,15 +15,26 @@ import MomentLocaleUtils, {
 
 import URLs from "common/urls";
 
-import { DownloadProps, DownloadState } from './Download.types';
-import {
-    Loading
-} from './Download.styles';
-import { Radios } from 'govuk-react-jsx/govuk/components/radios';
+import { Loading } from './Download.styles';
+
 import { Radio } from 'components/GovUk';
-import useDownloadData, {disabledDownload} from 'hooks/useDownloadData';
+import useDownloadData from 'hooks/useDownloadData';
 
 const MAX_METRICS = 5;
+
+const AreaNames = [
+    { value: "England", label: "England" },
+    { value: "Northern Ireland", label: "Northern Ireland" },
+    { value: "Scotland", label: "Scotland" },
+    { value: "Wales", label: "Wales" },
+]
+
+const disabledDownload = {
+    color: 'currentColor',
+    cursor: 'not-allowed',
+    opacity: '0.5',
+    textDecoration: 'none'
+};
 
 const enabledDownload = {
     color: 'currentColor'
@@ -80,61 +91,31 @@ ExtendedOptionStyles.control = ( base, state ) => ({
 
 const Download: ComponentType<Props> = ({}: Props) => {
        
-        const { loading, 
-                setLoading,
-                areaType,
-                setAreaType,
-                areaNames, 
-                setAreaNames,
-                areaNameOptions, 
-                setAreaNameOptions, 
-                metricOptions, 
-                setMetricOptions, 
-                metrics, 
-                setMetrics,
-                dataReleaseDate, 
-                setDataReleaseDate,
-                dataFormat, 
-                setDataFormat,
-                throttleMesage, 
-                setThrottleMessage,
-                archiveDate, 
-                setArchiveDate,
-                archivedDateDisabled, 
-                setArchivedDateDisabled,
-                isEnabled, 
-                setIsEnabled,
-                isButtonDisabled,
-                setIsButtonDisabled } = useDownloadData();
+        const { loading, data } = useDownloadData({defaultResponse: []}),
+              metricOptions = Object.keys(data).map(key => ({"value": key, "label": key})),
+              // TODO retrieve area name options from existing hook
+              areaNameOptions = AreaNames;
 
+        const [areaType, setAreaType] = useState(null);
+        const [areaNames, setAreaNames] = useState([]);
+        const [metrics, setMetrics] = useState([]);
+        const [dataReleaseDate, setDataReleaseDate] = useState("today");
+        const [dataFormat, setDataFormat] = useState(null);
+        const [throttleMesage, setThrottleMessage] = useState(false);
+        const [archiveDate, setArchiveDate] = useState(null);
+        const [archivedDateDisabled, setArchivedDateDisabled] = useState(true); 
+        const [isEnabled, setIsEnabled] = useState(disabledDownload);
 
-        const checkValidData = () => {
-
+        useEffect(() => {
+        
             if (areaType && metrics && Object.values(metrics).length > 0) {
                 setIsEnabled(enabledDownload);
-                setIsButtonDisabled(false);
             }
             else {
                 setIsEnabled(disabledDownload);
-                setIsButtonDisabled(true);
             }
 
-        }
-
-        const handleAreaTypeChange = (item) => {
-            setAreaType(item);
-            checkValidData()
-        }
-
-        const handleAreaNameChange = (item) => {
-            setAreaNames(item);
-            checkValidData()
-        };
-
-        const handleMetricChange = (item) => {
-            setMetrics(item);
-            checkValidData();
-        };
+        }, [areaType, metrics]);
 
         const handleDataReleaseDate = (item) => {
             setDataReleaseDate(item);
@@ -145,19 +126,8 @@ const Download: ComponentType<Props> = ({}: Props) => {
             else {
                 setArchivedDateDisabled(true);
             }
-            checkValidData();
         }
-
-        const handleArchiveDateChange = (archiveDate) => {
-            setArchiveDate(archiveDate);
-            checkValidData();
-        };
-
-        const handletDataFormatChange = (format) => {
-            setDataFormat(format);
-            checkValidData();
-        };
-        
+    
         const showTrottleMessage = () => {
             const href  = URLs.downloadData + 
                 "?areaType=" + (areaType && areaType.value ? areaType.value : "") +
@@ -215,7 +185,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
                                     aria-describedby={ 'aria-type-description' }>
                                     <Select options={AreaTypeOptions}
                                             value={areaType}
-                                            onChange={handleAreaTypeChange}
+                                            onChange={(item) => setAreaType(item)}
                                             styles={ SelectOptions }
                                             isLoading={false}
                                             placeholder={ "Select area type" }
@@ -235,7 +205,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
                                     aria-describedby={ 'aria-name-description' }>
                                     <Select options={areaNameOptions}
                                             value={areaNames}
-                                            onChange={handleAreaNameChange}
+                                            onChange={(item) => setAreaNames(item)}
                                             styles={ ExtendedOptionStyles }
                                             isLoading={false}
                                             placeholder={ "Select area(s)" }
@@ -256,9 +226,9 @@ const Download: ComponentType<Props> = ({}: Props) => {
 
                                 <div aria-labelledby={ "aria-metric-label" }
                                     aria-describedby={ 'aria-metric-description' }>
-                                    <Select options={Object.values(metrics).length >= MAX_METRICS ? [] : metricOptions}
+                                    <Select options={metricOptions}
                                             value={metrics}
-                                            onChange={handleMetricChange}
+                                            onChange={(item) => setMetrics(item)}
                                             styles={ ExtendedOptionStyles }
                                             isLoading={false}
                                             placeholder={ "Select Metrics" }
@@ -296,7 +266,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
                                         placeholder={ "Select date" }
                                         format={ "DD/MM/YYYY" }
                                         inputProps={{ disabled: archivedDateDisabled }}
-                                        onDayChange={ handleArchiveDateChange }
+                                        onDayChange={ (item) => setArchiveDate(item) }
                                         dayPickerProps={ {
                                             locale: 'en-gb',
                                             localeUtils: MomentLocaleUtils,
@@ -323,7 +293,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
                                             heading="Data Format"
                                             value={dataFormat}
                                             options={dataFormatOptions}
-                                            setValue={handletDataFormatChange}
+                                            setValue={(item) => setDataFormat(item)}
                                             inline={false}
                                         />
                                 </div>
@@ -337,8 +307,7 @@ const Download: ComponentType<Props> = ({}: Props) => {
                                     className={ "govuk-link" }
                                     href="#"
                                     onClick={showTrottleMessage}>
-                                        Download data
-                                  
+                                        Download data           
                                 </a>
                             </div>
                         </div>
