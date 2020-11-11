@@ -6,11 +6,6 @@ import { useState, useEffect } from "react";
 import URLs from "common/urls";
 
 import axios from "axios";
-import { thresholdFreedmanDiaconis } from "d3-array";
-
-
-
-
 
 
 const useDownloadData  = ({defaultResponse=[]}) => {
