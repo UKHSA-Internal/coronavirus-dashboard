@@ -27,7 +27,6 @@ import { Radio } from 'components/GovUk';
 import useDownloadData from 'hooks/useDownloadData';
 import useTimestamp from 'hooks/useTimestamp';
 
-const MAX_METRICS = 5;
 const MIN_ARCHIVE_DATE = Date(2020, 7, 12);
 
 const AreaNames = [

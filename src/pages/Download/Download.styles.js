@@ -4,10 +4,20 @@ import React from 'react';
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
+// export const Loading: ComponentType<*> = 
+//     styled
+//         .p
+//         .attrs(({ className="" }) => ({
+//         className: `govuk-body govuk-!-margin-top-6 ${className}`,
+// }));
 
-export const Loading = ({ className, ...props }) => (
-    <p className={ `govuk-body govuk-!-margin-top-6 ${className}` } { ...props }/>
-);
+export const Loading: ComponentType<*> = 
+    styled
+    .p
+    .attrs(({ className="" }) => ({
+        className: `govuk-body govuk-!-margin-top-6 ${className} ${className}`
+    }))`
+    `;
 
 const calcTextDecoration = ({enabled}) => {
     return enabled ? 'underline' : 'none';
