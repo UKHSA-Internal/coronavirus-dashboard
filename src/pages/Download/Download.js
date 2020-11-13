@@ -8,6 +8,10 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 
 import {AreaTypeOptions} from "../../components/DashboardHeader/Constants";
 
+import { DownloadLink } from "./Download.styles"
+
+import moment from "moment";
+
 import MomentLocaleUtils, {
     formatDate,
     parseDate
@@ -17,28 +21,22 @@ import URLs from "common/urls";
 
 import { Loading } from './Download.styles';
 
+import { createQuery } from '../../common/utils/utils'
+
 import { Radio } from 'components/GovUk';
 import useDownloadData from 'hooks/useDownloadData';
+import useTimestamp from 'hooks/useTimestamp';
 
 const MAX_METRICS = 5;
+const MIN_ARCHIVE_DATE = Date(2020, 7, 12);
 
 const AreaNames = [
     { value: "England", label: "England" },
     { value: "Northern Ireland", label: "Northern Ireland" },
     { value: "Scotland", label: "Scotland" },
     { value: "Wales", label: "Wales" },
-]
+];
 
-const disabledDownload = {
-    color: 'currentColor',
-    cursor: 'not-allowed',
-    opacity: '0.5',
-    textDecoration: 'none'
-};
-
-const enabledDownload = {
-    color: 'currentColor'
-};
 
 const dataFormatOptions = {   
     choices: [
@@ -47,14 +45,14 @@ const dataFormatOptions = {
         { label: "XML", value: "xml"},
         { label: "JSONL", value: "jsonl"}     
     ]
-}
+};
 
 const dataReleaseDateOptions = {   
     choices: [
         { label: "Today", value: "today" },
         { label: "Archive", value: "archive"} 
     ]
-}
+};
 
 const SelectOptions = {
     control: ( base, state ) => ({
@@ -92,27 +90,31 @@ ExtendedOptionStyles.control = ( base, state ) => ({
 const Download: ComponentType<Props> = ({}: Props) => {
        
         const { loading, data } = useDownloadData({defaultResponse: []}),
-              metricOptions = Object.keys(data).map(key => ({"value": key, "label": key})),
+              metricOptions = data && Object.keys(data).length > 0 ?
+                                Object.keys(data).map(key => ({"value": key, "label": key})) : [],
               // TODO retrieve area name options from existing hook
               areaNameOptions = AreaNames;
+
+        const { timestamp } = useTimestamp(),
+                archiveDateOptionTo = moment(timestamp).local(true).subtract(1, "days").toDate();
+    
 
         const [areaType, setAreaType] = useState(null);
         const [areaNames, setAreaNames] = useState([]);
         const [metrics, setMetrics] = useState([]);
         const [dataReleaseDate, setDataReleaseDate] = useState("today");
         const [dataFormat, setDataFormat] = useState(null);
-        const [throttleMesage, setThrottleMessage] = useState(false);
         const [archiveDate, setArchiveDate] = useState(null);
         const [archivedDateDisabled, setArchivedDateDisabled] = useState(true); 
-        const [isEnabled, setIsEnabled] = useState(disabledDownload);
+        const [isEnabled, setIsEnabled] = useState(false);
 
         useEffect(() => {
         
             if (areaType && metrics && Object.values(metrics).length > 0) {
-                setIsEnabled(enabledDownload);
+                setIsEnabled(true);
             }
             else {
-                setIsEnabled(disabledDownload);
+                setIsEnabled(false);
             }
 
         }, [areaType, metrics]);
@@ -126,26 +128,24 @@ const Download: ComponentType<Props> = ({}: Props) => {
             else {
                 setArchivedDateDisabled(true);
             }
-        }
-    
-        const showTrottleMessage = () => {
-            const href  = URLs.downloadData + 
-                "?areaType=" + (areaType && areaType.value ? areaType.value : "") +
-              (areaNames && Object.values(areaNames).length > 0 ?
-                areaNames.map(areaName => "&areaName=" + areaName.value) : ""
-              ) +
-              (metrics && Object.values(metrics).length > 0 ?
-                metrics.slice(0, MAX_METRICS).map(metric => "&metric=" + metric.value) : ""
-              ) +
-              (dataReleaseDate == 'today' ? "&release=" + formatDate(new Date(), "YYYY-MM-DD") : 
-               dataReleaseDate == 'archive' ? "&release=" + formatDate(archiveDate, "YYYY-MM-DD") : "") +
-              (dataFormat ? "&format=" + dataFormat : "json");
-
-            window.open(href)
-            setThrottleMessage(true);
-            setTimeout(() => { setThrottleMessage(false); }, 20000);
         };
 
+        const getParams = (params, label) => {
+            if (params && Object.values(params).length > 0) {
+    
+                return Object.values(params).map(param => (
+
+                    {
+                        key: label,
+                        sign: '=',
+                        value: param.value
+                    }
+
+                ))
+            } else {
+                return "";
+            }
+        };
 
         if ( loading ) return <Loading>Loading&hellip;</Loading>
 
@@ -154,17 +154,15 @@ const Download: ComponentType<Props> = ({}: Props) => {
 
                     <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" } >
 
-                        {throttleMesage && 
-                            <div className="govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2">
-                                <div className="govuk-grid-column-two-thirds">
-                                    <h4 className="govuk-heading-s govuk-!-margin-top-1 govuk-!-margin-bottom-0">
-                                        There is a restriction of 10 download requests per approximately 100 seconds.
-                                    </h4>
-                                </div>
+                    
+                        <div className="govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2">
+                            <div className="govuk-grid-column-two-thirds">
+                                <h4 className="govuk-heading-s govuk-!-margin-top-1 govuk-!-margin-bottom-0">
+                                    There is a restriction of 10 download requests per approximately 100 seconds.
+                                </h4>
                             </div>
-                        }
-
-
+                        </div>
+                    
                         <div className="govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2">
                             <div className="govuk-grid-column-two-thirds">
                                 <h4 className="govuk-heading-s govuk-!-margin-top-1 govuk-!-margin-bottom-0">
@@ -271,10 +269,12 @@ const Download: ComponentType<Props> = ({}: Props) => {
                                             locale: 'en-gb',
                                             localeUtils: MomentLocaleUtils,
                                             disabledDays: [{
-                                                before: new Date(2020, 7, 12),
-                                                after: new Date()
+                                                before: {MIN_ARCHIVE_DATE},
+                                                after: new Date(archiveDateOptionTo.getFullYear(), 
+                                                                archiveDateOptionTo.getMonth(),
+                                                                archiveDateOptionTo.getDate())
                                         }]
-                                        }}/>
+                                        }}/>    
                                 </div>
                             </div>
                         </div>
@@ -303,12 +303,32 @@ const Download: ComponentType<Props> = ({}: Props) => {
 
                         <div className="govuk-grid-row govuk-!-margin-top-2">
                             <div className="govuk-grid-column-one-quarter">
-                                <a  style={isEnabled}
-                                    className={ "govuk-link" }
-                                    href="#"
-                                    onClick={showTrottleMessage}>
+                                <DownloadLink
+                                    enabled={isEnabled}
+                                    href={URLs.downloadData + createQuery([
+                                            {
+                                                key: 'areaType',
+                                                sign: '=',
+                                                value: areaType && areaType. value ?
+                                                     areaType.value.toLowerCase().replace(/nhsNation/i, "nation") : ""
+                                            },
+                                            ...getParams(areaNames, "areaName"),
+                                            ...getParams(metrics, "metric"),
+                                            {
+                                                key: 'release',
+                                                sign: '=',
+                                                value: dataReleaseDate == 'today' ? formatDate(new Date(), "YYYY-MM-DD") : 
+                                                       dataReleaseDate == 'archive' ? formatDate(archiveDate, "YYYY-MM-DD") :
+                                                       ""
+                                            },
+                                            {
+                                                key: 'format',
+                                                sign: '=',
+                                                value: dataFormat ? dataFormat : "json"
+                                            }
+                                        ], "&", "?", false)}>
                                         Download data           
-                                </a>
+                                </DownloadLink>
                             </div>
                         </div>
 

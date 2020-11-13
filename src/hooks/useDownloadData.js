@@ -14,13 +14,12 @@ const useDownloadData  = ({defaultResponse=[]}) => {
    
 
     const getDropDownData = () => {
-        const metricsURL = URLs.metrics;
+    
         const getData = async () => {
         
-
             try {
 
-                const { data, status } = await axios.get("api_variables.json", { baseURL: metricsURL });            
+                const { data, status } = await axios.get(URLs.metrics);            
                 
                 
                 if ( status < 400 ) {
