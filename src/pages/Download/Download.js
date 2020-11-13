@@ -27,6 +27,7 @@ import { Radio } from 'components/GovUk';
 import useDownloadData from 'hooks/useDownloadData';
 import useTimestamp from 'hooks/useTimestamp';
 
+const MAX_METRICS = 5;
 const MIN_ARCHIVE_DATE = Date(2020, 7, 12);
 
 const AreaNames = [
@@ -223,14 +224,15 @@ const Download: ComponentType<Props> = ({}: Props) => {
 
                                 <div aria-labelledby={ "aria-metric-label" }
                                     aria-describedby={ 'aria-metric-description' }>
-                                    <Select options={metricOptions}
+                                    <Select options={metrics && Object.values(metrics).length >= MAX_METRICS ?
+                                                        [] : metricOptions}
                                             value={metrics}
                                             onChange={(item) => setMetrics(item)}
                                             styles={ ExtendedOptionStyles }
                                             isLoading={false}
                                             placeholder={ "Select Metrics" }
                                             className={ 'select' }
-                                            isMulti/>
+                                            isMulti/>   
                                 </div>
                             </div>
                         </div>
