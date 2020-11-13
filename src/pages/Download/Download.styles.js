@@ -1,15 +1,7 @@
 // @flow
 
-import React from 'react';
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
-
-// export const Loading: ComponentType<*> = 
-//     styled
-//         .p
-//         .attrs(({ className="" }) => ({
-//         className: `govuk-body govuk-!-margin-top-6 ${className}`,
-// }));
 
 export const Loading: ComponentType<*> = 
     styled
