@@ -291,6 +291,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                      dates={ dates }
                      extrema={ extrema }
                      colours={ colours }
+                     maxDate={ dates[dates.length - 1] }
                 >
                     <label id={ "month" }
                            className={ "govuk-body" }
