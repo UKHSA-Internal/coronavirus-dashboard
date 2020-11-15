@@ -6,12 +6,12 @@ name: Build
 on:
   push:
     branches:
-      - v2-development
+      - v3-development
       - master
 
   pull_request:
     branches: 
-      - v2-development
+      - v3-development
       - master
 
 jobs:
