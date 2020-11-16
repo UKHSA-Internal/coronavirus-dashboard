@@ -45,6 +45,9 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
         <SectionBreak/>
 
         <SideNavSecondaryContainer>
+            <SideNavListSecondaryItem className={`${pathname === '/details/change-log' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/change-log" }>Change Log</Link>
+            </SideNavListSecondaryItem>
             <SideNavListSecondaryItem className={`${pathname === '/details/about-data' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/about-data" }>About the data</Link>
             </SideNavListSecondaryItem>
