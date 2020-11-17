@@ -23,12 +23,29 @@ import {
 } from './ChangeLog.styles';
 
 import type { ComponentType } from "react";
-import type { ChangeLogProps } from "./ChangeLog.types";
+import type { ChangeLogProps, ChangeLogItemProps } from "./ChangeLog.types";
 
 import useGenericAPI from 'hooks/useGenericAPI';
 import useTimestamp from 'hooks/useTimestamp';
 
 const MIN_CHANGE_LOG_DATE = Date(2020, 7, 12);
+
+const ChangeLogItem: ComponentType<ChangeLogItemProps> = ({ changeLogItem }) => {
+
+        return <div>
+                <div>
+                    Date: {formatDate(changeLogItem.date, "DD/MM/YYYY")}
+                </div>
+                <div>
+                    <Link to={changeLogItem.relativeUrl}>{changeLogItem.linkText}</Link>
+                </div>
+                <div>
+                    <Markdown dangerouslySetInnerHTML={{ __html: changeLogItem.body }}/>
+                </div>
+            </div>
+
+}
+
 
 const ChangeLog: ComponentType<ChangeLogProps> = ({ ...props }) => {
 
@@ -102,20 +119,10 @@ const ChangeLog: ComponentType<ChangeLogProps> = ({ ...props }) => {
         />
         
         <Article>
+           
             {data.filter(filterData).map(change =>
-                <div>
-                    <div>
-                        Date: {formatDate(change.date, "DD/MM/YYY")}
-                    </div>
-                    <div>
-                        <Link to={change.relativeUrl}>{change.linkText}</Link>
-                    </div>
-                    <div>
-                        <Markdown dangerouslySetInnerHTML={{ __html: change.body }}/>
-                    </div>
-                </div>
-                
-            )}
+                <ChangeLogItem changeLogItem={change}/>
+            )}           
        
         </Article>
     </>
