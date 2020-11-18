@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 
 import numeral from "numeral";
 
@@ -29,31 +29,58 @@ const directions = {
     descending: "desc"
 }
 
-const SortIcon = ({ sortBy, currentFilter, direction, updater }) => {
+const UnsortedSort = (sortBy, updater) => {
+    return <Sort htmlType={ "button" } onClick={ event => updater(sortBy) }>
+    
+    <Fragment>
+        <CaretUpDown/>
+         <span className={ "sr-only" }>
+            Unsorted column - Apply ascending sort.
+        </span>
+    </Fragment>
 
-    return <Sort htmlType={ "button" } onClick={ event => updater(event, sortBy, direction) }>
-        { !currentFilter
-            ? <Fragment>
-                <CaretUpDown/>
-                <span className={ "sr-only" }>
-                    Unsorted column - Apply ascending sort.
-                </span>
-            </Fragment>
-            : direction === directions.descending
-                ? <Fragment>
-                    <CaretUp/>
-                    <span className={ "sr-only" }>
-                        Sorted column  (descending) - Apply ascending sort.
-                    </span>
-                </Fragment>
-                : <Fragment>
-                    <CaretDown/>
-                    <span className={ "sr-only" }>
-                        Sorted column (ascending) - Apply descending sort.
-                    </span>
-                </Fragment>
-        }
     </Sort>
+};
+
+const AscendingSort = (sortBy, updater) => {
+    return  <Sort htmlType={ "button" } onClick={ event => updater(sortBy) }>
+                <Fragment>
+                    <CaretDown/>
+                        <span className={ "sr-only" }>
+                             Sorted column (ascending) - Apply descending sort.
+                        </span>
+                </Fragment>
+
+            </Sort>
+};
+
+const DescendingSort = (sortBy, updater) => {
+    return  <Sort htmlType={ "button" } onClick={ event => updater(sortBy) }>
+                <Fragment>
+                    <CaretUp/>
+                        <span className={ "sr-only" }>
+                            Sorted column  (descending) - Apply ascending sort.
+                        </span>
+                </Fragment>
+            </Sort>
+};
+
+
+const SortIcon = ({ sortBy, firstSort, currentFilter, cInd, direction, updater }) => {
+
+    if (firstSort) {
+        return UnsortedSort(sortBy, updater);
+    }
+    else if (currentFilter === cInd) {
+        if (direction === directions.descending) {
+            return DescendingSort(sortBy, updater);
+        }
+        else {
+            return AscendingSort(sortBy, updater);
+        }   
+    } else {
+        return UnsortedSort(sortBy, updater);
+    };
 
 }; // SortIcon
 
@@ -77,87 +104,68 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
             .map(({ type="" }) => type);
 
 
-    let currentFilter = null
-    let previousFilter = null
-    let direction = null
+    const [ currentFilter, setCurrentFilter ] = useState(null);
+    const [ previousFilter, setPreviousFilter ] = useState(null);
+    const [ direction, setDirection ] = useState(null);
+    const [ firstSort, setFirstSort ] = useState(true);
+    const [ currentBody, setCurrentBody ] = useState([]);
 
-    const compareData = (a, b) => {
+    useEffect(() => {
+        setCurrentBody(body);
+    }, []);
 
-        alert ("compare")
-        
+    const compareData = (sortBy) => {
+
+        currentBody.sort((a, b) => {
+            const val1 = a[sortBy];
+            const val2 = b[sortBy];
+            if (typeof val1 === 'number') {
+                return val1 - val2;
+            } else if (typeof val1 === 'string') {
+                if (!moment(val1, "MM-DD-YYYY").isValid()) {
+                    return val1.localeCompare(val2);
+                }
+                else {
+                    const
+                        dateA = new Date(val1),
+                        dateB = new Date(val2);
+
+                    return dateA < dateB ? 1 : dateA > dateB || 0;
+                }
+            } else {
+                return 0;
+            }
+            
+        });   
+    };
+
+    const sortData = (sortBy) => {        
        
-        const hasValues = (a, b) => {
-            if (a && b) {
-                return true;
+        if (firstSort) {
+            // alert("first")
+            setDirection(directions.ascending); 
+            setCurrentFilter(sortBy)
+            setPreviousFilter(sortBy)
+            compareData(sortBy);
+        }
+        else {
+            if (previousFilter !== sortBy) {
+                // alert("new")
+                setDirection(directions.ascending); 
+                setCurrentFilter(sortBy)
+                setPreviousFilter(sortBy);
+                compareData(sortBy);
             }
             else {
-                return false;
-            }
+                // alert("reverse")
+                setDirection(direction === directions.ascending ? directions.descending : directions.ascending); 
+                currentBody.reverse()
+            };
         };
 
-        const typ = head.slice(-1).pop()[currentFilter].type
-        let val1 = a[currentFilter]
-        let val2 = b[currentFilter]
+        setFirstSort(false);
 
-        // alert (val1)
-        // alert (val2)
-        // alert (typ)
-
-        if (!hasValues(val1,val2)) {
-            return 0;
-        }
-
-        val1 = parseInt(val1)
-        val2 = parseInt(val2)
-
-        // if (typeof typ === string) {
-        //     alert ("string")
-        //     return val1.localCompare(val2)    
-        // }
-        // else if (typeof typ === numeric) {
-        //     alert ("numeric")
-        if (val1 < val2) {
-            return -1;
-          }
-        if (val1 > val2) {
-            return 1;
-        }
-          // a must be equal to b
-        return 0;
-        // }
-        // else if (typeof typ === date) {
-        //     alert ("date")
-        //     const
-        //         dateA = new Date(val1),
-        //         dateB = new Date(val2);
-            
-        //     return dateA < dateB ? 1 : dateA > dateB || 0;
-        // }
-    }
-
-    const sortData = (event, sortBy, direction) => {
-        
-        currentFilter = sortBy
-
-        if (!previousFilter && previousFilter != 0) {
-            alert ("initial sort");
-            direction = directions.ascending;
-            body = body.sort();
-        
-        } else if ((previousFilter || previousFilter === 0 ) && previousFilter === currentFilter) {
-            alert ("Reverse Sort");
-            direction = direction  === directions.ascending ? directions.descending : directions.ascending; 
-            body = body.reverse();
-        } else{
-            alert ("New Sort");
-            direction = directions.ascending; 
-            body = body.sort();
-        }
-
-        previousFilter = sortBy;
-       
-
-    }
+    };
 
     return <TableContainer { ...props }>
 
@@ -175,7 +183,9 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
                             
                                 <SortIcon
                                     sortBy={ cInd }
-                                    currentFilter={currentFilter && currentFilter === cInd ? true : false}
+                                    firstSort={firstSort}
+                                    currentFilter={currentFilter}
+                                    cInd={cInd}
                                     direction={direction}
                                     updater={ sortData }/>
                             </TableHeadingCell>
@@ -183,7 +193,7 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
                 }</TR>)
             }</THead>
             <TBody>{
-                body.map((item, rInd) => <TR key={ `body-tr-${ rInd }` }>{
+                currentBody.map((item, rInd) => <TR key={ `body-tr-${ rInd }` }>{
 
                     item.map((value, cInd) =>
                         <TD key={ `body-td-${rInd}-${cInd}` } type={ typeDefinitions[cInd] }
