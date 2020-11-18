@@ -77,50 +77,85 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
             .map(({ type="" }) => type);
 
 
-    const [ currentFilter, setCurrentFilter ] = useState(null);
-    const [ previousFilter, setPreviousFilter ] = useState(null);
-    const [ direction, setDirection ] = useState(null);
+    let currentFilter = null
+    let previousFilter = null
+    let direction = null
 
-    const compareData = (sortBy) => {
+    const compareData = (a, b) => {
 
-        const typ = head.slice(-1).pop()[sortBy].type
-
-        if (typeof typ === "string") {
-            body = body.sort((a, b) => {
-                if (a.value && b.value) {
-                    return a.value.localCompare(b.value)
-                }
-                else {
-                    return 1;
-                }
-            });
-        }
-        else if (typeof typ === "numeric") {
-            body = body.sort((a, b) => {
-                return parseInt(a.value) - parseInt(b.value);
-            });
-        }
-        else if (typeof typ === "date") {
-            body = body.sort((a, b) => {
-                const
-                    dateA = new Date(a.value),
-                    dateB = new Date(b.value);
+        alert ("compare")
         
-                return dateA < dateB ? 1 : dateA > dateB || 0;
-            });
+       
+        const hasValues = (a, b) => {
+            if (a && b) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        };
+
+        const typ = head.slice(-1).pop()[currentFilter].type
+        let val1 = a[currentFilter]
+        let val2 = b[currentFilter]
+
+        // alert (val1)
+        // alert (val2)
+        // alert (typ)
+
+        if (!hasValues(val1,val2)) {
+            return 0;
         }
+
+        val1 = parseInt(val1)
+        val2 = parseInt(val2)
+
+        // if (typeof typ === string) {
+        //     alert ("string")
+        //     return val1.localCompare(val2)    
+        // }
+        // else if (typeof typ === numeric) {
+        //     alert ("numeric")
+        if (val1 < val2) {
+            return -1;
+          }
+        if (val1 > val2) {
+            return 1;
+        }
+          // a must be equal to b
+        return 0;
+        // }
+        // else if (typeof typ === date) {
+        //     alert ("date")
+        //     const
+        //         dateA = new Date(val1),
+        //         dateB = new Date(val2);
+            
+        //     return dateA < dateB ? 1 : dateA > dateB || 0;
+        // }
     }
 
     const sortData = (event, sortBy, direction) => {
-        setCurrentFilter(sortBy)
-        if (previousFilter && currentFilter && previousFilter === currentFilter) {
+        
+        currentFilter = sortBy
+
+        if (!previousFilter && previousFilter != 0) {
+            alert ("initial sort");
+            direction = directions.ascending;
+            body = body.sort();
+        
+        } else if ((previousFilter || previousFilter === 0 ) && previousFilter === currentFilter) {
+            alert ("Reverse Sort");
+            direction = direction  === directions.ascending ? directions.descending : directions.ascending; 
             body = body.reverse();
-            setDirection(direction  === directions.ascending ? directions.descending : directions.ascending);     
-        } else {
-            setDirection(directions.ascending); 
-            compareData(sortBy);
+        } else{
+            alert ("New Sort");
+            direction = directions.ascending; 
+            body = body.sort();
         }
-        setPreviousFilter(sortBy)
+
+        previousFilter = sortBy;
+       
 
     }
 
