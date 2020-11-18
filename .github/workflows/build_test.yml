@@ -45,7 +45,6 @@ jobs:
     # ATTENTION: `BASE_URL` must have the HTTP(S) protocol, but other URLs must not.
     - name: Build
       env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS
         CI: false
         BUILD_ENV: development
         BASE_URL: https://covid19statdev.azureedge.net
