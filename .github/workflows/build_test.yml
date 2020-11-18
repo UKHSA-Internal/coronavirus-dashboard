@@ -33,6 +33,8 @@ jobs:
       uses: actions/setup-node@v2.1.1
       with:
         node-version: ${{ matrix.node-version }}
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
 
     - name: Install dependencies
       run: |
@@ -43,6 +45,7 @@ jobs:
     # ATTENTION: `BASE_URL` must have the HTTP(S) protocol, but other URLs must not.
     - name: Build
       env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS
         CI: false
         BUILD_ENV: development
         BASE_URL: https://covid19statdev.azureedge.net
