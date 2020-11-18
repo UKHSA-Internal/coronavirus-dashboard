@@ -75,7 +75,7 @@
   "devDependencies": {
     "dotenv": "^8.2.0",
     "flow-bin": "^0.132.0",
-    "stylelint": "^13.5.0",
+    "stylelint": "^13.8.0",
     "stylelint-config-idiomatic-order": "^8.1.0",
     "stylelint-config-standard": "^20.0.0",
     "stylelint-config-styled-components": "^0.1.1",
