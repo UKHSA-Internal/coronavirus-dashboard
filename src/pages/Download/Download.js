@@ -15,7 +15,8 @@ import {
     Form,
     MainContent,
     PermaLink,
-    SideContent
+    SideContent,
+    Formset
 } from "./Download.styles"
 
 import moment from "moment";
@@ -37,18 +38,11 @@ import useDownloadData from 'hooks/useDownloadData';
 import useTimestamp from 'hooks/useTimestamp';
 
 import type { ComponentType } from "react";
-import useApi from "../../hooks/useApi";
+import useApi from "hooks/useApi";
 
 
 const MAX_METRICS = 5;
-const MIN_ARCHIVE_DATE = Date(2020, 7, 12);
-
-const AreaNames = [
-    { value: "England", label: "England" },
-    { value: "Northern Ireland", label: "Northern Ireland" },
-    { value: "Scotland", label: "Scotland" },
-    { value: "Wales", label: "Wales" },
-];
+const MIN_ARCHIVE_DATE = "2020-08-12";
 
 
 const dataFormatOptions = {   
@@ -102,6 +96,7 @@ const SelectOptions = {
     })
 };
 
+
 const ExtendedOptionStyles = Object.create(SelectOptions);
 ExtendedOptionStyles.control = ( base, state ) => ({
     ...base,
@@ -148,9 +143,9 @@ const formatUrl = ({ ...props }) => {
 
 const FormItem: ComponentType<*> = ({ children, width="one-half", ...props }) => {
 
-    return <div className={ width } { ...props }>
+    return <Formset width={ width} { ...props }>
         { children }
-    </div>
+    </Formset>
 
 };  // FormItem
 
@@ -235,6 +230,7 @@ const MetricMultiSelector = ({ metrics, setMetrics }) => {
 
     const
         metricData = useDownloadData("metrics",{}),
+        [error, setError] = useState(null),
         metricNames = Object
             .keys(metricData)
             .filter(item => !excludedMetrics.includes(item))
@@ -245,7 +241,15 @@ const MetricMultiSelector = ({ metrics, setMetrics }) => {
                 value: item
             }));
 
-    return <FormItem width={ "full" }>
+    useEffect(() => {
+        setError(
+            metrics?.length && metrics.length > MAX_METRICS
+                ? "Too many metrics: you must select between 1 and 5 metrics."
+                : null
+        )
+    }, [ metrics])
+
+    return <FormItem width={ `full` } error={ error !== null  }>
         <span id={ "aria-metrics-label" } className={ "govuk-label govuk-label--s" }>
             Metrics
         </span>
@@ -253,6 +257,12 @@ const MetricMultiSelector = ({ metrics, setMetrics }) => {
             Required. Select up to 5 metrics. <br/>
             Records contain 4 additional default metrics as follows: areaType, areaCode, areaName, date
         </p>
+        {
+            error &&
+            <span className="govuk-error-message">
+              <span className="govuk-visually-hidden">Error:</span> { error }
+            </span>
+        }
         <div aria-labelledby={ "aria-metrics-label" }
             aria-describedby={ 'aria-metrics-description' }>
             <Select options={ metricNames }
@@ -375,12 +385,10 @@ const Download: ComponentType<*> = () => {
             areaType, areaCode, metric, format,
             release: dataReleaseDate !== "latest" && archiveDate
         }));
-        setIsEnabled(areaType && metric?.length && archiveDate && format);
+
+        setIsEnabled(areaType && metric?.length && metric.length <= MAX_METRICS && archiveDate && format);
 
     }, [areaType, areaCode, metric, archiveDate, format, dataReleaseDate ])
-
-    // console.log(metrics);
-    // console.log(urlParams);
 
     return <>
         <div className="govuk-phase-banner status-banner govuk-!-margin-bottom-0">
@@ -438,7 +446,7 @@ const Download: ComponentType<*> = () => {
                                    inline={ false }/>
                         </div>
                         <ArchiveDatePicker display={ dataReleaseDate === "archive" }
-                                           minDate={ "2020-08-12" }
+                                           minDate={ MIN_ARCHIVE_DATE }
                                            setDate={ setArchiveDate }
                                            date={ archiveDate }/>
                     </FormItem>

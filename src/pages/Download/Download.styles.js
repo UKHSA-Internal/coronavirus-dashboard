@@ -142,3 +142,16 @@ export const Form: ComponentType<*> =
                 }
             }
         `;
+
+
+export const Formset: ComponentType<*> =
+    styled
+        .fieldset
+        .attrs(({ className="", width="full", ...props }) => ({
+            className: `${width} ${className}`,
+            ...props
+        }))`
+            display: div;
+            border: unset;
+            border-left: ${ ({ error }) => error ? "5px solid #d4351c" : "unset" };
+        `;
