@@ -8,7 +8,7 @@ export const PathNameMapper = {
     "/details/healthcare": "Healthcare",
     "/details/deaths": "Deaths",
     "/details/about-data": "About the data",
-    "/details/download": "Data download",
+    "/details/download": "Download data",
     "/details/cookies": "Cookies",
     "/details/accessibility": "Accessibility",
     "/details/archive": "Archive",
@@ -66,10 +66,10 @@ export const PathWithHeader = [
 ];
 
 export const AreaTypeOptions = [
-    { value: "overview", label: "overview" },
-    { value: "nation", label: "nation" },
-    { value: "region", label: "region" },
-    { value: "nhsRegion", label: "nhsRegion" },
-    { value: "utla", label: "utla" },
-    { value: "ltla", label: "ltla" }
+    { value: "overview", label: "United Kingdom" },
+    { value: "nation", label: "Nation" },
+    { value: "region", label: "Region" },
+    { value: "nhsRegion", label: "NHS Region" },
+    { value: "utla", label: "Upper Tier Local Authority" },
+    { value: "ltla", label: "Lower Tier Local Authority" }
 ]

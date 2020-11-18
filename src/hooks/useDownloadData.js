@@ -7,45 +7,27 @@ import URLs from "common/urls";
 import axios from "axios";
 
 
-const useDownloadData  = ({defaultResponse=[]}) => {
+const useDownloadData  = ( urlName: string, defaultResponse= null ) => {
 
-    const [loading, setLoading] = useState(true);
     const [ data, setData ] = useState(defaultResponse);
-   
 
-    const getDropDownData = () => {
+    useEffect( () => {
     
-        const getData = async () => {
-        
+        (async () => {
             try {
-
-                const { data, status } = await axios.get(URLs.metrics);            
-                
-                
-                if ( status < 400 ) {
-                    setData(data);
-                } else {
-                    setData([])
-                }
-
+                const { data: dt, status } = await axios.get(URLs[urlName]);
+                status < 400
+                    ? setData(dt)
+                    : setData(defaultResponse);
             } catch (e) {
                 console.error(e)
-                setData([])
+                setData(defaultResponse)
             }
-        }
-
-        getData();
+        })();
     
-    };
+    }, [urlName]);
 
-    useEffect(() => {
-        setLoading(false);
-        getDropDownData();
-    }, []);
-
-    const retObject =  {loading, data};
-    
-    return retObject;
+    return data;
 
 };  //useDownloadData
 

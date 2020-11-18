@@ -35,6 +35,7 @@ export const Radio: ComponentType<*> = ({ heading, options, value, setValue, inl
                     return {
                         children: [ choice.label ],
                         value: choice.value,
+                        required: choice?.required ?? false,
                         id,
                         ...choice
                     }
