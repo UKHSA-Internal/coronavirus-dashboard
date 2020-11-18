@@ -41,10 +41,12 @@ export const DatePickerContainer: ComponentType<*> =
             border-left: 6px solid #b1b4b6;
         `;
 
+
 export const PermaLink: ComponentType<*> =
     styled
         .p`
             padding: 1rem;
+            margin-bottom: 0;
             background: rgb(249, 249, 249);
             border: 3px solid rgb(225, 225, 225);
             font-family: monospace, monospace;
@@ -121,7 +123,8 @@ export const Form: ComponentType<*> =
             grid-auto-flow: row;
             grid-template-columns: repeat(4, 1fr);
             margin-right: auto;
-            grid-gap: 1.5rem;
+            grid-row-gap: 2rem;
+            grid-column-gap: 1.5rem;
             
             & .one-half {
                 grid-column: 1/3;
@@ -154,4 +157,5 @@ export const Formset: ComponentType<*> =
             display: div;
             border: unset;
             border-left: ${ ({ error }) => error ? "5px solid #d4351c" : "unset" };
+            padding: 0;
         `;

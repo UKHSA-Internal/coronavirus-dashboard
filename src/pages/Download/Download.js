@@ -424,7 +424,7 @@ const Download: ComponentType<*> = () => {
 
                     <FormItem aria-labelledby={ "aria-releasedate-label" }
                               aria-described-by={ "aria-releasedate-descr" }
-                              width={ "full" }>
+                              width={ "two-third" }>
                         <span
                             id={ "aria-releasedate-label" }
                             className={ "govuk-label govuk-label--s" }>
@@ -432,10 +432,9 @@ const Download: ComponentType<*> = () => {
                         </span>
                         <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }
                            id={ "aria-dataformat-descr" }>
-                            Please note that when the Data release date option is set
-                            to "Latest", the permanent link will always produce the data
-                            as they appear on the website &mdash; that is, the very latest
-                            release.
+                            Required: Please note that when the "Latest" option is selected,
+                            the permanent link will always produce the data as they appear on
+                            the website &mdash; that is, the very latest release.
                         </p>
                         <div aria-labelledby={ "aria-releasedate-label" }
                             aria-describedby={ 'aria-releasedate-description' }>
