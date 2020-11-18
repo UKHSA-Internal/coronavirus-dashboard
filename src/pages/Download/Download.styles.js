@@ -157,5 +157,5 @@ export const Formset: ComponentType<*> =
             display: div;
             border: unset;
             border-left: ${ ({ error }) => error ? "5px solid #d4351c" : "unset" };
-            padding: 0;
+            padding: ${ ({ error }) => error ? ".5rem 0 1rem 1rem" : "unset" };
         `;

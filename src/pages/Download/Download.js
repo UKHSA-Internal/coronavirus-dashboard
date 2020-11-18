@@ -153,13 +153,14 @@ const FormItem: ComponentType<*> = ({ children, width="one-half", ...props }) =>
 const AreaTypeSelector = ({ areaType, setAreaType }) => {
 
     return <FormItem width={ "one-half govuk-!-margin-top-3" }>
-        <span id={ "aria-type-label" } className={ "govuk-label govuk-label--s" }>
+        <span id={ "areatype-label" } className={ "govuk-label govuk-label--s" }>
             Area type
         </span>
-        <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }>
+        <p id={ "areatype-descr" }
+           className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }>
             Required.
         </p>
-        <div aria-labelledby={ "aria-type-label" } aria-describedby={ 'aria-type-description' }>
+        <div aria-labelledby={ "areatype-label" } aria-describedby={ 'areatype-descr' }>
             <Select options={ AreaTypeOptions }
                     value={ AreaTypeOptions.filter(item => item.value === areaType) }
                     onChange={ ({value}) => setAreaType(value) }
@@ -204,14 +205,15 @@ const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
     }, [ areaNameOptions ]);
 
     return <FormItem width={ "one-half" }>
-        <span id={ "aria-name-label" } className={ "govuk-label govuk-label--s" }>
+        <span id={ "areaname-label" } className={ "govuk-label govuk-label--s" }>
             Area name
         </span>
-        <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }>
+        <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }
+           id={ "areaname-descr" }>
             Optional. Leave blank to download the data for all locations in your selected
             area type.
         </p>
-        <div aria-labelledby={ "aria-name-label" } aria-describedby={ 'aria-name-description' }>
+        <div aria-labelledby={ "areaname-label" } aria-describedby={ 'areaname-descr' }>
             <Select options={ areaNameData.data }
                     styles={ SelectOptions }
                     value={ areaNameData.data.filter(item => item.value === areaCode) }
@@ -250,21 +252,27 @@ const MetricMultiSelector = ({ metrics, setMetrics }) => {
     }, [ metrics])
 
     return <FormItem width={ `full` } error={ error !== null  }>
-        <span id={ "aria-metrics-label" } className={ "govuk-label govuk-label--s" }>
+        <span id={ "metrics-label" } className={ "govuk-label govuk-label--s" }>
             Metrics
         </span>
-        <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }>
-            Required. Select up to 5 metrics. <br/>
-            Records contain 4 additional default metrics as follows: areaType, areaCode, areaName, date
-        </p>
-        {
-            error &&
-            <span className="govuk-error-message">
-              <span className="govuk-visually-hidden">Error:</span> { error }
-            </span>
-        }
-        <div aria-labelledby={ "aria-metrics-label" }
-            aria-describedby={ 'aria-metrics-description' }>
+        <div id={ "metrics-descr" }>
+            <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>
+                Required. Select up to 5 metrics. Some metrics may not be available for
+                your selected area type. Such metrics will still be included in the resulting
+                document, but will not contain any data.
+            </p>
+            <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }>
+                Records contain 4 additional default metrics as follows: areaType, areaCode, areaName, date
+            </p>
+            {
+                error &&
+                <span className="govuk-error-message">
+                  <span className="govuk-visually-hidden">Error:</span> { error }
+                </span>
+            }
+        </div>
+        <div aria-labelledby={ "metrics-label" }
+            aria-describedby={ 'metrics-descr' }>
             <Select options={ metricNames }
                     value={ metricNames.filter(obj => metrics.includes(obj.value)) }
                     onChange={ e => setMetrics(Array.isArray(e) ? e.map(item => item.value) : []) }
@@ -364,6 +372,19 @@ const SupplementaryDownloads: ComponentType<*> = ({ ...props }) => {
 }; // SupplementaryDownloads
 
 
+const selectAndCopy = (event: any)  => {
+
+    let range = document.createRange();
+    range.selectNodeContents(event.target);
+
+    let sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand("copy");
+
+};  // selectContent
+
+
 const Download: ComponentType<*> = () => {
 
     const
@@ -426,18 +447,18 @@ const Download: ComponentType<*> = () => {
                               aria-described-by={ "aria-releasedate-descr" }
                               width={ "two-third" }>
                         <span
-                            id={ "aria-releasedate-label" }
+                            id={ "releasedate-label" }
                             className={ "govuk-label govuk-label--s" }>
                             Data release date
                         </span>
                         <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }
-                           id={ "aria-dataformat-descr" }>
-                            Required: Please note that when the "Latest" option is selected,
+                           id={ "dataformat-descr" }>
+                            Required. Note that when the "Latest" option is selected,
                             the permanent link will always produce the data as they appear on
                             the website &mdash; that is, the very latest release.
                         </p>
-                        <div aria-labelledby={ "aria-releasedate-label" }
-                            aria-describedby={ 'aria-releasedate-description' }>
+                        <div aria-labelledby={ "releasedate-label" }
+                            aria-describedby={ 'releasedate-descr' }>
                             <Radio heading="Data Release Date"
                                    value={ dataReleaseDate }
                                    options={ dataReleaseDateOptions }
@@ -450,15 +471,18 @@ const Download: ComponentType<*> = () => {
                                            date={ archiveDate }/>
                     </FormItem>
 
-                    <FormItem aria-labelledby={ "aria-dataformat-label" }
-                              aria-described-by={ "aria-dataformat-descr" }>
+                    <FormItem>
                         <span
-                            id={ "aria-dataformat-label" }
+                            id={ "dataformat-label" }
                             className={ "govuk-label govuk-label--s" }>
                             Data Format
                         </span>
-                        <div aria-labelledby={ "aria-dataformat-label" }
-                            aria-describedby={ 'aria-dataformat-description' }>
+                        <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }
+                           id={ "dataformat-descr" }>
+                            Required. The format of the document.
+                        </p>
+                        <div aria-labelledby={ "dataformat-label" }
+                             aria-describedby={ 'dataformat-description' }>
                             <Radio
                                 heading="Data Format"
                                 value={format}
@@ -469,10 +493,17 @@ const Download: ComponentType<*> = () => {
                         </div>
                     </FormItem>
                     <FormItem width={ "full" }>
-                        <span className={ "govuk-label govuk-label--s" }>
+                        <span id={ "downloadlink-label" } className={ "govuk-label govuk-label--s" }>
                             Permanent link
                         </span>
-                        <PermaLink>
+                        <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }
+                           id={ "downloadlink-descr" }>
+                            This is the permanent link for your specific request. Click
+                            on the box to copy the link into clipboard.
+                        </p>
+                        <PermaLink onClick={ isEnabled && selectAndCopy }
+                                   aria-labelledby={ "downloadlink-label" }
+                                   aria-describedby={ 'downloadlink-descr' }>
                             {
                                 isEnabled
                                     ? URLs.downloadData + urlParams
