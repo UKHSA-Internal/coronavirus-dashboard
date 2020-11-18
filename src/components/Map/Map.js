@@ -28,7 +28,7 @@ import {
     ScaleLegendLabel,
     ScaleValue
 } from "pages/InteractiveMap/InteractiveMap.styles";
-import turf from "turf";
+import bbox from "@turf/bbox";
 import { useFullRollingRates } from "hooks/useMapData";
 import axios from "axios";
 import MapMarker from "assets/icon-mapmarker.svg";
@@ -478,7 +478,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                             { hover: true }
                         );
 
-                        map.fitBounds(turf.bbox(e.features[0]), {
+                        map.fitBounds(bbox(e.features[0]), {
                             padding: 20,
                             maxZoom: Math.max(map.getLayer(layer.label).minzoom + 0.5, map.getZoom())
                         });
