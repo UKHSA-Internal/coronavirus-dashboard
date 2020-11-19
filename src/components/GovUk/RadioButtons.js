@@ -33,15 +33,10 @@ export const Radio: ComponentType<*> = ({ heading, options, value, setValue, inl
                         id
                     };
 
-                const { label, value } = choice;
-                delete choice.label
-                delete choice.value;
-
                 return {
-                    children: [ label ],
-                    value: value,
+                    children: [ choice.label ],
+                    value: choice.value,
                     id,
-                    ...choice
                 }
 
             })
