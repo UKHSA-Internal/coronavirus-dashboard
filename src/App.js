@@ -25,13 +25,9 @@ const
     ApiDocs         = lazy(() => import('pages/ApiDocs')),
     Announcement    = lazy(() => import("components/Announcement")),
     InteractiveMap  = lazy(() => import("pages/InteractiveMap")),
-<<<<<<< HEAD
     ChangeLog       = lazy(() => import("pages/ChangeLog")),
-    Footer          = lazy(() => import('components/Footer'));
-=======
     Footer          = lazy(() => import('components/Footer')),
     Download        = lazy(() => import('pages/Download'));
->>>>>>> v3-development
 
 
 const LastUpdateTime = () => {
