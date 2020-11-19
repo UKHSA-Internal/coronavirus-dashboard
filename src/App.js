@@ -25,8 +25,13 @@ const
     ApiDocs         = lazy(() => import('pages/ApiDocs')),
     Announcement    = lazy(() => import("components/Announcement")),
     InteractiveMap  = lazy(() => import("pages/InteractiveMap")),
+<<<<<<< HEAD
     ChangeLog       = lazy(() => import("pages/ChangeLog")),
     Footer          = lazy(() => import('components/Footer'));
+=======
+    Footer          = lazy(() => import('components/Footer')),
+    Download        = lazy(() => import('pages/Download'));
+>>>>>>> v3-development
 
 
 const LastUpdateTime = () => {
@@ -82,7 +87,9 @@ const
         "/details/healthcare",
         "/details/deaths",
         "/details/change-log",
-        "/details/about-data"
+        "/details/about-data",
+        "/details/download"
+
     ];
 
 
@@ -168,7 +175,11 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/details/deaths" exact component={ Deaths }/>
                                 <Route path="/details/interactive-map" component={ InteractiveMap }/>
 
+<<<<<<< HEAD
                                 <Route path="/details/change-log" exact component={ ChangeLog }/>
+=======
+                                <Route path="/details/download" exact component={ Download }/>
+>>>>>>> v3-development
                                 <Route path="/details/about-data" exact component={ About }/>
                                 {/*<Route path="/archive" component={ Archive }/>*/}
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>

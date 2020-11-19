@@ -51,6 +51,9 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
             <SideNavListSecondaryItem className={`${pathname === '/details/about-data' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/about-data" }>About the data</Link>
             </SideNavListSecondaryItem>
+            <SideNavListSecondaryItem className={`${pathname === '/details/download' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/download" }>Download data</Link>
+            </SideNavListSecondaryItem>
             <SideNavListSecondaryItem className={`${pathname === '/details/developers-guide' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/developers-guide" }>Developer's guide</Link>
             </SideNavListSecondaryItem>

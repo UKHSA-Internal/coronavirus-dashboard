@@ -9,6 +9,7 @@ export const PathNameMapper = {
     "/details/deaths": "Deaths",
     "/details/about-data": "About the data",
     "/details/change-log": "Change Log",
+    "/details/download": "Download data",
     "/details/cookies": "Cookies",
     "/details/accessibility": "Accessibility",
     "/details/archive": "Archive",
@@ -37,6 +38,7 @@ export const PathNames = {
 export const NoPickerPaths = [
     "/details/",
     "/details/interactive-map",
+    "/details/download",
     "/details/about-data",
     "/details/cookies",
     "/details/accessibility",
@@ -64,3 +66,12 @@ export const PathWithHeader = [
     "/details/new-service",
     "/details/developers-guide"
 ];
+
+export const AreaTypeOptions = [
+    { value: "overview", label: "United Kingdom" },
+    { value: "nation", label: "Nation" },
+    { value: "region", label: "Region" },
+    { value: "nhsRegion", label: "NHS Region" },
+    { value: "utla", label: "Upper Tier Local Authority" },
+    { value: "ltla", label: "Lower Tier Local Authority" }
+]
