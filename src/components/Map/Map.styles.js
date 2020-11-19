@@ -278,4 +278,8 @@ export const IndicatorLegend: ComponentType<*> =
             justify-content: space-between;
             color: #636A6D;
             margin: 0;
+            
+            & > code {
+                word-wrap: wrap;
+            }
         `;
