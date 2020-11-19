@@ -174,12 +174,8 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/details/healthcare" exact component={ Healthcare }/>
                                 <Route path="/details/deaths" exact component={ Deaths }/>
                                 <Route path="/details/interactive-map" component={ InteractiveMap }/>
-
-<<<<<<< HEAD
                                 <Route path="/details/change-log" exact component={ ChangeLog }/>
-=======
                                 <Route path="/details/download" exact component={ Download }/>
->>>>>>> v3-development
                                 <Route path="/details/about-data" exact component={ About }/>
                                 {/*<Route path="/archive" component={ Archive }/>*/}
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
