@@ -1,6 +1,6 @@
 {
   "name": "uk-covid19-dashboard",
-  "version": "2.0.79",
+  "version": "2.0.87",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
@@ -36,7 +36,7 @@
     "styled-components": "^5.1.1",
     "leaflet": "^1.6.0",
     "mapbox-gl": "^1.12.0",
-    "turf": "^3.0.14"
+    "@turf/bbox": "^6.0.1"
   },
   "scripts": {
     "lint": "yarn flow",
