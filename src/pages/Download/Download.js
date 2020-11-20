@@ -2,11 +2,21 @@
 
 import React, { useState, useEffect } from 'react';
 
-import Select from "react-select"; 
-
+import Select from "react-select";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 
+import moment from "moment";
+import MomentLocaleUtils, { formatDate, parseDate } from "react-day-picker/moment";
+
+import Loading from "components/Loading";
+import { Radio } from 'components/GovUk';
+
+import URLs from "common/urls";
+import { createQuery, groupBy, sort } from 'common/utils/utils';
 import {AreaTypeOptions} from "components/DashboardHeader/Constants";
+import useApi from "hooks/useApi";
+import useDownloadData from 'hooks/useDownloadData';
+import useTimestamp from 'hooks/useTimestamp';
 
 import {
     Container,
@@ -18,31 +28,12 @@ import {
     SideContent,
     Formset
 } from "./Download.styles"
-
-import moment from "moment";
-
-import MomentLocaleUtils, {
-    formatDate,
-    parseDate
-} from "react-day-picker/moment";
-
-import URLs from "common/urls";
-
-
-import { createQuery, groupBy, sort } from 'common/utils/utils';
-
-import Loading from "components/Loading";
-
-import { Radio } from 'components/GovUk';
-import useDownloadData from 'hooks/useDownloadData';
-import useTimestamp from 'hooks/useTimestamp';
-
 import type { ComponentType } from "react";
-import useApi from "hooks/useApi";
 
 
 const MAX_METRICS = 5;
 const MIN_ARCHIVE_DATE = "2020-08-12";
+const DATE_FORMAT = "YYYY-MM-DD";
 
 
 const dataFormatOptions = {   
@@ -56,8 +47,8 @@ const dataFormatOptions = {
 
 const dataReleaseDateOptions = {   
     choices: [
-        { label: "Latest", value: "latest", required: true },
-        { label: "Archive", value: "archive", required: true }
+        { label: "Latest", value: "latest" },
+        { label: "Archive", value: "archive" }
     ]
 };
 
@@ -141,9 +132,9 @@ const formatUrl = ({ ...props }) => {
 };  // formatUrl
 
 
-const FormItem: ComponentType<*> = ({ children, width="one-half", ...props }) => {
+const FormItem: ComponentType<*> = ({ children, width="one-half", className="", ...props }) => {
 
-    return <Formset width={ width} { ...props }>
+    return <Formset className={ `${className} ${width}` } { ...props }>
         { children }
     </Formset>
 
@@ -287,15 +278,17 @@ const MetricMultiSelector = ({ metrics, setMetrics }) => {
 };  // MetricMultiSelector
 
 
-const ArchiveDatePicker = ({ display=true, date, setDate, minDate }) => {
+const ArchiveDatePicker = ({ display=true, date, setDate, minDate, maxDate }) => {
 
     if ( !display ) return null;
+
+    if ( !maxDate || !date ) return <Loading/>;
 
     return <DatePickerContainer>
         <div id={ "archive-descr" }>
             <p className="govuk-body-s govuk-!-margin-top-1">
                 The archives in our current database include all publications
-                since 12 April 2020. The records are provided exactly as they were
+                since 12 August 2020. The records are provided exactly as they were
                 published on a specific date. They include every available figure for
                 the selected metrics from the start of the pandemic up to and including
                 the date that you select. The records will <u>not</u> include any data
@@ -318,7 +311,7 @@ const ArchiveDatePicker = ({ display=true, date, setDate, minDate }) => {
                 </strong>
             </div>
             <p className={ "govuk-hint govuk-!-font-size-16" }>
-            Select or type in a date formatted as "YYYY-MM-DD"
+            Select or type in a date formatted as "{ DATE_FORMAT }"
             </p>
         </div>
         <span id={ "archive-label" } className={ "govuk-visually-hidden" }>
@@ -330,16 +323,15 @@ const ArchiveDatePicker = ({ display=true, date, setDate, minDate }) => {
                 formatDate={ formatDate }
                 parseDate={ parseDate }
                 placeholder={ "Select date" }
-                format={ "YYYY-MM-DD" }
-                // inputProps={{ disabled: archivedDateDisabled }}
-                onDayChange={ value => setDate(moment(value).format("YYYY-MM-DD")) }
+                format={ DATE_FORMAT }
+                onDayChange={ value => setDate(moment(value).format(DATE_FORMAT)) }
                 value={ date }
                 dayPickerProps={ {
                     locale: 'en-gb',
                     localeUtils: MomentLocaleUtils,
                     disabledDays: [{
                         before: new Date(minDate),
-                        after: moment().toDate()
+                        after: new Date(maxDate)
                     }]
                 }}
             />
@@ -357,11 +349,12 @@ const SupplementaryDownloads: ComponentType<*> = ({ ...props }) => {
 
     return <ul className={ "govuk-list govuk-body-s" } { ...props }>{
         data.downloads.map((item, ind) =>
-            <li className={ "govuk-!-margin-bottom-2" }>
+            <li className={ "govuk-!-margin-bottom-2" } key={ `dl-item-${ ind }` }>
                 <span>{ item.label }</span>
                 <p className={ "govuk-body-s govuk-!-margin-top-1" }>{
                     item.links.map((link, linkInd) =>
-                        <a className={ "govuk-link govuk-link-!-no-visited-state govuk-!-margin-right-3" }
+                        <a key={ `dl-file-${ ind }-${ linkInd }` }
+                           className={ "govuk-link govuk-link-!-no-visited-state govuk-!-margin-right-3" }
                            href={ link.url }>{ link.text }</a>
                     )
                 }</p>
@@ -381,6 +374,7 @@ const selectAndCopy = (event: any)  => {
     sel.removeAllRanges();
     sel.addRange(range);
     document.execCommand("copy");
+    return null;
 
 };  // selectContent
 
@@ -388,15 +382,14 @@ const selectAndCopy = (event: any)  => {
 const Download: ComponentType<*> = () => {
 
     const
-        { timestamp } = useTimestamp(),
-        today = moment(timestamp).format("YYYY-MM-DD");
+        timestamp = useTimestamp();
 
     const [areaType, setAreaType] = useState("overview");
     const [areaCode, setAreaCode] = useState(null);
     const [metric, setMetric] = useState([]);
     const [dataReleaseDate, setDataReleaseDate] = useState("latest");
     const [format, setFormat] = useState("csv");
-    const [archiveDate, setArchiveDate] = useState(today);
+    const [archiveDate, setArchiveDate] = useState(null);
     const [urlParams, setUrlParams] = useState([]);
     const [isEnabled, setIsEnabled] = useState(false);
 
@@ -409,7 +402,16 @@ const Download: ComponentType<*> = () => {
 
         setIsEnabled(areaType && metric?.length && metric.length <= MAX_METRICS && archiveDate && format);
 
-    }, [areaType, areaCode, metric, archiveDate, format, dataReleaseDate ])
+    }, [areaType, areaCode, metric, archiveDate, format, dataReleaseDate ]);
+
+    useEffect(() => {
+        setAreaCode(null);
+    }, [ areaType === "overview" ]);
+
+    useEffect(() => {
+        const latest = moment(timestamp).format(DATE_FORMAT);
+        setArchiveDate(latest);
+    }, [ timestamp ]);
 
     return <>
         <div className="govuk-phase-banner status-banner govuk-!-margin-bottom-0">
@@ -439,12 +441,18 @@ const Download: ComponentType<*> = () => {
             <div id={ "downloadData" } className={ "govuk-!-margin-top-3" }>
                 <Form className={ "govuk-!-padding-left-0 govuk-!-padding-right-5" }>
 
-                    <AreaTypeSelector areaType={ areaType } setAreaType={ setAreaType }/>
-                    <AreaNameSelector areaType={ areaType } areaCode={ areaCode } setAreaCode={ setAreaCode }/>
-                    <MetricMultiSelector metrics={ metric } setMetrics={ setMetric }/>
+                    <AreaTypeSelector areaType={ areaType }
+                                      setAreaType={ setAreaType }/>
+
+                    <AreaNameSelector areaType={ areaType }
+                                      areaCode={ areaCode }
+                                      setAreaCode={ setAreaCode }/>
+
+                    <MetricMultiSelector metrics={ metric }
+                                         setMetrics={ setMetric }/>
 
                     <FormItem aria-labelledby={ "aria-releasedate-label" }
-                              aria-described-by={ "aria-releasedate-descr" }
+                              aria-describedby={ "aria-releasedate-descr" }
                               width={ "two-third" }>
                         <span
                             id={ "releasedate-label" }
@@ -459,7 +467,7 @@ const Download: ComponentType<*> = () => {
                         </p>
                         <div aria-labelledby={ "releasedate-label" }
                             aria-describedby={ 'releasedate-descr' }>
-                            <Radio heading="Data Release Date"
+                            <Radio heading={ "Data Release Date" }
                                    value={ dataReleaseDate }
                                    options={ dataReleaseDateOptions }
                                    setValue={ setDataReleaseDate }
@@ -467,6 +475,7 @@ const Download: ComponentType<*> = () => {
                         </div>
                         <ArchiveDatePicker display={ dataReleaseDate === "archive" }
                                            minDate={ MIN_ARCHIVE_DATE }
+                                           maxDate={ timestamp }
                                            setDate={ setArchiveDate }
                                            date={ archiveDate }/>
                     </FormItem>
@@ -484,7 +493,7 @@ const Download: ComponentType<*> = () => {
                         <div aria-labelledby={ "dataformat-label" }
                              aria-describedby={ 'dataformat-description' }>
                             <Radio
-                                heading="Data Format"
+                                heading={ "Data Format" }
                                 value={format}
                                 options={dataFormatOptions}
                                 setValue={(item) => setFormat(item)}
@@ -501,7 +510,7 @@ const Download: ComponentType<*> = () => {
                             This is the permanent link for your specific request. Click
                             on the box to copy the link into clipboard.
                         </p>
-                        <PermaLink onClick={ isEnabled && selectAndCopy }
+                        <PermaLink onClick={ isEnabled ? selectAndCopy : undefined }
                                    aria-labelledby={ "downloadlink-label" }
                                    aria-describedby={ 'downloadlink-descr' }>
                             {

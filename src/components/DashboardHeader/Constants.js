@@ -1,5 +1,6 @@
 // Global constants
 
+<<<<<<< HEAD
 export const PathNameMapper = {
     "/details/": "Daily update",
     "/details/interactive-map": "Interactive Map",
@@ -16,6 +17,16 @@ export const PathNameMapper = {
     "/details/new-service": "Announcement: New service",
     "/details/developers-guide": "Developers guide"
 };
+=======
+//
+// ATTENTION: Updates to routing paths must be reflected in "assets/paths.json"
+//
+
+import Path from "assets/paths.json";
+
+console.log(Path)
+export const PathNameMapper = Path;
+>>>>>>> v3-development
 
 
 export const PathNames = {
@@ -29,14 +40,13 @@ export const PathNames = {
     aboutData: "/details/about-data",
     cookies: "/details/cookies",
     accessibility: "/details/accessibility",
-    archive: "/details/archive",
-    newWebsite: "/details/new-service",
-    devGuide: "/details/developers-guide"
+    devGuide: "/details/developers-guide",
+    downloadData: "/details/download",
 }
 
 
 export const NoPickerPaths = [
-    "/details/",
+    "/details",
     "/details/interactive-map",
     "/details/download",
     "/details/about-data",

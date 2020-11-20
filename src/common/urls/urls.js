@@ -16,7 +16,7 @@ const URLs = {
     mapData:         `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/map_content/`,
     downloads:       `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/`,
     baseGeo:         `https://${ REACT_APP_MAIN_CDN      }/public/assets/geo/`,
-    mapStyle:        `https://${ REACT_APP_DOWNLOADS_CDN }/public/assets/geo/style_v3.json`,
+    mapStyle:        `https://${ REACT_APP_DOWNLOADS_CDN }/public/assets/geo/style_v4.json`,
     landingData:     `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/data/landing.json`,
     timestamp:       `https://${ REACT_APP_MAIN_CDN      }/public/assets/dispatch/website_timestamp`,
     lookups:         `https://${ REACT_APP_MAIN_CDN      }/public/assets/lookups/`,

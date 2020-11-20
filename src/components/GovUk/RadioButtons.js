@@ -10,37 +10,36 @@ export const Radio: ComponentType<*> = ({ heading, options, value, setValue, inl
     const radioId = heading.toLowerCase().replace(/[^a-z0-9_]+/g, "-");
 
     let clsName = "govuk-!-margin-bottom-0";
+
     if (inline) {
-        clsName = clsName + " " + "govuk-radios--inline";
+        clsName = `${clsName} govuk-radios--inline`;
     }
+
+    const choices = [...options.choices];
 
     return <Radios
         value={ value }
         onChange={ e => setValue(e.target.value) }
         className={ clsName }
         items={
-            options
-                .choices
-                .map((choice, index) => {
+            choices.map((choice, index) => {
 
-                    const id = `${radioId}-${index}`;
+                const id = `${radioId}-${index}`;
 
-                    if ( typeof choice === "string" )
-                        return {
-                            children: [ choice ],
-                            value: choice,
-                            id
-                        };
-
+                if ( typeof choice === "string" )
                     return {
-                        children: [ choice.label ],
-                        value: choice.value,
-                        required: choice?.required ?? false,
-                        id,
-                        ...choice
-                    }
+                        children: [ choice ],
+                        value: choice,
+                        id
+                    };
 
-                })
+                return {
+                    children: [ choice.label ],
+                    value: choice.value,
+                    id,
+                }
+
+            })
         }
         name={ `${radioId}-option-choices` }
         formGroup={{ className: `govuk-radios--small govuk-!-margin-bottom-0 ${ props?.groupClassName ?? "" }` }}
