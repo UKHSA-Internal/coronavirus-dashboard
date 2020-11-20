@@ -11,7 +11,13 @@ export const TH: ComponentType<*> =
             className: `govuk-table__header govuk-table__header--${ type } ${ className }`,
             colSpan: colSpan,
             scope: scope
-        }))``;
+        }))`
+            padding: 8px 5px;
+            
+            &.govuk-table__header--date {
+                max-width: 4rem;
+            }
+        `;
 
 
 export const TD: ComponentType<*> =
@@ -19,7 +25,13 @@ export const TD: ComponentType<*> =
         .td
         .attrs(({ className='', type='string' }) => ({
             className: `govuk-table__cell govuk-table__cell--${ type } ${ className }`,
-        }))``;
+        }))`
+            padding: 8px 5px;
+            
+            &.govuk-table__cell--date {
+                max-width: 4rem;
+            }
+        `;
 
 
 export const TR: ComponentType<*> =
@@ -37,7 +49,7 @@ export const TBody: ComponentType<*> =
             className: `govuk-table__tbody ${ className }`,
         }))`
             & > tr > td {
-                padding: 10px important;
+                padding: 5px important;
             }
         `;
 
@@ -47,21 +59,18 @@ export const THead: ComponentType<*> =
         .thead
         .attrs(({ className='' }) => ({
             className: `govuk-table__head ${ className }`,
-        }))`
-            & > tr > th {
-                padding: 10px !important;
-            }
-        `;
+        }))``;
 
 
 export const TableContainer: ComponentType<*> =
     styled
         .div`
             max-height: 350px;
-            overflow: scroll;
+            overflow: auto;
             
             &>table {
-                font-size: 1.1rem;
+                width: 99%;
+                // font-size: 1.1rem;
                 background-color: transparent !important;
             }
         `;
@@ -75,38 +84,43 @@ export const GovUKTable: ComponentType<*> =
         }))``;
 
 
- export const Sort: ComponentType<*> = (() => {
-
-    return styled.button`
-        display: block;
-        height: 15px;
-        width: 10px;
-        margin-left: 5px;
-        outline: none;
-        cursor: pointer;
+ export const Sort: ComponentType<*> =
+     styled
+         .button`
+            display: block;
+            height: 15px;
+            width: 10px;
+            margin-left: 5px;
+            outline: none;
+            cursor: pointer;
             
-        &:last-of-type {
-             padding-right: 20px;
-        }
-            `
-        
-})();
+            &:focus {
+                box-shadow: unset;
+                border: unset;
+                outline: #1d70b8 1px solid !important;
+                background: none !important;
+                background-color: none !important;
+            }
+                
+            &:last-of-type {
+                 padding-right: 20px;
+            }
+        `;
 
-export const TableHeadingCell = (() => {
 
-    return styled.span`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    
-    &.numeric {
-        justify-content: flex-end;
-    }
-    
-    &.string,
-    &.date {
-        justify-content: flex-start;
-    }
-    `
-
-})();
+export const TableHeadingCell: ComponentType<*> =
+    styled
+        .span`
+            display: inline-flex;
+            flex-direction: row;
+            align-items: center;
+            
+            &.numeric {
+                justify-content: flex-end;
+            }
+            
+            &.string,
+            &.date {
+                justify-content: flex-start;
+            }
+        `;

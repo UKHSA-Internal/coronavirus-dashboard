@@ -1,14 +1,11 @@
 // @flow
 
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import numeral from "numeral";
 
-
 import { CaretUp, CaretDown, CaretUpDown } from "common/Icons";
 import { Sort, TableHeadingCell } from "./Table.styles";
-
-
 
 import {
     TableContainer,
@@ -22,67 +19,81 @@ import {
 import moment from "moment";
 import ReactTooltip from "react-tooltip";
 
+import { sort } from "common/utils";
+
 import { NotAvailable } from "components/Widgets/Widgets";
 
-const directions = {
-    ascending: "asc",
-    descending: "desc"
-}
-
-const UnsortedSort = (sortBy, updater) => {
-    return <Sort htmlType={ "button" } onClick={ event => updater(sortBy) }>
-    
-    <Fragment>
-        <CaretUpDown/>
-         <span className={ "sr-only" }>
-            Unsorted column - Apply ascending sort.
-        </span>
-    </Fragment>
-
-    </Sort>
-};
-
-const AscendingSort = (sortBy, updater) => {
-    return  <Sort htmlType={ "button" } onClick={ event => updater(sortBy) }>
-                <Fragment>
-                    <CaretDown/>
-                        <span className={ "sr-only" }>
-                             Sorted column (ascending) - Apply descending sort.
-                        </span>
-                </Fragment>
-
-            </Sort>
-};
-
-const DescendingSort = (sortBy, updater) => {
-    return  <Sort htmlType={ "button" } onClick={ event => updater(sortBy) }>
-                <Fragment>
-                    <CaretUp/>
-                        <span className={ "sr-only" }>
-                            Sorted column  (descending) - Apply ascending sort.
-                        </span>
-                </Fragment>
-            </Sort>
-};
+import type { ComponentType } from "react";
 
 
-const SortIcon = ({ sortBy, firstSort, currentFilter, cInd, direction, updater }) => {
+const SortIcon = ({ setSorting, sorting, isSorted }) => {
 
-    if (firstSort) {
-        return UnsortedSort(sortBy, updater);
+    let { direction } = sorting;
+
+    if ( !isSorted ) direction = null;
+
+    let Icon, srMessage;
+
+    switch ( direction ) {
+        case true:
+            Icon = CaretUp;
+            srMessage = "Sorted column (ascending) - Apply descending sort.";
+            break;
+        case false:
+            Icon = CaretDown;
+            srMessage = "Sorted column  (descending) - Apply ascending sort."
+            break;
+        case null:
+        default:
+            Icon = CaretUpDown;
+            srMessage = "Unsorted column - Apply ascending sort.";
+            break;
     }
-    else if (currentFilter === cInd) {
-        if (direction === directions.descending) {
-            return DescendingSort(sortBy, updater);
-        }
-        else {
-            return AscendingSort(sortBy, updater);
-        }   
-    } else {
-        return UnsortedSort(sortBy, updater);
-    };
+
+    return <Sort htmlType={ "button" } onClick={ setSorting }>
+        <Icon/>
+        <span className={ "sr-only" }>{ srMessage }</span>
+    </Sort>
 
 }; // SortIcon
+
+
+const compareData = (data, sorting, dateFormat="DD-MM-YYYY") => {
+
+    if ( sorting.direction === null ) return data;
+
+    let sampleValue = data?.[0]?.[sorting.by];
+
+    if ( sampleValue === null ) sampleValue = NaN;
+
+    const sorter = ( a, b ) => sort(a[sorting.by], b[sorting.by]);
+    const dateSorter = ( a, b ) => sort(
+            moment(a[sorting.by], dateFormat),
+            moment(b[sorting.by], dateFormat)
+        );
+
+    let sortFunc;
+
+    switch ( typeof sampleValue ) {
+        case "number":
+            sortFunc = sorter;
+            break;
+
+        case "string":
+            sortFunc = moment(sampleValue, dateFormat).isValid()
+                ? dateSorter
+                : sorter;
+            break;
+
+        default:
+            return data
+    }
+
+    return sorting.direction
+        ? data.sort(sortFunc).reverse()
+        : data.sort(sortFunc)
+
+};  // compareData
 
 
 /**
@@ -95,77 +106,33 @@ const SortIcon = ({ sortBy, firstSort, currentFilter, cInd, direction, updater }
  * @param props { { [string]: any } }
  * @returns {*}
  */
-export const Table = ({ className, stickyHeader=true, head, body, ...props }) => {
+export const Table: ComponentType<*> = ({ className, stickyHeader=true,
+                                            head, body, ...props }) => {
 
-    const
-        typeDefinitions = head
-            .slice(-1)
-            .pop()
-            .map(({ type="" }) => type);
+    const typeDefinitions = head
+        .slice(-1)
+        .pop()
+        .map(({ type="" }) => type);
 
-
-    const [ currentFilter, setCurrentFilter ] = useState(null);
-    const [ previousFilter, setPreviousFilter ] = useState(null);
-    const [ direction, setDirection ] = useState(null);
-    const [ firstSort, setFirstSort ] = useState(true);
-    const [ currentBody, setCurrentBody ] = useState([]);
+    const [ sorting, setSorting ] = useState({ direction: false, by: 0 });
+    const [ currentBody, setCurrentBody ] = useState(compareData(body, sorting));
 
     useEffect(() => {
-        setCurrentBody(body);
-    }, []);
 
-    const compareData = (sortBy) => {
+        setCurrentBody(compareData(currentBody, sorting))
 
-        currentBody.sort((a, b) => {
-            const val1 = a[sortBy];
-            const val2 = b[sortBy];
-            if (typeof val1 === 'number') {
-                return val1 - val2;
-            } else if (typeof val1 === 'string') {
-                if (!moment(val1, "MM-DD-YYYY").isValid()) {
-                    return val1.localeCompare(val2);
-                }
-                else {
-                    const
-                        dateA = new Date(val1),
-                        dateB = new Date(val2);
+    }, [ sorting.by, sorting.direction, currentBody ]);
 
-                    return dateA < dateB ? 1 : dateA > dateB || 0;
-                }
-            } else {
-                return 0;
-            }
-            
-        });   
-    };
+    const sortingCallback = index => {
 
-    const sortData = (sortBy) => {        
-       
-        if (firstSort) {
-            // alert("first")
-            setDirection(directions.ascending); 
-            setCurrentFilter(sortBy)
-            setPreviousFilter(sortBy)
-            compareData(sortBy);
-        }
-        else {
-            if (previousFilter !== sortBy) {
-                // alert("new")
-                setDirection(directions.ascending); 
-                setCurrentFilter(sortBy)
-                setPreviousFilter(sortBy);
-                compareData(sortBy);
-            }
-            else {
-                // alert("reverse")
-                setDirection(direction === directions.ascending ? directions.descending : directions.ascending); 
-                currentBody.reverse()
-            };
-        };
+        setSorting(prev => ({
+            by: index,
+            direction: prev.direction === null
+                ? true
+                : !prev.direction,
+        }))
 
-        setFirstSort(false);
-
-    };
+    };  // sortingCallback
 
     return <TableContainer { ...props }>
 
@@ -175,37 +142,27 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
             <THead>{
                 head.map((item, rInd) => <TR key={ `head-tr-${ rInd }` }>{
                     item.map(({ value, ...props }, cInd) => 
-                        <TH key={ `head-th-${rInd}-${ cInd }` }
-                            { ...props }>
+                        <TH key={ `head-th-${rInd}-${ cInd }` } { ...props }>
                             <TableHeadingCell>
-
                                 { value }
-                            
-                                <SortIcon
-                                    sortBy={ cInd }
-                                    firstSort={firstSort}
-                                    currentFilter={currentFilter}
-                                    cInd={cInd}
-                                    direction={direction}
-                                    updater={ sortData }/>
+                                <SortIcon setSorting={ () => sortingCallback(cInd) }
+                                          sorting={ sorting }
+                                          isSorted={ sorting.by === cInd }/>
                             </TableHeadingCell>
-                        </TH>)
+                        </TH>
+                    )
                 }</TR>)
             }</THead>
             <TBody>{
                 currentBody.map((item, rInd) => <TR key={ `body-tr-${ rInd }` }>{
-
                     item.map((value, cInd) =>
-                        <TD key={ `body-td-${rInd}-${cInd}` } type={ typeDefinitions[cInd] }
-                        >{
+                        <TD key={ `body-td-${rInd}-${cInd}` } type={ typeDefinitions[cInd] }>{
                             typeDefinitions[cInd] === 'numeric'
                                 ? typeof value === 'number'
                                 ? numeral(value).format("0,0.[0]")
                                 : <NotAvailable/>
                                 : value
-                        }</TD>
-                    )
-
+                        }</TD>)
                 }</TR>)
             }</TBody>
         </GovUKTable>
@@ -223,7 +180,7 @@ export const DataTable = ({ fields, data, ...props }) => {
 
     const fieldNames = fields.map(item => item.value)
 
-    return <>
+    return <div style={{ overflow: "auto", maxWidth: "inherit" }}>
         <span className={ "govuk-visually-hidden" }>
             Showing a table of the data
         </span>
@@ -241,6 +198,6 @@ export const DataTable = ({ fields, data, ...props }) => {
             }
             { ...props }
         />
-    </>
+    </div>
 
 };  // DataTable
