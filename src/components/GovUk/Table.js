@@ -119,18 +119,17 @@ export const Table = ({ className, stickyHeader=true, head, body, ...props }) =>
         currentBody.sort((a, b) => {
             const val1 = a[sortBy];
             const val2 = b[sortBy];
-            if (typeof val1 === 'number') {
+            if (typeof val1 === 'number' && typeof val2 === 'number') {
                 return val1 - val2;
-            } else if (typeof val1 === 'string') {
-                if (!moment(val1, "MM-DD-YYYY").isValid()) {
-                    return val1.localeCompare(val2);
-                }
-                else {
+            } else if (typeof val1 === 'string' && typeof val2 === 'string') {
+                if (moment(val1, "MM-DD-YYYY").isValid() && moment(val2, "MM-DD-YYYY").isValid()) {
                     const
                         dateA = new Date(val1),
                         dateB = new Date(val2);
-
                     return dateA < dateB ? 1 : dateA > dateB || 0;
+                }
+                else {
+                    return val1.localeCompare(val2);
                 }
             } else {
                 return 0;
