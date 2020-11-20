@@ -180,7 +180,7 @@ export const DataTable = ({ fields, data, ...props }) => {
 
     const fieldNames = fields.map(item => item.value)
 
-    return <div style={{ overflow: "auto", maxWidth: "inherit" }}>
+    return <>
         <span className={ "govuk-visually-hidden" }>
             Showing a table of the data
         </span>
@@ -198,6 +198,6 @@ export const DataTable = ({ fields, data, ...props }) => {
             }
             { ...props }
         />
-    </div>
+    </>
 
 };  // DataTable
