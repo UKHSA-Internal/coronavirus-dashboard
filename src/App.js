@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { Switch, Route, withRouter, Redirect, useParams } from 'react-router';
 import Header from "components/Header";
 import BackToTop from 'components/BackToTop';
