@@ -135,6 +135,7 @@ const Arrow = ({ direction }) => {
             angle = 90;
             ArrowImage = GreenArrow;
             altText = "The rate has not changed relative to the previous week.";
+            break;
     }
 
     return <img src={ ArrowImage }
@@ -319,7 +320,6 @@ const LocalAuthorityCard = ({ currentLocation, date, areaType, ...props }) => {
                      { ...props }/>
 
 };
-
 
 
 const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, geoData, date,
@@ -653,11 +653,11 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     : <SoaCard { ...currentLocation } date={ date } maxDate={ maxDate } setShowInfo={ setShowInfo }/>
             }
             </MapContainer>
-            <span style={{ textAlign: "right" }}>
-                Download as <a onClick={ downloadImage }
-                       className={ "govuk-link govuk-link--no-visited-state" }
-                       download={ "map.png" } href={ "" }>image</a>.</span>
-        </>
+        <span style={{ textAlign: "right" }}>
+            Download as <a onClick={ downloadImage }
+                   className={ "govuk-link govuk-link--no-visited-state" }
+                   download={ "map.png" } href={ "" }>image</a>.</span>
+    </>
 
 };  // Map
 
