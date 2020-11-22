@@ -117,25 +117,22 @@ const MapLayers = [
 
 const Arrow = ({ direction }) => {
 
-    let angle, colour, altText, ArrowImage;
+    let angle, altText, ArrowImage;
 
     switch ( direction ) {
         case "UP":
             angle = 0;
-            colour = "red";
             ArrowImage = RedArrow;
             altText = "The rate has increased relative to the previous week.";
             break;
         case "DOWN":
             angle = 180;
-            colour = "green";
             ArrowImage = GreenArrow;
             altText = "The rate has decreased relative to the previous week.";
             break;
         case "SAME":
         default:
             angle = 90;
-            colour = "green";
             ArrowImage = GreenArrow;
             altText = "The rate has not changed relative to the previous week.";
     }
