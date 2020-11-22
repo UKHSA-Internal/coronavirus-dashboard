@@ -1,18 +1,10 @@
 // @flow
 
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 import type { ComponentType } from "react";
 import Magnifier from "assets/icon-magnify.svg";
 
-
-// export const MapContainer: ComponentType<*> =
-//     styled.div`
-//         position: absolute;
-//         border: 1px solid black;
-//         height: 75vh;
-//         margin: 0;
-//     `;
 
 export const MapContainer: ComponentType<*> =
     styled
