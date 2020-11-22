@@ -381,9 +381,7 @@ const selectAndCopy = (event: any)  => {
 
 const Download: ComponentType<*> = () => {
 
-    const
-        timestamp = useTimestamp();
-
+    const timestamp = useTimestamp();
     const [areaType, setAreaType] = useState("overview");
     const [areaCode, setAreaCode] = useState(null);
     const [metric, setMetric] = useState([]);
@@ -414,12 +412,12 @@ const Download: ComponentType<*> = () => {
     }, [ timestamp ]);
 
     return <>
-        <div className="govuk-phase-banner status-banner govuk-!-margin-bottom-0">
-            <p className="govuk-phase-banner__content">
-                <strong className="govuk-tag govuk-phase-banner__content__tag">
+        <div className={ "govuk-phase-banner status-banner govuk-!-margin-bottom-0" }>
+            <p className={ "govuk-phase-banner__content" }>
+                <strong className={ "govuk-tag govuk-phase-banner__content__tag" }>
                     EXPERIMENTAL
                 </strong>
-                <span className="govuk-phase-banner__text">
+                <span className={ "govuk-phase-banner__text" }>
                     This is a new addition to the service. It is subject to active development
                     and may become unstable or unresponsive without prior notice.
                 </span>
@@ -427,158 +425,159 @@ const Download: ComponentType<*> = () => {
         </div>
         <Container>
             <MainContent className={ "no-border" }>
-                <p className="govuk-body govuk-!-margin-top-1">
+                <p className={ "govuk-body govuk-!-margin-top-1" }>
                     You may download the data by clicking on the "Download data" button,
                     or using the permanent link. Download requests are subject
                     to the <a className={ "govuk-link govuk-link--no-visited-state" }
                               href={ "#fair-usage-policy" }>Fair usage policy</a>.
                 </p>
-                <p className="govuk-body govuk-!-margin-top-1 govuk-!-margin-bottom-0">
+                <p className={ "govuk-body govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>
                     You must select an area type and at least one metric to enable the
                     "Download data" button and create a link. You may further choose a
                     specific area name to reduce the data to a specific location.
                 </p>
-            <div id={ "downloadData" } className={ "govuk-!-margin-top-3" }>
-                <Form className={ "govuk-!-padding-left-0 govuk-!-padding-right-5" }>
+                <div id={ "downloadData" } className={ "govuk-!-margin-top-3" }>
+                    <Form className={ "govuk-!-padding-left-0 govuk-!-padding-right-5" }>
 
-                    <AreaTypeSelector areaType={ areaType }
-                                      setAreaType={ setAreaType }/>
+                        <AreaTypeSelector areaType={ areaType }
+                                          setAreaType={ setAreaType }/>
 
-                    <AreaNameSelector areaType={ areaType }
-                                      areaCode={ areaCode }
-                                      setAreaCode={ setAreaCode }/>
+                        <AreaNameSelector areaType={ areaType }
+                                          areaCode={ areaCode }
+                                          setAreaCode={ setAreaCode }/>
 
-                    <MetricMultiSelector metrics={ metric }
-                                         setMetrics={ setMetric }/>
+                        <MetricMultiSelector metrics={ metric }
+                                             setMetrics={ setMetric }/>
 
-                    <FormItem aria-labelledby={ "aria-releasedate-label" }
-                              aria-describedby={ "aria-releasedate-descr" }
-                              width={ "two-third" }>
-                        <span
-                            id={ "releasedate-label" }
-                            className={ "govuk-label govuk-label--s" }>
-                            Data release date
-                        </span>
-                        <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }
-                           id={ "dataformat-descr" }>
-                            Required. Note that when the "Latest" option is selected,
-                            the permanent link will always produce the data as they appear on
-                            the website &mdash; that is, the very latest release.
-                        </p>
-                        <div aria-labelledby={ "releasedate-label" }
-                            aria-describedby={ 'releasedate-descr' }>
-                            <Radio heading={ "Data Release Date" }
-                                   value={ dataReleaseDate }
-                                   options={ dataReleaseDateOptions }
-                                   setValue={ setDataReleaseDate }
-                                   inline={ false }/>
-                        </div>
-                        <ArchiveDatePicker display={ dataReleaseDate === "archive" }
-                                           minDate={ MIN_ARCHIVE_DATE }
-                                           maxDate={ timestamp }
-                                           setDate={ setArchiveDate }
-                                           date={ archiveDate }/>
-                    </FormItem>
+                        <FormItem aria-labelledby={ "aria-releasedate-label" }
+                                  aria-describedby={ "aria-releasedate-descr" }
+                                  width={ "two-third" }>
+                            <span
+                                id={ "releasedate-label" }
+                                className={ "govuk-label govuk-label--s" }>
+                                Data release date
+                            </span>
+                            <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }
+                               id={ "dataformat-descr" }>
+                                Required. Note that when the "Latest" option is selected,
+                                the permanent link will always produce the data as they appear on
+                                the website &mdash; that is, the very latest release.
+                            </p>
+                            <div aria-labelledby={ "releasedate-label" }
+                                aria-describedby={ 'releasedate-descr' }>
+                                <Radio heading={ "Data Release Date" }
+                                       value={ dataReleaseDate }
+                                       options={ dataReleaseDateOptions }
+                                       setValue={ setDataReleaseDate }
+                                       inline={ false }/>
+                            </div>
+                            <ArchiveDatePicker display={ dataReleaseDate === "archive" }
+                                               minDate={ MIN_ARCHIVE_DATE }
+                                               maxDate={ timestamp }
+                                               setDate={ setArchiveDate }
+                                               date={ archiveDate }/>
+                        </FormItem>
 
-                    <FormItem>
-                        <span
-                            id={ "dataformat-label" }
-                            className={ "govuk-label govuk-label--s" }>
-                            Data Format
-                        </span>
-                        <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }
-                           id={ "dataformat-descr" }>
-                            Required. The format of the document.
-                        </p>
-                        <div aria-labelledby={ "dataformat-label" }
-                             aria-describedby={ 'dataformat-description' }>
-                            <Radio
-                                heading={ "Data Format" }
-                                value={format}
-                                options={dataFormatOptions}
-                                setValue={(item) => setFormat(item)}
-                                inline={false}
-                            />
-                        </div>
-                    </FormItem>
-                    <FormItem width={ "full" }>
-                        <span id={ "downloadlink-label" } className={ "govuk-label govuk-label--s" }>
-                            Permanent link
-                        </span>
-                        <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }
-                           id={ "downloadlink-descr" }>
-                            This is the permanent link for your specific request. Click
-                            on the box to copy the link into clipboard.
-                        </p>
-                        <PermaLink onClick={ isEnabled ? selectAndCopy : undefined }
-                                   aria-labelledby={ "downloadlink-label" }
-                                   aria-describedby={ 'downloadlink-descr' }>
+                        <FormItem>
+                            <span
+                                id={ "dataformat-label" }
+                                className={ "govuk-label govuk-label--s" }>
+                                Data Format
+                            </span>
+                            <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }
+                               id={ "dataformat-descr" }>
+                                Required. The format of the document.
+                            </p>
+                            <div aria-labelledby={ "dataformat-label" }
+                                 aria-describedby={ 'dataformat-description' }>
+                                <Radio
+                                    heading={ "Data Format" }
+                                    value={format}
+                                    options={dataFormatOptions}
+                                    setValue={(item) => setFormat(item)}
+                                    inline={false}
+                                />
+                            </div>
+                        </FormItem>
+                        <FormItem width={ "full" }>
+                            <span id={ "downloadlink-label" } className={ "govuk-label govuk-label--s" }>
+                                Permanent link
+                            </span>
+                            <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }
+                               id={ "downloadlink-descr" }>
+                                This is the permanent link for your specific request. Click
+                                on the box to copy the link into clipboard.
+                            </p>
+                            <PermaLink onClick={ isEnabled ? selectAndCopy : undefined }
+                                       aria-labelledby={ "downloadlink-label" }
+                                       aria-describedby={ 'downloadlink-descr' }>
+                                {
+                                    isEnabled
+                                        ? URLs.downloadData + urlParams
+                                        : "You must select at least one metric to generate a link."
+                                }
+                            </PermaLink>
+                        </FormItem>
+                        <FormItem>
+                            <p className={ "govuk-hint govuk-!-font-size-16" }>
+                                The records in the document will not be ordered.
+                            </p>
                             {
                                 isEnabled
-                                    ? URLs.downloadData + urlParams
-                                    : "You must select at least one metric to generate a link."
+                                    ? <DownloadLink className={ "govuk-button" }
+                                                      target={ "_blank" }
+                                                      href={ URLs.downloadData + urlParams }
+                                                      enabled={ isEnabled }
+                                                      download>
+                                        Download data
+                                    </DownloadLink>
+                                    : <button className={ "govuk-button" } disabled={ true }>
+                                        Download data
+                                    </button>
                             }
-                        </PermaLink>
-                    </FormItem>
-                    <FormItem>
-                        <p className="govuk-hint govuk-!-font-size-16">
-                            The records in the document will not be ordered.
-                        </p>
-                        {
-                            isEnabled
-                                ? <DownloadLink className={ "govuk-button" }
-                                                  target={ "_blank" }
-                                                  href={ URLs.downloadData + urlParams }
-                                                  enabled={ isEnabled }
-                                                  download>
-                                    Download data
-                                </DownloadLink>
-                                : <button className={ "govuk-button" } disabled={ true }>
-                                    Download data
-                                </button>
-                        }
-                    </FormItem>
-                </Form>
-            </div>
+                        </FormItem>
+                    </Form>
+                </div>
 
-            <h2 id={ "fair-usage-policy" } className={ "govuk-heading-s govuk-!-margin-top-4" }>
-                Fair usage policy
-            </h2>
-            <p className="govuk-body-s govuk-!-margin-bottom-2">
-                Due to the large volume of data that may be downloaded through this
-                page, a fair usage policy applies:
-            </p>
-            <ul className="govuk-list govuk-body-s govuk-!-margin-bottom-2">
-                <li>
-                    <strong>Throttling:</strong> Each user is limited to 10 download
-                    requests per any 100&ndash;second period, with a maximum rate
-                    limit of 100 per hour.
-                </li>
-                <li className={ "govuk-!-margin-top-2" }>
-                    <strong>Metric limit:</strong> Each download request may contain
-                    up to a maximum number of 5 metrics. This excludes the default
-                    metrics.
-                </li>
-                <li className={ "govuk-!-margin-top-2" }>
-                    <strong>Freshness:</strong> Identical requests are only refreshed
-                    once every 150 seconds.
-                </li>
-            </ul>
-            <p className="govuk-body-s govuk-!-margin-bottom-2">
-                The limits outlined in this policy are subject to change without prior
-                notice.
-            </p>
-        </MainContent>
-        <SideContent>
-            <h2 className={ "govuk-heading-s govuk-!-margin-top-3 govuk-!-margin-bottom-3" }>
-                Supplementary downloads
-            </h2>
-            <div className={ "govuk-body-xs" }>
-                <SupplementaryDownloads/>
-            </div>
-        </SideContent>
-    </Container>
+                <h2 id={ "fair-usage-policy" } className={ "govuk-heading-s govuk-!-margin-top-4" }>
+                    Fair usage policy
+                </h2>
+                <p className={ "govuk-body-s govuk-!-margin-bottom-2" }>
+                    Due to the large volume of data that may be downloaded through this
+                    page, a fair usage policy applies:
+                </p>
+                <ul className={ "govuk-list govuk-body-s govuk-!-margin-bottom-2" }>
+                    <li>
+                        <strong>Throttling:</strong> Each user is limited to 10 download
+                        requests per any 100&ndash;second period, with a maximum rate
+                        limit of 100 per hour.
+                    </li>
+                    <li className={ "govuk-!-margin-top-2" }>
+                        <strong>Metric limit:</strong> Each download request may contain
+                        up to a maximum number of 5 metrics. This excludes the default
+                        metrics.
+                    </li>
+                    <li className={ "govuk-!-margin-top-2" }>
+                        <strong>Freshness:</strong> Identical requests are only refreshed
+                        once every 150 seconds.
+                    </li>
+                </ul>
+                <p className={ "govuk-body-s govuk-!-margin-bottom-2" }>
+                    The limits outlined in this policy are subject to change without prior
+                    notice.
+                </p>
+            </MainContent>
+            <SideContent>
+                <h2 className={ "govuk-heading-s govuk-!-margin-top-3 govuk-!-margin-bottom-3" }>
+                    Supplementary downloads
+                </h2>
+                <div className={ "govuk-body-xs" }>
+                    <SupplementaryDownloads/>
+                </div>
+            </SideContent>
+        </Container>
     </>
+
 } // Download
 
 
