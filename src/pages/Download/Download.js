@@ -578,7 +578,7 @@ const Download: ComponentType<*> = () => {
         </Container>
     </>
 
-} // Download
+}; // Download
 
 
 export default Download;
