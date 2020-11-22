@@ -521,8 +521,6 @@ export const Histogram = ({ data, currentLocation }) => {
 
 export const XAxis = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}, margin = {}, style = {}, isTimeSeries = true, SrOnly = "", ...props }) => {
 
-    const width = useResponsiveLayout(640);
-
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
         <Plot
