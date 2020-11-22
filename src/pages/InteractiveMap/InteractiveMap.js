@@ -6,7 +6,7 @@ import Map from "components/Map";
 import Loading from "components/Loading";
 import moment from "moment";
 
-import { getParams, getParamValueFor, sort } from "common/utils";
+import { getParams, getParamValueFor } from "common/utils";
 
 import {
     Header,
