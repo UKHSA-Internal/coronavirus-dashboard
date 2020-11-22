@@ -327,13 +327,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
     const
         bounds = new L.LatLngBounds(new L.LatLng(50.5, -14.5), new L.LatLng(58.8, 10)),
-        // maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -12.5), new L.LatLng(61, 10)),
         centrePoint = bounds.getCenter(),
         [map, setMap] = useState(null),
         [styleDataStatus, setStyleDataStatus] = useState(false),
-        [showInfo, setShowInfo] = useState(false);
-
-    const
+        [showInfo, setShowInfo] = useState(false),
         [postcodeData, setPostcodeData] = useState(null),
         [currentLocation, setCurrentLocation] = useState({ currentLocation: null, areaType: "utla" }),
         [isLoading, setIsLoading] = useState(true),
