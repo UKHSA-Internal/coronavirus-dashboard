@@ -19,6 +19,8 @@ import type { ComponentType } from "react";
 import { useMapData } from "hooks/useMapData";
 import { XAxis } from "components/Plotter/Plotter";
 
+import { glAvailable } from "components/Map/utils";
+
 
 const AreaLevel = {
     nation: {
@@ -68,16 +70,24 @@ const colours = [
 ];
 
 
+const MainHeader: ComponentType<*> = ({ ...props }) => {
+
+    return <Header>
+        <p className={ "govuk-body" } style={{ maxWidth: 40 + "em" }} { ...props }>
+            Browse cases data for specific areas within the UK.
+        </p>
+    </Header>
+
+};  // SectionHeader
+
+
 const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
 
     const
         params = getParams(query),
         period = getParamValueFor(params, "period", "daily"),
-        areaType = getParamValueFor(params, "areaType", "nation");
-
-    const
+        areaType = getParamValueFor(params, "areaType", "nation"),
         refData = useMapData(`maps/${areaType}_percentiles.json`),
-
         [ dates, setDates ] = useState(null) ,
         [ currentDate, setCurrentDate ] = useState(null),
         [ extrema, setExtrema ] = useState({ min: 0, first: .25, second: .5, third: .75, max: 1 });
@@ -98,22 +108,28 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
         if ( refData?.complete )
             setExtrema(refData?.[currentDate] ?? refData.complete);
 
-    }, [currentDate, refData?.complete])
+    }, [currentDate, refData?.complete]);
 
     useEffect(() =>{
         if ( period === "all_time" ) {
             setCurrentDate(null)
         }
-    }, [period])
+    }, [period]);
 
-    if ( !dates || !extrema ) return <Loading/>
+    if ( !glAvailable() ) {
+        return <Container>
+            <MainHeader/>
+            <div>
+                You must have WebGL installed and enabled on your browser to use the
+                interactive map.
+            </div>
+        </Container>
+    }
+
+    if ( !dates || !extrema ) return <Loading/>;
 
     return <Container>
-        <Header>
-            <p className={ "govuk-body" } style={{ maxWidth: 40 + "em" }}>
-                Browse cases data for specific areas within the UK.
-            </p>
-        </Header>
+        <MainHeader/>
         <div className={ "govuk-!-margin-bottom-5" }>
             {/*<h2 className={ "govuk-heading-m" }>How to use the map?</h2>*/}
             <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
