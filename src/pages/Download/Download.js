@@ -34,6 +34,7 @@ import type { ComponentType } from "react";
 const MAX_METRICS = 5;
 const MIN_ARCHIVE_DATE = "2020-08-12";
 const DATE_FORMAT = "YYYY-MM-DD";
+const MSOA_AREA_TYPE = "msoa";
 
 
 const dataFormatOptions = {   
@@ -51,6 +52,12 @@ const dataReleaseDateOptions = {
         { label: "Archive", value: "archive" }
     ]
 };
+
+const  msoaReleaseDateOption = {
+    choices: [
+        { label: "Latest", value: "latest" }
+    ]
+}
 
 
 const excludedMetrics = [
@@ -163,6 +170,122 @@ const AreaTypeSelector = ({ areaType, setAreaType }) => {
 
 };  // AreaTypeSelector
 
+const SelectContainer = ({areaType, areaCode, setAreaCode, region, setRegion, utla, setUtla, setLtlas}) => {
+    if (areaType && areaType === MSOA_AREA_TYPE) {
+
+        return <>
+                <RegionSelector
+                        areaType={ areaType }
+                        region={ region }
+                        seRegion={ setRegion }/>
+
+                <UtlaSelector region={ region}
+                              setUtla={ setUtla }/>
+
+                <LtlaSelector region={ region} 
+                              utla= { utla }
+                              setLtlas={ setLtlas }/>
+
+                <MsoaSelector></MsoaSelector>
+            </>
+    }
+    else {
+        return  <AreaNameSelector areaType={ areaType }
+                    areaCode={ areaCode }
+                    setAreaCode={ setAreaCode }/>
+    }
+} // SelectContainer
+                       
+
+const UtlaSelector = ({ region, setUtla }) => {
+
+    const utlas = [];
+
+    return <FormItem width={ "one-half" }>
+        <span id={ "utla-label" } className={ "govuk-label govuk-label--s" }>
+            Utla
+        </span>
+       
+        <div aria-labelledby={ "utla-label" } aria-describedby={ 'utla-descr' }>
+            <Select options={ utlas }
+                    styles={ SelectOptions }
+                    value={ utlas.filter(item => item.value === region) }
+                    isLoading={ utlas.length < 1 && utlas}
+                    placeholder={ "Select ulta" }
+                    isDisabled={ !region }
+                    onChange={ ({value}) => setUtla(value) }
+                    className={ 'select' }/>
+        </div>
+    </FormItem>  
+
+} // UtlaSelector
+
+const LtlaSelector = ({ region, utla, setLtla }) => {
+
+    const ltlas = [];
+
+    return <FormItem width={ "one-half" }>
+        <span id={ "ltla-label" } className={ "govuk-label govuk-label--s" }>
+           Ltla
+        </span>
+       
+        <div aria-labelledby={ "ltla-label" } aria-describedby={ 'ltla-descr' }>
+            <Select options={ ltlas }
+                    styles={ SelectOptions }
+                    value={ ltlas.filter(item => item.value === region) }
+                    isLoading={ ltlas.length < 1 && ltlas}
+                    placeholder={ "Select ltla" }
+                    isDisabled={ !utla }
+                    onChange={ ({value}) => setLtla(value) }
+                    className={ 'select' }/>
+        </div>
+    </FormItem>  
+
+} // LtlaSelector
+
+const RegionSelector = ({ areaType, region, setRegion }) => {
+
+    const regions = [];
+
+    return <FormItem width={ "one-half" }>
+        <span id={ "region-label" } className={ "govuk-label govuk-label--s" }>
+            Region
+        </span>
+       
+        <div aria-labelledby={ "region-label" } aria-describedby={ 'region-descr' }>
+            <Select options={ regions }
+                    styles={ SelectOptions }
+                    value={ regions.filter(item => item.value === region) }
+                    isLoading={ regions.length < 1 && region}
+                    placeholder={ "Select region" }
+                    isDisabled={ !areaType || areaType === "overview" }
+                    onChange={ ({value}) => setRegion(value) }
+                    className={ 'select' }/>
+        </div>
+    </FormItem>  
+} // RegionSelector
+
+const MsoaSelector = ({ ltla, setMsoa }) => {
+
+    const msoas = [];
+
+    return <FormItem width={ "one-half" }>
+        <span id={ "msoa-label" } className={ "govuk-label govuk-label--s" }>
+            MSOA
+        </span>
+       
+        <div aria-labelledby={ "msoa-label" } aria-describedby={ 'msoa-descr' }>
+            <Select options={ msoas }
+                    styles={ SelectOptions }
+                    value={ msoas.filter(item => item.value === ltla) }
+                    isLoading={ msoas.length < 1 && msoas}
+                    placeholder={ "Select msoa" }
+                    isDisabled={ !ltla}
+                    onChange={ ({value}) => setMsoa(value) }
+                    className={ 'select' }/>
+        </div>
+    </FormItem>  
+} // MsoaSelector
 
 const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
 
@@ -277,7 +400,6 @@ const MetricMultiSelector = ({ metrics, setMetrics }) => {
 
 };  // MetricMultiSelector
 
-
 const ArchiveDatePicker = ({ display=true, date, setDate, minDate, maxDate }) => {
 
     if ( !display ) return null;
@@ -314,28 +436,30 @@ const ArchiveDatePicker = ({ display=true, date, setDate, minDate, maxDate }) =>
             Select or type in a date formatted as "{ DATE_FORMAT }"
             </p>
         </div>
+
         <span id={ "archive-label" } className={ "govuk-visually-hidden" }>
-            Archive date
-        </span>
-        <div aria-describedby={ "archive-descr" }
-             aria-labelledby={ "archive-label" }>
-            <DayPickerInput
-                formatDate={ formatDate }
-                parseDate={ parseDate }
-                placeholder={ "Select date" }
-                format={ DATE_FORMAT }
-                onDayChange={ value => setDate(moment(value).format(DATE_FORMAT)) }
-                value={ date }
-                dayPickerProps={ {
-                    locale: 'en-gb',
-                    localeUtils: MomentLocaleUtils,
-                    disabledDays: [{
-                        before: new Date(minDate),
-                        after: new Date(maxDate)
-                    }]
-                }}
-            />
-        </div>
+                    Archive date
+                </span>
+                <div aria-describedby={ "archive-descr" }
+                    aria-labelledby={ "archive-label" }>
+                    <DayPickerInput
+                        formatDate={ formatDate }
+                        parseDate={ parseDate }
+                        placeholder={ "Select date" }
+                        format={ DATE_FORMAT }
+                        onDayChange={ value => setDate(moment(value).format(DATE_FORMAT)) }
+                        value={ date }
+                        dayPickerProps={ {
+                            locale: 'en-gb',
+                            localeUtils: MomentLocaleUtils,
+                            disabledDays: [{
+                                before: new Date(minDate),
+                                after: new Date(maxDate)
+                            }]
+                        }}
+                    />
+                </div>
+       
     </DatePickerContainer>
 
 };  // ArchiveDatePicker
@@ -390,6 +514,10 @@ const Download: ComponentType<*> = () => {
     const [archiveDate, setArchiveDate] = useState(null);
     const [urlParams, setUrlParams] = useState([]);
     const [isEnabled, setIsEnabled] = useState(false);
+    const [region, setRegion] = useState(null);
+    const [ulas, setUtlas] = useState(null);
+    const [ltlas, setLtlas] = useState(null);
+    const [msoas, setMsoas] = useState(null);
 
     useEffect(() => {
 
@@ -410,6 +538,8 @@ const Download: ComponentType<*> = () => {
         const latest = moment(timestamp).format(DATE_FORMAT);
         setArchiveDate(latest);
     }, [ timestamp ]);
+
+    
 
     return <>
         <div className={ "govuk-phase-banner status-banner govuk-!-margin-bottom-0" }>
@@ -442,9 +572,11 @@ const Download: ComponentType<*> = () => {
                         <AreaTypeSelector areaType={ areaType }
                                           setAreaType={ setAreaType }/>
 
-                        <AreaNameSelector areaType={ areaType }
-                                          areaCode={ areaCode }
-                                          setAreaCode={ setAreaCode }/>
+                        <SelectContainer areaType={areaType }
+                                        areaCode={ areaCode }
+                                        setAreaCode={ setAreaCode }
+                                        region={ region }
+                                        setRegion={ setRegion} />      
 
                         <MetricMultiSelector metrics={ metric }
                                              setMetrics={ setMetric }/>
@@ -467,11 +599,12 @@ const Download: ComponentType<*> = () => {
                                 aria-describedby={ 'releasedate-descr' }>
                                 <Radio heading={ "Data Release Date" }
                                        value={ dataReleaseDate }
-                                       options={ dataReleaseDateOptions }
+                                       options={ areaType != MSOA_AREA_TYPE ? dataReleaseDateOptions : msoaReleaseDateOption }
                                        setValue={ setDataReleaseDate }
                                        inline={ false }/>
                             </div>
-                            <ArchiveDatePicker display={ dataReleaseDate === "archive" }
+                            <ArchiveDatePicker
+                                               display={ dataReleaseDate === "archive" }
                                                minDate={ MIN_ARCHIVE_DATE }
                                                maxDate={ timestamp }
                                                setDate={ setArchiveDate }
@@ -512,8 +645,10 @@ const Download: ComponentType<*> = () => {
                                        aria-labelledby={ "downloadlink-label" }
                                        aria-describedby={ 'downloadlink-descr' }>
                                 {
-                                    isEnabled
+                                    isEnabled && areaType !== MSOA_AREA_TYPE
                                         ? URLs.downloadData + urlParams
+                                        :
+                                    isEnabled ? URLs.downloadMsoaData + urlParams
                                         : "You must select at least one metric to generate a link."
                                 }
                             </PermaLink>

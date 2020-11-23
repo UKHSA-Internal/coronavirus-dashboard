@@ -41,6 +41,7 @@ const URLs = {
     archiveList:            `https://${ REACT_APP_DOWNLOADS_CDN }/downloads?restype=container&comp=list`,
     metrics:                `https://${ REACT_APP_MAIN_CDN      }/public/assets/dispatch/api_variables.json`,
     downloadData:           `https://${ REACT_APP_API_ENDPOINT  }/v2/data`,
+    downloadMsoaData:       `https://${ REACT_APP_API_ENDPOINT  }/v2/soa`,
     supplementaryDownloads: `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/downloads.json`,
 };
 
