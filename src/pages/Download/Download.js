@@ -523,12 +523,13 @@ const Download: ComponentType<*> = () => {
 
         setUrlParams(formatUrl({
             areaType, areaCode, metric, format,
-            release: dataReleaseDate !== "latest" && archiveDate
+            release: dataReleaseDate !== "latest" && archiveDate,
+            region, ulas, ltlas, msoas
         }));
 
         setIsEnabled(areaType && metric?.length && metric.length <= MAX_METRICS && archiveDate && format);
 
-    }, [areaType, areaCode, metric, archiveDate, format, dataReleaseDate ]);
+    }, [areaType, areaCode, metric, archiveDate, format, dataReleaseDate, region, ulas, ltlas, msoas ]);
 
     useEffect(() => {
         setAreaCode(null);
@@ -661,7 +662,8 @@ const Download: ComponentType<*> = () => {
                                 isEnabled
                                     ? <DownloadLink className={ "govuk-button" }
                                                       target={ "_blank" }
-                                                      href={ URLs.downloadData + urlParams }
+                                                      href={ (areaType && areaType == MSOA_AREA_TYPE ?
+                                                             URLs.downloadMsoaData :  URLs.downloadData) + urlParams }
                                                       enabled={ isEnabled }
                                                       download>
                                         Download data
