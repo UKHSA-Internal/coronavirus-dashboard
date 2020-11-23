@@ -1,13 +1,6 @@
-import { transpose } from "d3-array";
+// @flow
 
-import type {
-    DataObjectType,
-    PopulationDataType,
-    ValuesDataType,
-    KeyedDataType,
-    RGB,
-    URIParameters
-} from "./MapTable.types"
+import type { RGB, URIParameters } from "./MapTable.types";
 
 
 export const hexToRgb = (hex: string): RGB => {

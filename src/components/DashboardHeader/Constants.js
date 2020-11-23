@@ -6,7 +6,6 @@
 
 import Path from "assets/paths.json";
 
-console.log(Path)
 export const PathNameMapper = Path;
 
 

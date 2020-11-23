@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { Switch, Route, withRouter, Redirect, useParams } from 'react-router';
 import Header from "components/Header";
-// import DailySummary from 'pages/DailySummary';
 import BackToTop from 'components/BackToTop';
 import ErrorBoundary from "components/ErrorBoundary";
 import useTimestamp from "hooks/useTimestamp";
@@ -11,7 +10,7 @@ import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
 
-import * as styles from './index.scss';
+import './index.scss';
 
 const
     DashboardHeader = lazy(() => import('components/DashboardHeader')),

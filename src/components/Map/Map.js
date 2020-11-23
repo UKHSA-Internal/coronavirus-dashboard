@@ -117,27 +117,25 @@ const MapLayers = [
 
 const Arrow = ({ direction }) => {
 
-    let angle, colour, altText, ArrowImage;
+    let angle, altText, ArrowImage;
 
     switch ( direction ) {
         case "UP":
             angle = 0;
-            colour = "red";
             ArrowImage = RedArrow;
             altText = "The rate has increased relative to the previous week.";
             break;
         case "DOWN":
             angle = 180;
-            colour = "green";
             ArrowImage = GreenArrow;
             altText = "The rate has decreased relative to the previous week.";
             break;
         case "SAME":
         default:
             angle = 90;
-            colour = "green";
             ArrowImage = GreenArrow;
             altText = "The rate has not changed relative to the previous week.";
+            break;
     }
 
     return <img src={ ArrowImage }
@@ -324,19 +322,15 @@ const LocalAuthorityCard = ({ currentLocation, date, areaType, ...props }) => {
 };
 
 
-
 const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, geoData, date,
                                    extrema, minData, maxData, valueIndex, children, dates, maxDate, ...props }) => {
 
     const
         bounds = new L.LatLngBounds(new L.LatLng(50.5, -14.5), new L.LatLng(58.8, 10)),
-        // maxBounds = new L.LatLngBounds(new L.LatLng(49.8, -12.5), new L.LatLng(61, 10)),
         centrePoint = bounds.getCenter(),
         [map, setMap] = useState(null),
         [styleDataStatus, setStyleDataStatus] = useState(false),
-        [showInfo, setShowInfo] = useState(false);
-
-    const
+        [showInfo, setShowInfo] = useState(false),
         [postcodeData, setPostcodeData] = useState(null),
         [currentLocation, setCurrentLocation] = useState({ currentLocation: null, areaType: "utla" }),
         [isLoading, setIsLoading] = useState(true),
@@ -656,11 +650,11 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     : <SoaCard { ...currentLocation } date={ date } maxDate={ maxDate } setShowInfo={ setShowInfo }/>
             }
             </MapContainer>
-            <span style={{ textAlign: "right" }}>
-                Download as <a onClick={ downloadImage }
-                       className={ "govuk-link govuk-link--no-visited-state" }
-                       download={ "map.png" } href={ "" }>image</a>.</span>
-        </>
+        <span style={{ textAlign: "right" }}>
+            Download as <a onClick={ downloadImage }
+                   className={ "govuk-link govuk-link--no-visited-state" }
+                   download={ "map.png" } href={ "" }>image</a>.</span>
+    </>
 
 };  // Map
 

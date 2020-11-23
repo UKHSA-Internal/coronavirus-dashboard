@@ -76,7 +76,8 @@ const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, n
                 : <FullCard {...props}/>;
 
     return <Container role={ "article" }
-                      aria-labelledby={ `card-heading-${preppedLabel}` }>
+                      aria-labelledby={ `card-heading-${preppedLabel}` }
+                      className={ "card" }>
         {
             url &&
             <DropdownButton tooltip={ "Download card data" }
