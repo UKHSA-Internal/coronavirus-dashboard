@@ -5,10 +5,6 @@ import { Link } from "react-router-dom";
 
 import DayPickerInput from "react-day-picker/DayPickerInput";
 
-import axios from "axios";
-
-import moment from "moment";
-
 import MomentLocaleUtils, {
     formatDate,
     parseDate
@@ -22,41 +18,32 @@ import {
     Article
 } from './ChangeLog.styles';
 
+
 import type { ComponentType } from "react";
 import type { ChangeLogProps, ChangeLogItemProps } from "./ChangeLog.types";
 
 import useGenericAPI from 'hooks/useGenericAPI';
 import useTimestamp from 'hooks/useTimestamp';
 
-const MIN_CHANGE_LOG_DATE = Date(2020, 7, 12);
+const MIN_CHANGE_LOG_DATE = "2020-07-12";
 
-const ChangeLogItem: ComponentType<ChangeLogItemProps> = ({ changeLogItem }) => {
-
-        return <div>
-                <div>
-                    Date: {formatDate(changeLogItem.date, "DD/MM/YYYY")}
-                </div>
-                <div>
-                    <Link to={changeLogItem.relativeUrl}>{changeLogItem.linkText}</Link>
-                </div>
-                <div>
-                    <Markdown dangerouslySetInnerHTML={{ __html: changeLogItem.body }}/>
-                </div>
-            </div>
-
-}
-
+const THIS_MONTH_TEXT = "This month"
 
 const ChangeLog: ComponentType<ChangeLogProps> = ({ ...props }) => {
 
     const { data } = useGenericAPI({defaultResponse: []});
 
-    const { timestamp } = useTimestamp(),
-            changeLogDateTo = moment(timestamp).local(true).subtract(1, "days").toDate();
+    const { timestamp } = useTimestamp();
             
 
     const [changeLogType, setChangeLogType] = useState('');
     const [changeLogDate, setChangeLogDate] = useState(null);
+
+    const paramObj = {
+        changeDate: null,
+        previous: null
+    };
+
 
     const filterByType = (text) => {
         const pattern = new RegExp(changeLogType.toLowerCase());
@@ -76,10 +63,10 @@ const ChangeLog: ComponentType<ChangeLogProps> = ({ ...props }) => {
             return filterByType(item.body) && filterByDate(item.date);
         }
         else if (changeLogType) {
-            return filterByType(item.body)
+            return filterByType(item.body);
         } 
         else if (changeLogDate) {
-            return filterByDate(item.date)
+            return filterByDate(item.date);
         }
         else {
             return true;
@@ -87,42 +74,119 @@ const ChangeLog: ComponentType<ChangeLogProps> = ({ ...props }) => {
     };
 
 
+    // reverse sort
+    const sortData = (a, b) => {
+        const
+            dateA = new Date(a.date),
+            dateB = new Date(b.date);
+
+        return dateB.getTime() - dateA.getTime();
+    };
+
+ 
+
+    const getChangeDateText = (params) => {
+        let changeMonthText = new Date(params.changeDate).toLocaleString('default', { month: 'long' });       
+        const thisMonthText = new Date().toLocaleString('default', { month: 'long' });     
+        if (changeMonthText === thisMonthText) {
+            changeMonthText = THIS_MONTH_TEXT;
+            params.previous = changeMonthText;
+        } else if (params.previous && params.previous === changeMonthText) {
+            changeMonthText = "";
+        } else {
+            params.previous = changeMonthText;
+        }
+        
+        return changeMonthText;
+    }
+
+   
+
+    const ChangeLogItem: ComponentType<ChangeLogItemProps> = ({ changeLogItem, changeMonthText }) => {
+
+        return <div>
+                     <div id={ "change-log-month" }>
+                        <p className="govuk-body-m govuk-!-margin-top-1">
+                            <strong>{changeMonthText}</strong>
+                        </p>
+                    </div>
+                    <div id={ "change-log-date" }>
+                        <p className="govuk-body-s govuk-!-margin-top-1">
+                            {formatDate(changeLogItem.date, "DD MMM YYYY")}
+                        </p>
+                    </div>
+                    
+                    <div id={ "change-log-body" }>
+                        <Markdown dangerouslySetInnerHTML={{ __html: changeLogItem.body }}/>
+                    </div>
+
+                    <div id={ "change-log-link" }>
+                        <p className="govuk-body-s govuk-!-margin-top-1">
+                            <strong><Link to={changeLogItem.relativeUrl}>{changeLogItem.linkText}</Link></strong>
+                        </p>
+                    </div>
+                   
+            </div>
+
+    }
+
 
     if ( !data ) return <Loading/>;
 
     return <>
+       
 
-    
+        <div style={{display: 'flex'}}>
+            <span id={ "date-filter-label" } className={ "govuk-visually-hidden" }>
+                Change Date
+            </span>
+            <div aria-describedby={ "date-filter-descr" }
+                aria-labelledby={ "date-filter-label" }
+                style={{marginRight: '10px'}}>
+                <DayPickerInput
+                    format={ "DD/MM/YYYY" }
+                    formatDate={ formatDate }
+                    parseDate={ parseDate }
+                    onDayChange={(item) => setChangeLogDate(item)}
+                    placeholder={ "Filter by date" }
+                    dayPickerProps={{
+                        locale: 'en-gb',
+                        localeUtils: MomentLocaleUtils,
+                        disabledDays: [{
+                            before: new Date(MIN_CHANGE_LOG_DATE),
+                            after:  { timestamp }
+                            }]
+                }} />
+            </div>
 
-        <DayPickerInput
-             format={ "DD/MM/YYYY" }
-             formatDate={ formatDate }
-             parseDate={ parseDate }
-             onDayChange={(item) => setChangeLogDate(item)}
-             placeholder={ "Filter by date" }
-             dayPickerProps={{
-                locale: 'en-gb',
-                localeUtils: MomentLocaleUtils,
-                disabledDays: [{
-                    before: new Date(2020, 0, 3),
-                    after:  new Date(changeLogDateTo.getFullYear(), 
-                                     changeLogDateTo.getMonth(),
-                                     changeLogDateTo.getDate())
-                    }]
-              }} />
+            <span id={ "date-filter-label" } className={ "govuk-visually-hidden" }>
+                Change Text
+            </span>
+            <div aria-describedby={ "date-filter-descr" }
+                aria-labelledby={ "date-filter-label" }
+                >
+                    <input 
+                        className={ "govuk-input govuk-input--width-10" }
+                        type={ "text" }
+                        placeholder={ "Filter by text" }
+                        onChange={ (item) => setChangeLogType(item.target.value) }
+                    />
+            </div>
+        </div>
 
-        <input 
-            className={ "govuk-input govuk-input--width-10" }
-            type={ "text" }
-            placeholder={ "Filter by type" }
-            onChange={ (item) => setChangeLogType(item.target.value) }
-        />
-        
         <Article>
            
-            {data.filter(filterData).map(change =>
-                <ChangeLogItem changeLogItem={change}/>
-            )}           
+            {
+                data.filter(filterData).sort(sortData).map((change, index) => {  
+                    
+                    paramObj.changeDate = change.date;
+
+                    const changeText = getChangeDateText(paramObj);
+                    return<ChangeLogItem 
+                        key={index}
+                        changeMonthText={changeText}
+                        changeLogItem={change}/>           
+            })}           
        
         </Article>
     </>

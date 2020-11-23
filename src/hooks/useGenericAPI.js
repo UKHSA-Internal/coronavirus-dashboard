@@ -26,7 +26,21 @@ const ChangeLogData = [
         "linkText": "Local alert levels",
         "relativeUrl": "/",
         "body": "When you search for a postcode, the local alert level will now be displayed."
-    }
+    },
+
+    { 
+        "date": "2020-11-01",
+        "linkText": "View Data",
+        "relativeUrl": "/",
+        "body": "November 01 Metric Change"
+    },
+
+    { 
+        "date": "2020-09-01",
+        "linkText": "View Data",
+        "relativeUrl": "/",
+        "body": "September 01 Metric Change"
+    },
 
 ]
 
