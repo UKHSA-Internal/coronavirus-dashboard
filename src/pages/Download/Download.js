@@ -13,9 +13,9 @@ import { Radio } from 'components/GovUk';
 
 import URLs from "common/urls";
 import { createQuery, groupBy, sort } from 'common/utils/utils';
-import {AreaTypeOptions} from "components/DashboardHeader/Constants";
+import { AreaTypeOptions, MSOAMetricOptions } from "components/DashboardHeader/Constants";
 import useApi from "hooks/useApi";
-import useDownloadData from 'hooks/useDownloadData';
+import useGenericAPI from 'hooks/useGenericAPI';
 import useTimestamp from 'hooks/useTimestamp';
 
 import {
@@ -35,7 +35,7 @@ const MAX_METRICS = 5;
 const MIN_ARCHIVE_DATE = "2020-08-12";
 const DATE_FORMAT = "YYYY-MM-DD";
 const MSOA_AREA_TYPE = "msoa";
-
+const MSOA_ADDITIONAL_TEXT = "For MSOA data download Archive date is not selectable.";
 
 const dataFormatOptions = {   
     choices: [
@@ -52,13 +52,6 @@ const dataReleaseDateOptions = {
         { label: "Archive", value: "archive" }
     ]
 };
-
-const  msoaReleaseDateOption = {
-    choices: [
-        { label: "Latest", value: "latest" }
-    ]
-}
-
 
 const excludedMetrics = [
     "date",
@@ -170,23 +163,80 @@ const AreaTypeSelector = ({ areaType, setAreaType }) => {
 
 };  // AreaTypeSelector
 
-const SelectContainer = ({areaType, areaCode, setAreaCode, region, setRegion, utla, setUtla, setLtlas}) => {
+const SelectContainer = ({areaType, areaCode, setAreaCode, region, setRegion, ltla, setLtla, setMsoa}) => {
+
+    const [ ltlaOptions,  setLtlaOptions ] = useState([])
+    const [ msoaOptions,  setMsoaOptions ] = useState([])
+
+
+    const sortRegions = (a, b) => {
+        if (a) alert (a)
+        if (b) alert (b)
+        // return a["label"].localeCompare(b["label"]);
+    };  // sortRegions
+
+    const getRegions = (msoaData) => {
+        let options = [];
+        for (const [key, value] of Object.entries(msoaData)) {
+            options.push ({value: key, label: value["name"]})
+        }
+        return options;
+    }
+
+    const getLtlas = (msoaData, region) => {
+        let options = [];
+        for (const [key1, value1] of Object.entries(msoaData)) {
+            for (const [key2, value2] of Object.entries(value1["ltla"])) {
+                options.push({value: key2, label: value2["name"]})
+            }
+        }
+        return options;
+    }
+
+    const getMsoas = (msoaData, region, ltla) => {
+        let options = [];
+        for (const [key1, value1] of Object.entries(msoaData)) {
+            for (const [key2, value2] of Object.entries(value1["ltla"])) {
+                options.push({value: key2, label: value2["name"]})
+            }
+        }
+        return options;
+    }
+
+    const msoaData = useGenericAPI("msoaData", {}),
+          regionOptions = getRegions(msoaData)
+
+    useEffect(() => {
+        console.log("useEffect region change")
+        const ltlas = getLtlas(msoaData, region)
+        setLtlaOptions(ltlas)
+       
+    }, [ region ])
+
+    useEffect(() => {
+        console.log("useEffect ltla change " + ltla + " " + region)
+        const msoas = getMsoas(msoaData, region, ltla)
+        setMsoaOptions(msoas)
+       
+    }, [ ltla ])
+
+
     if (areaType && areaType === MSOA_AREA_TYPE) {
 
         return <>
                 <RegionSelector
                         areaType={ areaType }
-                        region={ region }
-                        seRegion={ setRegion }/>
+                        regionOptions={ regionOptions }
+                        setRegion={ setRegion }/>
 
-                <UtlaSelector region={ region}
-                              setUtla={ setUtla }/>
+                <LtlaSelector region={ region }
+                              ltlaOptions={ ltlaOptions }
+                              setLtla={ setLtla }/>
 
-                <LtlaSelector region={ region} 
-                              utla= { utla }
-                              setLtlas={ setLtlas }/>
-
-                <MsoaSelector></MsoaSelector>
+                <MsoaSelector region={ region }
+                              ltla={ ltla }
+                              msoaOptions={ msoaOptions } 
+                              setMsoa={ setMsoa }/>
             </>
     }
     else {
@@ -196,56 +246,7 @@ const SelectContainer = ({areaType, areaCode, setAreaCode, region, setRegion, ut
     }
 } // SelectContainer
                        
-
-const UtlaSelector = ({ region, setUtla }) => {
-
-    const utlas = [];
-
-    return <FormItem width={ "one-half" }>
-        <span id={ "utla-label" } className={ "govuk-label govuk-label--s" }>
-            Utla
-        </span>
-       
-        <div aria-labelledby={ "utla-label" } aria-describedby={ 'utla-descr' }>
-            <Select options={ utlas }
-                    styles={ SelectOptions }
-                    value={ utlas.filter(item => item.value === region) }
-                    isLoading={ utlas.length < 1 && utlas}
-                    placeholder={ "Select ulta" }
-                    isDisabled={ !region }
-                    onChange={ ({value}) => setUtla(value) }
-                    className={ 'select' }/>
-        </div>
-    </FormItem>  
-
-} // UtlaSelector
-
-const LtlaSelector = ({ region, utla, setLtla }) => {
-
-    const ltlas = [];
-
-    return <FormItem width={ "one-half" }>
-        <span id={ "ltla-label" } className={ "govuk-label govuk-label--s" }>
-           Ltla
-        </span>
-       
-        <div aria-labelledby={ "ltla-label" } aria-describedby={ 'ltla-descr' }>
-            <Select options={ ltlas }
-                    styles={ SelectOptions }
-                    value={ ltlas.filter(item => item.value === region) }
-                    isLoading={ ltlas.length < 1 && ltlas}
-                    placeholder={ "Select ltla" }
-                    isDisabled={ !utla }
-                    onChange={ ({value}) => setLtla(value) }
-                    className={ 'select' }/>
-        </div>
-    </FormItem>  
-
-} // LtlaSelector
-
-const RegionSelector = ({ areaType, region, setRegion }) => {
-
-    const regions = [];
+const RegionSelector = ({ areaType, regionOptions, setRegion }) => {
 
     return <FormItem width={ "one-half" }>
         <span id={ "region-label" } className={ "govuk-label govuk-label--s" }>
@@ -253,21 +254,39 @@ const RegionSelector = ({ areaType, region, setRegion }) => {
         </span>
        
         <div aria-labelledby={ "region-label" } aria-describedby={ 'region-descr' }>
-            <Select options={ regions }
+            <Select options={ regionOptions }
                     styles={ SelectOptions }
-                    value={ regions.filter(item => item.value === region) }
-                    isLoading={ regions.length < 1 && region}
+                    // value={ regionOptions.filter(obj => msoaData.includes(obj.value)) }
+                    onChange={ ({value}) => setRegion(value)  }
+                    isLoading={ regionOptions.length < 1}
                     placeholder={ "Select region" }
                     isDisabled={ !areaType || areaType === "overview" }
-                    onChange={ ({value}) => setRegion(value) }
                     className={ 'select' }/>
         </div>
     </FormItem>  
 } // RegionSelector
 
-const MsoaSelector = ({ ltla, setMsoa }) => {
+const LtlaSelector = ({ region, ltlaOptions, setLtla }) => {
 
-    const msoas = [];
+    return <FormItem width={ "one-half" }>
+        <span id={ "ltla-label" } className={ "govuk-label govuk-label--s" }>
+           Local Authority
+        </span>
+       
+        <div aria-labelledby={ "ltla-label" } aria-describedby={ 'ltla-descr' }>
+            <Select options={ ltlaOptions }
+                    styles={ SelectOptions }
+                    isLoading={ ltlaOptions.length < 1 && ltlaOptions}
+                    placeholder={ "Select local authority" }
+                    isDisabled={ !region }
+                    onChange={ ({value}) => setLtla(value) }
+                    className={ 'select' }/>
+        </div>
+    </FormItem>  
+
+} // LtlaSelector
+
+const MsoaSelector = ({ region, ltla, msoaOptions, setMsoa }) => {
 
     return <FormItem width={ "one-half" }>
         <span id={ "msoa-label" } className={ "govuk-label govuk-label--s" }>
@@ -275,10 +294,9 @@ const MsoaSelector = ({ ltla, setMsoa }) => {
         </span>
        
         <div aria-labelledby={ "msoa-label" } aria-describedby={ 'msoa-descr' }>
-            <Select options={ msoas }
+            <Select options={ msoaOptions }
                     styles={ SelectOptions }
-                    value={ msoas.filter(item => item.value === ltla) }
-                    isLoading={ msoas.length < 1 && msoas}
+                    isLoading={ msoaOptions.length < 1 && msoaOptions}
                     placeholder={ "Select msoa" }
                     isDisabled={ !ltla}
                     onChange={ ({value}) => setMsoa(value) }
@@ -342,20 +360,21 @@ const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
 };  // AreaNameSelector
 
 
-const MetricMultiSelector = ({ metrics, setMetrics }) => {
+const MetricMultiSelector = ({ areaType, metrics, setMetrics }) => {
 
     const
-        metricData = useDownloadData("metrics",{}),
+        metricData = useGenericAPI("metrics",{}),
         [error, setError] = useState(null),
-        metricNames = Object
-            .keys(metricData)
-            .filter(item => !excludedMetrics.includes(item))
-            .sort(sort)
-            .reverse()
-            .map(item => ({
-                label: item,
-                value: item
-            }));
+        metricNames = areaType === MSOA_AREA_TYPE ? MSOAMetricOptions : 
+            Object
+                .keys(metricData)
+                .filter(item => !excludedMetrics.includes(item))
+                .sort(sort)
+                .reverse()
+                .map(item => ({
+                    label: item,
+                    value: item
+                }));
 
     useEffect(() => {
         setError(
@@ -400,9 +419,11 @@ const MetricMultiSelector = ({ metrics, setMetrics }) => {
 
 };  // MetricMultiSelector
 
-const ArchiveDatePicker = ({ display=true, date, setDate, minDate, maxDate }) => {
+const ArchiveDatePicker = ({ display=true, areaType, date, setDate, minDate, maxDate }) => {
 
     if ( !display ) return null;
+
+    if (areaType === MSOA_AREA_TYPE) return null
 
     if ( !maxDate || !date ) return <Loading/>;
 
@@ -467,7 +488,7 @@ const ArchiveDatePicker = ({ display=true, date, setDate, minDate, maxDate }) =>
 
 const SupplementaryDownloads: ComponentType<*> = ({ ...props }) => {
 
-    const data = useDownloadData("supplementaryDownloads", {});
+    const data = useGenericAPI("supplementaryDownloads", {});
 
     if ( !data?.downloads ) return <Loading/>;
 
@@ -515,21 +536,21 @@ const Download: ComponentType<*> = () => {
     const [urlParams, setUrlParams] = useState([]);
     const [isEnabled, setIsEnabled] = useState(false);
     const [region, setRegion] = useState(null);
-    const [ulas, setUtlas] = useState(null);
-    const [ltlas, setLtlas] = useState(null);
-    const [msoas, setMsoas] = useState(null);
+    const [ltla, setLtla] = useState(null);
+    const [msoa, setMsoa] = useState(null);
+    
 
     useEffect(() => {
 
         setUrlParams(formatUrl({
             areaType, areaCode, metric, format,
             release: dataReleaseDate !== "latest" && archiveDate,
-            region, ulas, ltlas, msoas
+            region, ltla, msoa
         }));
 
         setIsEnabled(areaType && metric?.length && metric.length <= MAX_METRICS && archiveDate && format);
 
-    }, [areaType, areaCode, metric, archiveDate, format, dataReleaseDate, region, ulas, ltlas, msoas ]);
+    }, [areaType, areaCode, metric, archiveDate, format, dataReleaseDate, region, ltla, msoa ]);
 
     useEffect(() => {
         setAreaCode(null);
@@ -540,7 +561,9 @@ const Download: ComponentType<*> = () => {
         setArchiveDate(latest);
     }, [ timestamp ]);
 
-    
+    const doNothing = (e) => {
+        // do nothing
+    }
 
     return <>
         <div className={ "govuk-phase-banner status-banner govuk-!-margin-bottom-0" }>
@@ -573,13 +596,17 @@ const Download: ComponentType<*> = () => {
                         <AreaTypeSelector areaType={ areaType }
                                           setAreaType={ setAreaType }/>
 
-                        <SelectContainer areaType={areaType }
-                                        areaCode={ areaCode }
-                                        setAreaCode={ setAreaCode }
-                                        region={ region }
-                                        setRegion={ setRegion} />      
+                        <SelectContainer areaType={ areaType }
+                                         areaCode={ areaCode }
+                                         setAreaCode={ setAreaCode }                                   
+                                         region={ region }
+                                         setRegion={ setRegion}
+                                         ltla={ ltla }
+                                         setLtla={ setLtla }
+                                         setMsoa={ setMsoa } />      
 
-                        <MetricMultiSelector metrics={ metric }
+                        <MetricMultiSelector areaType={ areaType }
+                                             metrics={ metric }
                                              setMetrics={ setMetric }/>
 
                         <FormItem aria-labelledby={ "aria-releasedate-label" }
@@ -595,17 +622,22 @@ const Download: ComponentType<*> = () => {
                                 Required. Note that when the "Latest" option is selected,
                                 the permanent link will always produce the data as they appear on
                                 the website &mdash; that is, the very latest release.
+                                {
+                                    areaType === MSOA_AREA_TYPE ? " " + MSOA_ADDITIONAL_TEXT : ""
+                                }
+                                
                             </p>
                             <div aria-labelledby={ "releasedate-label" }
                                 aria-describedby={ 'releasedate-descr' }>
                                 <Radio heading={ "Data Release Date" }
-                                       value={ dataReleaseDate }
-                                       options={ areaType != MSOA_AREA_TYPE ? dataReleaseDateOptions : msoaReleaseDateOption }
-                                       setValue={ setDataReleaseDate }
+                                       value={ areaType !== MSOA_AREA_TYPE ? dataReleaseDate : 'latest' }
+                                       options={ dataReleaseDateOptions }
+                                       setValue={ areaType !== MSOA_AREA_TYPE ? setDataReleaseDate : doNothing}
                                        inline={ false }/>
                             </div>
                             <ArchiveDatePicker
                                                display={ dataReleaseDate === "archive" }
+                                               areaType={ areaType }
                                                minDate={ MIN_ARCHIVE_DATE }
                                                maxDate={ timestamp }
                                                setDate={ setArchiveDate }

@@ -64,4 +64,13 @@ export const AreaTypeOptions = [
     { value: "utla", label: "Upper Tier Local Authority" },
     { value: "ltla", label: "Lower Tier Local Authority" },
     { value: "msoa", label: "MSOA" }
-]
+];
+
+export const MSOAMetricOptions = [
+    { value: "newCasesBySpecimenDate", label: "newCasesBySpecimenDate" },
+    { value: "newCasesBySpecimenDateRollingSum", label: "newCasesBySpecimenDateRollingSum" },
+    { value: "newCasesBySpecimenDateRollingRate", label: "newCasesBySpecimenDateRollingRate" },
+    { value: "newCasesBySpecimenDateChange", label: "newCasesBySpecimenDateChange" },
+    { value: "newCasesBySpecimenDateDirection", label: "newCasesBySpecimenDateDirection" },
+    { value: "newCasesBySpecimenDateChangePercentage", label: "newCasesBySpecimenDateChangePercentage" }
+];

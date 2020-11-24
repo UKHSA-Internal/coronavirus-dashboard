@@ -43,6 +43,7 @@ const URLs = {
     downloadData:           `https://${ REACT_APP_API_ENDPOINT  }/v2/data`,
     downloadMsoaData:       `https://${ REACT_APP_API_ENDPOINT  }/v2/soa`,
     supplementaryDownloads: `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/downloads.json`,
+    msoaData:               `https://coronavirus.data.gov.uk/public/assets/dispatch/region2ltla2msoa.json`,
 };
 
 URLs.pageLayouts = {
