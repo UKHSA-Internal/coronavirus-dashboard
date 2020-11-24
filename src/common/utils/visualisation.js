@@ -39,23 +39,64 @@ export const
 
 export const getPlotData = (fields: Array<{}>, rawData, xKey="date" ) => {
 
-    return fields.map((field, index) => {
+    const graphObjects = [];
+
+
+    fields.map((field, index) => {
 
         const
             data = dropLeadingZeros(rawData, field.value),
-            { r, g, b } = hexToRgb(colours[field?.colour ??  index]),
-            xData = data?.map(item => item?.[xKey] ?? null) ?? [];
+            { r, g, b } = hexToRgb(colours[field?.colour ??  index]);
+
+        let xData = data?.map(item => item?.[xKey] ?? null) ?? [];
 
         let
             yData = data?.map(variable => variable?.[field.value] ?? null) ?? [],
             plotFeatures;
+
+        const baseColour = colours[field?.colour ?? index];
+
+        // `hl` represents the `highlight` field.
+        if ( field?.highlight ) {
+
+            let {
+                from: hlFrom = NaN,
+                to: hlTo = NaN,
+                colour: hlColour = index,
+                label: hlLabel = field.label
+            } = field?.highlight ?? {};
+
+            hlFrom = hlFrom < 0 ? yData.length + hlFrom : hlFrom;
+            hlTo = hlTo < 0
+                ? yData.length - hlTo
+                : hlTo === 0 ? yData.length : hlTo;
+
+            let highlightedY = [...yData].reverse().slice(hlFrom, hlTo);
+            let highlightedX = [...xData].reverse().slice(hlFrom, hlTo);
+
+            graphObjects.push({
+                name: hlLabel,
+                x: highlightedX,
+                y: highlightedY,
+                hovertemplate: "%{y}",
+                type: field?.type ?? "bar",
+                marker: {
+                    color: colours[hlColour]
+                }
+            })
+
+            yData = yData.reverse().filter((val, ind) => ind < hlFrom || ind >= hlTo);
+
+            xData = xData.reverse().filter((val, ind) => ind < hlFrom || ind >= hlTo);
+
+        }
 
         switch ( field.type ) {
             case "bar":
                 plotFeatures = {
                     type: field.type,
                     marker: {
-                        color: colours[field?.colour ?? index]
+                        color: baseColour//colourArray//colours[field?.colour ?? index]
                     }
                 }
                 break;
@@ -81,7 +122,7 @@ export const getPlotData = (fields: Array<{}>, rawData, xKey="date" ) => {
 
         const trimLength = (field?.rollingAverage?.clipEnd ?? 0) + 3;
 
-        yData = (field.rollingAverage && typeof (field.rollingAverage === 'object'))
+        yData = (field.rollingAverage && (typeof field.rollingAverage === 'object'))
             ? [
                 ...new Array(trimLength).fill(null),
                 ...movingAverage(yData, field?.rollingAverage?.window ?? 7)
@@ -91,14 +132,16 @@ export const getPlotData = (fields: Array<{}>, rawData, xKey="date" ) => {
                 ? movingAverage(yData, 7)
                 : yData
 
-        return {
+        graphObjects.push({
             name: field.label,
             x: xData,
             y: yData,
             hovertemplate: "%{y}",
             ...plotFeatures
-        }
+        })
 
     });
+
+    return graphObjects
 
 };  // getYAxisData

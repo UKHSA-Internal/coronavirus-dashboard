@@ -49,7 +49,7 @@ const LastUpdateTime = () => {
     const timestamp = useTimestamp();
 
     const tmStart = moment(timestamp).local(true);
-    const tmEnd = moment(timestamp).local(true).add(15, 'minute');
+    const tmEnd = moment(timestamp).local(true).add(2, 'minute');
 
     const parsedTimestamp = {
         start: {
@@ -89,20 +89,6 @@ const LastUpdateTime = () => {
                 </p>
             </Announcement>
 
-            <Announcement firstDisplayDate={{ year: 2020, month: 9, day: 10, hour: 16 }}
-                                  lastDisplayDate={{ year: 2021, month: 9, day: 11, hour: 7 }}>
-                <p className={ "govuk-body" }>
-                    We are launching a new version of the dashboard. We welcome your
-                    feedback on the <a href={ "https://coronavirus-staging.data.gov.uk/" }
-                                       className={ "govuk-link govuk-link--no-visited-state" }
-                                       target={ "_blank" }
-                                       rel={ "noopener noreferrer" }>
-                        experimental release
-                    </a> of the new service.
-                </p>
-            </Announcement>
-
-
             { parsedTimestamp.start.day === 2
                 ? <Announcement firstDisplayDate={{ year: 2020, month: 10, day: 3, hour: 15 }}
                           lastDisplayDate={{ year: 2020, month: 10, day: 3, hour: 23 }}>
@@ -120,7 +106,7 @@ const LastUpdateTime = () => {
                             <strong>We are updating the data&hellip;</strong>
                         </p>
                         <p className={ "govuk-body" }>The process takes
-                            approximately 15 minutes to complete. Please do not refresh the
+                            approximately 2 minutes to complete. Please do not refresh the
                             website until { parsedTimestamp.endTimestamp }.
                         </p>
                     </Announcement>
