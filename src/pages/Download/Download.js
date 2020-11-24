@@ -184,23 +184,24 @@ const SelectContainer = ({areaType, areaCode, setAreaCode, region, setRegion, lt
     }
 
     const getLtlas = (msoaData, region) => {
+        alert (region)
         let options = [];
         for (const [key1, value1] of Object.entries(msoaData)) {
-            for (const [key2, value2] of Object.entries(value1["ltla"])) {
-                options.push({value: key2, label: value2["name"]})
+            if (key1 === region) {
+                for (const [key2, value2] of Object.entries(value1["ltla"])) {
+                    options.push({value: key2, label: value2["name"]})
+                 }
             }
         }
         return options;
     }
 
     const getMsoas = (msoaData, region, ltla) => {
+        alert (region)
+        alert (ltla)
         let options = [];
-        for (const [key1, value1] of Object.entries(msoaData)) {
-            for (const [key2, value2] of Object.entries(value1["ltla"])) {
-                options.push({value: key2, label: value2["name"]})
-            }
-        }
-        return options;
+        const ltlas = getLtlas(msoaData, region);
+        return ltlas;
     }
 
     const msoaData = useGenericAPI("msoaData", {}),
