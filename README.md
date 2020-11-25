@@ -2,7 +2,7 @@
 
 ![Build test for pull and push requests](https://github.com/PublicHealthEngland/coronavirus-dashboard/workflows/Build/badge.svg)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/publichealthengland/coronavirus-dashboard)
-![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/publichealthengland/coronavirus-dashboard/v2-development)
+![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/publichealthengland/coronavirus-dashboard/v3-development)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/publichealthengland/coronavirus-dashboard)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/publichealthengland/coronavirus-dashboard.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/publichealthengland/coronavirus-dashboard/context:javascript)
 
