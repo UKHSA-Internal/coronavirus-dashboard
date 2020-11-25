@@ -95,7 +95,7 @@ export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionC
         const
             fullQuery = `${key}${sign}${value}`,
             partialQueryWithSign = `${key}${sign}`,
-            fullPattern = new RegExp(`(${fullQuery}\b)`),
+            fullPattern = new RegExp(`(${fullQuery}&)|(${fullQuery}$)`),
             partialPattern = new RegExp(`(${partialQueryWithSign}[A-Za-z0-9,'.\\s-]*)`);
 
         if ( fullPattern.exec(params) && removeDuplicates ) continue;
