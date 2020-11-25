@@ -163,89 +163,89 @@ const AreaTypeSelector = ({ areaType, setAreaType }) => {
 
 };  // AreaTypeSelector
 
-const SelectContainer = ({areaType, areaCode, setAreaCode, region, setRegion, ltla, setLtla, setMsoa}) => {
+const MsoaSelectContainer = ({areaType, region, setRegion, ltla, setLtla, setMsoa}) => {
 
-    const [ ltlaOptions,  setLtlaOptions ] = useState([])
-    const [ msoaOptions,  setMsoaOptions ] = useState([])
+    const [ ltlaOptions,  setLtlaOptions ] = useState([]);
+    const [ msoaOptions,  setMsoaOptions ] = useState([]);
 
-
-    const sortRegions = (a, b) => {
-        if (a) alert (a)
-        if (b) alert (b)
-        // return a["label"].localeCompare(b["label"]);
-    };  // sortRegions
+    const sortOptions = (a, b) => {
+        return a["label"].localeCompare(b["label"]);
+    };  // sortOptions
 
     const getRegions = (msoaData) => {
         let options = [];
-        for (const [key, value] of Object.entries(msoaData)) {
-            options.push ({value: key, label: value["name"]})
-        }
-        return options;
+
+        Object.entries(msoaData).forEach(([key, value]) => {
+            options.push ({value: key, label: value["name"]});
+        });
+            
+        return options.sort(sortOptions);
     }
 
     const getLtlas = (msoaData, region) => {
-        alert (region)
         let options = [];
-        for (const [key1, value1] of Object.entries(msoaData)) {
+
+        Object.entries(msoaData).forEach(([key1, value1]) => {
             if (key1 === region) {
-                for (const [key2, value2] of Object.entries(value1["ltla"])) {
-                    options.push({value: key2, label: value2["name"]})
-                 }
-            }
-        }
-        return options;
+                Object.entries(value1["ltla"]).forEach(([key2, value2]) => {
+                    options.push({value: key2, label: value2["name"]});
+                });
+            }      
+        });
+        
+        return options.sort(sortOptions);
     }
 
     const getMsoas = (msoaData, region, ltla) => {
-        alert (region)
-        alert (ltla)
         let options = [];
-        const ltlas = getLtlas(msoaData, region);
-        return ltlas;
+
+        Object.entries(msoaData).forEach(([key1, value1]) => {
+            if (key1 === region) {
+                Object.entries(value1["ltla"]).forEach(([key2, value2]) => {
+                    if (key2 === ltla) {
+                        Object.entries(value2["msoa"]).forEach(([key3, value3]) => {
+                            options.push({value: key3, label: value3});
+                        });
+                    }          
+                });
+            }      
+        });
+
+        return options.sort(sortOptions);
     }
 
+    
     const msoaData = useGenericAPI("msoaData", {}),
-          regionOptions = getRegions(msoaData)
+          regionOptions = getRegions(msoaData);
 
     useEffect(() => {
-        console.log("useEffect region change")
-        const ltlas = getLtlas(msoaData, region)
-        setLtlaOptions(ltlas)
-       
-    }, [ region ])
+        const ltlas = getLtlas(msoaData, region);
+        setLtlaOptions(ltlas);   
+    }, [ region ]);
 
     useEffect(() => {
-        console.log("useEffect ltla change " + ltla + " " + region)
-        const msoas = getMsoas(msoaData, region, ltla)
-        setMsoaOptions(msoas)
-       
-    }, [ ltla ])
+        const msoas = getMsoas(msoaData, region, ltla);
+        setMsoaOptions(msoas); 
+    }, [ ltla ]);
 
 
-    if (areaType && areaType === MSOA_AREA_TYPE) {
+    return <>
+            <RegionSelector
+                    areaType={ areaType }
+                    regionOptions={ regionOptions }
+                    setRegion={ setRegion }/>
 
-        return <>
-                <RegionSelector
-                        areaType={ areaType }
-                        regionOptions={ regionOptions }
-                        setRegion={ setRegion }/>
+            <LtlaSelector region={ region }
+                          ltlaOptions={ ltlaOptions }
+                          setLtla={ setLtla }/>
 
-                <LtlaSelector region={ region }
-                              ltlaOptions={ ltlaOptions }
-                              setLtla={ setLtla }/>
-
-                <MsoaSelector region={ region }
-                              ltla={ ltla }
-                              msoaOptions={ msoaOptions } 
-                              setMsoa={ setMsoa }/>
+            <MsoaSelector region={ region }
+                          ltla={ ltla }
+                          msoaOptions={ msoaOptions } 
+                          setMsoa={ setMsoa }/>
             </>
-    }
-    else {
-        return  <AreaNameSelector areaType={ areaType }
-                    areaCode={ areaCode }
-                    setAreaCode={ setAreaCode }/>
-    }
-} // SelectContainer
+
+} // MsoaSelectContainer
                        
 const RegionSelector = ({ areaType, regionOptions, setRegion }) => {
 
@@ -562,10 +562,6 @@ const Download: ComponentType<*> = () => {
         setArchiveDate(latest);
     }, [ timestamp ]);
 
-    const doNothing = (e) => {
-        // do nothing
-    }
-
     return <>
         <div className={ "govuk-phase-banner status-banner govuk-!-margin-bottom-0" }>
             <p className={ "govuk-phase-banner__content" }>
@@ -597,14 +593,19 @@ const Download: ComponentType<*> = () => {
                         <AreaTypeSelector areaType={ areaType }
                                           setAreaType={ setAreaType }/>
 
-                        <SelectContainer areaType={ areaType }
-                                         areaCode={ areaCode }
-                                         setAreaCode={ setAreaCode }                                   
-                                         region={ region }
+                        { areaType === MSOA_AREA_TYPE ? 
+                                <MsoaSelectContainer areaType={ areaType }
+                                        region={ region }
                                          setRegion={ setRegion}
                                          ltla={ ltla }
                                          setLtla={ setLtla }
-                                         setMsoa={ setMsoa } />      
+                                         setMsoa={ setMsoa } /> :
+                                
+                                <AreaNameSelector areaType={ areaType }
+                                                  areaCode={ areaCode }
+                                                  setAreaCode={ setAreaCode }/>
+                                
+                        }   
 
                         <MetricMultiSelector areaType={ areaType }
                                              metrics={ metric }
@@ -624,7 +625,7 @@ const Download: ComponentType<*> = () => {
                                 the permanent link will always produce the data as they appear on
                                 the website &mdash; that is, the very latest release.
                                 {
-                                    areaType === MSOA_AREA_TYPE ? " " + MSOA_ADDITIONAL_TEXT : ""
+                                    areaType && areaType === MSOA_AREA_TYPE ? " " + MSOA_ADDITIONAL_TEXT : null
                                 }
                                 
                             </p>
@@ -633,7 +634,8 @@ const Download: ComponentType<*> = () => {
                                 <Radio heading={ "Data Release Date" }
                                        value={ areaType !== MSOA_AREA_TYPE ? dataReleaseDate : 'latest' }
                                        options={ dataReleaseDateOptions }
-                                       setValue={ areaType !== MSOA_AREA_TYPE ? setDataReleaseDate : doNothing}
+                                       setValue={ areaType !== MSOA_AREA_TYPE ? setDataReleaseDate : 
+                                                    (value) => {}}
                                        inline={ false }/>
                             </div>
                             <ArchiveDatePicker
