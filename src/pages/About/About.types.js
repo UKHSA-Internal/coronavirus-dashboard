@@ -3,7 +3,8 @@
 export interface AboutState {
 
     loading: true,
-    data: string
+    data: string,
+    hash: string
 
 } // ArchiveState
 
