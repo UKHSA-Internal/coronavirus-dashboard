@@ -194,11 +194,15 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
                         </>
                 }
             </>
-            : <p>Data {
+            : <p>{
                 areaType === "msoa"
-                    ? "suppressed to protect the privacy of individuals and prevent disclosure"
-                    : "missing"
-            }.</p>
+                    ? <>
+                        There were fewer than 3 cases. For smaller areas (eg MSOAs)
+                        with fewer than&nbsp;3&nbsp;cases, we do not show data. This is to
+                        protect individuals' identities.
+                    </>
+                    : "Data missing."
+            }</p>
         }
     </MapToolbox>
 

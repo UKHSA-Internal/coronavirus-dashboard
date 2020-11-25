@@ -142,9 +142,9 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                 Tier Local Authorities (LTLA) and Middle layer Super Output Areas (MSOA).
             </p>
             <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
-                <strong>Suppressed rates:</strong> MSOA level rates are suppressed where
-                there have been fewer than&nbsp;3&nbsp;cases in a seven-day period. This
-                is to protect the privacy of individuals and prevent disclosure.
+                <strong>Suppressed rates:</strong> For smaller areas (eg MSOAs) with
+                fewer than 3 cases, we do not show data. This is to protect individuals'
+                identities.
             </p>
             <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
                 <strong>More details:</strong> Click on an area to see more detailed cases
