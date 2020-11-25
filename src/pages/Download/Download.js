@@ -185,12 +185,11 @@ const MsoaSelectContainer = ({areaType, region, setRegion, ltla, setLtla, setMso
     const getLtlas = (msoaData, region) => {
         let options = [];
 
-        Object.entries(msoaData).forEach(([key1, value1]) => {
-            if (key1 === region) {
-                Object.entries(value1["ltla"]).forEach(([key2, value2]) => {
-                    options.push({value: key2, label: value2["name"]});
-                });
-            }      
+
+        Object.entries(msoaData).filter(([key1, value1]) => key1 === region).forEach(([key1, value1]) => {
+            Object.entries(value1["ltla"]).forEach(([key2, value2]) => {
+                options.push({value: key2, label: value2["name"]});
+            });
         });
         
         return options.sort(sortOptions);
@@ -199,16 +198,12 @@ const MsoaSelectContainer = ({areaType, region, setRegion, ltla, setLtla, setMso
     const getMsoas = (msoaData, region, ltla) => {
         let options = [];
 
-        Object.entries(msoaData).forEach(([key1, value1]) => {
-            if (key1 === region) {
-                Object.entries(value1["ltla"]).forEach(([key2, value2]) => {
-                    if (key2 === ltla) {
-                        Object.entries(value2["msoa"]).forEach(([key3, value3]) => {
-                            options.push({value: key3, label: value3});
-                        });
-                    }          
-                });
-            }      
+        Object.entries(msoaData).filter(([key1, value1]) => key1 === region).forEach(([key1, value1]) => {
+                Object.entries(value1["ltla"]).filter(([key2, value2]) => key2 === ltla).forEach(([key2, value2]) => {
+                    Object.entries(value2["msoa"]).forEach(([key3, value3]) => {
+                        options.push({value: key3, label: value3});
+                    });                  
+                });     
         });
 
         return options.sort(sortOptions);
