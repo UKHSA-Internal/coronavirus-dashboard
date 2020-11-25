@@ -576,7 +576,7 @@ const Download: ComponentType<*> = () => {
                 </div>
             </SideContent>
         </Container>
-    </>
+    </>;
 
 }; // Download
 

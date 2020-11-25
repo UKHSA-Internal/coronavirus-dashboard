@@ -140,7 +140,7 @@ const Arrow = ({ direction }) => {
 
     return <img src={ ArrowImage }
                 width={ "14px" } alt={ altText }
-                style={ { transform: `rotate(${ angle }deg)`, marginRight: 5 } }/>
+                style={ { transform: `rotate(${ angle }deg)`, marginRight: 5 } }/>;
 
 };
 
