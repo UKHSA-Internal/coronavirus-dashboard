@@ -25,7 +25,8 @@ const
     Announcement    = lazy(() => import("components/Announcement")),
     InteractiveMap  = lazy(() => import("pages/InteractiveMap")),
     Footer          = lazy(() => import('components/Footer')),
-    Download        = lazy(() => import('pages/Download'));
+    Download        = lazy(() => import('pages/Download')),
+    BrowserHistory  = lazy(() => import("components/BrowserHistory"));
 
 
 const LastUpdateTime = () => {
@@ -124,6 +125,8 @@ const App = ({ location: { pathname } }) => {
 
     }, [ pathname ]);
 
+    // const about = React.cloneElement(<BrowserHistory><About/></BrowserHistory>)
+
     return <>
         {/*<CookieBanner/>*/}
         <Header/>
@@ -168,7 +171,9 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/details/interactive-map" component={ InteractiveMap }/>
 
                                 <Route path="/details/download" exact component={ Download }/>
-                                <Route path="/details/about-data" exact component={ About }/>
+                                <Route path="/details/about-data" exact>
+                                    <BrowserHistory><About/></BrowserHistory>
+                                </Route>
                                 {/*<Route path="/archive" component={ Archive }/>*/}
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>

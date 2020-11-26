@@ -1,10 +1,6 @@
 // @flow
 
-import React, { Component, useState, useEffect } from 'react';
-import { Redirect } from 'react-router'
-
-
-import BrowserHistory from "components/BrowserHistory";
+import React, { Component } from 'react';
 
 import toc from "remark-toc";
 import slug from "remark-slug";
@@ -24,43 +20,41 @@ import {
 } from './About.styles';
 
 
-const About: ComponentType<Props> = ({ ...props }: Props) => {
+export default class About extends Component<AboutProps, {}> {
 
-    const url = URLs.about;
+    #url = URLs.about;
 
-    const [loading, setLoading] = useState(false)
-    const [data, setData ] = useState([])
-    // state: AboutState = {
-    //     loading: false,
-    //     data: []
-    // };
+    state: AboutState = {
+        loading: false,
+        data: []
+    };
 
-    const getData = async () => {
+    getData = async () => {
 
         const
-            { data } = await axios.get(url, {responseType: "text"});
+            { data } = await axios.get(this.#url, {responseType: "text"});
             remark()
                 .use(toc)
                 .use(slug)
                 .use(externalLink)
-                .use(html).process(data, (err, text) => {
-                    setLoading(false)
-                    setData(err ? data : String(text))
-                }
-        
+                .use(html).process(data, (err, text) =>
+                this.setState({
+                    data: err ? data : String(text),
+                    loading: false
+                })
             );
 
     };
 
-    useEffect(() => {
-        setLoading(true);
-        setData(getData());
-    });
+    componentDidMount() {
 
-    const display = () => {
+        this.setState({ loading: true }, this.getData)
 
-        // const { hash } = this.props
-        // alert (hash)
+    } // componentDidMount
+
+    display() {
+
+        const { loading, data } = this.state;
 
         if ( loading ) return <Loading>Loading&hellip;</Loading>
 
@@ -68,16 +62,12 @@ const About: ComponentType<Props> = ({ ...props }: Props) => {
 
     } // display
 
-    
+    render(): React$Node {
 
-        return <BrowserHistory>
-                <Article>
-                    { display() }
-                </Article>
-            </BrowserHistory>
+        return <Article>
+            { this.display() }
+            </Article>
 
-     // render
+    } // render
 
 } // About
-
-export default About

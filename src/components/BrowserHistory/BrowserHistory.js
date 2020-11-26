@@ -1,39 +1,54 @@
 // @flow
 
-import React from "react";
-import { useHistory } from "react-router-dom";
-
-import { BrowserHistoryStyles } from "./BrowserHistory.styles"
+import React, { createContext, useEffect, useState } from "react";
+import { useHistory, Redirect } from "react-router-dom";
 
 import type { ComponentType } from "react";
+import { prepAsKey } from "components/Map/utils";
+import { hopscotch } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 
-const BrowserHistory: ComponentType<*> = (props) => {
+const BrowserHistory = (props) => {
 
     const history = useHistory();
-    
+    const [previousPath, setPreviousPath ] = useState(null)
+    const [push, setPush ] = useState(false)
 
-    const hash = "dave";
-    // alert (hash)
+    const getPrevousPath = () => {
+        const ret = previousPath;
+        setPreviousPath(history.location.pathname + history.location.hash)
+        return ret;
+    }
 
-    // if (hash) {
-    //     history.push("/about-data/#introduction");
-    // }
-
-    const childrenWithProps = React.Children.map(props.children, child => {
-        if (React.isValidElement(child)) {
-            return React.cloneElement(child, { hash: hash });
+    useEffect(() => {
+        if (history.location.hash !== "") {
+            const previousPath = getPrevousPath()
+            alert ("Previuis " + previousPath)
+            alert ("Current " + history.location.pathname + history.location.hash)
+            if (!previousPath) {
+                setPush(true)     
+            }
         }
-        return child;
-    });
+        else {
+            setPreviousPath(history.location.pathname + history.location.hash)
+        }
+    }, [ history.location.hash ])
 
-    console.log(childrenWithProps)
 
-    return (
+    useEffect(() => {
+        console.log(history)
+    }, [ ])
 
-        <div>{childrenWithProps}</div>
-    )
+
+    if (push) {
+        setPush(false)
+        alert ("pushing")
+        window.location.href = "/details/about-data#r-number-and-growth-rate"
+    } else {
+        return (
+            <div>{props.children}</div>
+        )
+    }
 } // BrowserHistory
-
 
 export default BrowserHistory;
