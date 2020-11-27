@@ -1,18 +1,14 @@
 // @flow
 
-import React, { useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom"
+import React, { useEffect, useState } from "react"
 
 import { useHistory } from "react-router-dom";
-
-import usePrevious from "hooks/usePrevious";
 
 const BrowserHistory = (props) => {
 
     const history = useHistory();
     const [previousPath, setPreviousPath ] = useState(null);
     let push = false;
-    const childRef = useRef(null)
 
     const getPrevousPath = () => {
         const ret = previousPath;
@@ -57,8 +53,7 @@ const BrowserHistory = (props) => {
     }, []);
 
     return (
-        // forwardedRef={childRef}
-        <div ref={childRef}>{props.children}</div>
+        <div>{props.children}</div>
     )
     
 } // BrowserHistory
