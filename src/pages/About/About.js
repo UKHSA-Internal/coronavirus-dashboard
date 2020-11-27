@@ -19,10 +19,6 @@ import {
     Article
 } from './About.styles';
 
-const headings = [
-    "introduction",
-
-]
 
 export default class About extends Component<AboutProps, {}> {
 
@@ -59,20 +55,8 @@ export default class About extends Component<AboutProps, {}> {
     display() {
 
         const { loading, data } = this.state;
-        
 
         if ( loading ) return <Loading>Loading&hellip;</Loading>
-
-        // let data1 = "" + data
-
-        // const regex = new RegExp(/id="([^"]*?)".*?/gi);
-        // const res = data1.match(regex);
-        
-        // if (res) {
-        //     for (const [key, value] of Object.entries(res)) {
-        //         data1 = data1.replace(value, value + "ref=" + value.split("=")[1])
-        //     }
-        // }
 
         return <Markdown dangerouslySetInnerHTML={{ __html: data }}/>
 
