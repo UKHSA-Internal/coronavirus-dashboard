@@ -657,7 +657,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
         <span style={{ textAlign: "right" }}>
             Download as <a onClick={ downloadImage }
                    className={ "govuk-link govuk-link--no-visited-state" }
-                   download={ "map.png" } href={ "" }>image</a>.</span>
+                   download={ `cases_${date}.png` } href={ "" }>image</a>.</span>
     </>
 
 };  // Map
