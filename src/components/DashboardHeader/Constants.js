@@ -56,6 +56,7 @@ export const PathWithHeader = [
     "/details/developers-guide"
 ];
 
+
 export const AreaTypeOptions = [
     { value: "overview", label: "United Kingdom" },
     { value: "nation", label: "Nation" },
@@ -63,14 +64,14 @@ export const AreaTypeOptions = [
     { value: "nhsRegion", label: "NHS Region" },
     { value: "utla", label: "Upper Tier Local Authority" },
     { value: "ltla", label: "Lower Tier Local Authority" },
-    { value: "msoa", label: "MSOA" }
+    { value: "msoa", label: "Middle layer Super Output Areas (MSOA)" }
 ];
 
+
 export const MSOAMetricOptions = [
-    { value: "newCasesBySpecimenDate", label: "newCasesBySpecimenDate" },
     { value: "newCasesBySpecimenDateRollingSum", label: "newCasesBySpecimenDateRollingSum" },
     { value: "newCasesBySpecimenDateRollingRate", label: "newCasesBySpecimenDateRollingRate" },
     { value: "newCasesBySpecimenDateChange", label: "newCasesBySpecimenDateChange" },
-    { value: "newCasesBySpecimenDateDirection", label: "newCasesBySpecimenDateDirection" },
-    { value: "newCasesBySpecimenDateChangePercentage", label: "newCasesBySpecimenDateChangePercentage" }
+    { value: "newCasesBySpecimenDateChangePercentage", label: "newCasesBySpecimenDateChangePercentage" },
+    { value: "newCasesBySpecimenDateDirection", label: "newCasesBySpecimenDateDirection" }
 ];
