@@ -219,7 +219,8 @@ const MetricMultiSelector = ({ areaType, metrics, setMetrics }) => {
                 document, but will not contain any data.
             </p>
             <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }>
-                Records contain 4 additional default metrics as follows: areaType, areaCode, areaName, date
+                Records contain at least 4 additional record identification metrics as
+                follows: areaType, areaCode, areaName, date
             </p>
             {
                 error &&
