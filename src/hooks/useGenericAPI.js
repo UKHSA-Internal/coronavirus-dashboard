@@ -20,12 +20,11 @@ const useDownloadData  = ( urlName: string, defaultResponse= null ) => {
                     ? setData(dt)
                     : setData(defaultResponse);
             } catch (e) {
-                console.error(e)
-                setData(defaultResponse)
+                console.error(e);
             }
         })();
     
-    }, [urlName]);
+    }, [ urlName ]);
 
     return data;
 
