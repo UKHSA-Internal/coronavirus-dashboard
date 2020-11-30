@@ -13,10 +13,12 @@ import { Radio } from 'components/GovUk';
 
 import URLs from "common/urls";
 import { createQuery, groupBy, sort } from 'common/utils/utils';
+import { SelectOptions } from "./Download.styles";
 import { AreaTypeOptions, MSOAMetricOptions } from "components/DashboardHeader/Constants";
 import useApi from "hooks/useApi";
 import useGenericAPI from 'hooks/useGenericAPI';
 import useTimestamp from 'hooks/useTimestamp';
+import MsoaSelectContainer from "./MsoaDownloads";
 
 import {
     Container,
@@ -62,38 +64,11 @@ const excludedMetrics = [
 ];
 
 
-const SelectOptions = {
-    control: ( base, state ) => ({
-        ...base,
-        boxShadow: state.isFocused ? "0 0 0 3px #fd0" : "none"
-    }),
-    menu: provided => ({
-        ...provided,
-        borderRadius: 0,
-        backgroundColor: "rgba(241, 241, 241, 0.99)",
-        padding: 5
-      }),
-    option: (styles, state) => ({
-        ...styles,
-        backgroundColor: state.isFocused ? "#1d70b8": "none",
-        color: state.isFocused ? "#f1f1f1": "#000",
-        ":before": {
-            content: state.isSelected ? '"✓ "' : '""'
-        }
-    }),
-    placeholder: styles => ({
-        ...styles,
-        color: "#6B7276"
-    })
-};
-
-
 const ExtendedOptionStyles = Object.create(SelectOptions);
+
 ExtendedOptionStyles.control = ( base, state ) => ({
     ...base,
-    boxShadow: state.isFocused ? "0 0 0 3px #fd0" : "none",
-    // height: "auto",
-    // minHeight: "auto"
+    boxShadow: state.isFocused ? "0 0 0 3px #fd0" : "none"
 });
 
 
@@ -111,7 +86,7 @@ const formatUrl = ({ ...props }) => {
 
                 queryParams.push({ key: param, sign: "=", value: paramItems[param] });
 
-            }
+            }  // if
             else if ( paramItems[param]?.length ) {
 
                 queryParams.push(
@@ -119,13 +94,13 @@ const formatUrl = ({ ...props }) => {
                         .map(value => processParams({metric: value})[0])
                 );
 
-            }
+            } // else if
 
-        }
+        }  // for
 
         return queryParams
 
-    }
+    };  // processParams
 
     return createQuery(processParams(props), "&", "?", false)
 
@@ -163,143 +138,6 @@ const AreaTypeSelector = ({ areaType, setAreaType }) => {
 
 };  // AreaTypeSelector
 
-const MsoaSelectContainer = ({areaType, region, setRegion, ltla, setLtla, setMsoa}) => {
-
-    const [ ltlaOptions,  setLtlaOptions ] = useState([]);
-    const [ msoaOptions,  setMsoaOptions ] = useState([]);
-
-    const sortOptions = (a, b) => {
-        return a["label"].localeCompare(b["label"]);
-    };  // sortOptions
-
-    const getRegions = (msoaData) => {
-        let options = [];
-
-        Object.entries(msoaData).forEach(([key, value]) => {
-            options.push ({value: key, label: value["name"]});
-        });
-            
-        return options.sort(sortOptions);
-    }
-
-    const getLtlas = (msoaData, region) => {
-        let options = [];
-
-
-        Object.entries(msoaData).filter(([key1, value1]) => key1 === region).forEach(([key1, value1]) => {
-            Object.entries(value1["ltla"]).forEach(([key2, value2]) => {
-                options.push({value: key2, label: value2["name"]});
-            });
-        });
-        
-        return options.sort(sortOptions);
-    }
-
-    const getMsoas = (msoaData, region, ltla) => {
-        let options = [];
-
-        Object.entries(msoaData).filter(([key1, value1]) => key1 === region).forEach(([key1, value1]) => {
-                Object.entries(value1["ltla"]).filter(([key2, value2]) => key2 === ltla).forEach(([key2, value2]) => {
-                    Object.entries(value2["msoa"]).forEach(([key3, value3]) => {
-                        options.push({value: key3, label: value3});
-                    });                  
-                });     
-        });
-
-        return options.sort(sortOptions);
-    }
-
-    
-    const msoaData = useGenericAPI("msoaData", {}),
-          regionOptions = getRegions(msoaData);
-
-    useEffect(() => {
-        const ltlas = getLtlas(msoaData, region);
-        setLtlaOptions(ltlas);   
-    }, [ region ]);
-
-    useEffect(() => {
-        const msoas = getMsoas(msoaData, region, ltla);
-        setMsoaOptions(msoas); 
-    }, [ ltla ]);
-
-
-    return <>
-            <RegionSelector
-                    areaType={ areaType }
-                    regionOptions={ regionOptions }
-                    setRegion={ setRegion }/>
-
-            <LtlaSelector region={ region }
-                          ltlaOptions={ ltlaOptions }
-                          setLtla={ setLtla }/>
-
-            <MsoaSelector region={ region }
-                          ltla={ ltla }
-                          msoaOptions={ msoaOptions } 
-                          setMsoa={ setMsoa }/>
-            </>
-
-} // MsoaSelectContainer
-                       
-const RegionSelector = ({ areaType, regionOptions, setRegion }) => {
-
-    return <FormItem width={ "one-half" }>
-        <span id={ "region-label" } className={ "govuk-label govuk-label--s" }>
-            Region
-        </span>
-       
-        <div aria-labelledby={ "region-label" } aria-describedby={ 'region-descr' }>
-            <Select options={ regionOptions }
-                    styles={ SelectOptions }
-                    // value={ regionOptions.filter(obj => msoaData.includes(obj.value)) }
-                    onChange={ ({value}) => setRegion(value)  }
-                    isLoading={ regionOptions.length < 1}
-                    placeholder={ "Select region" }
-                    isDisabled={ !areaType || areaType === "overview" }
-                    className={ 'select' }/>
-        </div>
-    </FormItem>  
-} // RegionSelector
-
-const LtlaSelector = ({ region, ltlaOptions, setLtla }) => {
-
-    return <FormItem width={ "one-half" }>
-        <span id={ "ltla-label" } className={ "govuk-label govuk-label--s" }>
-           Local Authority
-        </span>
-       
-        <div aria-labelledby={ "ltla-label" } aria-describedby={ 'ltla-descr' }>
-            <Select options={ ltlaOptions }
-                    styles={ SelectOptions }
-                    isLoading={ ltlaOptions.length < 1 && ltlaOptions}
-                    placeholder={ "Select local authority" }
-                    isDisabled={ !region }
-                    onChange={ ({value}) => setLtla(value) }
-                    className={ 'select' }/>
-        </div>
-    </FormItem>  
-
-} // LtlaSelector
-
-const MsoaSelector = ({ region, ltla, msoaOptions, setMsoa }) => {
-
-    return <FormItem width={ "one-half" }>
-        <span id={ "msoa-label" } className={ "govuk-label govuk-label--s" }>
-            MSOA
-        </span>
-       
-        <div aria-labelledby={ "msoa-label" } aria-describedby={ 'msoa-descr' }>
-            <Select options={ msoaOptions }
-                    styles={ SelectOptions }
-                    isLoading={ msoaOptions.length < 1 && msoaOptions}
-                    placeholder={ "Select msoa" }
-                    isDisabled={ !ltla}
-                    onChange={ ({value}) => setMsoa(value) }
-                    className={ 'select' }/>
-        </div>
-    </FormItem>  
-} // MsoaSelector
 
 const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
 
@@ -531,22 +369,22 @@ const Download: ComponentType<*> = () => {
     const [archiveDate, setArchiveDate] = useState(null);
     const [urlParams, setUrlParams] = useState([]);
     const [isEnabled, setIsEnabled] = useState(false);
-    const [region, setRegion] = useState(null);
-    const [ltla, setLtla] = useState(null);
-    const [msoa, setMsoa] = useState(null);
-    
 
     useEffect(() => {
-
         setUrlParams(formatUrl({
             areaType, areaCode, metric, format,
-            release: dataReleaseDate !== "latest" && archiveDate,
-            region, ltla, msoa
+            release: dataReleaseDate !== "latest" && archiveDate
         }));
 
-        setIsEnabled(areaType && metric?.length && metric.length <= MAX_METRICS && archiveDate && format);
+        setIsEnabled(
+            areaType &&
+            metric?.length &&
+            metric.length <= MAX_METRICS &&
+            archiveDate &&
+            format
+        );
 
-    }, [areaType, areaCode, metric, archiveDate, format, dataReleaseDate, region, ltla, msoa ]);
+    }, [ areaType, areaCode, metric, archiveDate, format, dataReleaseDate ]);
 
     useEffect(() => {
         setAreaCode(null);
@@ -588,18 +426,12 @@ const Download: ComponentType<*> = () => {
                         <AreaTypeSelector areaType={ areaType }
                                           setAreaType={ setAreaType }/>
 
-                        { areaType === MSOA_AREA_TYPE ? 
-                                <MsoaSelectContainer areaType={ areaType }
-                                        region={ region }
-                                         setRegion={ setRegion}
-                                         ltla={ ltla }
-                                         setLtla={ setLtla }
-                                         setMsoa={ setMsoa } /> :
-                                
-                                <AreaNameSelector areaType={ areaType }
-                                                  areaCode={ areaCode }
-                                                  setAreaCode={ setAreaCode }/>
-                                
+                        {
+                            areaType === MSOA_AREA_TYPE
+                                ? <MsoaSelectContainer setAreaCode={ setAreaCode }/>
+                                : <AreaNameSelector areaType={ areaType }
+                                                    areaCode={ areaCode }
+                                                    setAreaCode={ setAreaCode }/>
                         }   
 
                         <MetricMultiSelector areaType={ areaType }
@@ -676,10 +508,8 @@ const Download: ComponentType<*> = () => {
                                        aria-labelledby={ "downloadlink-label" }
                                        aria-describedby={ 'downloadlink-descr' }>
                                 {
-                                    isEnabled && areaType !== MSOA_AREA_TYPE
+                                    isEnabled
                                         ? URLs.downloadData + urlParams
-                                        :
-                                    isEnabled ? URLs.downloadMsoaData + urlParams
                                         : "You must select at least one metric to generate a link."
                                 }
                             </PermaLink>
@@ -692,8 +522,7 @@ const Download: ComponentType<*> = () => {
                                 isEnabled
                                     ? <DownloadLink className={ "govuk-button" }
                                                       target={ "_blank" }
-                                                      href={ (areaType && areaType == MSOA_AREA_TYPE ?
-                                                             URLs.downloadMsoaData :  URLs.downloadData) + urlParams }
+                                                      href={ URLs.downloadData + urlParams }
                                                       enabled={ isEnabled }
                                                       download>
                                         Download data
