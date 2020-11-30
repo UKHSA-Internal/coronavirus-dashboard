@@ -155,3 +155,29 @@ export const Formset: ComponentType<*> =
             border-left: ${ ({ error }) => error ? "5px solid #d4351c" : "unset" };
             padding: ${ ({ error }) => error ? ".5rem 0 1rem 1rem" : "unset" };
         `;
+
+
+export const SelectOptions = {
+    control: ( base, state ) => ({
+        ...base,
+        boxShadow: state.isFocused ? "0 0 0 3px #fd0" : "none"
+    }),
+    menu: provided => ({
+        ...provided,
+        borderRadius: 0,
+        backgroundColor: "rgba(241, 241, 241, 0.99)",
+        padding: 5
+      }),
+    option: (styles, state) => ({
+        ...styles,
+        backgroundColor: state.isFocused ? "#1d70b8": "none",
+        color: state.isFocused ? "#f1f1f1": "#000",
+        ":before": {
+            content: state.isSelected ? '"✓ "' : '""'
+        }
+    }),
+    placeholder: styles => ({
+        ...styles,
+        color: "#6B7276"
+    })
+};
