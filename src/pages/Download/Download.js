@@ -35,7 +35,7 @@ const MAX_METRICS = 5;
 const MIN_ARCHIVE_DATE = "2020-08-12";
 const DATE_FORMAT = "YYYY-MM-DD";
 const MSOA_AREA_TYPE = "msoa";
-const MSOA_ADDITIONAL_TEXT = "For MSOA data download Archive date is not selectable.";
+
 
 const dataFormatOptions = {   
     choices: [
@@ -46,12 +46,12 @@ const dataFormatOptions = {
     ]
 };
 
-const dataReleaseDateOptions = {   
-    choices: [
-        { label: "Latest", value: "latest" },
-        { label: "Archive", value: "archive" }
-    ]
-};
+
+const dataReleaseDateOptions = [
+    { label: "Latest", value: "latest" },
+    { label: "Archive", value: "archive" }
+];
+
 
 const excludedMetrics = [
     "date",
@@ -219,7 +219,7 @@ const MetricMultiSelector = ({ areaType, metrics, setMetrics }) => {
                 document, but will not contain any data.
             </p>
             <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }>
-                Records contain at least 4 additional record identification metrics as
+                Records contain at least 4 additional metrics as
                 follows: areaType, areaCode, areaName, date
             </p>
             {
@@ -441,9 +441,11 @@ const Download: ComponentType<*> = () => {
                                id={ "dataformat-descr" }>
                                 Required. Note that when the "Latest" option is selected,
                                 the permanent link will always produce the data as they appear on
-                                the website &mdash; that is, the very latest release.
+                                the website &mdash; that is, the very latest release.&nbsp;
                                 {
-                                    areaType && areaType === MSOA_AREA_TYPE ? " " + MSOA_ADDITIONAL_TEXT : null
+                                    areaType && areaType === MSOA_AREA_TYPE
+                                        ? <b>Only the latest data are available at MSOA level.</b>
+                                        : null
                                 }
                                 
                             </p>
@@ -451,9 +453,8 @@ const Download: ComponentType<*> = () => {
                                 aria-describedby={ 'releasedate-descr' }>
                                 <Radio heading={ "Data Release Date" }
                                        value={ areaType !== MSOA_AREA_TYPE ? dataReleaseDate : 'latest' }
-                                       options={ dataReleaseDateOptions }
-                                       setValue={ areaType !== MSOA_AREA_TYPE ? setDataReleaseDate : 
-                                                    (value) => {}}
+                                       options={{ choices: dataReleaseDateOptions.filter(item => areaType !== MSOA_AREA_TYPE || item.value !== 'archive') }}
+                                       setValue={ areaType !== MSOA_AREA_TYPE ? setDataReleaseDate : () => {}}
                                        inline={ false }/>
                             </div>
                             <ArchiveDatePicker
