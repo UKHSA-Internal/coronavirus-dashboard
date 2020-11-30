@@ -40,7 +40,7 @@
   },
   "scripts": {
     "lint": "yarn flow",
-    "start": "react-scripts --max_old_space_size=4096 start",
+    "start": "unset HOST && react-scripts start",
     "build": "react-scripts build && node scripts/patchUrls.js",
     "ppostbuild": "react-snap",
     "test": "react-scripts test",
