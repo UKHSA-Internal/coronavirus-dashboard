@@ -506,9 +506,6 @@ const Download: ComponentType<*> = () => {
                             </PermaLink>
                         </FormItem>
                         <FormItem>
-                            <p className={ "govuk-hint govuk-!-font-size-16" }>
-                                The records in the document will not be ordered.
-                            </p>
                             {
                                 isEnabled
                                     ? <DownloadLink className={ "govuk-button" }
