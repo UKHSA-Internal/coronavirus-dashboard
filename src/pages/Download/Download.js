@@ -4,32 +4,30 @@ import React, { useState, useEffect } from 'react';
 
 import Select from "react-select";
 import DayPickerInput from "react-day-picker/DayPickerInput";
-
 import moment from "moment";
 import MomentLocaleUtils, { formatDate, parseDate } from "react-day-picker/moment";
 
-import Loading from "components/Loading";
-import { Radio } from 'components/GovUk';
-
-import URLs from "common/urls";
-import { createQuery, groupBy, sort } from 'common/utils/utils';
 import { SelectOptions } from "./Download.styles";
 import { AreaTypeOptions, MSOAMetricOptions } from "components/DashboardHeader/Constants";
+import { createQuery, groupBy, sort } from 'common/utils/utils';
+import URLs from "common/urls";
+import { Radio } from 'components/GovUk';
+import Loading from "components/Loading";
 import useApi from "hooks/useApi";
 import useGenericAPI from 'hooks/useGenericAPI';
 import useTimestamp from 'hooks/useTimestamp';
 import MsoaSelectContainer from "./MsoaDownloads";
+import FormItem, { Form } from "components/Formset";
 
 import {
     Container,
     DatePickerContainer,
     DownloadLink,
-    Form,
     MainContent,
     PermaLink,
-    SideContent,
-    Formset
+    SideContent
 } from "./Download.styles"
+
 import type { ComponentType } from "react";
 
 
@@ -107,18 +105,9 @@ const formatUrl = ({ ...props }) => {
 };  // formatUrl
 
 
-const FormItem: ComponentType<*> = ({ children, width="one-half", className="", ...props }) => {
-
-    return <Formset className={ `${className} ${width}` } { ...props }>
-        { children }
-    </Formset>
-
-};  // FormItem
-
-
 const AreaTypeSelector = ({ areaType, setAreaType }) => {
 
-    return <FormItem width={ "one-half govuk-!-margin-top-3" }>
+    return <FormItem width={ "two-third govuk-!-margin-top-3" }>
         <span id={ "areatype-label" } className={ "govuk-label govuk-label--s" }>
             Area type
         </span>
@@ -182,12 +171,13 @@ const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
         <div aria-labelledby={ "areaname-label" } aria-describedby={ 'areaname-descr' }>
             <Select options={ areaNameData.data }
                     styles={ SelectOptions }
-                    value={ areaNameData.data.filter(item => item.value === areaCode) }
+                    value={ areaNameData.data.filter(item => item?.value === areaCode) }
                     isLoading={ areaNameOptions.length < 1 && areaType && areaType !== "overview" }
                     placeholder={ "Select area" }
                     isDisabled={ !areaType || areaType === "overview" }
-                    onChange={ ({value}) => setAreaCode(value) }
-                    className={ 'select' }/>
+                    onChange={ item => setAreaCode(item?.value ?? null) }
+                    className={ 'select' }
+                    isClearable/>
         </div>
     </FormItem>
 
