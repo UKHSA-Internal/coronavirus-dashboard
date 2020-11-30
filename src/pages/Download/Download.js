@@ -4,36 +4,37 @@ import React, { useState, useEffect } from 'react';
 
 import Select from "react-select";
 import DayPickerInput from "react-day-picker/DayPickerInput";
-
 import moment from "moment";
 import MomentLocaleUtils, { formatDate, parseDate } from "react-day-picker/moment";
 
-import Loading from "components/Loading";
-import { Radio } from 'components/GovUk';
-
-import URLs from "common/urls";
+import { SelectOptions } from "./Download.styles";
+import { AreaTypeOptions, MSOAMetricOptions } from "components/DashboardHeader/Constants";
 import { createQuery, groupBy, sort } from 'common/utils/utils';
-import {AreaTypeOptions} from "components/DashboardHeader/Constants";
+import URLs from "common/urls";
+import { Radio } from 'components/GovUk';
+import Loading from "components/Loading";
 import useApi from "hooks/useApi";
-import useDownloadData from 'hooks/useDownloadData';
+import useGenericAPI from 'hooks/useGenericAPI';
 import useTimestamp from 'hooks/useTimestamp';
+import MsoaSelectContainer from "./MsoaDownloads";
+import FormItem, { Form } from "components/Formset";
 
 import {
     Container,
     DatePickerContainer,
     DownloadLink,
-    Form,
     MainContent,
     PermaLink,
-    SideContent,
-    Formset
+    SideContent
 } from "./Download.styles"
+
 import type { ComponentType } from "react";
 
 
 const MAX_METRICS = 5;
 const MIN_ARCHIVE_DATE = "2020-08-12";
 const DATE_FORMAT = "YYYY-MM-DD";
+const MSOA_AREA_TYPE = "msoa";
 
 
 const dataFormatOptions = {   
@@ -45,12 +46,11 @@ const dataFormatOptions = {
     ]
 };
 
-const dataReleaseDateOptions = {   
-    choices: [
-        { label: "Latest", value: "latest" },
-        { label: "Archive", value: "archive" }
-    ]
-};
+
+const dataReleaseDateOptions = [
+    { label: "Latest", value: "latest" },
+    { label: "Archive", value: "archive" }
+];
 
 
 const excludedMetrics = [
@@ -62,38 +62,11 @@ const excludedMetrics = [
 ];
 
 
-const SelectOptions = {
-    control: ( base, state ) => ({
-        ...base,
-        boxShadow: state.isFocused ? "0 0 0 3px #fd0" : "none"
-    }),
-    menu: provided => ({
-        ...provided,
-        borderRadius: 0,
-        backgroundColor: "rgba(241, 241, 241, 0.99)",
-        padding: 5
-      }),
-    option: (styles, state) => ({
-        ...styles,
-        backgroundColor: state.isFocused ? "#1d70b8": "none",
-        color: state.isFocused ? "#f1f1f1": "#000",
-        ":before": {
-            content: state.isSelected ? '"✓ "' : '""'
-        }
-    }),
-    placeholder: styles => ({
-        ...styles,
-        color: "#6B7276"
-    })
-};
-
-
 const ExtendedOptionStyles = Object.create(SelectOptions);
+
 ExtendedOptionStyles.control = ( base, state ) => ({
     ...base,
-    boxShadow: state.isFocused ? "0 0 0 3px #fd0" : "none",
-    // height: "auto",
-    // minHeight: "auto"
+    boxShadow: state.isFocused ? "0 0 0 3px #fd0" : "none"
 });
 
 
@@ -111,7 +84,7 @@ const formatUrl = ({ ...props }) => {
 
                 queryParams.push({ key: param, sign: "=", value: paramItems[param] });
 
-            }
+            }  // if
             else if ( paramItems[param]?.length ) {
 
                 queryParams.push(
@@ -119,31 +92,22 @@ const formatUrl = ({ ...props }) => {
                         .map(value => processParams({metric: value})[0])
                 );
 
-            }
+            } // else if
 
-        }
+        }  // for
 
         return queryParams
 
-    }
+    };  // processParams
 
     return createQuery(processParams(props), "&", "?", false)
 
 };  // formatUrl
 
 
-const FormItem: ComponentType<*> = ({ children, width="one-half", className="", ...props }) => {
-
-    return <Formset className={ `${className} ${width}` } { ...props }>
-        { children }
-    </Formset>
-
-};  // FormItem
-
-
 const AreaTypeSelector = ({ areaType, setAreaType }) => {
 
-    return <FormItem width={ "one-half govuk-!-margin-top-3" }>
+    return <FormItem width={ "two-third govuk-!-margin-top-3" }>
         <span id={ "areatype-label" } className={ "govuk-label govuk-label--s" }>
             Area type
         </span>
@@ -207,32 +171,34 @@ const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
         <div aria-labelledby={ "areaname-label" } aria-describedby={ 'areaname-descr' }>
             <Select options={ areaNameData.data }
                     styles={ SelectOptions }
-                    value={ areaNameData.data.filter(item => item.value === areaCode) }
+                    value={ areaNameData.data.filter(item => item?.value === areaCode) }
                     isLoading={ areaNameOptions.length < 1 && areaType && areaType !== "overview" }
                     placeholder={ "Select area" }
                     isDisabled={ !areaType || areaType === "overview" }
-                    onChange={ ({value}) => setAreaCode(value) }
-                    className={ 'select' }/>
+                    onChange={ item => setAreaCode(item?.value ?? null) }
+                    className={ 'select' }
+                    isClearable/>
         </div>
     </FormItem>
 
 };  // AreaNameSelector
 
 
-const MetricMultiSelector = ({ metrics, setMetrics }) => {
+const MetricMultiSelector = ({ areaType, metrics, setMetrics }) => {
 
     const
-        metricData = useDownloadData("metrics",{}),
+        metricData = useGenericAPI("metrics",{}),
         [error, setError] = useState(null),
-        metricNames = Object
-            .keys(metricData)
-            .filter(item => !excludedMetrics.includes(item))
-            .sort(sort)
-            .reverse()
-            .map(item => ({
-                label: item,
-                value: item
-            }));
+        metricNames = areaType === MSOA_AREA_TYPE ? MSOAMetricOptions : 
+            Object
+                .keys(metricData)
+                .filter(item => !excludedMetrics.includes(item))
+                .sort(sort)
+                .reverse()
+                .map(item => ({
+                    label: item,
+                    value: item
+                }));
 
     useEffect(() => {
         setError(
@@ -253,7 +219,8 @@ const MetricMultiSelector = ({ metrics, setMetrics }) => {
                 document, but will not contain any data.
             </p>
             <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }>
-                Records contain 4 additional default metrics as follows: areaType, areaCode, areaName, date
+                Records contain at least 4 additional metrics as
+                follows: areaType, areaCode, areaName, date
             </p>
             {
                 error &&
@@ -277,10 +244,11 @@ const MetricMultiSelector = ({ metrics, setMetrics }) => {
 
 };  // MetricMultiSelector
 
-
-const ArchiveDatePicker = ({ display=true, date, setDate, minDate, maxDate }) => {
+const ArchiveDatePicker = ({ display=true, areaType, date, setDate, minDate, maxDate }) => {
 
     if ( !display ) return null;
+
+    if (areaType === MSOA_AREA_TYPE) return null
 
     if ( !maxDate || !date ) return <Loading/>;
 
@@ -314,28 +282,30 @@ const ArchiveDatePicker = ({ display=true, date, setDate, minDate, maxDate }) =>
             Select or type in a date formatted as "{ DATE_FORMAT }"
             </p>
         </div>
+
         <span id={ "archive-label" } className={ "govuk-visually-hidden" }>
-            Archive date
-        </span>
-        <div aria-describedby={ "archive-descr" }
-             aria-labelledby={ "archive-label" }>
-            <DayPickerInput
-                formatDate={ formatDate }
-                parseDate={ parseDate }
-                placeholder={ "Select date" }
-                format={ DATE_FORMAT }
-                onDayChange={ value => setDate(moment(value).format(DATE_FORMAT)) }
-                value={ date }
-                dayPickerProps={ {
-                    locale: 'en-gb',
-                    localeUtils: MomentLocaleUtils,
-                    disabledDays: [{
-                        before: new Date(minDate),
-                        after: new Date(maxDate)
-                    }]
-                }}
-            />
-        </div>
+                    Archive date
+                </span>
+                <div aria-describedby={ "archive-descr" }
+                    aria-labelledby={ "archive-label" }>
+                    <DayPickerInput
+                        formatDate={ formatDate }
+                        parseDate={ parseDate }
+                        placeholder={ "Select date" }
+                        format={ DATE_FORMAT }
+                        onDayChange={ value => setDate(moment(value).format(DATE_FORMAT)) }
+                        value={ date }
+                        dayPickerProps={ {
+                            locale: 'en-gb',
+                            localeUtils: MomentLocaleUtils,
+                            disabledDays: [{
+                                before: new Date(minDate),
+                                after: new Date(maxDate)
+                            }]
+                        }}
+                    />
+                </div>
+       
     </DatePickerContainer>
 
 };  // ArchiveDatePicker
@@ -343,7 +313,7 @@ const ArchiveDatePicker = ({ display=true, date, setDate, minDate, maxDate }) =>
 
 const SupplementaryDownloads: ComponentType<*> = ({ ...props }) => {
 
-    const data = useDownloadData("supplementaryDownloads", {});
+    const data = useGenericAPI("supplementaryDownloads", {});
 
     if ( !data?.downloads ) return <Loading/>;
 
@@ -392,15 +362,20 @@ const Download: ComponentType<*> = () => {
     const [isEnabled, setIsEnabled] = useState(false);
 
     useEffect(() => {
-
         setUrlParams(formatUrl({
             areaType, areaCode, metric, format,
             release: dataReleaseDate !== "latest" && archiveDate
         }));
 
-        setIsEnabled(areaType && metric?.length && metric.length <= MAX_METRICS && archiveDate && format);
+        setIsEnabled(
+            areaType &&
+            metric?.length &&
+            metric.length <= MAX_METRICS &&
+            archiveDate &&
+            format
+        );
 
-    }, [areaType, areaCode, metric, archiveDate, format, dataReleaseDate ]);
+    }, [ areaType, areaCode, metric, archiveDate, format, dataReleaseDate ]);
 
     useEffect(() => {
         setAreaCode(null);
@@ -442,11 +417,16 @@ const Download: ComponentType<*> = () => {
                         <AreaTypeSelector areaType={ areaType }
                                           setAreaType={ setAreaType }/>
 
-                        <AreaNameSelector areaType={ areaType }
-                                          areaCode={ areaCode }
-                                          setAreaCode={ setAreaCode }/>
+                        {
+                            areaType === MSOA_AREA_TYPE
+                                ? <MsoaSelectContainer setAreaCode={ setAreaCode }/>
+                                : <AreaNameSelector areaType={ areaType }
+                                                    areaCode={ areaCode }
+                                                    setAreaCode={ setAreaCode }/>
+                        }   
 
-                        <MetricMultiSelector metrics={ metric }
+                        <MetricMultiSelector areaType={ areaType }
+                                             metrics={ metric }
                                              setMetrics={ setMetric }/>
 
                         <FormItem aria-labelledby={ "aria-releasedate-label" }
@@ -461,17 +441,25 @@ const Download: ComponentType<*> = () => {
                                id={ "dataformat-descr" }>
                                 Required. Note that when the "Latest" option is selected,
                                 the permanent link will always produce the data as they appear on
-                                the website &mdash; that is, the very latest release.
+                                the website &mdash; that is, the very latest release.&nbsp;
+                                {
+                                    areaType && areaType === MSOA_AREA_TYPE
+                                        ? <b>Only the latest data are available at MSOA level.</b>
+                                        : null
+                                }
+                                
                             </p>
                             <div aria-labelledby={ "releasedate-label" }
                                 aria-describedby={ 'releasedate-descr' }>
                                 <Radio heading={ "Data Release Date" }
-                                       value={ dataReleaseDate }
-                                       options={ dataReleaseDateOptions }
-                                       setValue={ setDataReleaseDate }
+                                       value={ areaType !== MSOA_AREA_TYPE ? dataReleaseDate : 'latest' }
+                                       options={{ choices: dataReleaseDateOptions.filter(item => areaType !== MSOA_AREA_TYPE || item.value !== 'archive') }}
+                                       setValue={ areaType !== MSOA_AREA_TYPE ? setDataReleaseDate : () => {}}
                                        inline={ false }/>
                             </div>
-                            <ArchiveDatePicker display={ dataReleaseDate === "archive" }
+                            <ArchiveDatePicker
+                                               display={ dataReleaseDate === "archive" }
+                                               areaType={ areaType }
                                                minDate={ MIN_ARCHIVE_DATE }
                                                maxDate={ timestamp }
                                                setDate={ setArchiveDate }
@@ -519,9 +507,6 @@ const Download: ComponentType<*> = () => {
                             </PermaLink>
                         </FormItem>
                         <FormItem>
-                            <p className={ "govuk-hint govuk-!-font-size-16" }>
-                                The records in the document will not be ordered.
-                            </p>
                             {
                                 isEnabled
                                     ? <DownloadLink className={ "govuk-button" }

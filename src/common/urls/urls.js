@@ -42,6 +42,7 @@ const URLs = {
     metrics:                `https://${ REACT_APP_MAIN_CDN      }/public/assets/dispatch/api_variables.json`,
     downloadData:           `https://${ REACT_APP_API_ENDPOINT  }/v2/data`,
     supplementaryDownloads: `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/downloads.json`,
+    msoaData:               `https://${ REACT_APP_MAIN_CDN      }/public/assets/dispatch/region2la2msoa.json`,
 };
 
 URLs.pageLayouts = {

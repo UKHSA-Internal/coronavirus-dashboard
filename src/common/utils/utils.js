@@ -23,6 +23,12 @@ export const sortByDate = (a, b) => {
 
 };  // sortByDate
 
+export const sortRegion = (a, b) => {
+
+    return a["name"].localCompare(b["name"]);
+
+};  // sortRegion
+
 
 export const dateRange = (startDate: string, stopDate: string, step: number = 1, unit: string = 'days'): Array<string> => {
 
