@@ -4,25 +4,63 @@ import React, { useState, useEffect } from 'react';
 import useGenericAPI from "hooks/useGenericAPI";
 
 import Select from "react-select";
+import FormItem from "components/Formset";
 
-import { Formset, SelectOptions } from "./Download.styles";
+import { SelectOptions } from "./Download.styles";
 import type { ComponentType } from "react";
 
 
-export const FormItem: ComponentType<*> = ({ children, width="one-half", className="", ...props }) => {
+const getLabel = ( areaType: string ) => {
 
-    return <Formset className={ `${className} ${width}` } { ...props }>
-        { children }
-    </Formset>
+    switch ( areaType ) {
+        case "region":
+            return {
+                singular: "Region",
+                plural: "Regions"
+            };
 
-};  // FormItem
+        case "la":
+            return {
+                singular: "Local Authority",
+                plural: "Local Authorities"
+            };
+
+        case "msoa":
+            return {
+                singular: "MSOA",
+                plural: "MSOAs"
+            };
+
+        default:
+            throw Error(`Invalid area type "${ areaType }".`);
+    }
+
+};  // getRegionName
 
 
-const Selector: ComponentType<*> = ({ data, areaType, areaCode, setAreaCode, enabled=true }) => {
+const Description: ComponentType<*> = ({ areaType, parentName, enabled }) => {
+
+    return <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }
+              id={ `msoa-descr-${ areaType }` }>
+        Optional. Leave blank to download all MSOAs
+        records{ parentName ? ` in ${ parentName }` : "" }.
+        {
+            enabled
+                ? <span className={ "govuk-visually-hidden" }>
+                    Currently disabled. Select the preceding option to enable.
+                </span>
+                : null
+        }
+    </p>
+
+};  // Description
+
+
+const Selector: ComponentType<*> = ({ data, areaType, areaCode, setAreaCode, enabled=true, parentName }) => {
 
     const [ options, setOptions ] = useState([]);
+    const label = getLabel(areaType);
 
-    console.log(data)
     useEffect(() => {
 
         setOptions(
@@ -35,23 +73,24 @@ const Selector: ComponentType<*> = ({ data, areaType, areaCode, setAreaCode, ena
     }, [data]);
 
     return <FormItem width={ "one-half" }>
-        <span id={ "region-label" } className={ "govuk-label govuk-label--s" }>{
-            areaType !== "region"
-            ? areaType !== "la"
-            ? "MSOA"
-            : "Local Authority"
-            : "Region"
-        }</span>
+        <span id={ `msoa-label-${ areaType }` }
+              className={ "govuk-label govuk-label--s" }>{ label.singular }</span>
 
-        <div aria-labelledby={ "region-label" } aria-describedby={ 'region-descr' }>
+        <Description parentName={ parentName }
+                     areaType={ areaType }
+                     enabled={ areaType || enabled }/>
+
+        <div aria-labelledby={ `msoa-label-${ areaType }` }
+             aria-describedby={ `msoa-descr-${ areaType }` }>
             <Select options={ options }
                     styles={ SelectOptions }
-                    value={ options.filter(item => item.value === areaCode) }
-                    onChange={ ({ value }) => setAreaCode(value)  }
+                    value={ options.filter(item => item?.value === areaCode) }
+                    onChange={ item => setAreaCode(item?.value ?? null)  }
                     isLoading={ enabled && options.length < 1 }
-                    placeholder={ "Select region" }
+                    placeholder={ `Select ${label.singular}` }
                     isDisabled={ !areaType || !enabled }
-                    className={ 'select' }/>
+                    className={ 'select' }
+                    isClearable/>
         </div>
     </FormItem>
 
@@ -75,16 +114,19 @@ const MsoaSelectContainer: ComponentType<*> = ({ setAreaCode }) => {
         <Selector data={ data }
                   areaType={ "region" }
                   areaCode={ regionCode }
+                  parentName={ "England" }
                   setAreaCode={ setRegionCode }/>
         <Selector data={ data?.["region"]?.[regionCode] ?? [] }
                   areaType={ "la" }
                   areaCode={ localAuthorityCode }
                   enabled={ regionCode !== null }
+                  parentName={ data?.["region"]?.[regionCode]?.name }
                   setAreaCode={ setLocalAuthorityCode }/>
         <Selector data={ data?.["region"]?.[regionCode]?.["la"]?.[localAuthorityCode] ?? [] }
                   areaType={ "msoa" }
                   areaCode={ msoaCode }
                   enabled={ localAuthorityCode !== null }
+                  parentName={ data?.["region"]?.[regionCode]?.["la"]?.[localAuthorityCode]?.name }
                   setAreaCode={ setMsoaCode }/>
     </>
 
