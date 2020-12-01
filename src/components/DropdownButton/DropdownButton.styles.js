@@ -6,77 +6,77 @@ import DownloadIcon from "assets/download.svg";
 import type { ComponentType } from "react";
 
 
-export const DropdownContainer: ComponentType<*> = (() => {
-
-    return styled.div`
-        min-width: 100px;
-        float: right;
-    `;
-
-})();
-
-
-export const OptionsContainer :ComponentType<*> = (() => {
-
-    return styled.div`
-        display: flex;
-        flex: 1 0 100px;
-        flex-direction: column;
-        position: absolute;
-        z-index: 999999999;
-        float: right;
-        margin-top: 14px;
-        margin-right: -15px !important;
-        min-width: 100px;
-        
-        &:focus {
-            background-colour: #ffdd00;
-        }
-        
-        & > * {
-            display: block;
-            padding: 8px 8px;
-            background-color: #f1f1f1;
-            border-top: 1px solid #e5e5e5;
-            border-left: 1px solid #e5e5e5;
-            border-right: 1px solid #e5e5e5;
+export const DropdownContainer: ComponentType<*> =
+    styled
+        .div
+        .attrs(({ className="", ...props }) => ({
+            className: `dropdown-container ${className}`,
+            ...props
+        }))`
             min-width: 100px;
-            text-decoration: none;
-            text-align: left;
-            
-            &:active,
-            &:focus,
-            &:hover {
-                background-color: #e5e5e5;
-                outline: none;
-                box-shadow: none;
-            }
+            float: right;
+        `;
+
+
+export const OptionsContainer :ComponentType<*> =
+    styled
+        .div`
+            display: flex;
+            flex: 1 0 100px;
+            flex-direction: column;
+            position: absolute;
+            z-index: 999999999;
+            float: right;
+            margin-top: 14px;
+            margin-right: -15px !important;
+            min-width: 100px;
             
             &:focus {
-                background-colour: #ffdd00 !important;
+                background-colour: #ffdd00;
             }
             
-            &.disabled {
+            & > * {
+                display: block;
+                padding: 8px 8px;
                 background-color: #f1f1f1;
-                color: #c1c1c1;
-                cursor: not-allowed;
+                border-top: 1px solid #e5e5e5;
+                border-left: 1px solid #e5e5e5;
+                border-right: 1px solid #e5e5e5;
+                min-width: 100px;
+                text-decoration: none;
+                text-align: left;
+                
+                &:active,
+                &:focus,
+                &:hover {
+                    background-color: #e5e5e5;
+                    outline: none;
+                    box-shadow: none;
+                }
+                
+                &:focus {
+                    background-colour: #ffdd00 !important;
+                }
+                
+                &.disabled {
+                    background-color: #f1f1f1;
+                    color: #c1c1c1;
+                    cursor: not-allowed;
+                }
+                
+                &:first-child {
+                    border-top-left-radius: 2px;
+                    border-top-right-radius: 2px;
+                }
+                
+                &:last-child {
+                    border-bottom: 1px solid #e5e5e5;
+                    border-bottom-left-radius: 2px;
+                    border-bottom-right-radius: 2px;
+                }
             }
             
-            &:first-child {
-                border-top-left-radius: 2px;
-                border-top-right-radius: 2px;
-            }
-            
-            &:last-child {
-                border-bottom: 1px solid #e5e5e5;
-                border-bottom-left-radius: 2px;
-                border-bottom-right-radius: 2px;
-            }
-        }
-        
-    `
-
-})();
+        `;
 
 
 export const Launcher: ComponentType<*> = (() => {
