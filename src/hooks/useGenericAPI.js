@@ -57,25 +57,25 @@ const useGenericAPI  = ( urlName: string, defaultResponse= null, responseType="j
 
     const [ data, setData ] = useState(defaultResponse);
 
-    // useEffect( () => {
+    useEffect( () => {
     
-    //     (async () => {
-    //         try {
-    //             const { data: dt, status } = await axios.get(URLs[urlName], {responseType: responseType});
+        (async () => {
+            try {
+                const { data: dt, status } = await axios.get(URLs[urlName], {responseType: responseType});
 
-    //             status < 400
-    //                 ? setData(dt)
-    //                 : setData(defaultResponse);
-    //         } catch (e) {
-    //             console.error(e)
-    //         }
-    //     })();
+                status < 400
+                    ? setData(dt)
+                    : setData(defaultResponse);
+            } catch (e) {
+                console.error(e)
+            }
+        })();
     
-    // }, [urlName]);
+    }, [urlName]);
 
-    // return data;
+    return data;
 
-    return ChangeLogData;
+    // return ChangeLogData;
 
 };  //useGenericAPI
 
