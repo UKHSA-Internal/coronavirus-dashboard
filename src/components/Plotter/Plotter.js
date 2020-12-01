@@ -133,7 +133,7 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                     orientation: 'h',
                     font: {
                         family: `"GDS Transport", Arial, sans-serif`,
-                        size: 16,
+                        size: width === "desktop" ? 15 : 12,
                     },
                     xanchor: 'auto',
                     // yanchor: 'auto'
@@ -141,8 +141,8 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                 },
                 showlegend: true,
                 margin: {
-                    l: width === "desktop" ? 80 : 40,
-                    r: 15,
+                    l: width === "desktop" ? 80 : 30,
+                    r: 10,
                     b: 25,
                     t: 10,
                     pad: 0,
@@ -160,7 +160,7 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                     tickformat: '%d %b',
                     tickfont: {
                         family: `"GDS Transport", Arial, sans-serif`,
-                        size: 14,
+                        size: width === "desktop" ? 14 : 10,
                         color: "#6B7276"
                     },
                     // rangeslider: {range: ['20202-01-01', new Date().toString()]},
@@ -188,15 +188,15 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                     ...xaxis
                 },
                 yaxis: {
-                    tickslen: 5,
-                    ticks: "outside",
+                    tickslen: 0,
+                    ticks: width === "desktop" ? "outside" : "inside",
                     tickson: "boundaries",
                     ticklen: 'labels',
                     tickcolor: "#f1f1f1",
                     tickformat: width === "desktop" ? ',r' : '.2s',
                     tickfont: {
                         family: `"GDS Transport", Arial, sans-serif`,
-                        size: 14,
+                        size: width === "desktop" ? 13 : 10,
                         color: "#6B7276",
                     },
                     ...yaxis
