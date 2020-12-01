@@ -7,6 +7,7 @@ import URLs from "common/urls";
 import axios from "axios";
 
 
+
 const ChangeLogData = [
     { 
         "date": "2020-10-26",
@@ -51,45 +52,30 @@ const ChangeLogData = [
 
 ]
 
+const useGenericAPI  = ( urlName: string, defaultResponse= null, responseType="json" ) => {
 
-const  useGenericAPI  = ({defaultResponse=[]}) => {
 
     const [ data, setData ] = useState(defaultResponse);
-   
 
-    const getChangeLogData = () => {
+    // useEffect( () => {
     
-        const getData = async () => {
-        
-            try {
+    //     (async () => {
+    //         try {
+    //             const { data: dt, status } = await axios.get(URLs[urlName], {responseType: responseType});
 
-                //const { data, status } = await axios.get(URLs.change-log);            
-                const data = ChangeLogData;
-                const status = 200;
-                
-                if ( status < 400 ) {
-                    setData(data);
-                } else {
-                    setData([])
-                }
-
-            } catch (e) {
-                console.error(e)
-                setData([])
-            }
-        }
-
-        getData();
+    //             status < 400
+    //                 ? setData(dt)
+    //                 : setData(defaultResponse);
+    //         } catch (e) {
+    //             console.error(e)
+    //         }
+    //     })();
     
-    };
+    // }, [urlName]);
 
-    useEffect(() => {
-        getChangeLogData();
-    }, []);
+    // return data;
 
-    const retObject =  {data};
-    
-    return retObject;
+    return ChangeLogData;
 
 };  //useGenericAPI
 

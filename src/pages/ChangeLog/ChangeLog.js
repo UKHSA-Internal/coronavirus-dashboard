@@ -33,7 +33,7 @@ const THIS_MONTH = new Date().toLocaleString('default', { month: 'long' });
 
 const ChangeLog: ComponentType<ChangeLogProps> = ({ ...props }) => {
 
-    const { data } = useGenericAPI({defaultResponse: []});
+    const { data } = useGenericAPI({url: "changeLog", defaultResponse: []});
 
     const { timestamp } = useTimestamp();
 

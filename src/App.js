@@ -171,7 +171,8 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/details/interactive-map" component={ InteractiveMap }/>
                                 <Route path="/details/change-log" exact component={ ChangeLog }/>
                                 <Route path="/details/download" exact component={ Download }/>
-                                <Route path="/details/about-data" exact component={ About }/>
+                                <Route path="/details/about-data" exact component={About}/>
+                        
                                 {/*<Route path="/archive" component={ Archive }/>*/}
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
