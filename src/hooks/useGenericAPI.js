@@ -7,7 +7,8 @@ import URLs from "common/urls";
 import axios from "axios";
 
 
-const useDownloadData  = ( urlName: string, defaultResponse= null ) => {
+const useGenericAPI  = ( urlName: string, defaultResponse= null, responseType="json" ) => {
+
 
     const [ data, setData ] = useState(defaultResponse);
 
@@ -15,20 +16,22 @@ const useDownloadData  = ( urlName: string, defaultResponse= null ) => {
     
         (async () => {
             try {
-                const { data: dt, status } = await axios.get(URLs[urlName]);
+                const { data: dt, status } = await axios.get(URLs[urlName], {responseType: responseType});
+
                 status < 400
                     ? setData(dt)
                     : setData(defaultResponse);
             } catch (e) {
-                console.error(e);
+                console.error(e)
             }
         })();
     
-    }, [ urlName ]);
+    }, [urlName]);
 
     return data;
 
-};  //useDownloadData
+};  //useGenericAPI
 
 
-export default useDownloadData;
+export default useGenericAPI;
+
