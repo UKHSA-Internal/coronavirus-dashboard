@@ -5,83 +5,6 @@ import { PlotContainer } from "./Plotter.styles";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 
 
-// export const Plotter = ({ layout={}, xaxis={}, yaxis={}, ...props }) => {
-//
-//     return <Plot
-//         config={ {
-//             showLink: false,
-//             responsive: true,
-//             displaylogo: false,
-//             modeBarButtonsToRemove: [
-//                 "autoScale2d",
-//                 "zoomIn2d",
-//                 "zoomOut2d",
-//                 "toggleSpikelines",
-//                 "hoverClosestCartesian",
-//                 "zoom2d"
-//             ],
-//             toImageButtonOptions: {
-//                 format: 'png',
-//                 filename: 'export',
-//                 height: 989,
-//                 width: 1600,
-//                 scale: 4
-//             }
-//         } }
-//         useResizeHandler={ true }
-//         style={{ display: 'flex' }}
-//         layout={ {
-//             barmode: 'stack',
-//             height: 320,
-//             legend: {
-//                 orientation: 'h',
-//                 font: {
-//                     family: `"GDS Transport", Arial, sans-serif`,
-//                     size: 16,
-//                 },
-//                 xanchor: 'auto',
-//                 y: -.2
-//             },
-//             showlegend: true,
-//             margin: {
-//                 l: 60,
-//                 r: 25,
-//                 b: 40,
-//                 t: 20,
-//                 pad: 5
-//             },
-//             xaxis: {
-//                 showgrid: false,
-//                 zeroline: false,
-//                 showline: false,
-//                 // tickangle: 30,
-//                 type: "date",
-//                 tickfont:{
-//                     family: `"GDS Transport", Arial, sans-serif`,
-//                     size : 14,
-//                     color: "#6f777b"
-//                 },
-//                 ...xaxis
-//             },
-//             yaxis: {
-//                 tickformat: 's',
-//                 tickfont:{
-//                     family: `"GDS Transport", Arial, sans-serif`,
-//                     size : 14,
-//                     color: "#6f777b",
-//                 },
-//                 ...yaxis
-//             },
-//             plot_bgcolor: "rgba(231,231,231,0)",
-//             paper_bgcolor: "rgba(255,255,255,0)",
-//             ...layout
-//         } }
-//         {...props}
-//     />
-//
-// }; // Plotter
-
-
 export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}, margin = {}, style = {}, isTimeSeries = true, SrOnly = "", ...props }) => {
 
     const width = useResponsiveLayout(640);
@@ -110,7 +33,7 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                     // "zoom2d",
                     // "pan2d",
                     "select2d",
-                    "lasso2d"
+                    "lasso2d",
                 ],
                 toImageButtonOptions: {
                     format: 'png',
@@ -142,7 +65,7 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                 showlegend: true,
                 margin: {
                     l: width === "desktop" ? 80 : 30,
-                    r: 10,
+                    r: width === "desktop" ? 10 : 5,
                     b: 25,
                     t: 10,
                     pad: 0,
@@ -152,6 +75,7 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                     showgrid: false,
                     zeroline: false,
                     showline: false,
+                    fixedrange: width !== "desktop",
                     tickslen: 10,
                     ticks: "outside",
                     tickson: "boundaries",
@@ -190,6 +114,7 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                 yaxis: {
                     tickslen: 0,
                     ticks: width === "desktop" ? "outside" : "inside",
+                    fixedrange: width !== "desktop",
                     tickson: "boundaries",
                     ticklen: 'labels',
                     tickcolor: "#f1f1f1",
