@@ -3,7 +3,7 @@ import Plot from "react-plotly.js";
 import URLs from "common/urls";
 import { PlotContainer } from "./Plotter.styles";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
-import { hexToRgb } from "../../common/utils";
+
 
 // export const Plotter = ({ layout={}, xaxis={}, yaxis={}, ...props }) => {
 //

@@ -140,7 +140,7 @@ const Arrow = ({ direction }) => {
 
     return <img src={ ArrowImage }
                 width={ "14px" } alt={ altText }
-                style={ { transform: `rotate(${ angle }deg)`, marginRight: 5 } }/>
+                style={ { transform: `rotate(${ angle }deg)`, marginRight: 5 } }/>;
 
 };
 
@@ -194,11 +194,15 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
                         </>
                 }
             </>
-            : <p>Data {
+            : <p>{
                 areaType === "msoa"
-                    ? "suppressed to protect the privacy of individuals and prevent disclosure"
-                    : "missing"
-            }.</p>
+                    ? <>
+                        There were fewer than 3 cases. For smaller areas (eg MSOAs)
+                        with fewer than&nbsp;3&nbsp;cases, we do not show data. This is to
+                        protect individuals' identities.
+                    </>
+                    : "Data missing."
+            }</p>
         }
     </MapToolbox>
 
@@ -653,7 +657,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
         <span style={{ textAlign: "right" }}>
             Download as <a onClick={ downloadImage }
                    className={ "govuk-link govuk-link--no-visited-state" }
-                   download={ "map.png" } href={ "" }>image</a>.</span>
+                   download={ `cases_${date}.png` } href={ "" }>image</a>.</span>
     </>
 
 };  // Map
