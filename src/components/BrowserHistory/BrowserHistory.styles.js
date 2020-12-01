@@ -7,7 +7,7 @@ import type { ComponentType } from 'react';
 export const Article: ComponentType<*> =
     styled
         .article
-        .attrs(({ className, ...props }) => ({
+        .attrs(({ className="", ...props }) => ({
             className: `about ${className}`,
             ...props
         }))`
@@ -18,7 +18,7 @@ export const Article: ComponentType<*> =
 export const Markdown: ComponentType<*> =
     styled
         .div
-        .attrs(({ className, ...props }) => ({
+        .attrs(({ className="", ...props }) => ({
             className: `markdown ${className}`,
             ...props
         }))``;
