@@ -20,6 +20,9 @@ const BrowserHistory = ({ data }) => {
             if ( element )
                 element.scrollIntoView();
         }
+        else {
+            document.querySelector("#main-content").scrollIntoView({block: "start"});
+        }
     }, [ hash, data ]);
 
     return <Article>
