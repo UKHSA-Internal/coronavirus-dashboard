@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import URLs from "common/urls";
 
 import axios from "axios";
-import ReplaceStream from "replacestream";
 
 
 const useGenericAPI  = ( urlName: string, defaultResponse= null, responseType="json" ) => {
