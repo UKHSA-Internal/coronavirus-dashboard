@@ -447,6 +447,7 @@ export const Histogram = ({ data, currentLocation }) => {
 export const XAxis = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}, margin = {}, style = {}, isTimeSeries = true, SrOnly = "", ...props }) => {
 
     return <PlotContainer className={ "govuk-grid-row" }
+                          height={ null }
                           aria-label={ "Displaying a graph of the data" }>
         <Plot
             data={ data }
