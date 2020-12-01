@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 
 import DayPickerInput from "react-day-picker/DayPickerInput";
@@ -11,7 +11,6 @@ import MomentLocaleUtils, {
 } from "react-day-picker/moment";
 
 import Loading from "components/Loading";
-import URLs from "common/urls";
 
 import {
     Markdown,
@@ -24,16 +23,21 @@ import type { ChangeLogProps, ChangeLogItemProps } from "./ChangeLog.types";
 
 import useGenericAPI from 'hooks/useGenericAPI';
 import useTimestamp from 'hooks/useTimestamp';
+import { TH } from 'components/GovUk/Table.styles';
 
 const MIN_CHANGE_LOG_DATE = "2020-07-12";
 
 const THIS_MONTH_TEXT = "This month"
+
+const THIS_MONTH = new Date().toLocaleString('default', { month: 'long' });
 
 const ChangeLog: ComponentType<ChangeLogProps> = ({ ...props }) => {
 
     const { data } = useGenericAPI({defaultResponse: []});
 
     const { timestamp } = useTimestamp();
+
+    const changeMonthRef = useRef(THIS_MONTH)
             
 
     const [changeLogType, setChangeLogType] = useState('');
@@ -85,19 +89,22 @@ const ChangeLog: ComponentType<ChangeLogProps> = ({ ...props }) => {
 
  
 
-    const getChangeDateText = (params) => {
-        let changeMonthText = new Date(params.changeDate).toLocaleString('default', { month: 'long' });       
-        const thisMonthText = new Date().toLocaleString('default', { month: 'long' });     
-        if (changeMonthText === thisMonthText) {
-            changeMonthText = THIS_MONTH_TEXT;
-            params.previous = changeMonthText;
-        } else if (params.previous && params.previous === changeMonthText) {
-            changeMonthText = "";
-        } else {
-            params.previous = changeMonthText;
+    const getChangeDateText = (changeDate) => {
+
+        const changeMonthText = new Date(changeDate).toLocaleString('default', { month: 'long' });  
+        
+        if (changeMonthText === THIS_MONTH) {
+            changeMonthRef.current = THIS_MONTH_TEXT
+            return changeMonthRef.current;
+        }
+
+        if (changeMonthRef.current !== changeMonthText) {
+            changeMonthRef.current = changeMonthText
+            return changeMonthRef.current;
         }
         
-        return changeMonthText;
+        return ""
+        
     }
 
    
@@ -177,11 +184,9 @@ const ChangeLog: ComponentType<ChangeLogProps> = ({ ...props }) => {
         <Article>
            
             {
-                data.filter(filterData).sort(sortData).map((change, index) => {  
-                    
-                    paramObj.changeDate = change.date;
+                data.filter(filterData).sort(sortData).map((change, index) => { 
 
-                    const changeText = getChangeDateText(paramObj);
+                    const changeText = getChangeDateText(change.date);
                     return<ChangeLogItem 
                         key={index}
                         changeMonthText={changeText}

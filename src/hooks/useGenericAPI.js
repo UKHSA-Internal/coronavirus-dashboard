@@ -6,7 +6,7 @@ import URLs from "common/urls";
 
 import axios from "axios";
 
-<<<<<<< HEAD
+
 const ChangeLogData = [
     { 
         "date": "2020-10-26",
@@ -41,6 +41,12 @@ const ChangeLogData = [
         "linkText": "View Data",
         "relativeUrl": "/",
         "body": "September 01 Metric Change"
+    },
+    { 
+        "date": "2020-12-25",
+        "linkText": "December Change",
+        "relativeUrl": "/",
+        "body": "December Change"
     },
 
 ]
@@ -89,31 +95,3 @@ const  useGenericAPI  = ({defaultResponse=[]}) => {
 
 
 export default useGenericAPI;
-=======
-
-const useDownloadData  = ( urlName: string, defaultResponse= null ) => {
-
-    const [ data, setData ] = useState(defaultResponse);
-
-    useEffect( () => {
-    
-        (async () => {
-            try {
-                const { data: dt, status } = await axios.get(URLs[urlName]);
-                status < 400
-                    ? setData(dt)
-                    : setData(defaultResponse);
-            } catch (e) {
-                console.error(e);
-            }
-        })();
-    
-    }, [ urlName ]);
-
-    return data;
-
-};  //useDownloadData
-
-
-export default useDownloadData;
->>>>>>> origin
