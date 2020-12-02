@@ -22,6 +22,10 @@ export const Loading = ({ className, ...props }) => (
 );
 
 
-export const Markdown = ({ className, ...props }) => (
-    <div className={ `markdown ${className}` } { ...props }/>
-);
+export const Markdown: ComponentType<*> =
+    styled
+        .div
+        .attrs(({ className="", ...props }) => ({
+            className: `markdown ${className}`,
+            ...props
+        }))``;
