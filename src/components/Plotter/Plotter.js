@@ -86,15 +86,42 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
 
     const width = useResponsiveLayout(640);
 
-    // const zoomScale = (layout, xrange) => {
-    //     const in_view = data.loc[fig.layout.xaxis.range[0],
-    //     fig.layout.xaxis.range[1]
-    //         ]
-    //
-    //     fig.layout.yaxis.range = [in_view.High.min(), in_view.High.max() + 10]
-    //     fig.layout.on_change(zoom, 'xaxis.range')
-    //
-    // }
+    let tickvals, ticktext, tickmode = undefined;
+
+    if ( layout?.barmode === "logy" ) {
+        tickmode = 'array';
+
+        const thresholds = [ -1000, -10, 0, 10, 100, 1000, 10000, 100000, 1000000, 10000000];
+
+        const minVal = Math.min(...data[0].y);
+        const maxVal = Math.max(...data[0].y);
+        ticktext = [
+            minVal,
+            ...thresholds.filter(value => value > minVal && value < maxVal),
+            maxVal
+        ];
+
+        for ( const item of data ) {
+            item.text = item.y;
+
+            item.y = item.y.map(val =>
+                val >= 0
+                    ? Math.log(val)
+                    : -Math.log(Math.abs(val))
+            );
+
+            item.hovertemplate ='%{text:.1f}';
+        }
+
+        tickvals = ticktext.map(val =>
+            val >= 0
+                ? val === 0
+                ? 0
+                : Math.log(val)
+                : -Math.log(Math.abs(val))
+        );
+
+    }
 
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
@@ -146,7 +173,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                         size: 16,
                     },
                     xanchor: 'auto',
-                    // yanchor: 'auto'
+                    // yanchor: 'auto',
                     y: -.2
                 },
                 showlegend: true,
@@ -198,6 +225,9 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, config={}, margin
                     ...xaxis
                 },
                 yaxis: {
+                    ticktext,
+                    tickvals,
+                    tickmode,
                     // autorange: true,
                     // fixedrange: false,
                     tickslen: 5,
