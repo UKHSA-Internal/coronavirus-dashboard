@@ -116,7 +116,7 @@ const ChangeLogComponent = ( { data }) => {
                         
                             return <div aria-describedby={ "type-filter-descr" }
                                         aria-labelledby={ "type-filter-label" }>
-                                <label htmlFor={ "changeMetric" }>
+                                <label htmlFor={ key }>
                                     <input
                                         key={index}
                                         name={key}
@@ -124,7 +124,10 @@ const ChangeLogComponent = ( { data }) => {
                                         checked={changeLogType[key]}
                                         onChange={(type) =>
                                             setChangeLogType({...changeLogType, [key]: !changeLogType[key] }) }/>
-                                        {data.type[key]}
+                                        {
+                                            data.type[key] &&
+                                             data.type[key][0].toUpperCase() + data.type[key].slice(1).toLowerCase()
+                                        }
                                 </label>
                             </div>
 
