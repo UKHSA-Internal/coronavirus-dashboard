@@ -1,17 +1,16 @@
 // @flow
 
+import React, { useState, useRef } from 'react';
 
-import React, { useState, useEffect, useRef } from 'react';
+import useTimestamp from 'hooks/useTimestamp';
 
 import { Link } from "react-router-dom";
 
-import DayPickerInput from "react-day-picker/DayPickerInput";
-
 import MomentLocaleUtils, {
-    formatDate,
-    parseDate
+    formatDate
 } from "react-day-picker/moment";
 
+import moment from "moment";
 
 import FormItem, { Form } from "components/Formset";
 
@@ -22,73 +21,136 @@ import {
     ChangeMonthContainer
 } from './ChangeLogComponent.styles';
 
-
-
 import type { ComponentType } from "react";
 import type { ChangeLogProps, ChangeLogItemProps } from "./ChangeLog.types";
+import { index } from 'd3-array';
+import { objectsAreEqual } from 'components/Map/utils';
 
-import useGenericAPI from 'hooks/useGenericAPI';
+const THIS_MONTH_TEXT = "This month";
 
-const MIN_CHANGE_LOG_DATE = "2020-07-12";
+const today = new Date();
 
-const THIS_MONTH_TEXT = "This month"
-
-const THIS_MONTH = "" + new Date().getMonth() + new Date().getFullYear();
-
-const searchTypeOptions = {   
-    choices: [
-        { label: "New metric", value: "New metric"  },
-        { label: "Change to metric", value: "Change to metric" },
-        { label: "New feature", value: "New feature" }
-    ]
-};
+const THIS_MONTH = "" +  today.getMonth() + today.getFullYear();
 
 const ChangeLogComponent = ( { data }) => {
 
-    const metricStates = {
-        newMetric: false,
-        newFeature: false,
-        changeMetric: false
-    }
+    let metricStates = {};
+
+    Object.keys(data.type).map(key => {
+        metricStates[key] = false;
+    });
 
     const changeMonthRef = useRef(THIS_MONTH);
+    const changeDateRef = useRef(null);
+
+    const timestamp = useTimestamp();
 
     const [changeLogType, setChangeLogType] = useState(metricStates);
     const [changeLogSearch, setChangeLogSearch] = useState(null);
 
-    const ChangeLogItemBody = ({ body, linktext, relativeUrl }) => {
+    const ChangeLogItemBody = ({ change, index }) => {
+
+        const id = "metric_" + index
        
-        return  <div id={ "change-log-body" }>
-                    <p>{body} <strong><Link to={relativeUrl}>{linktext}</Link></strong></p>         
-                 </div>
-    };
+        return  <div id={ id } className="govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0">
+                    <p className="govuk-body-s govuk-!-margin-top-0">
+                        <strong>{change.headline}</strong> {change.type}
+                    </p>
+                    <p className="govuk-body-s govuk-!-margin-top-0">
+                        {change.body} <strong><Link to={change.relativeUrl}>{change.linkText}</Link></strong>
+                    </p>         
+                </div>
+    }; // ChangeLogItemBody
 
-    const ChangeLogItem: ComponentType<ChangeLogItemProps> = ({ changeLogItem }) => {
+    const ChangeLogItemHeader = ( { change } ) => {
 
-        const changeMonthText = getChangeDateText( changeLogItem.date );
-    
-        return  <div>
-                    <div id={ "change-log-month" }>
-                        <p className="govuk-body-m govuk-!-margin-top-1">
+        const changeMonthText = getChangeMonthText( change.date );
+        const changeDateText = getChangeDateText(change.date);
+
+        return <div className="govuk-body-s govuk-!-margin-top-0">
+                    
+                    <div className="govuk-body-s govuk-!-margin-top-0">
+                        <p className="govuk-body-m govuk-!-margin-top-0">
                             <strong>{changeMonthText}</strong>
                         </p>
                     </div>
-    
-                    <div id={ "change-log-date" }>
-                        <p className="govuk-body-s govuk-!-margin-top-1">
-                            {formatDate(changeLogItem.date, "DD MMM YYYY")}
-                        </p>
-                    </div>
-                       
-                    <ChangeLogItemBody body={changeLogItem.body}
-                                            linktext={changeLogItem.linkText}
-                                            relativeUrl={changeLogItem.relativeUrl}/>     
-                </div>
-    
-    }
 
-    const filterByType = (type, newMetric, changeMetric, newFeature) => {
-        return true
+                    {changeDateText &&
+                        <div className="govuk-body-s govuk-!-margin-top-0">
+                            <p className="govuk-body-s govuk-!-margin-top-0">
+                                {formatDate(changeDateText, "DD MMM YYYY")}
+                            </p>
+                        </div>
+                    }
+                   
+            
+                </div>
+
+    }; // ChangeLogItemHeader
+    
+    const ChangeLogItem: ComponentType<ChangeLogItemProps> = ({ changeLogItem, index }) => {
+
+        return  <div className="govuk-body-s govuk-!-margin-top-0">
+                    <ChangeLogItemHeader change={ changeLogItem } />
+
+                    <ChangeLogItemBody change={ changeLogItem }                                
+                                                index={ index }/> 
+                </div>    
+    
+    }; // ChangeLogItem
+
+    const ChangeLogType = () => {
+        return <FormItem aria-labelledby={ "aria-type-filter-label" }
+                        aria-describedby={ "aria-type-filter-descr" }
+                        width={ "two-third" }>
+
+                    <span
+                        id={ "type-filter-label" }
+                        className={ "govuk-label govuk-label--s" }>
+                        Type
+                    </span>
+
+
+                    {
+                        Object.keys(metricStates).map((key, index) => {
+                        
+                            return <div aria-describedby={ "type-filter-descr" }
+                                        aria-labelledby={ "type-filter-label" }>
+                                <label htmlFor={ "changeMetric" }>
+                                    <input
+                                        key={index}
+                                        name={key}
+                                        type="checkbox"
+                                        checked={changeLogType[key]}
+                                        onChange={(type) =>
+                                            setChangeLogType({...changeLogType, [key]: !changeLogType[key] }) }/>
+                                        {data.type[key]}
+                                </label>
+                            </div>
+
+                            })
+                            
+                        }
+                    
+                </FormItem>
+    }; // ChangeLogType
+
+    const filterByDate = (item) => {
+
+        const today = moment(timestamp).local(true).toDate().getTime();
+        const changeDate = new Date(item.date).getTime();
+
+        if (changeDate <= today) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }; // filterByDate
+
+    const filterByType = (item) => {
+        const keys = Object.keys(metricStates).filter(key => changeLogType[key]);
+        return Object.values(keys).some((key) => data.type[key] === item.type);    
     }; // filterByType 
 
     const filterBySearch = (search) => {
@@ -96,28 +158,28 @@ const ChangeLogComponent = ( { data }) => {
         return pattern.exec(search.toLowerCase());
     }; // filterBySearch 
 
+    const isTypeSet = () => {
+        return Object.keys(metricStates).some((key) => changeLogType[key]) 
+    } // isTypeSet
 
     const filterData = (item) => {
         
-        if (!changeLogType && !changeLogSearch) {
-            return true;
+        const match1 = filterByDate(item)
+
+        const typeSet = isTypeSet();
+        
+        let match2 = true
+         if (typeSet) {
+            match2 = filterByType(item);
         }
-        else if (changeLogType && changeLogSearch) {
-            // alert ("here")
-            return filterByType(item) && filterBySearch(item.body);
-        }
-        else if (changeLogType.newMetric || changeLogType.changeMetric || changeLogType.newFeature) {
-            return filterByType(item,
-                                 changeLogType.newMetric,
-                                 changeLogType.changeMetric,
-                                 changeLogType.newFeature);
+        
+        let match3 = true
+        if (changeLogSearch) {
+            match3 = filterBySearch(item.body);
         } 
-        else if (changeLogSearch) {
-            return filterBySearch(item.body);
-        }
-        else {
-            return true;
-        }
+
+        return match1 && match2 && match3
+
     }; // filterData
 
 
@@ -132,9 +194,10 @@ const ChangeLogComponent = ( { data }) => {
     }; // sortData
 
     // assumes data is sorted in reverse date order
-    const getChangeDateText = (changeDate) => {
+    const getChangeMonthText = (changeDate) => {
 
-        const changeMonth = "" + new Date(changeDate).getMonth() + new Date(changeDate).getFullYear();
+        const dte = new Date(changeDate);
+        const changeMonth = "" + dte.getMonth() + dte.getFullYear();
         
         if (changeMonth === THIS_MONTH) {
             changeMonthRef.current = changeMonth;
@@ -152,6 +215,23 @@ const ChangeLogComponent = ( { data }) => {
         
         return null;
         
+    }; // getChangeMonthText
+
+     // assumes data is sorted in reverse date order
+     const getChangeDateText = (date) => {
+
+        if (changeDateRef.current && changeDateRef.current !== date) {
+            changeDateRef.current = date;
+            return date
+        } 
+
+        if (changeDateRef.current !== date) {
+            changeDateRef.current = date;
+            return date
+        }
+        
+        return null;
+        
     }; // getChangeDateText
 
     return <>
@@ -164,12 +244,15 @@ const ChangeLogComponent = ( { data }) => {
                     Here&#39;s a timeline of changes.
                 </p>
         
-                {
-                    data.filter(filterData).sort(sortData).map((change, index) => { 
-                        return<ChangeLogItem 
-                            key={index}
-                            changeLogItem={change}/>           
-                })}           
+                <div id={ "filterChangeLogItem" } className={ "govuk-!-margin-top-1" }>
+                    {
+                        data && data["changeLog"].filter(filterData).sort(sortData).map((change, index) => { 
+                            return<ChangeLogItem 
+                                key={index}
+                                index={ index }
+                                changeLogItem={change}/>           
+                    })}  
+                </div>         
     
             </MainContent>
 
@@ -184,73 +267,26 @@ const ChangeLogComponent = ( { data }) => {
                         <FormItem aria-labelledby={ "aria-search-filter-label" }
                                 aria-describedby={ "aria-search-filter-descr" }
                                 width={ "two-third" }>
-                            <span
-                                id={ "search-filter-label" }
-                                className={ "govuk-label govuk-label--s" }>
-                                Search
-                            </span>
-                
-                            <div aria-describedby={ "search-filter-descr" }
-                                aria-labelledby={ "search-filter-label" }>
-                                    <input 
-                                        className={ "govuk-input govuk-input--width-10" }
-                                        type={ "text" }
-                                        onChange={ (item) => setChangeLogSearch(item.target.value) }/>
-                            </div>
+                              <span
+                                    id={ "search-filter-label" }
+                                    className={ "govuk-label govuk-label--s" }>
+                                    Search
+                                </span>
+
+                                <div aria-describedby={ "search-filter-descr" }
+                                    aria-labelledby={ "search-filter-label" }>
+                                        <input 
+                                            className={ "govuk-input govuk-input--width-10" }
+                                            type={ "text" }
+                                            onChange={ (item) => setChangeLogSearch(item.target.value) }/>
+                                </div>
                         </FormItem>
 
-                        <FormItem aria-labelledby={ "aria-type-filter-label" }
-                                aria-describedby={ "aria-type-filter-descr" }
-                                width={ "two-third" }>
-
-                            <span
-                                id={ "type-filter-label" }
-                                className={ "govuk-label govuk-label--s" }>
-                                Type
-                            </span>
-                            <div aria-describedby={ "type-filter-descr" }
-                                aria-labelledby={ "type-filter-label" }>
-                                     <label htmlFor={ "newMetric" }>
-                                        <input
-                                            name="newMetric"
-                                            type="checkbox"
-                                            checked={changeLogType.newMetric}
-                                            onChange={(type) => setChangeLogType({...changeLogType, newMetric: !changeLogType.newMetric }) }/>
-                                        New metric
-                                    </label>
-                            </div>
-
-                            <div aria-describedby={ "type-filter-descr" }
-                                aria-labelledby={ "type-filter-label" }>
-                                     <label htmlFor={ "changeMetric" }>
-                                        <input
-                                            name="changeMetric"
-                                            type="checkbox"
-                                            checked={changeLogType.changeMetric}
-                                            onChange={(type) => setChangeLogType({...changeLogType, changeMetric: !changeLogType.changeMetric }) }/>
-                                        Change to metric
-                                    </label>
-                            </div>
-
-                            <div aria-describedby={ "type-filter-descr" }
-                                aria-labelledby={ "type-filter-label" }>
-                                     <label htmlFor={ "newFeature" }>
-                                        <input
-                                            name="newFeature"
-                                            type="checkbox"
-                                            checked={changeLogType.newFeature}
-                                            onChange={(type) => setChangeLogType({...changeLogType, newFeature: !changeLogType.newFeature }) }/>
-                                        New feature
-                                    </label>
-                            </div>
-                            
-                        </FormItem>
+                        <ChangeLogType/>
                         
                     </Form>
-                </div>
-        
+                </div>      
             </SideContent>
-
         </Container>
     </>
 };

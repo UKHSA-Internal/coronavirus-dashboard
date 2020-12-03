@@ -15,7 +15,7 @@ const useGenericAPI  = ( urlName: string, defaultResponse= null, responseType="j
     
         (async () => {
             try {
-                const { data: dt, status } = await axios.get(URLs[urlName], {responseType: responseType});
+                const { data: dt, status } = await axios.get("URLs[urlName]", {responseType: responseType});
 
                 status < 400
                     ? setData(dt)
