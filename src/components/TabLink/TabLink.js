@@ -25,6 +25,7 @@ const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
 
     switch ( cardType ) {
 
+        case "recentData":
         case "chart":
             return <TabContent Component={ TabContentRaw } { ...props }/>;
 
