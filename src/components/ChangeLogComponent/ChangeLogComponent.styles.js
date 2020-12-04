@@ -2,13 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
+
 export const Markdown: ComponentType<*> =
     styled
         .div
         .attrs(({ className="", ...props }) => ({
             className: `markdown ${className}`,
             ...props
-        }))``;
+        }))`
+            max-width: 85%;
+`;
 
 const calcColour = ({color}) => {
     return color ? color : 'black';
