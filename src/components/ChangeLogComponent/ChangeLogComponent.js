@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import useTimestamp from 'hooks/useTimestamp';
 
@@ -18,13 +18,13 @@ import {
     Container,
     MainContent,
     SideContent,
-    ChangeMonthContainer
+    ChangeMonthContainer,
+    Markdown,
+    ChangeLogSpan,
 } from './ChangeLogComponent.styles';
 
 import type { ComponentType } from "react";
-import type { ChangeLogProps, ChangeLogItemProps } from "./ChangeLog.types";
-import { index } from 'd3-array';
-import { objectsAreEqual } from 'components/Map/utils';
+
 
 const THIS_MONTH_TEXT = "This month";
 
@@ -34,30 +34,42 @@ const THIS_MONTH = "" +  today.getMonth() + today.getFullYear();
 
 const ChangeLogComponent = ( { data }) => {
 
-    let metricStates = {};
-
-    Object.keys(data.type).map(key => {
-        metricStates[key] = false;
-    });
+   
 
     const changeMonthRef = useRef(THIS_MONTH);
     const changeDateRef = useRef(null);
 
     const timestamp = useTimestamp();
 
-    const [changeLogType, setChangeLogType] = useState(metricStates);
+    const [changeLogType, setChangeLogType] = useState({});
     const [changeLogSearch, setChangeLogSearch] = useState(null);
+
+    useEffect(() => {
+        let metricStates = {};
+        if (data.type) {
+            Object.keys(data.type).map(key => {
+                metricStates[key] = false;
+            });
+            setChangeLogType(metricStates)
+        }
+    }, [ data.type ]);
 
     const ChangeLogItemBody = ({ change, index }) => {
 
-        const id = "metric_" + index
-       
+        const id = Object.keys(data.type).filter(key => data.type[key] === change.type) + "-" + index;
+        const bgColour = data.colours.find(element => element.type === change.type).background;
+        const textColour = data.colours.find(element => element.type === change.type).text;
+
         return  <div id={ id } className="govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0">
                     <p className="govuk-body-s govuk-!-margin-top-0">
-                        <strong>{change.headline}</strong> {change.type}
+                        <strong>{change.headline}</strong>
+                        <ChangeLogSpan color={textColour}
+                                       bgColor={bgColour}>
+                            {change.type}
+                        </ChangeLogSpan>
                     </p>
                     <p className="govuk-body-s govuk-!-margin-top-0">
-                        {change.body} <strong><Link to={change.relativeUrl}>{change.linkText}</Link></strong>
+                        <Markdown dangerouslySetInnerHTML={{ __html: change.body }}/>{ }<strong><Link to={change.relativeUrl}>{change.linkText}</Link></strong>
                     </p>         
                 </div>
     }; // ChangeLogItemBody
@@ -102,7 +114,7 @@ const ChangeLogComponent = ( { data }) => {
     const ChangeLogType = () => {
         return <FormItem aria-labelledby={ "aria-type-filter-label" }
                         aria-describedby={ "aria-type-filter-descr" }
-                        width={ "two-third" }>
+                        width={ "full" }>
 
                     <span
                         id={ "type-filter-label" }
@@ -112,10 +124,11 @@ const ChangeLogComponent = ( { data }) => {
 
 
                     {
-                        Object.keys(metricStates).map((key, index) => {
-                        
+                        changeLogType && Object.keys(changeLogType).map((key, index) => {
+
                             return <div aria-describedby={ "type-filter-descr" }
-                                        aria-labelledby={ "type-filter-label" }>
+                                        aria-labelledby={ "type-filter-label" }
+                                        className="govuk-!-margin-bottom-1">
                                 <label htmlFor={ key }>
                                     <input
                                         key={index}
@@ -123,7 +136,7 @@ const ChangeLogComponent = ( { data }) => {
                                         type="checkbox"
                                         checked={changeLogType[key]}
                                         onChange={(type) =>
-                                            setChangeLogType({...changeLogType, [key]: !changeLogType[key] }) }/>
+                                            setChangeLogType( {...changeLogType, [key]: !changeLogType[key] }) }/>
                                         {
                                             data.type[key] &&
                                              data.type[key][0].toUpperCase() + data.type[key].slice(1).toLowerCase()
@@ -152,7 +165,7 @@ const ChangeLogComponent = ( { data }) => {
     }; // filterByDate
 
     const filterByType = (item) => {
-        const keys = Object.keys(metricStates).filter(key => changeLogType[key]);
+        const keys = Object.keys(changeLogType).filter(key => changeLogType[key]);
         return Object.values(keys).some((key) => data.type[key] === item.type);    
     }; // filterByType 
 
@@ -162,26 +175,29 @@ const ChangeLogComponent = ( { data }) => {
     }; // filterBySearch 
 
     const isTypeSet = () => {
-        return Object.keys(metricStates).some((key) => changeLogType[key]) 
+        return Object.keys(changeLogType).some((key) => changeLogType[key]) 
     } // isTypeSet
 
     const filterData = (item) => {
         
-        const match1 = filterByDate(item)
+        const match1 = filterByDate(item);
+        if (!match1) return false;
 
         const typeSet = isTypeSet();
-        
-        let match2 = true
+
+        let match2 = true;
          if (typeSet) {
             match2 = filterByType(item);
+            if (!match2) return false;
         }
         
-        let match3 = true
+        let match3 = true;
         if (changeLogSearch) {
             match3 = filterBySearch(item.body);
+            if (!match3) return false;
         } 
 
-        return match1 && match2 && match3
+        return match1 && match2 && match3;
 
     }; // filterData
 
@@ -249,7 +265,7 @@ const ChangeLogComponent = ( { data }) => {
         
                 <div id={ "filterChangeLogItem" } className={ "govuk-!-margin-top-1" }>
                     {
-                        data && data["changeLog"].filter(filterData).sort(sortData).map((change, index) => { 
+                        data.changeLog && data.changeLog.filter(filterData).sort(sortData).map((change, index) => { 
                             return<ChangeLogItem 
                                 key={index}
                                 index={ index }
@@ -269,7 +285,7 @@ const ChangeLogComponent = ( { data }) => {
 
                         <FormItem aria-labelledby={ "aria-search-filter-label" }
                                 aria-describedby={ "aria-search-filter-descr" }
-                                width={ "two-third" }>
+                                width={ "full" }>
                               <span
                                     id={ "search-filter-label" }
                                     className={ "govuk-label govuk-label--s" }>

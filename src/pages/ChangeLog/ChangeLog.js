@@ -23,7 +23,9 @@ const ChangeLogData = {
          {"type":"NEW CONTENT","date":"2020-10-19","displayBanner":true,"linkText":"Local alert levels","relativeUrl":"/","headline":null,"body":"When you search for a postcode, the local alert level will now be displayed.\n"}]};
 const ChangeLog = () => {
     
-    const data = ChangeLogData //useGenericAPI({url: "changeLog", defaultResponse: []});
+    // const data = ChangeLogData //useGenericAPI({url: "changeLog", defaultResponse: []});
+
+    const data = useGenericAPI("changeLogData", [], "json");
 
     if ( !data ) return <Loading/>;
 

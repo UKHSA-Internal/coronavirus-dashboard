@@ -2,6 +2,34 @@ import React from 'react';
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
+export const Markdown: ComponentType<*> =
+    styled
+        .div
+        .attrs(({ className="", ...props }) => ({
+            className: `markdown ${className}`,
+            ...props
+        }))``;
+
+const calcColour = ({color}) => {
+    return color ? color : 'black';
+};
+        
+const calcBgColour = ({bgColor}) => {
+    return bgColor ? bgColor : 'white';
+};
+
+export const ChangeLogSpan: ComponentType<*> =
+    styled
+    .span
+    .attrs(({ color="", bgColor="" }) => ({
+        color,
+        bgColor
+    }))`
+        float: right;
+        color: ${calcColour};
+        background-color: ${calcBgColour};
+    `;
+
 export const ChangeMonthContainer: ComponentType<*> =
     styled
         .div
