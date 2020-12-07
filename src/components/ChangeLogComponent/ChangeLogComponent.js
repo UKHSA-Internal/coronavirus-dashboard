@@ -92,15 +92,13 @@ const ChangeLogComponent = ( { data, changeTypes={} }) => {
 
         const typeSet = isTypeSet();
 
-        let match2 = true;
          if (typeSet) {
-            match2 = filterByType(item);
+            const match2 = filterByType(item);
             if (!match2) return false;
         }
         
-        let match3 = true;
         if (changeLogSearch) {
-            match3 = filterBySearch(item.body, item.headline);
+            const match3 = filterBySearch(item.body, item.headline);
             if (!match3) return false;
         } 
 
