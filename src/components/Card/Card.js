@@ -27,6 +27,8 @@ import type { IsIncludedTypeProps, Props } from './Card.types';
 import type { ComponentType } from 'react';
 import Loading from "components/Loading";
 
+import moment from "moment";
+
 
 const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) => {
 
@@ -182,6 +184,17 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
 
     if ( !dataState ) return null;
 
+    if ( cardType === "recentData" ) {
+        params = [
+            ...params,
+            {
+                key: "date",
+                sign: ">",
+                value: moment().subtract(3, "months").format("YYYY-MM-DD")
+            }
+        ]
+    }
+
     const customProps = {
         ageSexBreakdown: {
             noCsv: true,
@@ -203,6 +216,9 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
         },
         simpleTableStatic: {
             url: false
+        },
+        recentData: {
+            url: fieldToStructure(download, params)
         }
     };
 

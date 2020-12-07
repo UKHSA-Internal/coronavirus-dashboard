@@ -5,86 +5,46 @@ import { PlotContainer } from "./Plotter.styles";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 
 
-// export const Plotter = ({ layout={}, xaxis={}, yaxis={}, ...props }) => {
-//
-//     return <Plot
-//         config={ {
-//             showLink: false,
-//             responsive: true,
-//             displaylogo: false,
-//             modeBarButtonsToRemove: [
-//                 "autoScale2d",
-//                 "zoomIn2d",
-//                 "zoomOut2d",
-//                 "toggleSpikelines",
-//                 "hoverClosestCartesian",
-//                 "zoom2d"
-//             ],
-//             toImageButtonOptions: {
-//                 format: 'png',
-//                 filename: 'export',
-//                 height: 989,
-//                 width: 1600,
-//                 scale: 4
-//             }
-//         } }
-//         useResizeHandler={ true }
-//         style={{ display: 'flex' }}
-//         layout={ {
-//             barmode: 'stack',
-//             height: 320,
-//             legend: {
-//                 orientation: 'h',
-//                 font: {
-//                     family: `"GDS Transport", Arial, sans-serif`,
-//                     size: 16,
-//                 },
-//                 xanchor: 'auto',
-//                 y: -.2
-//             },
-//             showlegend: true,
-//             margin: {
-//                 l: 60,
-//                 r: 25,
-//                 b: 40,
-//                 t: 20,
-//                 pad: 5
-//             },
-//             xaxis: {
-//                 showgrid: false,
-//                 zeroline: false,
-//                 showline: false,
-//                 // tickangle: 30,
-//                 type: "date",
-//                 tickfont:{
-//                     family: `"GDS Transport", Arial, sans-serif`,
-//                     size : 14,
-//                     color: "#6f777b"
-//                 },
-//                 ...xaxis
-//             },
-//             yaxis: {
-//                 tickformat: 's',
-//                 tickfont:{
-//                     family: `"GDS Transport", Arial, sans-serif`,
-//                     size : 14,
-//                     color: "#6f777b",
-//                 },
-//                 ...yaxis
-//             },
-//             plot_bgcolor: "rgba(231,231,231,0)",
-//             paper_bgcolor: "rgba(255,255,255,0)",
-//             ...layout
-//         } }
-//         {...props}
-//     />
-//
-// }; // Plotter
-
-
 export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}, margin = {}, style = {}, isTimeSeries = true, SrOnly = "", ...props }) => {
 
     const width = useResponsiveLayout(640);
+
+    let tickvals, ticktext, tickmode = undefined;
+
+    if ( layout?.barmode === "logy" ) {
+        tickmode = 'array';
+
+        const thresholds = [-1000, -10, 0, 10, 100, 1000, 10000, 100000, 1000000, 10000000];
+        const minVal = Math.min(...data[0].y);
+        const maxVal = Math.max(...data[0].y);
+
+        ticktext = [
+            minVal,
+            ...thresholds.filter(value => value > minVal && value < maxVal),
+            maxVal
+        ];
+
+        for ( const item of data ) {
+            item.text = item.y;
+
+            item.y = item.y.map(val =>
+                val >= 0
+                    ? Math.log(val)
+                    : -Math.log(Math.abs(val))
+            );
+
+            item.hovertemplate ='%{text:.1f}';
+        }
+
+        tickvals = ticktext.map(val =>
+            val >= 0
+                ? val === 0
+                ? 0
+                : Math.log(val)
+                : -Math.log(Math.abs(val))
+        );
+
+    }
 
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
@@ -110,7 +70,7 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                     // "zoom2d",
                     // "pan2d",
                     "select2d",
-                    "lasso2d"
+                    "lasso2d",
                 ],
                 toImageButtonOptions: {
                     format: 'png',
@@ -133,7 +93,7 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                     orientation: 'h',
                     font: {
                         family: `"GDS Transport", Arial, sans-serif`,
-                        size: 16,
+                        size: width === "desktop" ? 15 : 12,
                     },
                     xanchor: 'auto',
                     // yanchor: 'auto'
@@ -141,8 +101,8 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                 },
                 showlegend: true,
                 margin: {
-                    l: width === "desktop" ? 80 : 40,
-                    r: 15,
+                    l: width === "desktop" ? 80 : 30,
+                    r: width === "desktop" ? 10 : 5,
                     b: 25,
                     t: 10,
                     pad: 0,
@@ -152,6 +112,7 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                     showgrid: false,
                     zeroline: false,
                     showline: false,
+                    fixedrange: width !== "desktop",
                     tickslen: 10,
                     ticks: "outside",
                     tickson: "boundaries",
@@ -160,7 +121,7 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                     tickformat: '%d %b',
                     tickfont: {
                         family: `"GDS Transport", Arial, sans-serif`,
-                        size: 14,
+                        size: width === "desktop" ? 14 : 10,
                         color: "#6B7276"
                     },
                     // rangeslider: {range: ['20202-01-01', new Date().toString()]},
@@ -188,15 +149,19 @@ export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}
                     ...xaxis
                 },
                 yaxis: {
-                    tickslen: 5,
-                    ticks: "outside",
+                    tickmode,
+                    tickvals,
+                    ticktext,
+                    tickslen: 0,
+                    ticks: width === "desktop" ? "outside" : "inside",
+                    fixedrange: width !== "desktop",
                     tickson: "boundaries",
                     ticklen: 'labels',
                     tickcolor: "#f1f1f1",
                     tickformat: width === "desktop" ? ',r' : '.2s',
                     tickfont: {
                         family: `"GDS Transport", Arial, sans-serif`,
-                        size: 14,
+                        size: width === "desktop" ? 13 : 10,
                         color: "#6B7276",
                     },
                     ...yaxis
@@ -522,6 +487,7 @@ export const Histogram = ({ data, currentLocation }) => {
 export const XAxis = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}, margin = {}, style = {}, isTimeSeries = true, SrOnly = "", ...props }) => {
 
     return <PlotContainer className={ "govuk-grid-row" }
+                          height={ null }
                           aria-label={ "Displaying a graph of the data" }>
         <Plot
             data={ data }

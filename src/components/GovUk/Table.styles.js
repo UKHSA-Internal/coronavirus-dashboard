@@ -73,6 +73,12 @@ export const TableContainer: ComponentType<*> =
                 // font-size: 1.1rem;
                 background-color: transparent !important;
             }
+            
+            @media only screen and (max-width: 768px) {
+                .govuk-table {
+                    font-size: 10pt;
+                }
+            }
         `;
 
 

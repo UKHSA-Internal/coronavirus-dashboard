@@ -15,15 +15,43 @@ export const MobileNavWrapper: ComponentType<*> = (() => {
 export const MobileNavTogglerWrapper: ComponentType<*> = (() => {
   return styled.div`
     position: absolute;
-    top: -72px;
+    top: -80px;
     right: 12px;
   `;
 })();
 
 
-export const MobileNavToggler = ({ className="", ...props }) => (
-  <button className={ `govuk-button ${className}` } { ...props }/>
-);
+export const MobileNavToggler: ComponentType<*> =
+    styled
+        .button
+        .attrs(({ className="", ...props }) => ({
+          className: `govuk-button ${className}`,
+          ...props
+        }))`
+            position: absolute;
+            display: inline-block;
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            top: -15px;
+            right: -4px;
+            width: max-content !important;
+            padding: .3rem .5rem;
+              
+            &:active,
+            &:focus, 
+            &:hover {
+              position: absolute;
+              display: inline-block;
+              background: transparent;
+              color: black;
+              border: 2px solid white;
+              top: -15px;
+              right: -4px;
+              width: max-content !important;
+              padding: .3rem .5rem;
+            }
+        `;
 
 
 export const SideNav = ({ className="", ...props }) => (

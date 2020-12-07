@@ -19,3 +19,15 @@ svg.back-to-top {
     padding-top: 0;
     width: 100%;
 }
+
+
+.govuk-width-container {
+    overflow: hidden;
+}
+
+@include govuk-media-query($until: tablet) {
+  .govuk-width-container:not(.govuk-header__container) {
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+}

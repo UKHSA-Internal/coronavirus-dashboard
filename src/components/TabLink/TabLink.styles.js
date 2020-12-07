@@ -44,6 +44,10 @@ export const Tab: ComponentType<*> = (() => {
                 border-bottom: 4px solid #1e70b8 !important;
                 color: #1e70b8;
             }
+            
+            @media only screen and (max-width: 768px) {
+                margin-top: 1rem;
+            }
         `
 
 })();  // Tab
@@ -55,6 +59,7 @@ export const Body: ComponentType<*> = (() => {
         display: block;
         height: fit-content;
         width: 100%;
+        height: 350px;
     `
 
 })();  // Body

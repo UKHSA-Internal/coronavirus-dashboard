@@ -75,3 +75,12 @@
 .card {
     max-width: 95vw;
 }
+
+@include govuk-media-query($until: tablet) {
+    .card {
+        padding: 10px !important;
+    }
+    .dropdown-container {
+        margin: 10px 10px;
+    }
+}
