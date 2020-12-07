@@ -25,7 +25,8 @@ const extractEnvVars = () => {
         BASE_URL: "https://coronavirus.data.gov.uk",
         MAIN_CDN: "c19pub.azureedge.net",
         DOWNLOADS_CDN: "c19downloads.azureedge.net",
-        API_ENDPOINT: "api.coronavirus.data.gov.uk"
+        API_ENDPOINT: "api.coronavirus.data.gov.uk",
+        APPINSIGHTS_INSTRUMENTATIONKEY: ""
     };
 
     if ( process.env.NODE_ENV === "production" && !process.env.hasOwnProperty("BUILD_ENV"))
