@@ -11,8 +11,6 @@ const useGenericAPI  = ( urlName: string, defaultResponse= null, responseType="j
 
     const [ data, setData ] = useState(defaultResponse);
 
-    let st = null
-
     useEffect( () => {
     
         (async () => {

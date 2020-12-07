@@ -6,9 +6,7 @@ import useTimestamp from 'hooks/useTimestamp';
 
 import { renderToString } from 'react-dom/server'
 
-import MomentLocaleUtils, {
-    formatDate
-} from "react-day-picker/moment";
+import { formatDate } from "react-day-picker/moment";
 
 import moment from "moment";
 
@@ -106,7 +104,7 @@ const ChangeLogComponent = ( { data, changeTypes={} }) => {
             if (!match3) return false;
         } 
 
-        return match1 && match2 && match3;
+        return true;
 
     }; // filterData
 
