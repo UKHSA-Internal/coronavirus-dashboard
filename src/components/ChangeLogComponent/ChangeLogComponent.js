@@ -125,12 +125,15 @@ const ChangeLogComponent = ( { data, changeTypes={} }) => {
         
         if (changeMonth === THIS_MONTH) {
             changeMonthRef.current = changeMonth;
-            return THIS_MONTH_TEXT;
+            return <strong>{ THIS_MONTH_TEXT }</strong>
         }
 
         if ( changeMonthRef.current !== changeMonth) {
             changeMonthRef.current = changeMonth;
-            return new Date(changeDate).toLocaleString('default', { month: 'long' });
+            const dte = new Date(changeDate).toLocaleString('default', { month: 'long' });
+            return <ChangeMonthContainer>
+                        <p className="govuk-body-s govuk-!-margin-top-2"><strong>{ dte }</strong></p> 
+                   </ChangeMonthContainer>
         }
         
         return null;
@@ -184,17 +187,11 @@ const ChangeLogComponent = ( { data, changeTypes={} }) => {
 
         return <div className="govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0">
                     
-                    {
-                        changeMonthText ? 
-                            <ChangeMonthContainer className="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-0">
-                                <p>
-                                    <strong>{ changeMonthText }</strong>
-                                </p>
-                            </ChangeMonthContainer>
-                    :   <p>
-                            <strong>{ changeMonthText }</strong>
-                        </p>
-                    }
+                    <div className="govuk-body-s govuk-!-margin-top-0">
+                            <p className="govuk-body-s govuk-!-margin-top-0">
+                                {changeMonthText}
+                            </p>
+                    </div>
 
                     {changeDateText &&
                         <div className="govuk-body-s govuk-!-margin-top-0">
