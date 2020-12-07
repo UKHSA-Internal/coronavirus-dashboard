@@ -2,11 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
+export const ChangeLogAnchor: ComponentType<*> =
+    styled
+    .a`
+        white-space: nowrap;
+    `;
 
 export const Markdown: ComponentType<*> =
     styled
         .div
-        .attrs(({ className="", ...props }) => ({
+        .attrs(({ className="", element=null, ...props }) => ({
             className: `markdown ${className}`,
             ...props
         }))`
@@ -14,11 +19,11 @@ export const Markdown: ComponentType<*> =
 `;
 
 const calcColour = ({color}) => {
-    return color ? color : 'black';
+    return color ? color : '#000000';
 };
         
 const calcBgColour = ({bgColor}) => {
-    return bgColor ? bgColor : 'white';
+    return bgColor ? bgColor : 'inherit';
 };
 
 export const ChangeLogSpan: ComponentType<*> =
