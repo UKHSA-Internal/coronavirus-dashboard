@@ -187,18 +187,22 @@ const ChangeLogComponent = ( { data, changeTypes={} }) => {
 
         return <div className="govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0">
                     
-                    <div className="govuk-body-s govuk-!-margin-top-0">
-                            <p className="govuk-body-s govuk-!-margin-top-0">
-                                {changeMonthText}
-                            </p>
-                    </div>
+                    {
+                        changeMonthText && 
+                            <div className="govuk-body-s govuk-!-margin-top-0">
+                                <p className="govuk-body-s govuk-!-margin-top-0">
+                                    {changeMonthText}
+                                </p>
+                            </div>
+                    }
 
-                    {changeDateText &&
-                        <div className="govuk-body-s govuk-!-margin-top-0">
-                            <p className="govuk-body-s govuk-!-margin-top-0">
-                                {formatDate(changeDateText, "DD MMM YYYY")}
-                            </p>
-                        </div>
+                    {
+                        changeDateText &&
+                            <div className="govuk-body-s govuk-!-margin-top-0">
+                                <p className="govuk-body-s govuk-!-margin-top-0">
+                                    {formatDate(changeDateText, "DD MMM YYYY")}
+                                </p>
+                            </div>
                     }
                    
             
