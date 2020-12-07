@@ -1,10 +1,11 @@
 const
     env = process?.env ?? {},
     {
-        REACT_APP_MAIN_CDN      = "%MAIN_CDN%",
-        REACT_APP_DOWNLOADS_CDN = "%DOWNLOADS_CDN%",
-        REACT_APP_BASE_URL      = "%BASE_URL%",
-        REACT_APP_API_ENDPOINT  = "%API_ENDPOINT%"
+        REACT_APP_MAIN_CDN           = "%MAIN_CDN%",
+        REACT_APP_DOWNLOADS_CDN      = "%DOWNLOADS_CDN%",
+        REACT_APP_BASE_URL           = "%BASE_URL%",
+        REACT_APP_API_ENDPOINT       = "%API_ENDPOINT%",
+        REACT_APP_USER_API_ENDPOINT  = "%API_ENDPOINT%",
     } = env;
 
 
@@ -25,7 +26,8 @@ const URLs = {
     mainApi:         `https://${ REACT_APP_API_ENDPOINT  }/v1/data`,
     soaApi:          `https://${ REACT_APP_API_ENDPOINT  }/v1/soa`,
     modals:          `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/`,
-    postcode:        `https://api.coronavirus.data.gov.uk/v1/code`,
+    postcode:        `https://${ REACT_APP_API_ENDPOINT  }/v1/code`,
+    userApiEndpoint: `https://${ REACT_APP_USER_API_ENDPOINT  }`,
     latestCases: {
         csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-cases_latest.csv`,
         json: `${ REACT_APP_BASE_URL }/downloads/json/coronavirus-cases_latest.json`
@@ -43,6 +45,7 @@ const URLs = {
     downloadData:           `https://${ REACT_APP_API_ENDPOINT  }/v2/data`,
     supplementaryDownloads: `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/downloads.json`,
     msoaData:               `https://${ REACT_APP_MAIN_CDN      }/public/assets/dispatch/region2la2msoa.json`,
+    permalinkDownloadData:  `https://${ REACT_APP_USER_API_ENDPOINT  }/v2/data`,
 };
 
 URLs.pageLayouts = {

@@ -501,7 +501,7 @@ const Download: ComponentType<*> = () => {
                                        aria-describedby={ 'downloadlink-descr' }>
                                 {
                                     isEnabled
-                                        ? URLs.downloadData + urlParams
+                                        ? URLs.permalinkDownloadData + urlParams
                                         : "You must select at least one metric to generate a link."
                                 }
                             </PermaLink>
