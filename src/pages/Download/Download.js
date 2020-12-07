@@ -501,7 +501,7 @@ const Download: ComponentType<*> = () => {
                                        aria-describedby={ 'downloadlink-descr' }>
                                 {
                                     isEnabled
-                                        ? URLs.permalinkDownloadData + urlParams
+                                        ? URLs.downloadData + urlParams
                                         : "You must select at least one metric to generate a link."
                                 }
                             </PermaLink>
@@ -511,7 +511,7 @@ const Download: ComponentType<*> = () => {
                                 isEnabled
                                     ? <DownloadLink className={ "govuk-button" }
                                                       target={ "_blank" }
-                                                      href={ URLs.downloadData + urlParams }
+                                                      href={ URLs.permalinkDownloadData + urlParams }
                                                       enabled={ isEnabled }
                                                       download>
                                         Download data
