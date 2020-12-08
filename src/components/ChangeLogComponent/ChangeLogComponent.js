@@ -117,46 +117,6 @@ const ChangeLogComponent = ( { data, changeTypes={} }) => {
 
     }; // sortData
 
-    // assumes data is sorted in reverse date order
-    const getChangeMonthText = (changeDate) => {
-        
-        const dte = new Date(changeDate);
-        const changeMonth = "" + dte.getMonth() + dte.getFullYear();
-        
-        if (changeMonth === THIS_MONTH) {
-            changeMonthRef.current = changeMonth;
-            return <strong>{ THIS_MONTH_TEXT }</strong>
-        }
-
-        if ( changeMonthRef.current !== changeMonth) {
-            changeMonthRef.current = changeMonth;
-            const dte = new Date(changeDate).toLocaleString('default', { month: 'long' });
-            return <ChangeMonthContainer>
-                        <p className="govuk-body-s govuk-!-margin-top-2"><strong>{ dte }</strong></p> 
-                   </ChangeMonthContainer>
-        }
-        
-        return null;
-        
-    }; // getChangeMonthText
-
-     // assumes data is sorted in reverse date order
-     const getChangeDateText = (date) => {
-
-        if (changeDateRef.current && changeDateRef.current !== date) {
-            changeDateRef.current = date;
-            return date;
-        } 
-
-        if (changeDateRef.current !== date) {
-            changeDateRef.current = date;
-            return date;
-        }
-        
-        return null;
-        
-    }; // getChangeDateText
-
 
     const ChangeLogItemBody = ({ change }) => {
 
@@ -181,6 +141,51 @@ const ChangeLogComponent = ( { data, changeTypes={} }) => {
     }; // ChangeLogItemBody
 
     const ChangeLogItemHeader = ( { change } ) => {
+
+         // assumes data is sorted in reverse date order
+        const getChangeMonthText = (changeDate) => {
+            
+            const dte = new Date(changeDate);
+            const changeMonth = "" + dte.getMonth() + dte.getFullYear();
+            
+            if (changeMonth === THIS_MONTH) {
+                changeMonthRef.current = changeMonth;
+
+                return <div className="govuk-body-s govuk-!-margin-top-0">
+                            <p className="govuk-body-s govuk-!-margin-top-0"><strong>{ THIS_MONTH_TEXT }</strong></p> 
+                        </div>
+                    
+            }
+
+            if ( changeMonthRef.current !== changeMonth) {
+                changeMonthRef.current = changeMonth;
+                const dte = new Date(changeDate).toLocaleString('default', { month: 'long' });
+                return <ChangeMonthContainer>
+                            <p className="govuk-body-s govuk-!-margin-top-2"><strong>{ dte }</strong></p> 
+                    </ChangeMonthContainer>
+            }
+            
+            return null;
+            
+        }; // getChangeMonthText
+
+        // assumes data is sorted in reverse date order
+        const getChangeDateText = (date) => {
+
+            if (changeDateRef.current && changeDateRef.current !== date) {
+                changeDateRef.current = date;
+                return date;
+            } 
+
+            if (changeDateRef.current !== date) {
+                changeDateRef.current = date;
+                return date;
+            }
+            
+            return null;
+            
+        }; // getChangeDateText
+
 
         const changeMonthText = getChangeMonthText( change.date );
         const changeDateText = getChangeDateText( change.date );
@@ -214,7 +219,7 @@ const ChangeLogComponent = ( { data, changeTypes={} }) => {
 
         const id = Object.keys(data.type).filter(key => data.type[key] === change.type) + "-" + index;
 
-        return  <div id={ id } className="govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0">
+        return  <div id={ id } className="govuk-body-s govuk-!-margin-top-3 govuk-!-margin-bottom-0">
 
                     <ChangeLogItemHeader change={ change }/>
                                         
