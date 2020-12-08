@@ -5,7 +5,7 @@ const
         REACT_APP_DOWNLOADS_CDN      = "%DOWNLOADS_CDN%",
         REACT_APP_BASE_URL           = "%BASE_URL%",
         REACT_APP_API_ENDPOINT       = "%API_ENDPOINT%",
-        REACT_APP_USER_API_ENDPOINT  = "%API_ENDPOINT%",
+        REACT_APP_USER_API_ENDPOINT  = "%USER_API_ENDPOINT%",
     } = env;
 
 
