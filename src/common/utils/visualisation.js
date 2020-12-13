@@ -36,6 +36,17 @@ export const
         // '#00703C'   // green
 ];
 
+
+export const scaleColours = [
+    "#e0e543",
+    "#74bb68",
+    "#399384",
+    "#2067AB",
+    "#12407F",
+    "#53084A"
+];
+
+
 const processArrayField = ({ field, rawData, xKey }) => {
 
     const filterKey = field?.filters?.parameter;
