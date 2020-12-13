@@ -179,6 +179,6 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
             } }
             { ...props }
         />
-    </PlotContainer>
+    </PlotContainer>;
 
 }; // Plotter
