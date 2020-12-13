@@ -204,17 +204,14 @@ export const getHeatmapData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 
     const graphObjects = [];
 
-    for ( const { value, amplitude, parameter, label, metrics } of fields ) {
+    for ( const { value, amplitude, parameter, metrics, ...rest } of fields ) {
 
         const result = {
             xData: [],
             yData: [],
             zData: [],
-            label: null,
-            hovertemplate: "%{y}",
+            ...rest,
         };
-
-        result.label = label;
 
         for ( const { label } of metrics ) {
             result.yData.push(label)

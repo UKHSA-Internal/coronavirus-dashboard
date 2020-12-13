@@ -420,6 +420,9 @@ export const Heatmap = ({ data, layout, config, ...props }) => {
                 zauto: false,
                 zmin: 0,
                 zmax: 400,
+                hoverinfo: "text",
+                hovertemplate: `<b>Date</b>: %{x}<br><b>${dataset.metricLabel}</b>: %{y}<br><b>${dataset.amplitudeLabel}</b>: %{z}`,
+                name: dataset.label,
                 colorbar: {
                     tickvals: [0, 10, 50, 100, 200, 400],
                     ticktext: ["0", "10", "50", "100", "200", "400+"],
@@ -441,7 +444,7 @@ export const Heatmap = ({ data, layout, config, ...props }) => {
                         family: `"GDS Transport", Arial, sans-serif`,
                         size: 10,
                         color: "#6B7276",
-                    },
+                    }
                 },
                 // colorscale: "Viridis",
                 // reversescale: true
@@ -456,6 +459,7 @@ export const Heatmap = ({ data, layout, config, ...props }) => {
         }
         margin={{ l: width === "desktop" ? 80 : 50, }}
         layout={ {
+            hovermode: "x+y",
             annotations: [ width === "desktop" && {
                 text: data[0].label,
                 textangle: 90,
@@ -470,7 +474,6 @@ export const Heatmap = ({ data, layout, config, ...props }) => {
                 font: {
                     family: `"GDS Transport", Arial, sans-serif`,
                     size: 11,
-                    // color: "#6B7276",
                 },
             }],
             height: 350,
