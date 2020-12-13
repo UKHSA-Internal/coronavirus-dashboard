@@ -12,7 +12,7 @@ import {
 import type { ComponentType } from "react";
 
 import { dropLeadingZeros, getHeatmapData, getPlotData, groupBy } from "common/utils";
-import { DataTable } from "components/GovUk";
+import { DataTable, NestedDataTable } from "components/GovUk";
 import useApi from "hooks/useApi";
 import Loading from "components/Loading";
 import Metadata from "components/Metadata";
@@ -109,6 +109,9 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
                             layout={{}}
                             data={ getHeatmapData(fields, data, xKey) }
                             { ...props }/>;
+
+        case "nestedTable":
+            return <NestedDataTable fields={ fields } data={ data } { ...props }/>;
 
         case "table":
             return <DataTable fields={ fields } data={ data } { ...props }/>;
