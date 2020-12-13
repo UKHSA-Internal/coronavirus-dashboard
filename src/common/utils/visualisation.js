@@ -44,6 +44,7 @@ const processArrayField = ({ field, rawData, xKey }) => {
     const outputMetric = field?.metric;
 
     return rawData
+        ?.filter(row => (row[baseValue]?.length ?? 0) > 0)
         ?.map(row => ({
                 [xKey]: row?.[xKey],
                 [baseValue]: row?.[baseValue]
@@ -165,7 +166,7 @@ const processGenericField = ({ field, index, xData, yData }) => {
 };  // processGenericField
 
 
-export const getPlotData = (fields: Array<{}>, rawData, xKey="date" ) => {
+export const getPlotData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 
     const graphObjects = [];
 
@@ -197,3 +198,63 @@ export const getPlotData = (fields: Array<{}>, rawData, xKey="date" ) => {
     return graphObjects
 
 };  // getPlotData
+
+
+export const getHeatmapData = ( fields: Array<{}>, rawData, xKey="date" ) => {
+
+    const graphObjects = [];
+
+    for ( const { value, amplitude, parameter, label, metrics } of fields ) {
+
+        const result = {
+            xData: [],
+            yData: [],
+            zData: [],
+            label: null,
+            hovertemplate: "%{y}",
+        };
+
+        result.label = label;
+
+        for ( const { label } of metrics ) {
+            result.yData.push(label)
+        }
+
+        for ( let index = 0; index < rawData.length; index++ ) {
+            result.xData.push(rawData?.[index]?.[xKey])
+        }
+
+        for ( const { value: paramValue } of metrics ) {
+
+            const zData = [];
+            let tempData;
+
+            for ( let index = 0; index < rawData.length; index++ ) {
+
+                tempData = rawData
+                        ?.[index]
+                        ?.[value]
+                        ?.filter(row => row?.[parameter] === paramValue);
+
+                if ( (tempData?.length ?? 0) > 0 ) {
+                    zData.push(
+                        tempData
+                            ?.[0]
+                            ?.[amplitude]
+                        ?? null
+                    );
+                }
+
+            }
+
+            result.zData.push(zData);
+
+        }
+
+        graphObjects.push(result);
+
+    }
+
+    return graphObjects
+
+};  // getHeatmapData
