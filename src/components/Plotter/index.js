@@ -1,1 +1,1 @@
-export { Plotter as default, ScatterPlotWithTrendLine, Choropleth } from "./Plotter"
+export { Plotter as default, ScatterPlotWithTrendLine, Choropleth, Heatmap } from "./Plotter"

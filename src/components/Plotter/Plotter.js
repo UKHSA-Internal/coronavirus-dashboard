@@ -3,6 +3,7 @@ import Plot from "react-plotly.js";
 import URLs from "common/urls";
 import { PlotContainer } from "./Plotter.styles";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
+import { hexToRgb } from "common/utils";
 
 
 export const Plotter = ({ data, layout = {}, xaxis = {}, yaxis = {}, config = {}, margin = {}, style = {}, isTimeSeries = true, SrOnly = "", ...props }) => {
@@ -281,8 +282,8 @@ export const ScatterPlotWithTrendLine = ({ scatterData, trendLineData, layout, c
     return <Plotter
         data={ [
             {
-                type: 'scatter',
-                mode: 'markers',
+                type: 'heatmap',
+                // mode: 'markers',
                 showlegend: false,
                 marker: {
                     size: 8,
@@ -365,6 +366,138 @@ export const ScatterPlotWithTrendLine = ({ scatterData, trendLineData, layout, c
             paper_bgcolor: "rgba(255,255,255,0)",
             ...layout
         } }
+        { ...props }
+    />
+
+};  // ScatterPlot
+
+
+const asCssRgb = ( hex ) => {
+
+    const { r, g, b } = hexToRgb(hex);
+
+    return `rgb(${r},${g},${b})`
+
+};  // asCssRgb
+
+
+export const Heatmap = ({ data, layout, config, ...props }) => {
+
+    const width = useResponsiveLayout(640);
+
+    const colorscale = [
+        [0,   asCssRgb('#e0e543')],
+        // [10/400,  asCssRgb('#e0e543')],
+        //
+        [10/400,  asCssRgb('#74bb68')],
+        // [50/400,  asCssRgb('#74bb68')],
+        //
+        [50/400,  asCssRgb('#399384')],
+        [100/400,  asCssRgb('#3375b7')],
+        // [100/400, asCssRgb('#2067AB')],
+        //
+        [200/400, asCssRgb('#12407F')],
+        // [200/400, asCssRgb('#12407F')],
+
+        [400/400, asCssRgb('#53084a')],
+        // [400/400, asCssRgb('#53084A')],
+
+        // [1, asCssRgb('#53084A')],
+        // [Math.max(data[0].zData)/400, asCssRgb('#53084A')],
+    ];
+
+
+    return <Plotter
+        data={
+            data.map(dataset => ({
+                x: dataset.xData,
+                y: dataset.yData,
+                z: dataset.zData,
+                type: "heatmap",
+                colorscale,
+                ygap: 1,
+                fixedrange: true,
+                zauto: false,
+                zmin: 0,
+                zmax: 400,
+                colorbar: {
+                    tickvals: [0, 10, 50, 100, 200, 400],
+                    ticktext: ["0", "10", "50", "100", "200", "400+"],
+                    tickmode: "array",
+                    ticks: "outside",
+                    tickson: "boundaries",
+                    tickslen: 5,
+                    ticklen: 'labels',
+                    thickness: 20,
+                    // ypad: 2,
+                    x: 1,
+                    len: .8,
+                    // title: {
+                    //
+                    //     // align: "right",
+                    //     // valign: "top",
+                    // },
+                    tickfont: {
+                        family: `"GDS Transport", Arial, sans-serif`,
+                        size: 10,
+                        color: "#6B7276",
+                    },
+                },
+                // colorscale: "Viridis",
+                // reversescale: true
+                //
+                // mode: 'markers',
+                // showlegend: false,
+                // marker: {
+                //     size: 8,
+                // },
+                // fillcolor: '#005EA5',
+            }))
+        }
+        margin={{ l: width === "desktop" ? 80 : 50, }}
+        layout={ {
+            annotations: [ width === "desktop" && {
+                text: data[0].label,
+                textangle: 90,
+                x: 1.07,
+                align: "right",
+                valign: "top",
+                showarrow: false,
+                xref: "paper",
+                yref: "paper",
+                xanchor: "right",
+                yanchor:"middle",
+                font: {
+                    family: `"GDS Transport", Arial, sans-serif`,
+                    size: 11,
+                    // color: "#6B7276",
+                },
+            }],
+            height: 350,
+            legend: {
+                orientation: 'h',
+                font: {
+                    family: `"GDS Transport", Arial, sans-serif`,
+                    size: 16,
+                },
+                xanchor: 'auto',
+                y: -.2
+            },
+            showlegend: true,
+            // margin: {
+            //     l: 40,
+            //     r: 10,
+            //     b: 20,
+            //     t: 0,
+            //     pad: 0
+            // },
+            plot_bgcolor: "rgba(231,231,231,0)",
+            paper_bgcolor: "rgba(255,255,255,0)",
+            ...layout
+        } }
+        yaxis={{
+            fixedrange: false,
+        }}
         { ...props }
     />
 
