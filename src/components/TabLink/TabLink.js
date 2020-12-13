@@ -11,12 +11,13 @@ import {
 
 import type { ComponentType } from "react";
 
-import { dropLeadingZeros, getPlotData, groupBy } from "common/utils";
+import { dropLeadingZeros, getHeatmapData, getPlotData, groupBy } from "common/utils";
 import { DataTable } from "components/GovUk";
 import useApi from "hooks/useApi";
 import Loading from "components/Loading";
 import Metadata from "components/Metadata";
 import Abstract from "components/Abstract";
+import { Heatmap } from "components/Plotter";
 
 const Plotter = lazy(() => import('components/Plotter'));
 
@@ -27,6 +28,7 @@ const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
 
         case "recentData":
         case "chart":
+        case "heatmap":
             return <TabContent Component={ TabContentRaw } { ...props }/>;
 
         case "map":
@@ -105,7 +107,10 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
                 <Plotter data={ getPlotData(fields, data, xKey) }
                          layout={ layout }
                          { ...props }/>
-            </Suspense>
+            </Suspense>;
+
+        case "heatmap":
+            return <Heatmap data={ getHeatmapData(fields, data, xKey) } { ...props }/>;
 
         case "table":
             return <DataTable fields={ fields } data={ data } { ...props }/>;
