@@ -178,7 +178,7 @@ export const Table: ComponentType<*> = ({ className, stickyHeader=true,
 
 export const DataTable = ({ fields, data, ...props }) => {
 
-    const fieldNames = fields.map(item => item.value)
+    const fieldNames = fields.map(item => item.value);
 
     return <>
         <span className={ "govuk-visually-hidden" }>
@@ -201,3 +201,54 @@ export const DataTable = ({ fields, data, ...props }) => {
     </>
 
 };  // DataTable
+
+
+export const NestedDataTable = ({ fields, data, ...props }) => {
+
+    const processedData = [];
+
+    for ( const row of data ) {
+
+        const rowData = [];
+
+        for ( const { value, metric, filters, ...rest } of fields ) {
+
+            if ( !metric ) {
+                rowData.push(
+                    value === "date"
+                    ? moment(row?.[value]).format("DD-MM-YYYY")
+                    : row?.[value]
+                );
+
+                continue;
+            }
+
+            rowData.push(
+                row
+                    ?.[value]
+                    ?.filter(item => item?.[filters.parameter] === filters.value)
+                    ?.[0]
+                    ?.[metric]
+                    ?? null
+            )
+
+        }
+
+        processedData.push(rowData);
+
+    }
+
+    return <>
+        <span className={ "govuk-visually-hidden" }>
+            Showing a table of the data
+        </span>
+        <Table
+            head={[
+                fields.map(item => ({ value: item.label, type: item.type }))
+            ]}
+            body={ processedData }
+            { ...props }
+        />
+    </>
+
+};  // NestedDataTable
