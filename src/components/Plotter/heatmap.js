@@ -55,7 +55,7 @@ export const Heatmap: ComponentType<*> = ({ data, layout, config, ...props }) =>
                 hoverinfo: "text",
                 hovertemplate: (
                     `<b>Date</b>: %{x}<br>` +
-                    `<b>${dataset.metricLabel}</b>: %{y}<br>`
+                    `<b>${dataset.metricLabel}</b>: %{y}<br>` +
                     `<b>${dataset.amplitudeLabel}</b>: %{z}`
                 ),
                 name: dataset.label,
