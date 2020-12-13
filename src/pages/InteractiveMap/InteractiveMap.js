@@ -17,9 +17,9 @@ import {
 
 import type { ComponentType } from "react";
 import { useMapData } from "hooks/useMapData";
-import { XAxis } from "components/Plotter/Plotter";
-
 import { glAvailable } from "components/Map/utils";
+import { scaleColours as colours } from "common/utils";
+import Plotter from "components/Plotter";
 
 
 const AreaLevel = {
@@ -59,15 +59,6 @@ const AreaLevel = {
         label: "MSOAs"
     }
 };
-
-const colours = [
-    "#e0e543",
-    "#74bb68",
-    "#399384",
-    "#2067AB",
-    "#12407F",
-    "#53084A"
-];
 
 
 const MainHeader: ComponentType<*> = ({ ...props }) => {
@@ -181,13 +172,12 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                             e.target.style.background = `linear-gradient(to right, #12407F 0%, #12407F ${ Math.ceil(parseInt(e.target.value) * 100 / dates.length + .7) }%, white  ${ Math.ceil((parseInt(e.target.value) + .7) * 100 / dates.length) }%, white 100%)`
                         } }
                         onChange={ event => setCurrentDate(dates[parseInt(event.target.value)]) }/>
-                    <XAxis data={[{
-                        x: dates,
-                        y: Array(dates.length).fill(null)
-                        // xticktext: [
-                        //     "2020-03-15"
-                        // ]
-                    }]}/>
+                        <Plotter type={ "XAxis" }
+                                 // fallback={ <Loading/> }
+                                 data={[{
+                                    x: dates,
+                                    y: Array(dates.length).fill(null)
+                                }]}/>
                 </Map>
             </>
         </MainContainer>
