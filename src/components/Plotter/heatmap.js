@@ -71,7 +71,7 @@ export const Heatmap: ComponentType<*> = ({ data, layout, config, ...props }) =>
                     x: 1,
                     len: .8,
                     title: {
-                        text: dataset.label.split(/\s/).join("<br>"),
+                        text: dataset.amplitudeLabel.split(/\s/).join("<br>"),
                         font: {
                             family: `"GDS Transport", Arial, sans-serif`,
                             size: 11
@@ -84,7 +84,10 @@ export const Heatmap: ComponentType<*> = ({ data, layout, config, ...props }) =>
                 }
             }))
         }
-        margin={{ l: width === "desktop" ? 80 : 50, }}
+        margin={{
+            l: 50,
+            r: 0,
+        }}
         layout={ {
             hovermode: "x+y",
             height: 350,
@@ -102,7 +105,7 @@ export const Heatmap: ComponentType<*> = ({ data, layout, config, ...props }) =>
             paper_bgcolor: "rgba(255,255,255,0)",
             ...layout
         } }
-        yaxis={{
+        xaxis={{
             fixedrange: false,
         }}
         { ...props }
