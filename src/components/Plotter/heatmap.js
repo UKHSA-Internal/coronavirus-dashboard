@@ -53,9 +53,11 @@ export const Heatmap: ComponentType<*> = ({ data, layout, config, ...props }) =>
                 zmin: 0,
                 zmax: 400,
                 hoverinfo: "text",
-                hovertemplate: `<b>Date</b>: %{x}<br>
-                                <b>${dataset.metricLabel}</b>: %{y}<br>
-                                <b>${dataset.amplitudeLabel}</b>: %{z}`,
+                hovertemplate: (
+                    `<b>Date</b>: %{x}<br>` +
+                    `<b>${dataset.metricLabel}</b>: %{y}<br>`
+                    `<b>${dataset.amplitudeLabel}</b>: %{z}`
+                ),
                 name: dataset.label,
                 colorbar: {
                     tickvals: [0, 10, 50, 100, 200, 400],
