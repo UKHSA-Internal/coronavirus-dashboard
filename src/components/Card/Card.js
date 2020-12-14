@@ -20,7 +20,7 @@ import {
     Caption,
     BodySection,
     HBodySection,
-    MixedCardContainer
+    MixedCardContainer, DefaultTag
 } from './Card.styles';
 
 import type { IsIncludedTypeProps, Props } from './Card.types';
@@ -40,14 +40,16 @@ const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) 
 }; // ContentBox
 
 
-const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false, children }: Props) => {
+const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false,
+                                              experimental=false, children }: Props) => {
 
     const preppedLabel = heading.toLowerCase().replace(/\s/g, "_");
 
     return <>
         <HalfCardHeader className={ linkToHeading ? "" : "govuk-!-margin-bottom-2"}>
             <HalfCardHeading role={ 'heading' } aria-level={ 2 } id={ `card-heading-${ preppedLabel }` }>
-            { heading }
+                { heading }
+                { experimental ? <DefaultTag className={ "govuk-tag" }>EXPERIMENTAL</DefaultTag> : null}
             <Caption>{ caption }</Caption>
             </HalfCardHeading>
             {

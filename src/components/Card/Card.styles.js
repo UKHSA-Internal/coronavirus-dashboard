@@ -135,7 +135,6 @@ export const HBodySection: ComponentType<*> =
 
 
 export const MixedCardContainer: ComponentType<*> =
-
     styled
         .section`
             display: flex;
@@ -144,3 +143,13 @@ export const MixedCardContainer: ComponentType<*> =
             justify-items: space-between;
         `;
 
+
+export const DefaultTag: ComponentType<*> =
+    styled
+        .strong
+        .attrs(({ className="", ...props }) => ({
+            className: `${className} govuk-tag`,
+            ...props
+        }))`
+            margin-left: 1rem;
+        `;
