@@ -54,8 +54,10 @@ const processArrayField = ({ field, rawData, xKey }) => {
     const baseValue = field?.value;
     const outputMetric = field?.metric;
 
+    if ( !Array.isArray(rawData) ) return [];
+
     return rawData
-        ?.filter(row => (row[baseValue]?.length ?? 0) > 0)
+        ?.filter(row => (row?.[baseValue]?.length ?? 0) > 0)
         ?.map(row => ({
                 [xKey]: row?.[xKey],
                 [baseValue]: row?.[baseValue]
