@@ -63,11 +63,11 @@ const MapLayers = [
         maxZoom: 7,
         buckets: [
             colours[0],
-            9, colours[1],
-            49, colours[2],
-            99, colours[3],
-            199, colours[4],
-            399, colours[5],
+            10, colours[1],
+            50, colours[2],
+            100, colours[3],
+            200, colours[4],
+            400, colours[5],
         ]
     },
     {
@@ -84,11 +84,11 @@ const MapLayers = [
         foreground: "utla",
         buckets: [
             colours[0],
-            9, colours[1],
-            49, colours[2],
-            99, colours[3],
-            199, colours[4],
-            399, colours[5],
+            10, colours[1],
+            50, colours[2],
+            100, colours[3],
+            200, colours[4],
+            400, colours[5],
         ]
     },
     {
@@ -105,11 +105,11 @@ const MapLayers = [
         foreground: "ltla",
         buckets: [
             colours[0],
-            9, colours[1],
-            49, colours[2],
-            99, colours[3],
-            199, colours[4],
-            399, colours[5],
+            10, colours[1],
+            50, colours[2],
+            100, colours[3],
+            200, colours[4],
+            400, colours[5],
         ]
     }
 ];
@@ -585,9 +585,14 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                 <>
                     <PostcodeSearchForm onSubmit={  (e) => {
                             e.preventDefault();
-                            const postcode = document.getElementById("postcode").value;
+                            const postcode: string = document.getElementById("postcode").value;
                             (async () => {
-                                const { data } = await axios.get(URLs.postcode, { params: { category: "postcode", search: postcode } });
+                                const { data } = await axios.get(URLs.postcode, {
+                                    params: {
+                                        category: "postcode",
+                                        search: postcode.replace(/\s/, "").toUpperCase().trim()
+                                    }
+                                });
                                 setPostcodeData(data)
                             })();
                         } }>
@@ -597,7 +602,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                                maxLength={ 10 }
                                type={ "text" }
                                id={ "postcode" }
-                               pattern={ "[A-Za-z]{1,2}\\d{1,2}[A-Za-z]?\\s?\\d{1,2}[A-Za-z]{1,2}" }
+                               pattern={ "[A-Za-z]{1,2}\\d{1,2}[A-Za-z]?\\s?\\d{1,2}[A-Za-z]{1,2}\\s{0,2}" }
                                placeholder={ "Postcode" }/>
                         <label htmlFor={ "submit-postcode" } className={ "govuk-visually-hidden" }>Search by postcode</label>
                         <input name={ "submit-postcode" } className={ "govuk-button" } id={ "submit-postcode" } type={ "submit" } value={ "" }/>
@@ -626,10 +631,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                                                         ? 0
                                                         : firstValue === 0
                                                         ? 0
-                                                        : firstValue + 2
+                                                        : firstValue
                                                 }
                                                 &nbsp;&ndash;&nbsp;
-                                                { MapLayers[zoomLayerIndex].buckets?.[index] + 1 ?? "+" }
+                                                { MapLayers[zoomLayerIndex].buckets?.[index] - 1 ?? "+" }
                                             </ScaleValue>
                                         </ScaleGroup>
                                     }
@@ -638,7 +643,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                             <ScaleGroup>
                                 <ScaleColor style={ { background: MapLayers[zoomLayerIndex].buckets.slice(-1) } }/>
                                 <ScaleValue>
-                                    { MapLayers[zoomLayerIndex].buckets.slice(-2, -1)[0] + 1 }&nbsp;+
+                                    { MapLayers[zoomLayerIndex].buckets.slice(-2, -1)[0] }&nbsp;+
                                 </ScaleValue>
                             </ScaleGroup>
                         </ScaleLegend>
