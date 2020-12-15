@@ -33,17 +33,6 @@ export const getOrder = ( history ) => {
 
     switch (history.location.pathname.toLowerCase()) {
 
-        case PathNames.testing:
-            return {
-                "nation": {
-                    key: "nation",
-                    label: "Nations",
-                    lastUpdate: "2020-07-07",
-                    suggestion: "nations",
-                    parent: null
-                }
-            };
-
         case PathNames.healthcare:
             return {
                 "nhsNation": {
@@ -62,6 +51,7 @@ export const getOrder = ( history ) => {
                 }
             };
 
+        case PathNames.testing:
         case PathNames.deaths:
         case PathNames.cases:
         default:
