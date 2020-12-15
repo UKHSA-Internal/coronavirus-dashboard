@@ -35,20 +35,28 @@ export const getOrder = ( history ) => {
 
         case PathNames.healthcare:
             return {
-                "nhsNation": {
+                nhsNation: {
                     key: "nhsNation",
                     label: "Nations",
                     lastUpdate: "2020-07-07",
                     suggestion: "nations",
                     parent: null
                 },
-                "nhsRegion": {
+                nhsRegion: {
                     key: "nhsRegion",
                     label: "NHS regions",
                     lastUpdate: "2020-07-07",
                     suggestion: "NHS regions",
                     parent: "nhsNation",
-                }
+                },
+                nhsTrust: {
+                    key: "nhsTrust",
+                    label: "NHS trusts",
+                    lastUpdate: "2020-12-15",
+                    suggestion: "NHS trusts",
+                    parent: "nhsRegion",
+                },
+
             };
 
         case PathNames.testing:
