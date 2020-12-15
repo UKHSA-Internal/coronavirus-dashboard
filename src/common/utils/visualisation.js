@@ -144,7 +144,7 @@ const processGenericField = ({ field, index, xData, yData }) => {
                 ...(field?.fill ?? true)
                     ? {
                         fill: 'tozeroy',
-                        fillcolor: `rgba(${ r },${ g },${ b },0.1)`
+                        fillcolor: `rgba(${ r },${ g },${ b },${ field?.solidFill ? 1 : 0.1})`
                     }:
                     {},
                 line: {
@@ -173,6 +173,13 @@ const processGenericField = ({ field, index, xData, yData }) => {
         x: xData,
         y: yData,
         hovertemplate: "%{y}",
+        ...(field?.overlaying)
+            ? {
+                yaxis: "y2",
+                overlaying: field.overlaying,
+                side: field.side,
+            }
+            : {},
         ...plotFeatures
     }
 

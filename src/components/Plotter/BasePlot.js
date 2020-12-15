@@ -16,6 +16,21 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
 
     const width = useResponsiveLayout(640);
 
+    let yAxisRef = {
+        fixedragne: false,
+        tickslen: 0,
+        ticks: width === "desktop" ? "outside" : "inside",
+        tickson: "boundaries",
+        ticklen: 'labels',
+        tickcolor: "#f1f1f1",
+        tickformat: width === "desktop" ? ',r' : '.2s',
+        tickfont: {
+            family: `"GDS Transport", Arial, sans-serif`,
+            size: width === "desktop" ? 13 : 10,
+            color: "#6B7276",
+        },
+    };
+
     let tickvals, ticktext, tickmode = undefined;
 
     if ( layout?.barmode === "logy" ) {
@@ -51,6 +66,31 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
                 : -Math.log(Math.abs(val))
         );
 
+    }
+
+    for ( const row of data ) {
+        if ( "overlaying" in row ) {
+            yAxisRef = {
+                ...yAxisRef,
+                rangemode: "tozero",
+            };
+
+            layout = {
+                yaxis2: {
+                    ...yAxisRef,
+                    overlaying: row.overlaying,
+                    side: row.side,
+                    rangemode: "tozero",
+                    showgrid: false,
+
+                }
+            };
+
+            margin = {
+                r: 50,
+            };
+
+        }
     }
 
     return <PlotContainer className={ "govuk-grid-row" }
@@ -159,18 +199,7 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
                     tickmode,
                     tickvals,
                     ticktext,
-                    fixedragne: false,
-                    tickslen: 0,
-                    ticks: width === "desktop" ? "outside" : "inside",
-                    tickson: "boundaries",
-                    ticklen: 'labels',
-                    tickcolor: "#f1f1f1",
-                    tickformat: width === "desktop" ? ',r' : '.2s',
-                    tickfont: {
-                        family: `"GDS Transport", Arial, sans-serif`,
-                        size: width === "desktop" ? 13 : 10,
-                        color: "#6B7276",
-                    },
+                    ...yAxisRef,
                     ...yaxis
                 },
                 plot_bgcolor: "rgba(231,231,231,0)",
