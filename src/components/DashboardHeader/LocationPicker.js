@@ -21,7 +21,7 @@ const getDefaultOutput = ( pathname ) => {
                 // These must be ordered.
                 "nhsNation",
                 "nhsRegion",
-                // "nhsTrust"
+                "nhsTrust"
             ];
 
         case PathNames.testing:
