@@ -4,7 +4,7 @@ import React from "react";
 import styled from 'styled-components';
 
 import type { ComponentType } from 'react';
-import DownloadIcon from "assets/arrow.svg";
+import HashLinkIcon from "assets/open-external-link.svg";
 
 
 export const HalfCard: ComponentType<*> =
@@ -189,7 +189,7 @@ export const DefaultTag: ComponentType<*> =
                     cursor: pointer;
                     display: flex;
                     margin-right: 1px;
-                    background: url("${ DownloadIcon }");
+                    background: url("${ HashLinkIcon }");
                     background-repeat: no-repeat;
                     background-size: 30px 30px;
                     background-position: center center;

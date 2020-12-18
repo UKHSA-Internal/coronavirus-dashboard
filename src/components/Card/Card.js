@@ -91,10 +91,9 @@ const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=f
             <HalfCardHeading role={ 'heading' } aria-level={ 2 } id={ `card-heading-${ preppedLabel }` }>
                 { heading }
                 { experimental ? <DefaultTag className={ "govuk-tag" }>EXPERIMENTAL</DefaultTag> : null}
-                <CaseLink 
-                                        tooltip={ `Link to ${ heading }` }
-                                        launcherSrOnly={ `Link to ${ heading }` }
-                                        heading={ heading}/>
+                <CaseLink tooltip={ `Link to ${ heading }` }
+                          launcherSrOnly={ `Link to ${ heading }` }
+                          heading={ heading}/>
             <Caption>{ caption }</Caption>
             </HalfCardHeading>
             {
