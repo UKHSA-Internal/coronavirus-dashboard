@@ -4,7 +4,7 @@ import React from "react";
 import styled from 'styled-components';
 
 import type { ComponentType } from 'react';
-import DownloadIcon from "assets/download.svg";
+import DownloadIcon from "assets/arrow.svg";
 
 
 export const HalfCard: ComponentType<*> =
@@ -156,17 +156,6 @@ export const DefaultTag: ComponentType<*> =
             margin-left: 1rem;
         `;
 
-export const InternalLinkContainer: ComponentType<*> =
-    styled
-        .div
-        .attrs(({ className="", ...props }) => ({
-            className: `internallink-container ${className}`,
-            ...props
-        }))`
-            min-width: 100px;
-            float: right;
-        `;
-
         export const InternalLink: ComponentType<*> = (() => {
             const
                 Container = styled.span`
@@ -175,7 +164,7 @@ export const InternalLinkContainer: ComponentType<*> =
                     display: inline-block;
                     position: relative;
                     cursor: pointer;
-                    margin: -20px;
+                    margin-left: 10px;
                     float: right;
                     border-left: 1px solid #e8e8e8;
                     border-bottom: 1px solid #e8e8e8;

@@ -26,8 +26,7 @@ import {
     HBodySection,
     MixedCardContainer, 
     DefaultTag,
-    InternalLink,
-    InternalLinkContainer
+    InternalLink
 } from './Card.styles';
 
 import type { IsIncludedTypeProps, Props } from './Card.types';
@@ -58,7 +57,7 @@ const CaseLink: ComponentType<Props> = ({heading, launcherSrOnly, tooltip,
         window.location.href=`${pathname}${hash}`
     }
 
-    return  <InternalLinkContainer { ...props }>
+    return  <>
                 <InternalLink
                     data-tip={ tooltip }
                     data-for={ `tooltip-text-${ preppedLabel }` }
@@ -79,7 +78,7 @@ const CaseLink: ComponentType<Props> = ({heading, launcherSrOnly, tooltip,
                                 className={ "tooltip" }
                                 effect={ "solid" }/>
                 }
-            </InternalLinkContainer>
+            </>
 };
 
 const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false,
@@ -90,11 +89,12 @@ const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=f
     return <>
         <HalfCardHeader className={ linkToHeading ? "" : "govuk-!-margin-bottom-2"}>
             <HalfCardHeading role={ 'heading' } aria-level={ 2 } id={ `card-heading-${ preppedLabel }` }>
-                { heading }&nbsp;<CaseLink 
+                { heading }
+                { experimental ? <DefaultTag className={ "govuk-tag" }>EXPERIMENTAL</DefaultTag> : null}
+                <CaseLink 
                                         tooltip={ `Link to ${ heading }` }
                                         launcherSrOnly={ `Link to ${ heading }` }
                                         heading={ heading}/>
-                { experimental ? <DefaultTag className={ "govuk-tag" }>EXPERIMENTAL</DefaultTag> : null}
             <Caption>{ caption }</Caption>
             </HalfCardHeading>
             {
