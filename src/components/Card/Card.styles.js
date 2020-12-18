@@ -1,8 +1,10 @@
 // @flow
 
+import React from "react";
 import styled from 'styled-components';
 
 import type { ComponentType } from 'react';
+import DownloadIcon from "assets/download.svg";
 
 
 export const HalfCard: ComponentType<*> =
@@ -153,3 +155,66 @@ export const DefaultTag: ComponentType<*> =
         }))`
             margin-left: 1rem;
         `;
+
+export const InternalLinkContainer: ComponentType<*> =
+    styled
+        .div
+        .attrs(({ className="", ...props }) => ({
+            className: `internallink-container ${className}`,
+            ...props
+        }))`
+            min-width: 100px;
+            float: right;
+        `;
+
+        export const InternalLink: ComponentType<*> = (() => {
+            const
+                Container = styled.span`
+                    width: 34px;
+                    height: 34px;
+                    display: inline-block;
+                    position: relative;
+                    cursor: pointer;
+                    margin: -20px;
+                    float: right;
+                    border-left: 1px solid #e8e8e8;
+                    border-bottom: 1px solid #e8e8e8;
+                    background-color: #f1f1f1;
+                    transition: all .3s;
+                    
+                    &.open,
+                    &:hover,
+                    &:active {
+                        background-color: #e1e1e1;
+                    }
+                    
+                    &:focus {
+                        background-colour: #ffdd00 !important;
+                    }
+                `,
+                Node = styled.button`
+                    width: 34px;
+                    height: 34px;
+                    padding: 2px 3px;
+                    outline: none;
+                    cursor: pointer;
+                    display: flex;
+                    margin-right: 1px;
+                    background: url("${ DownloadIcon }");
+                    background-repeat: no-repeat;
+                    background-size: 30px 30px;
+                    background-position: center center;
+                                
+                    &:focus {
+                        background-color: #ffdd00;
+                    }
+                `;
+        
+            return ({ children, ...props }) => <Container>
+                <Node role={ "button" } { ...props }>
+                    { children }
+                </Node>
+            </Container>
+        
+        })();
+        

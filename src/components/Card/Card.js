@@ -1,7 +1,9 @@
 // @flow
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
+import ReactTooltip from "react-tooltip";
 
 import { fieldToStructure, getParamValueFor } from "common/utils";
 import usePrevious from "hooks/usePrevious";
@@ -10,6 +12,8 @@ import { Radio } from "components/GovUk";
 import DropdownButton from "components/DropdownButton";
 
 import DownloadOptions from "./DownloadOptions";
+
+import BrowserHistory from "../BrowserHistory";
 
 import {
     HalfCard,
@@ -20,7 +24,10 @@ import {
     Caption,
     BodySection,
     HBodySection,
-    MixedCardContainer, DefaultTag
+    MixedCardContainer, 
+    DefaultTag,
+    InternalLink,
+    InternalLinkContainer
 } from './Card.styles';
 
 import type { IsIncludedTypeProps, Props } from './Card.types';
@@ -29,6 +36,7 @@ import Loading from "components/Loading";
 
 import moment from "moment";
 
+const CARD_HEADER_HASH = "#card-heading-";
 
 const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) => {
 
@@ -39,6 +47,40 @@ const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) 
 
 }; // ContentBox
 
+const CaseLink: ComponentType<Props> = ({heading, launcherSrOnly, tooltip, 
+                                            internalLinkProps={}, ...props}: Props) => {
+
+    const preppedLabel = (heading ?? "").toLowerCase().replace(/\s/g, "_");
+    const { pathname } = useLocation();
+   
+    const setHash = () => {
+        const hash = CARD_HEADER_HASH + preppedLabel;
+        window.location.href=`${pathname}${hash}`
+    }
+
+    return  <InternalLinkContainer { ...props }>
+                <InternalLink
+                    data-tip={ tooltip }
+                    data-for={ `tooltip-text-${ preppedLabel }` }
+                    aria-labelledby={ `case-card-header-${ preppedLabel }` }
+                    className={ "internallink-hash"  }
+                    onClick={ () => setHash() }
+                    { ...internalLinkProps }>
+                    <span id={ `internallink-hash-${ preppedLabel }` }
+                        className={ "govuk-visually-hidden" }>
+                            { launcherSrOnly }
+                    </span>
+                </InternalLink>
+                {
+                    tooltip &&
+                    <ReactTooltip id={ `tooltip-text-${ preppedLabel }` }
+                                place={ "right" }
+                                backgroundColor={ "#0b0c0c" }
+                                className={ "tooltip" }
+                                effect={ "solid" }/>
+                }
+            </InternalLinkContainer>
+};
 
 const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false,
                                               experimental=false, children }: Props) => {
@@ -48,7 +90,10 @@ const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=f
     return <>
         <HalfCardHeader className={ linkToHeading ? "" : "govuk-!-margin-bottom-2"}>
             <HalfCardHeading role={ 'heading' } aria-level={ 2 } id={ `card-heading-${ preppedLabel }` }>
-                { heading }
+                { heading }&nbsp;<CaseLink 
+                                        tooltip={ `Link to ${ heading }` }
+                                        launcherSrOnly={ `Link to ${ heading }` }
+                                        heading={ heading}/>
                 { experimental ? <DefaultTag className={ "govuk-tag" }>EXPERIMENTAL</DefaultTag> : null}
             <Caption>{ caption }</Caption>
             </HalfCardHeading>
@@ -242,6 +287,13 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
     if ( !isIncluded(cardProps) )
         return null;
 
+    const element = <CardHeader heading={ heading } { ...cardProps }>{
+                        active &&
+                        <Radio heading={ heading }
+                            options={ options }
+                            value={ active }
+                            setValue={ setActive }/>
+                    }</CardHeader>
 
     return <Card heading={ heading }
                  fullWidth={ fullWidth }
@@ -250,15 +302,9 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
         noTabCards.indexOf(cardType) > -1
             ? <NoTabCard { ...cardProps }/>
             : <>
-                <CardHeader heading={ heading } { ...cardProps }>{
-                    active &&
-                    <Radio heading={ heading }
-                           options={ options }
-                           value={ active }
-                           setValue={ setActive }/>
-                }</CardHeader>
+                <BrowserHistory element={element}/>
                 <TabLinkContainer { ...cardProps }/>
-            </>
+             </>
     }</Card>;
 
 };  // TestingCard

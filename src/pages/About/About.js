@@ -12,6 +12,11 @@ import { Loading } from './About.styles';
 import useGenericAPI from 'hooks/useGenericAPI';
 import BrowserHistory from "components/BrowserHistory";
 
+import {
+    Markdown,
+    Article
+} from './About.styles';
+
 import type { AboutProps } from './About.types';
 import type { ComponentType } from "react";
 
@@ -31,7 +36,10 @@ const About: ComponentType<AboutProps> = ({ ...props }) => {
             data = err ? data : String(text);
         });
 
-    return <BrowserHistory data={data}/>
+    const element =  <Article>
+                        <Markdown dangerouslySetInnerHTML={{ __html: data }}/>
+                    </Article>;
+    return <BrowserHistory element={element}/>
 
 
 };  // About
