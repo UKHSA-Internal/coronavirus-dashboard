@@ -133,17 +133,6 @@ const LastUpdateTime = () => {
 }; // LastUpdateTime
 
 
-const
-    PathWithSideMenu = [
-        "/",
-        "/testing",
-        "/cases",
-        "/healthcare",
-        "/deaths",
-        "/about-data"
-    ];
-
-
 const Navigation = ({ layout, ...props }) => {
 
     const Nav = layout !== "mobile"
@@ -161,14 +150,6 @@ const App = ({ location: { pathname } }) => {
 
     const
         layout = useResponsiveLayout(768);
-
-    let hasMenu;
-
-    useEffect(() => {
-
-        hasMenu = PathWithSideMenu.indexOf(pathname) > -1;
-
-    }, [ pathname ]);
 
     return <>
         <Header/>

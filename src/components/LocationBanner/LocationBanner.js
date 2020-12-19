@@ -74,7 +74,7 @@ const LocationBanner: ComponentType = ({ pageTitle=null, areaTypes, pathname }) 
         if ( prevPathname !== pathname && cookieData ) {
 
             const
-                today = new Date,
+                today = new Date(),
                 appData = areaTypes
                     .reduce((acc, item) => ({
                         ...acc,
