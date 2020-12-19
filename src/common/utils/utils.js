@@ -128,6 +128,7 @@ export const getParams = (uri: string, separator: string="&"): ParsedParams => {
 
     return decodeURIComponent(uri)
         .replace("?", "")
+        .replace(/\w{1,2}clid=[^&]&?/, "")
         .split(separator)
         .reduce((acc, item) => {
             const found = /^([a-z]+)([=<>!]{1,2})(.+)$/i.exec(item)
