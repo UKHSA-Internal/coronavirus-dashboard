@@ -61,6 +61,7 @@ export const AreaTypeOptions = [
     { value: "overview", label: "United Kingdom" },
     { value: "nation", label: "Nation" },
     { value: "region", label: "Region" },
+    { value: "nhsTrust", label: "NHS Trust" },
     { value: "nhsRegion", label: "NHS Region" },
     { value: "utla", label: "Upper Tier Local Authority" },
     { value: "ltla", label: "Lower Tier Local Authority" },
