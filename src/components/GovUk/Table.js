@@ -211,7 +211,7 @@ export const NestedDataTable = ({ fields, data, ...props }) => {
 
         const rowData = [];
 
-        for ( const { value, metric, filters, ...rest } of fields ) {
+        for ( const { value, metric, filters } of fields ) {
 
             if ( !metric ) {
                 rowData.push(
