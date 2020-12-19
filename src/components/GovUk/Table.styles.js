@@ -58,7 +58,7 @@ export const TableContainer: ComponentType<*> =
     styled
         .div`
             max-height: 350px;
-            overflow: scroll;
+            overflow: auto;
             
             &>table {
                 font-size: 1.1rem;
