@@ -2,7 +2,6 @@
 
 import React from "react";
 
-import useResponsiveLayout from "hooks/useResponsiveLayout";
 import { BasePlotter } from "./BasePlot";
 import { hexToRgb } from "common/utils";
 import { scaleColours } from "common/utils";
@@ -31,13 +30,10 @@ const asCssRgb = ( hex ) => {
 
 export const Heatmap: ComponentType<*> = ({ data, layout, config, ...props }) => {
 
-    const width = useResponsiveLayout(680);
-
     const colorscale = zip(
         scaleLevels,
         scaleColours.map(asCssRgb)
     );
-
 
     return <BasePlotter
         data={
