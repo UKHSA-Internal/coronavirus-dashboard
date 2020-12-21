@@ -26,7 +26,7 @@ import {
     HBodySection,
     MixedCardContainer, 
     DefaultTag,
-    InternalLink
+    HashLink
 } from './Card.styles';
 
 import type { IsIncludedTypeProps, Props } from './Card.types';
@@ -49,7 +49,7 @@ const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) 
 const CaseLink: ComponentType<Props> = ({heading, launcherSrOnly, tooltip, 
                                             internalLinkProps={}, ...props}: Props) => {
 
-    const preppedLabel = (heading ?? "").toLowerCase().replace(/\s/g, "_");
+    const preppedLabel = (heading ?? "").toLowerCase().replace(/\s/g, "_").replace("(", "_").replace(")", "");
     const { pathname } = useLocation();
    
     const setHash = () => {
@@ -58,18 +58,18 @@ const CaseLink: ComponentType<Props> = ({heading, launcherSrOnly, tooltip,
     }
 
     return  <>
-                <InternalLink
+                <HashLink
                     data-tip={ tooltip }
                     data-for={ `tooltip-text-${ preppedLabel }` }
-                    aria-labelledby={ `case-card-header-${ preppedLabel }` }
-                    className={ "internallink-hash"  }
+                    aria-labelledby={ `hashLink-${ preppedLabel }` }
+                    className={ "hashLink"  }
                     onClick={ () => setHash() }
                     { ...internalLinkProps }>
-                    <span id={ `internallink-hash-${ preppedLabel }` }
+                    <span id={ `hashLink-${ preppedLabel }` }
                         className={ "govuk-visually-hidden" }>
                             { launcherSrOnly }
                     </span>
-                </InternalLink>
+                </HashLink>
                 {
                     tooltip &&
                     <ReactTooltip id={ `tooltip-text-${ preppedLabel }` }
@@ -84,7 +84,7 @@ const CaseLink: ComponentType<Props> = ({heading, launcherSrOnly, tooltip,
 const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false,
                                               experimental=false, children }: Props) => {
 
-    const preppedLabel = heading.toLowerCase().replace(/\s/g, "_");
+    const preppedLabel = heading.toLowerCase().replace(/\s/g, "_").replace("(", "_").replace(")", "");
 
     return <>
         <HalfCardHeader className={ linkToHeading ? "" : "govuk-!-margin-bottom-2"}>

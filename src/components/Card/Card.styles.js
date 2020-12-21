@@ -156,54 +156,54 @@ export const DefaultTag: ComponentType<*> =
             margin-left: 1rem;
         `;
 
-        export const InternalLink: ComponentType<*> = (() => {
-            const
-                Container = styled.span`
-                    width: 34px;
-                    height: 34px;
-                    display: inline-block;
-                    position: relative;
-                    cursor: pointer;
-                    margin-left: 10px;
-                    float: right;
-                    border-left: 1px solid #e8e8e8;
-                    border-bottom: 1px solid #e8e8e8;
-                    background-color: #f1f1f1;
-                    transition: all .3s;
+export const HashLink: ComponentType<*> = (() => {
+    const
+        Container = styled.span`
+             width: 28px;
+             height: 28px;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            margin-left: 10px;
+            float: right;
+            border-left: 1px solid #e8e8e8;
+            border-bottom: 1px solid #e8e8e8;
+            background-color: #f1f1f1;
+            transition: all .3s;
                     
-                    &.open,
-                    &:hover,
-                    &:active {
-                        background-color: #e1e1e1;
-                    }
+            &.open,
+            &:hover,
+            &:active {
+                background-color: #e1e1e1;
+            }
                     
-                    &:focus {
-                        background-colour: #ffdd00 !important;
-                    }
-                `,
-                Node = styled.button`
-                    width: 34px;
-                    height: 34px;
-                    padding: 2px 3px;
-                    outline: none;
-                    cursor: pointer;
-                    display: flex;
-                    margin-right: 1px;
-                    background: url("${ HashLinkIcon }");
-                    background-repeat: no-repeat;
-                    background-size: 30px 30px;
-                    background-position: center center;
+            &:focus {
+                background-colour: #ffdd00 !important;
+            }
+        `,
+        Node = styled.button`
+            width: 28px;
+            height: 28px;
+            padding: 2px 3px;
+            outline: none;
+            cursor: pointer;
+            display: flex;
+            margin-right: 1px;
+            background: url("${ HashLinkIcon }");
+            background-repeat: no-repeat;
+            background-size: 24px 24px;
+            background-position: center center;
                                 
-                    &:focus {
-                        background-color: #ffdd00;
-                    }
-                `;
+            &:focus {
+                background-color: #ffdd00;
+            }
+        `;
         
-            return ({ children, ...props }) => <Container>
-                <Node role={ "button" } { ...props }>
-                    { children }
-                </Node>
-            </Container>
+    return ({ children, ...props }) => <Container>
+        <Node role={ "button" } { ...props }>
+            { children }
+        </Node>
+    </Container>
         
-        })();
+})();
         
