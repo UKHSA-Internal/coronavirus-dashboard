@@ -10,8 +10,9 @@ import usePrevious from "hooks/usePrevious";
 import TabLinkContainer from "components/TabLink";
 import { Radio } from "components/GovUk";
 import DropdownButton from "components/DropdownButton";
-
 import DownloadOptions from "./DownloadOptions";
+import ShareButton from "components/ShareButton";
+import ShareOptions from "./ShareOptions";
 
 import BrowserHistory from "../BrowserHistory";
 
@@ -25,8 +26,7 @@ import {
     BodySection,
     HBodySection,
     MixedCardContainer, 
-    DefaultTag,
-    HashLink
+    DefaultTag
 } from './Card.styles';
 
 import type { IsIncludedTypeProps, Props } from './Card.types';
@@ -35,7 +35,6 @@ import Loading from "components/Loading";
 
 import moment from "moment";
 
-const CARD_HEADER_HASH = "#card-heading-";
 
 const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) => {
 
@@ -46,54 +45,27 @@ const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) 
 
 }; // ContentBox
 
-const CaseLink: ComponentType<Props> = ({heading, launcherSrOnly, tooltip, 
-                                            internalLinkProps={}, ...props}: Props) => {
-
-    const preppedLabel = (heading ?? "").toLowerCase().replace(/\s/g, "_").replace("(", "_").replace(")", "");
-    const { pathname } = useLocation();
-   
-    const setHash = () => {
-        const hash = CARD_HEADER_HASH + preppedLabel;
-        window.location.href=`${pathname}${hash}`
-    }
-
-    return  <>
-                <HashLink
-                    data-tip={ tooltip }
-                    data-for={ `tooltip-text-${ preppedLabel }` }
-                    aria-labelledby={ `hashLink-${ preppedLabel }` }
-                    className={ "hashLink"  }
-                    onClick={ () => setHash() }
-                    { ...internalLinkProps }>
-                    <span id={ `hashLink-${ preppedLabel }` }
-                        className={ "govuk-visually-hidden" }>
-                            { launcherSrOnly }
-                    </span>
-                </HashLink>
-                {
-                    tooltip &&
-                    <ReactTooltip id={ `tooltip-text-${ preppedLabel }` }
-                                place={ "right" }
-                                backgroundColor={ "#0b0c0c" }
-                                className={ "tooltip" }
-                                effect={ "solid" }/>
-                }
-            </>
-};
 
 const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false,
                                               experimental=false, children }: Props) => {
 
     const preppedLabel = heading.toLowerCase().replace(/\s/g, "_").replace("(", "_").replace(")", "");
 
+    const { pathname } = useLocation();
+
     return <>
         <HalfCardHeader className={ linkToHeading ? "" : "govuk-!-margin-bottom-2"}>
             <HalfCardHeading role={ 'heading' } aria-level={ 2 } id={ `card-heading-${ preppedLabel }` }>
                 { heading }
                 { experimental ? <DefaultTag className={ "govuk-tag" }>EXPERIMENTAL</DefaultTag> : null}
-                <CaseLink tooltip={ `Link to ${ heading }` }
-                          launcherSrOnly={ `Link to ${ heading }` }
-                          heading={ heading}/>
+                <ShareButton tooltip={ "Share card data" }
+                          launcherSrOnly={ "Share card data" }
+                          heading={ heading}>
+                    <ShareOptions 
+                            subject={ heading }
+                            label={ preppedLabel }
+                            pathname={pathname}/>
+                </ShareButton>
             <Caption>{ caption }</Caption>
             </HalfCardHeading>
             {
