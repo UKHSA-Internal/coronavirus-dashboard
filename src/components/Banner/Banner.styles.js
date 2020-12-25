@@ -14,6 +14,8 @@ export const BannerBase: ComponentType<*> =
         }))`
             background: #FEDE02;
             text-align: center;
+            margin-right: unset;
+            margin-left: unset;
         `;
 
 
