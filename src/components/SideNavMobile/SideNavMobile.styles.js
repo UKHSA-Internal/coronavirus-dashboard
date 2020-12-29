@@ -9,6 +9,7 @@ export const MobileNavWrapper: ComponentType<*> = (() => {
   return styled.div`
     position: relative;
     margin-top: 12px;
+    margin-bottom: -12px;
   `;
 })();
 
