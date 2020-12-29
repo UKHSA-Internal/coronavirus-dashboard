@@ -7,9 +7,10 @@ import URLs from "common/urls";
 
 const ShareOptions = ({ subject, label, pathname }) => {
 
-    const hash = "#card-heading-" + label;
+    const hash = "%23" + "card-heading-" + encodeURI(label);
     const baseUrl = URLs["baseUrl"];
-    const hashtags = "card-heading-" + label;
+    const tweetUri = "https://twitter.com/intent/tweet?url=" + 
+                        encodeURI(`${baseUrl}${pathname}`) + hash + encodeURI(`&text=${subject} -`)
 
     const copy_to_clipboard = (href) => {
       let textField = document.createElement('textarea');
@@ -40,8 +41,7 @@ const ShareOptions = ({ subject, label, pathname }) => {
         <a className={ 'govuk-link govuk-link--no-visited-state' }
             rel={ 'noreferrer noopener' }
             target="_blank"
-            href={
-            encodeURI(`https://twitter.com/intent/tweet?url=${baseUrl}${pathname}&hashtags=${hashtags}&text=${subject} -`)}>
+            href={ tweetUri }>
             Twitter
         </a>
     </>
