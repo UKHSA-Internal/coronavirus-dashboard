@@ -1,11 +1,11 @@
 {
   "name": "uk-covid19-dashboard",
-  "version": "2.0.122",
+  "version": "2.0.129",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
     "d3-array": "^2.6.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
     "d3-scale": "^3.2.2",
     "deep-equal": "^2.0.3",
     "govuk-frontend": "3.8.1",
@@ -13,7 +13,7 @@
     "moment": "^2.24.0",
     "node-sass": "^4.13.1",
     "numeral": "^2.0.6",
-    "plotly.js": "^1.57.1",
+    "plotly.js": "^1.58.3",
     "react": "^16.14.0",
     "react-app-polyfill": "^1.0.6",
     "react-day-picker": "^7.4.8",
@@ -75,7 +75,7 @@
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
-    "flow-bin": "^0.132.0",
+    "flow-bin": "^0.140.0",
     "stylelint": "^13.8.0",
     "stylelint-config-idiomatic-order": "^8.1.0",
     "stylelint-config-standard": "^20.0.0",

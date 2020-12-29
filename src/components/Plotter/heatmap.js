@@ -2,7 +2,6 @@
 
 import React from "react";
 
-import useResponsiveLayout from "hooks/useResponsiveLayout";
 import { BasePlotter } from "./BasePlot";
 import { hexToRgb } from "common/utils";
 import { scaleColours } from "common/utils";
@@ -13,10 +12,11 @@ import type { ComponentType } from "react";
 
 const scaleLevels = [
     0,
-    10 / 400,
-    50 / 400,
-    100 / 400,
-    200 / 400,
+    10 / 800,
+    50 / 800,
+    100 / 800,
+    200 / 800,
+    400 / 800,
     1
 ];
 
@@ -31,13 +31,10 @@ const asCssRgb = ( hex ) => {
 
 export const Heatmap: ComponentType<*> = ({ data, layout, config, ...props }) => {
 
-    const width = useResponsiveLayout(680);
-
     const colorscale = zip(
         scaleLevels,
         scaleColours.map(asCssRgb)
     );
-
 
     return <BasePlotter
         data={
@@ -51,7 +48,7 @@ export const Heatmap: ComponentType<*> = ({ data, layout, config, ...props }) =>
                 fixedrange: true,
                 zauto: false,
                 zmin: 0,
-                zmax: 400,
+                zmax: 800,
                 hoverinfo: "text",
                 hovertemplate: (
                     `<b>Date</b>: %{x}<br>` +
@@ -60,8 +57,8 @@ export const Heatmap: ComponentType<*> = ({ data, layout, config, ...props }) =>
                 ),
                 name: dataset.label,
                 colorbar: {
-                    tickvals: [0, 10, 50, 100, 200, 400],
-                    ticktext: ["0", "10", "50", "100", "200", "400+"],
+                    tickvals: [0, 10, 50, 100, 200, 400, 800],
+                    ticktext: ["0", "10", "50", "100", "200", "400", "800+"],
                     tickmode: "array",
                     ticks: "outside",
                     tickson: "boundaries",

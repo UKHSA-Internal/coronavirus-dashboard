@@ -23,6 +23,7 @@ const URLs = {
     lookups:         `https://${ REACT_APP_MAIN_CDN      }/public/assets/lookups/`,
     lookupApi:       `https://${ REACT_APP_API_ENDPOINT  }/v1/lookup`,
     pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/`,
+    banner:          `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/banner.json`,
     mainApi:         `https://${ REACT_APP_API_ENDPOINT  }/v1/data`,
     soaApi:          `https://${ REACT_APP_API_ENDPOINT  }/v1/soa`,
     modals:          `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/`,

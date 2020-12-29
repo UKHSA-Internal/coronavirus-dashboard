@@ -178,3 +178,11 @@
         font-size: .8rem !important;
     }
 }
+
+
+.banner.markdown {
+    & a {
+        @extend .govuk-link;
+        @extend .govuk-\!-font-weight-bold
+    }
+}

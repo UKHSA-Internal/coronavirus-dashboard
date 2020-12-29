@@ -37,15 +37,7 @@ import usePrevious from "hooks/usePrevious";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 import GreenArrow from "assets/icon-arrow-green.svg";
 import RedArrow from "assets/icon-arrow-red.svg";
-
-const colours = [
-    "#e0e543",
-    "#74bb68",
-    "#399384",
-    "#2067AB",
-    "#12407F",
-    "#53084A"
-];
+import { scaleColours } from "common/utils";
 
 
 const MapLayers = [
@@ -62,12 +54,13 @@ const MapLayers = [
         minZoom: 1,
         maxZoom: 7,
         buckets: [
-            colours[0],
-            10, colours[1],
-            50, colours[2],
-            100, colours[3],
-            200, colours[4],
-            400, colours[5],
+            scaleColours[0],
+            10, scaleColours[1],
+            50, scaleColours[2],
+            100, scaleColours[3],
+            200, scaleColours[4],
+            400, scaleColours[5],
+            800, scaleColours[6],
         ]
     },
     {
@@ -83,12 +76,13 @@ const MapLayers = [
         maxZoom: 8.5,
         foreground: "utla",
         buckets: [
-            colours[0],
-            10, colours[1],
-            50, colours[2],
-            100, colours[3],
-            200, colours[4],
-            400, colours[5],
+            scaleColours[0],
+            10, scaleColours[1],
+            50, scaleColours[2],
+            100, scaleColours[3],
+            200, scaleColours[4],
+            400, scaleColours[5],
+            800, scaleColours[6],
         ]
     },
     {
@@ -104,12 +98,13 @@ const MapLayers = [
         maxZoom: 15.5,
         foreground: "ltla",
         buckets: [
-            colours[0],
-            10, colours[1],
-            50, colours[2],
-            100, colours[3],
-            200, colours[4],
-            400, colours[5],
+            scaleColours[0],
+            10, scaleColours[1],
+            50, scaleColours[2],
+            100, scaleColours[3],
+            200, scaleColours[4],
+            400, scaleColours[5],
+            800, scaleColours[6],
         ]
     }
 ];
@@ -326,7 +321,7 @@ const LocalAuthorityCard = ({ currentLocation, date, areaType, ...props }) => {
 };
 
 
-const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, geoData, date,
+const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJSON, geoData, date,
                                    extrema, minData, maxData, valueIndex, children, dates, maxDate, ...props }) => {
 
     const

@@ -22,10 +22,10 @@ const
     Accessibility   = lazy(() => import('pages/Accessibility')),
     Cookies         = lazy(() => import('pages/Cookies')),
     ApiDocs         = lazy(() => import('pages/ApiDocs')),
-    Announcement    = lazy(() => import("components/Announcement")),
     InteractiveMap  = lazy(() => import("pages/InteractiveMap")),
     Footer          = lazy(() => import('components/Footer')),
-    Download        = lazy(() => import('pages/Download'));
+    Download        = lazy(() => import('pages/Download')),
+    Banner          = lazy(() => import('components/Banner'));
 
 
 const LastUpdateTime = () => {
@@ -33,26 +33,6 @@ const LastUpdateTime = () => {
     const timestamp = useTimestamp();
 
     return <>
-        <Suspense fallback={ <Loading/> }>
-            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 25, hour: 9 }}
-                          lastDisplayDate={{ year: 2020, month: 8, day: 28, hour: 8 }}>
-                <p className={ "govuk-body" }>
-                    Do we explain the data well? Please help us make this service better
-                    by completing our
-                    new&nbsp;<a href={ "https://forms.gle/RiLFWfyo62xD2V1w7" }
-                           className={ "govuk-link" }
-                           target={ "_blank" }
-                           rel={ "noopener noreferrer" }>survey</a>.
-                </p>
-            </Announcement>
-            <Announcement firstDisplayDate={{ year: 2020, month: 8, day: 18, hour: 16, minute: 0 }}
-                          lastDisplayDate={{ year: 2020, month: 8, day: 18, hour: 18, minute: 30 }}>
-                <p className={ "govuk-body" }>
-                    We have not received the latest breakdown of cases in England. We will
-                    update today's records as soon as they become available.
-                </p>
-            </Announcement>
-        </Suspense>
         <div className={ "govuk-!-margin-top-5 govuk-!-margin-bottom-5" }
              role={ "region" }
              aria-labelledby={ "last-update" }>
@@ -141,6 +121,7 @@ const App = ({ location: { pathname } }) => {
         {/*</div>*/}
 
         { layout === "mobile" && <Navigation layout={ layout }/> }
+        <Suspense fallback={ <Loading/> }><Banner/></Suspense>
         <div className={ "govuk-width-container" }>
             <LastUpdateTime/>
             <ErrorBoundary>

@@ -62,6 +62,7 @@ export const AreaTypeOptions = [
     { value: "nation", label: "Nation" },
     { value: "region", label: "Region" },
     { value: "nhsRegion", label: "NHS Region" },
+    { value: "nhsTrust", label: "NHS Trust" },
     { value: "utla", label: "Upper Tier Local Authority" },
     { value: "ltla", label: "Lower Tier Local Authority" },
     { value: "msoa", label: "Middle layer Super Output Areas (MSOA)" }
