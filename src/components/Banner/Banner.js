@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 
+import { useLocation } from "react-router";
+
 import useGenericAPI from "hooks/useGenericAPI";
 import useTimestamp from "hooks/useTimestamp";
 import Loading from "components/Loading";
@@ -43,6 +45,7 @@ const Banner: ComponentType<*> = ({ ...props }) => {
 
     const timestamp = useTimestamp();
     const banners = useGenericAPI("banner", null);
+    const { pathname } = useLocation();
 
     if ( banners === null ) return <Loading/>;
     if ( !banners?.length ) return null;
@@ -51,8 +54,14 @@ const Banner: ComponentType<*> = ({ ...props }) => {
 
     return <>{
         banners
-            .filter(({ appearByUpdate, disappearByUpdate }) =>
-                moment(appearByUpdate) <= ts && ts < moment(disappearByUpdate)
+            .filter(({ appearByUpdate, disappearByUpdate, displayUri=[] }) =>
+                moment(appearByUpdate) <= ts   &&
+                ts < moment(disappearByUpdate) &&
+                (
+                    displayUri.length
+                        ? displayUri.find(uri => uri.toLowerCase() === pathname.toLowerCase())
+                        : true
+                )
             )
             .map((banner, index) =>
                 <BannerBase key={ `banner-${index}-${banner?.appearByUpdate}` } { ...props }>
