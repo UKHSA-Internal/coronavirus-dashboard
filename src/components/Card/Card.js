@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect, lazy, Suspense, useRef } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Link, useLocation } from "react-router-dom";
 
 import { fieldToStructure, getParamValueFor } from "common/utils";
@@ -96,6 +96,7 @@ const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, n
         { children }
 
             <CardOptionsSeparator/>
+
             {
                 url &&
                 <DropdownButton tooltip={ "Download card data" }
@@ -112,7 +113,6 @@ const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, n
 
             <ShareButton tooltip={ "Share card data" }
                         launcherSrOnly={ "Share card data" }
-                        label={ "Share" }
                         heading={ heading}>
                 <ShareOptions 
                     subject={ heading }

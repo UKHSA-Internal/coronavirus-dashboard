@@ -18,7 +18,6 @@ const ShareButton: ComponentType<ShareButtonProps> = ({tooltip, heading, launche
                                                         launcherProps={}, ...props }) => {
 
     const preppedLabel = (heading ?? "").toLowerCase().replace(/\s/g, "_").replace("(", "_").replace(")", "");
-    const { pathname } = useLocation();
    
     const [ open, setOpen ] = useState(false);
     const share = useRef(null);

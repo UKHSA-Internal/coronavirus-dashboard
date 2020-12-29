@@ -1,10 +1,8 @@
 // @flow
 
-import React from "react";
 import styled from 'styled-components';
 
 import type { ComponentType } from 'react';
-import ShareIcon from "assets/icon-share.svg";
 
 export const OptionsLabel :ComponentType<*> =
     styled
