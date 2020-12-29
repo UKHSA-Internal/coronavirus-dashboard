@@ -1,9 +1,7 @@
 // @flow
 
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useRef } from 'react';
 import { Link, useLocation } from "react-router-dom";
-
-import ReactTooltip from "react-tooltip";
 
 import { fieldToStructure, getParamValueFor } from "common/utils";
 import usePrevious from "hooks/usePrevious";
@@ -13,7 +11,6 @@ import DropdownButton from "components/DropdownButton";
 import DownloadOptions from "./DownloadOptions";
 import ShareButton from "components/ShareButton";
 import ShareOptions from "./ShareOptions";
-
 import BrowserHistory from "../BrowserHistory";
 
 import {
@@ -26,7 +23,8 @@ import {
     BodySection,
     HBodySection,
     MixedCardContainer, 
-    DefaultTag
+    DefaultTag,
+    CardOptionsSeparator
 } from './Card.styles';
 
 import type { IsIncludedTypeProps, Props } from './Card.types';
@@ -51,21 +49,12 @@ const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=f
 
     const preppedLabel = heading.toLowerCase().replace(/\s/g, "_").replace("(", "_").replace(")", "");
 
-    const { pathname } = useLocation();
-
     return <>
         <HalfCardHeader className={ linkToHeading ? "" : "govuk-!-margin-bottom-2"}>
             <HalfCardHeading role={ 'heading' } aria-level={ 2 } id={ `card-heading-${ preppedLabel }` }>
                 { heading }
                 { experimental ? <DefaultTag className={ "govuk-tag" }>EXPERIMENTAL</DefaultTag> : null}
-                <ShareButton tooltip={ "Share card data" }
-                          launcherSrOnly={ "Share card data" }
-                          heading={ heading}>
-                    <ShareOptions 
-                            subject={ heading }
-                            label={ preppedLabel }
-                            pathname={pathname}/>
-                </ShareButton>
+                
             <Caption>{ caption }</Caption>
             </HalfCardHeading>
             {
@@ -95,22 +84,42 @@ const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, n
                 ? <HalfCard {...props}/>
                 : <FullCard {...props}/>;
 
+    const { pathname } = useLocation();
+
+    const shareLabel = heading.toLowerCase().replace(/\s/g, "_").replace("(", "_").replace(")", "");
+
     return <Container role={ "article" }
                       aria-labelledby={ `card-heading-${preppedLabel}` }
                       className={ "card" }>
-        {
-            url &&
-            <DropdownButton tooltip={ "Download card data" }
-                            launcherSrOnly={ `Download card data for "${ heading }"` }
-                            heading={ heading }
-                            { ...props }>
-                <DownloadOptions heading={ heading }
-                                 baseUrl={ url }
-                                 noCsv={ noCsv }
-                                 { ...props }/>
-            </DropdownButton>
-        }
+
+           
         { children }
+
+            <CardOptionsSeparator/>
+            {
+                url &&
+                <DropdownButton tooltip={ "Download card data" }
+                                launcherSrOnly={ `Download card data for "${ heading }"` }
+                                heading={ heading }
+                                { ...props }>
+                    <DownloadOptions heading={ heading }
+                                    baseUrl={ url }
+                                    noCsv={ noCsv }
+                                    { ...props }/>
+                    
+                </DropdownButton>
+            }
+
+            <ShareButton tooltip={ "Share card data" }
+                        launcherSrOnly={ "Share card data" }
+                        label={ "Share" }
+                        heading={ heading}>
+                <ShareOptions 
+                    subject={ heading }
+                    label={ shareLabel }
+                    pathname={pathname}/>
+            </ShareButton>
+
     </Container>
 
 };  // Card

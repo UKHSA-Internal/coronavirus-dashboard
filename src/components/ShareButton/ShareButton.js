@@ -9,10 +9,10 @@ import { useLocation } from "react-router-dom";
 import {
     Launcher,
     SharedContainer,
-    OptionsContainer
+    OptionsContainer,
+    SharedLabel
 } from "./ShareButton.styles";
 
-const CARD_HEADER_HASH = "#card-heading-";
 
 const ShareButton: ComponentType<ShareButtonProps> = ({tooltip, heading, launcherSrOnly, children, optionsProps={},
                                                         launcherProps={}, ...props }) => {
@@ -38,8 +38,7 @@ const ShareButton: ComponentType<ShareButtonProps> = ({tooltip, heading, launche
         }
     });
 
-    return  <SharedContainer ref={ share } { ...props }>
-
+    return  <SharedContainer ref={ share }>
                 {
                     open &&
                     <OptionsContainer { ...optionsProps }>{ children }</OptionsContainer>
@@ -56,7 +55,7 @@ const ShareButton: ComponentType<ShareButtonProps> = ({tooltip, heading, launche
                             { launcherSrOnly }
                     </span>
                 </Launcher>
-               
+                <SharedLabel>Share</SharedLabel>
                 {
                     tooltip &&
                     <ReactTooltip id={ `tooltip-text-${ preppedLabel }` }
@@ -65,7 +64,8 @@ const ShareButton: ComponentType<ShareButtonProps> = ({tooltip, heading, launche
                                 className={ "tooltip" }
                                 effect={ "solid" }/>
                 }
-            </SharedContainer>
+               </SharedContainer>
+          
 
 }; // ShareButton
 

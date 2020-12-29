@@ -5,16 +5,27 @@ import ShareIcon from "assets/icon-share.svg";
 
 import type { ComponentType } from "react";
 
-export const SharedContainer: ComponentType<*> =
+export const SharedContainer :ComponentType<*> =
     styled
         .div
         .attrs(({ className="", ...props }) => ({
-            className: `shared-container ${className}`,
+            className: `share-container ${className}`,
             ...props
         }))`
-            min-width: 100px;
-            float: right;
+            margin-top: 10px;
+            float: left;
         `;
+
+export const SharedLabel :ComponentType<*> =
+    styled
+    .p`
+        float: left;
+        margin-left: 5px !important;
+        margin-top: 10px;
+        font-size: 10pt;
+        font-weight: bold;
+        color: #1d70b8;
+    `;
 
 export const OptionsContainer :ComponentType<*> =
     styled
@@ -24,7 +35,7 @@ export const OptionsContainer :ComponentType<*> =
             flex-direction: column;
             position: absolute;
             z-index: 999999999;
-            float: right;
+            float: left;
             margin-top: 14px;
             margin-right: -15px !important;
             min-width: 100px;
@@ -85,7 +96,7 @@ export const Launcher: ComponentType<*> = (() => {
             position: relative;
             cursor: pointer;
             margin-left: 10px;
-            float: right;
+            float: left;
             border-left: 1px solid #e8e8e8;
             border-bottom: 1px solid #e8e8e8;
             background-color: #f1f1f1;

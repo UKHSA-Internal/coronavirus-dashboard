@@ -6,6 +6,20 @@ import styled from 'styled-components';
 import type { ComponentType } from 'react';
 import ShareIcon from "assets/icon-share.svg";
 
+export const OptionsLabel :ComponentType<*> =
+    styled
+        .span`
+            float: left;
+            margin-left: 20px !important;
+        `;
+
+export const CardOptionsSeparator :ComponentType<*> =
+    styled
+        .div`
+        min-width: 100%;
+        border-bottom: 2px solid #e8e8e8;
+    `;
+        
 
 export const HalfCard: ComponentType<*> =
     styled
@@ -156,5 +170,5 @@ export const DefaultTag: ComponentType<*> =
             margin-left: 1rem;
         `;
 
-
+    
         
