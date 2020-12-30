@@ -1,7 +1,7 @@
 import React from "react";
 
 import styled from "styled-components";
-import DownloadIcon from "assets/download.svg";
+import DownloadIcon from "assets/icon-download.svg";
 
 import type { ComponentType } from "react";
 
