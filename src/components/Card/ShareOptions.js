@@ -7,10 +7,11 @@ import URLs from "common/urls";
 
 const ShareOptions = ({ subject, label, pathname }) => {
 
-    const hash = "%23" + "card-heading-" + encodeURI(label);
+    const hash =  "#card-heading-" + encodeURI(label);
+    const enc_hash = hash.replace("#", "%23");
     const baseUrl = URLs["baseUrl"];
     const tweetUri = "https://twitter.com/intent/tweet?url=" + 
-                        encodeURI(`${baseUrl}${pathname}`) + hash + encodeURI(`&text=${subject} -`)
+                        encodeURI(`${baseUrl}${pathname}`) + enc_hash + encodeURI(`&text=${subject} -`)
 
     const copy_to_clipboard = (href) => {
       let textField = document.createElement('textarea');
