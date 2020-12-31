@@ -14,6 +14,8 @@ import externalLink from "remark-external-links";
 import moment from "moment";
 
 import type { ComponentType } from 'react';
+import type { BannerType } from "./Banner.types";
+
 import { BannerBase, BannerContent, Body, Timestamp } from "./Banner.styles";
 
 
@@ -40,29 +42,36 @@ const BannerBody: ComponentType<*> = ({ rawBody, ...props }) => {
 };  // Banner Body
 
 
+const bannerFilter = ( timestamp: string, pathname: string ): (BannerType => boolean) => {
+
+    const ts = moment(timestamp);
+
+    return ( { appearByUpdate, disappearByUpdate, displayUri=[] }: BannerType ): boolean => {
+
+        if ( moment(appearByUpdate) > ts || ts > moment(disappearByUpdate) ) return false;
+
+        return (
+            displayUri.length === 0 ||
+            displayUri.includes(uri => uri === pathname.toLowerCase())
+        )
+
+    }
+
+};  // bannerFilter
+
 
 const Banner: ComponentType<*> = ({ ...props }) => {
 
+    const banners: BannerType[] = useGenericAPI("banner", null);
     const timestamp = useTimestamp();
-    const banners = useGenericAPI("banner", null);
     const { pathname } = useLocation();
 
     if ( banners === null ) return <Loading/>;
     if ( !banners?.length ) return null;
 
-    const ts = moment(timestamp);
-
     return <>{
         banners
-            .filter(({ appearByUpdate, disappearByUpdate, displayUri=[] }) =>
-                moment(appearByUpdate) <= ts   &&
-                ts < moment(disappearByUpdate) &&
-                (
-                    displayUri.length
-                        ? displayUri.find(uri => uri.toLowerCase() === pathname.toLowerCase())
-                        : true
-                )
-            )
+            .filter(bannerFilter(timestamp, pathname))
             .map((banner, index) =>
                 <BannerBase key={ `banner-${index}-${banner?.appearByUpdate}` } { ...props }>
                     <BannerContent>
