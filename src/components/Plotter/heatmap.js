@@ -84,6 +84,7 @@ export const Heatmap: ComponentType<*> = ({ data, layout, config, ...props }) =>
         margin={{
             l: 50,
             r: 0,
+            t: 20
         }}
         layout={ {
             hovermode: "x+y",
