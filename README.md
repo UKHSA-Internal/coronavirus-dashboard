@@ -36,11 +36,13 @@ languages to facilitate access to the API:
 Different parts of the Coronavirus dashboard service are maintained in their respective 
 repositories, itemised as follows:
  
-- [API v.2](https://github.com/publichealthengland/coronavirus-dashboard-api-v2) - Batch downloads server
+- [API v.1](https://github.com/publichealthengland/coronavirus-dashboard-api-v1) - Main API service for the data, lookup tables, CMS, and metadata.
+- [API v.2](https://github.com/publichealthengland/coronavirus-dashboard-api-v2) - Batch downloads service
 - [Frontend server](https://github.com/publichealthengland/coronavirus-dashboard-frontend-server) - Home and postcode pages
 - [Layout CMS](https://github.com/publichealthengland/coronavirus-dashboard-layouts) - Definition of contents
 - [Metadata](https://github.com/publichealthengland/coronavirus-dashboard-metadata) - Description of metrics and textual contents
 - [ETL service](https://github.com/publichealthengland/coronavirus-dashboard-pipeline-etl) - Post-pipeline data processing and deployment
+- [Terraform](https://github.com/publichealthengland/coronavirus-dashboard-terraform) - Infrastructure as Code [DEPRECATED]
 
 
 ## Development and contribution
