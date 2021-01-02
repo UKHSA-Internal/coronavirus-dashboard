@@ -1,17 +1,17 @@
 // @flow
 
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import { fieldToStructure, getParamValueFor } from "common/utils";
+import { fieldToStructure, getParamValueFor, heading2id } from "common/utils";
 import usePrevious from "hooks/usePrevious";
 import TabLinkContainer from "components/TabLink";
 import { Radio } from "components/GovUk";
 import DropdownButton from "components/DropdownButton";
 import DownloadOptions from "./DownloadOptions";
-import ShareButton from "components/ShareButton";
+import BrowserHistory from "components/BrowserHistory";
+import Loading from "components/Loading";
 import ShareOptions from "./ShareOptions";
-import BrowserHistory from "../BrowserHistory";
 
 import {
     HalfCard,
@@ -24,12 +24,15 @@ import {
     HBodySection,
     MixedCardContainer, 
     DefaultTag,
-    CardOptionsSeparator
+    ShareRow
 } from './Card.styles';
 
 import type { IsIncludedTypeProps, Props } from './Card.types';
 import type { ComponentType } from 'react';
-import Loading from "components/Loading";
+
+import DownloadIcon from "assets/icon-download.svg";
+import ShareIcon from "assets/icon-share.svg";
+
 
 import moment from "moment";
 
@@ -44,20 +47,17 @@ const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) 
 }; // ContentBox
 
 
+
+
 const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false,
                                               experimental=false, children }: Props) => {
 
-    const preppedLabel = heading
-        .toLowerCase()
-        .replace(/["')]/g, "")
-        .replace(/[\s.(&]+/, "_");
-
     return <>
         <HalfCardHeader className={ linkToHeading ? "" : "govuk-!-margin-bottom-2"}>
-            <HalfCardHeading role={ 'heading' } aria-level={ 2 } id={ `card-heading-${ preppedLabel }` }>
+            <HalfCardHeading role={ 'heading' }
+                             aria-level={ 2 }>
                 { heading }
                 { experimental ? <DefaultTag className={ "govuk-tag" }>EXPERIMENTAL</DefaultTag> : null}
-                
             <Caption>{ caption }</Caption>
             </HalfCardHeading>
             {
@@ -81,47 +81,43 @@ const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=f
 const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, noCsv=false, ...props }: Props) => {
 
     const
-        preppedLabel = heading.toLowerCase().replace(/\s/g, "_"),
+        preppedLabel = heading2id(heading),
         Container = ({ ...props }) =>
             !fullWidth
                 ? <HalfCard {...props}/>
                 : <FullCard {...props}/>;
 
-    const { pathname } = useLocation();
-
-    const shareLabel = heading.toLowerCase().replace(/\s/g, "_").replace("(", "_").replace(")", "");
-
     return <Container role={ "article" }
+                      id={ `card-${preppedLabel}` }
                       aria-labelledby={ `card-heading-${preppedLabel}` }
                       className={ "card" }>
 
-           
         { children }
-
-            <CardOptionsSeparator/>
-
+        <ShareRow>
             {
                 url &&
                 <DropdownButton tooltip={ "Download card data" }
                                 launcherSrOnly={ `Download card data for "${ heading }"` }
                                 heading={ heading }
+                                buttonLabel={ "Download" }
+                                icon={ DownloadIcon }
                                 { ...props }>
                     <DownloadOptions heading={ heading }
                                     baseUrl={ url }
                                     noCsv={ noCsv }
                                     { ...props }/>
-                    
+
                 </DropdownButton>
             }
-
-            <ShareButton tooltip={ "Share card data" }
-                        launcherSrOnly={ "Share card data" }
-                        heading={ heading}>
-                <ShareOptions 
-                    subject={ heading }
-                    label={ shareLabel }
-                    pathname={pathname}/>
-            </ShareButton>
+            <DropdownButton tooltip={ "Share card data" }
+                            launcherSrOnly={ `Share card data for "${ heading }"` }
+                            buttonLabel={ "Share" }
+                            icon={ ShareIcon }
+                            heading={ heading }>
+                <ShareOptions subject={ heading }
+                              label={ heading2id(heading) }/>
+            </DropdownButton>
+        </ShareRow>
 
     </Container>
 
