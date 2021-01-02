@@ -1,49 +1,68 @@
 // @flow
 
 import React from "react"
+import { useLocation } from "react-router";
+
 
 import URLs from "common/urls";
+import { getParams, getParamValueFor } from "common/utils";
 
 
-const ShareOptions = ({ subject, label, pathname }) => {
+const ShareOptions = ({ subject, label }) => {
 
-    const hash =  "#card-heading-" + encodeURI(label);
-    const enc_hash = hash.replace("#", "%23");
-    const baseUrl = URLs["baseUrl"];
-    const tweetUri = "https://twitter.com/intent/tweet?url=" + 
-                        encodeURI(`${baseUrl}${pathname}`) + enc_hash + encodeURI(`&text=${subject} -`)
+    const cardLabel = `card-${label}`;
+    const hash =  `#${encodeURI(cardLabel)}`;
+    const { pathname, search: query } = useLocation();
+    const url = `https://${URLs.baseUrl}${pathname}${query.replace("&", "%26")}${hash}`;
+    const urlParams = getParams(query);
+    const areaName = getParamValueFor(urlParams, "areaName", "the United Kingdom");
+    const tweetUri = (
+        `https://twitter.com/intent/tweet?url=${encodeURI(url.replace("#", "%23"))}&text=` +
+        encodeURI(
+            `See latest charts & data for "${subject}" in ${ areaName } on ` +
+            `#UKCovid19 Dashboard.\n`
+        ).replace("#", "%23").replace("&", "%26")
+    );
 
-    const copy_to_clipboard = (href) => {
-      let textField = document.createElement('textarea');
-      textField.innerText = "" + href;
-      document.body.appendChild(textField);
-      textField.select();
-      document.execCommand('copy');
-      textField.remove();
+    const body = `See latest charts and data for "${subject}" in ${ areaName } 
+on the official UK Coronavirus Dashboard:
+
+${url}
+
+Click on the link or copy and paste it into your browser.
+`;
+
+
+    const copy_to_clipboard = () => {
+        const textField = document.createElement('textarea');
+        textField.innerText = url;
+        document.body.appendChild(textField);
+        textField.select();
+        document.execCommand('copy');
+        textField.remove();
     };
 
     return <>
 
         <a id={`copy-url-${label}`}
            className={ 'govuk-link govuk-link--no-visited-state' }
-           onClick={ (e) => copy_to_clipboard(e.target.href) }
-           rel={ 'noreferrer noopener' }
-           href={ `${pathname}${hash}` }>
-            Copy Link
+           onClick={ copy_to_clipboard }
+           href={ hash }>
+            Copy link
         </a>
 
         <a className={ 'govuk-link govuk-link--no-visited-state' }
            rel={ 'noreferrer noopener' }
-           target="_blank"
-           href={encodeURI(`mailto:?Subject=Coronavirus Dashboard - ${subject}&body=${baseUrl}${pathname}${hash}`)}>
+           target={ "_blank" }
+           href={encodeURI(`mailto:?Subject=Coronavirus Dashboard - ${subject}&body=${body}`)}>
             Email
         </a>
 
         <a className={ 'govuk-link govuk-link--no-visited-state' }
             rel={ 'noreferrer noopener' }
-            target="_blank"
+            target={ "_blank" }
             href={ tweetUri }>
-            Twitter
+            Tweet
         </a>
     </>
 
