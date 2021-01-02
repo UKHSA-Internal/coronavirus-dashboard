@@ -14,18 +14,20 @@ const BrowserHistory = ( { element } ) => {
 
     useEffect(() => {
         if ( hash ) {
-            const ele: HTMLElement = document.querySelector(hash);
+            setTimeout(() => {
+                const ele: HTMLElement = document.querySelector(hash);
 
-            if ( ele ) {
-                ele.scrollIntoView();
-            } else {
-                scrollToMainContent();
-            }
+                if ( ele ) {
+                    ele.scrollIntoView();
+                } else {
+                    scrollToMainContent();
+                }
+            }, 1000);
         }
         else {
             scrollToMainContent();
         }
-    }, [ hash, element ]);
+    }, [ hash, element, document ]);
 
     return element
     
