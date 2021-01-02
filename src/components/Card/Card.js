@@ -47,7 +47,10 @@ const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) 
 const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false,
                                               experimental=false, children }: Props) => {
 
-    const preppedLabel = heading.toLowerCase().replace(/\s/g, "_").replace("(", "_").replace(")", "");
+    const preppedLabel = heading
+        .toLowerCase()
+        .replace(/["')]/g, "")
+        .replace(/[\s.(&]+/, "_");
 
     return <>
         <HalfCardHeader className={ linkToHeading ? "" : "govuk-!-margin-bottom-2"}>
