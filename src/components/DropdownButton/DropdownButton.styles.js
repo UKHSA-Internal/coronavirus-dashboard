@@ -1,20 +1,26 @@
 import React from "react";
 
 import styled from "styled-components";
-import DownloadIcon from "assets/icon-download.svg";
 
 import type { ComponentType } from "react";
 
+
 export const DropdownLabel :ComponentType<*> =
     styled
-        .p`
+        .span
+        .attrs(({ className="", ...props }) => ({
+            ...props,
+            className: `${className} govuk-body-s`
+        }))`
             float: left;
             margin-left: 5px !important;
-            margin-top: 10px;
+            margin-top: 5px;
+            margin-bottom: 0;
             font-size: 10pt;
             font-weight: bold;
             color: #1d70b8;
         `;
+
 
 export const DropdownContainer :ComponentType<*> =
     styled
@@ -23,20 +29,22 @@ export const DropdownContainer :ComponentType<*> =
             className: `dropdown-container ${className}`,
             ...props
         }))`
-            margin-top: 12px;
-            float: left;
+            display: grid;
+            grid-template-rows: auto auto; 
         `;
 
-export const OptionsContainer :ComponentType<*> =
+
+export const Options :ComponentType<*> =
     styled
         .div`
             display: flex;
+            box-shadow: 2px 2px 5px 1px rgba(0,0,0,0.3);
             flex: 1 0 100px;
             flex-direction: column;
             position: absolute;
             z-index: 999999999;
             float: left;
-            margin-top: 14px;
+            margin-top: ${ (({ top }) => top - 5 ) }px;
             margin-right: -15px !important;
             min-width: 100px;
             
@@ -90,22 +98,20 @@ export const OptionsContainer :ComponentType<*> =
 export const Launcher: ComponentType<*> = (() => {
     const
         Container = styled.span`
-             width: 28px;
-             height: 28px;
             display: inline-block;
             position: relative;
             cursor: pointer;
-            margin-left: 10px;
             float: left;
-            border-left: 1px solid #e8e8e8;
-            border-bottom: 1px solid #e8e8e8;
+            border-right: 1px solid #e1e1e1;
             background-color: #f1f1f1;
+            background: linear-gradient(#f8f8f8, #f1f1f1);
             transition: all .3s;
                     
             &.open,
             &:hover,
             &:active {
                 background-color: #e1e1e1;
+                background: linear-gradient(#e5e5e5, #f8f8f8);
             }
                     
             &:focus {
@@ -113,25 +119,26 @@ export const Launcher: ComponentType<*> = (() => {
             }
         `,
         Node = styled.button`
-            width: 28px;
-            height: 28px;
-            padding: 2px 3px;
+            padding: 10px 25px;
+            
             outline: none;
             cursor: pointer;
-            display: flex;
-            margin-right: 1px;
-            background: url("${ DownloadIcon }");
-            background-repeat: no-repeat;
-            background-size: 24px 24px;
-            background-position: center center;
+            display: grid;
+            grid-template-columns: 24px auto;
+            align-content: center;
+            align-items: center;
                
             &:focus {
                 background-color: #ffdd00;
             }
         `;
         
-    return ({ children, ...props }) => <Container>
+    return ({ children, icon, ...props }) => <Container>
         <Node role={ "button" } { ...props }>
+            <img src={ icon }
+                 alt={ "Button icon" }
+                 aria-hidden={ true }
+                 style={{ minWidth: 20 }}/>
             { children }
         </Node>
     </Container>
