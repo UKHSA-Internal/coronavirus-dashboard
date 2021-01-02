@@ -8,6 +8,7 @@ import type { ComponentType } from 'react';
 export const HalfCard: ComponentType<*> =
     styled
         .div`
+            display: grid;
             flex: 1 1 43%;
             padding: 20px 20px 0 20px;
             border: 1px #f3f2f1 solid;
@@ -78,6 +79,7 @@ export const HalfCardSplitBody: ComponentType<*> =
 export const FullCard: ComponentType<*> =
     styled
         .article`
+            display: grid;
             flex: 1 0 60%;
             padding: 20px 20px 0 20px;
             border: 1px #f3f2f1 solid;
@@ -159,6 +161,7 @@ export const ShareRow: ComponentType<*> =
     styled
         .div`
             display: grid;
+            align-self: end;
             grid-auto-flow: column;
             justify-content: start;
             grid-column-gap: 1px;
