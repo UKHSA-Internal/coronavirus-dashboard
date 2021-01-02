@@ -168,7 +168,7 @@ export const ShareRow: ComponentType<*> =
             border-top: 1px solid #e8e8e8;
             background: #f8f8f8;
             background: linear-gradient(#f8f8f8, #f1f1f1);
-            margin-top: 10px;
+            margin-top: 20px;
             margin-left: -20px;
             margin-right: -20px;
             padding: 0;
