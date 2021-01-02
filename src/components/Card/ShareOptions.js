@@ -13,7 +13,7 @@ const ShareOptions = ({ subject, label }) => {
     const cardLabel = `card-${label}`;
     const hash =  `#${encodeURI(cardLabel)}`;
     const { pathname, search: query } = useLocation();
-    const url = `https://${URLs.baseUrl}${pathname}${query.replace(/[&]/g, "%26")}${hash}`;
+    const url = `${URLs.baseUrl}${pathname}${query.replace(/[&]/g, "%26")}${hash}`;
     const urlParams = getParams(query);
     const areaName = getParamValueFor(urlParams, "areaName", "the United Kingdom");
     const tweetUri = (
