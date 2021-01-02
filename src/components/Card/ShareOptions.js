@@ -13,15 +13,17 @@ const ShareOptions = ({ subject, label }) => {
     const cardLabel = `card-${label}`;
     const hash =  `#${encodeURI(cardLabel)}`;
     const { pathname, search: query } = useLocation();
-    const url = `https://${URLs.baseUrl}${pathname}${query.replace("&", "%26")}${hash}`;
+    const url = `https://${URLs.baseUrl}${pathname}${query.replace(/[&]/g, "%26")}${hash}`;
     const urlParams = getParams(query);
     const areaName = getParamValueFor(urlParams, "areaName", "the United Kingdom");
     const tweetUri = (
-        `https://twitter.com/intent/tweet?url=${encodeURI(url.replace("#", "%23"))}&text=` +
+        `https://twitter.com/intent/tweet?url=${encodeURI(url.replace(/[#]/g, "%23"))}&text=` +
         encodeURI(
             `See latest charts & data for "${subject}" in ${ areaName } on ` +
             `#UKCovid19 Dashboard.\n`
-        ).replace("#", "%23").replace("&", "%26")
+        )
+            .replace(/[#]/g, "%23")
+            .replace(/[&]/g, "%26")
     );
 
     const body = `See latest charts and data for "${subject}" in ${ areaName } 
