@@ -148,6 +148,16 @@ export const getParams = (uri: string, separator: string="&"): ParsedParams => {
 }; // getParams
 
 
+export const heading2id = ( heading: string ): string => {
+
+    return heading
+        .toLowerCase()
+        .replace(/["')]/g, "")
+        .replace(/[\s.(&,]+/g, "_")
+
+};  // heading2id
+
+
 export const getParamValueFor = (params: Array<ParsedParams>, keyName: string, defaultValue: string|null=null): string | null => {
 
     return params

@@ -1,13 +1,15 @@
 import type { ComponentType } from "react";
 
 
-export type DropdownButtonProps = {
+export interface DropdownButtonProps {
 
-    tooltip?: string,
     launcherSrOnly: string,
-    children?: ComponentType,
-    optionsProps?: {||},
-    launcherProps?: {||},
-    props: {||}
+    buttonLabel:    string,
+    icon:           string,
+    props:          {||},
+    tooltip?:       string,
+    children?:      ComponentType,
+    optionsProps?:  {||},
+    launcherProps?: {||}
 
-};  // DropdownButtonProps
+}  // DropdownButtonProps

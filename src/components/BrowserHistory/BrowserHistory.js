@@ -1,33 +1,35 @@
 // @flow
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 import { useLocation } from "react-router-dom";
 
-import {
-    Markdown,
-    Article
-} from './BrowserHistory.styles';
 
-
-const BrowserHistory = ({ data }) => {
+const BrowserHistory = ( { element } ) => {
 
     const { hash } = useLocation();
 
+    const scrollToMainContent = () => {
+        document.querySelector("#main-content").scrollIntoView({block: "start"});
+    }
+
     useEffect(() => {
         if ( hash ) {
-            const element: HTMLElement = document.querySelector(hash);
+            setTimeout(() => {
+                const ele: HTMLElement = document.querySelector(hash);
 
-            if ( element )
-                element.scrollIntoView();
+                if ( ele ) {
+                    ele.scrollIntoView();
+                } else {
+                    scrollToMainContent();
+                }
+            }, 1000);
         }
         else {
-            document.querySelector("#main-content").scrollIntoView({block: "start"});
+            scrollToMainContent();
         }
-    }, [ hash, data ]);
+    }, [ hash, element, document ]);
 
-    return <Article>
-        <Markdown dangerouslySetInnerHTML={{ __html: data }}/>
-    </Article>
+    return element
     
 };  // BrowserHistory
 
