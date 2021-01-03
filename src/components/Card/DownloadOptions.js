@@ -1,16 +1,18 @@
 // @flow
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { analytics } from "common/utils";
 
 
 const DownloadOptions = ({ heading, baseUrl, noCsv }) => {
 
-    analytics({
-        category: 'Downloads',
-        action: 'open',
-        label: 'Selection dropdown'
+    useEffect(() => {
+        analytics({
+            category: 'Downloads',
+            action: 'open',
+            label: 'Selection dropdown'
+        });
     });
 
     const downloadTriggered = ( type ) => analytics({
