@@ -127,6 +127,7 @@ export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionC
 export const getParams = (uri: string, separator: string="&"): ParsedParams => {
 
     return decodeURIComponent(uri)
+        .replace(/(%23|#).*$/ig, "")
         .replace("?", "")
         .replace(/\w{1,2}clid=[^&]&?/i, "")
         .split(separator)
