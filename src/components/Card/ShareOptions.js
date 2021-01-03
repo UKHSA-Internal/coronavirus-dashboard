@@ -1,11 +1,11 @@
 // @flow
 
-import React from "react"
+import React, { useEffect } from "react"
 import { useLocation } from "react-router";
-
 
 import URLs from "common/urls";
 import { getParams, getParamValueFor } from "common/utils";
+import { analytics } from "common/utils";
 
 
 const ShareOptions = ({ subject, label }) => {
@@ -34,6 +34,37 @@ ${url}
 Click on the link or copy and paste it into your browser.
 `;
 
+    useEffect(() => {
+        analytics({
+            category: 'Share',
+            action: 'open',
+            label: 'Selection dropdown'
+        });
+    });
+
+    useEffect(() => {
+        analytics({
+            category: 'Share',
+            action: 'open',
+            label: 'Selection dropdown'
+        });
+    });
+
+
+    const shareTriggered = ( type, action = () => null ) => {
+
+        analytics({
+            category: 'Share',
+            action: JSON.stringify({
+                areaName,
+                label
+            }),
+            label: type
+        });
+
+        action();
+
+    };
 
     const copy_to_clipboard = () => {
         const textField = document.createElement('textarea');
@@ -48,7 +79,7 @@ Click on the link or copy and paste it into your browser.
 
         <a id={`copy-url-${label}`}
            className={ 'govuk-link govuk-link--no-visited-state' }
-           onClick={ copy_to_clipboard }
+           onClick={ () => shareTriggered("COPY TO CLIPBOARD", copy_to_clipboard) }
            href={ hash }>
             Copy link
         </a>
@@ -56,6 +87,7 @@ Click on the link or copy and paste it into your browser.
         <a className={ 'govuk-link govuk-link--no-visited-state' }
            rel={ 'noreferrer noopener' }
            target={ "_blank" }
+           onClick={ () => shareTriggered("EMAIL") }
            href={encodeURI(`mailto:?Subject=Coronavirus Dashboard - ${subject}&body=${body}`)}>
             Email
         </a>
@@ -63,6 +95,7 @@ Click on the link or copy and paste it into your browser.
         <a className={ 'govuk-link govuk-link--no-visited-state' }
             rel={ 'noreferrer noopener' }
             target={ "_blank" }
+            onClick={ () => shareTriggered("TWEET") }
             href={ tweetUri }>
             Tweet
         </a>
