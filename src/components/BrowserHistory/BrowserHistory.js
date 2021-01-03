@@ -1,23 +1,28 @@
 // @flow
-import { useEffect } from "react";
+
+import React, { useEffect } from "react";
 
 import { useLocation } from "react-router-dom";
 
 
-const BrowserHistory = ( { element } ) => {
+const BrowserHistory = ({ element }) => {
 
-    const { hash } = useLocation();
+    let { hash, search } = useLocation();
 
     const scrollToMainContent = () => {
-        document.querySelector("#main-content").scrollIntoView({block: "start"});
+        document.querySelector("body").scrollIntoView({ block: "start" });
     }
 
     useEffect(() => {
-        if ( hash ) {
-            setTimeout(() => {
-                const ele: HTMLElement = document.querySelector(hash);
 
-                if ( ele ) {
+        if ( hash || search.search(/%23(.*)$/ig) > -1 ) {
+            setTimeout(() => {
+                console.log(`#${/%23(.*)$/ig.exec(search)?.[1]}`)
+                const ele: HTMLElement = document.querySelector(
+                    hash || (`#${/%23(.*)$/ig.exec(search)?.[1] ?? ""}`)
+                );
+
+                if (ele) {
                     ele.scrollIntoView();
                 } else {
                     scrollToMainContent();
@@ -27,11 +32,11 @@ const BrowserHistory = ( { element } ) => {
         else {
             scrollToMainContent();
         }
-    }, [ hash, element, document ]);
+    }, [hash, element, document]);
 
     return element
-    
-};  // BrowserHistory
+
+}; // BrowserHistory
 
 
 export default BrowserHistory;
