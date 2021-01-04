@@ -266,25 +266,27 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
     if ( !isIncluded(cardProps) )
         return null;
 
-    const element = <CardHeader heading={ heading } { ...cardProps }>{
-                        active &&
-                        <Radio heading={ heading }
-                            options={ options }
-                            value={ active }
-                            setValue={ setActive }/>
-                    }</CardHeader>
-
-    return <Card heading={ heading }
-                 fullWidth={ fullWidth }
-                 dataState={ dataState }
-                 { ...cardProps }>{
-        noTabCards.indexOf(cardType) > -1
-            ? <NoTabCard { ...cardProps }/>
-            : <>
-                <BrowserHistory element={element}/>
-                <TabLinkContainer { ...cardProps }/>
-             </>
-    }</Card>;
+    return <BrowserHistory>
+        <Card heading={ heading }
+              fullWidth={ fullWidth }
+              dataState={ dataState }
+              { ...cardProps }>
+            {
+                noTabCards.indexOf(cardType) > -1
+                    ? <NoTabCard { ...cardProps }/>
+                    : <>
+                        <CardHeader heading={ heading } { ...cardProps }>{
+                            active &&
+                            <Radio heading={ heading }
+                                options={ options }
+                                value={ active }
+                                setValue={ setActive }/>
+                        }</CardHeader>
+                        <TabLinkContainer { ...cardProps }/>
+                    </>
+            }
+        </Card>
+    </BrowserHistory>;
 
 };  // TestingCard
 
