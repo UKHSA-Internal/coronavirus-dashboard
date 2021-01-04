@@ -1,40 +1,46 @@
 // @flow
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useLocation } from "react-router-dom";
+import usePrevious from "hooks/usePrevious";
 
 
-const BrowserHistory = ({ element }) => {
+const BrowserHistory = ({ children }) => {
 
-    let { hash, search } = useLocation();
+    const location = useLocation();
+    let { hash, search } = location;
+    const [hashValue, setHashValue] = useState(null);
+    let prevHash = usePrevious(hashValue);
 
-    const scrollToMainContent = () => {
-        document.querySelector("body").scrollIntoView({ block: "start" });
-    }
+
+    useEffect(() => {
+        setHashValue(
+            hash && hash.length > 0
+                ? hash
+                : (`#${ /%23(.*)$/ig.exec(search)?.[1] ?? "" }`)
+        )
+    }, [ hash, search ]);
 
     useEffect(() => {
 
-        if ( hash || search.search(/%23(.*)$/ig) > -1 ) {
+        if ( hashValue !== null && hashValue !== prevHash ) {
+
             setTimeout(() => {
-                console.log(`#${/%23(.*)$/ig.exec(search)?.[1]}`)
-                const ele: HTMLElement = document.querySelector(
-                    hash || (`#${/%23(.*)$/ig.exec(search)?.[1] ?? ""}`)
-                );
+                try {
+                    const ele: HTMLElement = document.querySelector(hashValue);
 
-                if (ele) {
-                    ele.scrollIntoView();
-                } else {
-                    scrollToMainContent();
-                }
-            }, 1000);
-        }
-        else {
-            scrollToMainContent();
-        }
-    }, [hash, element, document]);
+                    if ( ele ) {
+                        ele.scrollIntoView()
+                    }
+                } catch (err) { }
 
-    return element
+            }, 1000)
+        }
+
+    }, [ hashValue ]);
+
+    return children
 
 }; // BrowserHistory
 
