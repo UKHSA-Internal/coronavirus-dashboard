@@ -17,7 +17,7 @@ const ShareOptions = ({ subject, label }) => {
     const urlParams = getParams(query);
     const areaName = getParamValueFor(urlParams, "areaName", "the United Kingdom");
     const tweetUri = (
-        `https://twitter.com/intent/tweet?url=${encodeURI(url.replace(/[#]/g, "%23"))}&text=` +
+        `https://twitter.com/intent/tweet?url=${encodeURI(url).replace(/[#]/g, "%23")}&text=` +
         encodeURI(
             `See latest charts & data for "${subject}" in ${ areaName } on ` +
             `#UKCovid19 Dashboard.\n`
