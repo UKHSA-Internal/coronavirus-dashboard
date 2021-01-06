@@ -5,33 +5,32 @@ import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
 
-export const SideNav: ComponentType<*> = (() => {
+export const SideNav: ComponentType<*> =
 
-    const Node = styled.nav`
-        max-width: 200px;
-        margin-right: 0;
-    `;
+    styled
+        .nav
+        .attrs(({ className, ...props }) => ({
+            className: `moj-side-navigation govuk-!-padding-right-4 govuk-!-padding-top-2 ${ className }`,
+            role: "navigation",
+            ...props
+        }))`
+            max-width: 200px;
+            margin-right: 0;
+        `;
 
-    return ({ className, ...props }) =>
-        <Node role={ 'navigation' }
-              className={ `moj-side-navigation govuk-!-padding-right-4 govuk-!-padding-top-2 ${className}` }
-              { ...props }/>
-})();
 
+export const SideNavMainContainer: ComponentType<*> =
 
-export const SideNavMainContainer: ComponentType<*> = (() => {
-
-    const Node = styled.ul`
-        padding: 0;
-        margin: 0;
-        list-style: none;
-    `;
-
-    return ({ className, ...props }) =>
-        <Node className={ `${ className } moj-side-navigation__list` }
-              { ...props }/>
-
-})();
+    styled
+        .ul
+        .attrs(({ className, ...props }) => ({
+            className: `${ className } moj-side-navigation__list`,
+            ...props
+        }))`
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        `;
 
 
 export const SideNavSecondaryContainer: ComponentType<*> = ({ className, ...props }) => (
@@ -43,16 +42,41 @@ export const SideNavSecondaryContainer: ComponentType<*> = ({ className, ...prop
 );
 
 
-export const SideNavListItem = ({ className, ...props }) => (
-    <li className={ `moj-side-navigation__item ${className}` } { ...props }/>
-);
+export const SideNavListItem: ComponentType<*> =
+    styled
+        .li
+        .attrs(({ className, ...props }) => ({
+            className: `moj-side-navigation__item ${className}`,
+            ...props
+        }))``;
 
 
-export const SideNavListSecondaryItem = ({ className, ...props }) => (
-    <SideNavListItem className={ `${className} govuk-!-margin-left-0 govuk-!-margin-bottom-0` } { ...props }/>
-);
+export const SideNavListSecondaryItem: ComponentType<*> =
+    styled
+        .li
+        .attrs(({ className, ...props }) => ({
+            className: `moj-side-navigation__item ${className}`,
+            ...props
+        }))`
+            &.moj-side-navigation__item--active > a {
+                padding-top: 5px !important;
+                padding-bottom: 5px !important;
+            }
+            
+            a {
+                padding-bottom: 0 !important;
+                padding-top: 0 !important;
+            }
+            
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+        `;
 
 
-export const SectionBreak = ({ className, ...props }) => (
-  <hr className={ `govuk-section-break govuk-section-break--m govuk-!-margin-top-3 govuk-!-margin-bottom-3 govuk-section-break--visible ${className}` } { ...props }/>
-);
+export const SectionBreak: ComponentType<*> =
+    styled
+        .hr
+        .attrs(({ className, ...props }) => ({
+            className: `govuk-section-break govuk-section-break--m govuk-!-margin-top-3 govuk-!-margin-bottom-3 govuk-section-break--visible ${className}`,
+            ...props
+        }))``;

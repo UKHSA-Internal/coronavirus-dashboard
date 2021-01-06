@@ -5,7 +5,8 @@ import ReactTooltip from "react-tooltip";
 import {
     Launcher,
     DropdownContainer,
-    OptionsContainer
+    Options,
+    DropdownLabel
 } from "./DropdownButton.styles";
 
 import type { ComponentType } from "react";
@@ -13,8 +14,9 @@ import type { DropdownButtonProps } from "./DropdownButton.types";
 
 
 const DropdownButton: ComponentType<DropdownButtonProps> = ({
-            tooltip, launcherSrOnly, children, optionsProps={},
-            launcherProps={}, ...props }) => {
+            tooltip, launcherSrOnly, optionsProps={},
+            buttonLabel, icon, launcherProps={},
+            children, ...props }) => {
 
     const
         preppedLabel = (props?.heading ?? "")
@@ -38,19 +40,28 @@ const DropdownButton: ComponentType<DropdownButtonProps> = ({
         }
     });
 
-    return <DropdownContainer ref={ dropdown } { ...props }>
-        <Launcher data-tip={ tooltip }
+    // const x: HTMLSpanElement;
+    // x.offsetHeight
+
+    return <DropdownContainer ref={ dropdown }>
+        <Launcher ref={ dropdown }
+                  data-tip={ tooltip }
                   data-for={ `tooltip-text-${ preppedLabel }` }
                   aria-labelledby={ `sr-only-download-${ preppedLabel }` }
                   className={ `dropdown-launcher ${ open ? "open" : "" }` }
                   onClick={ () => setOpen(open => !open) }
+                  icon={ icon }
                   { ...launcherProps }>
             <span id={ `sr-only-download-${ preppedLabel }` }
                 className={ "govuk-visually-hidden" }>{ launcherSrOnly }</span>
+            <DropdownLabel>{ buttonLabel }</DropdownLabel>
         </Launcher>
         {
             open &&
-            <OptionsContainer { ...optionsProps }>{ children }</OptionsContainer>
+            <Options { ...optionsProps }
+                              top={ dropdown?.current?.offsetHeight ?? 0 }>
+                { children }
+            </Options>
         }
         {
             tooltip &&

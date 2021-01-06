@@ -36,10 +36,11 @@ const About: ComponentType<AboutProps> = ({ ...props }) => {
             data = err ? data : String(text);
         });
 
-    const element =  <Article>
-                        <Markdown dangerouslySetInnerHTML={{ __html: data }}/>
-                    </Article>;
-    return <BrowserHistory element={element}/>
+    return <BrowserHistory>
+        <Article>
+            <Markdown dangerouslySetInnerHTML={{ __html: data }}/>
+        </Article>
+    </BrowserHistory>
 
 
 };  // About

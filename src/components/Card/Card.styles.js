@@ -8,8 +8,9 @@ import type { ComponentType } from 'react';
 export const HalfCard: ComponentType<*> =
     styled
         .div`
+            display: grid;
             flex: 1 1 43%;
-            padding: 20px;
+            padding: 20px 20px 0 20px;
             border: 1px #f3f2f1 solid;
             background-color: #f8f8f8;
             margin-top: 30px;
@@ -78,8 +79,9 @@ export const HalfCardSplitBody: ComponentType<*> =
 export const FullCard: ComponentType<*> =
     styled
         .article`
+            display: grid;
             flex: 1 0 60%;
-            padding: 20px;
+            padding: 20px 20px 0 20px;
             border: 1px #f3f2f1 solid;
             margin-top: 30px;
             background-color: #f8f8f8;
@@ -135,7 +137,6 @@ export const HBodySection: ComponentType<*> =
 
 
 export const MixedCardContainer: ComponentType<*> =
-
     styled
         .section`
             display: flex;
@@ -144,3 +145,35 @@ export const MixedCardContainer: ComponentType<*> =
             justify-items: space-between;
         `;
 
+
+export const DefaultTag: ComponentType<*> =
+    styled
+        .strong
+        .attrs(({ className="", ...props }) => ({
+            className: `${className} govuk-tag`,
+            ...props
+        }))`
+            margin-left: 1rem;
+        `;
+
+
+export const ShareRow: ComponentType<*> =
+    styled
+        .div`
+            display: grid;
+            align-self: end;
+            grid-auto-flow: column;
+            justify-content: start;
+            grid-column-gap: 1px;
+            border-top: 1px solid #e8e8e8;
+            background: #f8f8f8;
+            background: linear-gradient(#f8f8f8, #f1f1f1);
+            margin-top: 20px;
+            margin-left: -20px;
+            margin-right: -20px;
+            padding: 0;
+            
+            @media only screen and (max-width: 768px) {
+                margin-left: -9px !important;
+            }
+        `

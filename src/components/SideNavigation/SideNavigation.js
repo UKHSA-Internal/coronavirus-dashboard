@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { ComponentType } from 'react';
-import { withRouter } from 'react-router';
+import { useLocation } from 'react-router';
 import { Link } from "react-router-dom";
 
 import type { Props } from './SideNavigation.types';
@@ -16,9 +16,11 @@ import {
 } from './SideNavigation.styles';
 
 
-const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) => {
+const SideNavigation: ComponentType<Props> = ({ ...props }: Props) => {
 
-    return <SideNav aria-label="Side navigation">
+    const { pathname } = useLocation();
+
+    return <SideNav aria-label={ "Side navigation" } { ...props }>
         <SideNavMainContainer>
             <SideNavListItem className={`${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
                 <a href={ "/" } aria-current="location">Daily update</a>
@@ -62,4 +64,4 @@ const SideNavigation: ComponentType<Props> = ({ location: { pathname }}: Props) 
 
 };
 
-export default withRouter(SideNavigation);
+export default SideNavigation;

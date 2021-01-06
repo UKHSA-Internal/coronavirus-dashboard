@@ -12,24 +12,19 @@ import Select from "react-select";
 import { LocalisationForm, LocalisationFormInputs } from "./DashboardHeader.styles";
 
 
-
 const getDefaultOutput = ( pathname ) => {
 
     switch (pathname.toLowerCase()) {
-
-        case PathNames.testing:
-            return [
-                // These must be ordered.
-                "nation"
-            ];
 
         case PathNames.healthcare:
             return [
                 // These must be ordered.
                 "nhsNation",
-                "nhsRegion"
+                "nhsRegion",
+                "nhsTrust"
             ];
 
+        case PathNames.testing:
         case PathNames.deaths:
         case PathNames.cases:
         default:
@@ -37,9 +32,7 @@ const getDefaultOutput = ( pathname ) => {
                 // These must be ordered.
                 "nation",
                 "region",
-                "la"
-                // "utla",
-                // "ltla"
+                "la"  // utla + ltla
             ]
 
     } // switch

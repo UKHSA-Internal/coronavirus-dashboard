@@ -37,15 +37,7 @@ import usePrevious from "hooks/usePrevious";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 import GreenArrow from "assets/icon-arrow-green.svg";
 import RedArrow from "assets/icon-arrow-red.svg";
-
-const colours = [
-    "#e0e543",
-    "#74bb68",
-    "#399384",
-    "#2067AB",
-    "#12407F",
-    "#53084A"
-];
+import { scaleColours } from "common/utils";
 
 
 const MapLayers = [
@@ -62,12 +54,13 @@ const MapLayers = [
         minZoom: 1,
         maxZoom: 7,
         buckets: [
-            colours[0],
-            9, colours[1],
-            49, colours[2],
-            99, colours[3],
-            199, colours[4],
-            399, colours[5],
+            scaleColours[0],
+            10, scaleColours[1],
+            50, scaleColours[2],
+            100, scaleColours[3],
+            200, scaleColours[4],
+            400, scaleColours[5],
+            800, scaleColours[6],
         ]
     },
     {
@@ -83,12 +76,13 @@ const MapLayers = [
         maxZoom: 8.5,
         foreground: "utla",
         buckets: [
-            colours[0],
-            9, colours[1],
-            49, colours[2],
-            99, colours[3],
-            199, colours[4],
-            399, colours[5],
+            scaleColours[0],
+            10, scaleColours[1],
+            50, scaleColours[2],
+            100, scaleColours[3],
+            200, scaleColours[4],
+            400, scaleColours[5],
+            800, scaleColours[6],
         ]
     },
     {
@@ -104,12 +98,13 @@ const MapLayers = [
         maxZoom: 15.5,
         foreground: "ltla",
         buckets: [
-            colours[0],
-            9, colours[1],
-            49, colours[2],
-            99, colours[3],
-            199, colours[4],
-            399, colours[5],
+            scaleColours[0],
+            10, scaleColours[1],
+            50, scaleColours[2],
+            100, scaleColours[3],
+            200, scaleColours[4],
+            400, scaleColours[5],
+            800, scaleColours[6],
         ]
     }
 ];
@@ -144,7 +139,7 @@ const Arrow = ({ direction }) => {
 
 };
 
-const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, trend,
+const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, trend, postcode,
                       percentageChange, areaType, areaCode, setShowInfo, maxDate, ...props }) => {
 
     const viewPort = useResponsiveLayout(600);
@@ -204,12 +199,23 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
                     : "Data missing."
             }</p>
         }
+        {
+            postcode &&
+            <p className={ "govuk-body-s govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>
+                <a className={ "govuk-link govuk-link--no-visited-state" }
+                   target={ "_blank" }
+                   rel={ "noopener noreferrer" }
+                   href={ `/search?postcode=${postcode.replace(/[\s]/gi, "")}` }>
+                    See more data for { postcode }
+                </a>
+            </p>
+        }
     </MapToolbox>
 
 };  // InfoCard
 
 
-const SoaCard = ({ currentLocation, date, areaType, ...props }) => {
+const SoaCard = ({ currentLocation, postcodeData, date, areaType, ...props }) => {
 
     const
         [locationData, setLocationData] = useState(null),
@@ -266,6 +272,7 @@ const SoaCard = ({ currentLocation, date, areaType, ...props }) => {
                      areaCode={ currentLocation }
                      areaType={ areaType }
                      trend={ fortnightData.direction }
+                     postcode={ currentLocation === postcodeData?.msoa ? postcodeData.postcode : null }
                      { ...props }/>
 
 };
@@ -326,7 +333,7 @@ const LocalAuthorityCard = ({ currentLocation, date, areaType, ...props }) => {
 };
 
 
-const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, geoData, date,
+const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJSON, geoData, date,
                                    extrema, minData, maxData, valueIndex, children, dates, maxDate, ...props }) => {
 
     const
@@ -537,6 +544,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
 
         if ( map && postcodeData ) {
 
+            setShowInfo(true)
             const el = document.createElement("div");
             el.className = "marker";
             el.style.backgroundImage = `url(${MapMarker})`;
@@ -554,13 +562,28 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     postcodeData.geometry.coordinates[0],
                     postcodeData.geometry.coordinates[1]
                 ],
-                zoom: 10.8
+                zoom: 12.5
             });
 
+                // console.log(postcodeData)
+            // setShowInfo(true);
         }
 
     }, [postcodeData, map]);
 
+
+    useEffect(() => {
+
+        if ( currentLocation?.areaType === "msoa" ) {
+
+            setCurrentLocation(prev => ({
+                ...prev,
+                currentLocation: postcodeData?.msoa
+            }))
+
+        }
+
+    }, [ postcodeData, currentLocation?.areaType ]);
 
     useEffect(() => {
         setCurrentLocation(prev => ({
@@ -585,22 +608,37 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                 <>
                     <PostcodeSearchForm onSubmit={  (e) => {
                             e.preventDefault();
-                            const postcode = document.getElementById("postcode").value;
+                            const postcode: string = document.getElementById("postcode").value;
                             (async () => {
-                                const { data } = await axios.get(URLs.postcode, { params: { category: "postcode", search: postcode } });
+                                const { data } = await axios.get(URLs.postcode, {
+                                    params: {
+                                        category: "postcode",
+                                        search: postcode.replace(/\s/, "").toUpperCase().trim()
+                                    }
+                                });
                                 setPostcodeData(data)
                             })();
                         } }>
-                        <label htmlFor={ "postcode" } className={ "govuk-visually-hidden" }>Search by postcode</label>
+                        <label htmlFor={ "postcode" }
+                               className={ "govuk-visually-hidden" }>
+                            Search by postcode
+                        </label>
                         <input className={ "govuk-input govuk-input--width-10" }
                                name={ "postcode" }
                                maxLength={ 10 }
                                type={ "text" }
                                id={ "postcode" }
-                               pattern={ "[A-Za-z]{1,2}\\d{1,2}[A-Za-z]?\\s?\\d{1,2}[A-Za-z]{1,2}" }
+                               pattern={ "[A-Za-z]{1,2}\\d{1,2}[A-Za-z]?\\s?\\d{1,2}[A-Za-z]{1,2}\\s{0,2}" }
                                placeholder={ "Postcode" }/>
-                        <label htmlFor={ "submit-postcode" } className={ "govuk-visually-hidden" }>Search by postcode</label>
-                        <input name={ "submit-postcode" } className={ "govuk-button" } id={ "submit-postcode" } type={ "submit" } value={ "" }/>
+                        <label htmlFor={ "submit-postcode" }
+                               className={ "govuk-visually-hidden" }>
+                            Search by postcode
+                        </label>
+                        <input name={ "submit-postcode" }
+                               className={ "govuk-button" }
+                               id={ "submit-postcode" }
+                               type={ "submit" }
+                               value={ "" }/>
                     </PostcodeSearchForm>
                     <LegendContainer>
                         <ScaleLegend>
@@ -626,10 +664,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                                                         ? 0
                                                         : firstValue === 0
                                                         ? 0
-                                                        : firstValue + 2
+                                                        : firstValue
                                                 }
                                                 &nbsp;&ndash;&nbsp;
-                                                { MapLayers[zoomLayerIndex].buckets?.[index] + 1 ?? "+" }
+                                                { MapLayers[zoomLayerIndex].buckets?.[index] - 1 ?? "+" }
                                             </ScaleValue>
                                         </ScaleGroup>
                                     }
@@ -638,7 +676,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                             <ScaleGroup>
                                 <ScaleColor style={ { background: MapLayers[zoomLayerIndex].buckets.slice(-1) } }/>
                                 <ScaleValue>
-                                    { MapLayers[zoomLayerIndex].buckets.slice(-2, -1)[0] + 1 }&nbsp;+
+                                    { MapLayers[zoomLayerIndex].buckets.slice(-2, -1)[0] }&nbsp;+
                                 </ScaleValue>
                             </ScaleGroup>
                         </ScaleLegend>
@@ -651,7 +689,11 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, colours, geoJSON, 
                     ? null
                     : currentLocation.areaType !== "msoa"
                     ? <LocalAuthorityCard { ...currentLocation } date={ date } maxDate={ maxDate } setShowInfo={ setShowInfo }/>
-                    : <SoaCard { ...currentLocation } date={ date } maxDate={ maxDate } setShowInfo={ setShowInfo }/>
+                    : <SoaCard { ...currentLocation }
+                               date={ date }
+                               postcodeData={ postcodeData }
+                               maxDate={ maxDate }
+                               setShowInfo={ setShowInfo }/>
             }
             </MapContainer>
         <span style={{ textAlign: "right" }}>

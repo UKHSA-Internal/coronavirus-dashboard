@@ -10,12 +10,10 @@ export const MapContainer: ComponentType<*> =
     styled
         .div`
             position: relative;
-            width: 100%;
             height: 75vh;
             
             #map {
                 height: 75vh;
-                width: 100%;
                 border: 1px solid black;
             }
         `;

@@ -74,6 +74,10 @@ export const TableContainer: ComponentType<*> =
                 background-color: transparent !important;
             }
             
+            .govuk-table {
+                font-size: 12pt;
+            }
+            
             @media only screen and (max-width: 768px) {
                 .govuk-table {
                     font-size: 10pt;

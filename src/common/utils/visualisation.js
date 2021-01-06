@@ -37,111 +37,242 @@ export const
 ];
 
 
-export const getPlotData = (fields: Array<{}>, rawData, xKey="date" ) => {
+export const scaleColours = [
+    "#e0e543",
+    "#74bb68",
+    "#399384",
+    "#2067AB",
+    "#12407F",
+    "#53084A",
+    "#2B0226"
+];
+
+
+const processArrayField = ({ field, rawData, xKey }) => {
+
+    const filterKey = field?.filters?.parameter;
+    const filterPassValue = field?.filters?.value;
+    const baseValue = field?.value;
+    const outputMetric = field?.metric;
+
+    if ( !Array.isArray(rawData) ) return [];
+
+    return rawData
+        ?.filter(row => (row?.[baseValue]?.length ?? 0) > 0)
+        ?.map(row => ({
+                [xKey]: row?.[xKey],
+                [baseValue]: row?.[baseValue]
+                    ?.filter(nestedRow => nestedRow?.[filterKey] === filterPassValue)
+            })
+        )
+        ?.reduce((acc, row) =>
+            [
+                ...acc,
+                {
+                    [baseValue]: row?.[baseValue]?.[0]?.[outputMetric] ?? null,
+                    [xKey]: row?.[xKey]
+                }
+            ],
+            []
+        )
+        ?? []
+
+};  // processArrayField
+
+
+const processHighlightedField = ({ field, index, xData, yData }) => {
+
+    let {
+        from: hlFrom = NaN,
+        to: hlTo = NaN,
+        colour: hlColour = index,
+        label: hlLabel = field.label
+    } = field?.highlight ?? {};
+
+    hlFrom = hlFrom < 0 ? yData.length + hlFrom : hlFrom;
+    hlTo = hlTo < 0
+        ? yData.length - hlTo
+        : hlTo === 0 ? yData.length : hlTo;
+
+    let highlightedY = [...yData].reverse().slice(hlFrom, hlTo);
+    let highlightedX = [...xData].reverse().slice(hlFrom, hlTo);
+
+    const highlightedSection = {
+        name: hlLabel,
+        x: highlightedX,
+        y: highlightedY,
+        hovertemplate: "%{y}",
+        type: field?.type ?? "bar",
+        marker: {
+            color: colours[hlColour]
+        }
+    };
+
+    yData = yData.reverse().filter((val, ind) => ind < hlFrom || ind >= hlTo);
+    xData = xData.reverse().filter((val, ind) => ind < hlFrom || ind >= hlTo);
+
+    return {
+        xData,
+        yData,
+        highlightedSection
+    }
+
+};  // processHighlightedField
+
+
+const processGenericField = ({ field, index, xData, yData }) => {
+
+    const baseColour = colours[field?.colour ?? index];
+    const { r, g, b } = hexToRgb(colours[field?.colour ?? index]);
+
+    // `hl` represents the `highlight` field.
+    let plotFeatures;
+
+    switch ( field.type ) {
+        case "bar":
+            plotFeatures = {
+                type: field.type,
+                marker: {
+                    color: baseColour
+                }
+            }
+            break;
+
+        case "line":
+            plotFeatures = {
+                type: field.type,
+                mode: 'lines',
+                ...(field?.fill ?? true)
+                    ? {
+                        fill: 'tozeroy',
+                        fillcolor: `rgba(${ r },${ g },${ b },${ field?.solidFill ? 1 : 0.1})`
+                    }:
+                    {},
+                line: {
+                    width: 3,
+                    color: colours[field?.colour ?? index]
+                }
+            };
+            break;
+
+    }
+
+    const trimLength = (field?.rollingAverage?.clipEnd ?? 0) + 3;
+
+    yData = (field.rollingAverage && (typeof field.rollingAverage === 'object'))
+        ? [
+            ...new Array(trimLength).fill(null),
+            ...movingAverage(yData, field?.rollingAverage?.window ?? 7)
+                .slice(trimLength, yData.length),
+        ]
+        : field.rollingAverage === true
+            ? movingAverage(yData, 7)
+            : yData
+
+    return {
+        name: field.label,
+        x: xData,
+        y: yData,
+        hovertemplate: "%{y}",
+        ...(field?.overlaying)
+            ? {
+                yaxis: "y2",
+                overlaying: field.overlaying,
+                side: field.side,
+            }
+            : {},
+        ...plotFeatures
+    }
+
+};  // processGenericField
+
+
+export const getPlotData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 
     const graphObjects = [];
 
+    for ( let index = 0; index < fields.length; index ++ ) {
 
-    fields.map((field, index) => {
+        const field = fields[index];
 
-        const
-            data = dropLeadingZeros(rawData, field.value),
-            { r, g, b } = hexToRgb(colours[field?.colour ??  index]);
+        let xData, yData, data;
 
-        let xData = data?.map(item => item?.[xKey] ?? null) ?? [];
+        if ( field?.isArray ) {
+            data = processArrayField({ field, rawData, xKey })
+        }
 
-        let
-            yData = data?.map(variable => variable?.[field.value] ?? null) ?? [],
-            plotFeatures;
+        data = dropLeadingZeros(data || rawData, field.value);
+        xData = data?.map(item => item?.[xKey] ?? null) ?? [];
+        yData = data?.map(variable => variable?.[field.value] ?? null) ?? [];
 
-        const baseColour = colours[field?.colour ?? index];
-
-        // `hl` represents the `highlight` field.
         if ( field?.highlight ) {
-
-            let {
-                from: hlFrom = NaN,
-                to: hlTo = NaN,
-                colour: hlColour = index,
-                label: hlLabel = field.label
-            } = field?.highlight ?? {};
-
-            hlFrom = hlFrom < 0 ? yData.length + hlFrom : hlFrom;
-            hlTo = hlTo < 0
-                ? yData.length - hlTo
-                : hlTo === 0 ? yData.length : hlTo;
-
-            let highlightedY = [...yData].reverse().slice(hlFrom, hlTo);
-            let highlightedX = [...xData].reverse().slice(hlFrom, hlTo);
-
-            graphObjects.push({
-                name: hlLabel,
-                x: highlightedX,
-                y: highlightedY,
-                hovertemplate: "%{y}",
-                type: field?.type ?? "bar",
-                marker: {
-                    color: colours[hlColour]
-                }
-            })
-
-            yData = yData.reverse().filter((val, ind) => ind < hlFrom || ind >= hlTo);
-
-            xData = xData.reverse().filter((val, ind) => ind < hlFrom || ind >= hlTo);
-
+            const highlightedData = processHighlightedField({ field, index, xData, yData });
+            xData = highlightedData.xData;
+            yData = highlightedData.yData;
+            graphObjects.push(highlightedData.highlightedSection);
         }
 
-        switch ( field.type ) {
-            case "bar":
-                plotFeatures = {
-                    type: field.type,
-                    marker: {
-                        color: baseColour//colourArray//colours[field?.colour ?? index]
-                    }
-                }
-                break;
+        graphObjects.push(processGenericField({ field, index, xData, yData }));
 
-            case "line":
-                plotFeatures = {
-                    type: field.type,
-                    mode: 'lines',
-                    ...(field?.fill ?? true)
-                        ? {
-                            fill: 'tozeroy',
-                            fillcolor: `rgba(${ r },${ g },${ b },0.1)`
-                        }:
-                        {},
-                    line: {
-                        width: 3,
-                        color: colours[field?.colour ?? index]
-                    }
-                };
-                break;
-
-        }
-
-        const trimLength = (field?.rollingAverage?.clipEnd ?? 0) + 3;
-
-        yData = (field.rollingAverage && (typeof field.rollingAverage === 'object'))
-            ? [
-                ...new Array(trimLength).fill(null),
-                ...movingAverage(yData, field?.rollingAverage?.window ?? 7)
-                    .slice(trimLength, yData.length),
-            ]
-            : field.rollingAverage === true
-                ? movingAverage(yData, 7)
-                : yData
-
-        graphObjects.push({
-            name: field.label,
-            x: xData,
-            y: yData,
-            hovertemplate: "%{y}",
-            ...plotFeatures
-        })
-
-    });
+    }
 
     return graphObjects
 
-};  // getYAxisData
+};  // getPlotData
+
+
+export const getHeatmapData = ( fields: Array<{}>, rawData, xKey="date" ) => {
+
+    const graphObjects = [];
+
+    for ( const { value, amplitude, parameter, metrics, ...rest } of fields ) {
+
+        const result = {
+            xData: [],
+            yData: [],
+            zData: [],
+            ...rest,
+        };
+
+        for ( const { label } of metrics ) {
+            result.yData.push(label)
+        }
+
+        for ( let index = 0; index < rawData.length; index++ ) {
+            result.xData.push(rawData?.[index]?.[xKey])
+        }
+
+        for ( const { value: paramValue } of metrics ) {
+
+            const zData = [];
+            let tempData;
+
+            for ( let index = 0; index < rawData.length; index++ ) {
+
+                tempData = rawData
+                        ?.[index]
+                        ?.[value]
+                        ?.filter(row => row?.[parameter] === paramValue);
+
+                if ( (tempData?.length ?? 0) > 0 ) {
+                    zData.push(
+                        tempData
+                            ?.[0]
+                            ?.[amplitude]
+                        ?? null
+                    );
+                }
+
+            }
+
+            result.zData.push(zData);
+
+        }
+
+        graphObjects.push(result);
+
+    }
+
+    return graphObjects
+
+};  // getHeatmapData

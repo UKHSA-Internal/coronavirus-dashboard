@@ -21,10 +21,9 @@ const ChangeLog = () => {
         });
     };
 
-    const element = <ChangeLogComponent data={data} changeTypes={changeTypes} />
-
-    return <BrowserHistory element={element}/>
-
+    return <BrowserHistory>
+                <ChangeLogComponent data={data} changeTypes={changeTypes} />
+            </BrowserHistory>
 }; // ChangeLog
 
 

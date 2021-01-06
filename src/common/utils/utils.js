@@ -127,7 +127,9 @@ export const createQuery = ( args: ParsedParams, joinBy: string="&", definitionC
 export const getParams = (uri: string, separator: string="&"): ParsedParams => {
 
     return decodeURIComponent(uri)
+        .replace(/(%23|#).*$/ig, "")
         .replace("?", "")
+        .replace(/\w{1,2}clid=[^&]&?/i, "")
         .split(separator)
         .reduce((acc, item) => {
             const found = /^([a-z]+)([=<>!]{1,2})(.+)$/i.exec(item)
@@ -145,6 +147,16 @@ export const getParams = (uri: string, separator: string="&"): ParsedParams => {
         }, [])
 
 }; // getParams
+
+
+export const heading2id = ( heading: string ): string => {
+
+    return heading
+        .toLowerCase()
+        .replace(/["')]/g, "")
+        .replace(/[\s.(&,]+/g, "_")
+
+};  // heading2id
 
 
 export const getParamValueFor = (params: Array<ParsedParams>, keyName: string, defaultValue: string|null=null): string | null => {

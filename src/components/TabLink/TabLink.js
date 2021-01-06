@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
     MainContainer,
@@ -11,14 +11,13 @@ import {
 
 import type { ComponentType } from "react";
 
-import { dropLeadingZeros, getPlotData, groupBy } from "common/utils";
-import { DataTable } from "components/GovUk";
+import { dropLeadingZeros, getHeatmapData, getPlotData, groupBy } from "common/utils";
+import { DataTable, NestedDataTable } from "components/GovUk";
 import useApi from "hooks/useApi";
 import Loading from "components/Loading";
 import Metadata from "components/Metadata";
 import Abstract from "components/Abstract";
-
-const Plotter = lazy(() => import('components/Plotter'));
+import Plotter from "components/Plotter";
 
 
 const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
@@ -27,6 +26,7 @@ const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
 
         case "recentData":
         case "chart":
+        case "heatmap":
             return <TabContent Component={ TabContentRaw } { ...props }/>;
 
         case "map":
@@ -100,12 +100,18 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
 
             if ( barType ) layout["barmode"] = barType;
 
+            return <Plotter data={ getPlotData(fields, data, xKey) }
+                            layout={ layout }
+                            { ...props }/>;
 
-            return <Suspense fallback={ <Loading/> }>
-                <Plotter data={ getPlotData(fields, data, xKey) }
-                         layout={ layout }
-                         { ...props }/>
-            </Suspense>
+        case "heatmap":
+            return <Plotter type={ "Heatmap" }
+                            layout={{}}
+                            data={ getHeatmapData(fields, data, xKey) }
+                            { ...props }/>;
+
+        case "nestedTable":
+            return <NestedDataTable fields={ fields } data={ data } { ...props }/>;
 
         case "table":
             return <DataTable fields={ fields } data={ data } { ...props }/>;

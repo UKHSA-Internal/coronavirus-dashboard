@@ -6,31 +6,37 @@ import URLs from "common/urls";
 
 import axios from "axios";
 
-const useGenericAPI  = ( urlName: string, defaultResponse= null, responseType="json" ) => {
+import type { ResponseType } from "axios";
 
 
-    const [ data, setData ] = useState(defaultResponse);
+const useGenericAPI  = ( urlName: string, defaultResponse: any= null, responseType: ResponseType="json" ) => {
+
+
+    const [ response, setResponse ] = useState(defaultResponse);
 
     useEffect( () => {
     
         (async () => {
         
             try {
-                const { data: dt, status } = await axios.get(URLs[urlName], {responseType: responseType});
+                const { data, status } = await axios.get(URLs[urlName], {responseType: responseType});
 
-                status < 400
-                    ? setData(dt)
-                    : setData(defaultResponse);
+                if ( status < 400 )
+                    setResponse(data);
+                else if ( response !== defaultResponse ) {
+                    setResponse(defaultResponse);
+                    console.warn(`Failed request for "${urlName}" with status ${status}`);
+                }
+
             } catch (e) {
                 console.log("error")
                 console.error(e)
             }
         })();
     
-    }, [urlName]);
+    }, [ urlName ]);
 
-   
-    return data;
+    return response;
 
 };  //useGenericAPI
 
