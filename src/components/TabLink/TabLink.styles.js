@@ -14,6 +14,16 @@ export const MainContainer = (() => {
 
 })();
 
+export const MainContainerLanguageTabs = (() => {
+
+    return styled.div`
+        display: flex !important;
+        flex-direction: column !important;
+        margin-bottom: 150px;
+    `
+
+})();
+
 
 export const TabsContainer = (() => {
 

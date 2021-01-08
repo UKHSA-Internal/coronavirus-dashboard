@@ -116,7 +116,7 @@ const ApiDocs: ComponentType<*> = ({ ...props }) => {
 
             <article>
                 <header>
-                    <h3>Software Development Kits (SDK)</h3>
+                    <h3 id={"sdks"}>Software Development Kits (SDK)</h3>
                 </header>
                 <p>
                     In addition to the examples in this document, we have also developed
