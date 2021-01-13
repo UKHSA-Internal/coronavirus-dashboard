@@ -13,6 +13,7 @@ export const TH: ComponentType<*> =
             scope: scope
         }))`
             padding: 8px 5px;
+            vertical-align: middle;
             
             &.govuk-table__header--date {
                 max-width: 4rem;
