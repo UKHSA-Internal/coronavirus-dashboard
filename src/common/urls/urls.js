@@ -55,6 +55,7 @@ URLs.pageLayouts = {
     healthcare: 'healthcare.json',
     deaths: 'deaths.json',
     cases: 'cases.json',
+    vaccinations: 'vaccinations.json',
 }
 
 export default URLs;
