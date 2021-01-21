@@ -11,6 +11,7 @@ import { formatDate } from "react-day-picker/moment";
 import moment from "moment";
 
 import FormItem, { Form } from "components/Formset";
+import { sortByDate } from "common/utils";
 
 import {
     Container,
@@ -22,33 +23,111 @@ import {
     ChangeLogAnchor,
 } from './ChangeLogComponent.styles';
 
+import type { ChangeLogInputProps } from "./ChangeLogComponent.types";
+import type { ComponentType } from "react";
+
+
 const THIS_MONTH_TEXT = "This month";
 
 const today = new Date();
 
 const THIS_MONTH = "" +  today.getMonth() + today.getFullYear();
 
-const ChangeLogComponent = ( { data, changeTypes={} }) => {
+
+const ChangeLogTextSearch: ComponentType = ({ changeLogSearch, setChangeLogSearch }) => {
+
+        const inputRef = useRef();
+
+        useEffect(() => {
+            if (changeLogSearch) inputRef.current.focus();
+        }, [ changeLogSearch ]);
+
+        return <FormItem aria-labelledby={ "aria-search-filter-label" }
+                         aria-describedby={ "aria-search-filter-descr" }
+                         width={ "full" }>
+            <span
+                id={ "search-filter-label" }
+                className={ "govuk-label govuk-label--s" }>
+                Search
+            </span>
+
+            <div aria-describedby={ "search-filter-descr" }
+                 aria-labelledby={ "search-filter-label" }>
+                <input
+                    id={ "search-filter-id" }
+                    value={ changeLogSearch }
+                    ref={inputRef}
+                    className={ "govuk-input govuk-input--width-10" }
+                    type={ "text" }
+                    onChange={ item => setChangeLogSearch(item.target.value) }/>
+            </div>
+        </FormItem>
+
+}; // ChangeLogTextSearch
+
+
+const ChangeLogType: ComponentType = ({ data, changeTypes, changeLogType, setChangeLogType }) => {
+
+
+    return <FormItem aria-labelledby={ "aria-type-filter-label" }
+                    aria-describedby={ "aria-type-filter-descr" }
+                    width={ "full" }>
+
+        <span id={ "type-filter-label" }
+              className={ "govuk-label govuk-label--s" }>
+            Type
+        </span>
+
+        {
+            changeTypes.map((key, index) => {
+
+                return <div aria-describedby={ "type-filter-descr" }
+                            aria-labelledby={ "type-filter-label" }
+                            className="govuk-!-margin-bottom-1">
+                    <label htmlFor={ key }>
+                        <input
+                            id={ `type-filter-${index}` }
+                            key={ `type-filter-${index}` }
+                            name={key}
+                            type="checkbox"
+                            checked={changeLogType[key]}
+                            onChange={ event =>
+                                setChangeLogType( prev => {
+                                    event.target.checked
+                                        ? prev.add(event.target.name)
+                                        : prev.remove(event.target.name);
+                                    return prev
+                                })
+                            }/>
+                            { key }
+                    </label>
+                </div>
+
+                })
+
+            }
+
+    </FormItem>
+
+}; // ChangeLogType
+
+
+const ChangeLogComponent: ComponentType = ( { data, ...props }: ChangeLogInputProps) => {
 
     const changeMonthRef = useRef(null);
     const changeDateRef = useRef(null);
 
     const timestamp = useTimestamp();
 
-    const [changeLogType, setChangeLogType] = useState({});
+    const changeTypes = new Set(data.map(item => item.type));
+    const [changeLogType, setChangeLogType] = useState(changeTypes);
     const [changeLogSearch, setChangeLogSearch] = useState("");
-
-    useEffect(() => {
-
-        setChangeLogType(changeTypes)
-    
-    }, []);
 
     const filterByDate = (item) => {
 
         const today = moment(timestamp).local(true).toDate().getTime();
         const changeDate = new Date(item.date).getTime();
-        return changeDate <= today ? true : false; 
+        return changeDate <= today;
 
     }; // filterByDate
 
@@ -105,18 +184,6 @@ const ChangeLogComponent = ( { data, changeTypes={} }) => {
         return true;
 
     }; // filterData
-
-
-    // reverse sort
-    const sortData = (a, b) => {
-        const
-            dateA = new Date(a.date),
-            dateB = new Date(b.date);
-
-        return dateB.getTime() - dateA.getTime();
-
-    }; // sortData
-
 
     const ChangeLogItemBody = ({ change }) => {
 
@@ -230,79 +297,6 @@ const ChangeLogComponent = ( { data, changeTypes={} }) => {
     
     }; // ChangeLogItem
 
-    const ChangeLogType = () => {
-        return <FormItem aria-labelledby={ "aria-type-filter-label" }
-                        aria-describedby={ "aria-type-filter-descr" }
-                        width={ "full" }>
-
-                    <span
-                        id={ "type-filter-label" }
-                        className={ "govuk-label govuk-label--s" }>
-                        Type
-                    </span>
-
-
-                    {
-                        data.type && Object.keys(data.type).map((key, index) => {
-
-                            return <div aria-describedby={ "type-filter-descr" }
-                                        aria-labelledby={ "type-filter-label" }
-                                        className="govuk-!-margin-bottom-1">
-                                <label htmlFor={ key }>
-                                    <input
-                                        id={ `type-filter-${index}` }
-                                        key={ `type-filter-${index}` }
-                                        name={key}
-                                        type="checkbox"
-                                        checked={changeLogType[key]}
-                                        onChange={(type) =>
-                                            setChangeLogType( {...changeLogType, [key]: !changeLogType[key] }) }/>
-                                        {
-                                            data.type[key] &&
-                                             data.type[key][0].toUpperCase() + data.type[key].slice(1).toLowerCase()
-                                        }
-                                </label>
-                            </div>
-
-                            })
-                            
-                        }
-                    
-                </FormItem>
-    }; // ChangeLogType
-
-    const ChangeLogTextSearch = () => {
-
-        const inputRef = useRef();
-
-        useEffect(() => {
-            if (changeLogSearch) inputRef.current.focus();
-        }, [ changeLogSearch ]);
-
-        return <FormItem aria-labelledby={ "aria-search-filter-label" }
-                        aria-describedby={ "aria-search-filter-descr" }
-                        width={ "full" }>
-                    <span
-                        id={ "search-filter-label" }
-                        className={ "govuk-label govuk-label--s" }>
-                        Search
-                    </span>
-
-                    <div aria-describedby={ "search-filter-descr" }
-                         aria-labelledby={ "search-filter-label" }>
-                        <input 
-                            id={ "search-filter-id" }
-                            value={ changeLogSearch }
-                            ref={inputRef}
-                            className={ "govuk-input govuk-input--width-10" }
-                            type={ "text" }
-                            onChange={ (item) => setChangeLogSearch(item.target.value) }/>
-                    </div>
-                </FormItem>
-
-    }; // ChangeLogTextSearch
-
-    
     return <>
 
         <Container>
@@ -315,7 +309,7 @@ const ChangeLogComponent = ( { data, changeTypes={} }) => {
         
                 <div className={ "govuk-!-margin-top-1" }>
                     { 
-                        data.changeLog && data.changeLog.filter(filterData).sort(sortData).map((change, index) => { 
+                        data.changeLog && data.changeLog.filter(filterData).sort(sortByDate).map((change, index) => {
                             return<ChangeLogItem id={ `cl-item-${index}` }
                                                  key={ `cl-item-${index}` }
                                                  index={ index }
@@ -333,11 +327,8 @@ const ChangeLogComponent = ( { data, changeTypes={} }) => {
                 <div className={ "govuk-!-margin-top-1" }>
 
                     <Form className={ "govuk-!-padding-left-0 govuk-!-padding-right-5" }>
-
-                        <ChangeLogTextSearch/>
-
-                        <ChangeLogType/>
-                        
+                        <ChangeLogTextSearch changeLogSearch={ changeLogSearch } setChangeLogSearch={ setChangeLogSearch }/>
+                        <ChangeLogType data={ data } changeTypes={ changeTypes } changeLogType={ changeLogType } setChangeLogType={ setChangeLogType }/>
                     </Form>
                 </div>      
             </SideContent>
