@@ -13,5 +13,5 @@ export interface ChangeLogItemType {
 }
 
 export interface ChangeLogInputProps extends ElementProps {
-    data: ChangeLogItemType
+    data: ChangeLogItemType[]
 }
