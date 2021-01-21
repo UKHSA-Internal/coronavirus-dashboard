@@ -14,16 +14,10 @@ const ChangeLog = () => {
 
     if ( !data ) return <Loading/>;
 
-    let changeTypes = {};
-    if (data.type) {
-        Object.keys(data.type).map(key => {
-            changeTypes[key] = false;
-        });
-    };
-
     return <BrowserHistory>
-                <ChangeLogComponent data={data} changeTypes={changeTypes} />
-            </BrowserHistory>
+        <ChangeLogComponent data={data?.changeLog ?? []}/>
+    </BrowserHistory>
+
 }; // ChangeLog
 
 
