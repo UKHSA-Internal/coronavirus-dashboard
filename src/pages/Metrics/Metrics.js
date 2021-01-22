@@ -3,7 +3,6 @@
 import React, { Fragment } from 'react';
 import type { ComponentType } from 'react';
 
-import PageTitle from 'components/PageTitle';
 import type { Props } from './Metrics.types';
 
 import { Container } from './Metrics.styles';
@@ -29,138 +28,74 @@ const MetricHeader = [
     'Wales'
 ]
 
-const MetricData: ComponentType<Props> = ({ metric }: Props) => {
+const MetricItem: ComponentType<Props> = ({ item, metric }: Props) => {
+
+    const areaType = [
+        'nation',
+        'region',
+        'utla',
+        'ltla',
+        'overview',
+        'msoa'
+    ]
 
     return <>
 
-            <div>
-                
-            </div>
+    { areaType.map(at => {
 
-            {/* Nation */}
-            <div>
-                nation
-            </div>
-            <div>
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                *
-            </div>
+        const values = metric[item][at]
 
-            {/* Region */}
+        return <>
+        {/* Metric */}
+        <div style={{height: '2px'}}>
+            {at === 'utla' ? item : null}
+        </div>   
+         {/* Area Type */}
+        <div style={{height: '2px'}}>
+            {at}
+        </div>
+        {/* UK */}
+        <div style={{height: '2px'}}>
+            {values.includes("K") ? "*" : null}
+        </div>
+        {/* England */}
+        <div style={{height: '2px'}}>
+            {values.includes("E") ? "*" : null}
+        </div>
+        {/* Scotland */}
+        <div style={{height: '2px'}}>
+            {values.includes("S") ? "*" : null}
+        </div>
+        {/* NI */}
+        <div style={{height: '2px'}}>
+            {values.includes("N") ? "*" : null}
+        </div>
+        {/* Wales */}
+        <div style={{height: '2px'}}>
+            {values.includes("W") ? "*" : null}
+        </div>
 
-            <div>
-            </div>
-            <div>
-                region
-            </div>
-            <div>
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                *
-            </div>
+      </>
+    })}
+  
+  </>
+} // MetricItem
 
-             {/* Utla */}
+const MetricData: ComponentType<Props> = ({ metric }: Props) => {
 
-             <div>
-                 {Object.keys(metric)[0]}
-            </div>
-            <div>
-                utla
-            </div>
-            <div>
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                *
-            </div>
+    const item = Object.keys(metric)[0];
 
-             {/* ltla */}
-
-             <div>
-            </div>
-            <div>
-                ltla
-            </div>
-            <div>
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                *
-            </div>
-
-             {/* overview */}
-
-             <div>
-            </div>
-            <div>
-                overview
-            </div>
-            <div>
-                *
-            </div>
-            <div>
-                
-            </div>
-            <div>
-               
-            </div>
-            <div>
-               
-            </div>
-            <div>
-                
-            </div>
-
-
-
-
-          </>
-}
+    return <MetricItem item={ item }
+                        metric={ metric }/>
+   
+} // MetricData
 
 const MetricDataHeader: ComponentType<Props> = ({ header }: Props) => {
 
     return header.map(item => {
-                return <div>{item}</div> 
-            });
-                 
-              
-          
-}
+                return <div style={{height: '2px'}}>{item}</div> 
+            });         
+} // MetricDataHeadrer
 
 const Metrics: ComponentType<Props> = ({ }: Props) => {
 
@@ -188,12 +123,26 @@ const Metrics: ComponentType<Props> = ({ }: Props) => {
                     'dateDeprecated': ''
                 }
             },
+            {
+                'newCasesByPublishDate': {
+                    'overview': 'K',
+                    'nation': 'ENSW',
+                    'region': 'E',
+                    'utla': 'ENSW',
+                    'ltla': 'ENSW',
+                    'msoa': 'E',
+                    'tag': ['cases', 'eventDate'],
+                    'description': 'changeInCumCasesBySpecimenDate.md',
+                    'methodology': '1 paragraph',
+                    'abstract': 'Abstract',
+                    'dateAdded': '2021-01-21',
+                    'dateDeprecated': ''
+                }
+            },
         ]
     }
 
     return ( <Fragment>
-
-        <PageTitle title={"Metrics"} />
 
         <Container>
             <MetricDataHeader header={ MetricHeader }/>
@@ -212,6 +161,6 @@ const Metrics: ComponentType<Props> = ({ }: Props) => {
     </Fragment>
 
     );
-};
+}; // Metrics
 
 export default Metrics

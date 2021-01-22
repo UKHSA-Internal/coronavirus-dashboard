@@ -11,5 +11,6 @@ export const Container: ComponentType<*> =
             display: grid;
             grid-gap: 2rem;
             grid-template-rows: 5px 1fr; 
+            margin-top: 20px;
             grid-template-columns: repeat(7, 1fr);
         `;
