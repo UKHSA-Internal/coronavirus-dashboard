@@ -9,6 +9,8 @@ import { Container } from './Metrics.styles';
 
 import Loading from "components/Loading";
 
+import GreenTick from "assets/green-tick.svg";
+
 import useGenericAPI from 'hooks/useGenericAPI';
 
 const MetricHeader = [
@@ -56,23 +58,23 @@ const MetricItem: ComponentType<Props> = ({ item, metric }: Props) => {
         </div>
         {/* UK */}
         <div style={{height: '2px'}}>
-            {values.includes("K") ? "*" : null}
+            {values.includes("K") ? <img src={ GreenTick } width={ "14px" } /> : null}
         </div>
         {/* England */}
         <div style={{height: '2px'}}>
-            {values.includes("E") ? "*" : null}
+            {values.includes("E") ? <img src={ GreenTick } width={ "14px" } /> : null}
         </div>
         {/* Scotland */}
         <div style={{height: '2px'}}>
-            {values.includes("S") ? "*" : null}
+            {values.includes("S") ? <img src={ GreenTick } width={ "14px" } /> : null}
         </div>
         {/* NI */}
         <div style={{height: '2px'}}>
-            {values.includes("N") ? "*" : null}
+            {values.includes("N") ? <img src={ GreenTick } width={ "14px" } /> : null}
         </div>
         {/* Wales */}
         <div style={{height: '2px'}}>
-            {values.includes("W") ? "*" : null}
+            {values.includes("W") ? <img src={ GreenTick } width={ "14px" } /> : null}
         </div>
 
       </>
@@ -146,7 +148,6 @@ const Metrics: ComponentType<Props> = ({ }: Props) => {
 
         <Container>
             <MetricDataHeader header={ MetricHeader }/>
-
              {
                 data.metrics.map(item => {
 
