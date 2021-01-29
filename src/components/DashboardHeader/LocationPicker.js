@@ -24,6 +24,11 @@ const getDefaultOutput = ( pathname ) => {
                 "nhsTrust"
             ];
 
+        case PathNames.vaccinations:
+            return [
+                "nation",
+            ];
+
         case PathNames.testing:
         case PathNames.deaths:
         case PathNames.cases:

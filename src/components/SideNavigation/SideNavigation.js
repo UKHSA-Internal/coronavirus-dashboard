@@ -38,6 +38,10 @@ const SideNavigation: ComponentType<Props> = ({ ...props }: Props) => {
                 <Link to={ "/details/healthcare" }>Healthcare</Link>
             </SideNavListItem>
 
+            <SideNavListItem className={`${pathname === '/details/vaccinations' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/vaccinations" }>Vaccinations</Link>
+            </SideNavListItem>
+
             <SideNavListItem className={`${pathname === '/details/deaths' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/deaths" }>Deaths</Link>
             </SideNavListItem>

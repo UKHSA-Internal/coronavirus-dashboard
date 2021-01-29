@@ -16,6 +16,7 @@ export const PathNames = {
     cases: "/details/cases",
     testing: "/details/testing",
     healthcare: "/details/healthcare",
+    vaccinations: "/details/vaccinations",
     deaths: "/details/deaths",
     aboutData: "/details/about-data",
     cookies: "/details/cookies",
@@ -44,7 +45,8 @@ export const LocationBannerMapper = {
     "/details/cases": "Cases",
     "/details/testing": "Testing",
     "/details/healthcare": "Healthcare",
-    "/details/deaths": "Deaths"
+    "/details/deaths": "Deaths",
+    "/details/vaccinations": "Vaccinations"
 };
 
 
@@ -53,6 +55,7 @@ export const PathWithHeader = [
     "/details/testing",
     "/details/cases",
     "/details/healthcare",
+    "/details/Vaccinations",
     "/details/deaths",
     "/details/new-service",
     "/details/developers-guide"

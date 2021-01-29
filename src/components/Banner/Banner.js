@@ -42,24 +42,6 @@ const BannerBody: ComponentType<*> = ({ rawBody, ...props }) => {
 };  // Banner Body
 
 
-const bannerFilter = ( timestamp: string, pathname: string ): (BannerType => boolean) => {
-
-    const ts = moment(timestamp);
-
-    return ( { appearByUpdate, disappearByUpdate, displayUri=[] }: BannerType ): boolean => {
-
-        if ( moment(appearByUpdate) > ts || ts > moment(disappearByUpdate) ) return false;
-
-        return (
-            displayUri.length === 0 ||
-            displayUri.includes(uri => uri === pathname.toLowerCase())
-        )
-
-    }
-
-};  // bannerFilter
-
-
 const Banner: ComponentType<*> = ({ ...props }) => {
 
     const banners: BannerType[] = useGenericAPI("banner", null);
@@ -69,9 +51,24 @@ const Banner: ComponentType<*> = ({ ...props }) => {
     if ( banners === null ) return <Loading/>;
     if ( !banners?.length ) return null;
 
+    const ts = moment(timestamp);
+    const pattern = new RegExp(pathname, 'ig');
+
+    const bannerFilter = ( { appearByUpdate, disappearByUpdate, displayUri=[] }: BannerType ): boolean => {
+
+        if ( moment(appearByUpdate) > ts || ts > moment(disappearByUpdate) ) return false;
+
+        return (
+            displayUri.length > 0
+                ? displayUri.filter(item => pattern.test(item)).length > 0
+                : true
+        )
+
+    };  // bannerFilter
+
     return <>{
         banners
-            .filter(bannerFilter(timestamp, pathname))
+            .filter(bannerFilter)
             .map((banner, index) =>
                 <BannerBase key={ `banner-${index}-${banner?.appearByUpdate}` } { ...props }>
                     <BannerContent>

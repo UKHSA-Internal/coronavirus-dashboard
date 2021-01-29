@@ -56,7 +56,7 @@ export const Tab: ComponentType<*> = (() => {
 export const Body: ComponentType<*> = (() => {
 
     return styled.div`
-        display: block;
+        display: grid;
         height: fit-content;
         width: 100%;
         height: 350px;

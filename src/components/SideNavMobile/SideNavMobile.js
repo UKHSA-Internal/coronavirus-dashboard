@@ -50,6 +50,11 @@ const SideNavMobile: ComponentType<Props> = ({ ...props }: Props) => {
                               onClick={ () => setMenuState(state => !state) }>Healthcare</Link>
                     </SideNavListItem>
 
+                    <SideNavListItem className={`${pathname === '/details/vaccinations' ? "moj-side-navigation__item--active" : ""}`}>
+                        <Link to={ "/details/vaccinations" }
+                              onClick={ () => setMenuState(state => !state) }>Vaccinations</Link>
+                    </SideNavListItem>
+
                     <SideNavListItem className={`${pathname === '/details/deaths' ? "moj-side-navigation__item--active" : ""}`}>
                         <Link to={ "/details/deaths" }
                               onClick={ () => setMenuState(state => !state) }>Deaths</Link>
