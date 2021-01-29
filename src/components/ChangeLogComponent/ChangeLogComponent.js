@@ -54,22 +54,22 @@ const DateGroup: ComponentType = ({ data, group, colours, changeTypes }) => {
 const ChangeLogComponent: ComponentType = ({ data, colours }: ChangeLogInputProps) => {
 
     const changeTypes = new Set(data.map(item => item.type));
-    const [changeLogType, setChangeLogType] = useState(changeTypes.map(item => ({[item]: true})));
+    // const [changeLogType, setChangeLogType] = useState(changeTypes.map(item => ({[item]: true})));
     const [changeLogSearch, setChangeLogSearch] = useState("");
     const [groupedData, setGroupedData] = useState([]);
 
-    const filterByType = (item) => {
-
-        const keys = Object.keys(changeLogType).filter(key => changeLogType[key]);
-        return Object.values(keys).some((key) => changeTypes[key] === item.type);
-
-    }; // filterByType
-
-    const isTypeSet = () => {
-
-        return Object.keys(changeLogType).some((key) => changeLogType[key]);
-
-    } // isTypeSet
+    // const filterByType = (item) => {
+    //
+    //     const keys = Object.keys(changeLogType).filter(key => changeLogType[key]);
+    //     return Object.values(keys).some((key) => changeTypes[key] === item.type);
+    //
+    // }; // filterByType
+    //
+    // const isTypeSet = () => {
+    //
+    //     return Object.keys(changeLogType).some((key) => changeLogType[key]);
+    //
+    // } // isTypeSet
 
     useEffect(() => {
 
