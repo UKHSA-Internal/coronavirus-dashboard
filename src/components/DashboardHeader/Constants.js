@@ -23,7 +23,7 @@ export const PathNames = {
     accessibility: "/details/accessibility",
     devGuide: "/details/developers-guide",
     downloadData: "/details/download",
-    changeLog: "/details/change-log",
+    whatsNew: "/details/whats-new",
 }
 
 
@@ -37,7 +37,7 @@ export const NoPickerPaths = [
     "/details/archive",
     "/details/new-service",
     "/details/developers-guide",
-    "/details/change-log",
+    "/details/whats-new",
 ];
 
 

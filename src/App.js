@@ -24,7 +24,7 @@ const
     Cookies         = lazy(() => import('pages/Cookies')),
     ApiDocs         = lazy(() => import('pages/ApiDocs')),
     InteractiveMap  = lazy(() => import("pages/InteractiveMap")),
-    ChangeLog       = lazy(() => import("pages/ChangeLog")),
+    WhatsNew        = lazy(() => import("pages/WhatsNew")),
     Footer          = lazy(() => import('components/Footer')),
     Download        = lazy(() => import('pages/Download')),
     Banner          = lazy(() => import('components/Banner'));
@@ -62,10 +62,9 @@ const
         "/details/cases",
         "/details/healthcare",
         "/details/deaths",
-        "/details/change-log",
         "/details/about-data",
-        "/details/download"
-
+        "/details/download",
+        "/details/whats-new"
     ];
 
 
@@ -152,7 +151,7 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/details/vaccinations" exact component={ Vaccinations }/>
                                 <Route path="/details/deaths" exact component={ Deaths }/>
                                 <Route path="/details/interactive-map" component={ InteractiveMap }/>
-                                <Route path="/details/change-log" exact component={ ChangeLog }/>
+                                <Route path="/details/whats-new" exact component={ WhatsNew }/>
                                 <Route path="/details/download" exact component={ Download }/>
                                 <Route path="/details/about-data" exact component={About}/>
                         

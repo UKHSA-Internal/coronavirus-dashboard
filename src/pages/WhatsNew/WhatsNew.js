@@ -8,7 +8,7 @@ import Loading from "components/Loading";
 import BrowserHistory from "components/BrowserHistory";
 import ChangeLogComponent from "components/ChangeLogComponent";
 
-const ChangeLog = () => {
+const WhatsNew = () => {
 
     const data = useGenericAPI("changeLogData", [], "json");
 
@@ -21,4 +21,4 @@ const ChangeLog = () => {
 }; // ChangeLog
 
 
-export default ChangeLog;
+export default WhatsNew;
