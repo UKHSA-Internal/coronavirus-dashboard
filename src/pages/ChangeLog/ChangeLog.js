@@ -15,7 +15,7 @@ const ChangeLog = () => {
     if ( !data ) return <Loading/>;
 
     return <BrowserHistory>
-        <ChangeLogComponent data={data?.changeLog ?? []}/>
+        <ChangeLogComponent data={data?.changeLog ?? []} colours={ data?.colours ?? [] }/>
     </BrowserHistory>
 
 }; // ChangeLog
