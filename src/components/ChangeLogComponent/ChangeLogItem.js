@@ -2,7 +2,10 @@
 
 import React from "react";
 import moment from "moment";
-import { ChangeLogSpan, Markdown } from "./ChangeLogComponent.styles";
+import {
+    // ChangeLogSpan,
+    Markdown
+} from "./ChangeLogComponent.styles";
 import { Link } from "react-router-dom";
 
 import type { ComponentType } from "react";
