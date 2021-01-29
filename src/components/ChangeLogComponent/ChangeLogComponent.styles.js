@@ -2,11 +2,6 @@
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
-export const ChangeLogAnchor: ComponentType<*> =
-    styled
-    .a`
-        white-space: nowrap;
-    `;
 
 export const Markdown: ComponentType<*> =
     styled
@@ -29,25 +24,18 @@ const calcBgColour = ({bgColor}) => {
 export const ChangeLogSpan: ComponentType<*> =
     styled
     .span
-    .attrs(({ color="", bgColor="" }) => ({
+    .attrs(({ color="", bgColor="", className="" }) => ({
         color,
-        bgColor
+        bgColor,
+        className: `${className} govuk-!-font-size-14`
     }))`
         float: right;
+        padding: 2px 5px;
+        font-weight: 600;
         color: ${calcColour};
         background-color: ${calcBgColour};
     `;
 
-export const ChangeMonthContainer: ComponentType<*> =
-    styled
-        .div
-        .attrs(({ className="", ...props }) => ({
-            className: `${className} aria-change-month-label`,
-            ...props
-        }))`
-            border-top: 1px solid #b1b4b6;
-            margin-top: 15px;
-        `;
 
 export const Container: ComponentType<*> =
     styled
@@ -60,9 +48,9 @@ export const Container: ComponentType<*> =
             @media only screen and (min-width: 800px) {
                 grid-template-columns: repeat(3, 1fr);
             }
-            @media only screen and (min-width: 1100px) {
-                grid-template-columns: repeat(4, 1fr);
-            }
+            // @media only screen and (min-width: 1100px) {
+            //     grid-template-columns: repeat(4, 1fr);
+            // }
         `;
 
 
@@ -82,13 +70,13 @@ export const MainContent: ComponentType<*> =
                 }
             }
             @media only screen and (min-width: 1100px) {
-                grid-column: 1/4;
+                grid-column: 1/3;
             }
             
             &.no-border {
                 border-top: unset;
                 margin-top: 1rem;
-                max-width: 50em;
+                // max-width: 50em;
             }
         `;
 
@@ -105,7 +93,7 @@ export const SideContent: ComponentType<*> =
                 grid-column: 3/-1;
             }
             @media only screen and (min-width: 1100px) {
-                grid-column: 4/-1;
+                grid-column: 3/-1;
             }
         `;
 
