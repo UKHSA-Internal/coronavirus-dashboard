@@ -27,10 +27,10 @@ export const ChangeLogItem: ComponentType = ({ data, changeTypes, colour }) => {
         <h3 className={ "govuk-heading-s govuk-!-margin-bottom-1" }>
             <small className={ "govuk-caption-m govuk-!-font-size-16 govuk-!-margin-bottom-1 govuk-!-font-weight-bold" }>
                 { moment(data.date).format("D MMMM") }
-                <ChangeLogSpan color={ colour?.text ?? "#000000" }
-                               bgColor={ colour?.background ?? "inherit" }>
-                    { data.type }
-                </ChangeLogSpan>
+                {/*<ChangeLogSpan color={ colour?.text ?? "#000000" }*/}
+                {/*               bgColor={ colour?.background ?? "inherit" }>*/}
+                {/*    { data.type }*/}
+                {/*</ChangeLogSpan>*/}
             </small>
             { data.headline }
         </h3>
