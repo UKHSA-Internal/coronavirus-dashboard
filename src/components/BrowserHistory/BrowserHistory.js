@@ -13,11 +13,6 @@ const BrowserHistory = ({ children }) => {
     const [hashValue, setHashValue] = useState(null);
     let prevHash = usePrevious(hashValue);
 
-
-    const scrollToMainContent = () => {
-        document.querySelector("#main-content").scrollIntoView({block: "start"});
-    }
-
     useEffect(() => {
         setHashValue(
             hash && hash.length > 0
