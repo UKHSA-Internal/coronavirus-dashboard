@@ -1,11 +1,24 @@
 // @flow
 
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import type { ComponentType } from 'react';
 
 import type { Props } from './Metrics.types';
 
-import { Container } from './Metrics.styles';
+import PageTitle from 'components/PageTitle';
+
+import { 
+    MainContainer,
+    MainContent, 
+    SideContent, 
+    Container } 
+from './Metrics.styles';
+
+import { MetricTextSearch, searchContent } from "components/MetricTextSearch";
+
+import { MetricFilter } from "components/MetricFilter";
+
+import { Form } from "components/Formset";
 
 import Loading from "components/Loading";
 
@@ -14,11 +27,9 @@ import GreenTick from "assets/green-tick.svg";
 import useGenericAPI from 'hooks/useGenericAPI';
 
 const MetricHeader = [
-    'Metric',
     'Area Type',
-    '',
-    '',
     'Availability',
+    '',
     '',
     '',
     '',
@@ -28,7 +39,11 @@ const MetricHeader = [
     'Scotland',
     'Northern Ireland',
     'Wales'
-]
+];
+
+const Spacer: ComponentType<Props> = () => {
+    return <div style={{gridColumn: "1/ span 6"}}/>
+}
 
 const MetricItem: ComponentType<Props> = ({ item, metric }: Props) => {
 
@@ -39,7 +54,7 @@ const MetricItem: ComponentType<Props> = ({ item, metric }: Props) => {
         'ltla',
         'overview',
         'msoa'
-    ]
+    ];
 
     return <>
 
@@ -48,11 +63,7 @@ const MetricItem: ComponentType<Props> = ({ item, metric }: Props) => {
         const values = metric[item][at]
 
         return <>
-        {/* Metric */}
-        <div style={{height: '2px'}}>
-            {at === 'utla' ? item : null}
-        </div>   
-         {/* Area Type */}
+         {/* Area Name */}
         <div style={{height: '2px'}}>
             {at}
         </div>
@@ -76,10 +87,11 @@ const MetricItem: ComponentType<Props> = ({ item, metric }: Props) => {
         <div style={{height: '2px'}}>
             {values.includes("W") ? <img src={ GreenTick } width={ "14px" } /> : null}
         </div>
+         
 
       </>
     })}
-  
+    <Spacer/>
   </>
 } // MetricItem
 
@@ -106,6 +118,25 @@ const Metrics: ComponentType<Props> = ({ }: Props) => {
 
         
     // if ( !data?.metrics ) return <Loading/>;
+
+    const [metricSearch, setMetricSearch] = useState("");
+
+    const topicTypes = [
+        'Cases',
+        'Deaths',
+        'Healthcare',
+        'Vaccinations',
+        'Tests'
+    ];
+
+    const typeTypes = [
+        'Cumulative',
+        'Daily',
+        'Count'
+    ];
+
+    const [topicType, setTopicType] = useState(topicTypes.map(item => ({[item]: true})));
+    const [typeType, setTypeType] = useState(typeTypes.map(item => ({[item]: true})));
 
     const data = {
         metrics: [
@@ -146,17 +177,62 @@ const Metrics: ComponentType<Props> = ({ }: Props) => {
 
     return ( <Fragment>
 
-        <Container>
-            <MetricDataHeader header={ MetricHeader }/>
-             {
-                data.metrics.map(item => {
 
-                    return <MetricData metric={ item }/>
 
-                })
-            }
-        </Container>
+        <PageTitle title={"Metric availability matrix"} />
 
+      
+
+
+        <MainContainer>
+            <MainContent className={ "no-border" }>
+
+                <div className={ "govuk-phase-banner status-banner govuk-!-margin-bottom-0" }>
+                    <p className={ "govuk-phase-banner__content" }>
+                        This page lists all the available metrics, displaying their availability across
+                        area type and country.
+                    </p>
+                </div>
+
+                <Container>
+                    <MetricDataHeader header={ MetricHeader }/>
+                    {
+                        data.metrics.map(item => {
+
+                            return <MetricData metric={ item }/>
+
+                        })
+                    }
+                </Container>
+
+            </MainContent>
+
+            <SideContent>
+                <div className={ "govuk-!-margin-top-1" }>
+                    <Form className={ "govuk-!-padding-left-0 govuk-!-padding-right-5" }>
+                        <MetricTextSearch 
+                            metricSearch={ metricSearch }
+                            setMetricSearch={ setMetricSearch }/>
+
+                        <MetricFilter label={"Topic"}
+                                    metricTypes={ topicTypes } 
+                                    metricType={ topicType }
+                                    setMetricType={ setTopicType }/>
+
+                         <MetricFilter label={"Type"}
+                                    metricTypes={ typeTypes } 
+                                    metricType={ typeType }
+                                    setMetricType={ setTypeType }/>
+
+
+
+                    </Form>
+                </div>
+            </SideContent>
+
+        </MainContainer>
+
+        
        
 
     </Fragment>
