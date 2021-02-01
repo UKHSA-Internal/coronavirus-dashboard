@@ -48,4 +48,3 @@ export const MetricFilter: ComponentType = ({ label, metricType, metricTypes, se
 
 }; // MetricFilter
 
-export default MetricFilter;

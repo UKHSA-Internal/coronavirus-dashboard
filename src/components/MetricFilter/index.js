@@ -1,1 +1,1 @@
-export { default } from "./MetricFilter"
+export { MetricFilter } from "./MetricFilter"
