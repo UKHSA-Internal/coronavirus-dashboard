@@ -46,7 +46,7 @@ const MetricHeader = [
 ];
 
 const Spacer: ComponentType<Props> = () => {
-    return <div style={{gridColumn: "1/ span 6"}}/>
+    return <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } style={{gridColumn: "1/ span 6"}}/>
 }
 
 
@@ -69,28 +69,38 @@ const MetricCard: ComponentType<Props> = ({ item, metric, expanded }: Props) => 
      
         return <>
             {/* Area Name */} 
-            <div key={ `metric-an-${ index }`} style={{height: '2px'}}>
-                {at}
+            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-an-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
+                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>{at}</div>
             </div>
             {/* UK */}
-            <div key={ `metric-uk-${ index }`} style={{height: '2px'}}>
-                {values.includes("K") ? <img src={ GreenTick } width={ "14px" } /> : null}
+            <div className={ "govuk-!-margin-top-20 govuk-!-margin-bottom-0" }key={ `metric-uk-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
+                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                    {values.includes("K") ? <img src={ GreenTick } width={ "14px" } /> : null}
+                </div>
             </div>
             {/* England */}
-            <div key={ `metric-en-${ index }`} style={{height: '2px'}}>
-                {values.includes("E") ? <img src={ GreenTick } width={ "14px" } /> : null}
+            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-en-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
+                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                    {values.includes("E") ? <img src={ GreenTick } width={ "14px" } /> : null}
+                </div>
             </div>
             {/* Scotland */}
-            <div key={ `metric-sc-${ index }`} style={{height: '2px'}}>
-                {values.includes("S") ? <img src={ GreenTick } width={ "14px" } /> : null}
+            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" }key={ `metric-sc-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
+                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                    {values.includes("S") ? <img src={ GreenTick } width={ "14px" } /> : null}
+                </div>
             </div>
             {/* NI */}
-            <div key={ `metric-ni-${ index }`} style={{height: '2px'}}>
-                {values.includes("N") ? <img src={ GreenTick } width={ "14px" } /> : null}
+            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-ni-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
+                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                    {values.includes("N") ? <img src={ GreenTick } width={ "14px" } /> : null}
+                </div>
             </div>
             {/* Wales */}
-            <div key={ `metric-wa-${ index }`} style={{height: '2px'}}>
-                {values.includes("W") ? <img src={ GreenTick } width={ "14px" } /> : null}
+            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-wa-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
+                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                    {values.includes("W") ? <img src={ GreenTick } width={ "14px" } /> : null}
+                </div>
             </div>
             </>
 
@@ -120,23 +130,25 @@ const MetricItem: ComponentType<Props> = ({ metric, expandAll }: Props) => {
 
     return <>
 
-    <div style={{gridColumn: "1/ span 5"}}>
+    <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } style={{gridColumn: "1/ span 5",  borderTop: "2px solid #e5e5e5"}}>
         <p id={ "metric-description" } className={ "govuk-heading-s" }>
             {metric[item]["description"]}
         </p> 
     </div>
 
-    <div style={{gridColumn: "1/ span 5"}}>
-        <p id={ "metric-name-and-date-added" } className={ "govuk-heading-s" }>
+    <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } style={{gridColumn: "6/ span 1", borderTop: "2px solid #e5e5e5"}}>
+        <button className={ "govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-0" } onClick={closeOrExpandCard}>
+            {cardOpen ? "-" : "+"}
+        </button>
+    </div>
+
+    <div className={"govuk-!-margin-top-0 govuk-!-margin-bottom-0"} style={{gridColumn: "1/ span 6"}}>
+        <p id={ "metric-name" } className={ "govuk-heading-s" }>
             Metric name: {item} Date added: {moment(metric[item]["dateAdded"]).format(DATE_FORMAT)}
         </p>
     </div>
 
-    <div style={{gridColumn: "6/ span 1"}}>
-        <button className={ "govuk-button" } onClick={closeOrExpandCard}>
-            {cardOpen ? "-" : "+"}
-        </button>
-    </div>
+    
 
     <MetricDataHeader header={ MetricHeader }
                       expanded={cardOpen}/>
@@ -166,7 +178,7 @@ const MetricDataHeader: ComponentType<Props> = ({ header, expanded }: Props) => 
         return header.map((item, index) => {
                     return <div key={ `metric-header-${ index }`} 
                             style={{height: '2px', gridColumn:  "{index+1}/ span 1"}} 
-                            className={ "govuk-!-margin-top-2" }>{item}</div> 
+                            className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>{item}</div> 
                 });  
     }
     else {
@@ -292,6 +304,7 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
         <MainContainer>
             <MainContent className={ "no-border" }>
 
+                  
                 <div className={ "govuk-phase-banner status-banner govuk-!-margin-bottom-0" }>
                     <p className={ "govuk-phase-banner__content" }>
                         This page lists all the available metrics, displaying their availability across
@@ -299,11 +312,14 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
                     </p>
                 </div>
 
-                <div className={ "govuk-phase-banner status-banner govuk-!-margin-bottom-0" }>
-                    <button className={ "govuk-button" } onClick={closeOrExpandAll}>
-                        {expandAll ? "Close all" : "Open all"}
-                    </button>
-                </div>
+                <Container> 
+                    <div style={{gridColumn: "6/ span 1"}}>
+                        <button className={ "govuk-button govuk-!-margin-top-0 govuk-!-margin-bottom-0" }
+                                onClick={closeOrExpandAll}>
+                            {expandAll ? "Close all" : "Open all"}
+                        </button>
+                    </div>
+                </Container>
 
                 <Container>     
                     {
