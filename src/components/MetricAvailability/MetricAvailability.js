@@ -108,14 +108,15 @@ const MetricItem: ComponentType<Props> = ({ metric, expandAll }: Props) => {
 
     const DATE_FORMAT = "DD/MM/YYYY";
 
-    const [ closeOrExpandButton, setCloseOrExpandButton ] = useState("+")
-    const [ expandCard, setExpandCard ] = useState(false)
+    const [ cardOpen, setCardOpen ] = useState(false)
 
     const closeOrExpandCard = () => {
-        const open = closeOrExpandButton === "+" ? true : false;
-        setCloseOrExpandButton(open ? "-": "+");
-        setExpandCard(open)
+        setCardOpen(!cardOpen)
     }
+
+    useEffect(() => {
+        setCardOpen(expandAll);
+    }, [ expandAll ]);
 
     return <>
 
@@ -133,16 +134,18 @@ const MetricItem: ComponentType<Props> = ({ metric, expandAll }: Props) => {
 
     <div style={{gridColumn: "6/ span 1"}}>
         <button className={ "govuk-button" } onClick={closeOrExpandCard}>
-            {expandAll ? "-" : closeOrExpandButton}
+            {cardOpen ? "-" : "+"}
         </button>
     </div>
 
     <MetricDataHeader header={ MetricHeader }
-                      expanded={expandAll ? true : expandCard ? true : false}/>
+                      expanded={cardOpen}/>
 
     <MetricCard item={ item }
                 metric={ metric }
-                expanded={expandAll ? true : expandCard}/>
+                expanded={cardOpen}/>
+
+    <Spacer/>
 
    
   </>
