@@ -185,4 +185,9 @@
         @extend .govuk-link;
         @extend .govuk-\!-font-weight-bold
     }
+
+    & p {
+        width: max-content;
+        margin: auto auto;
+    }
 }
