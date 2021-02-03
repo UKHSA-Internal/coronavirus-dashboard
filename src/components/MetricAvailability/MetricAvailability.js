@@ -21,6 +21,11 @@ import {
     Container } 
 from './MetricAvailability.styles';
 
+import searchContent from './MetricTextSearch';
+
+import MetricTextSearch from './MetricTextSearch';
+
+import MetricFilter from './MetricFilter';
 
 import { Form } from "components/Formset";
 
@@ -58,50 +63,50 @@ const MetricCard: ComponentType<Props> = ({ item, metric, expanded }: Props) => 
         'utla',
         'ltla',
         'overview',
-        'msoa'
     ];
 
     const card = expanded ? 
  
         areaType.map((at, index) => {
 
-        const values = metric[item][at]
+        const availability = (Object.values(metric)[0])[1].availability
+        console.log(availability)
      
         return <>
-            {/* Area Name */} 
+            {/* Area Name  */}
             <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-an-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
                 <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>{at}</div>
             </div>
             {/* UK */}
             <div className={ "govuk-!-margin-top-20 govuk-!-margin-bottom-0" }key={ `metric-uk-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
                 <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    {values.includes("K") ? <img src={ GreenTick } width={ "14px" } /> : null}
+                    { availability.includes("K") ? <img src={ GreenTick } width={ "14px" } /> : null}
                 </div>
             </div>
             {/* England */}
-            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-en-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
+            {/* <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-en-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
                 <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    {values.includes("E") ? <img src={ GreenTick } width={ "14px" } /> : null}
+                    { availability.includes("E") ? <img src={ GreenTick } width={ "14px" } /> : null}
                 </div>
-            </div>
+            </div> */}
             {/* Scotland */}
-            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" }key={ `metric-sc-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
+            {/* <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" }key={ `metric-sc-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
                 <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    {values.includes("S") ? <img src={ GreenTick } width={ "14px" } /> : null}
+                    { availability.includes("S") ? <img src={ GreenTick } width={ "14px" } /> : null}
                 </div>
-            </div>
+            </div> */}
             {/* NI */}
-            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-ni-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
+            {/* <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-ni-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
                 <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    {values.includes("N") ? <img src={ GreenTick } width={ "14px" } /> : null}
+                    { availability.includes("N") ? <img src={ GreenTick } width={ "14px" } /> : null}
                 </div>
-            </div>
+            </div> */}
             {/* Wales */}
-            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-wa-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
+            {/* <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-wa-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
                 <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    {values.includes("W") ? <img src={ GreenTick } width={ "14px" } /> : null}
+                    { availability.includes("W") ? <img src={ GreenTick } width={ "14px" } /> : null}
                 </div>
-            </div>
+            </div> */}
             </>
 
     }) : null;
@@ -112,9 +117,11 @@ const MetricCard: ComponentType<Props> = ({ item, metric, expanded }: Props) => 
 
 };
 
-const MetricItem: ComponentType<Props> = ({ metric, expandAll }: Props) => {
+const MetricItem: ComponentType<Props> = ({ item, metric, expandAll, callClose }: Props) => {
 
-    const item = Object.keys(metric)[0];
+    console.log("MetricItem")
+
+    const dateAdded = (Object.values(metric)[0])[1].dateAdded
 
     const DATE_FORMAT = "DD/MM/YYYY";
 
@@ -122,6 +129,7 @@ const MetricItem: ComponentType<Props> = ({ metric, expandAll }: Props) => {
 
     const closeOrExpandCard = () => {
         setCardOpen(!cardOpen)
+        callClose(!cardOpen, item)
     }
 
     useEffect(() => {
@@ -130,11 +138,11 @@ const MetricItem: ComponentType<Props> = ({ metric, expandAll }: Props) => {
 
     return <>
 
-    <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } style={{gridColumn: "1/ span 5",  borderTop: "2px solid #e5e5e5"}}>
+    {/* <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } style={{gridColumn: "1/ span 5",  borderTop: "2px solid #e5e5e5"}}>
         <p id={ "metric-description" } className={ "govuk-heading-s" }>
             {metric[item]["description"]}
         </p> 
-    </div>
+    </div> */}
 
     <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } style={{gridColumn: "6/ span 1", borderTop: "2px solid #e5e5e5"}}>
         <button className={ "govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-0" } onClick={closeOrExpandCard}>
@@ -144,7 +152,7 @@ const MetricItem: ComponentType<Props> = ({ metric, expandAll }: Props) => {
 
     <div className={"govuk-!-margin-top-0 govuk-!-margin-bottom-0"} style={{gridColumn: "1/ span 6"}}>
         <p id={ "metric-name" } className={ "govuk-heading-s" }>
-            Metric name: {item} Date added: {moment(metric[item]["dateAdded"]).format(DATE_FORMAT)}
+            Metric name: {item} Date added: {moment(dateAdded).format(DATE_FORMAT)}
         </p>
     </div>
 
@@ -163,15 +171,6 @@ const MetricItem: ComponentType<Props> = ({ metric, expandAll }: Props) => {
   </>
 } // MetricItem
 
-const MetricData: ComponentType<Props> = ({ metric, expandAll }: Props) => {
-
-    
-
-    return <MetricItem  metric={ metric }
-                        expandAll={ expandAll }/>
-   
-} // MetricData
-
 const MetricDataHeader: ComponentType<Props> = ({ header, expanded }: Props) => {
 
     if (expanded) {
@@ -186,87 +185,6 @@ const MetricDataHeader: ComponentType<Props> = ({ header, expanded }: Props) => 
     
     }       
 } // MetricDataHeadrer
-
-export const searchContent = (data, token) => {
-
-    return ( !token || (token?.length ?? 0) === 0 ) ||
-        new RegExp(token, 'ig').exec(`${data?.headline ?? ""} ${data.body}`) !== null
-
-};
-
-
-export const MetricTextSearch: ComponentType = ({ metricSearch, setMetricSearch }) => {
-
-    const inputRef = useRef();
-
-    useEffect(() => {
-        if ( metricSearch ) inputRef.current.focus();
-    }, [metricSearch]);
-
-    return <FormItem aria-labelledby={ "aria-search-filter-label" }
-                     aria-describedby={ "aria-search-filter-descr" }
-                     className={ "govuk-!-margin-top-2" }
-                     width={ "full" }>
-            <span
-                id={ "search-filter-label" }
-                className={ "govuk-label govuk-label--s" }>
-                Search
-            </span>
-
-        <div aria-describedby={ "search-filter-descr" }
-             aria-labelledby={ "search-filter-label" }>
-            <input
-                id={ "search-filter-id" }
-                value={ metricSearch }
-                ref={ inputRef }
-                className={ "govuk-input govuk-input--width-15" }
-                type={ "text" }
-                onChange={ item => setMetricSearch(item.target.value) }/>
-        </div>
-    </FormItem>
-
-}; // MetricTextSearch
-
-export const MetricFilter: ComponentType = ({ label, metricType, metricTypes, setMetricType }) => {
-
-
-    return <FormItem aria-labelledby={ "aria-type-filter-label" }
-                     aria-describedby={ "aria-type-filter-descr" }
-                     width={ "full" }>
-
-        <span id={ "type-filter-label" }
-              className={ "govuk-label govuk-label--s" }>
-            {label}
-        </span>
-
-        {
-            metricTypes.map((key, index) =>
-
-                <div aria-describedby={ "type-filter-descr" }
-                     aria-labelledby={ "type-filter-label" }
-                     key={ `checkbox-${ key }-${ index }` }
-                     className="govuk-!-margin-bottom-1">
-                    <label htmlFor={ key }>
-                        <input
-                            id={ `type-filter-${ index }` }
-                            name={ key }
-                            type="checkbox"
-                            checked={false}
-                            checked={ metricType[key] }
-                            onChange={ (event) =>
-                                setMetricType( prev => ({...prev, [key]: !metricType[key] }))
-                            }
-                            />
-                        { key }
-                    </label>
-                </div>
-            )
-
-        }
-
-    </FormItem>
-
-}; // MetricFilter
 
 
 const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
@@ -287,15 +205,53 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
         'Count'
     ];
 
-    const [topicType, setTopicType] = useState(topicTypes.map(item => ({[item]: true})));
-    const [typeType, setTypeType] = useState(typeTypes.map(item => ({[item]: true})));
+    const metrics = Object.keys(data[Object.keys(data)[1]])
+
+    const [closeAll, setCloseAll] = useState([]);
+
+    useEffect(() => {
+
+        const m = metrics.map(item => {
+            return {[item]: false} 
+        });
+        
+        setCloseAll(m)
+    }, [ ]);
+
+    const topics = new Set(Object.values(data[Object.keys(data)[0]]["categories"]))
+    const typs = new Set(Object.values(data[Object.keys(data)[0]]["types"]))
+   
+    const [topicType, setTopicType] = useState(null);
+    const [typeType, setTypeType] = useState(null);
 
     const [expandAll, setExpandAll] = useState(false);
+ 
 
     const closeOrExpandAll = () => {
-        setExpandAll(!expandAll)
+        setExpandAll(!expandAll);
     }
 
+    const callClose = (close, metric) => {  
+        
+        if (close) {
+            const m = metrics.map(item => {
+            
+                if (metric === item) {
+                    return {[item]: close} 
+                } else {
+                    return {[item]: false}
+                }
+                
+            });
+            setCloseAll(m)
+        }
+    };
+
+    useEffect(() => {
+        // const allOpen = Object.values(closeAll)[0].some((key) => closeAll[key] === false);
+        const allOpen = false;
+        if (allOpen) setExpandAll(true)
+    }, [ closeAll ]);
 
     return <Fragment>
 
@@ -323,10 +279,16 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
 
                 <Container>     
                     {
-                        data.metrics.map(item => {
-
-                            return <MetricData metric={ item }
-                                    expandAll={ expandAll }/>
+        
+                        metrics.map(item => {
+                           
+                            const metric = Object.entries(Object.entries(data)[1][1]).filter(it => it[0] === item)
+                        
+                            return <MetricItem 
+                                    item={ item }
+                                    metric={ metric }
+                                    expandAll={ expandAll }
+                                    callClose={ callClose }/>
 
                         })
                     }
@@ -343,12 +305,12 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
                             setMetricSearch={ setMetricSearch }/>
 
                         <MetricFilter label={"Topic"}
-                                    metricTypes={ topicTypes } 
+                                    metricTypes={ topics } 
                                     metricType={ topicType }
                                     setMetricType={ setTopicType }/>
 
                          <MetricFilter label={"Type"}
-                                    metricTypes={ typeTypes } 
+                                    metricTypes={ typs } 
                                     metricType={ typeType }
                                     setMetricType={ setTypeType }/>
                     </Form>
