@@ -181,13 +181,15 @@
 
 
 .banner.markdown {
+    display: grid;
+
     & a {
         @extend .govuk-link;
         @extend .govuk-\!-font-weight-bold
     }
 
     & p {
-        width: max-content;
-        margin: auto auto;
+        width: fit-content;
+        justify-self: center;
     }
 }
