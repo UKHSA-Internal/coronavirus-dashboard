@@ -3,9 +3,6 @@
 import React, { Fragment, useState, useEffect, useRef } from 'react';
 
 
-import FormItem from "../Formset";
-
-
 import type { ComponentType } from 'react';
 
 import moment from "moment";
@@ -194,7 +191,8 @@ const MetricItem: ComponentType<Props> = ({ item, metric, allExpanded }: Props) 
 
                         <div className={"govuk-!-margin-top-0 govuk-!-margin-bottom-0"}>
                             <p id={ "metric-name" } className={ "govuk-heading-s" }>
-                                Metric name: {item} Date added: {moment(dateAdded).format(DATE_FORMAT)}
+                                Metric name: {item} Date added: {dateAdded ? moment(dateAdded).format(DATE_FORMAT) :
+                                                            "Not available"}
                             </p>
                        </div>
                         
@@ -231,6 +229,7 @@ const MetricDataHeader: ComponentType<Props> = ({ header }: Props) => {
 const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
 
     const [metricSearch, setMetricSearch] = useState("");
+    const [metrics, setMetrics ] = useState(Object.keys(data[Object.keys(data)[1]]))
 
     const topicTypes = [
         'Cases',
@@ -246,9 +245,14 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
         'Count'
     ];
 
-    console.log("MA")
-    console.log(data)
-    const metrics = Object.keys(data[Object.keys(data)[1]])
+    useEffect(() => {
+        if (metricSearch) {
+            
+            searchContent("dave", metricSearch)
+            // setMetrics(m)
+        }
+       
+    }, [ metricSearch ]);
 
     const topics = new Set(Object.values(data[Object.keys(data)[0]]["categories"]))
     const typs = new Set(Object.values(data[Object.keys(data)[0]]["types"]))

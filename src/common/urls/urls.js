@@ -47,7 +47,7 @@ const URLs = {
     supplementaryDownloads: `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/downloads.json`,
     msoaData:               `https://${ REACT_APP_MAIN_CDN      }/public/assets/dispatch/region2la2msoa.json`,
     permalinkDownloadData:  `https://${ REACT_APP_USER_API_ENDPOINT  }/v2/data`,
-    metricsAvailability:     `https://daisy.coronavirus.data.gov.uk/public/assets/cms/metrics.json`,
+    metricsAvailability:    `https://daisy.coronavirus.data.gov.uk/public/assets/cms/metrics.json`,
     metricDetails:          `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/ref/`,
 };
 

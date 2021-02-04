@@ -4,20 +4,18 @@ import React, { useEffect, useRef } from 'react';
 
 import FormItem from "../Formset";
 
-export const searchContent = (data, token) => {
+export const searchContent = (item, token) => {
+
+    console.log("searching")
+    console.log(token)
+    console.log(item)
 
     return ( !token || (token?.length ?? 0) === 0 ) ||
-        new RegExp(token, 'ig').exec(`${data?.headline ?? ""} ${data.body}`) !== null
-
+        new RegExp(token, 'ig').exec(`${item}`) !== null
+   
 };
 
 export const MetricTextSearch: ComponentType = ({ metricSearch, setMetricSearch }) => {
-
-    const inputRef = useRef();
-
-    useEffect(() => {
-        if ( metricSearch ) inputRef.current.focus();
-    }, [metricSearch]);
 
     return <FormItem aria-labelledby={ "aria-search-filter-label" }
                      aria-describedby={ "aria-search-filter-descr" }
@@ -34,7 +32,6 @@ export const MetricTextSearch: ComponentType = ({ metricSearch, setMetricSearch 
             <input
                 id={ "search-filter-id" }
                 value={ metricSearch }
-                ref={ inputRef }
                 className={ "govuk-input govuk-input--width-15" }
                 type={ "text" }
                 onChange={ item => setMetricSearch(item.target.value) }/>
