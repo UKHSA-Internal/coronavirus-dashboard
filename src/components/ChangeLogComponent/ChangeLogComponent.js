@@ -5,12 +5,11 @@ import React, { useState, useEffect } from 'react';
 import moment from "moment";
 
 import { Form } from "components/Formset";
-import { sortByDate, groupBy } from "common/utils";
+import { sortByDate, groupBy, sort } from "common/utils";
 
 import {
-    Container,
-    MainContent,
-    SideContent
+    Container, MainContent, SideContent,
+    MonthlyGroup, MonthlyHeader
 } from './ChangeLogComponent.styles';
 
 import type { ChangeLogInputProps } from "./ChangeLogComponent.types";
@@ -20,22 +19,26 @@ import { ChangeLogItem } from "./ChangeLogItem";
 import { ChangeLogTextSearch, searchContent } from "./ChangeLogTextSearch";
 
 
-const ChangeLogItemHeader: ComponentType = ({ change }) => {
+const ChangeLogItemHeader: ComponentType = ({ date }) => {
 
-    return <header>
-        <hr className={ "govuk-section-break govuk-section-break--m govuk-section-break--visible" }/>
-        <h2 className={ "govuk-heading-s" }>
-            { change }
+    return <MonthlyHeader>
+        <h2 className={ "govuk-heading-m" } id={ `monthly_${date}` }>
+            <time dateTime={ date }>
+                <span className={ "govuk-visually-hidden" }>
+                    List of changes in the month of
+                </span>
+                { moment(date).format("MMMM YYYY") }
+            </time>
         </h2>
-    </header>
+    </MonthlyHeader>
 
 }; // ChangeLogItemHeader
 
 
 const DateGroup: ComponentType = ({ data, group, colours, changeTypes }) => {
 
-    return <article>
-        <ChangeLogItemHeader change={ group }/>
+    return <MonthlyGroup aria-describedby={ `monthly_${group}` }>
+        <ChangeLogItemHeader date={ group }/>
         {
             data.map((change, index ) =>
                 <ChangeLogItem id={ `cl-item-${ index }` }
@@ -46,7 +49,7 @@ const DateGroup: ComponentType = ({ data, group, colours, changeTypes }) => {
                                colour={ colours.find(element => element.type === change.type) }/>
             )
         }
-    </article>
+    </MonthlyGroup>
 
 };  // DateGroup
 
@@ -74,11 +77,12 @@ const ChangeLogComponent: ComponentType = ({ data, colours }: ChangeLogInputProp
     useEffect(() => {
 
         setGroupedData(groupBy(
-            data.sort(sortByDate).filter(item => searchContent(item, changeLogSearch)),
-            item => moment(item.date).format("MMMM YYYY")
+            data.filter(item => searchContent(item, changeLogSearch)),
+            item => item.date.substring(0, 7)
         ))
 
     }, [changeLogSearch, data])
+
 
     return <>
 
@@ -94,6 +98,7 @@ const ChangeLogComponent: ComponentType = ({ data, colours }: ChangeLogInputProp
                     {
                         Object
                             .keys(groupedData)
+                            .sort(sort)
                             .map(groupKey =>
                                 <DateGroup data={ groupedData[groupKey] }
                                            group={ groupKey }
