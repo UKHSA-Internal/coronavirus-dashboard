@@ -10,8 +10,10 @@ export const Markdown: ComponentType<*> =
             className: `markdown ${className}`,
             ...props
         }))`
-            max-width: 85%;
-`;
+            @media only screen and (min-width: 800px) {
+                max-width: 85%;
+            }
+        `;
 
 const calcColour = ({color}) => {
     return color ? color : '#000000';
@@ -48,9 +50,6 @@ export const Container: ComponentType<*> =
             @media only screen and (min-width: 800px) {
                 grid-template-columns: repeat(3, 1fr);
             }
-            // @media only screen and (min-width: 1100px) {
-            //     grid-template-columns: repeat(4, 1fr);
-            // }
         `;
 
 
@@ -76,7 +75,6 @@ export const MainContent: ComponentType<*> =
             &.no-border {
                 border-top: unset;
                 margin-top: 1rem;
-                // max-width: 50em;
             }
         `;
 
@@ -97,3 +95,20 @@ export const SideContent: ComponentType<*> =
             }
         `;
 
+
+export const MonthlyGroup: ComponentType<*> =
+    styled
+        .article`
+            margin-top: 30px;
+            border-top: 1px solid #e1e1e1;
+            
+            &:first-of-type {
+                border-top: none;
+            }
+        `
+
+export const MonthlyHeader: ComponentType<*> =
+    styled
+        .header`
+            margin-top: 30px;
+        `;
