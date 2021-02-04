@@ -10,6 +10,7 @@ export interface ChangeLogItemType {
     relativeUrl?: string,
     headline: string,
     body: string
+    details?: string
 }
 
 export interface ChangeLogInputProps extends ElementProps {
