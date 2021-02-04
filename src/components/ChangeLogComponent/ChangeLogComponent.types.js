@@ -9,7 +9,7 @@ export interface ChangeLogItemType {
     displayBanner?: boolean,
     relativeUrl?: string,
     headline: string,
-    body: string
+    body: string,
     details?: string
 }
 

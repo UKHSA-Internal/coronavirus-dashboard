@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import moment from "moment";
 
 import { Form } from "components/Formset";
-import { sortByDate, groupBy, sort } from "common/utils";
+import { groupBy, sort } from "common/utils";
 
 import {
     Container, MainContent, SideContent,
