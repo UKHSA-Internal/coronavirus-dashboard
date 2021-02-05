@@ -6,8 +6,11 @@ import FormItem from "../Formset";
 
 export const searchContent = (item, token) => {
 
-    return ( !token || (token?.length ?? 0) === 0 ) ||
-        new RegExp(token, 'ig').exec(`${item}`) !== null
+    return false;
+
+    // return ( !token || (token?.length ?? 0) === 0 ) ||
+    //     item.includes(token)
+    //     // new RegExp(token, 'ig').exec(`${item}`) !== null
    
 };
 

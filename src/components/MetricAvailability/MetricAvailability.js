@@ -58,7 +58,7 @@ const MetricDescription : ComponentType<Props> = ({ baseUrl, descriptionMd }: Pr
     const description = useGenericAPI(baseUrl + descriptionMd, "Not currently available", "text" );
 
     return <MainDiv>
-                <details class="govuk-details" data-module="govuk-details">
+                <details class="govuk-details govuk-!-margin-top-0 govuk-!-margin-bottom-0" data-module="govuk-details">
                     <summary class="govuk-details__summary">
                         <span class="govuk-details__summary-text">
                             Metric description
@@ -76,7 +76,7 @@ const MetricMethodology : ComponentType<Props> = ({ baseUrl, methodologyMd }: Pr
     const methodology = useGenericAPI(baseUrl + methodologyMd, "Not currently available", "text" );
 
     return <MainDiv>
-                <details class="govuk-details" data-module="govuk-details">
+                <details class="govuk-details govuk-!-margin-top-0 govuk-!-margin-bottom-0" data-module="govuk-details">
                     <summary class="govuk-details__summary">
                         <span class="govuk-details__summary-text">
                             Methodology
@@ -237,7 +237,7 @@ const MetricDataHeader: ComponentType<Props> = ({ header }: Props) => {
    
     return header.map((item, index) => {
                     return <HeaderDiv key={ `metric-header-${ index }`} 
-                                      style={{gridColumn:  "{index+1}/ span 1"}}>
+                                      index={index+1}>
                                 {item}
                             </HeaderDiv> 
                 });  
@@ -248,40 +248,37 @@ const MetricDataHeader: ComponentType<Props> = ({ header }: Props) => {
 const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
 
     const [metricSearch, setMetricSearch] = useState("");
+    const [topicType, setTopicType] = useState(null);
+    const [typeType, setTypeType] = useState(null);
+   
     const [metrics, setMetrics ] = useState(Object.keys(data[Object.keys(data)[1]]));
 
-    const topicTypes = [
-        'Cases',
-        'Deaths',
-        'Healthcare',
-        'Vaccinations',
-        'Tests'
-    ];
-
-    const typeTypes = [
-        'Cumulative',
-        'Daily',
-        'Count'
-    ];
+    const searchTags = (item, metricSearch) => {
+        const metric = Object.entries(Object.entries(data)[1][1]).filter(it => it[0] === item);
+        const tags = (Object.values(metric)[0])[1].tags;
+        const res = tags.some(item => item.includes(metricSearch));
+        return res;
+    }
 
     useEffect(() => {
         if (metricSearch) {
-            alert ("searching")
-            console.log(metrics.length)
-            const m = metrics.filter(item => item === 'cumAdmissionsByAge')
-            console.log(m)
-            console.log(m.length)
-            alert ("searched")
-            setMetrics(m)
+            setMetrics(metrics.filter(item => item.includes(metricSearch) || searchTags(item, metricSearch)))   
         }
        
     }, [ metricSearch ]);
 
+    useEffect(() => {
+       
+    }, [ topicType ]);
+
+    useEffect(() => {
+       
+    }, [ typeType ]);
+
     const topics = new Set(Object.values(data[Object.keys(data)[0]]["categories"]))
     const typs = new Set(Object.values(data[Object.keys(data)[0]]["types"]))
    
-    const [topicType, setTopicType] = useState(null);
-    const [typeType, setTypeType] = useState(null);
+   
 
     const [allExpanded, setAllExpanded ] = useState(false);
  

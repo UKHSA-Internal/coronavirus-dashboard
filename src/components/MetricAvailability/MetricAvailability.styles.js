@@ -3,6 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
+import { indexes } from 'd3-array';
 
 export const MainContainer: ComponentType<*> =
     styled
@@ -77,7 +78,10 @@ export const Container: ComponentType<*> =
 
 export const MainDiv: ComponentType<*> =
     styled
-        .div`
+        .div
+        .attrs(({ className="" }) => ({
+            className: `govuk-!-margin-top-0 govuk-!-margin-bottom-0 ${className}`
+        }))`
             grid-column: 1/ span 6;
         `;
 
@@ -91,9 +95,10 @@ export const CardColumn: ComponentType<*> =
 export const HeaderDiv: ComponentType<*> =
     styled
         .div
-        .attrs(({ className="", href="", index }) => ({
+        .attrs(({ className="", index }) => ({
             className: `govuk-!-margin-top-0 govuk-!-margin-bottom-0 ${className}`,
             index
         }))`
             height: 2px;
+            grid-column: {index} / span 1;
         `;
