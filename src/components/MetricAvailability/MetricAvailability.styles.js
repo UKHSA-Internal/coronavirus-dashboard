@@ -74,3 +74,26 @@ export const Container: ComponentType<*> =
             margin-top: 20px;
             grid-template-columns: repeat(6, 1fr);
         `;
+
+export const MainDiv: ComponentType<*> =
+    styled
+        .div`
+            grid-column: 1/ span 6;
+        `;
+
+export const CardColumn: ComponentType<*> =
+    styled
+        .div`
+            height: 2px;
+            border-top: 1px solid #e5e5e5;
+        `;
+
+export const HeaderDiv: ComponentType<*> =
+    styled
+        .div
+        .attrs(({ className="", href="", index }) => ({
+            className: `govuk-!-margin-top-0 govuk-!-margin-bottom-0 ${className}`,
+            index
+        }))`
+            height: 2px;
+        `;

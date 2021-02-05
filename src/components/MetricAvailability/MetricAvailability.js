@@ -15,7 +15,11 @@ import {
     MainContainer,
     MainContent, 
     SideContent, 
-    Container } 
+    Container,
+    MainDiv,
+    CardColumn,
+    HeaderDiv,
+}
 from './MetricAvailability.styles';
 
 import URLs from "common/urls";
@@ -49,14 +53,95 @@ const MetricHeader = [
     'Wales'
 ];
 
+const MetricDescription : ComponentType<Props> = ({ baseUrl, descriptionMd }: Props) => { 
+    
+    const description = useGenericAPI(baseUrl + descriptionMd, "Not currently available", "text" );
+
+    return <MainDiv>
+                <details class="govuk-details" data-module="govuk-details">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text">
+                            Metric description
+                        </span>
+                    </summary>
+                    <div class="govuk-details__text">
+                        {description}
+                    </div>
+                </details>
+            </MainDiv>;
+}
+
+const MetricMethodology : ComponentType<Props> = ({ baseUrl, methodologyMd }: Props) => {    
+
+    const methodology = useGenericAPI(baseUrl + methodologyMd, "Not currently available", "text" );
+
+    return <MainDiv>
+                <details class="govuk-details" data-module="govuk-details">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text">
+                            Methodology
+                        </span>
+                    </summary>
+                    <div class="govuk-details__text">
+                        {methodology}
+                    </div>
+                </details> 
+            </MainDiv>;
+}
+
+const Card: ComponentType<Props> = ({ areaType, metric }: Props) => {
+
+    return areaType.map((at, index) => {
+
+        const availability = (Object.values(metric)[0])[1].availability
+       
+        return <>
+            {/* Area Name  */}
+            <CardColumn className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-an-${ index }`}>
+                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>{at}</div>
+            </CardColumn>
+            {/* UK */}
+            <CardColumn className={ "govuk-!-margin-top-20 govuk-!-margin-bottom-0" }key={ `metric-uk-${ index }`}>
+                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                    { availability[at] ? availability[at].includes("K") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
+                </div>
+            </CardColumn>
+            {/* England */}
+            <CardColumn className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-en-${ index }`}>
+                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                    { availability[at] ? availability[at].includes("E") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
+                </div>
+            </CardColumn>
+            {/* Scotland */}
+            <CardColumn className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" }key={ `metric-sc-${ index }`}>
+                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                    { availability[at] ? availability[at].includes("S") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
+                </div>
+            </CardColumn>
+            {/* NI */}
+            <CardColumn className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-ni-${ index }`}>
+                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                    { availability[at] ? availability[at].includes("N") ? <img src={ GreenTick } width={ "14px" } /> : null: null}
+                </div>
+            </CardColumn>
+            {/* Wales */}
+            <CardColumn className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-wa-${ index }`}>
+                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                    { availability[at] ? availability[at].includes("W") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
+                </div>
+            </CardColumn>
+  
+            </>
+
+    });
+
+}
+
 const MetricCard: ComponentType<Props> = ({ item, metric }: Props) => {
 
     const detailsBaseUrl = URLs["metricDetails"];
     const descriptionMd = (Object.values(metric)[0])[1].description
     const methodologyMd = (Object.values(metric)[0])[1].methodology
-
-    const description = useGenericAPI(detailsBaseUrl + descriptionMd, "Not currently available", "text" );
-    const methodology = useGenericAPI(detailsBaseUrl + methodologyMd, "Not currently available", "text" );
 
     const areaType = [
         'nation',
@@ -66,85 +151,15 @@ const MetricCard: ComponentType<Props> = ({ item, metric }: Props) => {
         'overview',
     ];
 
-    const card = areaType.map((at, index) => {
-
-        const availability = (Object.values(metric)[0])[1].availability
-       
-        return <>
-            {/* Area Name  */}
-            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-an-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
-                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>{at}</div>
-            </div>
-            {/* UK */}
-            <div className={ "govuk-!-margin-top-20 govuk-!-margin-bottom-0" }key={ `metric-uk-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
-                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    { availability[at] ? availability[at].includes("K") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
-                </div>
-            </div>
-            {/* England */}
-            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-en-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
-                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    { availability[at] ? availability[at].includes("E") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
-                </div>
-            </div>
-            {/* Scotland */}
-            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" }key={ `metric-sc-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
-                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    { availability[at] ? availability[at].includes("S") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
-                </div>
-            </div>
-            {/* NI */}
-            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-ni-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
-                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    { availability[at] ? availability[at].includes("N") ? <img src={ GreenTick } width={ "14px" } /> : null: null}
-                </div>
-            </div>
-            {/* Wales */}
-            <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-wa-${ index }`} style={{height: '2px', borderTop: "1px solid #e5e5e5"}}>
-                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    { availability[at] ? availability[at].includes("W") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
-                </div>
-            </div>
-  
-            </>
-
-    });
-
-   
-
-    const metricDescription =   
-            <div style={{gridColumn: "1/ span 6"}}>
-                <details class="govuk-details" data-module="govuk-details">
-                <summary class="govuk-details__summary">
-                    <span class="govuk-details__summary-text">
-                        Metric description
-                    </span>
-                </summary>
-                <div class="govuk-details__text">
-                    {description}
-                </div>
-            </details>
-            </div>;
-
-  
-    const metricMethodology =    
-        <div style={{gridColumn: "1/ span 6"}}>
-            <details class="govuk-details" data-module="govuk-details">
-                <summary class="govuk-details__summary">
-                    <span class="govuk-details__summary-text">
-                        Methodology
-                    </span>
-                </summary>
-                <div class="govuk-details__text">
-                    {methodology}
-                </div>
-            </details> 
-        </div>;
-
     return <> 
-        {card}
-        {metricMethodology}
-        {metricDescription}
+        <Card areaType={ areaType }
+              metric={ metric }/>
+        <MetricDescription baseUrl={ detailsBaseUrl }
+                      descriptionMd={ descriptionMd }/>
+
+
+        <MetricMethodology baseUrl={ detailsBaseUrl }
+                       methodologyMd={ methodologyMd }/>
        
     </>
 
@@ -183,6 +198,7 @@ const MetricItem: ComponentType<Props> = ({ item, metric, allExpanded }: Props) 
 
                     <button type="button" onClick={expandSection} id={ `accordion-default-heading-${ item }`} aria-controls={ `accordion-default-content-${ item }`} class="govuk-accordion__section-button" aria-expanded={expanded}>
 
+                        {/* Not available at the moment */}
                         <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
                             {/* <p id={ "metric-????" } className={ "govuk-heading-s" }>
                                 {???}
@@ -191,8 +207,10 @@ const MetricItem: ComponentType<Props> = ({ item, metric, allExpanded }: Props) 
 
                         <div className={"govuk-!-margin-top-0 govuk-!-margin-bottom-0"}>
                             <p id={ "metric-name" } className={ "govuk-heading-s" }>
-                                Metric name: {item} Date added: {dateAdded ? moment(dateAdded).format(DATE_FORMAT) :
-                                                            "Not available"}
+                                Metric name: {item}
+                            </p>
+                            <p id={ "metric-name" } className={ "govuk-heading-s" }>
+                                Date added: {dateAdded ? moment(dateAdded).format(DATE_FORMAT) : "Not available"}
                             </p>
                        </div>
                         
@@ -218,9 +236,10 @@ const MetricDataHeader: ComponentType<Props> = ({ header }: Props) => {
 
    
     return header.map((item, index) => {
-                    return <div key={ `metric-header-${ index }`} 
-                            style={{height: '2px', gridColumn:  "{index+1}/ span 1"}} 
-                            className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>{item}</div> 
+                    return <HeaderDiv key={ `metric-header-${ index }`} 
+                                      style={{gridColumn:  "{index+1}/ span 1"}}>
+                                {item}
+                            </HeaderDiv> 
                 });  
        
 } // MetricDataHeadrer
@@ -229,7 +248,7 @@ const MetricDataHeader: ComponentType<Props> = ({ header }: Props) => {
 const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
 
     const [metricSearch, setMetricSearch] = useState("");
-    const [metrics, setMetrics ] = useState(Object.keys(data[Object.keys(data)[1]]))
+    const [metrics, setMetrics ] = useState(Object.keys(data[Object.keys(data)[1]]));
 
     const topicTypes = [
         'Cases',
@@ -247,9 +266,13 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
 
     useEffect(() => {
         if (metricSearch) {
-            
-            searchContent("dave", metricSearch)
-            // setMetrics(m)
+            alert ("searching")
+            console.log(metrics.length)
+            const m = metrics.filter(item => item === 'cumAdmissionsByAge')
+            console.log(m)
+            console.log(m.length)
+            alert ("searched")
+            setMetrics(m)
         }
        
     }, [ metricSearch ]);

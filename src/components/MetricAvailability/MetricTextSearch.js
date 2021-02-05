@@ -6,10 +6,6 @@ import FormItem from "../Formset";
 
 export const searchContent = (item, token) => {
 
-    console.log("searching")
-    console.log(token)
-    console.log(item)
-
     return ( !token || (token?.length ?? 0) === 0 ) ||
         new RegExp(token, 'ig').exec(`${item}`) !== null
    
