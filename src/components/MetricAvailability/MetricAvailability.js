@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Fragment, useState, useEffect, useRef } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 
 import type { ComponentType } from 'react';
@@ -23,8 +23,6 @@ import {
 from './MetricAvailability.styles';
 
 import URLs from "common/urls";
-
-import searchContent from './MetricTextSearch';
 
 import MetricTextSearch from './MetricTextSearch';
 
@@ -69,7 +67,7 @@ const MetricDescription : ComponentType<Props> = ({ baseUrl, descriptionMd }: Pr
                     </div>
                 </details>
             </MainDiv>;
-}
+}; // MetricDescription
 
 const MetricMethodology : ComponentType<Props> = ({ baseUrl, methodologyMd }: Props) => {    
 
@@ -87,13 +85,13 @@ const MetricMethodology : ComponentType<Props> = ({ baseUrl, methodologyMd }: Pr
                     </div>
                 </details> 
             </MainDiv>;
-}
+}; //  MetricMethodology
 
 const Card: ComponentType<Props> = ({ areaType, metric }: Props) => {
 
     return areaType.map((at, index) => {
 
-        const availability = (Object.values(metric)[0])[1].availability
+        const availability = (Object.values(metric)[0])[1].availability;
        
         return <>
             {/* Area Name  */}
@@ -135,13 +133,13 @@ const Card: ComponentType<Props> = ({ areaType, metric }: Props) => {
 
     });
 
-}
+}; // Card
 
 const MetricCard: ComponentType<Props> = ({ item, metric }: Props) => {
 
     const detailsBaseUrl = URLs["metricDetails"];
-    const descriptionMd = (Object.values(metric)[0])[1].description
-    const methodologyMd = (Object.values(metric)[0])[1].methodology
+    const descriptionMd = (Object.values(metric)[0])[1].description;
+    const methodologyMd = (Object.values(metric)[0])[1].methodology;
 
     const areaType = [
         'nation',
@@ -163,28 +161,28 @@ const MetricCard: ComponentType<Props> = ({ item, metric }: Props) => {
        
     </>
 
-};
+}; //  MetricCard
 
 const MetricItem: ComponentType<Props> = ({ item, metric, allExpanded }: Props) => {
 
-    const dateAdded = (Object.values(metric)[0])[1].dateAdded
+    const dateAdded = (Object.values(metric)[0])[1].dateAdded;
 
     const DATE_FORMAT = "DD/MM/YYYY";
 
-    const [ expanded, setExpanded ] = useState(false)
-    const [ cls, setCls] = useState ("govuk-accordion__section")
+    const [ expanded, setExpanded ] = useState(false);
+    const [ cls, setCls] = useState ("govuk-accordion__section");
 
     const expandSection = () => {
         if (expanded === true) allExpanded = false;
-        setExpanded(!expanded)
+        setExpanded(!expanded);
     }
 
     useEffect(() => {
         if (expanded || allExpanded) {
-            setCls("govuk-accordion__section govuk-accordion__section--expanded")
+            setCls("govuk-accordion__section govuk-accordion__section--expanded");
         }
         else {
-            setCls("govuk-accordion__section")
+            setCls("govuk-accordion__section");
         }
     }, [ expanded, allExpanded ]);
 
@@ -250,7 +248,9 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
     const [metricSearch, setMetricSearch] = useState("");
     const [topicType, setTopicType] = useState(null);
     const [typeType, setTypeType] = useState(null);
-   
+    const topics = new Set(Object.values(data[Object.keys(data)[0]]["categories"]));
+    const typs = new Set(Object.values(data[Object.keys(data)[0]]["types"]));
+    const [allExpanded, setAllExpanded ] = useState(false);
     const [metrics, setMetrics ] = useState(Object.keys(data[Object.keys(data)[1]]));
 
     const searchTags = (item, metricSearch) => {
@@ -262,30 +262,25 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
 
     useEffect(() => {
         if (metricSearch) {
-            setMetrics(metrics.filter(item => item.includes(metricSearch) || searchTags(item, metricSearch)))   
+            setMetrics(metrics.filter(item => item.includes(metricSearch) || searchTags(item, metricSearch)));
         }
        
     }, [ metricSearch ]);
 
     useEffect(() => {
         if (topicType) {
-            setMetrics(metrics.filter(item => searchTags(item, topicType))) 
+            setMetrics(metrics.filter(item => searchTags(item, topicType)));
         }
     }, [ topicType ]);
 
     useEffect(() => {
         if (typeType) {
-            setMetrics(metrics.filter(item => searchTags(item, typeType))) 
+            setMetrics(metrics.filter(item => searchTags(item, typeType)));
         }
     }, [ typeType ]);
 
-    const topics = new Set(Object.values(data[Object.keys(data)[0]]["categories"]))
-    const typs = new Set(Object.values(data[Object.keys(data)[0]]["types"]))
-   
-    const [allExpanded, setAllExpanded ] = useState(false);
- 
     const setAllExp = () => {
-        setAllExpanded(!allExpanded)
+        setAllExpanded(!allExpanded);
     }
 
     return <Fragment>
@@ -313,7 +308,7 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
             
                         metrics.map(item => {
                             
-                            const metric = Object.entries(Object.entries(data)[1][1]).filter(it => it[0] === item)
+                            const metric = Object.entries(Object.entries(data)[1][1]).filter(it => it[0] === item);
                             
                             return <MetricItem 
                                     item={ item }
@@ -351,12 +346,9 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
 
         </MainContainer>
 
-        
-       
-
     </Fragment>
 
 
 }; // MetricAvailabilty
 
-export default MetricAvailabilty
+export default MetricAvailabilty;

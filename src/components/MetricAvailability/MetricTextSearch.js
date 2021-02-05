@@ -4,16 +4,6 @@ import React, { useEffect, useRef } from 'react';
 
 import FormItem from "../Formset";
 
-export const searchContent = (item, token) => {
-
-    return false;
-
-    // return ( !token || (token?.length ?? 0) === 0 ) ||
-    //     item.includes(token)
-    //     // new RegExp(token, 'ig').exec(`${item}`) !== null
-   
-};
-
 export const MetricTextSearch: ComponentType = ({ metricSearch, setMetricSearch }) => {
 
     return <FormItem aria-labelledby={ "aria-search-filter-label" }
@@ -39,4 +29,4 @@ export const MetricTextSearch: ComponentType = ({ metricSearch, setMetricSearch 
 
 }; // MetricTextSearch
 
-export default MetricTextSearch
+export default MetricTextSearch;
