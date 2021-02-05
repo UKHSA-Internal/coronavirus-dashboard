@@ -6,7 +6,7 @@ import FormItem from "../Formset";
 
 export const MetricFilter: ComponentType = ({ label, metricType, metricTypes, setMetricType }) => {
 
-
+   
     return <FormItem aria-labelledby={ "aria-type-filter-label" }
                      aria-describedby={ "aria-type-filter-descr" }
                      width={ "full" }>
@@ -17,7 +17,7 @@ export const MetricFilter: ComponentType = ({ label, metricType, metricTypes, se
         </span>
 
         {
-            metricTypes.map((key, index) =>
+            metricTypes.map((key, index) => 
 
                 <div aria-describedby={ "type-filter-descr" }
                      aria-labelledby={ "type-filter-label" }
@@ -28,8 +28,8 @@ export const MetricFilter: ComponentType = ({ label, metricType, metricTypes, se
                             id={ `type-filter-${ index }` }
                             name={ key }
                             type="checkbox"
-                            checked={false}
-                            onChange={ (event) => setMetricType(event.target.value)}
+                            checked={key === metricType}
+                            onChange={ (event) => setMetricType(event.target.name)}
                             />
                         { key }
                     </label>

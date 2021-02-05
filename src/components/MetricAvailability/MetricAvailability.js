@@ -268,18 +268,20 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
     }, [ metricSearch ]);
 
     useEffect(() => {
-       
+        if (topicType) {
+            setMetrics(metrics.filter(item => searchTags(item, topicType))) 
+        }
     }, [ topicType ]);
 
     useEffect(() => {
-       
+        if (typeType) {
+            setMetrics(metrics.filter(item => searchTags(item, typeType))) 
+        }
     }, [ typeType ]);
 
     const topics = new Set(Object.values(data[Object.keys(data)[0]]["categories"]))
     const typs = new Set(Object.values(data[Object.keys(data)[0]]["types"]))
    
-   
-
     const [allExpanded, setAllExpanded ] = useState(false);
  
     const setAllExp = () => {
