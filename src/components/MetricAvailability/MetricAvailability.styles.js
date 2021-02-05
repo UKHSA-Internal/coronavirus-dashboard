@@ -3,7 +3,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
-import { indexes } from 'd3-array';
 
 export const MainContainer: ComponentType<*> =
     styled
@@ -102,3 +101,16 @@ export const HeaderDiv: ComponentType<*> =
             height: 2px;
             grid-column: {index} / span 1;
         `;
+
+export const SummaryContainer: ComponentType<*> =
+    styled
+        .article`
+            display: grid;
+            grid-template-columns: auto max-content;
+        `;
+
+export const SummaryContent: ComponentType<*> =
+        styled
+            .section`
+                text-align: left;
+            `;
