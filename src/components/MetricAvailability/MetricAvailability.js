@@ -18,6 +18,7 @@ import {
     MainDiv,
     CardColumn,
     HeaderDiv,
+    SummaryContainer,   
 }
 from './MetricAvailability.styles';
 
@@ -198,33 +199,25 @@ const MetricItem: ComponentType<Props> = ({ item, metric, allExpanded }: Props) 
             <div class="govuk-accordion__section-header">
                 <h2 class="govuk-accordion__section-heading">
 
-                    <button type="button" onClick={expandSection} id={ `accordion-default-heading-${ item }`} aria-controls={ `accordion-default-content-${ item }`} class="govuk-accordion__section-button" aria-expanded={expanded}>
+                    
 
-                       
-                       
+                    <button style={{width: '100%'}} type="button" onClick={expandSection} id={ `accordion-default-heading-${ item }`} aria-controls={ `accordion-default-content-${ item }`} class="govuk-accordion__section-button" aria-expanded={expanded}>
 
-                        <div className={"govuk-!-margin-top-0 govuk-!-margin-bottom-0"}>
-
-                            {/* Not available at the moment */}
-                            {/* <div className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } style={{gridColum: '1/ span 2'}}>
-                                <p id={ "metric-????" } className={ "govuk-heading-s" } style={{color: '#1d70b8', fontSize: '13pt'}}>
-                                    {???}
-                                </p>
-                            </div> */}
-
-                            <div id={ "metric" } className={ "govuk-heading-s" } style={{fontSize: '13pt', marginRight: '2px', float: 'left'}}>
+                        <SummaryContainer className={"govuk-!-margin-top-0 govuk-!-margin-bottom-0"}>
+                            <div id={ "metric" } className={ "govuk-heading-s" } style={{width: 'fitContent', fontSize: '13pt', gridColumn: '1/ span 1'}}>
                                 Metric: {item}
                             </div>
 
-                            <div id={ "metric-date-added" } className={ "govuk-heading-s" } style={{textAlign: 'right', fontSize: '13pt', float: 'right', marginRight: '2px'}}>
-                                Date added:  {dateAdded ? moment(dateAdded).format(DATE_FORMAT) : "99/99/9999"}
+                            <div id={ "metric-date-added" } className={ "govuk-heading-s" } style={{textAlign: 'center', fontSize: '13pt', gridColumn: '2/ span 1'}}>
+                                Date added:  {dateAdded ? moment(dateAdded).format(DATE_FORMAT) : "N/A"}
                             </div>
+
+                        </SummaryContainer>
             
-                            
-                       </div>
-                        
-                       <span class="govuk-accordion__icon" aria-hidden="true"></span>
+                        <span class="govuk-accordion__icon" aria-hidden="true"></span>
                     </button>
+
+                    
                 </h2>
             </div>
             <div id={ `accordion-default-content-${ item }`} class="govuk-accordion__section-content" aria-labelledby={ `accordion-default-heading-${ item }`}>

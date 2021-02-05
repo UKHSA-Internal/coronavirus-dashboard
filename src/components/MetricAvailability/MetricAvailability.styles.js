@@ -104,13 +104,8 @@ export const HeaderDiv: ComponentType<*> =
 
 export const SummaryContainer: ComponentType<*> =
     styled
-        .article`
+        .div`
             display: grid;
-            grid-template-columns: auto max-content;
+            width: 100%;
+            grid-template-columns: 70% 30%;
         `;
-
-export const SummaryContent: ComponentType<*> =
-        styled
-            .section`
-                text-align: left;
-            `;
