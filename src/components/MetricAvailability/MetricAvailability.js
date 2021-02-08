@@ -59,16 +59,19 @@ const MetricDescription : ComponentType<Props> = ({ baseUrl, descriptionMd }: Pr
     
     const description = useGenericAPI(baseUrl + descriptionMd, "Not currently available", "text" );
 
+    if ( !description ) return null;
+
+
     return <MainDiv>
-                <details class="govuk-details govuk-!-margin-top-2 govuk-!-margin-bottom-0" data-module="govuk-details">
-                    <summary class="govuk-details__summary govuk-!-margin-bottom-2">
-                        <span class="govuk-details__summary-text">     
+                  <details className="govuk-details govuk-!-margin-top-2"
+                    data-module="govuk-details">
+                    <summary className="govuk-details__summary">
+                        <span className="govuk-details__summary-text">
                             Metric description
                         </span>
                     </summary>
-                    <div class="govuk-details__text">
-                        <Markdown dangerouslySetInnerHTML={{ __html: description }}/>
-                    </div>
+                    <Markdown className="govuk-details__text govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0"
+                            dangerouslySetInnerHTML={{ __html: description }}/>
                 </details>
             </MainDiv>;
 }; // MetricDescription
@@ -77,17 +80,19 @@ const MetricMethodology : ComponentType<Props> = ({ baseUrl, methodologyMd }: Pr
 
     const methodology = useGenericAPI(baseUrl + methodologyMd, "Not currently available", "text" );
 
+    if ( !methodology ) return null;
+
     return <MainDiv>
-                <details class="govuk-details govuk-!-margin-top-0 govuk-!-margin-bottom-0" data-module="govuk-details">
-                    <summary class="govuk-details__summary">
-                        <span class="govuk-details__summary-text">
+               <details className="govuk-details govuk-!-margin-top-0"
+                    data-module="govuk-details">
+                    <summary className="govuk-details__summary">
+                        <span className="govuk-details__summary-text">
                             Methodology
                         </span>
                     </summary>
-                    <div class="govuk-details__text">
-                        <Markdown dangerouslySetInnerHTML={{ __html: methodology }}/>
-                    </div>
-                </details> 
+                    <Markdown className="govuk-details__text govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0"
+                            dangerouslySetInnerHTML={{ __html: methodology }}/>
+                </details>
             </MainDiv>;
 }; //  MetricMethodology
 
@@ -191,10 +196,10 @@ const MetricItem: ComponentType<Props> = ({ item, metric, allExpanded }: Props) 
 
     return <>
 
-        <div key={ `metric-section-${ item }`} class={ cls }>
+        <div key={ `metric-section-${ item }`} className={ cls }>
     
-            <div class="govuk-accordion__section-header">
-                <h2 class="govuk-accordion__section-heading">
+            <div className="govuk-accordion__section-header">
+                <h2 className="govuk-accordion__section-heading">
 
                     <MatrixButton onClick={expandSection} 
                                   id={ `accordion-default-heading-${ item }`} 
@@ -207,20 +212,21 @@ const MetricItem: ComponentType<Props> = ({ item, metric, allExpanded }: Props) 
                             <MetricSummary textAlign={ 'left' } fontWeight={ 'normal' }>{item}</MetricSummary>
             
                             <MetricSummary textAlign={ 'center' } fontWeight={ 'bold' }>Date added:</MetricSummary>  
-                            <MetricSummary textAlign={ 'left' } fontWeight={ 'normal' }>{dateAdded ? moment(dateAdded).format(DATE_FORMAT) : "N/A"}</MetricSummary>
+                            <MetricSummary textAlign={ 'left' } fontWeight={ 'normal' }>
+                                {dateAdded ? moment(dateAdded).format(DATE_FORMAT) : "N/A"}
+                            </MetricSummary>
 
                         </SummaryContainer>
             
-                        <span class="govuk-accordion__icon" aria-hidden="true"></span>
+                        <span className="govuk-accordion__icon" aria-hidden="true"></span>
                     </MatrixButton>
 
                     
                 </h2>
             </div>
-            <div id={ `accordion-default-content-${ item }`} class="govuk-accordion__section-content" aria-labelledby={ `accordion-default-heading-${ item }`}>
+            <div id={ `accordion-default-content-${ item }`} className="govuk-accordion__section-content" aria-labelledby={ `accordion-default-heading-${ item }`}>
                 <Container>
                     <MetricDataHeader header={ MetricHeader }/>
-
                     <MetricMatrix metric={ metric }/>
                 </Container>
             </div>
@@ -262,35 +268,29 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
     }
 
     useEffect(() => {
+        
+        let metrics = allMetrics;
+      
         if (metricSearch) {
-            setMetrics(metrics.filter(item => item.includes(metricSearch) || searchTags(item, metricSearch)));
-        }
-        else {
-            setMetrics(allMetrics);
-        }
-       
-    }, [ metricSearch ]);
-
-    useEffect(() => {
+            metrics = metrics.filter(item => item.includes(metricSearch) || searchTags(item, metricSearch));
+        };
+    
         if (topicType) {
-            setMetrics(metrics.filter(item => searchTags(item, topicType)));
-        }
-        else {
-            setMetrics(allMetrics);
-        }
-    }, [ topicType ]);
+            metrics = metrics.filter(item => searchTags(item, topicType));
+        };
 
-    useEffect(() => {
         if (typeType) {
-            setMetrics(metrics.filter(item => searchTags(item, typeType)));
-        } else {
-            setMetrics(allMetrics);
-        }
-    }, [ typeType ]);
+            metrics = metrics.filter(item => searchTags(item, typeType));
+        };
 
-    const setAllExp = () => {
+        setMetrics(metrics)
+       
+    }, [ metricSearch, topicType, typeType ]);
+
+     const setAllExp = () => {
         setAllExpanded(!allExpanded);
-    }
+    };
+
 
     return <Fragment>
 
@@ -306,15 +306,15 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
                     </p>
                 </div>
 
-                <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+                <div className="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
 
-                <div class="govuk-accordion__controls">
+                <div className="govuk-accordion__controls">
                     <button onClick={setAllExp}
                             type="button" 
-                            class="govuk-accordion__open-all" 
+                            className="govuk-accordion__open-all" 
                             aria-expanded={allExpanded}>
                                 {allExpanded ? "Close all": "Open all"}
-                        <span class="govuk-visually-hidden"> sections</span>
+                        <span className="govuk-visually-hidden"> sections</span>
                     </button>
                 </div>
                     {     
@@ -343,12 +343,10 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
 
                         <MetricFilter label={"Topic"}
                                     metricTypes={ topics } 
-                                    metricType={ topicType }
                                     setMetricType={ setTopicType }/>
 
                          <MetricFilter label={"Type"}
                                     metricTypes={ typs } 
-                                    metricType={ typeType }
                                     setMetricType={ setTypeType }/>
                     </Form>
                 </div>
