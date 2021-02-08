@@ -21,6 +21,8 @@ const NavigationItems: ComponentType<Props> = ({ menuState, setMenuState, ...pro
 
     const { pathname } = useLocation();
 
+    if ( !menuState ) return null;
+
     return <SideNav aria-label="Side navigation" { ...props }>
         <SideNavList>
             <SideNavListItem className={`${pathname === '/' ? "moj-side-navigation__item--active" : ""}`}>
@@ -86,7 +88,7 @@ const SideNavMobile: ComponentType<Props> = ({ ...props }: Props) => {
                 Menu ▼
             </MobileNavToggler>
         </MobileNavTogglerWrapper>
-        { menuState ? <NavigationItems menuState={ menuState } setMenuState={ setMenuState() }/>: null }
+        <NavigationItems menuState={ menuState } setMenuState={ setMenuState }/>
     </MobileNavWrapper>;
 
 };  // SideNavMobile
