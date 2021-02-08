@@ -1,6 +1,6 @@
 // @flow
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 
 import URLs from "common/urls";
 
@@ -14,7 +14,7 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, responseTy
 
     const [ response, setResponse ] = useState(defaultResponse);
 
-    useEffect( () => {
+    useMemo( () => {
     
         (async () => {
         
