@@ -16,9 +16,12 @@ import {
     SideContent, 
     Container,
     MainDiv,
-    CardColumn,
+    MatrixColumn,
     HeaderDiv,
-    SummaryContainer,   
+    SummaryContainer, 
+    Markdown, 
+    MatrixButton,
+    MetricSummary,
 }
 from './MetricAvailability.styles';
 
@@ -49,19 +52,22 @@ const MetricHeader = [
     'Wales'
 ];
 
+const REF_INDEX = 0;
+const METRICS_INDEX = 1;
+
 const MetricDescription : ComponentType<Props> = ({ baseUrl, descriptionMd }: Props) => { 
     
     const description = useGenericAPI(baseUrl + descriptionMd, "Not currently available", "text" );
 
     return <MainDiv>
-                <details class="govuk-details govuk-!-margin-top-0 govuk-!-margin-bottom-0" data-module="govuk-details">
-                    <summary class="govuk-details__summary">
-                        <span class="govuk-details__summary-text">
+                <details class="govuk-details govuk-!-margin-top-2 govuk-!-margin-bottom-0" data-module="govuk-details">
+                    <summary class="govuk-details__summary govuk-!-margin-bottom-2">
+                        <span class="govuk-details__summary-text">     
                             Metric description
                         </span>
                     </summary>
                     <div class="govuk-details__text">
-                        {description}
+                        <Markdown dangerouslySetInnerHTML={{ __html: description }}/>
                     </div>
                 </details>
             </MainDiv>;
@@ -79,13 +85,13 @@ const MetricMethodology : ComponentType<Props> = ({ baseUrl, methodologyMd }: Pr
                         </span>
                     </summary>
                     <div class="govuk-details__text">
-                        {methodology}
+                        <Markdown dangerouslySetInnerHTML={{ __html: methodology }}/>
                     </div>
                 </details> 
             </MainDiv>;
 }; //  MetricMethodology
 
-const Card: ComponentType<Props> = ({ areaType, metric }: Props) => {
+const Matrix: ComponentType<Props> = ({ areaType, metric }: Props) => {
 
     return areaType.map((at, index) => {
 
@@ -93,47 +99,37 @@ const Card: ComponentType<Props> = ({ areaType, metric }: Props) => {
        
         return <>
             {/* Area Name  */}
-            <CardColumn className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-an-${ index }`}>
-                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>{at}</div>
-            </CardColumn>
+            <MatrixColumn key={ `metric-an-${ index }`}>
+                {at}
+            </MatrixColumn>
             {/* UK */}
-            <CardColumn className={ "govuk-!-margin-top-20 govuk-!-margin-bottom-0" }key={ `metric-uk-${ index }`}>
-                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    { availability[at] ? availability[at].includes("K") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
-                </div>
-            </CardColumn>
+            <MatrixColumn key={ `metric-uk-${ index }`}>
+                { availability[at] ? availability[at].includes("K") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
+            </MatrixColumn>
             {/* England */}
-            <CardColumn className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-en-${ index }`}>
-                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    { availability[at] ? availability[at].includes("E") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
-                </div>
-            </CardColumn>
+            <MatrixColumn key={ `metric-en-${ index }`}>
+                { availability[at] ? availability[at].includes("E") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
+            </MatrixColumn>
             {/* Scotland */}
-            <CardColumn className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" }key={ `metric-sc-${ index }`}>
-                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    { availability[at] ? availability[at].includes("S") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
-                </div>
-            </CardColumn>
+            <MatrixColumn key={ `metric-sc-${ index }`}>
+                { availability[at] ? availability[at].includes("S") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
+            </MatrixColumn>
             {/* NI */}
-            <CardColumn className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-ni-${ index }`}>
-                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    { availability[at] ? availability[at].includes("N") ? <img src={ GreenTick } width={ "14px" } /> : null: null}
-                </div>
-            </CardColumn>
+            <MatrixColumn key={ `metric-ni-${ index }`}>
+                { availability[at] ? availability[at].includes("N") ? <img src={ GreenTick } width={ "14px" } /> : null: null}
+            </MatrixColumn>
             {/* Wales */}
-            <CardColumn className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" } key={ `metric-wa-${ index }`}>
-                <div className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    { availability[at] ? availability[at].includes("W") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
-                </div>
-            </CardColumn>
+            <MatrixColumn key={ `metric-wa-${ index }`}>
+                { availability[at] ? availability[at].includes("W") ? <img src={ GreenTick } width={ "14px" } /> : null : null}
+            </MatrixColumn>
   
             </>
 
     });
 
-}; // Card
+}; // Matrix
 
-const MetricCard: ComponentType<Props> = ({ item, metric }: Props) => {
+const MetricMatrix: ComponentType<Props> = ({ metric }: Props) => {
 
     const detailsBaseUrl = URLs["metricDetails"];
     const descriptionMd = (Object.values(metric)[0])[1].description;
@@ -148,7 +144,7 @@ const MetricCard: ComponentType<Props> = ({ item, metric }: Props) => {
     ];
 
     return <> 
-        <Card areaType={ areaType }
+        <Matrix areaType={ areaType }
               metric={ metric }/>
         <MetricDescription baseUrl={ detailsBaseUrl }
                       descriptionMd={ descriptionMd }/>
@@ -159,7 +155,7 @@ const MetricCard: ComponentType<Props> = ({ item, metric }: Props) => {
        
     </>
 
-}; //  MetricCard
+}; //  MatrixMatrix
 
 const MetricItem: ComponentType<Props> = ({ item, metric, allExpanded }: Props) => {
 
@@ -195,27 +191,28 @@ const MetricItem: ComponentType<Props> = ({ item, metric, allExpanded }: Props) 
 
     return <>
 
-      <div key={ `metric-section-${ item }`} class={cls}>
+        <div key={ `metric-section-${ item }`} class={ cls }>
+    
             <div class="govuk-accordion__section-header">
                 <h2 class="govuk-accordion__section-heading">
 
-                    
-
-                    <button style={{width: '100%'}} type="button" onClick={expandSection} id={ `accordion-default-heading-${ item }`} aria-controls={ `accordion-default-content-${ item }`} class="govuk-accordion__section-button" aria-expanded={expanded}>
+                    <MatrixButton onClick={expandSection} 
+                                  id={ `accordion-default-heading-${ item }`} 
+                                  aria-controls={ `accordion-default-content-${ item }`}
+                                  aria-expanded={expanded}>
 
                         <SummaryContainer className={"govuk-!-margin-top-0 govuk-!-margin-bottom-0"}>
-                            <div id={ "metric" } className={ "govuk-heading-s" } style={{width: 'fitContent', fontSize: '13pt', gridColumn: '1/ span 1'}}>
-                                Metric: {item}
-                            </div>
 
-                            <div id={ "metric-date-added" } className={ "govuk-heading-s" } style={{textAlign: 'center', fontSize: '13pt', gridColumn: '2/ span 1'}}>
-                                Date added:  {dateAdded ? moment(dateAdded).format(DATE_FORMAT) : "N/A"}
-                            </div>
+                            <MetricSummary textAlign={ 'left' } fontWeight={ 'bold' }>Metric:</MetricSummary> 
+                            <MetricSummary textAlign={ 'left' } fontWeight={ 'normal' }>{item}</MetricSummary>
+            
+                            <MetricSummary textAlign={ 'center' } fontWeight={ 'bold' }>Date added:</MetricSummary>  
+                            <MetricSummary textAlign={ 'left' } fontWeight={ 'normal' }>{dateAdded ? moment(dateAdded).format(DATE_FORMAT) : "N/A"}</MetricSummary>
 
                         </SummaryContainer>
             
                         <span class="govuk-accordion__icon" aria-hidden="true"></span>
-                    </button>
+                    </MatrixButton>
 
                     
                 </h2>
@@ -224,8 +221,7 @@ const MetricItem: ComponentType<Props> = ({ item, metric, allExpanded }: Props) 
                 <Container>
                     <MetricDataHeader header={ MetricHeader }/>
 
-                    <MetricCard item={ item }
-                                metric={ metric }/>
+                    <MetricMatrix metric={ metric }/>
                 </Container>
             </div>
         </div>
@@ -248,13 +244,15 @@ const MetricDataHeader: ComponentType<Props> = ({ header }: Props) => {
 
 const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
 
+    const allMetrics = Object.keys(data[Object.keys(data)[METRICS_INDEX]]);
+
     const [metricSearch, setMetricSearch] = useState("");
     const [topicType, setTopicType] = useState(null);
     const [typeType, setTypeType] = useState(null);
-    const topics = new Set(Object.values(data[Object.keys(data)[0]]["categories"]));
-    const typs = new Set(Object.values(data[Object.keys(data)[0]]["types"]));
+    const topics = new Set(Object.values(data[Object.keys(data)[REF_INDEX]]["categories"]));
+    const typs = new Set(Object.values(data[Object.keys(data)[REF_INDEX]]["types"]));
     const [allExpanded, setAllExpanded ] = useState(false);
-    const [metrics, setMetrics ] = useState(Object.keys(data[Object.keys(data)[1]]));
+    const [metrics, setMetrics ] = useState(allMetrics);
 
     const searchTags = (item, metricSearch) => {
         const metric = Object.entries(Object.entries(data)[1][1]).filter(it => it[0] === item);
@@ -267,6 +265,9 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
         if (metricSearch) {
             setMetrics(metrics.filter(item => item.includes(metricSearch) || searchTags(item, metricSearch)));
         }
+        else {
+            setMetrics(allMetrics);
+        }
        
     }, [ metricSearch ]);
 
@@ -274,11 +275,16 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
         if (topicType) {
             setMetrics(metrics.filter(item => searchTags(item, topicType)));
         }
+        else {
+            setMetrics(allMetrics);
+        }
     }, [ topicType ]);
 
     useEffect(() => {
         if (typeType) {
             setMetrics(metrics.filter(item => searchTags(item, typeType)));
+        } else {
+            setMetrics(allMetrics);
         }
     }, [ typeType ]);
 
@@ -303,12 +309,15 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
                 <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
 
                 <div class="govuk-accordion__controls">
-                    <button onClick={setAllExp}type="button" class="govuk-accordion__open-all" aria-expanded={allExpanded}>{allExpanded ? "Close all": "Open all"}
+                    <button onClick={setAllExp}
+                            type="button" 
+                            class="govuk-accordion__open-all" 
+                            aria-expanded={allExpanded}>
+                                {allExpanded ? "Close all": "Open all"}
                         <span class="govuk-visually-hidden"> sections</span>
                     </button>
                 </div>
-                    {
-            
+                    {     
                         metrics.map(item => {
                             
                             const metric = Object.entries(Object.entries(data)[1][1]).filter(it => it[0] === item);
@@ -319,10 +328,8 @@ const MetricAvailabilty: ComponentType<Props> = ({ data }: Props) => {
                                     allExpanded={ allExpanded }/>
 
                         })
-                    }
-                  
+                    }          
                 </div>
-
 
             </MainContent>
 

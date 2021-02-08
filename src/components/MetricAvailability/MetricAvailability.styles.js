@@ -84,11 +84,45 @@ export const MainDiv: ComponentType<*> =
             grid-column: 1/ span 6;
         `;
 
-export const CardColumn: ComponentType<*> =
+export const MatrixColumn: ComponentType<*> =
     styled
-        .div`
+        .div
+        .attrs(({ className="" }) => ({
+            className: `govuk-!-margin-top-1 govuk-!-margin-bottom-1 ${className}`
+        }))`
             height: 2px;
             border-top: 1px solid #e5e5e5;
+        `;
+
+export const MatrixButton: ComponentType<*> =
+    styled
+        .button
+        .attrs(({ className="" }) => ({
+            className: `govuk-accordion__section-button ${className}`
+        }))`
+            width: 100%;
+            type: button;
+        `;
+
+const calcTextAlign = ({ textAlign }) => {
+    return textAlign;
+}
+
+const calcFontWeight = ({ fontWeight }) => {
+    return fontWeight;
+}
+        
+export const MetricSummary: ComponentType<*> =
+    styled
+        .div
+        .attrs(({ className="", textAlign='left', fontWeight='normal' }) => ({
+            className: `govuk-heading-s ${className}`,
+            textAlign,
+            fontWeight
+        }))`
+            font-size: 13pt;
+            text-align: ${calcTextAlign};
+            font-weight: ${calcFontWeight};
         `;
 
 export const HeaderDiv: ComponentType<*> =
@@ -107,5 +141,12 @@ export const SummaryContainer: ComponentType<*> =
         .div`
             display: grid;
             width: 100%;
-            grid-template-columns: 70% 30%;
+            grid-template-columns: 9% 61% 20% 10%;
         `;
+
+    
+
+export const Markdown = ({ className = '', ...props }) => (
+    <div className={ `markdown ${className}` } { ...props }/>
+);
+        

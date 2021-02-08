@@ -1,12 +1,18 @@
 // @flow
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import FormItem from "../Formset";
 
 export const MetricFilter: ComponentType = ({ label, metricType, metricTypes, setMetricType }) => {
 
-   
+    const [checked, setChecked ] = useState(false);
+
+    const setFilter = (event) => {
+        setChecked(!checked);
+        setMetricType(checked ? event.target.name : null);
+    }
+
     return <FormItem aria-labelledby={ "aria-type-filter-label" }
                      aria-describedby={ "aria-type-filter-descr" }
                      width={ "full" }>
@@ -28,8 +34,8 @@ export const MetricFilter: ComponentType = ({ label, metricType, metricTypes, se
                             id={ `type-filter-${ index }` }
                             name={ key }
                             type="checkbox"
-                            checked={key === metricType}
-                            onChange={ (event) => setMetricType(event.target.name)}
+                            checked={ checked }
+                            onChange={ (event) => setFilter(event)}
                             />
                         { key }
                     </label>
