@@ -112,3 +112,22 @@ export const MonthlyHeader: ComponentType<*> =
         .header`
             margin-top: 30px;
         `;
+
+
+export const ChangeLogBanner: ComponentType<*> =
+    styled
+        .div`
+            display: grid;
+            padding: 0.7rem;
+            justify-content: center;
+            background-color: #1d70b8;
+            margin-bottom: 1px;
+            
+            &, & * {
+                color: #fff !important;
+            }
+            
+            &:first-of-type {
+                margin-top: 10px;
+            }
+        `;
