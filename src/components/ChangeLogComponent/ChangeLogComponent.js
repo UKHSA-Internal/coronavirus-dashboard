@@ -17,6 +17,7 @@ import type { ComponentType } from "react";
 
 import { ChangeLogItem } from "./ChangeLogItem";
 import { ChangeLogTextSearch, searchContent } from "./ChangeLogTextSearch";
+import BrowserHistory from "../BrowserHistory";
 
 
 const ChangeLogItemHeader: ComponentType = ({ date }) => {
@@ -85,32 +86,30 @@ const ChangeLogComponent: ComponentType = ({ data, colours }: ChangeLogInputProp
 
 
     return <>
-
         <Container>
-            <MainContent className={ "no-border" }>
+            <BrowserHistory>
+                <MainContent className={ "no-border" }>
+                    <p className={ "govuk-body govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>
+                        We regularly update the dashboard with new data and features.
+                        Here is a timeline of changes.
+                    </p>
 
-                <p className={ "govuk-body govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>
-                    We regularly update the dashboard with new data and features.
-                    Here is a timeline of changes.
-                </p>
-
-                <div className={ "govuk-!-margin-top-1" }>
-                    {
-                        Object
-                            .keys(groupedData)
-                            .sort(sort)
-                            .map(groupKey =>
-                                <DateGroup data={ groupedData[groupKey] }
-                                           group={ groupKey }
-                                           changeTypes={ changeTypes }
-                                           colours={ colours }
-                                           key={ groupKey }/>
-                            )
-                    }
-                </div>
-
-            </MainContent>
-
+                    <div className={ "govuk-!-margin-top-1" }>
+                        {
+                            Object
+                                .keys(groupedData)
+                                .sort(sort)
+                                .map(groupKey =>
+                                    <DateGroup data={ groupedData[groupKey] }
+                                               group={ groupKey }
+                                               changeTypes={ changeTypes }
+                                               colours={ colours }
+                                               key={ groupKey }/>
+                                )
+                        }
+                    </div>
+                </MainContent>
+            </BrowserHistory>
             <SideContent>
                 <div className={ "govuk-!-margin-top-1" }>
 
