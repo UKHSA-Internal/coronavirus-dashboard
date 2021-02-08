@@ -79,7 +79,7 @@ export const MainDiv: ComponentType<*> =
     styled
         .div
         .attrs(({ className="" }) => ({
-            className: `govuk-!-margin-top-0 govuk-!-margin-bottom-0 ${className}`
+            className: `govuk-!-margin-top-1 govuk-!-margin-bottom-1 ${className}`
         }))`
             grid-column: 1/ span 6;
         `;
@@ -144,9 +144,9 @@ export const SummaryContainer: ComponentType<*> =
             grid-template-columns: 9% 61% 20% 10%;
         `;
 
-    
 
 export const Markdown = ({ className = '', ...props }) => (
     <div className={ `markdown ${className}` } { ...props }/>
 );
+
         

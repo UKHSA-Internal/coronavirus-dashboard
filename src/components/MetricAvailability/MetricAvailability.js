@@ -62,18 +62,19 @@ const MetricDescription : ComponentType<Props> = ({ baseUrl, descriptionMd }: Pr
     if ( !description ) return null;
 
 
-    return <MainDiv>
-                  <details className="govuk-details govuk-!-margin-top-2"
-                    data-module="govuk-details">
+    return <MainDiv className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                <details className="govuk-details"
+                        data-module="govuk-details">
                     <summary className="govuk-details__summary">
                         <span className="govuk-details__summary-text">
                             Metric description
                         </span>
                     </summary>
                     <Markdown className="govuk-details__text govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0"
-                            dangerouslySetInnerHTML={{ __html: description }}/>
+                                dangerouslySetInnerHTML={{ __html: description }}/>
                 </details>
-            </MainDiv>;
+            </MainDiv>
+    
 }; // MetricDescription
 
 const MetricMethodology : ComponentType<Props> = ({ baseUrl, methodologyMd }: Props) => {    
@@ -82,18 +83,19 @@ const MetricMethodology : ComponentType<Props> = ({ baseUrl, methodologyMd }: Pr
 
     if ( !methodology ) return null;
 
-    return <MainDiv>
-               <details className="govuk-details govuk-!-margin-top-0"
-                    data-module="govuk-details">
+        return <MainDiv className={ "govuk-!-margin-top-0 govuk-!-margin-bottom-0" }> 
+                <details className="govuk-details"
+                        data-module="govuk-details">
                     <summary className="govuk-details__summary">
                         <span className="govuk-details__summary-text">
                             Methodology
                         </span>
                     </summary>
                     <Markdown className="govuk-details__text govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0"
-                            dangerouslySetInnerHTML={{ __html: methodology }}/>
+                                dangerouslySetInnerHTML={{ __html: methodology }}/>
                 </details>
-            </MainDiv>;
+            </MainDiv>
+          
 }; //  MetricMethodology
 
 const Matrix: ComponentType<Props> = ({ areaType, metric }: Props) => {
@@ -134,6 +136,8 @@ const Matrix: ComponentType<Props> = ({ areaType, metric }: Props) => {
 
 }; // Matrix
 
+
+
 const MetricMatrix: ComponentType<Props> = ({ metric }: Props) => {
 
     const detailsBaseUrl = URLs["metricDetails"];
@@ -150,13 +154,13 @@ const MetricMatrix: ComponentType<Props> = ({ metric }: Props) => {
 
     return <> 
         <Matrix areaType={ areaType }
-              metric={ metric }/>
+                metric={ metric }/>
         <MetricDescription baseUrl={ detailsBaseUrl }
-                      descriptionMd={ descriptionMd }/>
+                           descriptionMd={ descriptionMd }/>
 
 
         <MetricMethodology baseUrl={ detailsBaseUrl }
-                       methodologyMd={ methodologyMd }/>
+                           methodologyMd={ methodologyMd }/>
        
     </>
 
