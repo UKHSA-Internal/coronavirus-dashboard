@@ -128,6 +128,6 @@ export const ChangeLogBanner: ComponentType<*> =
             }
             
             &:first-of-type {
-                margin-top: 10px;
+                margin-top: -10px;
             }
         `;
