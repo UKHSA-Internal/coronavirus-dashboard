@@ -110,18 +110,6 @@ const App = ({ location: { pathname } }) => {
     return <>
         {/*<CookieBanner/>*/}
         <Header/>
-        {/*<div className="govuk-phase-banner" style={{ padding: ".7rem 30px" }}>*/}
-        {/*    <p className="govuk-phase-banner__content">*/}
-        {/*        <strong className="govuk-tag govuk-phase-banner__content__tag">*/}
-        {/*            experimental*/}
-        {/*        </strong>*/}
-        {/*        <span className="govuk-phase-banner__text">*/}
-        {/*            This is a new version of the*/}
-        {/*            service &mdash; your <a className="govuk-link govuk-link--no-visited-state"*/}
-        {/*                                    href="mailto:coronavirus-tracker@phe.gov.uk?subject=Feedback on version 3">feedback</a> will*/}
-        {/*            help us to improve it.</span>*/}
-        {/*    </p>*/}
-        {/*</div>*/}
 
         { layout === "mobile" && <Navigation layout={ layout }/> }
         <Suspense fallback={ <Loading/> }><Banner/></Suspense>
