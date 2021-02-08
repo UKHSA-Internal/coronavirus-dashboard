@@ -63,7 +63,7 @@ const NavigationItems: ComponentType<Props> = ({ menuState, setMenuState, ...pro
                 onClick={ () => setMenuState(state => !state) }>Download data</Link>
             </SideNavListItem>
             <SideNavListItem className={`${pathname === '/details/whats-new' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/whats-new" } onClick={ () => setMenuState(state => !state) }>What&#39;s New</Link>
+                <Link to={ "/details/whats-new" } onClick={ () => setMenuState(state => !state) }>What&#39;s new</Link>
             </SideNavListItem>
             <SideNavListItem className={`${pathname === '/details/developers-guide' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/developers-guide" }
