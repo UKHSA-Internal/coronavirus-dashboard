@@ -77,9 +77,13 @@ const ChangeLogHeading: ComponentType = ({ data }) => {
         </small>
         {
             data?.relativeUrl
+                ? data.relativeUrl.indexOf("details") > -1
                 ? <Link to={ data.relativeUrl } className={ "govuk-link govuk-!-font-weight-bold" }>
                     { data.headline }
                 </Link>
+                : <a href={ data.relativeUrl } className={ "govuk-link govuk-!-font-weight-bold" }>
+                    { data.headline }
+                </a>
                 : data.headline
         }
     </h3>
