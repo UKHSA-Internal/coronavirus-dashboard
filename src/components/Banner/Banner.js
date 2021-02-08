@@ -73,7 +73,7 @@ const Banner: ComponentType<*> = ({ ...props }) => {
                 <BannerBase key={ `banner-${index}-${banner?.appearByUpdate}` } { ...props }>
                     <BannerContent>
                         <Timestamp dateTime={ moment(banner?.appearByUpdate).toISOString() }>{
-                            moment(banner?.appearByUpdate).format("DD MMMM YYYY")
+                            moment(banner?.appearByUpdate).format("D MMMM YYYY")
                         }</Timestamp>
                         <BannerBody rawBody={ banner?.body ?? "" }/>
                     </BannerContent>

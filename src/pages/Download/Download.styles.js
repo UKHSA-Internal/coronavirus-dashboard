@@ -68,7 +68,7 @@ export const Container: ComponentType<*> =
                 grid-template-columns: repeat(3, 1fr);
             }
             @media only screen and (min-width: 1100px) {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
         `;
 
@@ -89,13 +89,12 @@ export const MainContent: ComponentType<*> =
                 }
             }
             @media only screen and (min-width: 1100px) {
-                grid-column: 1/4;
+                grid-column: 1/3;
             }
             
             &.no-border {
                 border-top: unset;
                 margin-top: 1rem;
-                max-width: 50em;
             }
         `;
 
@@ -112,7 +111,7 @@ export const SideContent: ComponentType<*> =
                 grid-column: 3/-1;
             }
             @media only screen and (min-width: 1100px) {
-                grid-column: 4/-1;
+                grid-column: 3/-1;
             }
         `;
 

@@ -192,4 +192,11 @@
         width: fit-content;
         justify-self: center;
     }
+
+    .banner.markdown .govuk-details__text {
+        & p:last-of-type {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+    }
 }

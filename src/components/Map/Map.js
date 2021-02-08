@@ -554,7 +554,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
         if ( map && postcodeData ) {
 
-            setShowInfo(true)
+            setShowInfo(true);
             const el = document.createElement("div");
             el.className = "marker";
             el.style.backgroundImage = `url(${MapMarker})`;
@@ -711,7 +711,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
             Download as <a onClick={ downloadImage }
                    className={ "govuk-link govuk-link--no-visited-state" }
                    download={ `cases_${date}.png` } href={ "" }>image</a>.</span>
-    </>
+    </>;
 
 };  // Map
 
