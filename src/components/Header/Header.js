@@ -29,7 +29,9 @@ const Header: ComponentType<*> = ({ ...props }) => {
         if ( timestamp && (changeData?.changeLog ?? null) ) {
             const date = timestamp.split("T")[0];
 
-            setData(changeData?.changeLog?.filter(item => item.date === date) ?? null);
+            setData(changeData?.changeLog?.filter(
+                item => item.date === date && (item?.displayBanner ?? false)
+            ) ?? null);
         }
     }, [ timestamp, changeData?.changeLog ]);
 
