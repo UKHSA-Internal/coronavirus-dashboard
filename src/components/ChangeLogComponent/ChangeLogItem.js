@@ -4,6 +4,7 @@ import React, { useState, useMemo } from "react";
 import moment from "moment";
 import { Markdown } from "./ChangeLogComponent.styles";
 import { Link } from "react-router-dom";
+import { heading2id } from "common/utils";
 
 import type { ComponentType } from "react";
 import remark from "remark";
@@ -62,9 +63,10 @@ const Details: ComponentType = ({ data }) => {
 
 const ChangeLogHeading: ComponentType = ({ data }) => {
 
-    return <h3 className={ "govuk-heading-s govuk-!-font-size-19 govuk-!-margin-bottom-1" }>
+    return <h3 className={ "govuk-heading-s govuk-!-font-size-19 govuk-!-margin-bottom-1" }
+               id={ heading2id(data.headline) }>
         <small className={ "govuk-caption-m govuk-!-font-size-19 govuk-!-margin-bottom-1" }>
-            <time dateTime={data.date}>
+            <time dateTime={ data.date }>
                 <span className={ "govuk-visually-hidden" }>Date of change: </span>
                 { moment(data.date).format("D MMMM") }
             </time>
