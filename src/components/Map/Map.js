@@ -1,7 +1,7 @@
 // @flow
 
 import type ComponentType from "react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo, useMemo } from "react";
 import L from "leaflet";
 import mapboxgl from "mapbox-gl";
 import Loading from "components/Loading";
@@ -333,6 +333,9 @@ const LocalAuthorityCard = ({ currentLocation, date, areaType, ...props }) => {
 };
 
 
+const Component = memo( ( props )=> <div {...props} id={ "map" }/>);
+
+
 const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJSON, geoData, date,
                                    extrema, minData, maxData, valueIndex, children, dates, maxDate, ...props }) => {
 
@@ -378,7 +381,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
         }
     }, []);
 
-    useEffect(() => {
+    useMemo(() => {
 
         if ( map && !styleDataStatus ) {
 
@@ -526,9 +529,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                 // }
                 //
                 // map.on('sourcedata', sourceCallback)
-                map.on("render", (e) => {
-                    setIsLoading(false)
-                });
+
+                // map.on("render", (e) => {
+                //     setIsLoading(false)
+                // });
 
             })
         }
@@ -540,11 +544,17 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
     }, [date, styleDataStatus]);
 
+    // useEffect(() => {
+    //     if ( map ) {
+    //         map.remove();
+    //     }
+    // }, [ date ]);
+
     useEffect(() => {
 
         if ( map && postcodeData ) {
 
-            setShowInfo(true)
+            setShowInfo(true);
             const el = document.createElement("div");
             el.className = "marker";
             el.style.backgroundImage = `url(${MapMarker})`;
@@ -601,10 +611,11 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
             { children }
         </SliderContainer>
         <MapContainer>
-            { isLoading && <Loading/> }
-            <div id={ "map" } style={ { visibility: isLoading ? "hidden" : "visible" } }/>
+            {/*{ isLoading && <Loading/> }*/}
+            {/*<div id={ "map" }/>*/}
+            <Component/>
             {
-                !isLoading &&
+                // !isLoading &&
                 <>
                     <PostcodeSearchForm onSubmit={  (e) => {
                             e.preventDefault();
@@ -700,7 +711,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
             Download as <a onClick={ downloadImage }
                    className={ "govuk-link govuk-link--no-visited-state" }
                    download={ `cases_${date}.png` } href={ "" }>image</a>.</span>
-    </>
+    </>;
 
 };  // Map
 

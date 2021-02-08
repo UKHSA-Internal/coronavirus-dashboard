@@ -13,7 +13,6 @@ const BrowserHistory = ({ children }) => {
     const [hashValue, setHashValue] = useState(null);
     let prevHash = usePrevious(hashValue);
 
-
     useEffect(() => {
         setHashValue(
             hash && hash.length > 0

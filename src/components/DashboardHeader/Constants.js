@@ -24,6 +24,7 @@ export const PathNames = {
     devGuide: "/details/developers-guide",
     downloadData: "/details/download",
     metrics: "/details/metrics",
+    whatsNew: "/details/whats-new",
 }
 
 
@@ -38,6 +39,7 @@ export const NoPickerPaths = [
     "/details/new-service",
     "/details/developers-guide",
     "/details/metrics",
+    "/details/whats-new",
 ];
 
 

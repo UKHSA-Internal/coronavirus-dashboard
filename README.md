@@ -38,11 +38,12 @@ repositories, itemised as follows:
  
 - [API v.1](https://github.com/publichealthengland/coronavirus-dashboard-api-v1) - Main API service for the data, lookup tables, CMS, and metadata.
 - [API v.2](https://github.com/publichealthengland/coronavirus-dashboard-api-v2) - Batch downloads service
-- [Frontend server](https://github.com/publichealthengland/coronavirus-dashboard-frontend-server) - Home and postcode pages
+- [Frontend Server](https://github.com/publichealthengland/coronavirus-dashboard-frontend-server) - Home and postcode pages
+- [Easy-Read Server](https://github.com/publichealthengland/coronavirus-dashboard-easy-read) - Easy-read pages and PDF generator
 - [Layout CMS](https://github.com/publichealthengland/coronavirus-dashboard-layouts) - Definition of contents
 - [Metadata](https://github.com/publichealthengland/coronavirus-dashboard-metadata) - Description of metrics and textual contents
-- [ETL service](https://github.com/publichealthengland/coronavirus-dashboard-pipeline-etl) - Post-pipeline data processing and deployment
-- [Terraform](https://github.com/publichealthengland/coronavirus-dashboard-terraform) - Infrastructure as Code [DEPRECATED]
+- [ETL Service](https://github.com/publichealthengland/coronavirus-dashboard-pipeline-etl) - Post-pipeline data processing and deployment
+- [Terraform](https://github.com/publichealthengland/coronavirus-dashboard-terraform) - Infrastructure as Code [Deprecated in favour of ARM templates]
 
 
 ## Development and contribution

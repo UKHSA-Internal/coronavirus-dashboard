@@ -1,1 +1,1 @@
-export { default } from "./BrowserHistory";
+export { default } from "./BrowserHistory"

@@ -23,13 +23,7 @@ const FooterContents: ComponentType<*> = () => (
                href="https://www.gov.uk/government/organisations/public-health-england"
                target="_blank"
                rel="noopener noreferrer"
-            >Public Health England</a>
-            &nbsp;and&nbsp;
-            <a className="govuk-footer__link"
-               href="https://www.nhsx.nhs.uk/"
-               target="_blank"
-               rel="noopener noreferrer"
-            >NHSX</a>
+            >Public Health England</a>.
         </p>
     </>
 );  // FooterContents
