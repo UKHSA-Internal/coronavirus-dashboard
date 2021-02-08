@@ -45,7 +45,7 @@ const Details: ComponentType = ({ data }) => {
 
     const details = useMarkdown(data?.details);
 
-    if ( !details ) return null;
+    if ( !data?.details ) return null;
 
     return <details className="govuk-details govuk-!-margin-top-2"
                     data-module="govuk-details">
