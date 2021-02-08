@@ -36,9 +36,9 @@ const Header: ComponentType<*> = ({ ...props }) => {
     }, [ timestamp, changeData?.changeLog ]);
 
     return <>
-        <header className="govuk-header" role="banner" data-module="govuk-header" style={ extraStyles }>
+        <header className="govuk-header" role="banner" data-module="govuk-header">
             <a href={ "#main-content" } className="govuk-skip-link">Skip to main content</a>
-            <div className="govuk-header__container govuk-width-container" style={ extraStyles }>
+            <div className="govuk-header__container govuk-width-container">
                 <div className="govuk-header__logo">
                     <a href="https://coronavirus-staging.data.gov.uk"
                        className="govuk-header__link govuk-header__link--homepage">
