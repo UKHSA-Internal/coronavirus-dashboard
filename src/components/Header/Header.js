@@ -12,17 +12,8 @@ import type { ComponentType } from "react";
 const Header: ComponentType<*> = ({ ...props }) => {
 
     const changeData = useGenericAPI("changeLogData", null, "json");
-    const [extraStyles, setExtraStyles] = useState({});
     const [data, setData] = useState(null);
     const timestamp = useTimestamp();
-
-    useEffect(() => {
-
-        if ( data ) {
-            setExtraStyles({ border: "unset" })
-        }
-
-    }, [ data ]);
 
     useEffect(() => {
 
