@@ -9,6 +9,7 @@ import useTimestamp from "hooks/useTimestamp";
 import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
+import CookieBanner from "components/CookieBanner";
 
 import './index.scss';
 
@@ -108,7 +109,7 @@ const App = ({ location: { pathname } }) => {
     }, [ pathname ]);
 
     return <>
-        {/*<CookieBanner/>*/}
+        <CookieBanner/>
         <Header/>
 
         { layout === "mobile" && <Navigation layout={ layout }/> }
