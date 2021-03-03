@@ -1,4 +1,11 @@
+import Cookies from "js-cookie";
+
+
 export const setCookies = () => {
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        window.dataLayer.push(arguments)
+    }
     gtag('js', new Date());
     gtag(
         'config',
@@ -8,7 +15,6 @@ export const setCookies = () => {
             'allowAdFeatures': false
         }
     );
-
     window.ga('create', 'UA-145652997-1', 'auto', 'govuk_shared', { 'allowLinker': true });
     window.ga('govuk_shared.require', 'linker');
     window.ga('govuk_shared.set', 'anonymizeIp', true);
@@ -20,18 +26,20 @@ export const setCookies = () => {
 
 
 export const deleteCookies = () => {
-    document.cookie = "_ga= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=coronavirus.data.gov.uk";
-    document.cookie = "_gid= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=coronavirus.data.gov.uk";
+    Cookies.remove("_ga");
+    Cookies.remove("_gid");
+    Cookies.remove("_gat_gtag_UA_161400643_2");
+    Cookies.remove("LocationBanner");
 };
 
 
-export const handleCookieAccept = ({cookieState, setCookieState}) => {
+export const handleCookieAccept = ( accepted ) => {
     const
         today = new Date(),
         [year, month, day] = [today.getFullYear(), today.getMonth(), today.getDate()],
         cookieExpiryDate = new Date(year, month + 1, day).toUTCString();
 
-    if ( cookieState === 'set' ) {
+    if ( accepted ) {
         document.cookie = `cookies_policy_21_3=${ encodeURIComponent('{"essential":true,"usage":true}') }; expires=${ cookieExpiryDate };`;
         setCookies();
     } else {
@@ -39,8 +47,6 @@ export const handleCookieAccept = ({cookieState, setCookieState}) => {
         deleteCookies();
     }
 
-    document.cookie = `cookies_preferences_set_21_3=true; expires=${ cookieExpiryDate };`
-
-    setCookieState('accept');
+    document.cookie = `cookies_preferences_set_21_3=true; expires=${ cookieExpiryDate }; path=/`
 
 };

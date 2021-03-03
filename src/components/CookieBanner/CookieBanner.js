@@ -7,46 +7,79 @@ import { Link } from "react-router-dom";
 
 import type { Props } from './CookieBanner.types.js';
 
-import { setCookies, deleteCookies } from "common/utils/cookies";
+import { setCookies, deleteCookies, handleCookieAccept } from "common/utils/cookies";
+
+import Cookies from "js-cookie";
 
 
 const CookieBanner: ComponentType<Props> = ({ ...props }: Props) => {
 
-    const [cookieState, setCookieState] = useState('unread');
+    const [cookieStateIsSet, setCookieStateIsSet] = useState(null);
+    const [cookieAccepted, setCookieAccepted] = useState(null);
 
     useEffect(() => {
 
-        const cookies = document.cookie.split(';');
-        const cookiesPreferencesSet = cookies.find(c => c.trim().startsWith('cookies_preferences_set_21_3'))?.split('=')?.[1];
-
-        if ( cookiesPreferencesSet === 'true' ) {
-            const cookiesPolicyRaw = cookies.find(c => c.trim().startsWith('cookies_policy_21_3'))?.split('=')?.[1];
-            if ( cookiesPolicyRaw ) {
-                const cookiesPolicy = JSON.parse(decodeURIComponent(cookiesPolicyRaw));
-
-                if ( !cookiesPolicy.usage ) {
-                    deleteCookies();
-                } else {
-                    setCookies();
-                }
-            }
-            setCookieState('set');
-        } else {
-            setCookieState('unset');
+        if ( cookieAccepted ) {
+            handleCookieAccept(true);
+            setCookieStateIsSet(true);
+        }
+        else if ( cookieAccepted === false )  {
+            handleCookieAccept(false);
+            setCookieStateIsSet(true);
         }
 
-    }, []);
+    }, [ cookieAccepted ]);
+
+    useEffect(() => {
+        const cookiePreference = Cookies.get('cookies_preferences_set_21_3');
+
+        if ( cookiePreference === 'true' ) {
+            const cookiePolicyRaw = Cookies.get('cookies_policy_21_3');
+
+            if ( !cookiePolicyRaw ) {
+                Cookies.remove("cookies_preferences_set_21_3");
+                setCookieStateIsSet(false)
+            }
+            else {
+                const cookiePolicy = JSON.parse(cookiePolicyRaw);
+                !cookiePolicy.usage
+                    ? deleteCookies()
+                    : setCookies();
+
+                setCookieStateIsSet(true)
+            }
+        }
+        else {
+            setCookieStateIsSet(false)
+        }
+    }, [ cookieAccepted ]);
 
 
-    const handleSetCookiePreferences = () => {
-        setCookieState('set-cookie-preferences');
-    };
+    if ( cookieStateIsSet === null ) return null;
 
-    const handleHide = () => {
-        setCookieState('set');
-    };
+    if ( cookieStateIsSet && cookieAccepted !== null ) {
+        return (
+            <div { ...props } id="global-cookie-message" className="gem-c-cookie-banner govuk-clearfix"
+                 data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet=""
+                 style={ { display: 'block' } }>
+                <div className="gem-c-cookie-banner__confirmation govuk-width-container" tabIndex="-1">
+                    <p className="gem-c-cookie-banner__confirmation-message govuk-body">
+                        You’ve { cookieAccepted ? "accepted" : "rejected" } additional cookies.
+                        You can <Link to="/details/cookies" className="govuk-link">change
+                        your cookie settings</Link> at any time.
+                    </p>
+                    <button className="gem-c-cookie-banner__hide-button govuk-link" data-hide-cookie-banner="true"
+                            data-module="track-click" data-track-category="cookieBanner"
+                            data-track-action="Hide cookie banner" onClick={ () => setCookieAccepted(null) }>
+                        Hide
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
-    if ( cookieState === 'unset' ) {
+
+    if ( !cookieStateIsSet ) {
         return <div className="govuk-cookie-banner " role="region" aria-label="Cookies on the UK Coronavirus Dashboard">
             <div className={ "govuk-width-container" }>
                 <div className="govuk-cookie-banner__message govuk-!-width-two-thirds">
@@ -57,12 +90,10 @@ const CookieBanner: ComponentType<Props> = ({ ...props }: Props) => {
                             </h2>
 
                             <div className="govuk-cookie-banner__content">
-                                <p className={ "govuk-body" }>We use some essential cookies to make this service
-                                    work.</p>
+                                <p className={ "govuk-body" }>We use some essential cookies to make this service work.</p>
                                 <p className={ "govuk-body" }>
                                     We’d like to set additional cookies so we can remember your settings, understand how
-                                    people use the
-                                    service and make improvements.
+                                    people use the service and make improvements.
                                 </p>
                             </div>
                         </div>
@@ -71,41 +102,20 @@ const CookieBanner: ComponentType<Props> = ({ ...props }: Props) => {
                     <div className="govuk-button-group">
                         <button className="gem-c-button govuk-button gem-c-button--inline" type="submit"
                                 data-module="track-click" data-accept-cookies="true"
-                                data-track-category="cookieBanner" onClick={ handleAccept }>Accept all cookies
+                                data-track-category="cookieBanner"
+                                onClick={ () => setCookieAccepted(true) }>
+                            Accept additional cookies
                         </button>
-                        <button className="gem-c-button govuk-button gem-c-button--inline"
-                                type="submit" data-module="track-click" data-set-cookie-preferences="true"
-                                data-track-category="cookieBanner" onClick={ handleSetCookiePreferences }>Set cookie
-                            preferences
-                        </button>
+                        <Link className="gem-c-button govuk-button gem-c-button--inline"
+                              type="submit" data-module="track-click" data-set-cookie-preferences="true"
+                              data-track-category="cookieBanner" onClick={ () => setCookieAccepted(false) }>
+                            Reject additional cookies
+                        </Link>
                         <Link to="/details/cookies" className="govuk-link govuk-body">View cookies</Link>
                     </div>
                 </div>
             </div>
         </div>
-    }
-
-    if ( cookieState === 'accept' ) {
-        return (
-            <div { ...props } id="global-cookie-message" className="gem-c-cookie-banner govuk-clearfix"
-                 data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet=""
-                 style={ { display: 'block' } }>
-                <div className="gem-c-cookie-banner__confirmation govuk-width-container" tabIndex="-1">
-                    <p className="gem-c-cookie-banner__confirmation-message govuk-body">
-                        You’ve accepted all cookies. You can <Link to="/details/cookies" className="govuk-link">change
-                        your cookie settings</Link> at any time.
-                    </p>
-                    <button className="gem-c-cookie-banner__hide-button govuk-link" data-hide-cookie-banner="true"
-                            data-module="track-click" data-track-category="cookieBanner"
-                            data-track-action="Hide cookie banner" onClick={ handleHide }>Hide
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
-    if ( cookieState === 'set-cookie-preferences' ) {
-        window.location = "/details/cookies";
     }
 
     return null;

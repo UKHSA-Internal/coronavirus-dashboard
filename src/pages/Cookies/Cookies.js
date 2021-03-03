@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { ComponentType } from 'react';
 
 import type { Props } from './Cookies.types';
@@ -9,7 +9,9 @@ import {
     Heading
 } from './Cookies.styles';
 
-import { handleCookieAccept } from "common/utils/cookies";
+import { deleteCookies, handleCookieAccept, setCookies } from "common/utils/cookies";
+
+import Cookies from "js-cookie";
 
 
 const CookiesUpdatedText = ({ cookieState }) => {
@@ -25,16 +27,34 @@ const CookiesUpdatedText = ({ cookieState }) => {
 
 };
 
-const Cookies: ComponentType<Props> = ({ }: Props) => {
 
-    const [cookieState, setCookieState] = useState('unset');
+const CookiesPage: ComponentType<Props> = ({ }: Props) => {
 
-    if (cookieState === 'accept') {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    }
+    // const [preferenceSet, ]
+    const [cookieState, setCookieState] = useState(null);
+
+    useEffect(() => {
+        const cookiePreference = Cookies.get('cookies_preferences_set_21_3');
+        console.log(cookiePreference);
+        console.log(cookieState);
+
+        if ( cookiePreference === 'true' ) {
+            const cookiePolicyRaw = Cookies.get('cookies_policy_21_3');
+            console.log(cookiePolicyRaw);
+
+            if ( !cookiePolicyRaw ) {
+                Cookies.remove("cookies_preferences_set_21_3");
+                setCookieState(true)
+            }
+            else {
+                const cookiePolicy = JSON.parse(cookiePolicyRaw);
+                setCookieState(cookiePolicy.usage);
+            }
+        }
+        else {
+            setCookieState(true)
+        }
+    }, []);
 
     return <>
         <CookiesUpdatedText/>
@@ -73,9 +93,8 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
 
 
             <p className={"govuk-body"}>
-                We do not allow Google to use or share the data about how you use this
-                site, nor do we collect any personally identifiable information such as
-                your IP address.
+                We’d like to set additional cookies so we can remember your settings, understand how
+                people use the service and make improvements.
             </p>
 
             <p className={"govuk-body"}>
@@ -108,15 +127,18 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
             <div className={"govuk-body govuk-!-margin-bottom-8"}>
                 <div className="govuk-radios">
                     <div className="gem-c-radio govuk-radios__item">
-                        <input type="radio" name="cookies-usage" id="radio-c6a408c0-0" value="on"
-                               className="govuk-radios__input" defaultChecked onClick={() => setCookieState('set')} />
+                        <input type="radio" name="cookies-usage" id="radio-c6a408c0-0"
+                               checked={ cookieState }
+                               className="govuk-radios__input" defaultChecked onClick={() => setCookieState(true)} />
                         <label htmlFor="radio-c6a408c0-0" className="gem-c-label govuk-label govuk-radios__label">
                             Use cookies that measure my website use
                         </label>
                     </div>
                     <div className="gem-c-radio govuk-radios__item">
-                        <input type="radio" name="cookies-usage" id="radio-c6a408c0-1" value="off"
-                            className="govuk-radios__input" onClick={() => setCookieState('unset')} />
+                        <input type="radio" name="cookies-usage" id="radio-c6a408c0-1"
+                               checked={ cookieState === false }
+                               className="govuk-radios__input"
+                               onClick={() => setCookieState(false)} />
                         <label htmlFor="radio-c6a408c0-1" className="gem-c-label govuk-label govuk-radios__label">
                             Do not use cookies that measure my website use
                         </label>
@@ -138,7 +160,7 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
                 <button className="gem-c-button govuk-button"
                     type="submit" data-module="track-click"
                     data-accept-cookies="true" data-track-category="cookies"
-                    onClick={ () => handleCookieAccept({ cookieState, setCookieState }) }>
+                    onClick={ () => handleCookieAccept(cookieState) }>
                     Save changes
                 </button>
             </p>
@@ -146,4 +168,4 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
     </>
 };
 
-export default Cookies;
+export default CookiesPage;
