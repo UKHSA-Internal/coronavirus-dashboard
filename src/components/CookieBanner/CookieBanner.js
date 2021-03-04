@@ -46,11 +46,11 @@ const CookieBanner: ComponentType<Props> = ({ ...props }: Props) => {
                     ? deleteCookies()
                     : setCookies();
 
-                setCookieStateIsSet(true)
+                setCookieStateIsSet(true);
             }
         }
         else {
-            setCookieStateIsSet(false)
+            setCookieStateIsSet(false);
         }
     }, [ cookieAccepted ]);
 
