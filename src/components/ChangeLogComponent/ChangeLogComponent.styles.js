@@ -114,6 +114,13 @@ export const MonthlyHeader: ComponentType<*> =
         `;
 
 
+export const ChangeLogBannerContainer: ComponentType<*> =
+    styled
+        .div`
+            margin-top: -10px;
+        `;
+
+
 export const ChangeLogBanner: ComponentType<*> =
     styled
         .div`
@@ -125,9 +132,5 @@ export const ChangeLogBanner: ComponentType<*> =
             
             &, & * {
                 color: #fff !important;
-            }
-            
-            &:first-of-type {
-                margin-top: -10px;
             }
         `;
