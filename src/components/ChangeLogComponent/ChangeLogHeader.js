@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { heading2id } from "common/utils";
-import { ChangeLogBanner } from "./ChangeLogComponent.styles";
+import { ChangeLogBanner, ChangeLogBannerContainer } from "./ChangeLogComponent.styles";
 
 import type { ChangeLogInputProps } from "./ChangeLogComponent.types";
 import type { ComponentType } from "react";
@@ -16,7 +16,7 @@ export const ChangeLogHeader: ComponentType<*> = ({ data, ...props }: ChangeLogI
         return null;
     }
 
-    return <>{
+    return <ChangeLogBannerContainer>{
         data.map((item, index) => <ChangeLogBanner key={ `change-log-banner-${index}` }>
             <div className={ "govuk-body-s govuk-!-font-weight-bold govuk-!-margin-bottom-0" }>
                 <time dateTime={ item.date }>
@@ -28,6 +28,6 @@ export const ChangeLogHeader: ComponentType<*> = ({ data, ...props }: ChangeLogI
                 </Link>
             </div>
         </ChangeLogBanner>)
-    }</>
+    }</ChangeLogBannerContainer>
 
 };  // ChangeLogHeader
