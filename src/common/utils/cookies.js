@@ -2,26 +2,36 @@ import Cookies from "js-cookie";
 
 
 export const setCookies = () => {
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        window.dataLayer.push(arguments)
-    }
-    gtag('js', new Date());
-    gtag(
-        'config',
-        'UA-161400643-2',
-        {
-            'anonymize_ip': true ,
-            'allowAdFeatures': false
+    try {
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            window.dataLayer.push(arguments)
         }
-    );
-    window.ga('create', 'UA-145652997-1', 'auto', 'govuk_shared', { 'allowLinker': true });
-    window.ga('govuk_shared.require', 'linker');
-    window.ga('govuk_shared.set', 'anonymizeIp', true);
-    window.ga('govuk_shared.set', 'allowAdFeatures', false);
-    window.ga('govuk_shared.linker:autoLink', ['www.gov.uk']);
-    window.ga('send', 'pageview');
-    window.ga('govuk_shared.send', 'pageview');
+
+        gtag('js', new Date());
+        gtag(
+            'config',
+            'UA-161400643-2',
+            {
+                'anonymize_ip': true,
+                'allowAdFeatures': false
+            }
+        );
+        window.ga('create', 'UA-145652997-1', 'auto', 'govuk_shared', { 'allowLinker': true });
+        window.ga('govuk_shared.require', 'linker');
+        window.ga('govuk_shared.set', 'anonymizeIp', true);
+        window.ga('govuk_shared.set', 'allowAdFeatures', false);
+        window.ga('govuk_shared.linker:autoLink', ['www.gov.uk']);
+        window.ga('send', 'pageview');
+        window.ga('govuk_shared.send', 'pageview');
+
+    } catch (error) {
+        console.group("Cookie preferences")
+        console.warn("Cookies accepted, but tracking is blocked by the browser.")
+        console.warn("Failed to set GA cookies.")
+        console.groupEnd()
+    }
 };
 
 
