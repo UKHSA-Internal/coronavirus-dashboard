@@ -42,6 +42,17 @@ const BannerBody: ComponentType<*> = ({ rawBody, ...props }) => {
 };  // Banner Body
 
 
+const Datestamp: ComponentType<*> = ({ banner, ...props }) => {
+
+    const timestamp = banner?.date ?? banner.appearByUpdate;
+
+    return <Timestamp dateTime={ moment(timestamp).toISOString() } { ...props }>{
+        moment(timestamp).format("D MMMM YYYY")
+    }</Timestamp>
+
+};  // Datestamp
+
+
 const Banner: ComponentType<*> = ({ ...props }) => {
 
     const banners: BannerType[] = useGenericAPI("banner", null);
@@ -72,9 +83,7 @@ const Banner: ComponentType<*> = ({ ...props }) => {
             .map((banner, index) =>
                 <BannerBase key={ `banner-${index}-${banner?.appearByUpdate}` } { ...props }>
                     <BannerContent>
-                        <Timestamp dateTime={ moment(banner?.appearByUpdate).toISOString() }>{
-                            moment(banner?.appearByUpdate).format("D MMMM YYYY")
-                        }</Timestamp>
+                        <Datestamp banner={ banner }/>
                         <BannerBody rawBody={ banner?.body ?? "" }/>
                     </BannerContent>
                 </BannerBase>
