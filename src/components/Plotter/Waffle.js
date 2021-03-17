@@ -42,7 +42,9 @@ export const Waffle: ComponentType<*> = ({ data, layout, config, ...props }) => 
             t: 20
         }}
         style={{
-            display: "inline-block"
+            display: "block",
+            margin: "auto auto",
+            'max-width': 400
         }}
         layout={ {
             hovermode: "x+y",
@@ -53,10 +55,10 @@ export const Waffle: ComponentType<*> = ({ data, layout, config, ...props }) => 
                     family: `"GDS Transport", Arial, sans-serif`,
                     size: 16,
                 },
-                xanchor: 'left',
+                xanchor: 'center',
                 yachor: 'bottom',
                 y: -.3,
-                x: 0
+                x: .5
             },
             showlegend: true,
             plot_bgcolor: "rgba(231,231,231,0)",
@@ -65,7 +67,7 @@ export const Waffle: ComponentType<*> = ({ data, layout, config, ...props }) => 
         } }
         xaxis={{
             range: [.5, 10.5],
-            fixedrange: true,
+            // fixedrange: true,
             type: 'linear',
             tickvals: tickvals.reverse(),
             tickformat: null,
@@ -77,7 +79,7 @@ export const Waffle: ComponentType<*> = ({ data, layout, config, ...props }) => 
             range: [.5, 10.5],
             tickvals: tickvals,
             ticktext: tickvals.map(val => `${val}`).reverse(),
-            showgrid: false,
+            // showgrid: false,
             scaleratio: 1,
             scaleanchor: "x",
         }}
