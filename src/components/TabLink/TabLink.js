@@ -11,7 +11,13 @@ import {
 
 import type { ComponentType } from "react";
 
-import { dropLeadingZeros, getHeatmapData, getPlotData, groupBy } from "common/utils";
+import {
+    dropLeadingZeros,
+    getHeatmapData,
+    getPlotData,
+    getPercentageWaffleData,
+    groupBy
+} from "common/utils";
 import { DataTable, NestedDataTable } from "components/GovUk";
 import useApi from "hooks/useApi";
 import Loading from "components/Loading";
@@ -27,6 +33,7 @@ const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
         case "recentData":
         case "chart":
         case "heatmap":
+        case "tabContentRaw":
             return <TabContent Component={ TabContentRaw } { ...props }/>;
 
         case "map":
@@ -108,6 +115,12 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
             return <Plotter type={ "Heatmap" }
                             layout={{}}
                             data={ getHeatmapData(fields, data, xKey) }
+                            { ...props }/>;
+
+        case "percentageWaffle":
+            return <Plotter type={ "percentageWaffle" }
+                            layout={{}}
+                            data={ getPercentageWaffleData(fields, data, xKey) }
                             { ...props }/>;
 
         case "nestedTable":
