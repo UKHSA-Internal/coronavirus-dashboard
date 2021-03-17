@@ -2,7 +2,16 @@
 
 import { dropLeadingZeros, hexToRgb } from "./utils";
 import { movingAverage } from "../stats";
+import cloneDeep from "lodash.clonedeep";
 
+
+const asCssRgb = ( hex ) => {
+
+    const { r, g, b } = hexToRgb(hex);
+
+    return `rgb(${r},${g},${b})`
+
+};  // asCssRgb
 
 export const
     colours = [
@@ -219,6 +228,89 @@ export const getPlotData = ( fields: Array<{}>, rawData, xKey="date" ) => {
     return graphObjects
 
 };  // getPlotData
+
+
+export const getPercentageWaffleData = ( fields: Array<{}>, rawData, xKey="date" ) => {
+
+    const BaseArray = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+
+    let responseData = [
+        {
+            z: BaseArray,
+            x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            y: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reverse(),
+            type: "heatmap",
+            showscale: false,
+            hoverongaps: false,
+            ygap: 3,
+            xgap: 3,
+            showlegend: false,
+            colorscale: [[0, asCssRgb('#e7e7e7')], [1, asCssRgb('#e7e7e7')]],
+            hoverinfo: 'skip'
+        }
+    ];
+
+    const fieldsLength = fields.length;
+
+    for ( let fieldIndex = 0; fieldIndex < fieldsLength; fieldIndex ++ ) {
+
+        const field = fields?.[fieldIndex];
+        const value = field?.value;
+        const label = field?.label;
+        const colour = asCssRgb(colours[field?.colour ?? 1]);
+
+        const maxValue = Math.max(...rawData.map(row => row?.[value]));
+        const valueArray = cloneDeep(BaseArray);
+
+        for ( let rowInd = 0; rowInd < BaseArray.length; rowInd ++ ) {
+            for ( let colInd = 0; colInd < BaseArray[rowInd].length; colInd ++ ) {
+
+                if ( ((rowInd * 10) + colInd) <= maxValue ) {
+                    valueArray[rowInd][colInd] = fieldIndex + 1;
+                }
+                else {
+                    valueArray[rowInd][colInd] = null;
+                }
+            }
+        }
+
+        responseData.push({
+            z: valueArray,
+            x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            y: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reverse(),
+            name: label,
+            type: "heatmap",
+            showscale: false,
+            hoverongaps: false,
+            ygap: 3,
+            xgap: 3,
+            showlegend: true,
+            colorscale: fieldIndex ? [
+                [0, colour],
+                [1, colour],
+            ] : [
+                [0, colour],
+                [1, colour],
+            ],
+            hoverinfo: 'skip'
+        });
+
+    }
+
+    return responseData;
+
+};  // getWaffleData
 
 
 export const getHeatmapData = ( fields: Array<{}>, rawData, xKey="date" ) => {
