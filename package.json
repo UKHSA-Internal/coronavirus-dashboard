@@ -38,7 +38,8 @@
     "leaflet": "^1.6.0",
     "mapbox-gl": "^1.13.1",
     "@turf/bbox": "^6.3.0",
-    "js-cookie": "^2.2.1"
+    "js-cookie": "^2.2.1",
+    "lodash.clonedeep": "^4.5.0"
   },
   "scripts": {
     "lint": "yarn flow",
