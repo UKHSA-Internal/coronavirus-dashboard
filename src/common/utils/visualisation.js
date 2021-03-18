@@ -245,7 +245,7 @@ export const getPercentageWaffleData = ( fields: Array<{}>, rawData, xKey="date"
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
-    const yGridTicks = BaseArray.map((_, ind) => ind + 1).reverse();
+    const yGridTicks = BaseArray.map((_, ind) => ind + 1);
     const xGridTicks = BaseArray[0].map((_, ind) => ind + 1);
 
     const genericSettings = {
