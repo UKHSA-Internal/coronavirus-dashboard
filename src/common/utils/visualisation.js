@@ -277,7 +277,7 @@ export const getPercentageWaffleData = ( fields: Array<{}>, rawData, xKey="date"
         const label = field?.label;
         const colour = asCssRgb(colours[field?.colour ?? 1]);
 
-        const maxValue = Math.round(Math.max(...rawData.map(row => row?.[value])));
+        const maxValue = Math.floor(Math.max(...rawData.map(row => row?.[value])));
         const valueArray = cloneDeep(BaseArray);
 
         for ( let rowInd = 0; rowInd < BaseArray.length; rowInd ++ ) {
