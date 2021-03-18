@@ -245,19 +245,26 @@ export const getPercentageWaffleData = ( fields: Array<{}>, rawData, xKey="date"
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
 
+    const yGridTicks = BaseArray.map((_, ind) => ind + 1).reverse();
+    const xGridTicks = BaseArray[0].map((_, ind) => ind + 1);
+
+    const genericSettings = {
+        type: "heatmap",
+        showscale: false,
+        hoverongaps: false,
+        ygap: 3,
+        xgap: 3,
+        hoverinfo: 'skip',
+        x: xGridTicks,
+        y: yGridTicks,
+    };
+
     let responseData = [
         {
+            ...genericSettings,
             z: BaseArray,
-            x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            y: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reverse(),
-            type: "heatmap",
-            showscale: false,
-            hoverongaps: false,
-            ygap: 3,
-            xgap: 3,
             showlegend: false,
             colorscale: [[0, asCssRgb('#e7e7e7')], [1, asCssRgb('#e7e7e7')]],
-            hoverinfo: 'skip'
         }
     ];
 
@@ -286,15 +293,9 @@ export const getPercentageWaffleData = ( fields: Array<{}>, rawData, xKey="date"
         }
 
         responseData.push({
+            ...genericSettings,
             z: valueArray,
-            x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            y: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reverse(),
             name: label,
-            type: "heatmap",
-            showscale: false,
-            hoverongaps: false,
-            ygap: 3,
-            xgap: 3,
             showlegend: true,
             colorscale: fieldIndex ? [
                 [0, colour],
@@ -303,7 +304,6 @@ export const getPercentageWaffleData = ( fields: Array<{}>, rawData, xKey="date"
                 [0, colour],
                 [1, colour],
             ],
-            hoverinfo: 'skip'
         });
 
     }
