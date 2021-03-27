@@ -20,9 +20,8 @@ const Plotter: ComponentType<*> = ({ type = "generic", ...props }) => {
             return <Heatmap { ...props }/>;
 
         case "percentageWaffle":
-            return <Waffle { ...props }/>
+            return <Waffle { ...props }/>;
 
-        case "Generic":
         default:
             return <BasePlotter { ...props }/>;
     }
