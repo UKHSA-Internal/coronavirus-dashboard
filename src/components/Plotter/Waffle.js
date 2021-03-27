@@ -44,7 +44,7 @@ export const Waffle: ComponentType<*> = ({ data, layout, config, ...props }) => 
         style={{
             display: "block",
             margin: "auto auto",
-            'max-width': 400
+            maxWidth: 400
         }}
         layout={ {
             hovermode: "x+y",
