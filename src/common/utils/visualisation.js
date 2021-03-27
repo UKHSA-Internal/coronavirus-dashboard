@@ -230,6 +230,56 @@ export const getPlotData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 };  // getPlotData
 
 
+export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date",
+                                       markerColour: number, lineColour: number ) => {
+
+    const data = [];
+
+    for ( const { value, label } of fields ) {
+        const trace = {
+            name: label,
+            x: [],
+            y: [],
+            mode: 'markers',
+            type: "scatter",
+            showlegend: false,
+            marker: {
+                color: asCssRgb(colours[markerColour]),
+                size: 12
+            },
+        }
+
+        for ( const row of rawData ) {
+            trace.x.push(row?.[xKey] ?? null);
+            trace.y.push(row?.[value] ?? null);
+        }
+
+        data.push(trace);
+    }
+
+    for ( const row of rawData ) {
+        const trace = {
+            x: [],
+            y: [],
+            type: "scatter",
+            showlegend: false,
+            hoverinfo: 'skip',
+            line: {color: asCssRgb(colours[lineColour]), width: 1},
+        };
+
+        for ( const { value } of fields ) {
+            trace.x.push(row?.[xKey] ?? null)
+            trace.y.push(row?.[value] ?? null);
+        }
+
+        data.push(trace);
+    }
+
+    return data;
+
+};  // twoWayLollipopData
+
+
 export const getPercentageWaffleData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 
     const BaseArray = [
