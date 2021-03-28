@@ -26,6 +26,7 @@ export const
         '#EFF0F0',  // Grey tint 2
         '#FFDD00',  // Yellow
         '#d4351c',  // Red
+        '#009f56',  // green
         // New colours
         // '#206BC9',  // blue
         // '#90C1FE',  // blue (tint 3)
@@ -231,31 +232,10 @@ export const getPlotData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 
 
 export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date",
-                                       markerColour: number, lineColour: number ) => {
+                                       threshold: number, markerColourBelowThreshold: number,
+                                       markerColourAboveThreshold: number, lineColour: number ) => {
 
     const data = [];
-
-    for ( const { value, label } of fields ) {
-        const trace = {
-            name: label,
-            x: [],
-            y: [],
-            mode: 'markers',
-            type: "scatter",
-            showlegend: false,
-            marker: {
-                color: asCssRgb(colours[markerColour]),
-                size: 12
-            },
-        }
-
-        for ( const row of rawData ) {
-            trace.x.push(row?.[xKey] ?? null);
-            trace.y.push(row?.[value] ?? null);
-        }
-
-        data.push(trace);
-    }
 
     for ( const row of rawData ) {
         const trace = {
@@ -270,6 +250,33 @@ export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date",
         for ( const { value } of fields ) {
             trace.x.push(row?.[xKey] ?? null)
             trace.y.push(row?.[value] ?? null);
+        }
+
+        data.push(trace);
+    }
+
+    for ( const { value, label } of fields ) {
+        const trace = {
+            name: label,
+            x: [],
+            y: [],
+            mode: 'markers',
+            type: "scatter",
+            showlegend: false,
+            marker: {
+                color: [],
+                size: 12
+            },
+        }
+
+        for ( const row of rawData ) {
+            trace.x.push(row?.[xKey] ?? null);
+            trace.y.push(row?.[value] ?? null);
+            trace.marker.color.push(
+                (row?.[value] ?? 0) >= threshold
+                    ? asCssRgb(colours[markerColourAboveThreshold])
+                    : asCssRgb(colours[markerColourBelowThreshold])
+            );
         }
 
         data.push(trace);

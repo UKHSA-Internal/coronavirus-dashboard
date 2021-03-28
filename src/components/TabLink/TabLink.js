@@ -127,7 +127,15 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
         case "twoWayLollipop":
             return <Plotter type={ "twoWayLollipop" }
                             layout={{}}
-                            data={ getTwoWayLollipopData(fields, data, xKey, props?.markerColour, props?.lineColour) }
+                            data={
+                                getTwoWayLollipopData(
+                                    fields, data, xKey,
+                                    props?.threshold,
+                                    props?.markerColourBelowThreshold,
+                                    props?.markerColourAboveThreshold,
+                                    props?.lineColour,
+                                )
+                            }
                             { ...props }/>;
 
         case "nestedTable":
