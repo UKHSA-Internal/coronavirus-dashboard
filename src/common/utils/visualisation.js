@@ -231,9 +231,10 @@ export const getPlotData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 };  // getPlotData
 
 
-export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date",
-                                       threshold: number, markerColourBelowThreshold: number,
-                                       markerColourAboveThreshold: number, lineColour: number ) => {
+export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date", threshold: number,
+                                       markerColourBelowThreshold: number, markerColourAboveThreshold: number,
+                                       symbolBelowThreshold: string, symbolAboveThreshold: string,
+                                       lineColour: number ) => {
 
     const data = [];
 
@@ -265,6 +266,7 @@ export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date",
             showlegend: false,
             marker: {
                 color: [],
+                symbol: [],
                 size: 12
             },
         }
@@ -276,6 +278,11 @@ export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date",
                 (row?.[value] ?? 0) >= threshold
                     ? asCssRgb(colours[markerColourAboveThreshold])
                     : asCssRgb(colours[markerColourBelowThreshold])
+            );
+            trace.marker.symbol.push(
+                (row?.[value] ?? 0) >= threshold
+                    ? symbolAboveThreshold
+                    : symbolBelowThreshold
             );
         }
 

@@ -133,6 +133,8 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
                                     props?.threshold,
                                     props?.markerColourBelowThreshold,
                                     props?.markerColourAboveThreshold,
+                                    props?.symbolBelowThreshold,
+                                    props?.symbolAboveThreshold,
                                     props?.lineColour,
                                 )
                             }
