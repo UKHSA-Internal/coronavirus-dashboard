@@ -28,7 +28,8 @@ const
     WhatsNew        = lazy(() => import("pages/WhatsNew")),
     Footer          = lazy(() => import('components/Footer')),
     Download        = lazy(() => import('pages/Download')),
-    Banner          = lazy(() => import('components/Banner'));
+    Banner          = lazy(() => import('components/Banner')),
+    Metrics         = lazy(() => import('pages/Metrics'));
 
 
 const LastUpdateTime = () => {
@@ -65,6 +66,7 @@ const
         "/details/deaths",
         "/details/about-data",
         "/details/download",
+        "/details/metrics",
         "/details/whats-new"
     ];
 
@@ -148,7 +150,10 @@ const App = ({ location: { pathname } }) => {
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
                                 <Route path="/details/developers-guide" exact component={ ApiDocs }/>
+                                <Route path="/details/metrics" exact component={ Metrics }/>
                                 <Route path={ "/:page" } component={ RedirectToDetails }/>
+
+                               
                             </Switch>
                         </Suspense>
                     </main>

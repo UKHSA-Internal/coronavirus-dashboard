@@ -13,4 +13,4 @@ export interface AboutProps {
 
     value: string
 
-} // ArchiveProps
+} // AboutProps
