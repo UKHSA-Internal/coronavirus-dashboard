@@ -95,7 +95,7 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
 
         for ( const value of row?.y ?? []) {
 
-            if ( row?.showlegend !== true && row?.type === 'heatmap' ) continue;
+            if ( row?.showlegend === false || row?.type === 'heatmap' ) continue;
             if ( !(row?.hovertemplate ?? null) ) row.hovertemplate = [];
 
             row.hovertemplate.push(numeral(value).format("0,0.[0]"));
