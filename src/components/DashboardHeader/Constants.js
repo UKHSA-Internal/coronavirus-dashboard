@@ -24,7 +24,6 @@ export const PathNames = {
     accessibility: "/details/accessibility",
     devGuide: "/details/developers-guide",
     downloadData: "/details/download",
-    metrics: "/details/metrics",
     whatsNew: "/details/whats-new",
 }
 
@@ -39,7 +38,6 @@ export const NoPickerPaths = [
     "/details/archive",
     "/details/new-service",
     "/details/developers-guide",
-    "/details/metrics",
     "/details/whats-new",
 ];
 
@@ -49,7 +47,7 @@ export const LocationBannerMapper = {
     "/details/testing": "Testing",
     "/details/healthcare": "Healthcare",
     "/details/deaths": "Deaths",
-    "/details/vaccinations": "Vaccinations",
+    "/details/vaccinations": "Vaccinations"
 };
 
 
@@ -61,7 +59,7 @@ export const PathWithHeader = [
     "/details/Vaccinations",
     "/details/deaths",
     "/details/new-service",
-    "/details/developers-guide",
+    "/details/developers-guide"
 ];
 
 
