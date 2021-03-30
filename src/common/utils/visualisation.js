@@ -111,7 +111,6 @@ const processHighlightedField = ({ field, index, xData, yData }) => {
         name: hlLabel,
         x: highlightedX,
         y: highlightedY,
-        hovertemplate: "%{y}",
         type: field?.type ?? "bar",
         marker: {
             color: colours[hlColour]
@@ -183,7 +182,6 @@ const processGenericField = ({ field, index, xData, yData }) => {
         name: field.label,
         x: xData,
         y: yData,
-        hovertemplate: "%{y}",
         ...(field?.overlaying)
             ? {
                 yaxis: "y2",
