@@ -158,7 +158,7 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
                 },
                 showlegend: true,
                 margin: {
-                    l: width === "desktop" ? 100 : 30,
+                    l: width === "desktop" ? 85 : 30,
                     r: width === "desktop" ? 10 : 5,
                     b: 25,
                     t: 10,
