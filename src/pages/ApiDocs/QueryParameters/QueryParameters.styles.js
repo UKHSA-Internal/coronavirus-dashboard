@@ -43,3 +43,10 @@ export const Title: ComponentType<*> =
             justify-content: flex-start;
             margin: 2rem 0 1.5rem 0;
         `;
+
+
+export const Spacer: ComponentType<*> =
+    styled
+        .div`
+            margin-top: 150px;
+        `;

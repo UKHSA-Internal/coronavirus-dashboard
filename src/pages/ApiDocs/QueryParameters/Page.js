@@ -6,7 +6,7 @@ import CodeBox from "components/CodeBox";
 import { Admonition } from "components/Widgets";
 import LanguageTabs from "./LanguageTabLink";
 
-import { BlueBadge, Query, Title } from "./QueryParameters.styles";
+import { BlueBadge, Query, Title, Spacer } from "./QueryParameters.styles";
 import { Code } from "components/Widgets/Widgets.styles";
 import type { ComponentType } from "react";
 
@@ -343,6 +343,7 @@ $\`Data (first 3 items)\`
 
 const Page: ComponentType<*> = () =>
     <article>
+        <Spacer/>
         <Title id={ "params-page" }>
             <Query>page</Query>
             <BlueBadge>Optional</BlueBadge>
