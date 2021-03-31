@@ -24,7 +24,7 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
         tickson: "boundaries",
         ticklen: 'labels',
         tickcolor: "#f1f1f1",
-        tickformat: width === "desktop" ? ',.2r' : '.1f',
+        tickformat: width === "desktop" ? ',.2r' : '.1s',
         tickfont: {
             family: `"GDS Transport", Arial, sans-serif`,
             size: width === "desktop" ? 13 : 10,
