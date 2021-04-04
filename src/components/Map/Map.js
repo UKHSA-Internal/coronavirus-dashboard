@@ -292,7 +292,7 @@ const LocalAuthorityCard = ({ currentLocation, date, areaType, ...props }) => {
                         {
                             key: "date",
                             sign: "=",
-                            value: dataDate.toISOString().split("T")[0]
+                            value: dataDate.format("YYYY-MM-DD")
                         },
                     ],
                 }
