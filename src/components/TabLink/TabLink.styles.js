@@ -1,6 +1,6 @@
 // @flow
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import type { ComponentType } from 'react';
 
@@ -67,9 +67,8 @@ export const Body: ComponentType<*> = (() => {
 
     return styled.div`
         display: grid;
-        height: fit-content;
-        width: 100%;
-        height: 350px;
+        grid-auto-columns: auto;
+        ${({ height }) => css`height: ${height ? height : "350px"}`} 
     `
 
 })();  // Body

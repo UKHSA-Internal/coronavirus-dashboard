@@ -11,3 +11,12 @@ export const Container: ComponentType<*> =
         .div`
             max-width: 40em;
         `;
+
+
+export const TablinkBodyContainer: ComponentType<*> =
+    styled
+        .div`
+             &>div {
+                display: grid;
+             }
+        `;

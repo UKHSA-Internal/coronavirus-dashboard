@@ -123,10 +123,10 @@ $data
 
 const Filters: ComponentType<*> = () =>
     <article>
-        <Title id={ "params-filters" }>
+        <div id={ "params-filters" }>
             <Query>filters</Query>
             <BlueBadge>Required</BlueBadge>
-        </Title>
+        </div>
 
         <CodeBox>{`filters=[metricName]=[string]`}</CodeBox>
         <p>
