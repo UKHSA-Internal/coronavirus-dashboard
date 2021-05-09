@@ -385,7 +385,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
         if ( map && !styleDataStatus ) {
 
-            map.on("load", function () {
+            map.once("style.load", function () {
 
                 MapLayers.map( layer => {
                     map.addSource(`timeSeries-${layer.label}`, {
