@@ -1,7 +1,7 @@
 // @flow
 
 import type ComponentType from "react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo, useMemo } from "react";
 import L from "leaflet";
 import mapboxgl from "mapbox-gl";
 import Loading from "components/Loading";
@@ -139,7 +139,7 @@ const Arrow = ({ direction }) => {
 
 };
 
-const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, trend,
+const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, trend, postcode,
                       percentageChange, areaType, areaCode, setShowInfo, maxDate, ...props }) => {
 
     const viewPort = useResponsiveLayout(600);
@@ -199,12 +199,23 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
                     : "Data missing."
             }</p>
         }
+        {
+            postcode &&
+            <p className={ "govuk-body-s govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>
+                <a className={ "govuk-link govuk-link--no-visited-state" }
+                   target={ "_blank" }
+                   rel={ "noopener noreferrer" }
+                   href={ `/search?postcode=${postcode.replace(/[\s]/gi, "")}` }>
+                    See more data for { postcode }
+                </a>
+            </p>
+        }
     </MapToolbox>
 
 };  // InfoCard
 
 
-const SoaCard = ({ currentLocation, date, areaType, ...props }) => {
+const SoaCard = ({ currentLocation, postcodeData, date, areaType, ...props }) => {
 
     const
         [locationData, setLocationData] = useState(null),
@@ -261,6 +272,7 @@ const SoaCard = ({ currentLocation, date, areaType, ...props }) => {
                      areaCode={ currentLocation }
                      areaType={ areaType }
                      trend={ fortnightData.direction }
+                     postcode={ currentLocation === postcodeData?.msoa ? postcodeData.postcode : null }
                      { ...props }/>
 
 };
@@ -280,7 +292,7 @@ const LocalAuthorityCard = ({ currentLocation, date, areaType, ...props }) => {
                         {
                             key: "date",
                             sign: "=",
-                            value: dataDate.toISOString().split("T")[0]
+                            value: dataDate.format("YYYY-MM-DD")
                         },
                     ],
                 }
@@ -319,6 +331,9 @@ const LocalAuthorityCard = ({ currentLocation, date, areaType, ...props }) => {
                      { ...props }/>
 
 };
+
+
+const Component = memo( ( props )=> <div {...props} id={ "map" }/>);
 
 
 const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJSON, geoData, date,
@@ -366,11 +381,11 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
         }
     }, []);
 
-    useEffect(() => {
+    useMemo(() => {
 
         if ( map && !styleDataStatus ) {
 
-            map.on("load", function () {
+            map.once("style.load", function () {
 
                 MapLayers.map( layer => {
                     map.addSource(`timeSeries-${layer.label}`, {
@@ -514,9 +529,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                 // }
                 //
                 // map.on('sourcedata', sourceCallback)
-                map.on("render", (e) => {
-                    setIsLoading(false)
-                });
+
+                // map.on("render", (e) => {
+                //     setIsLoading(false)
+                // });
 
             })
         }
@@ -528,10 +544,17 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
     }, [date, styleDataStatus]);
 
+    // useEffect(() => {
+    //     if ( map ) {
+    //         map.remove();
+    //     }
+    // }, [ date ]);
+
     useEffect(() => {
 
         if ( map && postcodeData ) {
 
+            setShowInfo(true);
             const el = document.createElement("div");
             el.className = "marker";
             el.style.backgroundImage = `url(${MapMarker})`;
@@ -549,13 +572,28 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                     postcodeData.geometry.coordinates[0],
                     postcodeData.geometry.coordinates[1]
                 ],
-                zoom: 10.8
+                zoom: 12.5
             });
 
+                // console.log(postcodeData)
+            // setShowInfo(true);
         }
 
     }, [postcodeData, map]);
 
+
+    useEffect(() => {
+
+        if ( currentLocation?.areaType === "msoa" ) {
+
+            setCurrentLocation(prev => ({
+                ...prev,
+                currentLocation: postcodeData?.msoa
+            }))
+
+        }
+
+    }, [ postcodeData, currentLocation?.areaType ]);
 
     useEffect(() => {
         setCurrentLocation(prev => ({
@@ -573,10 +611,11 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
             { children }
         </SliderContainer>
         <MapContainer>
-            { isLoading && <Loading/> }
-            <div id={ "map" } style={ { visibility: isLoading ? "hidden" : "visible" } }/>
+            {/*{ isLoading && <Loading/> }*/}
+            {/*<div id={ "map" }/>*/}
+            <Component/>
             {
-                !isLoading &&
+                // !isLoading &&
                 <>
                     <PostcodeSearchForm onSubmit={  (e) => {
                             e.preventDefault();
@@ -591,7 +630,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                                 setPostcodeData(data)
                             })();
                         } }>
-                        <label htmlFor={ "postcode" } className={ "govuk-visually-hidden" }>Search by postcode</label>
+                        <label htmlFor={ "postcode" }
+                               className={ "govuk-visually-hidden" }>
+                            Search by postcode
+                        </label>
                         <input className={ "govuk-input govuk-input--width-10" }
                                name={ "postcode" }
                                maxLength={ 10 }
@@ -599,8 +641,15 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                                id={ "postcode" }
                                pattern={ "[A-Za-z]{1,2}\\d{1,2}[A-Za-z]?\\s?\\d{1,2}[A-Za-z]{1,2}\\s{0,2}" }
                                placeholder={ "Postcode" }/>
-                        <label htmlFor={ "submit-postcode" } className={ "govuk-visually-hidden" }>Search by postcode</label>
-                        <input name={ "submit-postcode" } className={ "govuk-button" } id={ "submit-postcode" } type={ "submit" } value={ "" }/>
+                        <label htmlFor={ "submit-postcode" }
+                               className={ "govuk-visually-hidden" }>
+                            Search by postcode
+                        </label>
+                        <input name={ "submit-postcode" }
+                               className={ "govuk-button" }
+                               id={ "submit-postcode" }
+                               type={ "submit" }
+                               value={ "" }/>
                     </PostcodeSearchForm>
                     <LegendContainer>
                         <ScaleLegend>
@@ -651,14 +700,18 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                     ? null
                     : currentLocation.areaType !== "msoa"
                     ? <LocalAuthorityCard { ...currentLocation } date={ date } maxDate={ maxDate } setShowInfo={ setShowInfo }/>
-                    : <SoaCard { ...currentLocation } date={ date } maxDate={ maxDate } setShowInfo={ setShowInfo }/>
+                    : <SoaCard { ...currentLocation }
+                               date={ date }
+                               postcodeData={ postcodeData }
+                               maxDate={ maxDate }
+                               setShowInfo={ setShowInfo }/>
             }
             </MapContainer>
         <span style={{ textAlign: "right" }}>
             Download as <a onClick={ downloadImage }
                    className={ "govuk-link govuk-link--no-visited-state" }
                    download={ `cases_${date}.png` } href={ "" }>image</a>.</span>
-    </>
+    </>;
 
 };  // Map
 

@@ -46,6 +46,7 @@ const URLs = {
     downloadData:           `https://${ REACT_APP_API_ENDPOINT  }/v2/data`,
     supplementaryDownloads: `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/downloads.json`,
     msoaData:               `https://${ REACT_APP_MAIN_CDN      }/public/assets/dispatch/region2la2msoa.json`,
+    changeLogData:          `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/changeLog.json`,
     permalinkDownloadData:  `https://${ REACT_APP_USER_API_ENDPOINT  }/v2/data`,
 };
 
@@ -55,6 +56,7 @@ URLs.pageLayouts = {
     healthcare: 'healthcare.json',
     deaths: 'deaths.json',
     cases: 'cases.json',
+    vaccinations: 'vaccinations.json',
 }
 
 export default URLs;

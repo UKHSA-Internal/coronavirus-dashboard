@@ -42,22 +42,15 @@ const BannerBody: ComponentType<*> = ({ rawBody, ...props }) => {
 };  // Banner Body
 
 
-const bannerFilter = ( timestamp: string, pathname: string ): (BannerType => boolean) => {
+const Datestamp: ComponentType<*> = ({ banner, ...props }) => {
 
-    const ts = moment(timestamp);
+    const timestamp = banner?.date ?? banner.appearByUpdate;
 
-    return ( { appearByUpdate, disappearByUpdate, displayUri=[] }: BannerType ): boolean => {
+    return <Timestamp dateTime={ moment(timestamp).toISOString() } { ...props }>{
+        moment(timestamp).format("D MMMM YYYY")
+    }</Timestamp>
 
-        if ( moment(appearByUpdate) > ts || ts > moment(disappearByUpdate) ) return false;
-
-        return (
-            displayUri.length === 0 ||
-            displayUri.includes(uri => uri === pathname.toLowerCase())
-        )
-
-    }
-
-};  // bannerFilter
+};  // Datestamp
 
 
 const Banner: ComponentType<*> = ({ ...props }) => {
@@ -69,15 +62,28 @@ const Banner: ComponentType<*> = ({ ...props }) => {
     if ( banners === null ) return <Loading/>;
     if ( !banners?.length ) return null;
 
+    const ts = moment(timestamp);
+    const pattern = new RegExp(pathname, 'ig');
+
+    const bannerFilter = ( { appearByUpdate, disappearByUpdate, displayUri=[] }: BannerType ): boolean => {
+
+        if ( moment(appearByUpdate) > ts || ts > moment(disappearByUpdate) ) return false;
+
+        return (
+            displayUri.length > 0
+                ? displayUri.filter(item => pattern.test(item)).length > 0
+                : true
+        )
+
+    };  // bannerFilter
+
     return <>{
         banners
-            .filter(bannerFilter(timestamp, pathname))
+            .filter(bannerFilter)
             .map((banner, index) =>
                 <BannerBase key={ `banner-${index}-${banner?.appearByUpdate}` } { ...props }>
                     <BannerContent>
-                        <Timestamp dateTime={ moment(banner?.appearByUpdate).toISOString() }>{
-                            moment(banner?.appearByUpdate).format("DD MMMM YYYY")
-                        }</Timestamp>
+                        <Datestamp banner={ banner }/>
                         <BannerBody rawBody={ banner?.body ?? "" }/>
                     </BannerContent>
                 </BannerBase>

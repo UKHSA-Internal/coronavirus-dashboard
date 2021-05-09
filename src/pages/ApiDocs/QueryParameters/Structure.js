@@ -28,14 +28,10 @@ structure = {
     "date": "date",
     "name": "areaName",
     "code": "areaCode",
-    "cases": {
-        "daily": "newCasesByPublishDate",
-        "cumulative": "cumCasesByPublishDate"
-    },
-    "deaths": {
-        "daily": "newDeathsByDeathDate",
-        "cumulative": "cumDeathsByDeathDate"
-    }
+    "dailyCases": "newCasesByPublishDate",
+    "cumulativeCases": "cumCasesByPublishDate"
+    "dailyDeaths": "newDeaths28DaysByPublishDate",
+    "cumulativeDeaths": "cumDeaths28DaysByPublishDate"
 }
 
 api_params = {
@@ -61,14 +57,10 @@ const
         date: "date",
         name: "areaName",
         code: "areaCode",
-        cases: {
-            daily: "newCasesByPublishDate",
-            cumulative: "cumCasesByPublishDate"
-        },
-        deaths: {
-            daily: "newDeathsByDeathDate",
-            cumulative: "cumDeathsByDeathDate"
-        }
+        "dailyCases": "newCasesByPublishDate",
+        "cumulativeCases": "cumCasesByPublishDate"
+        "dailyDeaths": "newDeaths28DaysByPublishDate",
+        "cumulativeDeaths": "cumDeaths28DaysByPublishDate"
     };
 
 const
@@ -91,17 +83,13 @@ filters <- c(
 
 # Create the structure as a list or a list of lists:
 structure <- list(
-    date = "date",
-    name = "areaName",
-    code = "areaCode",
-    cases = list(
-        daily = "newCasesByPublishDate",
-        cumulative = "cumCasesByPublishDate"
-    ),
-    deaths = list(
-        daily = "newDeathsByDeathDate",
-        cumulative = "cumDeathsByDeathDate"
-    )
+    date = "date", 
+    name = "areaName", 
+    code = "areaCode", 
+    dailyCases = "newCasesByPublishDate",
+    cumulativeCases = "cumCasesByPublishDate",
+    dailyDeaths = "newDeaths28DaysByPublishDate",
+    cumulativeDeaths = "cumDeaths28DaysByPublishDate"
 )
 
 # The "httr::GET" method automatically encodes
@@ -156,14 +144,10 @@ structure = {
     "date": "date",
     "name": "areaName",
     "code": "areaCode",
-    "cases": {
-        "daily": "newCasesByPublishDate",
-        "cumulative": "cumCasesByPublishDate"
-    },
-    "deaths": {
-        "daily": "newDeathsByDeathDate",
-        "cumulative": "cumDeathsByDeathDate"
-    }
+    "dailyCases": "newCasesByPublishDate",
+    "cumulativeCases": "cumCasesByPublishDate"
+    "dailyDeaths": "newDeaths28DaysByPublishDate",
+    "cumulativeDeaths": "cumDeaths28DaysByPublishDate"
 }
 
 api_params = {
@@ -181,10 +165,8 @@ print(response.url)
 print(response.json())`;
 
 
-const AutomatedEncodingExamplePythonResponse = `https://api.coronavirus.data.gov.uk/v1/data?filters=areaType%3Dnation%3BareaName%3Dengland&structure=%7B%22date%22%3A%22date%22%2C%22name%22%3A%22areaName%22%2C%22code%22%3A%22areaCode%22%2C%22cases%22%3A%7B%22daily%22%3A%22newCasesByPublishDate%22%2C%22cumulative%22%3A%22cumCasesByPublishDate%22%7D%2C%22deaths%22%3A%7B%22daily%22%3A%22newDeathsByDeathDate%22%2C%22cumulative%22%3A%22cumDeathsByDeathDate%22%7D%7D
-{'length': 141, 'maxPageLimit': 1000, 'data': [{'date': '2020-07-20', 'name': 'England', 'code': 'E92000001', 'cases': {'daily': 535, 'cumulative': 254120}, 'deaths': {'daily': None, 'cumulative': None}}, ...]}`;
-
-
+const AutomatedEncodingExamplePythonResponse = `https://api.coronavirus.data.gov.uk/v1/data?filters=areaName=England;areaType=nation&structure={"date":"date","name":"areaName","code":"areaCode","dailyCases":"newCasesByPublishDate","cumulativeCases":"cumCasesByPublishDate","dailyDeaths":"newDeaths28DaysByPublishDate","cumulativeDeaths":"cumDeaths28DaysByPublishDate"}
+{"length":446,"maxPageLimit":2500,"totalRecords":1714,"data":[{"date":"2021-04-20","name":"England","code":"E92000001","dailyCases":2169,"cumulativeCases":3839002,"dailyDeaths":28,"cumulativeDeaths":111985}, ..., {"date":"2020-01-31","name":"England","code":"E92000001","dailyCases":2,"cumulativeCases":2,"dailyDeaths":null,"cumulativeDeaths":null}],"requestPayload":{"structure":{"date":"date","name":"areaName","code":"areaCode","dailyCases":"newCasesByPublishDate","cumulativeCases":"cumCasesByPublishDate","dailyDeaths":"newDeaths28DaysByPublishDate","cumulativeDeaths":"cumDeaths28DaysByPublishDate"},"filters":[{"identifier":"areaName","operator":"=","value":"England"},{"identifier":"areaType","operator":"=","value":"nation"}],"page":1},"pagination":{"current":"/v1/data?filters=areaName=England;areaType=nation&structure={"date": "date","name": "areaName","code": "areaCode","dailyCases": "newCasesByPublishDate","cumulativeCases": "cumCasesByPublishDate","dailyDeaths": "newDeaths28DaysByPublishDate","cumulativeDeaths": "cumDeaths28DaysByPublishDate"}&page=1","next":null,"previous":null,"first":"/v1/data?filters=areaName=England;areaType=nation&structure={"date": "date","name": "areaName","code": "areaCode","dailyCases": "newCasesByPublishDate","cumulativeCases": "cumCasesByPublishDate","dailyDeaths": "newDeaths28DaysByPublishDate","cumulativeDeaths": "cumDeaths28DaysByPublishDate"}&page=1","last":"/v1/data?filters=areaName=England;areaType=nation&structure={"date": "date","name": "areaName","code": "areaCode","dailyCases": "newCasesByPublishDate","cumulativeCases": "cumCasesByPublishDate","dailyDeaths": "newDeaths28DaysByPublishDate","cumulativeDeaths": "cumDeaths28DaysByPublishDate"}&page=1"}}`
 const AutomatedEncodingExampleJavaScript = `const axios = require("axios");
 
 
@@ -220,14 +202,10 @@ const main = async () => {
             date: "date",
             name: "areaName",
             code: "areaCode",
-            cases: {
-                new: "newCasesByPublishDate",
-                cumulative: "cumCasesByPublishDate"
-            },
-            deaths: {
-                new: "newDeathsByDeathDate",
-                cumulative: "cumDeathsByDeathDate"
-            }
+            "dailyCases": "newCasesByPublishDate",
+            "cumulativeCases": "cumCasesByPublishDate"
+            "dailyDeaths": "newDeaths28DaysByPublishDate",
+            "cumulativeDeaths": "cumDeaths28DaysByPublishDate"
         };
 
     const
@@ -249,7 +227,8 @@ main().catch(err => {
 });`;
 
 
-const AutomatedEncodingExampleJavaScriptResponse = `{"length":141,"maxPageLimit":1000,"data":[{"date":"2020-07-20","name":"England","code":"E92000001","cases":{"new":535,"cumulative":254120},"deaths":{"new":null,"cumulative":null}}, ...]}`;
+const AutomatedEncodingExampleJavaScriptResponse = `{"length":446,"maxPageLimit":2500,"totalRecords":1714,"data":[{"date":"2021-04-20","name":"England","code":"E92000001","dailyCases":2169,"cumulativeCases":3839002,"dailyDeaths":28,"cumulativeDeaths":111985}, ..., {"date":"2020-01-31","name":"England","code":"E92000001","dailyCases":2,"cumulativeCases":2,"dailyDeaths":null,"cumulativeDeaths":null}],"requestPayload":{"structure":{"date":"date","name":"areaName","code":"areaCode","dailyCases":"newCasesByPublishDate","cumulativeCases":"cumCasesByPublishDate","dailyDeaths":"newDeaths28DaysByPublishDate","cumulativeDeaths":"cumDeaths28DaysByPublishDate"},"filters":[{"identifier":"areaName","operator":"=","value":"England"},{"identifier":"areaType","operator":"=","value":"nation"}],"page":1},"pagination":{"current":"/v1/data?filters=areaName=England;areaType=nation&structure={"date": "date","name": "areaName","code": "areaCode","dailyCases": "newCasesByPublishDate","cumulativeCases": "cumCasesByPublishDate","dailyDeaths": "newDeaths28DaysByPublishDate","cumulativeDeaths": "cumDeaths28DaysByPublishDate"}&page=1","next":null,"previous":null,"first":"/v1/data?filters=areaName=England;areaType=nation&structure={"date": "date","name": "areaName","code": "areaCode","dailyCases": "newCasesByPublishDate","cumulativeCases": "cumCasesByPublishDate","dailyDeaths": "newDeaths28DaysByPublishDate","cumulativeDeaths": "cumDeaths28DaysByPublishDate"}&page=1","last":"/v1/data?filters=areaName=England;areaType=nation&structure={"date": "date","name": "areaName","code": "areaCode","dailyCases": "newCasesByPublishDate","cumulativeCases": "cumCasesByPublishDate","dailyDeaths": "newDeaths28DaysByPublishDate","cumulativeDeaths": "cumDeaths28DaysByPublishDate"}&page=1"}}`
+
 
 
 const AutomatedEncodingExampleR = `AREA_TYPE = "nation"
@@ -265,17 +244,13 @@ filters <- c(
 
 # Create the structure as a list or a list of lists:
 structure <- list(
-    date  = "date",
-    name  = "areaName",
-    code  = "areaCode",
-    cases = list(
-        daily      = "newCasesByPublishDate",
-        cumulative = "cumCasesByPublishDate"
-    ),
-    deaths = list(
-        daily      = "newDeathsByDeathDate",
-        cumulative = "cumDeathsByDeathDate"
-    )
+    date  = "date", 
+    name  = "areaName", 
+    code  = "areaCode", 
+    dailyCases = "newCasesByPublishDate",
+    cumulativeCases = "cumCasesByPublishDate"
+    dailyDeaths = "newDeaths28DaysByPublishDate",
+    cumulativeDeaths = "cumDeaths28DaysByPublishDate"
 )
 
 # The "httr::GET" method automatically encodes
@@ -314,7 +289,7 @@ print(url)
 print(data)`;
 
 
-const AutomatedEncodingExampleRResponse = `https://api.coronavirus.data.gov.uk/v1/data?filters=areaType%3Dnation%3BareaName%3Dengland&structure=%7B%22date%22%3A%22date%22%2C%22name%22%3A%22areaName%22%2C%22code%22%3A%22areaCode%22%2C%22cases%22%3A%7B%22daily%22%3A%22newCasesByPublishDate%22%2C%22cumulative%22%3A%22cumCasesByPublishDate%22%7D%2C%22deaths%22%3A%7B%22daily%22%3A%22newDeathsByDeathDate%22%2C%22cumulative%22%3A%22cumDeathsByDeathDate%22%7D%7D
+const AutomatedEncodingExampleRResponse = `https://api.coronavirus.data.gov.uk/v1/data?filters=areaName=England;areaType=nation&structure={"date":"date","name":"areaName","code":"areaCode","dailyCases":"newCasesByPublishDate","cumulativeCases":"cumCasesByPublishDate","dailyDeaths":"newDeaths28DaysByPublishDate","cumulativeDeaths":"cumDeaths28DaysByPublishDate"}
 $length
 [1] 141
 
@@ -322,7 +297,7 @@ $maxPageLimit
 [1] 1000
 
 $data
-          date    name      code cases.daily cases.cumulative deaths.daily deaths.cumulative
+          date    name      code  dailyCases  cumulativeCases  dailyDeaths  cumulativeDeaths
 1   2020-07-20 England E92000001         535           254120           NA                NA
 2   2020-07-19 England E92000001         672           253585            5             40718
 ...`;
@@ -471,43 +446,75 @@ const Structure: ComponentType<*> = () =>
     "date":"date",
     "areaName":"areaName",
     "areaCode":"areaCode",
-    "newCasesByPublishDate":"newCasesByPublishDate",
-    "cumCasesByPublishDate":"cumCasesByPublishDate",
-    "newDeathsByDeathDate":"newDeathsByDeathDate",
-    "cumDeathsByDeathDate":"cumDeathsByDeathDate"
+    "newCasesByPublishDate": "newCasesByPublishDate",
+    "cumCasesByPublishDate": "cumCasesByPublishDate"
+    "newDeaths28DaysByPublishDate": "newDeaths28DaysByPublishDate",
+    "cumDeaths28DaysByPublishDate": "cumDeaths28DaysByPublishDate"
 }`}</CodeBox>
 
             <p>We may simply include the above structure in our URL:</p>
             <CodeBox>
-                {`/v1/data?filters=areaType=nation;areaName=england&structure={"date":"date","areaName":"areaName","areaCode":"areaCode","newCasesByPublishDate":"newCasesByPublishDate","cumCasesByPublishDate":"cumCasesByPublishDate","newDeathsByDeathDate":"newDeathsByDeathDate","cumDeathsByDeathDate":"cumDeathsByDeathDate"}`}
+                {`/v1/data?filters=areaName=England;areaType=nation&structure={"date":"date","name":"areaName","code":"areaCode","newCasesByPublishDate":"newCasesByPublishDate","cumCasesByPublishDate":"cumCasesByPublishDate","newDeaths28DaysByPublishDate":"newDeaths28DaysByPublishDate","cumDeaths28DaysByPublishDate":"cumDeaths28DaysByPublishDate"}`}
             </CodeBox>
 
             <p>When called, the above URL would produce a response similar to the following JSON:</p>
             <CodeBox>
 {`{
-    "length":141,
-    "maxPageLimit":1000,
-    "data":[
-        {
-            "date":"2020-07-20",
-            "areaName":"England",
-            "areaCode":"E92000001",
-            "newCasesByPublishDate":535,
-            "cumCasesByPublishDate":254120,
-            "newDeathsByDeathDate":null,
-            "cumDeathsByDeathDate":null
-        },
-        {
-            "date":"2020-07-19",
-            "areaName":"England",
-            "areaCode":"E92000001",
-            "newCasesByPublishDate":672,
-            "cumCasesByPublishDate":253585,
-            "newDeathsByDeathDate":5,
-            "cumDeathsByDeathDate":40718
-        },
-        ...
-    ]
+  "length": 446,
+  "maxPageLimit": 2500,
+  "totalRecords": 1714,
+  "data": [
+    {
+      "date": "2021-04-20",
+      "name": "United Kingdom",
+      "code": "K02000001",
+      "newCasesByPublishDate": 2524,
+      "cumCasesByPublishDate": 4393307,
+      "newDeaths28DaysByPublishDate": 33,
+      "cumDeaths28DaysByPublishDate": 127307
+    },
+    ...
+    {
+      "date": "2020-01-31",
+      "name": "United Kingdom",
+      "code": "K02000001",
+      "newCasesByPublishDate": 2,
+      "cumCasesByPublishDate": 2,
+      "newDeaths28DaysByPublishDate": null,
+      "cumDeaths28DaysByPublishDate": null
+    }
+  ],
+  "requestPayload": {
+    "structure": {
+      "date": "date",
+      "name": "areaName",
+      "code": "areaCode",
+      "newCasesByPublishDate": "newCasesByPublishDate",
+      "cumCasesByPublishDate": "cumCasesByPublishDate",
+      "newDeaths28DaysByPublishDate": "newDeaths28DaysByPublishDate",
+      "cumDeaths28DaysByPublishDate": "cumDeaths28DaysByPublishDate"
+    },
+    "filters": [
+      {
+        "identifier": "areaName",
+        "operator": "=",
+        "value": "United Kingdom"
+      },
+      {
+        "identifier": "areaType",
+        "operator": "=",
+        "value": "overview"
+      }
+    ],
+    "page": 1
+  },
+  "pagination": {
+    "current": "/v1/data?filters=areaName=United%20Kingdom;areaType=overview&structure={\\"date\\": \\"date\\",\\"name\\": \\"areaName\\",\\"code\\": \\"areaCode\\",\\"newCasesByPublishDate\\": \\"newCasesByPublishDate\\",\\"cumCasesByPublishDate\\": \\"cumCasesByPublishDate\\",\\"newDeaths28DaysByPublishDate\\": \\"newDeaths28DaysByPublishDate\\",\\"cumDeaths28DaysByPublishDate\\": \\"cumDeaths28DaysByPublishDate\\"}&page=1",
+    "next": null,
+    "previous": null,
+    "first": "/v1/data?filters=areaName=United%20Kingdom;areaType=overview&structure={\\"date\\": \\"date\\",\\"name\\": \\"areaName\\",\\"code\\": \\"areaCode\\",\\"newCasesByPublishDate\\": \\"newCasesByPublishDate\\",\\"cumCasesByPublishDate\\": \\"cumCasesByPublishDate\\",\\"newDeaths28DaysByPublishDate\\": \\"newDeaths28DaysByPublishDate\\",\\"cumDeaths28DaysByPublishDate\\": \\"cumDeaths28DaysByPublishDate\\"}&page=1",
+    "last": "/v1/data?filters=areaName=United%20Kingdom;areaType=overview&structure={\\"date\\": \\"date\\",\\"name\\": \\"areaName\\",\\"code\\": \\"areaCode\\",\\"newCasesByPublishDate\\": \\"newCasesByPublishDate\\",\\"cumCasesByPublishDate\\": \\"cumCasesByPublishDate\\",\\"newDeaths28DaysByPublishDate\\": \\"newDeaths28DaysByPublishDate\\",\\"cumDeaths28DaysByPublishDate\\": \\"cumDeaths28DaysByPublishDate\\"}&page=1"
+  }
 }`}
             </CodeBox>
 
@@ -519,49 +526,87 @@ const Structure: ComponentType<*> = () =>
                 to change both the structure and the names of the metrics.
             </p>
             <p>
-                We can change metric names or the structure of the JSON / XML response by
+                We can change metric name in the response by
                 altering the value of the <Code>structure</Code> parameter:
             </p>
+
+            <Admonition type={ "Warning" }>
+                The JSON value of structure must always be flat. Nested JSON structures
+                cannot be processed.
+            </Admonition>
+
             <CodeBox language={ 'json' }>{`{
-    "date":"date",
-    "name":"areaName",
-    "code":"areaCode",
-    "cases": {
-        "daily":"newCasesByPublishDate",
-        "cumulative":"cumCasesByPublishDate"
-    },
-    "deaths": {
-        "daily":"newDeathsByDeathDate",
-        "cumulative":"cumDeathsByDeathDate"
-    }
+    "date": "date",
+    "name": "areaName",
+    "code": "areaCode",
+    "dailyCases": "newCasesByPublishDate",
+    "cumulativeCases": "cumCasesByPublishDate"
+    "dailyDeaths": "newDeaths28DaysByPublishDate",
+    "cumulativeDeaths": "cumDeaths28DaysByPublishDate"
 }`}</CodeBox>
             <p>and incorporate the structure JSON text into the URL:</p>
             <CodeBox>
-                {`/v1/data?filters=areaType=nation;areaName=england&structure={"date":"date","name":"areaName","code":"areaCode","cases":{"daily":"newCasesByPublishDate","cumulative":"cumCasesByPublishDate"},"deaths":{"daily":"newDeathsByDeathDate","cumulative":"cumDeathsByDeathDate"}}`}
+                {`/v1/data?filters=areaName=England;areaType=nation&structure=filters=areaName=England;areaType=nation&structure=structure={"date":"date","name":"areaName","code":"areaCode","dailyCases":"newCasesByPublishDate","cumulativeCases":"cumCasesByPublishDate","dailyDeaths":"newDeaths28DaysByPublishDate","cumulativeDeaths":"cumDeaths28DaysByPublishDate"}`}
             </CodeBox>
 
             <p>When called, the above URL would produce a response similar to the following JSON:</p>
             <CodeBox>
 {`{
-    "length":141,
-    "maxPageLimit":1000,
-    "data":[
-        {
-            "date":"2020-07-20",
-            "name":"England",
-            "code":"E92000001",
-            "cases":{"daily":535,"cumulative":254120},
-            "deaths":{"daily":null,"cumulative":null}
-        },
-        {
-            "date":"2020-07-19",
-            "name":"England",
-            "code":"E92000001",
-            "cases": {"daily":672, "cumulative":253585},
-            "deaths": {"daily":5, "cumulative":40718}
-        },
-        ...
-    ]
+  "length": 446,
+  "maxPageLimit": 2500,
+  "totalRecords": 1714,
+  "data": [
+    {
+      "date": "2021-04-20",
+      "name": "United Kingdom",
+      "code": "K02000001",
+      "dailyCases": 2524,
+      "cumulativeCases": 4393307,
+      "dailyDeaths": 33,
+      "cumulativeDeaths": 127307
+    },
+    ...
+    {
+      "date": "2020-01-31",
+      "name": "United Kingdom",
+      "code": "K02000001",
+      "dailyCases": 2,
+      "cumulativeCases": 2,
+      "dailyDeaths": null,
+      "cumulativeDeaths": null
+    }
+  ],
+  "requestPayload": {
+    "structure": {
+      "date": "date",
+      "name": "areaName",
+      "code": "areaCode",
+      "dailyCases": "newCasesByPublishDate",
+      "cumulativeCases": "cumCasesByPublishDate",
+      "dailyDeaths": "newDeaths28DaysByPublishDate",
+      "cumulativeDeaths": "cumDeaths28DaysByPublishDate"
+    },
+    "filters": [
+      {
+        "identifier": "areaName",
+        "operator": "=",
+        "value": "United Kingdom"
+      },
+      {
+        "identifier": "areaType",
+        "operator": "=",
+        "value": "overview"
+      }
+    ],
+    "page": 1
+  },
+  "pagination": {
+    "current": "/v1/data?filters=areaName=United%20Kingdom;areaType=overview&structure={\\"date\\": \\"date\\",\\"name\\": \\"areaName\\",\\"code\\": \\"areaCode\\",\\"dailyCases\\": \\"newCasesByPublishDate\\",\\"cumulativeCases\\": \\"cumCasesByPublishDate\\",\\"dailyDeaths\\": \\"newDeaths28DaysByPublishDate\\",\\"cumulativeDeaths\\": \\"cumDeaths28DaysByPublishDate\\"}&page=1",
+    "next": null,
+    "previous": null,
+    "first": "/v1/data?filters=areaName=United%20Kingdom;areaType=overview&structure={\\"date\\": \\"date\\",\\"name\\": \\"areaName\\",\\"code\\": \\"areaCode\\",\\"dailyCases\\": \\"newCasesByPublishDate\\",\\"cumulativeCases\\": \\"cumCasesByPublishDate\\",\\"dailyDeaths\\": \\"newDeaths28DaysByPublishDate\\",\\"cumulativeDeaths\\": \\"cumDeaths28DaysByPublishDate\\"}&page=1",
+    "last": "/v1/data?filters=areaName=United%20Kingdom;areaType=overview&structure={\\"date\\": \\"date\\",\\"name\\": \\"areaName\\",\\"code\\": \\"areaCode\\",\\"dailyCases\\": \\"newCasesByPublishDate\\",\\"cumulativeCases\\": \\"cumCasesByPublishDate\\",\\"dailyDeaths\\": \\"newDeaths28DaysByPublishDate\\",\\"cumulativeDeaths\\": \\"cumDeaths28DaysByPublishDate\\"}&page=1"
+  }
 }`}
             </CodeBox>
 
@@ -582,15 +627,15 @@ const Structure: ComponentType<*> = () =>
                 content={[
                     <div>
                         <CodeBox language={ "python" }>{ EncodeExamplePython }</CodeBox>
-                        <CodeBox>{`/v1/data?filters=areaType%3Dnation%3BareaName%3Dengland&structure=%7B%22date%22%3A%22date%22%2C%22name%22%3A%22areaName%22%2C%22code%22%3A%22areaCode%22%2C%22cases%22%3A%7B%22daily%22%3A%22newCasesByPublishDate%22%2C%22cumulative%22%3A%22cumCasesByPublishDate%22%7D%2C%22deaths%22%3A%7B%22new%22%3A%22newDeathsByDeathDate%22%2C%22cumulative%22%3A%22cumDeathsByDeathDate%22%7D%7D`}</CodeBox>
+                        <CodeBox>{`/v1/data?filters%3DareaName%3DEngland%3BareaType%3Dnation%26structure%3D%7B%22date%22%3A%22date%22%2C%22name%22%3A%22areaName%22%2C%22code%22%3A%22areaCode%22%2C%22dailyCases%22%3A%22newCasesByPublishDate%22%2C%22cumulativeCases%22%3A%22cumCasesByPublishDate%22%2C%22dailyDeaths%22%3A%22newDeaths28DaysByPublishDate%22%2C%22cumulativeDeaths%22%3A%22cumDeaths28DaysByPublishDate%22%7D`}</CodeBox>
                     </div>,
                     <div>
                         <CodeBox language={ "javascript" }>{ EncodingExampleJavaScript }</CodeBox>
-                        <CodeBox>{`/v1/data?filters=areaType=nation;areaName=england&structure=%7B%22date%22:%22date%22,%22name%22:%22areaName%22,%22code%22:%22areaCode%22,%22cases%22:%7B%22daily%22:%22newCasesByPublishDate%22,%22cumulative%22:%22cumCasesByPublishDate%22%7D,%22deaths%22:%7B%22new%22:%22newDeathsByDeathDate%22,%22cumulative%22:%22cumDeathsByDeathDate%22%7D%7D`}</CodeBox>
+                        <CodeBox>{`/v1/data?filters%3DareaName%3DEngland%3BareaType%3Dnation%26structure%3D%7B%22date%22%3A%22date%22%2C%22name%22%3A%22areaName%22%2C%22code%22%3A%22areaCode%22%2C%22dailyCases%22%3A%22newCasesByPublishDate%22%2C%22cumulativeCases%22%3A%22cumCasesByPublishDate%22%2C%22dailyDeaths%22%3A%22newDeaths28DaysByPublishDate%22%2C%22cumulativeDeaths%22%3A%22cumDeaths28DaysByPublishDate%22%7D`}</CodeBox>
                     </div>,
                     <div>
                         <CodeBox language={ "r" }>{ EncodingExampleR }</CodeBox>
-                        <CodeBox>{`https://api.coronavirus.data.gov.uk/v1/data?filters=areaType%3Dnation%3BareaName%3Dengland&structure=%7B%22date%22%3A%22date%22%2C%22name%22%3A%22areaName%22%2C%22code%22%3A%22areaCode%22%2C%22cases%22%3A%7B%22daily%22%3A%22newCasesByPublishDate%22%2C%22cumulative%22%3A%22cumCasesByPublishDate%22%7D%2C%22deaths%22%3A%7B%22daily%22%3A%22newDeathsByDeathDate%22%2C%22cumulative%22%3A%22cumDeathsByDeathDate%22%7D%7D`}</CodeBox></div>
+                        <CodeBox>{`https://api.coronavirus.data.gov.uk/v1/data?filters%3DareaName%3DEngland%3BareaType%3Dnation%26structure%3D%7B%22date%22%3A%22date%22%2C%22name%22%3A%22areaName%22%2C%22code%22%3A%22areaCode%22%2C%22dailyCases%22%3A%22newCasesByPublishDate%22%2C%22cumulativeCases%22%3A%22cumCasesByPublishDate%22%2C%22dailyDeaths%22%3A%22newDeaths28DaysByPublishDate%22%2C%22cumulativeDeaths%22%3A%22cumDeaths28DaysByPublishDate%22%7D`}</CodeBox></div>
                 ]}
             />
 
@@ -613,7 +658,8 @@ const Structure: ComponentType<*> = () =>
                 </div>,
                 <div>
                     <CodeBox language={ "r" }>{ AutomatedEncodingExampleR }</CodeBox>
-                    <CodeBox>{ AutomatedEncodingExampleRResponse }</CodeBox></div>
+                    <CodeBox>{ AutomatedEncodingExampleRResponse }</CodeBox>
+                </div>
             ]}
         />
     </article>;

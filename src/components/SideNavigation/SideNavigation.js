@@ -38,6 +38,10 @@ const SideNavigation: ComponentType<Props> = ({ ...props }: Props) => {
                 <Link to={ "/details/healthcare" }>Healthcare</Link>
             </SideNavListItem>
 
+            <SideNavListItem className={`${pathname === '/details/vaccinations' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/vaccinations" }>Vaccinations</Link>
+            </SideNavListItem>
+
             <SideNavListItem className={`${pathname === '/details/deaths' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/deaths" }>Deaths</Link>
             </SideNavListItem>
@@ -52,6 +56,9 @@ const SideNavigation: ComponentType<Props> = ({ ...props }: Props) => {
             </SideNavListSecondaryItem>
             <SideNavListSecondaryItem className={`${pathname === '/details/download' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/download" }>Download data</Link>
+            </SideNavListSecondaryItem>
+            <SideNavListSecondaryItem className={`${pathname === '/details/whats-new' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/whats-new" }>What&#39;s new</Link>
             </SideNavListSecondaryItem>
             <SideNavListSecondaryItem className={`${pathname === '/details/developers-guide' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/developers-guide" }>Developer's guide</Link>

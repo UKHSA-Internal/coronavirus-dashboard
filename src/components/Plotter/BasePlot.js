@@ -7,6 +7,7 @@ import { PlotContainer } from "./Plotter.styles";
 import Plot from "react-plotly.js";
 
 import type { ComponentType } from "react";
+import numeral from "numeral";
 
 
 export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, yaxis = {},
@@ -23,7 +24,7 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
         tickson: "boundaries",
         ticklen: 'labels',
         tickcolor: "#f1f1f1",
-        tickformat: width === "desktop" ? ',r' : '.2s',
+        tickformat: width === "desktop" ? ',.2r' : '3s',
         tickfont: {
             family: `"GDS Transport", Arial, sans-serif`,
             size: width === "desktop" ? 13 : 10,
@@ -91,6 +92,15 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
             };
 
         }
+
+        for ( const value of row?.y ?? []) {
+
+            if ( row?.showlegend === false || row?.type === 'heatmap' ) continue;
+            if ( !(row?.hovertemplate ?? null) ) row.hovertemplate = [];
+
+            row.hovertemplate.push(numeral(value).format("0,0.[0]"));
+
+        }
     }
 
     return <PlotContainer className={ "govuk-grid-row" }
@@ -110,11 +120,8 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
                 // displayModeBar: true,
                 modeBarButtonsToRemove: [
                     "autoScale2d",
-                    // "zoomIn2d",
-                    // "zoomOut2d",
                     "toggleSpikelines",
                     "hoverClosestCartesian",
-                    // "zoom2d",
                     "pan2d",
                     "select2d",
                     "lasso2d",
@@ -148,7 +155,7 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
                 },
                 showlegend: true,
                 margin: {
-                    l: width === "desktop" ? 80 : 30,
+                    l: width === "desktop" ? 85 : 30,
                     r: width === "desktop" ? 10 : 5,
                     b: 25,
                     t: 10,

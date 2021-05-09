@@ -9,6 +9,7 @@ import {
     TabsContainer
 } from "components/TabLink/TabLink.styles";
 
+import { TablinkBodyContainer } from "../ApiDocs.styles";
 import type { ComponentType } from "react";
 
 
@@ -32,7 +33,7 @@ const LanguageTabs: ComponentType<*> = ({ tabs, content }) => {
                     </Tab>
                 )
             }</TabsContainer>
-            <Body>{ content[current] }</Body>
+        <Body height={ "auto" }><TablinkBodyContainer>{ content[current] }</TablinkBodyContainer></Body>
     </MainContainer>
 
 };  // TabLinkContainer

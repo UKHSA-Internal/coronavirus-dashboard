@@ -43,5 +43,11 @@ declare type GeoDataResponseItem = {
     [string]: any
 }; // GeoDataType
 
+export type useGenericAPInputs = {
+    defaultResponse: useApiResponseInput
+}
+
+export type useGenericAPIResponse = Array<useApiStructureInput>;
+
 
 export type GeoDataResponseType = GeoDataResponseItem[];

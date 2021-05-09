@@ -1,6 +1,6 @@
 // @flow
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import type { ComponentType } from 'react';
 
@@ -10,6 +10,16 @@ export const MainContainer = (() => {
     return styled.div`
         display: flex !important;
         flex-direction: column !important;
+    `
+
+})();
+
+export const MainContainerLanguageTabs = (() => {
+
+    return styled.div`
+        display: flex !important;
+        flex-direction: column !important;
+        margin-bottom: 150px;
     `
 
 })();
@@ -56,10 +66,9 @@ export const Tab: ComponentType<*> = (() => {
 export const Body: ComponentType<*> = (() => {
 
     return styled.div`
-        display: block;
-        height: fit-content;
-        width: 100%;
-        height: 350px;
+        display: grid;
+        grid-auto-columns: auto;
+        ${({ height }) => css`height: ${height ? height : "350px"}`} 
     `
 
 })();  // Body

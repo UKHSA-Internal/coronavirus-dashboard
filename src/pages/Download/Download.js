@@ -387,17 +387,6 @@ const Download: ComponentType<*> = () => {
     }, [ timestamp ]);
 
     return <>
-        <div className={ "govuk-phase-banner status-banner govuk-!-margin-bottom-0" }>
-            <p className={ "govuk-phase-banner__content" }>
-                <strong className={ "govuk-tag govuk-phase-banner__content__tag" }>
-                    EXPERIMENTAL
-                </strong>
-                <span className={ "govuk-phase-banner__text" }>
-                    This is a new addition to the service. It is subject to active development
-                    and may become unstable or unresponsive without prior notice.
-                </span>
-            </p>
-        </div>
         <Container>
             <MainContent className={ "no-border" }>
                 <p className={ "govuk-body govuk-!-margin-top-1" }>

@@ -5,6 +5,7 @@ import { BasePlotter } from "./BasePlot";
 
 import Heatmap from "./heatmap";
 import { XAxis } from "./xAxis";
+import Waffle from "./Waffle";
 
 import type { ComponentType } from "react";
 
@@ -18,7 +19,9 @@ const Plotter: ComponentType<*> = ({ type = "generic", ...props }) => {
         case "Heatmap":
             return <Heatmap { ...props }/>;
 
-        case "Generic":
+        case "percentageWaffle":
+            return <Waffle { ...props }/>;
+
         default:
             return <BasePlotter { ...props }/>;
     }

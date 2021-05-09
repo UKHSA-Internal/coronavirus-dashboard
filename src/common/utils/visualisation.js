@@ -2,7 +2,16 @@
 
 import { dropLeadingZeros, hexToRgb } from "./utils";
 import { movingAverage } from "../stats";
+import cloneDeep from "lodash.clonedeep";
 
+
+const asCssRgb = ( hex ) => {
+
+    const { r, g, b } = hexToRgb(hex);
+
+    return `rgb(${r},${g},${b})`
+
+};  // asCssRgb
 
 export const
     colours = [
@@ -17,6 +26,7 @@ export const
         '#EFF0F0',  // Grey tint 2
         '#FFDD00',  // Yellow
         '#d4351c',  // Red
+        '#009f56',  // green
         // New colours
         // '#206BC9',  // blue
         // '#90C1FE',  // blue (tint 3)
@@ -101,7 +111,6 @@ const processHighlightedField = ({ field, index, xData, yData }) => {
         name: hlLabel,
         x: highlightedX,
         y: highlightedY,
-        hovertemplate: "%{y}",
         type: field?.type ?? "bar",
         marker: {
             color: colours[hlColour]
@@ -173,7 +182,6 @@ const processGenericField = ({ field, index, xData, yData }) => {
         name: field.label,
         x: xData,
         y: yData,
-        hovertemplate: "%{y}",
         ...(field?.overlaying)
             ? {
                 yaxis: "y2",
@@ -219,6 +227,152 @@ export const getPlotData = ( fields: Array<{}>, rawData, xKey="date" ) => {
     return graphObjects
 
 };  // getPlotData
+
+
+export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date", threshold: number,
+                                       markerColourBelowThreshold: number, markerColourAboveThreshold: number,
+                                       symbolBelowThreshold: string, symbolAboveThreshold: string,
+                                       lineColour: number ) => {
+
+    const data = [];
+
+    for ( const row of rawData ) {
+        const trace = {
+            x: [],
+            y: [],
+            type: "scatter",
+            showlegend: false,
+            hoverinfo: 'skip',
+            line: {color: asCssRgb(colours[lineColour]), width: 1},
+        };
+
+        for ( const { value } of fields ) {
+            trace.x.push(row?.[xKey] ?? null)
+            trace.y.push(row?.[value] ?? null);
+        }
+
+        data.push(trace);
+    }
+
+    for ( const { value, label } of fields ) {
+        const trace = {
+            name: label,
+            x: [],
+            y: [],
+            mode: 'markers',
+            type: "scatter",
+            showlegend: false,
+            marker: {
+                color: [],
+                symbol: [],
+                size: 12
+            },
+        }
+
+        for ( const row of rawData ) {
+            trace.x.push(row?.[xKey] ?? null);
+            trace.y.push(row?.[value] ?? null);
+            trace.marker.color.push(
+                (row?.[value] ?? 0) >= threshold
+                    ? asCssRgb(colours[markerColourAboveThreshold])
+                    : asCssRgb(colours[markerColourBelowThreshold])
+            );
+            trace.marker.symbol.push(
+                (row?.[value] ?? 0) >= threshold
+                    ? symbolAboveThreshold
+                    : symbolBelowThreshold
+            );
+        }
+
+        data.push(trace);
+    }
+
+    return data;
+
+};  // twoWayLollipopData
+
+
+export const getPercentageWaffleData = ( fields: Array<{}>, rawData, xKey="date" ) => {
+
+    const BaseArray = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+
+    const yGridTicks = BaseArray.map((_, ind) => ind + 1);
+    const xGridTicks = BaseArray[0].map((_, ind) => ind + 1);
+
+    const genericSettings = {
+        type: "heatmap",
+        showscale: false,
+        hoverongaps: false,
+        ygap: 3,
+        xgap: 3,
+        hoverinfo: 'skip',
+        x: xGridTicks,
+        y: yGridTicks,
+    };
+
+    let responseData = [
+        {
+            ...genericSettings,
+            z: BaseArray,
+            showlegend: false,
+            colorscale: [[0, asCssRgb('#e7e7e7')], [1, asCssRgb('#e7e7e7')]],
+        }
+    ];
+
+    const fieldsLength = fields.length;
+
+    for ( let fieldIndex = 0; fieldIndex < fieldsLength; fieldIndex ++ ) {
+
+        const field = fields?.[fieldIndex];
+        const value = field?.value;
+        const label = field?.label;
+        const colour = asCssRgb(colours[field?.colour ?? 1]);
+
+        const maxValue = Math.floor(Math.max(...rawData.map(row => row?.[value])));
+        const valueArray = cloneDeep(BaseArray);
+
+        for ( let rowInd = 0; rowInd < BaseArray.length; rowInd ++ ) {
+            for ( let colInd = 0; colInd < BaseArray[rowInd].length; colInd ++ ) {
+
+                if ( ((rowInd * 10) + colInd) < maxValue ) {
+                    valueArray[rowInd][colInd] = fieldIndex + 1;
+                }
+                else {
+                    valueArray[rowInd][colInd] = null;
+                }
+            }
+        }
+
+        responseData.push({
+            ...genericSettings,
+            z: valueArray,
+            name: label,
+            showlegend: true,
+            colorscale: fieldIndex ? [
+                [0, colour],
+                [1, colour],
+            ] : [
+                [0, colour],
+                [1, colour],
+            ],
+        });
+
+    }
+
+    return responseData;
+
+};  // getWaffleData
 
 
 export const getHeatmapData = ( fields: Array<{}>, rawData, xKey="date" ) => {

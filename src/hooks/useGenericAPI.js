@@ -1,6 +1,6 @@
 // @flow
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 
 import URLs from "common/urls";
 
@@ -14,9 +14,10 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, responseTy
 
     const [ response, setResponse ] = useState(defaultResponse);
 
-    useEffect( () => {
+    useMemo( () => {
     
         (async () => {
+        
             try {
                 const { data, status } = await axios.get(URLs[urlName], {responseType: responseType});
 
@@ -28,6 +29,7 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, responseTy
                 }
 
             } catch (e) {
+                console.log("error")
                 console.error(e)
             }
         })();
@@ -40,4 +42,3 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, responseTy
 
 
 export default useGenericAPI;
-

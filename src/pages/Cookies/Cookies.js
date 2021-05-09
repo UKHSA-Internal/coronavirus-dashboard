@@ -1,83 +1,63 @@
 // @flow
 
-import React, { useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { ComponentType } from 'react';
 
-import PageTitle from 'components/PageTitle';
 import type { Props } from './Cookies.types';
 import {
     Article,
     Heading
 } from './Cookies.styles';
 
-const deleteCookies = () => {
-    document.cookie = "_ga= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=.data.gov.uk";
-    document.cookie = "_gid= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; domain=.data.gov.uk";
+import { deleteCookies, handleCookieAccept, setCookies } from "common/utils/cookies";
+
+import Cookies from "js-cookie";
+
+
+const CookiesUpdatedText = ({ cookieState }) => {
+
+    if ( cookieState !== 'accept' ) return null;
+
+    return <div className="cookie-settings__confirmation" data-cookie-confirmation="true">
+        <section className="gem-c-notice govuk-!-margin-bottom-8" aria-label="Notice" aria-live="polite">
+            <h2 className="gem-c-notice__title">Cookies on coronavirus.data.gov.uk</h2>
+            <p className={"govuk-body"}>Your cookie settings were saved</p>
+        </section>
+    </div>
+
 };
 
-const setCookies = () => {
-    window.ga('create', 'UA-161400643-1', 'auto');
-    window.ga('set', 'anonymizeIp', true);
-    window.ga('set', 'allowAdFeatures', false);
-    window.ga('create', 'UA-145652997-1', 'auto', 'govuk_shared', { 'allowLinker': true });
-    window.ga('govuk_shared.require', 'linker');
-    window.ga('govuk_shared.set', 'anonymizeIp', true);
-    window.ga('govuk_shared.set', 'allowAdFeatures', false);
-    window.ga('govuk_shared.linker:autoLink', ['www.gov.uk']);
-    window.ga('send', 'pageview');
-    window.ga('govuk_shared.send', 'pageview');
-};
 
-const Cookies: ComponentType<Props> = ({ }: Props) => {
-    const [cookieState, setCookieState] = useState('unset');
+const CookiesPage: ComponentType<Props> = ({ }: Props) => {
 
-    const handleAccept = () => {
-        const
-            today = new Date(),
-            [year, month, day] = [today.getFullYear(), today.getMonth(), today.getDate()],
-            cookieExpiryDate = new Date(year + 1, month, day).toUTCString();
+    // const [preferenceSet, ]
+    const [cookieState, setCookieState] = useState(null);
 
-        if (cookieState === 'set') {
-            document.cookie = `cookies_policy=${encodeURIComponent('{"essential":true,"usage":true}')}; expires=${cookieExpiryDate};`;
-            setCookies();
-        } else {
-            document.cookie = `cookies_policy=${encodeURIComponent('{"essential":true,"usage":false}')}; expires=${cookieExpiryDate};`;
-            deleteCookies();
+    useEffect(() => {
+        const cookiePreference = Cookies.get('cookies_preferences_set_21_3');
+        console.log(cookiePreference);
+        console.log(cookieState);
+
+        if ( cookiePreference === 'true' ) {
+            const cookiePolicyRaw = Cookies.get('cookies_policy_21_3');
+            console.log(cookiePolicyRaw);
+
+            if ( !cookiePolicyRaw ) {
+                Cookies.remove("cookies_preferences_set_21_3");
+                setCookieState(true)
+            }
+            else {
+                const cookiePolicy = JSON.parse(cookiePolicyRaw);
+                setCookieState(cookiePolicy.usage);
+            }
         }
+        else {
+            setCookieState(true)
+        }
+    }, []);
 
-        document.cookie = `cookies_preferences_set=true; expires=${cookieExpiryDate};`
-        setCookieState('accept');
-    };
-
-
-    if (cookieState === 'accept') {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    }
-
-    const getCookiesUpdatedText = () => {
-
-        if (cookieState === 'accept')
-            return (
-                <div className="cookie-settings__confirmation" data-cookie-confirmation="true">
-                    <section className="gem-c-notice govuk-!-margin-bottom-8" aria-label="Notice" aria-live="polite">
-                        <h2 className="gem-c-notice__title">Cookies on data.gov.uk</h2>
-                        <p className={"govuk-body"}>Your cookie settings were saved</p>
-                    </section>
-                </div>
-            );
-
-        return null
-
-    };
-
-    return ( <Fragment>
-
-        {getCookiesUpdatedText()}
-
-        <PageTitle title={"Cookies"} />
+    return <>
+        <CookiesUpdatedText/>
 
         <Article>
 
@@ -85,7 +65,8 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
                 Cookies are files saved on your phone, tablet or computer when you visit a website.
             </p>
             <p className={"govuk-body govuk-!-margin-bottom-8"}>
-                We use cookies to store information about how you use the data.gov.uk website, such as the pages you visit.
+                We use cookies to store information about how you use the coronavirus.data.gov.uk website,
+                such as the pages you visit.
             </p>
 
             <Heading>Cookie settings</Heading>
@@ -97,20 +78,23 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
             <Heading>Cookies that measure website use</Heading>
 
             <p className={"govuk-body"}>
-                We use Google Analytics to measure how you use the website so we can improve it based on user needs. Google Analytics sets cookies that store anonymised information about:
+                We use Google Analytics to measure how you use the website so we can
+                improve it based on user needs. Google Analytics sets cookies that store
+                anonymized information about:
             </p>
 
             <div className={"govuk-body"}>
                 <ul className="govuk-list govuk-list--bullet">
                     <li>how you got to the site</li>
-                    <li>the pages you visit on data.gov.uk, and how long you spend on each page</li>
+                    <li>the pages you visit on coronavirus.data.gov.uk, and how long you spend on each page</li>
                     <li>what you click on while you're visiting the site</li>
                 </ul>
             </div>
 
 
             <p className={"govuk-body"}>
-                We do not allow Google to use or share the data about how you use this site.
+                We’d like to set additional cookies so we can remember your settings, understand how
+                people use the service and make improvements.
             </p>
 
             <p className={"govuk-body"}>
@@ -122,18 +106,19 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
                     <thead className={"govuk-table__head"}>
                         <tr className={"govuk-table__row"}>
                             <th scope={"col"} className={"govuk-table__header"}>Name</th>
-                            <th scope="col" className={"govuk-table__header govuk-!-width-two-third"}>Purpose</th>
+                            <th scope={"col"} className={"govuk-table__header govuk-!-width-two-third"}>Purpose</th>
                             <th scope={"col"} className={"govuk-table__header"}>Expires</th>
                         </tr>
                     </thead>
                     <tbody className={"govuk-table__body"}>
                         <tr className={"govuk-table__row"}>
                             <td className={"govuk-table__cell"}>_ga,<br />_gid</td>
-                            <td className={"govuk-table__cell"}>These help us count how many people visit data.gov.uk by
-                            tracking if you’ve visited before
-                        </td>
-                            <td className={"govuk-table__cell"} style={{ minWidth: `100px` }}>_ga 2 years,<br />_gid 24 hours
-                        </td>
+                            <td className={"govuk-table__cell"}>
+                                These help us count how many people visit coronavirus.data.gov.uk by
+                                tracking if you’ve visited before.
+                            </td>
+                                <td className={"govuk-table__cell"} style={{ minWidth: `100px` }}>_ga 2 years,<br />_gid 24 hours
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -142,15 +127,18 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
             <div className={"govuk-body govuk-!-margin-bottom-8"}>
                 <div className="govuk-radios">
                     <div className="gem-c-radio govuk-radios__item">
-                        <input type="radio" name="cookies-usage" id="radio-c6a408c0-0" value="on"
-                            className="govuk-radios__input" onClick={() => setCookieState('set')} />
+                        <input type="radio" name="cookies-usage" id="radio-c6a408c0-0"
+                               checked={ cookieState }
+                               className="govuk-radios__input" defaultChecked onClick={() => setCookieState(true)} />
                         <label htmlFor="radio-c6a408c0-0" className="gem-c-label govuk-label govuk-radios__label">
                             Use cookies that measure my website use
                         </label>
                     </div>
                     <div className="gem-c-radio govuk-radios__item">
-                        <input type="radio" name="cookies-usage" id="radio-c6a408c0-1" value="off"
-                            className="govuk-radios__input" defaultChecked onClick={() => setCookieState('unset')} />
+                        <input type="radio" name="cookies-usage" id="radio-c6a408c0-1"
+                               checked={ cookieState === false }
+                               className="govuk-radios__input"
+                               onClick={() => setCookieState(false)} />
                         <label htmlFor="radio-c6a408c0-1" className="gem-c-label govuk-label govuk-radios__label">
                             Do not use cookies that measure my website use
                         </label>
@@ -172,14 +160,12 @@ const Cookies: ComponentType<Props> = ({ }: Props) => {
                 <button className="gem-c-button govuk-button"
                     type="submit" data-module="track-click"
                     data-accept-cookies="true" data-track-category="cookies"
-                    onClick={handleAccept}>
+                    onClick={ () => handleCookieAccept(cookieState) }>
                     Save changes
                 </button>
             </p>
         </Article>
-    </Fragment>
-
-    );
+    </>
 };
 
-export default Cookies
+export default CookiesPage;

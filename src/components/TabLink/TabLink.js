@@ -11,7 +11,14 @@ import {
 
 import type { ComponentType } from "react";
 
-import { dropLeadingZeros, getHeatmapData, getPlotData, groupBy } from "common/utils";
+import {
+    dropLeadingZeros,
+    getHeatmapData,
+    getPlotData,
+    getPercentageWaffleData,
+    getTwoWayLollipopData,
+    groupBy
+} from "common/utils";
 import { DataTable, NestedDataTable } from "components/GovUk";
 import useApi from "hooks/useApi";
 import Loading from "components/Loading";
@@ -27,6 +34,7 @@ const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
         case "recentData":
         case "chart":
         case "heatmap":
+        case "tabContentRaw":
             return <TabContent Component={ TabContentRaw } { ...props }/>;
 
         case "map":
@@ -110,6 +118,28 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
                             data={ getHeatmapData(fields, data, xKey) }
                             { ...props }/>;
 
+        case "percentageWaffle":
+            return <Plotter type={ "percentageWaffle" }
+                            layout={{}}
+                            data={ getPercentageWaffleData(fields, data, xKey) }
+                            { ...props }/>;
+
+        case "twoWayLollipop":
+            return <Plotter type={ "twoWayLollipop" }
+                            layout={{}}
+                            data={
+                                getTwoWayLollipopData(
+                                    fields, data, xKey,
+                                    props?.threshold,
+                                    props?.markerColourBelowThreshold,
+                                    props?.markerColourAboveThreshold,
+                                    props?.symbolBelowThreshold,
+                                    props?.symbolAboveThreshold,
+                                    props?.lineColour,
+                                )
+                            }
+                            { ...props }/>;
+
         case "nestedTable":
             return <NestedDataTable fields={ fields } data={ data } { ...props }/>;
 
@@ -127,7 +157,7 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
 };
 
 
-const TabContentRaw: ComponentType<*> = ({ fields, setDataState, params, tabType, barType=null }) => {
+const TabContentRaw: ComponentType<*> = ({ fields, setDataState, params, tabType, barType=null, ...props }) => {
 
     const  structure = { date: "date" };
 
@@ -151,7 +181,8 @@ const TabContentRaw: ComponentType<*> = ({ fields, setDataState, params, tabType
     if ( data === null )
         return <Loading/>;
 
-    return <TabContentWithData data={ data } fields={ fields } tabType={ tabType } barType={ barType }/>
+    return <TabContentWithData data={ data } fields={ fields } tabType={ tabType }
+                               barType={ barType } { ...props }/>
 
 };  // TabContentRaw
 

@@ -99,7 +99,7 @@ Click on the link or copy and paste it into your browser.
             href={ tweetUri }>
             Tweet
         </a>
-    </>
+    </>;
 
 };  // ShareOptions
 
