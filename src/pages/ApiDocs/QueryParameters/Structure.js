@@ -92,21 +92,21 @@ structure <- list(
     cumulativeDeaths = "cumDeaths28DaysByPublishDate"
 )
 
-# The "httr::GET" method automatically encodes 
+# The "httr::GET" method automatically encodes
 # the URL and its parameters:
 httr::GET(
     # Concatenate the filters vector using a semicolon.
     url = endpoint,
-    
-    # Convert the structure to JSON (ensure 
+
+    # Convert the structure to JSON (ensure
     # that "auto_unbox" is set to TRUE).
     query = list(
         filters = paste(filters, collapse = ";"),
         structure = jsonlite::toJSON(structure, auto_unbox = TRUE)
     ),
-    
+
     # The API server will automatically reject any
-    # requests that take longer than 10 seconds to 
+    # requests that take longer than 10 seconds to
     # process.
     timeout(10)
 ) -> response
@@ -174,9 +174,9 @@ const getData = async ( queries ) => {
 
     const endpoint = 'https://api.coronavirus.data.gov.uk/v1/data';
 
-    const { data, status, statusText } = await axios.get(endpoint, { 
+    const { data, status, statusText } = await axios.get(endpoint, {
         params: queries,
-        timeout: 10000 
+        timeout: 10000
     });
 
     if ( status >= 400 )
@@ -253,21 +253,21 @@ structure <- list(
     cumulativeDeaths = "cumDeaths28DaysByPublishDate"
 )
 
-# The "httr::GET" method automatically encodes 
+# The "httr::GET" method automatically encodes
 # the URL and its parameters:
 httr::GET(
     # Concatenate the filters vector using a semicolon.
     url = endpoint,
-    
-    # Convert the structure to JSON (ensure 
+
+    # Convert the structure to JSON (ensure
     # that "auto_unbox" is set to TRUE).
     query = list(
         filters   = paste(filters, collapse = ";"),
         structure = jsonlite::toJSON(structure, auto_unbox = TRUE)
     ),
-    
+
     # The API server will automatically reject any
-    # requests that take longer than 10 seconds to 
+    # requests that take longer than 10 seconds to
     # process.
     timeout(10)
 ) -> response
@@ -373,10 +373,10 @@ const Structure: ComponentType<*> = () =>
 
                     <dt><Code>newCasesByPublishDate</Code></dt><dd>New cases by publish date</dd>
                     <dt><Code>cumCasesByPublishDate</Code></dt><dd>Cumulative cases by publish date</dd>
-                    <dt><Code>cumCasesBySpecimenDateRate</Code></dt><dd>Rate of cumulative cases by publish date per 100k resident population</dd>
+                    <dt><Code>cumCasesByPublishDateRate</Code></dt><dd>Rate of cumulative cases by publish date per 100k resident population</dd>
                     <dt><Code>newCasesBySpecimenDate</Code></dt><dd>New cases by specimen date</dd>
-                    <dt><Code>cumCasesBySpecimenDateRate</Code></dt><dd>Rate of cumulative cases by specimen date per 100k resident population</dd>
                     <dt><Code>cumCasesBySpecimenDate</Code></dt><dd>Cumulative cases by specimen date</dd>
+                    <dt><Code>cumCasesBySpecimenDateRate</Code></dt><dd>Rate of cumulative cases by specimen date per 100k resident population</dd>
                     <dt><Code>maleCases</Code></dt><dd>Male cases (by age)</dd>
                     <dt><Code>femaleCases</Code></dt><dd>Female cases (by age)</dd>
 
