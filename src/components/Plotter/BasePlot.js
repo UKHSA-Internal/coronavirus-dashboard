@@ -24,7 +24,7 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
         tickson: "boundaries",
         ticklen: 'labels',
         tickcolor: "#f1f1f1",
-        tickformat: width === "desktop" ? ',.2r' : '.1s',
+        tickformat: width === "desktop" ? ',.2r' : '3s',
         tickfont: {
             family: `"GDS Transport", Arial, sans-serif`,
             size: width === "desktop" ? 13 : 10,
@@ -120,11 +120,8 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
                 // displayModeBar: true,
                 modeBarButtonsToRemove: [
                     "autoScale2d",
-                    // "zoomIn2d",
-                    // "zoomOut2d",
                     "toggleSpikelines",
                     "hoverClosestCartesian",
-                    // "zoom2d",
                     "pan2d",
                     "select2d",
                     "lasso2d",
