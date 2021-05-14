@@ -46,6 +46,7 @@ const MapLayers = [
         name: "UTLA",
         paths: {
             timeSeries: "https://coronavirus.data.gov.uk/downloads/maps/utla_data_latest.geojson",
+            timeSeriesMobile: "https://coronavirus.data.gov.uk/downloads/maps/utla_data_latest-mobile.geojson",
             outline: "https://coronavirus.data.gov.uk/downloads/maps/utla-ref.geojson"
         },
         foreground: "building",
@@ -68,6 +69,7 @@ const MapLayers = [
         name: "LTLA",
         paths: {
             timeSeries: "https://coronavirus.data.gov.uk/downloads/maps/ltla_data_latest.geojson",
+            timeSeriesMobile: "https://coronavirus.data.gov.uk/downloads/maps/ltla_data_latest-mobile.geojson",
             outline: "https://coronavirus.data.gov.uk/downloads/maps/ltla-ref.geojson"
         },
         tolerance: .4,
@@ -90,6 +92,7 @@ const MapLayers = [
         name: "MSOA",
         paths: {
             timeSeries: "https://coronavirus.data.gov.uk/downloads/maps/msoa_data_latest.geojson",
+            timeSeriesMobile: "https://coronavirus.data.gov.uk/downloads/maps/msoa_data_latest-mobile.geojson",
             outline: "https://coronavirus.data.gov.uk/downloads/maps/msoa-ref.geojson"
         },
         tolerance: .5,
@@ -337,7 +340,7 @@ const Component = memo( ( props )=> <div {...props} id={ "map" }/>);
 
 
 const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJSON, geoData, date,
-                                   extrema, minData, maxData, valueIndex, children, dates, maxDate, ...props }) => {
+                                   extrema, minData, maxData, valueIndex, children, dates, maxDate, width, ...props }) => {
 
     const
         bounds = new L.LatLngBounds(new L.LatLng(50.5, -14.5), new L.LatLng(58.8, 10)),
@@ -390,7 +393,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                 MapLayers.map( layer => {
                     map.addSource(`timeSeries-${layer.label}`, {
                         type: 'geojson',
-                        data: layer.paths.timeSeries,
+                        data: width === "desktop" ? layer.paths.timeSeries : layer.paths.timeSeriesMobile,
                         buffer: layer.buffer,
                         tolerance: layer.tolerance,
                         maxzoom: layer.maxZoom
