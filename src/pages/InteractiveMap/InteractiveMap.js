@@ -20,6 +20,7 @@ import { useMapData } from "hooks/useMapData";
 import { glAvailable } from "components/Map/utils";
 import { scaleColours as colours } from "common/utils";
 import Plotter from "components/Plotter";
+import useResponsiveLayout from "../../hooks/useResponsiveLayout";
 
 
 const AreaLevel = {
@@ -81,7 +82,8 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
         refData = useMapData(`maps/${areaType}_percentiles.json`),
         [ dates, setDates ] = useState(null) ,
         [ currentDate, setCurrentDate ] = useState(null),
-        [ extrema, setExtrema ] = useState({ min: 0, first: .25, second: .5, third: .75, max: 1 });
+        [ extrema, setExtrema ] = useState({ min: 0, first: .25, second: .5, third: .75, max: 1 }),
+        width = useResponsiveLayout(860);
 
     useEffect(() => {
         if ( refData?.complete ) {
@@ -156,6 +158,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                      extrema={ extrema }
                      colours={ colours }
                      maxDate={ dates[dates.length - 1] }
+                     width={ width }
                 >
                     <label id={ "month" }
                            className={ "govuk-body" }
@@ -163,21 +166,27 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                         Seven&ndash;day rolling rate of new cases by specimen date ending
                         on <strong>{ moment(currentDate).format("DD MMM YYYY") }</strong>
                     </label>
-                    <Slider id="slider"
-                        min={ 0 }
-                        max={ ( dates.length ?? 0 ) - 1 }
-                        value={ dates.indexOf(currentDate) ?? 0 }
-                        length={ dates.length }
-                        onInput={ e => {
-                            e.target.style.background = `linear-gradient(to right, #12407F 0%, #12407F ${ Math.ceil(parseInt(e.target.value) * 100 / dates.length + .7) }%, white  ${ Math.ceil((parseInt(e.target.value) + .7) * 100 / dates.length) }%, white 100%)`
-                        } }
-                        onChange={ event => setCurrentDate(dates[parseInt(event.target.value)]) }/>
-                        <Plotter type={ "XAxis" }
-                                 // fallback={ <Loading/> }
-                                 data={[{
-                                    x: dates,
-                                    y: Array(dates.length).fill(null)
-                                }]}/>
+                    {
+                        width === "desktop"
+                            ? <>
+                                <Slider id="slider"
+                                          min={ 0 }
+                                          max={ (dates.length ?? 0) - 1 }
+                                          value={ dates.indexOf(currentDate) ?? 0 }
+                                          length={ dates.length }
+                                          onInput={ e => {
+                                              e.target.style.background = `linear-gradient(to right, #12407F 0%, #12407F ${ Math.ceil(parseInt(e.target.value) * 100 / dates.length + .7) }%, white  ${ Math.ceil((parseInt(e.target.value) + .7) * 100 / dates.length) }%, white 100%)`
+                                          } }
+                                          onChange={ event => setCurrentDate(dates[parseInt(event.target.value)]) }/>
+                                <Plotter type={ "XAxis" }
+                                    // fallback={ <Loading/> }
+                                         data={ [{
+                                             x: dates,
+                                             y: Array(dates.length).fill(null)
+                                         }] }/>
+                            </>
+                            : null
+                    }
                 </Map>
             </>
         </MainContainer>
