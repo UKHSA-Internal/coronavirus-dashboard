@@ -12,6 +12,7 @@ import { getParams } from "common/utils";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import Loading from "components/Loading";
+import DataPageHeaders from "components/DataPageHeader";
 
 
 const
@@ -31,6 +32,9 @@ const Deaths: ComponentType<Props> = ({ location: { search: query }}: Props) => 
     if ( !layout ) return <Loading large={ true }/>;
 
     return <>
+        <DataPageHeaders category={ "Deaths" }
+                         areaParams={ params }
+                         description={ "Data and charts for coronavirus (COVID-19) deaths" }/>
         <HeadlineNumbers params={ params } { ...layout }/>
         <CardsContainer>{
             layout?.cards.map(( cardProps, index ) =>

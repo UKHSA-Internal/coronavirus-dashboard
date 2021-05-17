@@ -36,14 +36,10 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
         preppedLabel = areaName
             .toLowerCase()
             .replace(/[\s:]/g, "_"),
-        pageHead = document.querySelector("head>title"),
         { location: { pathname } } = useHistory(),
         pageName = PathNameMapper[pathname],
         noPicker = NoPickerPaths.indexOf(pathname) > -1;
 
-    pageHead.innerText = `${ pageName } | Coronavirus in the UK`;
-
-    // if ( !(PathWithHeader.indexOf(pathname) > -1) ) return null;
 
     return <>
         <HeaderContainer role={ "heading" }

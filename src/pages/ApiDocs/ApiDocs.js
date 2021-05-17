@@ -12,11 +12,18 @@ import QueryParameters from "./QueryParameters/QueryParameters";
 import { Container } from "./ApiDocs.styles";
 
 import type { ComponentType } from "react";
+import { Helmet } from "react-helmet";
 
 
 const ApiDocs: ComponentType<*> = ({ ...props }) => {
 
     return <Container className={ "developers-guide" }>
+        <Helmet>
+            <title>Developer's guide | Coronavirus in the UK</title>
+            <meta name="description"
+                  content="Guidance for developer on how to use the API." />
+        </Helmet>
+
         <h2>Documentations for the API &mdash; v.1</h2>
 
         <section>

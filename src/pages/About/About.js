@@ -10,7 +10,6 @@ import externalLink from "remark-external-links";
 
 import { Loading } from './About.styles';
 import useGenericAPI from 'hooks/useGenericAPI';
-import BrowserHistory from "components/BrowserHistory";
 
 import {
     Markdown,
@@ -19,6 +18,7 @@ import {
 
 import type { AboutProps } from './About.types';
 import type { ComponentType } from "react";
+import { Helmet } from "react-helmet";
 
 
 const About: ComponentType<AboutProps> = ({ ...props }) => {
@@ -36,11 +36,17 @@ const About: ComponentType<AboutProps> = ({ ...props }) => {
             data = err ? data : String(text);
         });
 
-    return <BrowserHistory>
+    return <>
+        <Helmet>
+            <title>About the data | Coronavirus in the UK</title>
+            <meta name="description"
+                  content="Sources, metric definitions, and other generic
+                  information about the data that presented on the dashboard." />
+        </Helmet>
         <Article>
             <Markdown dangerouslySetInnerHTML={{ __html: data }}/>
         </Article>
-    </BrowserHistory>
+    </>
 
 
 };  // About

@@ -18,6 +18,7 @@ import {
     Markdown,
     Article
 } from './Accessibility.styles';
+import { Helmet } from "react-helmet";
 
 
 
@@ -65,9 +66,16 @@ export default class Accessibility extends Component<AccessibilityProps, {}> {
 
     render(): React$Node {
 
-        return <Article>
-            { this.display() }
-        </Article>
+        return <>
+            <Article>
+                { this.display() }
+            </Article>
+            <Helmet>
+                <title>Accessibility | Coronavirus in the UK</title>
+                <meta name="description"
+                      content="Information on the accessibility of the service." />
+            </Helmet>
+        </>
 
     } // render
 

@@ -12,6 +12,7 @@ import { getParams } from "common/utils";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import Loading from "components/Loading";
+import DataPageHeaders from "components/DataPageHeader";
 
 
 const
@@ -31,6 +32,9 @@ const Vaccinations: ComponentType<Props> = ({ location: { search: query }}: Prop
     if ( !layout ) return <Loading large={ true }/>;
 
     return <>
+        <DataPageHeaders category={ "Vaccinations" }
+                         areaParams={ params }
+                         description={ "Data and charts on vaccinations for coronavirus (COVID-19)" }/>
         <HeadlineNumbers params={ params } { ...layout }/>
         <CardsContainer>{
             layout?.cards.map(( cardProps, index ) =>

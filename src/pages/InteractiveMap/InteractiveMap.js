@@ -21,6 +21,7 @@ import { glAvailable } from "components/Map/utils";
 import { scaleColours as colours } from "common/utils";
 import Plotter from "components/Plotter";
 import useResponsiveLayout from "../../hooks/useResponsiveLayout";
+import { Helmet } from "react-helmet";
 
 
 const AreaLevel = {
@@ -119,9 +120,23 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
         </Container>
     }
 
+    const title = "Interactive Map | Coronavirus in the UK";
+    const description = (
+        "Interactive map of coronavirus (COVID-19) prevalence rate for the " +
+        "United Kingdom by local authorities and small areas."
+    );
+
     if ( !dates || !extrema ) return <Loading/>;
 
     return <Container>
+        <Helmet>
+            <title>{ title }</title>
+            <meta name="description" content={ description } />
+            <meta property="og:title" content={ title }/>
+            <meta name="twitter:title" content={ title }/>
+            <meta property="og:description" content={ description }/>
+            <meta name="twitter:description" content={ description }/>
+        </Helmet>
         <MainHeader/>
         <div className={ "govuk-!-margin-bottom-5" }>
             {/*<h2 className={ "govuk-heading-m" }>How to use the map?</h2>*/}
