@@ -159,7 +159,7 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
                 Seven days to { moment(date).format("DD MMMM YYYY") }
             </small>
         </h2>
-        { totalThisWeek
+        { typeof totalThisWeek === "number"
             ? <>
                 <NumbersContainer>
                     <NumberBox>
