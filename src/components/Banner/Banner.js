@@ -56,11 +56,9 @@ const Datestamp: ComponentType<*> = ({ banner, ...props }) => {
 const Banner: ComponentType<*> = ({ ...props }) => {
 
     const banners: BannerType[] = useGenericAPI("banner", null);
+    const [preppedBanners, setPreppedBanners] = useState([]);
     const timestamp = useTimestamp();
     const { pathname } = useLocation();
-
-    if ( banners === null ) return <Loading/>;
-    if ( !banners?.length ) return null;
 
     const ts = moment(timestamp);
     const pattern = new RegExp(pathname, 'ig');
@@ -77,17 +75,24 @@ const Banner: ComponentType<*> = ({ ...props }) => {
 
     };  // bannerFilter
 
+    useEffect(() => {
+        if ( banners && timestamp !== "" ) {
+            setPreppedBanners(banners.filter(bannerFilter))
+        }
+    }, [banners, timestamp]);
+
+
+    if ( banners === null || !preppedBanners.length ) return null;
+
     return <>{
-        banners
-            .filter(bannerFilter)
-            .map((banner, index) =>
-                <BannerBase key={ `banner-${index}-${banner?.appearByUpdate}` } { ...props }>
-                    <BannerContent>
-                        <Datestamp banner={ banner }/>
-                        <BannerBody rawBody={ banner?.body ?? "" }/>
-                    </BannerContent>
-                </BannerBase>
-            )
+        preppedBanners.map((banner, index) =>
+            <BannerBase key={ `banner-${index}-${banner?.appearByUpdate}` } { ...props }>
+                <BannerContent>
+                    <Datestamp banner={ banner }/>
+                    <BannerBody rawBody={ banner?.body ?? "" }/>
+                </BannerContent>
+            </BannerBase>
+        )
     }</>
 
 };  // Banner
