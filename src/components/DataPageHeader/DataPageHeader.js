@@ -12,7 +12,7 @@ const DataPageHeaders = ({category, areaParams, description}) => {
     let areaName = getParamValueFor(areaParams, "areaName");
 
     if ( areaName.toLowerCase() === "united kingdom" ) {
-        areaName = "the United Kingdom";
+        areaName = "the UK";
     }
 
     const title = `${category} in ${areaName} | Coronavirus in the UK`;
