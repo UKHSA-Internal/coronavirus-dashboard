@@ -60,17 +60,6 @@ export const getOrder = ( history ) => {
             };
 
         case PathNames.vaccinations:
-            return {
-                nation: {
-                    key: "nation",
-                    label: "Nations",
-                    suggestion: "nations",
-                    lastUpdate: "2020-07-07",
-                    parent: null
-                },
-                la: defaultOrder.la
-            }
-
         case PathNames.testing:
         case PathNames.deaths:
         case PathNames.cases:

@@ -25,12 +25,6 @@ const getDefaultOutput = ( pathname ) => {
             ];
 
         case PathNames.vaccinations:
-            return [
-                // These must be ordered.
-                "nation",
-                "la"  // utla + ltla
-            ]
-
         case PathNames.testing:
         case PathNames.deaths:
         case PathNames.cases:
