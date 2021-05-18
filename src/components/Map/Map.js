@@ -45,9 +45,9 @@ const MapLayers = [
         label: "utla",
         name: "UTLA",
         paths: {
-            timeSeries: "https://coronavirus.data.gov.uk/downloads/maps/utla_data_latest.geojson",
-            timeSeriesMobile: "https://coronavirus.data.gov.uk/downloads/maps/utla_data_latest-mobile.geojson",
-            outline: "https://coronavirus.data.gov.uk/downloads/maps/utla-ref.geojson"
+            timeSeries: `https://${URLs.baseCDN}/downloads/maps/utla_data_latest.geojson`,
+            timeSeriesMobile: `https://${ URLs.baseCDN }/downloads/maps/utla_data_latest-mobile.geojson`,
+            outline: `https://${ URLs.baseCDN }/downloads/maps/utla-ref.geojson`
         },
         foreground: "building",
         tolerance: .25,
@@ -68,9 +68,9 @@ const MapLayers = [
         label: "ltla",
         name: "LTLA",
         paths: {
-            timeSeries: "https://coronavirus.data.gov.uk/downloads/maps/ltla_data_latest.geojson",
-            timeSeriesMobile: "https://coronavirus.data.gov.uk/downloads/maps/ltla_data_latest-mobile.geojson",
-            outline: "https://coronavirus.data.gov.uk/downloads/maps/ltla-ref.geojson"
+            timeSeries: `https://${ URLs.baseCDN }/downloads/maps/ltla_data_latest.geojson`,
+            timeSeriesMobile: `https://${ URLs.baseCDN }/downloads/maps/ltla_data_latest-mobile.geojson`,
+            outline: `https://${ URLs.baseCDN }/downloads/maps/ltla-ref.geojson`
         },
         tolerance: .4,
         buffer: 32,
@@ -91,9 +91,9 @@ const MapLayers = [
         label: "msoa",
         name: "MSOA",
         paths: {
-            timeSeries: "https://coronavirus.data.gov.uk/downloads/maps/msoa_data_latest.geojson",
-            timeSeriesMobile: "https://coronavirus.data.gov.uk/downloads/maps/msoa_data_latest-mobile.geojson",
-            outline: "https://coronavirus.data.gov.uk/downloads/maps/msoa-ref.geojson"
+            timeSeries: `https://${ URLs.baseCDN }/downloads/maps/msoa_data_latest.geojson`,
+            timeSeriesMobile: `https://${ URLs.baseCDN }/downloads/maps/msoa_data_latest-mobile.geojson`,
+            outline: `https://${ URLs.baseCDN }/downloads/maps/msoa-ref.geojson`
         },
         tolerance: .5,
         buffer: 32,

@@ -38,6 +38,7 @@ const URLs = {
         json: `${ REACT_APP_BASE_URL }/downloads/json/coronavirus-deaths_latest.json`
     },
     baseUrl:                REACT_APP_BASE_URL,
+    baseCDN:                REACT_APP_DOWNLOADS_CDN,
     about:                  `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/about.md`,
     accessibility:          `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/accessibility.md`,
     newWebsite:             `https://${ REACT_APP_MAIN_CDN      }/public/assets/new_website.md`,
