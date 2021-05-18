@@ -26,8 +26,10 @@ const getDefaultOutput = ( pathname ) => {
 
         case PathNames.vaccinations:
             return [
+                // These must be ordered.
                 "nation",
-            ];
+                "la"  // utla + ltla
+            ]
 
         case PathNames.testing:
         case PathNames.deaths:
@@ -129,7 +131,8 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                      ],
              structure: {
                  value: "areaName",
-                 areaType: "areaType"
+                 areaType: "areaType",
+                 areaCode: "areaCode"
              },
              endpoint: "lookupApi",
              defaultResponse: []
@@ -156,7 +159,13 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     useEffect(() => {
         const
-            groupedAreaNameData = groupBy(data || [], item => item.value),
+            groupedAreaNameData = pathname !== PathNames.vaccinations
+                ? groupBy(data || [], item => item.value)
+                : groupBy(
+                    // Vaccinations are restricted to LAs in England and Scotland
+                    (data || []).filter(item => /^[^WN]/.test(item.areaCode) || item.areaType === "nation"),
+                        item => item.value
+                ),
             areaNameDataPrepped = Object.keys(groupedAreaNameData)
                 .map(value => ({
                     value: value,
