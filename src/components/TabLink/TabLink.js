@@ -34,6 +34,7 @@ const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
         case "recentData":
         case "chart":
         case "heatmap":
+        case "percentageHeatmap":
         case "tabContentRaw":
             return <TabContent Component={ TabContentRaw } { ...props }/>;
 
@@ -114,6 +115,12 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
 
         case "heatmap":
             return <Plotter type={ "Heatmap" }
+                            layout={{}}
+                            data={ getHeatmapData(fields, data, xKey) }
+                            { ...props }/>;
+
+        case "percentageHeatmap":
+            return <Plotter type={ "percentageHeatmap" }
                             layout={{}}
                             data={ getHeatmapData(fields, data, xKey) }
                             { ...props }/>;
