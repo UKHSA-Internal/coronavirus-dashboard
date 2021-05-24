@@ -67,14 +67,14 @@ export default class Accessibility extends Component<AccessibilityProps, {}> {
     render(): React$Node {
 
         return <>
-            <Article>
-                { this.display() }
-            </Article>
             <Helmet>
                 <title>Accessibility | Coronavirus in the UK</title>
                 <meta name="description"
                       content="Information on the accessibility of the service." />
             </Helmet>
+            <Article>
+                { this.display() }
+            </Article>
         </>
 
     } // render

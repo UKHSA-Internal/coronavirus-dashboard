@@ -12,6 +12,7 @@ import {
 import { deleteCookies, handleCookieAccept, setCookies } from "common/utils/cookies";
 
 import Cookies from "js-cookie";
+import { Helmet } from "react-helmet";
 
 
 const CookiesUpdatedText = ({ cookieState }) => {
@@ -57,6 +58,10 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
     }, []);
 
     return <>
+        <Helmet>
+            <title>Cookies | Coronavirus in the UK</title>
+            <meta name="description" content="Cookies policy" />
+        </Helmet>
         <CookiesUpdatedText/>
 
         <Article>

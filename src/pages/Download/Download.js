@@ -29,6 +29,7 @@ import {
 } from "./Download.styles"
 
 import type { ComponentType } from "react";
+import { Helmet } from "react-helmet";
 
 
 const MAX_METRICS = 5;
@@ -387,6 +388,11 @@ const Download: ComponentType<*> = () => {
     }, [ timestamp ]);
 
     return <>
+        <Helmet>
+            <title>Download data | Coronavirus in the UK</title>
+            <meta name="description"
+                  content="Download data on the coronavirus pandemic in the UK." />
+        </Helmet>
         <Container>
             <MainContent className={ "no-border" }>
                 <p className={ "govuk-body govuk-!-margin-top-1" }>
