@@ -7,34 +7,25 @@ import { BasePlotter } from "./BasePlot";
 import type { ComponentType } from "react";
 import { hexToRgb } from "../../common/utils";
 import { zip } from "d3-array";
+import moment from "moment";
 
 
 const scaleLevels = [
     0,
-    .1,
-    .2,
-    .3,
-    .4,
+    .15,
+    // .25,
     .5,
-    .6,
     .7,
-    .8,
-    .9,
     1,
 ];
 
 export const scaleColours = [
-    "#160C17",
     "#43244C",
-    "#693984",
-    "#864BC0",
-    "#985AFF",
+    // "#4f2a5a",
     "#946FFF",
-    "#9484FF",
-    "#a0a0fd",
+    "#a7a7fa",
     "#B2BCFF",
-    "#C9D8FF",
-    "#E2EEFF",
+    "#e2e5ff",
 ];
 
 
@@ -72,7 +63,7 @@ export const PercentageHeatmap: ComponentType<*> = ({ data, layout, config, ...p
                 hovertemplate: (
                     `<b>Date</b>: %{x}<br>` +
                     `<b>${dataset.metricLabel}</b>: %{y}<br>` +
-                    `<b>${dataset.amplitudeLabel}</b>: %%{z}`
+                    `<b>${dataset.amplitudeLabel}</b>: %{z}%`
                 ),
                 name: dataset.label,
                 colorbar: {
@@ -122,8 +113,10 @@ export const PercentageHeatmap: ComponentType<*> = ({ data, layout, config, ...p
             paper_bgcolor: "rgba(255,255,255,0)",
             ...layout
         } }
+        isTimeSeries={ true }
         xaxis={{
             fixedrange: false,
+            type: "date",
         }}
         { ...props }
     />
