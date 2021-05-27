@@ -12,20 +12,26 @@ import moment from "moment";
 
 const scaleLevels = [
     0,
-    .15,
-    // .25,
-    .5,
+    .05,
+    .1,
+    .2,
+    .3,
+    .6,
     .7,
-    1,
+    .95,
+    1
 ];
 
 export const scaleColours = [
-    "#43244C",
-    // "#4f2a5a",
+    "#1f0f23",
+    "#391d40",
+    "#6d31c2",
+    "#865ad7",
     "#946FFF",
     "#a7a7fa",
     "#B2BCFF",
     "#e2e5ff",
+    "#eff1ff",
 ];
 
 
