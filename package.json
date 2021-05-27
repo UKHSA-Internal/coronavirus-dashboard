@@ -58,7 +58,10 @@
       "collapseWhitespace": false,
       "removeComments": false
     },
-    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"],
+    "puppeteerArgs": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox"
+    ],
     "cacheAjaxRequests": false
   },
   "browserslist": {

@@ -223,6 +223,9 @@ const MetricMultiSelector = ({ areaType, metrics, setMetrics }) => {
                 Records contain at least 4 additional metrics as
                 follows: areaType, areaCode, areaName, date
             </p>
+            <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }>
+                Note that you can only request one metric at a time for demographics data.
+            </p>
             {
                 error &&
                 <span className="govuk-error-message">
