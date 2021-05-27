@@ -219,9 +219,12 @@ const MetricMultiSelector = ({ areaType, metrics, setMetrics }) => {
                 your selected area type. Such metrics will still be included in the resulting
                 document, but will not contain any data.
             </p>
-            <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }>
+            <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>
                 Records contain at least 4 additional metrics as
                 follows: areaType, areaCode, areaName, date
+            </p>
+            <p className={ "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-1" }>
+                Note that you can only request one metric at a time for demographics data.
             </p>
             {
                 error &&
