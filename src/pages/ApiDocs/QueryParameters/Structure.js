@@ -369,7 +369,6 @@ const Structure: ComponentType<*> = () =>
                     <dt><Code>areaCode</Code></dt><dd>Area Code as string</dd>
                     <dt><Code>date</Code></dt><dd>Date as string [<Code>YYYY-MM-DD</Code>]</dd>
 
-                    <dt><Code>hash</Code></dt><dd>Unique ID as string</dd>
 
                     <dt><Code>newCasesByPublishDate</Code></dt><dd>New cases by publish date</dd>
                     <dt><Code>cumCasesByPublishDate</Code></dt><dd>Cumulative cases by publish date</dd>
