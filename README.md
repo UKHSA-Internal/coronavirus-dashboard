@@ -100,7 +100,7 @@ Please note that other branches may contain experimental development contents an
 prototypes. We routinely create such materials so that they can be discussed, improved, 
 and be put forward for approval purposes. 
 
-You are welcome to use the `development` branch as describeed in 
+You are welcome to use the `development` branch as described in 
 the [Contributors' Guide](https://github.com/PublicHealthEngland/coronavirus-dashboard/blob/master/CONTRIBUTING.md) to 
 help us improve the service and make a contribution.
 
