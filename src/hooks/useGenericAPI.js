@@ -7,19 +7,28 @@ import URLs from "common/urls";
 import axios from "axios";
 
 import type { ResponseType } from "axios";
+import { strFormat } from "../common/utils";
 
 
-const useGenericAPI  = ( urlName: string, defaultResponse: any= null, responseType: ResponseType="json" ) => {
+const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: any = {}, responseType: ResponseType="json" ) => {
 
 
     const [ response, setResponse ] = useState(defaultResponse);
 
+    const isGenericEndpoint = urlName.startsWith("genericApi");
+
     useMemo( () => {
+
+        let url = URLs[urlName];
+
+        if ( isGenericEndpoint ) {
+            url = strFormat(url, { kwargs })
+        }
     
         (async () => {
         
             try {
-                const { data, status } = await axios.get(URLs[urlName], {responseType: responseType});
+                const { data, status } = await axios.get(url, {responseType: responseType});
 
                 if ( status < 400 )
                     setResponse(data);
@@ -34,7 +43,7 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, responseTy
             }
         })();
     
-    }, [ urlName ]);
+    }, [ urlName, ...Object.values(kwargs) ]);
 
     return response;
 
