@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 
 import { createQuery, getParams, groupBy } from "common/utils";
 import { getOrder } from "./GenericHooks";
-import useApi from "hooks/useApi";
 import { PathNames } from "./Constants";
 import Select from "react-select";
 import { LocalisationForm, LocalisationFormInputs } from "./DashboardHeader.styles";
+import useGenericAPI from "../../hooks/useGenericAPI";
 
 
 const getDefaultOutput = ( pathname ) => {
@@ -102,36 +102,16 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                 ]),
         prevQuery = usePrevious(newQuery),
         [areaNameData, setAreaNameData] = useState({ grouped: {}, data: [] }),
-        defaultOutput = getDefaultOutput(pathname),
-        data = useApi({
-             disjunctiveFilters:
-                 ( currentLocation.areaType ) !== "overview"
-                     ? currentLocation.areaType === "la"
-                     ? [
-                         { key: "areaType", sign: '=', value: 'utla' },
-                         { key: "areaType", sign: '=', value: 'ltla' },
-                     ]
-                     : [{ key: "areaType", sign: '=', value: currentLocation.areaType }] // must be conjunctive
-                     : [
-                         ...defaultOutput
-                             .filter(item => item !== "la")
-                             .map(item => ({key: "areaType", sign: '=', value: item })),
-                         ...defaultOutput.indexOf("la") > -1
-                             ? [
-                                 { key: "areaType", sign: '=', value: 'utla' },
-                                 { key: "areaType", sign: '=', value: 'ltla' }
-                             ]
-                             : []
-                     ],
-             structure: {
-                 value: "areaName",
-                 areaType: "areaType",
-                 areaCode: "areaCode"
-             },
-             endpoint: "lookupApi",
-             defaultResponse: []
-        });
-
+        data = useGenericAPI(
+            `genericApiPageArea${currentLocation.areaType !== "overview" ? "WithType" : ""}`,
+            [],
+            {
+                page: pathname.replace(/\/details\//i, ""),
+                ... currentLocation.areaType !== "overview"
+                    ? {area_type: currentLocation.areaType}
+                    : {}
+            }
+        );
 
     useEffect(() => {
 
@@ -154,7 +134,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
     useEffect(() => {
         const
             groupedAreaNameData = pathname !== PathNames.vaccinations
-                ? groupBy(data || [], item => item.value)
+                ? groupBy(data || [], item => item.areaName)
                 : groupBy(
                     // Vaccinations are restricted to LAs in England and Scotland
                     (data || []).filter(item => /^[^WN]/.test(item.areaCode) || item.areaType === "nation"),
