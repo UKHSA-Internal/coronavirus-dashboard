@@ -14,25 +14,29 @@ import { deleteCookies, handleCookieAccept, setCookies } from "common/utils/cook
 import Cookies from "js-cookie";
 import { Helmet } from "react-helmet";
 
-
-const CookiesUpdatedText = ({ cookieState }) => {
-
-    if ( cookieState !== 'accept' ) return null;
-
-    return <div className="cookie-settings__confirmation" data-cookie-confirmation="true">
-        <section className="gem-c-notice govuk-!-margin-bottom-8" aria-label="Notice" aria-live="polite">
-            <h2 className="gem-c-notice__title">Cookies on coronavirus.data.gov.uk</h2>
-            <p className={"govuk-body"}>Your cookie settings were saved</p>
-        </section>
-    </div>
-
-};
-
+const successNotification = <div className={"govuk-notification-banner govuk-notification-banner--success"} role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+<div className={"govuk-notification-banner__header"}>
+  <h2 className={"govuk-notification-banner__title"} id="govuk-notification-banner-title">
+    Success
+  </h2>
+</div>
+<div className={"govuk-notification-banner__content"}>
+  <p className={"govuk-notification-banner__heading"}>
+    You’ve updated your cookie preferences. 
+  </p>
+</div>
+</div>
 
 const CookiesPage: ComponentType<Props> = ({ }: Props) => {
 
     // const [preferenceSet, ]
     const [cookieState, setCookieState] = useState(null);
+    const [updateState, setUpdateState] = useState(false);
+
+    const handleButtonClick = (cookieState) => {
+        setUpdateState(true);
+        handleCookieAccept(cookieState);
+    }
 
     useEffect(() => {
         const cookiePreference = Cookies.get('cookies_preferences_set_21_3');
@@ -57,12 +61,20 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
         }
     }, []);
 
+    const CookiesUpdatedText = () => {
+    
+        if ( updateState === false) return null;
+        
+        return successNotification;
+    };
+    
+
     return <>
         <Helmet>
             <title>Cookies | Coronavirus in the UK</title>
             <meta name="description" content="Cookies policy" />
         </Helmet>
-        <CookiesUpdatedText/>
+        
 
         <Article>
 
@@ -150,7 +162,7 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
                     </div>
                 </div>
             </div>
-
+            
             <Heading>Strictly necessary cookies</Heading>
 
             <p className={"govuk-body"}>
@@ -160,12 +172,12 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
             <p className={"govuk-body govuk-!-margin-bottom-8"}>
                 They always need to be on.
             </p>
-
+            <CookiesUpdatedText/>
             <p className={"govuk-body"}>
                 <button className="gem-c-button govuk-button"
                     type="submit" data-module="track-click"
                     data-accept-cookies="true" data-track-category="cookies"
-                    onClick={ () => handleCookieAccept(cookieState) }>
+                    onClick={ () => handleButtonClick(cookieState)}>
                     Save changes
                 </button>
             </p>
