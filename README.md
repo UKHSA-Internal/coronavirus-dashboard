@@ -27,7 +27,7 @@ languages to facilitate access to the API:
 - **Python** library is available on [GitHub®](https://github.com/publichealthengland/coronavirus-dashboard-api-python-sdk) and is published on [PyPI](https://pypi.org/project/uk-covid19/).   
 - **JavaScript** library is available on [GitHub®](https://github.com/publichealthengland/coronavirus-dashboard-api-javascript-sdk) and is published on [GitHub® Packages](https://github.com/publichealthengland/coronavirus-dashboard-api-javascript-sdk/packages/343170) and [NPM](https://www.npmjs.com/package/@publichealthengland/uk-covid19).
 - **R** library is available on [GitHub®](https://github.com/publichealthengland/coronavirus-dashboard-api-r-sdk) and has been submitted to [CRAN](https://cran.r-project.org) for publication.
-- **.Net** library is available of [GitHub®](https://github.com/publichealthengland/coronavirus-dashboard-api-net-sdk) and is published on [NuGet](https://www.nuget.org/packages/UKCovid19/).
+- **.NET** library is available of [GitHub®](https://github.com/publichealthengland/coronavirus-dashboard-api-net-sdk) and is published on [NuGet](https://www.nuget.org/packages/UKCovid19/).
 - **Elixir** library is available on [GitHub®](https://github.com/publichealthengland/coronavirus-dashboard-api-elixir-sdk).
 
 
