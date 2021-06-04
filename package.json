@@ -27,7 +27,7 @@
     "react-select": "^4.1.0",
     "react-spinners": "^0.10.6",
     "react-syntax-highlighter": "^15.4.3",
-    "react-tooltip": "^4.2.15",
+    "react-tooltip": "^4.2.21",
     "remark": "^13.0.0",
     "remark-external-links": "^8.0.0",
     "remark-html": "^13.0.1",
