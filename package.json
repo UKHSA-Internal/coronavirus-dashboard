@@ -15,7 +15,7 @@
     "numeral": "^2.0.6",
     "plotly.js": "^1.58.4",
     "react": "^16.14.0",
-    "react-app-polyfill": "^1.0.6",
+    "react-app-polyfill": "^2.0.0",
     "react-day-picker": "^7.4.8",
     "react-dom": "^16.14.0",
     "react-focus-trap": "^2.7.1",
