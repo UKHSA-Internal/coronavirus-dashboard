@@ -35,7 +35,7 @@ export const getOrder = ( history ) => {
 
         case PathNames.healthcare:
             return {
-                nhsNation: {
+                nation: {
                     key: "nation",
                     label: "Nations",
                     lastUpdate: "2020-07-07",
