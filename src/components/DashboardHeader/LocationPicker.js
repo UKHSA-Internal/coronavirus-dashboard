@@ -133,24 +133,17 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     useEffect(() => {
         const
-            groupedAreaNameData = pathname !== PathNames.vaccinations
-                ? groupBy(data || [], item => item.areaName)
-                : groupBy(
-                    // Vaccinations are restricted to LAs in England and Scotland
-                    (data || []).filter(item => /^[^WN]/.test(item.areaCode) || item.areaType === "nation"),
-                        item => item.value
-                ),
+            groupedAreaNameData = groupBy(data || [], item => item.areaName),
             areaNameDataPrepped = Object.keys(groupedAreaNameData)
                 .map(value => ({
                     value: value,
                     label: value,
-                    areaType: groupedAreaNameData[value].areaType
+                    areaType: groupedAreaNameData[value]?.[0]?.areaType
                 }));
 
         setAreaNameData({ grouped: groupedAreaNameData, data: areaNameDataPrepped })
 
     }, [ data ]);
-
 
     if ( !show ) return null;
 
