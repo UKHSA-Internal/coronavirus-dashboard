@@ -25,6 +25,12 @@ const FooterContents: ComponentType<*> = () => (
                rel="noopener noreferrer"
             >Public Health England</a>.
         </p>
+        <p className="govuk-footer__meta-custom">
+            This service is open source. See our repositories
+            on <a className="govuk-footer__link"
+                  href="https://github.com/publichealthengland/coronavirus-dashboard#coronavirus-covid-19-in-the-uk"
+                  target="_blank" rel="noopener noreferrer">GitHub&reg;</a>.
+        </p>
     </>
 );  // FooterContents
 
