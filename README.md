@@ -94,13 +94,13 @@ additional information.
 Please only clone our `master` branch for redeployment. All other contents, data, and 
 branches that are either outside of the `master` branch or not otherwise used as a 
 part of it - i.e. the associating assets - are copyrighted materials and therefore 
-excluded from the MIT license until they receieve the necessary approvals to be merged.
+excluded from the MIT license until they receive the necessary approvals to be merged.
 
 Please note that other branches may contain experimental development contents and 
 prototypes. We routinely create such materials so that they can be discussed, improved, 
 and be put forward for approval purposes. 
 
-You are welcome to use the `development` branch as described in 
+You are welcome to use the `development-v3` branch as described in 
 the [Contributors' Guide](https://github.com/PublicHealthEngland/coronavirus-dashboard/blob/master/CONTRIBUTING.md) to 
 help us improve the service and make a contribution.
 
