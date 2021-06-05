@@ -10,7 +10,7 @@ import type { ResponseType } from "axios";
 import { strFormat } from "../common/utils";
 
 
-const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: any = {}, responseType: ResponseType="json" ) => {
+const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: any = {}, responseType: ResponseType="json", params={} ) => {
 
 
     const [ response, setResponse ] = useState(defaultResponse);
@@ -28,7 +28,7 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: an
         (async () => {
         
             try {
-                const { data, status } = await axios.get(url, {responseType: responseType});
+                const { data, status } = await axios.get(url, {responseType, params});
 
                 if ( status < 400 )
                     setResponse(data);
@@ -43,7 +43,7 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: an
             }
         })();
     
-    }, [ urlName, ...Object.values(kwargs) ]);
+    }, [ urlName, ...Object.values(kwargs), ...Object.values(params) ]);
 
     return response;
 
