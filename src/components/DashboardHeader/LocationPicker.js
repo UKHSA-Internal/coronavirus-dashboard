@@ -19,7 +19,7 @@ const getDefaultOutput = ( pathname ) => {
         case PathNames.healthcare:
             return [
                 // These must be ordered.
-                "nhsNation",
+                "nation",
                 "nhsRegion",
                 "nhsTrust"
             ];
@@ -95,7 +95,6 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                         key: 'areaType',
                         sign: '=',
                         value: currentLocation.areaType
-                            .toLowerCase()
                             .replace(/nhsNation/i, "nation")
                     },
                     { key: 'areaName', sign: '=', value: currentLocation.areaName }
@@ -108,7 +107,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
             {
                 page: pathname.replace(/\/details\//i, ""),
                 ... currentLocation.areaType !== "overview"
-                    ? {area_type: currentLocation.areaType}
+                    ? {area_type: currentLocation.areaType.replace(/^nhsNation$/i, "nation")}
                     : {}
             }
         );
