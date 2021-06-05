@@ -51,6 +51,8 @@ const URLs = {
     permalinkDownloadData:      `https://${ REACT_APP_USER_API_ENDPOINT  }/v2/data`,
     genericApiPageArea:         `https://${ REACT_APP_API_ENDPOINT }/generic/page_areas/{page}`,
     genericApiPageAreaWithType: `https://${ REACT_APP_API_ENDPOINT }/generic/page_areas/{page}/{area_type}`,
+    genericApiSoa:              `https://${ REACT_APP_API_ENDPOINT }/generic/soa/{area_type}/{area_code}/{metric}`,
+    genericApiCode:             `https://${ REACT_APP_API_ENDPOINT }/generic/code/{area_type}/{area_code}`,
 };
 
 URLs.pageLayouts = {
