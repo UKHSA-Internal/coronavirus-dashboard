@@ -3,6 +3,7 @@
 import { dropLeadingZeros, hexToRgb } from "./utils";
 import { movingAverage } from "../stats";
 import cloneDeep from "lodash.clonedeep";
+import numeral from "numeral";
 
 
 const asCssRgb = ( hex ) => {
@@ -338,7 +339,7 @@ export const getPercentageWaffleData = ( fields: Array<{}>, rawData, xKey="date"
         const value = field?.value;
         const maxValue = Math.max(...rawData.map(row => row?.[value]));
         const flooredMax = Math.floor(maxValue);
-        const label = field?.label?.replace(/\s*\(%\)/, `: ${maxValue}%`);
+        const label = field?.label?.replace(/\s*\(%\)/, `: ${numeral(maxValue).format("0,0.[0]")}%`);
         const colour = asCssRgb(colours[field?.colour ?? 1]);
         const valueArray = cloneDeep(BaseArray);
 
