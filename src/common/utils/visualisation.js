@@ -336,22 +336,17 @@ export const getPercentageWaffleData = ( fields: Array<{}>, rawData, xKey="date"
 
         const field = fields?.[fieldIndex];
         const value = field?.value;
-        const label = field?.label;
+        const maxValue = Math.max(...rawData.map(row => row?.[value]));
+        const flooredMax = Math.floor(maxValue);
+        const label = field?.label?.replace(/\s*\(%\)/, `: ${maxValue}%`);
         const colour = asCssRgb(colours[field?.colour ?? 1]);
-
-        const maxValue = Math.floor(Math.max(...rawData.map(row => row?.[value])));
         const valueArray = cloneDeep(BaseArray);
 
         for ( let rowInd = 0; rowInd < BaseArray.length; rowInd ++ ) {
-            for ( let colInd = 0; colInd < BaseArray[rowInd].length; colInd ++ ) {
-
-                if ( ((rowInd * 10) + colInd) < maxValue ) {
-                    valueArray[rowInd][colInd] = fieldIndex + 1;
-                }
-                else {
-                    valueArray[rowInd][colInd] = null;
-                }
-            }
+            for ( let colInd = 0; colInd < BaseArray[rowInd].length; colInd ++ )
+                valueArray[rowInd][colInd] = (((rowInd * 10) + colInd) < flooredMax )
+                    ? fieldIndex + 1
+                    : null;
         }
 
         responseData.push({
