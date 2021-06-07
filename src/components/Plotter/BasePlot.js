@@ -4,10 +4,13 @@ import React from "react";
 
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 import { PlotContainer } from "./Plotter.styles";
-import Plot from "react-plotly.js";
 
 import type { ComponentType } from "react";
 import numeral from "numeral";
+import Plotly from "plotly.js";
+import createPlotlyComponent from 'react-plotly.js/factory';
+
+const Plot = createPlotlyComponent(Plotly);
 
 
 export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, yaxis = {},
