@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
-    "d3-array": "^2.11.0",
+    "d3-array": "^3.0.1",
     "axios": "^0.21.1",
     "d3-scale": "^3.2.3",
     "deep-equal": "^2.0.5",
