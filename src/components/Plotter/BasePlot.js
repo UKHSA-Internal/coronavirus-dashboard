@@ -143,6 +143,7 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
             style={ { display: "block", height: 350, ...style } }
             layout={ {
                 hovermode: "x unified",
+                hoverdistance: 1,
                 // barmode: "overlay",
                 // barmode: "stack",
                 // height: 320,
