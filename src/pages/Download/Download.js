@@ -202,7 +202,7 @@ const MetricMultiSelector = ({ areaType, areaCode, date, metrics, setMetrics }) 
         : metricData.map(item => ({
             label: <span>
                 { item.metric }<br/>
-                <MetricLastUpdated>Last update: { item.last_update }</MetricLastUpdated>
+                <MetricLastUpdated>Latest record: { item.last_update }</MetricLastUpdated>
             </span>,
             value: item.metric
         }));
