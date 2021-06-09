@@ -14,7 +14,8 @@ import { deleteCookies, handleCookieAccept, setCookies } from "common/utils/cook
 import Cookies from "js-cookie";
 import { Helmet } from "react-helmet";
 
-const successNotification = <div className={"govuk-notification-banner govuk-notification-banner--success"} role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+function SuccessNotification() {
+return <div className={"govuk-notification-banner govuk-notification-banner--success govuk-!-margin-top-1"} role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
 <div className={"govuk-notification-banner__header"}>
   <h2 className={"govuk-notification-banner__title"} id="govuk-notification-banner-title">
     Success
@@ -26,7 +27,7 @@ const successNotification = <div className={"govuk-notification-banner govuk-not
   </p>
 </div>
 </div>
-
+}
 const CookiesPage: ComponentType<Props> = ({ }: Props) => {
 
     // const [preferenceSet, ]
@@ -64,7 +65,7 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
 
     const CookiesUpdatedText = () => {
         if ( updateState === false) return null;
-        return successNotification;
+        return SuccessNotification();
     };
     
 
