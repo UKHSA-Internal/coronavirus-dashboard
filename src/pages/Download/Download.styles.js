@@ -133,10 +133,23 @@ export const SelectOptions = {
         color: state.isFocused ? "#f1f1f1": "#000",
         ":before": {
             content: state.isSelected ? '"✓ "' : '""'
-        }
+        },
+        whiteSpace: 'pre-wrap'
     }),
     placeholder: styles => ({
         ...styles,
         color: "#6B7276"
     })
 };
+
+
+export const MetricLastUpdated: ComponentType<*> =
+    styled
+        .span`
+            font-size: small;
+            color: #6B7276;
+            
+            &:hover {
+                color: black;
+            }
+        `;

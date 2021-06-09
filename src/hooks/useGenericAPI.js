@@ -12,9 +12,7 @@ import { strFormat } from "../common/utils";
 
 const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: any = {}, responseType: ResponseType="json", params={} ) => {
 
-
     const [ response, setResponse ] = useState(defaultResponse);
-
     const isGenericEndpoint = urlName.startsWith("genericApi");
 
     useMemo( () => {
@@ -43,7 +41,7 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: an
             }
         })();
     
-    }, [ urlName, ...Object.values(kwargs), ...Object.values(params) ]);
+    }, [ urlName, JSON.stringify(kwargs), JSON.stringify(params) ]);
 
     return response;
 
