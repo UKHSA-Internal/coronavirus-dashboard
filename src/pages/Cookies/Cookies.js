@@ -36,6 +36,7 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
     const handleButtonClick = (cookieState) => {
         setUpdateState(true);
         handleCookieAccept(cookieState);
+        window.scrollTo(0, 0);
     }
 
     useEffect(() => {
@@ -62,9 +63,7 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
     }, []);
 
     const CookiesUpdatedText = () => {
-    
         if ( updateState === false) return null;
-        
         return successNotification;
     };
     
@@ -74,7 +73,8 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
             <title>Cookies | Coronavirus in the UK</title>
             <meta name="description" content="Cookies policy" />
         </Helmet>
-        
+
+        <CookiesUpdatedText/>        
 
         <Article>
 
@@ -162,7 +162,7 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
                     </div>
                 </div>
             </div>
-            
+
             <Heading>Strictly necessary cookies</Heading>
 
             <p className={"govuk-body"}>
@@ -172,7 +172,7 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
             <p className={"govuk-body govuk-!-margin-bottom-8"}>
                 They always need to be on.
             </p>
-            <CookiesUpdatedText/>
+            
             <p className={"govuk-body"}>
                 <button className="gem-c-button govuk-button"
                     type="submit" data-module="track-click"
