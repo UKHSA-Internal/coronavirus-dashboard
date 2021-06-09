@@ -36,7 +36,7 @@
     "replacestream": "^4.0.3",
     "styled-components": "^5.3.0",
     "leaflet": "^1.6.0",
-    "mapbox-gl": "^1.13.1",
+    "mapbox-gl": "^2.3.0",
     "@turf/bbox": "^6.3.0",
     "js-cookie": "^2.2.1",
     "lodash.clonedeep": "^4.5.0"
