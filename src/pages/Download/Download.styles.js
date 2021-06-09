@@ -147,7 +147,7 @@ export const MetricLastUpdated: ComponentType<*> =
     styled
         .span`
             font-size: small;
-            color: #6B7276;
+            color: #2c2c2f;
             
             &:hover {
                 color: black;
