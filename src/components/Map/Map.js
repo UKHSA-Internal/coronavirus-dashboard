@@ -325,7 +325,6 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
         [showInfo, setShowInfo] = useState(false),
         [postcodeData, setPostcodeData] = useState(null),
         [currentLocation, setCurrentLocation] = useState({ currentLocation: null, areaType: "utla" }),
-        [isLoading, setIsLoading] = useState(true),
         [zoomLayerIndex, setZoomLayerIndex] = useState(0),
         prevAreaType = usePrevious(currentLocation.areaType);
 

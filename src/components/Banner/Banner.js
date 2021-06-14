@@ -6,7 +6,6 @@ import { useLocation } from "react-router";
 
 import useGenericAPI from "hooks/useGenericAPI";
 import useTimestamp from "hooks/useTimestamp";
-import Loading from "components/Loading";
 
 import html from "remark-html";
 import remark from "remark";

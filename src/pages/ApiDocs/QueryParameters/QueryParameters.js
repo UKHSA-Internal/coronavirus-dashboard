@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import Filters from "./Filteres";
+import Filters from "./Filters";
 import Structure from "./Structure";
 import LatestBy from "./LatestBy";
 import Format from "./Format";

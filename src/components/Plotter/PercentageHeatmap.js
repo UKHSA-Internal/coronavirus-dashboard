@@ -5,9 +5,8 @@ import React from "react";
 import { BasePlotter } from "./BasePlot";
 
 import type { ComponentType } from "react";
-import { hexToRgb } from "../../common/utils";
+import { hexToRgb } from "common/utils";
 import { zip } from "d3-array";
-import moment from "moment";
 
 
 const scaleLevels = [

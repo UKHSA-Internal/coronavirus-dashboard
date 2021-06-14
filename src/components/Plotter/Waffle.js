@@ -4,30 +4,8 @@ import React from "react";
 
 import { BasePlotter } from "./BasePlot";
 import { hexToRgb } from "common/utils";
-import { scaleColours } from "common/utils";
-import { zip } from "d3-array";
 
 import type { ComponentType } from "react";
-
-
-const scaleLevels = [
-    0,
-    10 / 800,
-    50 / 800,
-    100 / 800,
-    200 / 800,
-    400 / 800,
-    1
-];
-
-
-const asCssRgb = ( hex ) => {
-
-    const { r, g, b } = hexToRgb(hex);
-
-    return `rgb(${r},${g},${b})`
-
-};  // asCssRgb
 
 
 export const Waffle: ComponentType<*> = ({ data, layout, config, ...props }) => {

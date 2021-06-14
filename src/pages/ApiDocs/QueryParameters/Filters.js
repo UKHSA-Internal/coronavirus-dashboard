@@ -6,7 +6,7 @@ import CodeBox from "components/CodeBox";
 import { Admonition } from "components/Widgets";
 import LanguageTabs from "./LanguageTabLink";
 
-import { BlueBadge, Query, Title } from "./QueryParameters.styles";
+import { BlueBadge, Query } from "./QueryParameters.styles";
 import { Code } from "components/Widgets/Widgets.styles";
 
 import type { ComponentType } from "react";
