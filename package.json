@@ -8,7 +8,7 @@
     "axios": "^0.21.1",
     "d3-scale": "^4.0.0",
     "deep-equal": "^2.0.5",
-    "govuk-frontend": "3.8.1",
+    "govuk-frontend": "^3.12.0",
     "govuk-react-jsx": "4.0.3",
     "moment": "^2.29.1",
     "node-sass": "^4.11.0",
