@@ -76,7 +76,7 @@ const CookiesPage: ComponentType<Props> = ({}: Props) => {
 
         <Article>
 
-            { !updateState ? <SuccessNotification/> : null }
+            { updateState ? <SuccessNotification/> : null }
 
             <p className={"govuk-body"}>
                 Cookies are files saved on your phone, tablet or computer when you visit a website.
