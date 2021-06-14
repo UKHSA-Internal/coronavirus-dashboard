@@ -7,7 +7,7 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
 import MomentLocaleUtils, { formatDate, parseDate } from "react-day-picker/moment";
 
-import { SelectOptions } from "./Download.styles";
+import { MetricLastUpdated, SelectOptions } from "./Download.styles";
 import { AreaTypeOptions, MSOAMetricOptions } from "components/DashboardHeader/Constants";
 import { createQuery, groupBy, sort } from 'common/utils/utils';
 import URLs from "common/urls";
@@ -30,10 +30,12 @@ import {
 
 import type { ComponentType } from "react";
 import { Helmet } from "react-helmet";
+import usePrevious from "../../hooks/usePrevious";
+import time from "d3-scale/src/time";
 
 
 const MAX_METRICS = 5;
-const MIN_ARCHIVE_DATE = "2020-08-12";
+const MIN_ARCHIVE_DATE = "2020-06-27";
 const DATE_FORMAT = "YYYY-MM-DD";
 const MSOA_AREA_TYPE = "msoa";
 
@@ -132,19 +134,7 @@ const AreaTypeSelector = ({ areaType, setAreaType }) => {
 const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
 
     const [areaNameData, setAreaNameData] = useState({ grouped: {}, data: [] });
-    const areaNameOptions = useApi({
-             disjunctiveFilters:
-                 (areaType && areaType !== "overview")
-                     ? [{ key: "areaType", sign: '=', value: areaType }]
-                     : [],
-             structure: {
-                 areaName: "areaName",
-                 areaCode: "areaCode",
-                 areaType: "areaType"
-             },
-             endpoint: "lookupApi",
-             defaultResponse: []
-        });
+    const areaNameOptions = useGenericAPI("genericApiAreaByType", [], {area_type: areaType});
 
     useEffect(() => {
         const
@@ -185,21 +175,37 @@ const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
 };  // AreaNameSelector
 
 
-const MetricMultiSelector = ({ areaType, metrics, setMetrics }) => {
+const MetricMultiSelector = ({ areaType, areaCode, date, metrics, setMetrics }) => {
 
-    const
-        metricData = useGenericAPI("metrics",{}),
-        [error, setError] = useState(null),
-        metricNames = areaType === MSOA_AREA_TYPE ? MSOAMetricOptions : 
-            Object
-                .keys(metricData)
-                .filter(item => !excludedMetrics.includes(item))
-                .sort(sort)
-                .reverse()
-                .map(item => ({
-                    label: item,
-                    value: item
-                }));
+    const prevAreaType = usePrevious(areaType);
+    const apiParams = date ? { date } : {};
+    const [error, setError] = useState(null);
+
+    if ( prevAreaType !== areaType ) {
+        areaCode = null;
+    }
+
+    const apiName = areaCode
+        ? "genericApiMetricAvailabilityByArea"
+        : "genericApiMetricAvailabilityByAreaType";
+
+    const metricData = useGenericAPI(
+        apiName,
+        [],
+        {area_type: areaType, area_code: areaCode || ""},
+        "json",
+        apiParams
+    );
+
+    const metricNames = areaType === MSOA_AREA_TYPE
+        ? MSOAMetricOptions
+        : metricData.map(item => ({
+            label: <span>
+                { item.metric }<br/>
+                <MetricLastUpdated>Latest record: { item.last_update }</MetricLastUpdated>
+            </span>,
+            value: item.metric
+        }));
 
     useEffect(() => {
         setError(
@@ -252,7 +258,7 @@ const ArchiveDatePicker = ({ display=true, areaType, date, setDate, minDate, max
 
     if ( !display ) return null;
 
-    if (areaType === MSOA_AREA_TYPE) return null
+    if (areaType === MSOA_AREA_TYPE) return null;
 
     if ( !maxDate || !date ) return <Loading/>;
 
@@ -260,7 +266,7 @@ const ArchiveDatePicker = ({ display=true, areaType, date, setDate, minDate, max
         <div id={ "archive-descr" }>
             <p className="govuk-body-s govuk-!-margin-top-1">
                 The archives in our current database include all publications
-                since 12 August 2020. The records are provided exactly as they were
+                since 27 June 2020. The records are provided exactly as they were
                 published on a specific date. They include every available figure for
                 the selected metrics from the start of the pandemic up to and including
                 the date that you select. The records will <u>not</u> include any data
@@ -383,6 +389,11 @@ const Download: ComponentType<*> = () => {
 
     useEffect(() => {
         setAreaCode(null);
+        setMetric([]);
+    }, [ areaType ])
+
+    useEffect(() => {
+        setAreaCode(null);
     }, [ areaType === "overview" ]);
 
     useEffect(() => {
@@ -424,6 +435,8 @@ const Download: ComponentType<*> = () => {
                         }   
 
                         <MetricMultiSelector areaType={ areaType }
+                                             areaCode={ areaCode }
+                                             date={ archiveDate }
                                              metrics={ metric }
                                              setMetrics={ setMetric }/>
 

@@ -19,7 +19,7 @@ const getDefaultOutput = ( pathname ) => {
         case PathNames.healthcare:
             return [
                 // These must be ordered.
-                "nhsNation",
+                "nation",
                 "nhsRegion",
                 "nhsTrust"
             ];
@@ -95,7 +95,6 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                         key: 'areaType',
                         sign: '=',
                         value: currentLocation.areaType
-                            .toLowerCase()
                             .replace(/nhsNation/i, "nation")
                     },
                     { key: 'areaName', sign: '=', value: currentLocation.areaName }
@@ -108,7 +107,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
             {
                 page: pathname.replace(/\/details\//i, ""),
                 ... currentLocation.areaType !== "overview"
-                    ? {area_type: currentLocation.areaType}
+                    ? {area_type: currentLocation.areaType.replace(/^nhsNation$/i, "nation")}
                     : {}
             }
         );
@@ -133,24 +132,17 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     useEffect(() => {
         const
-            groupedAreaNameData = pathname !== PathNames.vaccinations
-                ? groupBy(data || [], item => item.areaName)
-                : groupBy(
-                    // Vaccinations are restricted to LAs in England and Scotland
-                    (data || []).filter(item => /^[^WN]/.test(item.areaCode) || item.areaType === "nation"),
-                        item => item.value
-                ),
+            groupedAreaNameData = groupBy(data || [], item => item.areaName),
             areaNameDataPrepped = Object.keys(groupedAreaNameData)
                 .map(value => ({
                     value: value,
                     label: value,
-                    areaType: groupedAreaNameData[value].areaType
+                    areaType: groupedAreaNameData[value]?.[0]?.areaType
                 }));
 
         setAreaNameData({ grouped: groupedAreaNameData, data: areaNameDataPrepped })
 
     }, [ data ]);
-
 
     if ( !show ) return null;
 

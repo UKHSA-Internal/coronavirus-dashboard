@@ -23,7 +23,7 @@ import { Helmet } from "react-helmet";
 
 const About: ComponentType<AboutProps> = ({ ...props }) => {
 
-    let data = useGenericAPI("about", [], "text");
+    let data = useGenericAPI("about", [], {}, "text");
 
     if ( !data ) return <Loading>Loading&hellip;</Loading>;
 

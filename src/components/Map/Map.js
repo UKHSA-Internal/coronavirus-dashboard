@@ -29,7 +29,6 @@ import {
     ScaleValue
 } from "pages/InteractiveMap/InteractiveMap.styles";
 import bbox from "@turf/bbox";
-import { useFullRollingRates } from "hooks/useMapData";
 import axios from "axios";
 import MapMarker from "assets/icon-mapmarker.svg";
 import useTimestamp from "hooks/useTimestamp";
@@ -38,6 +37,7 @@ import useResponsiveLayout from "hooks/useResponsiveLayout";
 import GreenArrow from "assets/icon-arrow-green.svg";
 import RedArrow from "assets/icon-arrow-red.svg";
 import { scaleColours } from "common/utils";
+import useGenericAPI from "hooks/useGenericAPI";
 
 
 const MapLayers = [
@@ -221,60 +221,35 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
 const SoaCard = ({ currentLocation, postcodeData, date, areaType, ...props }) => {
 
     const
-        [locationData, setLocationData] = useState(null),
-        apiData = useApi({
-            extraParams: [
-                {key: "areaType", sign: "=", value: "msoa"},
-                {key: "areaCode", sign: "=", value: currentLocation}
-            ],
-            cache: false,
-            structure: {
-                areaCode: "areaCode",
-                release: "release",
-                newCasesBySpecimenDate: [{
-                    date: "date",
-                    rollingSum: "rollingSum",
-                    rollingRate: "rollingRate",
-                    change: "change",
-                    direction: "direction",
-                    changePercentage: "changePercentage",
-                }]
+        apiData = useGenericAPI(
+            "genericApiSoa",
+            null,
+            {
+                area_type: "msoa",
+                area_code: currentLocation,
+                metric: "newCasesBySpecimenDate"
             },
-            defaultResponse: null,
-            endpoint: "soaApi"
-        }),
-        [fortnightData, setFortnightData] = useState(null),
-        casesData = useFullRollingRates(areaType);
+            "json",
+            {date}
+        ),
+        locationData = useGenericAPI(
+            "genericApiCode",
+            null,
+            { area_type: "msoa", area_code: currentLocation }
+        );
 
-    useEffect(() => {
-
-        if ( apiData ) {
-            setFortnightData(
-                apiData?.newCasesBySpecimenDate?.find(item => item.date === date) ?? {}
-            );
-        }
-
-    }, [ apiData?.newCasesBySpecimenDate, date ])
-
-    useEffect(() => {
-        (async () => {
-            const { data } = await axios.get(URLs.postcode, { params: { category: "msoa", search: currentLocation } });
-            setLocationData(data)
-        })();
-    }, [currentLocation])
-
-    if ( !locationData || !currentLocation || !casesData || !fortnightData || !apiData )
+    if ( !locationData || !currentLocation || !apiData )
         return <MapToolbox><Loading/></MapToolbox>;
 
     return <InfoCard areaName={ locationData?.msoaName ?? "" }
                      date={ date }
-                     totalThisWeek={ fortnightData?.rollingSum ?? null }
-                     rollingRate={ fortnightData.rollingRate }
-                     percentageChange={ fortnightData.changePercentage }
-                     totalChange={ fortnightData.change }
+                     totalThisWeek={ apiData?.payload?.rollingSum ?? null }
+                     rollingRate={ apiData?.payload?.rollingRate }
+                     percentageChange={ apiData?.payload?.changePercentage }
+                     totalChange={ apiData?.payload?.change }
                      areaCode={ currentLocation }
                      areaType={ areaType }
-                     trend={ fortnightData.direction }
+                     trend={ apiData?.payload?.direction }
                      postcode={ currentLocation === postcodeData?.msoa ? postcodeData.postcode : null }
                      { ...props }/>
 
