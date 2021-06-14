@@ -1,34 +1,42 @@
 // @flow
 
 import React, { useEffect, useState } from 'react';
-import type { ComponentType } from 'react';
 
-import type { Props } from './Cookies.types';
 import {
     Article,
     Heading
 } from './Cookies.styles';
 
-import { deleteCookies, handleCookieAccept, setCookies } from "common/utils/cookies";
+import { handleCookieAccept } from "common/utils/cookies";
 
 import Cookies from "js-cookie";
 import { Helmet } from "react-helmet";
 
-function SuccessNotification() {
-return <div className={"govuk-notification-banner govuk-notification-banner--success govuk-!-margin-top-1"} role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-<div className={"govuk-notification-banner__header"}>
-  <h2 className={"govuk-notification-banner__title"} id="govuk-notification-banner-title">
-    Success
-  </h2>
-</div>
-<div className={"govuk-notification-banner__content"}>
-  <p className={"govuk-notification-banner__heading"}>
-    You’ve updated your cookie preferences. 
-  </p>
-</div>
-</div>
-}
-const CookiesPage: ComponentType<Props> = ({ }: Props) => {
+import type { Props } from "./Cookies.types";
+import type { ComponentType } from 'react';
+
+
+const SuccessNotification: ComponentType<Props> = () => {
+
+    return <div className={ "govuk-notification-banner govuk-notification-banner--success govuk-!-margin-top-1" }
+                role="alert" aria-labelledby="govuk-notification-banner-title"
+                data-module="govuk-notification-banner">
+        <div className={ "govuk-notification-banner__header" }>
+            <h2 className={ "govuk-notification-banner__title" } id="govuk-notification-banner-title">
+                Success
+            </h2>
+        </div>
+        <div className={ "govuk-notification-banner__content" }>
+            <p className={ "govuk-notification-banner__heading" }>
+                You’ve updated your cookie preferences.
+            </p>
+        </div>
+    </div>
+
+};  // SuccessNotification
+
+
+const CookiesPage: ComponentType<Props> = ({}: Props) => {
 
     // const [preferenceSet, ]
     const [cookieState, setCookieState] = useState(null);
@@ -42,12 +50,9 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
 
     useEffect(() => {
         const cookiePreference = Cookies.get('cookies_preferences_set_21_3');
-        console.log(cookiePreference);
-        console.log(cookieState);
 
         if ( cookiePreference === 'true' ) {
             const cookiePolicyRaw = Cookies.get('cookies_policy_21_3');
-            console.log(cookiePolicyRaw);
 
             if ( !cookiePolicyRaw ) {
                 Cookies.remove("cookies_preferences_set_21_3");
@@ -63,21 +68,15 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
         }
     }, []);
 
-    const CookiesUpdatedText = () => {
-        if ( updateState === false) return null;
-        return SuccessNotification();
-    };
-    
-
     return <>
         <Helmet>
             <title>Cookies | Coronavirus in the UK</title>
             <meta name="description" content="Cookies policy" />
         </Helmet>
 
-        <CookiesUpdatedText/>        
-
         <Article>
+
+            { !updateState ? <SuccessNotification/> : null }
 
             <p className={"govuk-body"}>
                 Cookies are files saved on your phone, tablet or computer when you visit a website.
@@ -185,5 +184,6 @@ const CookiesPage: ComponentType<Props> = ({ }: Props) => {
         </Article>
     </>
 };
+
 
 export default CookiesPage;
