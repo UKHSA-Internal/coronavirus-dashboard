@@ -7,7 +7,7 @@ import type { ComponentType } from 'react';
 
 export const Article: ComponentType<*> = (() =>
     styled.article`
-        max-width: 40em;
+        max-width: 50em;
     `
 )();
 
