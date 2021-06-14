@@ -48,6 +48,7 @@ export const Tab: ComponentType<*> = (() => {
             padding-bottom: 2px;
             color: #1e70b8;
             cursor: pointer;
+            text-decoration: none;
     
             &.active,
             &.focus {
