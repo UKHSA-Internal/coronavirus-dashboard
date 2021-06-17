@@ -36,6 +36,7 @@ import GreenArrow from "assets/icon-arrow-green.svg";
 import RedArrow from "assets/icon-arrow-red.svg";
 import { scaleColours } from "common/utils";
 import useGenericAPI from "hooks/useGenericAPI";
+import type { ComponentType } from "react";
 
 
 const MapLayers = [
