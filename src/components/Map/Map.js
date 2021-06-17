@@ -1,6 +1,5 @@
 // @flow
 
-import type ComponentType from "react";
 import React, { useEffect, useState, memo, useMemo } from "react";
 import L from "leaflet";
 import mapboxgl from "mapbox-gl";
