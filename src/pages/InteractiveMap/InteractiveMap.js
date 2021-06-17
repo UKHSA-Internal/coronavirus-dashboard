@@ -141,7 +141,9 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
         <div className={ "govuk-!-margin-bottom-5" }>
             {/*<h2 className={ "govuk-heading-m" }>How to use the map?</h2>*/}
             <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
-                This map shows 7-day case rate per 100,000 people.<br/>
+                This map shows 7-day case rate per 100,000 people.
+            </p>
+            <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
                 The default view shows data by local authority. Zoom in for more local data.
             </p>
         </div>
