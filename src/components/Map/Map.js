@@ -33,7 +33,6 @@ import axios from "axios";
 import MapMarker from "assets/icon-mapmarker.svg";
 import useTimestamp from "hooks/useTimestamp";
 import usePrevious from "hooks/usePrevious";
-import useResponsiveLayout from "hooks/useResponsiveLayout";
 import GreenArrow from "assets/icon-arrow-green.svg";
 import RedArrow from "assets/icon-arrow-red.svg";
 import { scaleColours } from "common/utils";
