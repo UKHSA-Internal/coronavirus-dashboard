@@ -66,9 +66,9 @@ const AreaLevel = {
 const MainHeader: ComponentType<*> = ({ ...props }) => {
 
     return <Header>
-        <p className={ "govuk-body" } style={{ maxWidth: 40 + "em" }} { ...props }>
+        {/* <p className={ "govuk-body" } style={{ maxWidth: 40 + "em" }} { ...props }>
             Browse cases data for specific areas within the UK.
-        </p>
+        </p> */}
     </Header>
 
 };  // SectionHeader
@@ -141,24 +141,8 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
         <div className={ "govuk-!-margin-bottom-5" }>
             {/*<h2 className={ "govuk-heading-m" }>How to use the map?</h2>*/}
             <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
-                The map displays weekly data, which are updated everyday. Use the slider to
-                select a week-ending date.
-            </p>
-            <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
-                <strong>Local view:</strong> The default zoom level shows Upper Tier Local
-                Authorities (UTLA). Zoom in for more details, including Lower
-                Tier Local Authorities (LTLA) and Middle layer Super Output Areas (MSOA).
-            </p>
-            <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
-                <strong>Suppressed rates:</strong> For smaller areas (eg MSOAs) with
-                fewer than 3 cases, we do not show data. This is to protect individuals'
-                identities.
-            </p>
-            <p className={ "govuk-body govuk-body" } style={{ maxWidth: 40 + "em" }}>
-                <strong>More details:</strong> Click on an area to see more detailed cases
-                data for the most recent time period available &ndash; including seven day
-                case rates and direction of change. When zoomed to very small areas, data
-                for Northern Ireland, Scotland and Wales are not available.
+                This map shows 7-day case rate per 100,000 people.<br/>
+                The default view shows data by local authority. Zoom in for more local data.
             </p>
         </div>
         <MainContainer>
@@ -178,8 +162,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                     <label id={ "month" }
                            className={ "govuk-body" }
                            htmlFor={ "slider" }>
-                        Seven&ndash;day rolling rate of new cases by specimen date ending
-                        on <strong>{ moment(currentDate).format("DD MMM YYYY") }</strong>
+                        Case rate per 100,000 people for 7&ndash;day period ending on <strong>{ moment(currentDate).format("DD MMM YYYY") }</strong>
                     </label>
                     {
                         width === "desktop"
@@ -205,17 +188,37 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                 </Map>
             </>
         </MainContainer>
+        
         <div className={ "markdown govuk-!-margin-top-5" } style={{ maxWidth: 40 + "em" }}>
+            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Cases rates</h3>
             <p>
-                Seven&ndash;day rates are expressed per 100,000 population and are calculated
-                by dividing the seven day count by the area population and multiplying
-                by 100,000.
+                Case rates are shown per 100,000 people for the 7-day period ending on the date shown. <br/>
+                We calculate this by dividing the 7-day total by the area population and multiplying by 100,000. <br/>
+                This makes it easier to compare cases across areas of different population size.
             </p>
+
+            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Map Areas</h3>
             <p>
-                All data used in the map are available in the public domain and may be
-                downloaded from the relevant section of the website or via the API.
+                Find your area by using the postcode search or the zoom.
+                The map shows data for different area types:
             </p>
-            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Attributions</h3>
+
+            <ul className={ "govuk-list govuk-list--bullet govuk-body-s" }>
+                <li>local authorities. These are divided into Upper Tier Local Authorities (UTLA) and Lower Tier Local Authorities (LTLA) for areas with 2 tiers of local government, such as county council (upper tier) and district council (lower tier).</li>
+                <li>Middle layer Super Output Areas (MSOA). These areas are smaller than local authorities, so show data at the most local level.</li>
+            </ul>
+
+            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Data not shown</h3>
+            <p>
+                There are 2 reasons why data may not be shown:
+            </p>
+            
+            <ul className={ "govuk-list govuk-list--bullet govuk-body-s" }>
+                <li>for areas with fewer than 3 cases at MSOA level, we do not show data to protect individuals' identities.</li>
+                <li>data may be missing, for example because it is delayed or unavailable. If you zoom in to MSOA level, data for Northern Ireland, Scotland and Wales are not available.</li>
+            </ul>
+        
+            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Copyright information</h3>
             <div className={ "govuk-body-s" }>
                 <ul className={ "govuk-list govuk-list--bullet govuk-body-s" }>
                     <li>Contains MSOA names &copy; Open Parliament copyright and database right 2020</li>

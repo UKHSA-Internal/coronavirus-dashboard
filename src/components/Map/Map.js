@@ -156,6 +156,7 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
         <h2 className={ 'govuk-heading-m' }>
             { areaName }
             <small className={ "govuk-caption-s" }>
+                {areaType.toUpperCase()} <br/>
                 Seven days to { moment(date).format("DD MMMM YYYY") }
             </small>
         </h2>
@@ -173,7 +174,7 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
                         </div>
                     </NumberBox>
                     <NumberBox>
-                        <h3 className={ "govuk-heading-s" }>Rolling rate</h3>
+                        <h3 className={ "govuk-heading-s" }>Case rate per 100,000 people</h3>
                         <div className={ "number-row" }>
                             <span className={ "number" }>{ numeral(rollingRate).format("0,0.0") }</span>
                         </div>
@@ -183,21 +184,19 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
                     date !== maxDate
                         ? null
                         : <>
-                            <h3 className={ "govuk-heading-s" }>Case rate compared
+                            {/* <h3 className={ "govuk-heading-s" }>Case rate compared
                                 to { areaType === "msoa" ? "England" : "the UK" } average</h3>
                             <img
                                 src={ `https://coronavirus.data.gov.uk/public/assets/frontpage/scales/${ areaType }/${ areaCode }.svg` }
                                 style={ { maxWidth: viewPort === "mobile" ? 250 : 300, marginBottom: -15 } }
-                                alt={ `Scale showing the comparison of ${ areaName } compared to national average.` }/>
+                                alt={ `Scale showing the comparison of ${ areaName } compared to national average.` }/> */}
                         </>
                 }
             </>
             : <p>{
                 areaType === "msoa"
                     ? <>
-                        There were fewer than 3 cases. For smaller areas (eg MSOAs)
-                        with fewer than&nbsp;3&nbsp;cases, we do not show data. This is to
-                        protect individuals' identities.
+                        Under 3 cases. For smaller areas (MSOAs) with fewer than 3 cases, we do not show data. This is to protect individuals' identities.
                     </>
                     : "Data missing."
             }</p>
@@ -630,13 +629,13 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                     </PostcodeSearchForm>
                     <LegendContainer>
                         <ScaleLegend>
-                            <ScaleLegendLabel>{ MapLayers?.[zoomLayerIndex]?.name ?? "" } rate</ScaleLegendLabel>
+                            <ScaleLegendLabel>Case rate</ScaleLegendLabel>
                             <ScaleGroup>
                                 <ScaleColor style={{ background: "#fff" }}/>
                                 <ScaleValue>{
                                     currentLocation.areaType === "msoa"
                                         ? "Suppressed"
-                                        : "Missing data"
+                                        : "Data not shown"
                                 }</ScaleValue>
                             </ScaleGroup>
                             {
