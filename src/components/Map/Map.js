@@ -145,7 +145,6 @@ const Arrow = ({ direction }) => {
 const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, trend, postcode,
                       percentageChange, areaType, areaCode, setShowInfo, maxDate, ...props }) => {
 
-    const viewPort = useResponsiveLayout(600);
 
     if ( !setShowInfo ) return null;
 
@@ -180,18 +179,18 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
                         </div>
                     </NumberBox>
                 </NumbersContainer>
-                {
+                {/* {
                     date !== maxDate
                         ? null
                         : <>
-                            {/* <h3 className={ "govuk-heading-s" }>Case rate compared
+                            <h3 className={ "govuk-heading-s" }>Case rate compared
                                 to { areaType === "msoa" ? "England" : "the UK" } average</h3>
                             <img
                                 src={ `https://coronavirus.data.gov.uk/public/assets/frontpage/scales/${ areaType }/${ areaCode }.svg` }
                                 style={ { maxWidth: viewPort === "mobile" ? 250 : 300, marginBottom: -15 } }
-                                alt={ `Scale showing the comparison of ${ areaName } compared to national average.` }/> */}
+                                alt={ `Scale showing the comparison of ${ areaName } compared to national average.` }/>
                         </>
-                }
+                } */}
             </>
             : <p>{
                 areaType === "msoa"
