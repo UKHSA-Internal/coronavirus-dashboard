@@ -162,9 +162,9 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                      width={ width }
                 >
                     <label id={ "month" }
-                           className={ "govuk-body" }
+                           className={ "govuk-body govuk-!-font-weight-bold" }
                            htmlFor={ "slider" }>
-                        Case rate per 100,000 people for 7&ndash;day period ending on <strong>{ moment(currentDate).format("DD MMM YYYY") }</strong>
+                        Case rate per 100,000 people for 7&ndash;day period ending on <strong>{ moment(currentDate).format("D MMMM YYYY") }</strong>:
                     </label>
                     {
                         width === "desktop"
