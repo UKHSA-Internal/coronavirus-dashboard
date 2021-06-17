@@ -1,6 +1,5 @@
 // @flow
 
-import type ComponentType from "react";
 import React, { useEffect, useState, memo, useMemo } from "react";
 import L from "leaflet";
 import mapboxgl from "mapbox-gl";
@@ -33,7 +32,6 @@ import axios from "axios";
 import MapMarker from "assets/icon-mapmarker.svg";
 import useTimestamp from "hooks/useTimestamp";
 import usePrevious from "hooks/usePrevious";
-import useResponsiveLayout from "hooks/useResponsiveLayout";
 import GreenArrow from "assets/icon-arrow-green.svg";
 import RedArrow from "assets/icon-arrow-red.svg";
 import { scaleColours } from "common/utils";
@@ -145,7 +143,6 @@ const Arrow = ({ direction }) => {
 const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, trend, postcode,
                       percentageChange, areaType, areaCode, setShowInfo, maxDate, ...props }) => {
 
-    const viewPort = useResponsiveLayout(600);
 
     if ( !setShowInfo ) return null;
 
@@ -156,6 +153,7 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
         <h2 className={ 'govuk-heading-m' }>
             { areaName }
             <small className={ "govuk-caption-s" }>
+                {areaType.toUpperCase()} <br/>
                 Seven days to { moment(date).format("DD MMMM YYYY") }
             </small>
         </h2>
@@ -173,13 +171,13 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
                         </div>
                     </NumberBox>
                     <NumberBox>
-                        <h3 className={ "govuk-heading-s" }>Rolling rate</h3>
+                        <h3 className={ "govuk-heading-s" }>Case rate per 100,000 people</h3>
                         <div className={ "number-row" }>
                             <span className={ "number" }>{ numeral(rollingRate).format("0,0.0") }</span>
                         </div>
                     </NumberBox>
                 </NumbersContainer>
-                {
+                {/* {
                     date !== maxDate
                         ? null
                         : <>
@@ -190,14 +188,12 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
                                 style={ { maxWidth: viewPort === "mobile" ? 250 : 300, marginBottom: -15 } }
                                 alt={ `Scale showing the comparison of ${ areaName } compared to national average.` }/>
                         </>
-                }
+                } */}
             </>
             : <p>{
                 areaType === "msoa"
                     ? <>
-                        There were fewer than 3 cases. For smaller areas (eg MSOAs)
-                        with fewer than&nbsp;3&nbsp;cases, we do not show data. This is to
-                        protect individuals' identities.
+                        Under 3 cases. For smaller areas (MSOAs) with fewer than 3 cases, we do not show data. This is to protect individuals' identities.
                     </>
                     : "Data missing."
             }</p>
@@ -630,13 +626,13 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                     </PostcodeSearchForm>
                     <LegendContainer>
                         <ScaleLegend>
-                            <ScaleLegendLabel>{ MapLayers?.[zoomLayerIndex]?.name ?? "" } rate</ScaleLegendLabel>
+                            <ScaleLegendLabel>Case rate</ScaleLegendLabel>
                             <ScaleGroup>
                                 <ScaleColor style={{ background: "#fff" }}/>
                                 <ScaleValue>{
                                     currentLocation.areaType === "msoa"
                                         ? "Suppressed"
-                                        : "Missing data"
+                                        : "Data not shown"
                                 }</ScaleValue>
                             </ScaleGroup>
                             {
