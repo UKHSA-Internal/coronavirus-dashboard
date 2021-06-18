@@ -192,7 +192,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
         </MainContainer>
         
         <div className={ "markdown govuk-!-margin-top-5 govuk-body" } style={{ maxWidth: 50 + "em" }}>
-            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Case rates</h3>
+            <h3 className={ "govuk-heading-m govuk-!-margin-top-1" }>Case rates</h3>
             <p className={ "govuk-body" }>
                 Case rates are shown per 100,000 people for the 7-day period ending on the date shown. <br/>
                 We calculate this by dividing the 7-day total by the area population and multiplying by 100,000.
@@ -208,7 +208,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
             </p>
 
             <ul className={ "govuk-list govuk-list--bullet" }>
-                <li>local authorities. These are divided into Upper Tier Local Authorities (UTLA) and Lower Tier Local Authorities (LTLA) for areas with 2 tiers of local government, such as county council (upper tier) and district council (lower tier).</li>
+                <li className={ "govuk-!-margin-bottom-1" }>local authorities. These are divided into Upper Tier Local Authorities (UTLA) and Lower Tier Local Authorities (LTLA) for areas with 2 tiers of local government, such as county council (upper tier) and district council (lower tier).</li>
                 <li>Middle layer Super Output Areas (MSOA). These areas are smaller than local authorities, so show data at the most local level.</li>
             </ul>
 
@@ -218,7 +218,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
             </p>
             
             <ul className={ "govuk-list govuk-list--bullet" }>
-                <li>for areas with fewer than 3 cases at MSOA level, we do not show data to protect individuals' identities.</li>
+                <li className={ "govuk-!-margin-bottom-1" }>for areas with fewer than 3 cases at MSOA level, we do not show data to protect individuals' identities.</li>
                 <li>data may be missing, for example because it is delayed or unavailable. If you zoom in to MSOA level, data for Northern Ireland, Scotland and Wales are not available.</li>
             </ul>
         
@@ -229,10 +229,10 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                     downloaded from the relevant section of the website or via the API.
                 </p>
                 <ul className={ "govuk-list govuk-list--bullet govuk-body-s" }>
-                    <li>Contains MSOA names &copy; Open Parliament copyright and database right 2020</li>
-                    <li>Contains Ordnance Survey data &copy; Crown copyright and database right 2020</li>
-                    <li>Contains Royal Mail data &copy; Royal Mail copyright and database right 2020</li>
-                    <li>Contains Public Health England data &copy; Crown copyright and database right 2020</li>
+                    <li className={ "govuk-!-margin-bottom-1" }>Contains MSOA names &copy; Open Parliament copyright and database right 2020</li>
+                    <li className={ "govuk-!-margin-bottom-1" }>Contains Ordnance Survey data &copy; Crown copyright and database right 2020</li>
+                    <li className={ "govuk-!-margin-bottom-1" }>Contains Royal Mail data &copy; Royal Mail copyright and database right 2020</li>
+                    <li className={ "govuk-!-margin-bottom-1" }>Contains Public Health England data &copy; Crown copyright and database right 2020</li>
                     <li>Office for National Statistics licensed under the Open Government Licence v.3.0</li>
                 </ul>
 
