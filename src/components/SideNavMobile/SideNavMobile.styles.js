@@ -34,7 +34,7 @@ export const MobileNavToggler: ComponentType<*> =
             background: transparent;
             color: white;
             border: 2px solid white;
-            top: -15px;
+            top: -5px;
             right: -4px;
             width: max-content !important;
             padding: .3rem .5rem;
@@ -47,11 +47,22 @@ export const MobileNavToggler: ComponentType<*> =
               background: transparent;
               color: black;
               border: 2px solid white;
-              top: -15px;
               right: -4px;
               width: max-content !important;
               padding: .3rem .5rem;
             }
+            
+            @media only screen and (max-width: 528px) {
+                top: -5px
+            }
+            @media only screen and (min-width: 528px) {
+                top: 25px !important;
+            }
+            @media only screen and (max-width: 326px) {
+                top: -20px;
+            }
+
+            
         `;
 
 

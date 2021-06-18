@@ -74,3 +74,14 @@
         color: $govuk-focus-text-colour;
     }
 }
+
+
+.govuk-header__logo {
+    width: 100%;
+    @media only screen and (max-width: 570px) {
+        padding-right: 65px;
+    }
+    @media only screen and (max-width: 400px) {
+        padding-right: 0.5rem;
+    }
+}
