@@ -682,9 +682,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
             }
             </MapContainer>
         <span style={{ textAlign: "right" }}>
-            Download as <a onClick={ downloadImage }
-                   className={ "govuk-link govuk-link--no-visited-state" }
-                   download={ `cases_${date}.png` } href={ "" }>image</a>.</span>
+            <a onClick={ downloadImage }
+               className={"govuk-button govuk-!-margin-top-3 govuk-!-margin-bottom-1"}
+               data-module={"govuk-button"}
+               download={ `cases_${date}.png` } href={ "" }>Download image</a></span>
     </>;
 
 };  // Map
