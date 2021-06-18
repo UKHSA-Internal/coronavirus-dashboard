@@ -1,6 +1,4 @@
 // @flow
 
-export type Props = {|
-  hover: boolean,
-|};
+export type Props = {||};
 
