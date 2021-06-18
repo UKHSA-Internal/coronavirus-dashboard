@@ -120,7 +120,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
         </Container>
     }
 
-    const title = "Interactive Map | Coronavirus in the UK";
+    const title = "Interactive map | Coronavirus in the UK";
     const description = (
         "Interactive map of coronavirus (COVID-19) prevalence rate for the " +
         "United Kingdom by local authorities and small areas."
@@ -192,7 +192,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
         </MainContainer>
         
         <div className={ "markdown govuk-!-margin-top-5 govuk-body" } style={{ maxWidth: 50 + "em" }}>
-            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Cases rates</h3>
+            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Case rates</h3>
             <p className={ "govuk-body" }>
                 Case rates are shown per 100,000 people for the 7-day period ending on the date shown. <br/>
                 We calculate this by dividing the 7-day total by the area population and multiplying by 100,000.
@@ -201,7 +201,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                 This makes it easier to compare cases across areas of different population size.
             </p>
 
-            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Map Areas</h3>
+            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Map areas</h3>
             <p>
                 Find your area by using the postcode search or the zoom.
                 The map shows data for different area types:
@@ -222,9 +222,13 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                 <li>data may be missing, for example because it is delayed or unavailable. If you zoom in to MSOA level, data for Northern Ireland, Scotland and Wales are not available.</li>
             </ul>
         
-            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Copyright information</h3>
+            <h3 className={ "govuk-heading-s govuk-!-margin-top-8" }>Copyright information</h3>
             <div className={ "govuk-body-s" }>
-                <ul className={ "govuk-list govuk-list--bullet" }>
+                <p className={ "govuk-body-s" }>
+                    All data used in the map are available in the public domain and may be
+                    downloaded from the relevant section of the website or via the API.
+                </p>
+                <ul className={ "govuk-list govuk-list--bullet govuk-body-s" }>
                     <li>Contains MSOA names &copy; Open Parliament copyright and database right 2020</li>
                     <li>Contains Ordnance Survey data &copy; Crown copyright and database right 2020</li>
                     <li>Contains Royal Mail data &copy; Royal Mail copyright and database right 2020</li>
@@ -232,7 +236,7 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
                     <li>Office for National Statistics licensed under the Open Government Licence v.3.0</li>
                 </ul>
 
-                <p className={ "govuk-body" }>
+                <p className={ "govuk-body-s" }>
                     Lookup products and data are supplied under the Open Government Licence.
                     You must use the above copyright statements when you reproduce or use the
                     materials, data, digital boundaries, or postcode products used in this
