@@ -76,3 +76,18 @@ button {
         border: 0;
     }
 }
+
+
+div[role='heading'] {
+    padding-left: 0.5rem;
+}
+
+.govuk-heading-* {
+    margin-left: .5rem;
+    margin-right: .5rem;
+}
+
+.govuk-body:not(article) {
+    margin-left: .5rem;
+    margin-right: .5rem;
+}
