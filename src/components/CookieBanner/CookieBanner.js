@@ -85,7 +85,7 @@ const CookieBanner: ComponentType<Props> = ({ ...props }: Props) => {
                 <div className="govuk-cookie-banner__message govuk-!-width-two-thirds">
                     <div className="govuk-grid-row">
                         <div className="govuk-grid-column-two-thirds">
-                            <h2 className="govuk-cookie-banner__heading govuk-heading-m govuk-!-margin-top-2">
+                            <h2 className="govuk-cookie-banner__heading govuk-heading-m govuk-!-margin-top-2 govuk-!-margin-left-1">
                                 Cookies on the UK Coronavirus Dashboard
                             </h2>
 
@@ -100,13 +100,15 @@ const CookieBanner: ComponentType<Props> = ({ ...props }: Props) => {
                     </div>
 
                     <div className="govuk-button-group">
-                        <button className="gem-c-button govuk-button gem-c-button--inline" type="submit"
+                        <button className="govuk-button" type="submit"
                                 data-module="track-click" data-accept-cookies="true"
                                 data-track-category="cookieBanner"
+                                style={{ maxWidth: '50%' }}
                                 onClick={ () => setCookieAccepted(true) }>
                             Accept additional cookies
                         </button>
-                        <Link className="gem-c-button govuk-button gem-c-button--inline"
+                        <Link className="govuk-button"
+                              style={{ maxWidth: '50%' }}
                               type="submit" data-module="track-click" data-set-cookie-preferences="true"
                               data-track-category="cookieBanner" onClick={ () => setCookieAccepted(false) }>
                             Reject additional cookies
