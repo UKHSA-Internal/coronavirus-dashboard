@@ -9,17 +9,18 @@ import CarretUp from "assets/caret-up.svg";
 import CarretDown from "assets/caret-down.svg";
 
 
-export const MainContainer: ComponentType<*> = (() => {
-  const
-    classes = 'sticky-header govuk-!-padding-top-3',
-    Node = styled.div`
-      background-color: rgba(255, 255, 255, 0.95);
-      z-index: 999999;
-    `;
+export const MainContainer: ComponentType<*> =
+    styled
+        .div
+        .attrs(({ className="", ...props }) => ({
+            className: `sticky-header govuk-!-padding-top-3 ${className}`,
+            ...props
+        }))
+        `
+          background-color: rgba(255, 255, 255, 0.95);
+          z-index: 999999;
+        `;
 
-  return ({ className, ...props }) =>
-    <Node className={ `${classes} ${className}` } { ...props }/>
-})();
 
 
 export const HeaderContainer: ComponentType<*> = (() => {
