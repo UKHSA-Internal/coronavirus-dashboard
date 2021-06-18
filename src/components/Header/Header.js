@@ -31,7 +31,7 @@ const Header: ComponentType<*> = ({ ...props }) => {
             <a href={ "#main-content" } className="govuk-skip-link">Skip to main content</a>
             <div className="govuk-header__container govuk-width-container">
                 <div className="govuk-header__logo">
-                    <a href="https://coronavirus-staging.data.gov.uk"
+                    <a href="https://coronavirus.data.gov.uk"
                        className="govuk-header__link govuk-header__link--homepage">
                         <span className="govuk-header__logotype">
                             <svg aria-hidden="true"
