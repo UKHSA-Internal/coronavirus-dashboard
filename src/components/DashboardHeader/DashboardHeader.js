@@ -12,6 +12,7 @@ import LocationBanner from "components/LocationBanner";
 import { analytics, getParams } from "common/utils";
 import { getParamValueFor } from "./utils";
 import { getOrder } from "./GenericHooks";
+import { StickyContainer, Sticky } from 'react-sticky';
 import {
     PathNameMapper,
     NoPickerPaths,
@@ -44,7 +45,7 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
     return <>
         <HeaderContainer role={ "heading" }
                          aria-level={ 1 }>
-            <Title data-for={  !noPicker && "open-localisation-tooltip" }
+            <Title data-for={ !noPicker && "open-localisation-tooltip" }
                    data-tip={ !noPicker && "Click to change location" }
                    id={ `page-heading-${ preppedLabel }` }
                    className={ localisationState ? "open" : "" }
@@ -52,25 +53,39 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
                 { `${ pageName }${ noPicker ? "" : " in" }` }
                 { noPicker
                     ? null
-                    : ( pathname && pathname !== "/" ) &&
-                        <>
-                            <TitleButton aria-describedby={ `${ preppedLabel }-loc-desc` }>
-                                { areaName }
-                                <span id={ `${ preppedLabel }-loc-desc` }
-                                      className={ "govuk-visually-hidden" }>
-                                    Opens the localisation banner, which provides options to
-                                    switch location and receive data at different geographical
-                                    levels.
-                                </span>
-                            </TitleButton>
-                        </>
+                    : (pathname && pathname !== "/") &&
+                    <>
+                        <TitleButton aria-describedby={ `${ preppedLabel }-loc-desc` }>
+                            { areaName }
+                            <span id={ `${ preppedLabel }-loc-desc` }
+                                  className={ "govuk-visually-hidden" }>
+                                Opens the localisation banner, which provides options to
+                                switch location and receive data at different geographical
+                                levels.
+                            </span>
+                        </TitleButton>
+                    </>
                 }
             </Title>
         </HeaderContainer>
         <SectionBreak/>
-    </>
+    </>;
 
 };  // PageHeader
+
+
+
+const useScrollPositionGreaterThan = (minY) => {
+
+  const [isGreater, setIsGreater] = useState(false)
+
+  useEffect(() => {
+      setIsGreater(minY !== null && window.scrollY > minY);
+  }, [window.scrollY])
+
+  return isGreater;
+
+};
 
 
 const DashboardHeader: ComponentType<Props> = ({}: Props) => {
@@ -113,26 +128,31 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
         setLocationPickerState(state => !state)
     };
 
-    return <MainContainer>
-        <PageHeader areaName={ areaName }
-                    localisationState={ locationPickerState }
-                    localisationCallback={ locationPickerCallback }/>
-        {
-            !isExcluded &&
-            <LocationPicker show={ locationPickerState }
-                            currentLocation={ location }
-                            setCurrentLocation={ setLocation }/>
-        }
-        <LocationBanner pageTitle={ LocationBannerMapper?.[pathname] ?? null }
-                        areaTypes={ Object.keys(areaTypeOrder).map(key => areaTypeOrder[key]) }
-                        pathname={ pathname }/>
+    return <StickyContainer>
+        <Sticky>{ ({ style }) =>
+            <MainContainer style={ style }>
+                <PageHeader areaName={ areaName }
+                            localisationState={ locationPickerState }
+                            localisationCallback={ locationPickerCallback }/>
+                {
+                    !isExcluded &&
+                    <LocationPicker show={ locationPickerState }
+                                    currentLocation={ location }
+                                    setCurrentLocation={ setLocation }/>
+                }
+                <LocationBanner pageTitle={ LocationBannerMapper?.[pathname] ?? null }
+                                areaTypes={ Object.keys(areaTypeOrder).map(key => areaTypeOrder[key]) }
+                                pathname={ pathname }/>
 
-        <ReactTooltip id={ "open-localisation-tooltip" }
-                      place={ "right" }
-                      backgroundColor={ "#0b0c0c" }
-                      className={ "tooltip" }
-                      effect={ "solid" }/>
-    </MainContainer>
+                <ReactTooltip id={ "open-localisation-tooltip" }
+                              place={ "right" }
+                              backgroundColor={ "#0b0c0c" }
+                              className={ "tooltip" }
+                              effect={ "solid" }/>
+            </MainContainer>
+        }
+        </Sticky>
+    </StickyContainer>;
 
 };  // DashboardHeader
 
