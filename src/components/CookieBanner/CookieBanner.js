@@ -107,12 +107,12 @@ const CookieBanner: ComponentType<Props> = ({ ...props }: Props) => {
                                 onClick={ () => setCookieAccepted(true) }>
                             Accept additional cookies
                         </button>
-                        <Link className="govuk-button"
+                        <button className="govuk-button"
                               style={{ maxWidth: '50%' }}
                               type="submit" data-module="track-click" data-set-cookie-preferences="true"
                               data-track-category="cookieBanner" onClick={ () => setCookieAccepted(false) }>
                             Reject additional cookies
-                        </Link>
+                        </button>
                         <Link to="/details/cookies" className="govuk-link govuk-body">View cookies</Link>
                     </div>
                 </div>
