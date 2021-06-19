@@ -1,7 +1,7 @@
 // @flow
 
 import React, { useState, useEffect } from "react";
-import { withRouter } from "react-router";
+import { useLocation } from "react-router";
 import Map from "components/Map";
 import Loading from "components/Loading";
 import moment from "moment";
@@ -20,8 +20,7 @@ import { useMapData } from "hooks/useMapData";
 import { glAvailable } from "components/Map/utils";
 import { scaleColours as colours } from "common/utils";
 import Plotter from "components/Plotter";
-import useResponsiveLayout from "../../hooks/useResponsiveLayout";
-import { Helmet } from "react-helmet";
+import useResponsiveLayout from "hooks/useResponsiveLayout";
 
 
 const AreaLevel = {
@@ -74,9 +73,10 @@ const MainHeader: ComponentType<*> = ({ ...props }) => {
 };  // SectionHeader
 
 
-const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
+const InteractiveMap: ComponentType<*> = () => {
 
     const
+        { search: query } = useLocation(),
         params = getParams(query),
         period = getParamValueFor(params, "period", "daily"),
         areaType = getParamValueFor(params, "areaType", "nation"),
@@ -120,23 +120,9 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
         </Container>
     }
 
-    const title = "Interactive map | Coronavirus in the UK";
-    const description = (
-        "Interactive map of coronavirus (COVID-19) prevalence rate for the " +
-        "United Kingdom by local authorities and small areas."
-    );
-
     if ( !dates || !extrema ) return <Loading/>;
 
     return <Container>
-        <Helmet>
-            <title>{ title }</title>
-            <meta name="description" content={ description } />
-            <meta property="og:title" content={ title }/>
-            <meta name="twitter:title" content={ title }/>
-            <meta property="og:description" content={ description }/>
-            <meta name="twitter:description" content={ description }/>
-        </Helmet>
         <MainHeader/>
         <div className={ "govuk-!-margin-bottom-5" }>
             {/*<h2 className={ "govuk-heading-m" }>How to use the map?</h2>*/}
@@ -249,4 +235,4 @@ const InteractiveMap: ComponentType<*> = ({ location: { search: query } }) => {
 };
 
 
-export default withRouter(InteractiveMap);
+export default InteractiveMap;
