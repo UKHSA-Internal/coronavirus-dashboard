@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { ComponentType } from 'react';
 import { useLocation } from 'react-router';
 import { Link } from "react-router-dom";
@@ -21,6 +21,8 @@ const NavigationItems: ComponentType<Props> = ({ menuState, setMenuState, ...pro
 
     const { pathname } = useLocation();
 
+    useEffect(() => { setMenuState(false) }, [pathname]);
+
     if ( !menuState ) return null;
 
     return <SideNav aria-label="Side navigation" { ...props }>
@@ -30,46 +32,41 @@ const NavigationItems: ComponentType<Props> = ({ menuState, setMenuState, ...pro
             </SideNavListItem>
 
             <SideNavListItem className={`${pathname === '/details/testing' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/testing" }
-                      onClick={ () => setMenuState(state => !state) }>Testing</Link>
+                <Link to={ "/details/testing" }>Testing</Link>
             </SideNavListItem>
 
             <SideNavListItem className={`${pathname === '/details/cases' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/cases" }
-                      onClick={ () => setMenuState(state => !state) }>Cases</Link>
+                <Link to={ "/details/cases" }>Cases</Link>
             </SideNavListItem>
 
             <SideNavListItem className={`${pathname === '/details/healthcare' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/healthcare" }
-                      onClick={ () => setMenuState(state => !state) }>Healthcare</Link>
+                <Link to={ "/details/healthcare" }>Healthcare</Link>
             </SideNavListItem>
 
             <SideNavListItem className={`${pathname === '/details/vaccinations' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/vaccinations" }
-                      onClick={ () => setMenuState(state => !state) }>Vaccinations</Link>
+                <Link to={ "/details/vaccinations" }>Vaccinations</Link>
             </SideNavListItem>
 
             <SideNavListItem className={`${pathname === '/details/deaths' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/deaths" }
-                      onClick={ () => setMenuState(state => !state) }>Deaths</Link>
+                <Link to={ "/details/deaths" }>Deaths</Link>
             </SideNavListItem>
             <li className={ "moj-side-navigation__item" }>
                 <hr className={ "govuk-section-break govuk-section-break--s govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
             </li>
             <SideNavListItem className={`${pathname === '/details/about-data' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/about-data" }
-                onClick={ () => setMenuState(state => !state) }>About the data</Link>
+                <Link to={ "/details/interactive-map" }>Interactive map</Link>
+            </SideNavListItem>
+            <SideNavListItem className={`${pathname === '/details/about-data' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/about-data" }>About the data</Link>
             </SideNavListItem>
             <SideNavListItem className={`${pathname === '/details/download' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/download" }
-                onClick={ () => setMenuState(state => !state) }>Download data</Link>
+                <Link to={ "/details/download" }>Download data</Link>
             </SideNavListItem>
             <SideNavListItem className={`${pathname === '/details/whats-new' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/whats-new" } onClick={ () => setMenuState(state => !state) }>What&#39;s new</Link>
+                <Link to={ "/details/whats-new" }>What's new</Link>
             </SideNavListItem>
             <SideNavListItem className={`${pathname === '/details/developers-guide' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/developers-guide" }
-                onClick={ () => setMenuState(state => !state) }>Developer's guide</Link>
+                <Link to={ "/details/developers-guide" }>Developer's guide</Link>
             </SideNavListItem>
         </SideNavList>
         <SectionBreak/>
