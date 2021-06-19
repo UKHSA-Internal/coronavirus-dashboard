@@ -38,7 +38,7 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
             .toLowerCase()
             .replace(/[\s:]/g, "_"),
         { location: { pathname } } = useHistory(),
-        pageName = PathNameMapper[pathname],
+        pageName = PathNameMapper[pathname]?.title ?? "",
         noPicker = NoPickerPaths.indexOf(pathname) > -1;
 
 
