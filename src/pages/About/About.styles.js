@@ -9,7 +9,7 @@ export const Article: ComponentType<*> = (() => {
     const
         classes = 'about',
         Node = styled.article`
-            max-width: 40em;
+            max-width: 50em;
         `;
 
   return ({ className, ...props }) =>
