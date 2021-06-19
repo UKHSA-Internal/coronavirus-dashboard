@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, forwardRef } from "react";
 
 import ReactTooltip from "react-tooltip";
 
@@ -40,11 +40,9 @@ const DropdownButton: ComponentType<DropdownButtonProps> = ({
         }
     });
 
-    // const x: HTMLSpanElement;
-    // x.offsetHeight
 
     return <DropdownContainer ref={ dropdown }>
-        <Launcher ref={ dropdown }
+        <Launcher
                   data-tip={ tooltip }
                   data-for={ `tooltip-text-${ preppedLabel }` }
                   aria-labelledby={ `sr-only-download-${ preppedLabel }` }
