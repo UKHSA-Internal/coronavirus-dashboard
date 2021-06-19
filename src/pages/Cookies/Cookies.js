@@ -10,7 +10,6 @@ import {
 import { handleCookieAccept } from "common/utils/cookies";
 
 import Cookies from "js-cookie";
-import { Helmet } from "react-helmet";
 
 import type { Props } from "./Cookies.types";
 import type { ComponentType } from 'react';
@@ -69,11 +68,6 @@ const CookiesPage: ComponentType<Props> = ({}: Props) => {
     }, []);
 
     return <>
-        <Helmet>
-            <title>Cookies | Coronavirus in the UK</title>
-            <meta name="description" content="Cookies policy" />
-        </Helmet>
-
         <Article>
 
             { updateState ? <SuccessNotification/> : null }

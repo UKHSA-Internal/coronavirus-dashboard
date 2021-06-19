@@ -3,7 +3,7 @@
 import React from 'react';
 import type { ComponentType } from 'react';
 
-import { withRouter } from 'react-router';
+import { useLocation } from 'react-router';
 
 import { CardsContainer, CardContent } from 'components/Card';
 import HeadlineNumbers from "components/HeadlineNumbers";
@@ -12,7 +12,6 @@ import { getParams } from "common/utils";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import Loading from "components/Loading";
-import DataPageHeaders from "components/DataPageHeader";
 
 
 const
@@ -22,9 +21,10 @@ const
     ];
 
 
-const Healthcare: ComponentType<Props> = ({ location: { search: query }}: Props) => {
+const Healthcare: ComponentType<Props> = () => {
 
     const
+        { search: query } = useLocation(),
         urlParams = getParams(query),
         layout = usePageLayout(URLs.pageLayouts.healthcare,  null),
         params = urlParams.length ? urlParams : DefaultParams;
@@ -32,12 +32,6 @@ const Healthcare: ComponentType<Props> = ({ location: { search: query }}: Props)
     if ( !layout ) return <Loading large={ true }/>;
 
     return <>
-        <DataPageHeaders category={ "Healthcare" }
-                         areaParams={ params }
-                         description={
-                             "Data and charts on hospital admissions, ICUs, and other " +
-                             "healthcare statistics for coronavirus (COVID-19)"
-                         }/>
         <HeadlineNumbers params={ params } { ...layout }/>
         <CardsContainer>{
             layout?.cards.map(( cardProps, index ) =>
@@ -47,4 +41,4 @@ const Healthcare: ComponentType<Props> = ({ location: { search: query }}: Props)
     </>
 };
 
-export default withRouter(Healthcare);
+export default Healthcare;
