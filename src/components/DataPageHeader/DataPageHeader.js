@@ -2,12 +2,26 @@
 
 import React from "react";
 
-import { getParamValueFor } from "common/utils";
+import { getParams, getParamValueFor } from "common/utils";
 
 import { Helmet } from "react-helmet";
+import { useLocation } from "react-router";
+
+import Path from "assets/paths.json";
 
 
-const DataPageHeaders = ({category, areaParams, description}) => {
+const DefaultParams = [
+    { key: 'areaName', sign: '=', value: 'United Kingdom' },
+    { key: 'areaType', sign: '=', value: 'overview' }
+];
+
+
+const DataPageHeaders = () => {
+
+    const { search: query, pathname } = useLocation();
+    const { title="", description="", localised=false } = Path?.[pathname] ?? {};
+    const urlParams = getParams(query);
+    const areaParams = urlParams.length ? urlParams : DefaultParams;
 
     let areaName = getParamValueFor(areaParams, "areaName");
 
@@ -15,17 +29,19 @@ const DataPageHeaders = ({category, areaParams, description}) => {
         areaName = "the UK";
     }
 
-    const title = `${category} in ${areaName} | Coronavirus in the UK`;
-    description = `${description} in ${ areaName }`;
+    let [preppedTitle, preppedDescription] = localised
+        ? [`${title} in ${areaName}`, `${description} in ${ areaName }`]
+        : [title, description];
+
+    preppedTitle +=  ' | Coronavirus in the UK';
 
     return <Helmet>
-        <title>{ title }</title>
-        <meta name="description"
-              content={ description } />
-        <meta property="og:title" content={ title }/>
-        <meta name="twitter:title" content={ title }/>
-        <meta property="og:description" content={ description }/>
-        <meta name="twitter:description" content={ description }/>
+        <title>{ preppedTitle }</title>
+        <meta name="description" content={ preppedDescription } />
+        <meta property="og:title" content={ preppedTitle }/>
+        <meta name="twitter:title" content={ preppedTitle }/>
+        <meta property="og:description" content={ preppedDescription }/>
+        <meta name="twitter:description" content={ preppedDescription }/>
     </Helmet>
 
 };
