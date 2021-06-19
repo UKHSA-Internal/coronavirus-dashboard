@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useEffect, lazy, Suspense } from 'react';
-import { Switch, Route, withRouter, Redirect, useParams } from 'react-router';
+import { Switch, Route, useLocation, Redirect, useParams } from 'react-router';
 import Header from "components/Header";
 import BackToTop from 'components/BackToTop';
 import ErrorBoundary from "components/ErrorBoundary";
@@ -10,8 +10,10 @@ import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
 import CookieBanner from "components/CookieBanner";
+import DataPageHeader from "./components/DataPageHeader";
 
 import './index.scss';
+
 
 const
     DashboardHeader = lazy(() => import('components/DashboardHeader')),
@@ -95,10 +97,10 @@ const RedirectToDetails = () => {
 };  // RedirectToDetails
 
 
-const App = ({ location: { pathname } }) => {
+const App = () => {
 
-    const
-        layout = useResponsiveLayout(768);
+    const { pathname } = useLocation();
+    const layout = useResponsiveLayout(768);
 
     let hasMenu;
 
@@ -109,9 +111,9 @@ const App = ({ location: { pathname } }) => {
     }, [ pathname ]);
 
     return <>
+        <DataPageHeader/>
         <CookieBanner/>
         <Header/>
-
         { layout === "mobile" && <Navigation layout={ layout }/> }
         <Suspense fallback={ <Loading/> }><Banner/></Suspense>
         <div className={ "govuk-width-container" }>
@@ -177,4 +179,4 @@ const App = ({ location: { pathname } }) => {
 };  // App
 
 
-export default withRouter(App);
+export default App;
