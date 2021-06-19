@@ -74,20 +74,6 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
 };  // PageHeader
 
 
-
-const useScrollPositionGreaterThan = (minY) => {
-
-  const [isGreater, setIsGreater] = useState(false)
-
-  useEffect(() => {
-      setIsGreater(minY !== null && window.scrollY > minY);
-  }, [window.scrollY])
-
-  return isGreater;
-
-};
-
-
 const DashboardHeader: ComponentType<Props> = ({}: Props) => {
 
     const
