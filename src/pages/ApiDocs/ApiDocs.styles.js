@@ -9,7 +9,7 @@ import type { ComponentType } from "react";
 export const Container: ComponentType<*> =
     styled
         .div`
-            max-width: 40em;
+            max-width: 50em;
         `;
 
 
