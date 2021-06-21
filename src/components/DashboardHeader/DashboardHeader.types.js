@@ -10,7 +10,6 @@ export type Props = {|
 export type LocationPickerProps = {
 
     hierarchy: HierarchyDataType,
-    query:     string
 
 } // LocationPickerProps
 
@@ -35,7 +34,7 @@ export type HierarchyItem = {
 export type FlatHierarchyItem = {
 
     key:   string,
-    value: string
+    value: string,
     type:  string
 
 }  // HierarchyItem
@@ -43,33 +42,11 @@ export type FlatHierarchyItem = {
 
 export type HierarchyDataType = {
 
-    overview:  Array<HierarchyItem>
+    overview:  Array<HierarchyItem>,
     nation:    Array<HierarchyItem>,
     region:    Array<HierarchyItem>,
     nhsRegion: Array<HierarchyItem>,
     utla:      Array<HierarchyItem>,
     ltla:      Array<HierarchyItem>
-
-}  // HierarchyDataType
-
-
-
-export type LookupItem = {
-
-    [string]: {
-        c: Array<string>,  // children
-        p: string          // parent
-    }
-
-}  // LookupItem
-
-
-export type LookupDataType = {
-
-    nation:   Array<LookupItem>,
-    region:   Array<LookupItem>,
-    nhsRegion:   Array<LookupItem>,
-    utla:     Array<LookupItem>,
-    ltla:     Array<LookupItem>
 
 }  // HierarchyDataType

@@ -1,110 +1,146 @@
 // @flow
 
-// React
-import React, { useState } from "react";
-import { withRouter } from 'react-router';
-
-// Third party
-import moment from "moment";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router";
+import ReactTooltip from "react-tooltip";
+import deepEqual from "deep-equal";
 import 'moment/locale/en-gb';
 
-import { getParams } from "common/utils";
-import useHierarchy from "hooks/useHierarchy";
-
-// Internal
+import usePrevious from "hooks/usePrevious";
 import LocationPicker from "./LocationPicker";
-import DateRangePicker from "./DateRangePicker";
-import { getParamValueFor, getParamDateFor } from "./utils";
-
-// Styles
+import LocationBanner from "components/LocationBanner";
+import { analytics, getParams } from "common/utils";
+import { getParamValueFor } from "./utils";
+import { getOrder } from "./GenericHooks";
+import { StickyContainer, Sticky } from 'react-sticky';
 import {
-    CollapsibleLink,
+    PathNameMapper,
+    NoPickerPaths,
+    LocationBannerMapper
+} from "./Constants";
+
+import {
+    MainContainer,
     HeaderContainer,
     Title,
-    TriangleRight,
-    TriangleDown,
-    CollapsibleLinkContainer,
-    MainContainer
+    TitleButton,
+    SectionBreak,
 } from './DashboardHeader.styles'
 
-// Types
 import type { ComponentType } from 'react';
 import type { Props } from './DashboardHeader.types';
 
 
-// Global constants
-const PathNameMapper = {
-    "/": "Daily Summary",
-    "/cases": "Cases",
-    "/tests": "Tests",
-    "/healthcare": "Healthcare",
-    "/deaths": "Deaths",
-    "/about-data": "About data",
-    "/cookies": "Cookies",
-    "/accessibility": "Accessibility",
-    "/archive": "Archive"
-};
-
-
-const NoPickerPaths = [
-    "/about-data",
-    "/cookies",
-    "/accessibility",
-    "/archive"
-];
-
-
-const DashboardHeader: ComponentType<Props> = ({ title, location: { search: query, pathname } }: Props) => {
+const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
 
     const
-        hierarchy = useHierarchy(),
-        [locationPickerState, setLocationPickerState] = useState(false),
-        [datePickerState, setDatePickerState] = useState(false),
-        params = getParams(query),
-        currentLocation = getParamValueFor(params, "areaName", "United Kingdom"),
-        startDate = getParamDateFor(params, 'specimenDate', moment("2020-01-30"), ">"),
-        endDate = getParamDateFor(params, "specimenDate", moment(), "<"),
-        isExcluded = NoPickerPaths.indexOf(pathname) > -1;
+        preppedLabel = areaName
+            .toLowerCase()
+            .replace(/[\s:]/g, "_"),
+        { location: { pathname } } = useHistory(),
+        pageName = PathNameMapper[pathname]?.title ?? "",
+        noPicker = NoPickerPaths.indexOf(pathname) > -1;
 
-    return <MainContainer className={ "sticky-header govuk-!-padding-top-3" }>
-        <HeaderContainer className={ "util-flex util-flex-justify-between util-flex-wrap util-flex-align-items-center" }>
-            <Title>{ PathNameMapper[pathname] }</Title>
-            { isExcluded
-                ? null
-                : <CollapsibleLinkContainer>
-                    <CollapsibleLink htmlType={ "button" }
-                        onClick={ () => setLocationPickerState(!locationPickerState) }
-                        className={ "govuk-!-margin-right-6" }>
-                        { locationPickerState ? <TriangleDown/> : <TriangleRight/> }
-                        <span className={ "govuk-body-s govuk-body govuk-body govuk-!-margin-bottom-0" }>
-                            <b>Location:</b>&nbsp;{ currentLocation }
-                        </span>
-                    </CollapsibleLink>
-                    <CollapsibleLink htmlType={ "button" }
-                        onClick={ () => setDatePickerState(!datePickerState) }>
-                        { datePickerState ? <TriangleDown/> : <TriangleRight/> }
-                        <span className={ "govuk-body-s change-location govuk-body govuk-!-margin-bottom-0 " }>
-                            <b>Date:</b>&nbsp;{ startDate.format("D MMM YYYY") }&nbsp;-&nbsp;{ endDate.format("D MMM YYYY") }
-                        </span>
-                    </CollapsibleLink>
-                </CollapsibleLinkContainer>
-            }
+
+    return <>
+        <HeaderContainer role={ "heading" }
+                         aria-level={ 1 }>
+            <Title data-for={ !noPicker && "open-localisation-tooltip" }
+                   data-tip={ !noPicker && "Click to change location" }
+                   id={ `page-heading-${ preppedLabel }` }
+                   className={ localisationState ? "open" : "" }
+                   onClick={ localisationCallback }>
+                { `${ pageName }${ noPicker ? "" : " in" }` }
+                { noPicker
+                    ? null
+                    : (pathname && pathname !== "/") &&
+                    <>
+                        <TitleButton aria-describedby={ `${ preppedLabel }-loc-desc` }>
+                            { areaName }
+                            <span id={ `${ preppedLabel }-loc-desc` }
+                                  className={ "govuk-visually-hidden" }>
+                                Opens the localisation banner, which provides options to
+                                switch location and receive data at different geographical
+                                levels.
+                            </span>
+                        </TitleButton>
+                    </>
+                }
+            </Title>
         </HeaderContainer>
-        <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
+        <SectionBreak/>
+    </>;
 
-        {
-            ( locationPickerState && !isExcluded )
-                ? <LocationPicker hierarchy={ hierarchy } query={ query }/>
-                : null
+};  // PageHeader
+
+
+const DashboardHeader: ComponentType<Props> = ({}: Props) => {
+
+    const
+        history = useHistory(),
+        [locationPickerState, setLocationPickerState] = useState(false),
+        params = getParams(history.location.search),
+        areaName = getParamValueFor(params, "areaName", "United Kingdom"),
+        pathname = history.location.pathname,
+        areaTypeOrder = getOrder(history),
+        isExcluded = NoPickerPaths.indexOf(pathname) > -1,
+        prevPathname = usePrevious(pathname),
+        initialParam = getParams(history.location.query),
+        [ location, setLocation ] = useState({
+            areaType: getParamValueFor(initialParam, "areaType", "overview"),
+            areaName: getParamValueFor(initialParam, "areaName", "United Kingdom"),
+        }),
+        prevLocation = usePrevious(location);
+
+    useEffect(() => {
+
+        if ( location.areaName && !deepEqual(location.areaName, prevLocation.areaName) )
+            setLocationPickerState(false);
+
+    }, [ location.areaName, prevLocation.areaName ])
+
+    useEffect(() => {
+
+        if ( pathname !== prevPathname )
+            setLocation({
+                areaType: getParamValueFor(initialParam, "areaType", "overview"),
+                areaName: getParamValueFor(initialParam, "areaName", "United Kingdom"),
+            });
+
+    }, [ pathname, prevPathname ])
+
+    const locationPickerCallback = () => {
+        analytics("Interaction", "Location picker", locationPickerState ? "OPEN" : "CLOSE");
+        setLocationPickerState(state => !state)
+    };
+
+    return <StickyContainer>
+        <Sticky>{ ({ style }) =>
+            <MainContainer style={ style }>
+                <PageHeader areaName={ areaName }
+                            localisationState={ locationPickerState }
+                            localisationCallback={ locationPickerCallback }/>
+                {
+                    !isExcluded &&
+                    <LocationPicker show={ locationPickerState }
+                                    currentLocation={ location }
+                                    setCurrentLocation={ setLocation }/>
+                }
+                <LocationBanner pageTitle={ LocationBannerMapper?.[pathname] ?? null }
+                                areaTypes={ Object.keys(areaTypeOrder).map(key => areaTypeOrder[key]) }
+                                pathname={ pathname }/>
+
+                <ReactTooltip id={ "open-localisation-tooltip" }
+                              place={ "right" }
+                              backgroundColor={ "#0b0c0c" }
+                              className={ "tooltip" }
+                              effect={ "solid" }/>
+            </MainContainer>
         }
-        {
-            ( datePickerState && !isExcluded )
-                ? <DateRangePicker query={ query } startDate={ startDate } endDate={ endDate }/>
-                : null
-        }
-    </MainContainer>
+        </Sticky>
+    </StickyContainer>;
 
 };  // DashboardHeader
 
 
-export default withRouter(DashboardHeader);
+export default DashboardHeader;

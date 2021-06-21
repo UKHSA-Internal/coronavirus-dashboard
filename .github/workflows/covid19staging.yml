@@ -1,21 +1,22 @@
-name: Build and deploy Node.js app to Azure Web App - Covid19StaticSTAGING
+name: STAGING deployment
 
 on:
   push:
     branches:
-      - master
+      - v2-staging
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
     - uses: actions/checkout@master
 
     - name: Set up Node.js version
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2.1.5
       with:
-        node-version: '12.13.0'
+        node-version: '14.5.0'
 
     - name: Install dependencies
       run: |
@@ -29,18 +30,19 @@ jobs:
       env:
         CI: false
         BUILD_ENV: staging
-        BASE_URL: https://Covid19StaticStaging.azureedge.net
-        MAIN_CDN: c19pub.azureedgestaging.net
+        BASE_URL: https://coronavirus-staging.data.gov.uk
+        MAIN_CDN: c19pubstaging.azureedge.net
         DOWNLOADS_CDN: c19downloadsstaging.azureedge.net
+        API_ENDPOINT: api.coronavirus-staging.data.gov.uk
         NODE_ENV: production
 
       run: |
         yarn run build
 
     - name: 'Deploy to Azure Web App'
-      uses: azure/webapps-deploy@v1
+      uses: azure/webapps-deploy@v2.2.0
       with:
         app-name: 'Covid19StaticSTAGING'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppServiceStaging }}
+        publish-profile: ${{ secrets.AZUREAPPSERVICESTAGING }}
         package: ./build

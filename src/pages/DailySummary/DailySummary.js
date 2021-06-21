@@ -1,253 +1,202 @@
 // @flow
 
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import type { ComponentType } from 'react';
 import { withRouter } from 'react-router';
 
-import moment from "moment";
+import {
+    Card,
+    ContentBox,
+    HalfCardSplitBody,
+    CardHeader
+} from 'components/Card';
 
-import { HalfWidthCard, VisualSection, ValueItem, ValueItemsSection } from 'components/Card';
+import ValueBox from "components/ValueBox";
+import { Container } from './DailySummary.styles';
 
-import * as Styles from './DailySummary.styles';
-
-import { max } from "d3-array";
-import { MainLoading } from "components/Loading";
-import { getParams, sum } from "common/utils";
+import { getParams, getPlotData } from "common/utils";
 
 import useApi from "hooks/useApi";
 
 import { Plotter } from "./plots";
 
+import usePageLayout from "hooks/usePageLayout";
+import URLs from "common/urls";
+import type {
+    DailySummaryCardProps
+} from "./DailySummary.types";
+import Loading from "components/Loading";
+
 
 const
     DefaultParams = [
         { key: 'areaName', sign: '=', value: 'United Kingdom' },
-        { key: 'areaType', sign: '=', value: 'overview' }
-    ],
-    Structures = {
-        data: {
-            dailyLabCases: "changeInDailyCases",
-            deathReportDate: "deathReportingDate",
-            specimenDate: "specimenDate",
-            deaths: "dailyChangeInDeaths",
-            cases: "dailyLabConfirmedCases"
+        { key: 'areaType', sign: '=', value: 'overview' },
+    ];
+
+
+// const NationDeathsPlot = ({ ...props }) => {
+//
+//     const
+//         latestNationDeaths = useApi({
+//             conjunctiveFilters: [
+//                 { key: "areaType", sign: "=", value: "nation" }
+//             ],
+//             structure: { name: "areaName", death: "newDeathsByPublishDate" },
+//             extraParams: [{ key: "latestBy", sign: "=", value: "date" }],
+//             defaultResponse: []
+//         }),
+//         nationalDataDeaths = latestNationDeaths.map(item => item?.death ?? null),
+//         maxDeath = max(nationalDataDeaths);
+//
+//     return <BarPlotter
+//         data={[
+//             {
+//                 name: "Daily deaths",
+//                 y: latestNationDeaths
+//                     .map(({ name="" }) => name.replace(/Northern Ireland/g, "NI")),
+//                 x: nationalDataDeaths,
+//                 text: nationalDataDeaths
+//                     .map(item => `${item}`),
+//                 type: "bar",
+//                 orientation: "h",
+//                 width: 0.7,
+//                 mode: 'marker+text',
+//                 marker: {
+//                     color: '#005EA5'
+//                 },
+//                 texttemplate: '%{text:s}',
+//                 textposition: nationalDataDeaths
+//                     .map(item => item !== 0 ? 'auto' : 'outside'),
+//                 cliponaxis: true,
+//                 showlegend: false,
+//                 textfont: {
+//                     color: nationalDataDeaths
+//                         .map(item => item === maxDeath ? '#fff' :  '#005EA5'),
+//                     family: `"GDS Transport", Arial, sans-serif`,
+//                     size: 11
+//                 }
+//             }
+//         ]}
+//         { ...props }
+//     />
+//
+// };  // DeathsCard
+
+
+
+const DailySummaryCard: ComponentType<DailySummaryCardProps> = ({ params, layout=[], heading }: DailySummaryCardProps) => {
+
+    const
+        headingLabel = heading.toLowerCase().replace(/[\s:]/g, "_"),
+        structure = { date: "date" },
+        chartData = {};
+
+    for ( const { primaryValue, secondaryValue=null, ...rest } of layout )  {
+
+        structure[primaryValue] = primaryValue;
+
+        if ( secondaryValue )
+            structure[secondaryValue] = secondaryValue;
+
+        if ( rest?.chart ?? null ) {
+
+            structure[rest.chart.value] = rest.chart.value;
+
         }
-    };
 
-
-export const timestamp = (data): string =>
-    data.hasOwnProperty("metadata")
-        ? moment(data?.metadata?.lastUpdatedAt).format("dddd D MMMM YYYY [at] h:mma")
-        : "";
-
-
-const groupByUniqueKey = (data, uniqueKeyName) => {
-
-    try {
-        return data
-            .reduce((acc, { [uniqueKeyName]: grouper, ...rest }) =>
-                grouper ? { ...acc, [grouper]: rest } : acc, {})
-    } catch {
-        return {}
     }
 
-};  // groupByUniqueKey
-
-
-const DeathsCard = ({ data }) => {
-
-    if ( !data ) return <MainLoading/>;
-
     const
-        groupByDeathReportDate = groupByUniqueKey(data, 'deathReportDate'),
-        maxDeathReportDate = max(Object.keys(groupByDeathReportDate));
-
-    return <HalfWidthCard caption={ "Deaths" }>
-        <VisualSection>
-            <Plotter
-                data={ [
-                    {
-                        name: "Total lab-confirmed cases",
-                        x: data.map(item => item?.deathReportDate ?? ""),
-                        y: data.map(item => item?.deaths ?? 0),
-                        type: 'scatter',
-                        fill: 'tozeroy',
-                        fillcolor: 'rgba(43,140,196,0.2)'
-                    }
-                ] }
-            />
-        </VisualSection>
-        <ValueItemsSection>
-            <ValueItem
-                label={ "Confirmed COVID-19 associated deaths" }
-                value={  groupByDeathReportDate[maxDeathReportDate]?.deaths ?? 0 }
-                description={ 'Total all time' }
-                descriptionValue={ sum(data, item => item?.deaths ?? 0) }
-                colourName={ 'blue' }
-            />
-        </ValueItemsSection>
-    </HalfWidthCard>
-
-};  // DeathsCard
+        // Plotter = lazy(() => import('components/Plotter')),
+        [ plotData, setPlotData ] = useState(
+            layout.reduce((acc, { chart={} }) =>
+                chart && !((chart?.value ?? null) in chartData)
+                    ? {...acc, [chart.value]: chart?.display ?? true }
+                    : acc, {}
+            )
+        ),
+        data = useApi({
+            conjunctiveFilters: params,
+            structure: structure,
+            defaultResponse: null
+        });
 
 
-const HealthcareCard = ({ data }) => {
+    return <Card heading={ heading }>
+        <CardHeader heading={ heading }
+                    linkToHeading={ `More on ${ heading.toLowerCase() }` }/>
+        <HalfCardSplitBody>
+            <ContentBox>{
+                data === null
+                    ? <Loading size={ 8 } margin={ 2 } color={ '#adadad' }/>
+                    : <Plotter data={
+                            getPlotData(
+                                layout
+                                    .filter(({ chart = false }) => chart && (plotData?.[chart.value] ?? true))
+                                    .map(item => item.chart),
+                                data
+                            )
+                        }
+                    />
+            }</ContentBox>
+            <ContentBox role={ "region" }
+                        aria-label={ `${ heading }: Latest data` }
+                        aria-describedby={ `container_${ headingLabel }-description` }>
+                <span id={ `container_${ headingLabel }-description` }
+                      className={ "govuk-visually-hidden" }>
+                    Latest available data on "{ heading }".
+                </span>
+                {
+                    layout.map((item, index) =>
+                        <ValueBox { ...item }
+                                  heading={ heading }
+                                  params={ params }
+                                  data={ data }
+                                  embedded={ true }
+                                  isEnabled={ plotData?.[(item?.chart?.value ?? null)] ?? true }
+                                  setChartState={ () => {
+                                      const name = item?.chart?.value ?? null;
 
-    if ( !data ) return <MainLoading/>;
+                                      setPlotData( plotData =>
+                                          name
+                                              ? { ...plotData, [name]: !(plotData?.[name] ?? true) }
+                                              : plotData
+                                      )
+                                  } }
+                                  key={ `${heading}-${index}` }/>)
+                }
+                {/*{*/}
+                {/*    heading.toLowerCase().indexOf("death") > -1*/}
+                {/*        ? <NationDeathsPlot/>*/}
+                {/*        : null*/}
+                {/*}*/}
+            </ContentBox>
+        </HalfCardSplitBody>
+    </Card>
 
-    return <HalfWidthCard caption={ "Healthcare" }>
-        <VisualSection>
-            <Plotter
-                data={ [
-                    {
-                        name: "",
-                        x: [],
-                        y: [],
-                        type: 'line',
-                        mode: 'lines',
-                        marker: { color: '#2B8CC4' },
-                    }
-                ] }
-            />
-        </VisualSection>
-        <ValueItemsSection>
-            <ValueItem
-                label={ "Discharged" }
-                value={ max(data, item => item?.dischargeDate ?? 0)?.discharged ?? 0}
-                description={ 'Total all time' }
-                descriptionValue={ sum(data, item => item?.discharged ?? 0) }
-                colourName={ 'blue' }
-            />
-            <ValueItem
-                label={ "In hospital" }
-                value={ max(data, item => item?.inHospitalDate ?? 0)?.inHospital ?? 0 }
-                description={ 'Occupancy' }
-                descriptionValue={ 0 }
-                descriptionSign={ "%" }
-            />
-            <ValueItem
-                label={ "Hospital breakdown" }
-                value={ 0 }
-            />
-        </ValueItemsSection>
-    </HalfWidthCard>
-
-};  // HealthcareCard
-
-
-const CasesCard = ({ data }) => {
-
-    if ( !data ) return <MainLoading/>;
-
-    const
-        groupBySpecimenDate = groupByUniqueKey(data, 'specimenDate'),
-        maxSpecimenDate = max(Object.keys(groupBySpecimenDate)),
-        groupByTestDate = groupByUniqueKey(data, 'testDate'),
-        testDate = max(Object.keys(groupByTestDate));
-
-
-    return <HalfWidthCard caption={ "Cases" }>
-        <VisualSection>
-            <Plotter
-                data={ [
-                    {
-                        name: "Cases",
-                        x: data.map(item => item?.specimenDate ?? ""),
-                        y: data.map(item => item?.cases ?? 0),
-                        fill: 'tozeroy',
-                        fillcolor: 'rgba(43,140,196,0.2)'
-                    },
-                    {
-                        name: "Tests",
-                        x: data.map(item => item?.testDate ?? ""),
-                        y: data.map(item => item?.cases ?? 0),
-                        fill: 'tozeroy',
-                        fillcolor: 'rgba(111,119,123,0.2)'
-                    }
-                ] }
-            />
-        </VisualSection>
-        <ValueItemsSection>
-            <ValueItem
-                label={ "Lab-confirmed" }
-                // value={ groupBySpecimenDate[maxSpecimenDate]?.cases ?? 0 }
-                value={ sum(data, item => item?.dailyLabCases ?? 0) }
-                description={ 'Total all time' }
-                descriptionValue={ sum(data, item => item?.cases ?? 0) }
-                colourName={ 'blue' }
-            />
-            <ValueItem
-                label={ "No. of people tested" }
-                value={ groupByTestDate[testDate]?.tests ?? 0 }
-                description={ 'Total all time' }
-                descriptionValue={ sum(data, item => item?.tests ?? 0) }
-            />
-            <ValueItem
-                label={ "Patients recovered" }
-                value={ sum(data, item => item?.recovered ?? 0) }
-            />
-        </ValueItemsSection>
-    </HalfWidthCard>
-
-};   // CasesCard
-
-
-const TestingCard = ({ data }) => {
-
-    if ( !data ) return <MainLoading/>;
-
-    const
-        testDate = groupByUniqueKey(data, 'testDate'),
-        maxTestDate = max(Object.keys(testDate)),
-        labCapacityDate = groupByUniqueKey(data, 'labCapacityDate'),
-        maxLabCapacityDate = max(Object.keys(labCapacityDate));
-
-
-    return <HalfWidthCard caption={ "Testing" }>
-        <VisualSection>
-            <Plotter
-                data={ [
-                    {
-                        name: "",
-                        x: [],
-                        y: [],
-                        type: 'line',
-                        mode: 'lines',
-                        marker: { color: 'red' },
-                    }
-                ] }
-            />
-        </VisualSection>
-        <ValueItemsSection>
-            <ValueItem
-                label={ "No. of test" }
-                value={ testDate[maxTestDate]?.tests ?? 0}
-                description={ 'Total all time' }
-                descriptionValue={ sum(data, item => item?.tests ?? 0) }
-                colourName={ 'blue' }
-            />
-            <ValueItem
-                label={ "Planned lab capacity" }
-                value={ labCapacityDate[maxLabCapacityDate]?.labCapacity ?? 0 }
-            />
-        </ValueItemsSection>
-    </HalfWidthCard>
-
-};  // TestingCard
+};  // DailySummaryCard
 
 
 const DailySummary = ({ location: { search: query } }) => {
 
     const
+        pageLayout = usePageLayout(URLs.pageLayouts.UKSummary, {}),
         urlParams = getParams(query),
         params = urlParams.length ? urlParams : DefaultParams,
-        data = useApi(params, Structures.data);
+        { summary=[] } = pageLayout;
 
-    return<Styles.FlexContainer>
-        <TestingCard data={ data }/>
-        <CasesCard data={ data }/>
-        <HealthcareCard data={ data }/>
-        <DeathsCard data={ data }/>
-    </Styles.FlexContainer>
+    if ( !summary ) return <Loading large={ true }/>
+
+    return <Container className={ "util-flex util-flex-wrap" }>{
+        summary.map((item, index) =>
+            <DailySummaryCard
+                key={ `card-${item?.heading ?? ""}-${ index }` }
+                params={ params }
+                heading={ item?.heading ?? "" }
+                layout={ item?.fields ?? [] }/>
+        )
+    }</Container>
 
 };  // DailySummary
 

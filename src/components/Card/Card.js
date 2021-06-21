@@ -1,97 +1,301 @@
 // @flow
 
-import React, { Fragment } from 'react';
-import type { ComponentType } from 'react';
-import { BackLink } from 'govuk-react-jsx';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Link } from "react-router-dom";
 
-import type { Props } from './Card.types';
+import { fieldToStructure, getParamValueFor, heading2id } from "common/utils";
+import usePrevious from "hooks/usePrevious";
+import TabLinkContainer from "components/TabLink";
+import { Radio } from "components/GovUk";
+import DropdownButton from "components/DropdownButton";
+import DownloadOptions from "./DownloadOptions";
+import BrowserHistory from "components/BrowserHistory";
+import Loading from "components/Loading";
+import ShareOptions from "./ShareOptions";
+
 import {
-    CardDescription,
-    CardBody,
-    FullWidthCardBody
+    HalfCard,
+    HalfCardHeader,
+    HalfCardHeading,
+    HalfCardSplitBody,
+    FullCard,
+    Caption,
+    BodySection,
+    HBodySection,
+    MixedCardContainer, 
+    DefaultTag,
+    ShareRow
 } from './Card.styles';
-import numeral from 'numeral'
+
+import type { IsIncludedTypeProps, Props } from './Card.types';
+import type { ComponentType } from 'react';
+
+import DownloadIcon from "assets/icon-download.svg";
+import ShareIcon from "assets/icon-share.svg";
 
 
-const VisualSection: ComponentType<Props> = ({ children }: Props) => {
-
-    return <div className={ "govuk-grid-column-one-half container-map" }>
-        { children }
-        {/*<img src={ "/public/images/graph-tests.png" } width={ "100%" } alt={ "" }/>*/}
-    </div>
-
-}; // Visuals
+import moment from "moment";
 
 
-const ValueItem: ComponentType<Props> = ({ label, value, description=null, descriptionValue=null, descriptionSign=null, colourName }: Props) => {
+const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) => {
 
-    return <Fragment>
-        <div className={ "data-label" }>
-            <p className={ "govuk-body govuk-!-margin-bottom-0" }>{ label }</p>
-        </div>
-        <div className={ `square-${ colourName }` }/>
-        <div className={ "data-value" }>
-            <h3 className={ "govuk-heading-m govuk-!-margin-bottom-2 govuk-!-padding-top-0" }>
-                { numeral(value).format("0,0") }
-                {
-                    description
-                        ? <CardDescription>{ description }:&nbsp;{ numeral(descriptionValue).format("0,0") }{descriptionSign}</CardDescription>
-                        : null
-                }
-            </h3>
-        </div>
-    </Fragment>
+    if ( horizontal )
+        return <HBodySection { ...props }>{ children }</HBodySection>;
 
-}; // ValueItem
+    return <BodySection { ...props }>{ children }</BodySection>
+
+}; // ContentBox
 
 
-const ValueItemsSection: ComponentType<Props> = ({ children }: Props) => {
-
-    return <div className={ "govuk-grid-column-one-half" }>
-        { children }
-        <div className={ "spacer" }/>
-    </div>
-
-}; // ValueItemContainer
 
 
-const HalfWidthCard: ComponentType<Props> = ({ caption="Placeholder", children }: Props) => {
+const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false,
+                                              experimental=false, children }: Props) => {
 
-    return <CardBody>
-        <header className={ "util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
-            <h2 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>{ caption }</h2>
-            <Link to={ "tests"} className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state" }>More detail</Link>
-        </header>
+    return <>
+        <HalfCardHeader className={ linkToHeading ? "" : "govuk-!-margin-bottom-2"}>
+            <HalfCardHeading role={ 'heading' }
+                             aria-level={ 2 }>
+                { heading }
+                { experimental ? <DefaultTag className={ "govuk-tag" }>EXPERIMENTAL</DefaultTag> : null}
+            <Caption>{ caption }</Caption>
+            </HalfCardHeading>
+            {
+                linkToHeading &&
+                <Link to={ heading.toLowerCase() }
+                      className={ "govuk-link govuk-!-font-weight-bold govuk-link--no-visited-state no-decoration smaller" }>
+                    { linkToHeading }
+                </Link>
+            }
+            { children }
+        </HalfCardHeader>
+        {
+            linkToHeading &&
+            <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
+        }
+    </>
 
-        <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
-
-        { children }
-
-    </CardBody>
-
-};
+};  // CardHeader
 
 
-const FullWidthCard: ComponentType<Props> = ({ caption, children }: Props) => {
+const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, noCsv=false, ...props }: Props) => {
 
-    return <FullWidthCardBody>
-        <header className={ "util-flex util-flex-justify-between util-flex-align-items-center govuk-!-padding-bottom-2" }>
-            <h2 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>{ caption }</h2>
-        </header>
+    const
+        preppedLabel = heading2id(heading),
+        Container = ({ ...props }) =>
+            !fullWidth
+                ? <HalfCard {...props}/>
+                : <FullCard {...props}/>;
 
-        <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-0 govuk-section-break--visible" }/>
+    return <Container role={ "article" }
+                      id={ `card-${preppedLabel}` }
+                      aria-labelledby={ `card-heading-${preppedLabel}` }
+                      className={ "card" }>
 
         { children }
+        <ShareRow>
+            {
+                url &&
+                <DropdownButton tooltip={ "Download card data" }
+                                launcherSrOnly={ `Download card data for "${ heading }"` }
+                                heading={ heading }
+                                buttonLabel={ "Download" }
+                                icon={ DownloadIcon }
+                                { ...props }>
+                    <DownloadOptions heading={ heading }
+                                    baseUrl={ url }
+                                    noCsv={ noCsv }
+                                    { ...props }/>
 
-    </FullWidthCardBody>
+                </DropdownButton>
+            }
+            <DropdownButton tooltip={ "Share card data" }
+                            launcherSrOnly={ `Share card data for "${ heading }"` }
+                            buttonLabel={ "Share" }
+                            icon={ ShareIcon }
+                            heading={ heading }>
+                <ShareOptions subject={ heading }
+                              label={ heading2id(heading) }/>
+            </DropdownButton>
+        </ShareRow>
 
-}
+    </Container>
+
+};  // Card
+
+
+const CardsContainer: ComponentType<*> = ({ children }) => {
+
+    return <MixedCardContainer>
+        { children }
+    </MixedCardContainer>
+
+};  // MixedCardContainer
+
+
+const NoTabCard: ComponentType<*> = ({ cardType, ...props }) => {
+
+    switch ( cardType ) {
+
+        case "simpleExternalStatic":
+            const StaticExternalCard = lazy(() => import('components/StaticExternalCard'));
+
+            return <Suspense fallback={ <Loading/> }>
+                <StaticExternalCard { ...props }/>
+            </Suspense>;
+
+        default:
+            console.warn(`Invalid card type: "${cardType}"`)
+            return null;
+
+    }
+
+};  // NoTabCards
+
+
+const isIncluded = ({ params, locationAware={} }: IsIncludedTypeProps): boolean => {
+
+    if ( !Object.keys(locationAware).length )
+        return true;
+
+    const
+        areaType = getParamValueFor(
+            params,
+            "areaType",
+            "overview"
+        ).toLowerCase(),
+        areaName = getParamValueFor(
+            params,
+            "areaName",
+            "United Kingdom"
+        ).toLowerCase(),
+        includedAreaType = locationAware?.included?.areaType ?? [],
+        includedAreaName = locationAware?.included?.areaName ?? [],
+        excludedAreaType = locationAware?.excluded?.areaType ?? [],
+        excludedAreaName = locationAware?.excluded?.areaName ?? [],
+        hasExclusion = excludedAreaType.length > 0 && !(excludedAreaName.length > 0),
+        isExcluded = (
+            excludedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
+            excludedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
+        ),
+        isIncluded = (
+            includedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
+            includedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
+        );
+
+    return !hasExclusion ? isIncluded : !isExcluded
+
+};  // isIncluded
+
+
+const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], params, options=null,
+                         heading, fullWidth, abstract=null, ...props }) => {
+
+    const
+        noTabCards = ["simpleExternalStatic"],
+        [ active, setActive ] = useState(options?.choices?.[0] ?? null),
+        [ dataState, setDataState ] = useState(true),
+        strParams = JSON.stringify(params),
+        prevParams = usePrevious(strParams),
+        tabs = !active
+            ? (singleOptionTabs || [])
+            : ( props?.[active]?.tabs ?? [] );
+
+    useEffect(() => {
+
+        if ( prevParams !== strParams ) setDataState(true);
+
+    }, [ prevParams, strParams ])
+
+
+    if ( !dataState ) return null;
+
+    if ( cardType === "recentData" ) {
+        params = [
+            ...params,
+            {
+                key: "date",
+                sign: ">",
+                value: moment().subtract(3, "months").format("YYYY-MM-DD")
+            }
+        ]
+    }
+
+    const customProps = {
+        ageSexBreakdown: {
+            noCsv: true,
+            url: (() => {
+                const breakdownMetrics = [...tabs]?.reverse()?.[0]?.requiredMetrics ?? [];
+
+                return fieldToStructure(
+                    [...breakdownMetrics, ...download],
+                    params,
+                    [
+                        { key: "latestBy", sign: "=", value: breakdownMetrics?.[0] ?? "" }
+                    ]
+
+                );
+            })()
+        },
+        multiAreaStatic: {
+            url: fieldToStructure(download, tabs?.[0]?.params ?? [])
+        },
+        simpleTableStatic: {
+            url: false
+        },
+        recentData: {
+            url: fieldToStructure(download, params)
+        }
+    };
+
+    const cardProps = {
+        tabs: tabs,
+        cardType: cardType,
+        dataState: dataState,
+        heading: heading,
+        params: params,
+        setDataState: setDataState,
+        abstract: abstract,
+        download: download,
+        fullWidth: fullWidth,
+        url: fieldToStructure(download, params),
+        ...props,
+        ...customProps?.[cardType] ?? {}
+    };
+
+    if ( !isIncluded(cardProps) )
+        return null;
+
+    return <BrowserHistory>
+        <Card heading={ heading }
+              fullWidth={ fullWidth }
+              dataState={ dataState }
+              { ...cardProps }>
+            {
+                noTabCards.indexOf(cardType) > -1
+                    ? <NoTabCard { ...cardProps }/>
+                    : <>
+                        <CardHeader heading={ heading } { ...cardProps }>{
+                            active &&
+                            <Radio heading={ heading }
+                                options={ options }
+                                value={ active }
+                                setValue={ setActive }/>
+                        }</CardHeader>
+                        <TabLinkContainer { ...cardProps }/>
+                    </>
+            }
+        </Card>
+    </BrowserHistory>;
+
+};  // TestingCard
+
 
 export {
-    HalfWidthCard,
-    FullWidthCard,
-    VisualSection,
-    ValueItem,
-    ValueItemsSection
+    Card,
+    CardsContainer,
+    CardContent,
+    HalfCardSplitBody,
+    CardHeader,
+    ContentBox
 };

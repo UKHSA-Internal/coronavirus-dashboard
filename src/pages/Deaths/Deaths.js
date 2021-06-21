@@ -1,25 +1,44 @@
 // @flow
 
-import React, { useState } from 'react';
+import React from 'react';
 import type { ComponentType } from 'react';
 
-import { HalfWidthCard } from 'components/Card';
+import { useLocation } from 'react-router';
+
+import { CardsContainer, CardContent } from 'components/Card';
+import HeadlineNumbers from "components/HeadlineNumbers";
 import type { Props } from './Deaths.types';
-import * as Styles from './Deaths.styles';
+import { getParams } from "common/utils";
+import usePageLayout from "hooks/usePageLayout";
+import URLs from "common/urls";
+import Loading from "components/Loading";
 
 
-const Deaths: ComponentType<Props> = ({ }: Props) => {
+const
+    DefaultParams = [
+        { key: 'areaName', sign: '=', value: 'United Kingdom' },
+        { key: 'areaType', sign: '=', value: 'overview' }
+    ];
 
-    // ToDo: This should be done for every page in the "app.js".
-    const base = document.querySelector("head>base");
-    base.href = document.location.pathname;
 
+const Deaths: ComponentType<Props> = () => {
 
-    return <Styles.FlexContainer>
-        <HalfWidthCard />
-        <HalfWidthCard />
-    </Styles.FlexContainer>
+    const
+        { search: query } = useLocation(),
+        urlParams = getParams(query),
+        layout = usePageLayout(URLs.pageLayouts.deaths,  null),
+        params = urlParams.length ? urlParams : DefaultParams;
 
+    if ( !layout ) return <Loading large={ true }/>;
+
+    return <>
+        <HeadlineNumbers params={ params } { ...layout }/>
+        <CardsContainer>{
+            layout?.cards.map(( cardProps, index ) =>
+                <CardContent key={ `card-${ index }` } params={ params } { ...cardProps }/>
+            ) ?? null
+        }</CardsContainer>
+    </>
 };
 
-export default Deaths
+export default Deaths;

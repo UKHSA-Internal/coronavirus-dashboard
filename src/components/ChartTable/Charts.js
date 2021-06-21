@@ -1,4 +1,4 @@
-import React, { Fragment, ReactNode } from "react";
+import React, { Fragment } from "react";
 
 import LineChart from "components/LineChart";
 import StackedBarChart from "components/StackedBarChart";

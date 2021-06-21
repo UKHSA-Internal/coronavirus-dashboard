@@ -1,0 +1,64 @@
+{
+  "/details/": {},
+  "/details": {},
+  "/details/interactive-map": {
+    "title": "Interactive map",
+    "description": "Interactive map of coronavirus (COVID-19) prevalence rate for the United Kingdom by local authorities and small areas.",
+    "localised": false
+  },
+  "/details/cases": {
+    "title": "Cases",
+    "description": "Data and charts for confirmed cases of coronavirus (COVID-19)",
+    "localised": true
+  },
+  "/details/testing": {
+    "title": "Testing",
+    "description": "Data and charts on tests, capacity, positivity and other testing statistics for coronavirus (COVID-19)",
+    "localised": true
+  },
+  "/details/healthcare": {
+    "title": "Healthcare",
+    "description": "Data and charts on hospital admissions, ICUs, and other healthcare statistics for coronavirus (COVID-19)",
+    "localised": true
+  },
+  "/details/vaccinations": {
+    "title": "Vaccinations",
+    "description": "Data and charts on vaccinations for coronavirus (COVID-19)",
+    "localised": true
+  },
+  "/details/deaths": {
+    "title": "Deaths",
+    "description": "Data and charts for coronavirus (COVID-19) deaths",
+    "localised": true
+  },
+  "/details/about-data": {
+    "title": "About the data",
+    "description": "Sources, metric definitions, and other generic information about the data that presented on the dashboard.",
+    "localised": false
+  },
+  "/details/download": {
+    "title": "Download data",
+    "description": "Download data on the coronavirus pandemic in the United Kingdom.",
+    "localised": false
+  },
+  "/details/whats-new": {
+    "title": "What's new",
+    "description": "Log of updates and changes to the service.",
+    "localised": false
+  },
+  "/details/developers-guide": {
+    "title": "Developers guide - APIv1",
+    "description": "Documentations and guidance for developers on how to use the API.",
+    "localised": false
+  },
+  "/details/cookies": {
+    "title": "Cookies",
+    "description": "Cookies policy and preferences.",
+    "localised": false
+  },
+  "/details/accessibility": {
+    "title": "Accessibility",
+    "description": "Information on the accessibility of the service.",
+    "localised": false
+  }
+}

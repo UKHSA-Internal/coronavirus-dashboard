@@ -1,111 +1,49 @@
 // @flow
-import React, { Fragment, useState, useEffect, useRef } from "react";
+
+import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 
-import axios from "axios";
-
-import URLs from "common/urls";
-import { createQuery, getParams } from "common/utils";
-
-import { Select } from "./DashboardHeader.styles";
-
-import { getParamValueFor } from "./utils";
-
-import type {
-    FlatHierarchyItem,
-    HierarchyDataType,
-    LookupDataType,
-    LocationPickerProps
-} from "./DashboardHeader.types";
+import { createQuery, getParams, groupBy } from "common/utils";
+import { getOrder } from "./GenericHooks";
+import { PathNames } from "./Constants";
+import Select from "react-select";
+import { LocalisationForm, LocalisationFormInputs } from "./DashboardHeader.styles";
+import useGenericAPI from "../../hooks/useGenericAPI";
 
 
+const getDefaultOutput = ( pathname ) => {
 
-const GetLookup = (): LookupDataType | null => {
+    switch (pathname.toLowerCase()) {
 
-    const [ lookupTable, setLookupTable ] = useState(null);
+        case PathNames.healthcare:
+            return [
+                // These must be ordered.
+                "nation",
+                "nhsRegion",
+                "nhsTrust"
+            ];
 
-    useEffect(() => {
-        const getData = async () => {
-            const { data } = await axios.get(
-                'lookupTable_bothWay_v1.json',
-                { baseURL: URLs.lookups }
-                );
+        case PathNames.vaccinations:
+        case PathNames.testing:
+        case PathNames.deaths:
+        case PathNames.cases:
+        default:
+            return [
+                // These must be ordered.
+                "nation",
+                "region",
+                "la"  // utla + ltla
+            ]
 
-            setLookupTable(data)
-        }
+    } // switch
 
-        getData()
-
-    }, []);
-
-    return lookupTable
-
-};  // GetLookup
-
-
-const GetDataFor = ( hierarchy: HierarchyDataType, lookup: LookupDataType ) => {
-
-    const
-        flatHierarchy: FlatHierarchyItem = Object
-            .keys(hierarchy)
-            .reduce((acc, item) =>
-                [...acc, ...hierarchy[item].map(value => ({...value, type: item}))],
-                []
-            );
-
-    // Closure definition:
-    //--------------------
-    // itemName is the parentName for getting children and the childName for getting
-    // the parent - Default behaviour is to get the children.
-    return (areaType: string, itemName: string | null, getParent: boolean = false): Array<string> | string => {
-
-        if (!lookup || !hierarchy) return getParent ? "" : [];
-
-        // Getting the children
-        if ( !getParent ) {
-
-            if ( !itemName ) return hierarchy[areaType];
-
-            for ( const { name, code, type } of flatHierarchy ) {
-                if ( name !== itemName ) continue;
-
-                return hierarchy[areaType].filter(item =>
-                    lookup[type][code].c.indexOf(item.code) > -1
-                )
-            }
-
-            // default children
-            return []
-
-        }
-
-        // Getting the parent
-        for ( const { name, code, type } of flatHierarchy ) {
-
-            if ( name !== itemName || areaType !== type ) continue;
-
-            for ( const item of flatHierarchy )
-                if ( item.code === lookup[type][code].p ) return item.name
-
-        }
-
-        // default parent
-        return ""
-
-    }
-
-};  // GetDataFor
+};  // getDefaultOutput
 
 
-const usePrevious = (value, getData) => {
+const usePrevious = (value) => {
 
-    const ref = useRef([
-        // These must be ordered.
-        { areaType: "nation", areaName: null, options: getData("nation", null) },
-        { areaType: "region", areaName: null, options: getData("region", null) },
-        { areaType: "utla",   areaName: null, options: getData("utla", null)   },
-        { areaType: "ltla",   areaName: null, options: getData('ltla', null)   },
-    ]);
+    const ref = useRef(value);
 
     useEffect(() => {
 
@@ -118,180 +56,181 @@ const usePrevious = (value, getData) => {
 };  // usePrevious
 
 
-const LocationPicker = ({ hierarchy, query }: LocationPickerProps) => {
+const SelectOptions = {
+    control: ( base, state ) => ({
+        ...base,
+        boxShadow: state.isFocused ? "0 0 0 3px #fd0" : "none"
+    }),
+    menu: provided => ({
+        ...provided,
+        borderRadius: 0,
+        backgroundColor: "rgba(241, 241, 241, 0.95)",
+        padding: 5
+      }),
+    option: (styles, state) => ({
+        ...styles,
+        backgroundColor: state.isFocused ? "#1d70b8": "none",
+        color: state.isFocused ? "#f1f1f1": "#000",
+        ":before": {
+            content: state.isSelected ? '"✓ "' : '""'
+        }
+    }),
+    placeholder: styles => ({
+        ...styles,
+        color: "#6B7276"
+    })
+};
+
+
+const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     const
-        order = {
-            "nation": {
-                key: "nation",
-                label: "nations",
-                parent: null
-            },
-            "region": {
-                key: "region",
-                label: "regions",
-                parent: "nation",
-            },
-            "utla": {
-                key: "utla",
-                label: "upper-tier local authorities",
-                parent: "region",
-            },
-            "ltla": {
-                key: "ltla",
-                label: "lower-tier local authorities",
-                parent: "utla"
-            }
-        },
-        lookup = GetLookup(),
-        getData = GetDataFor(hierarchy, lookup),
         history = useHistory(),
-        initialParam = getParams(query),
-        [ location, setLocation ] = useState([]),
-        previousLocation = usePrevious(location, getData);
+        order = getOrder(history),
+        pathname = history.location.pathname,
+        query = history.location.search,
+        newQuery = currentLocation.areaName && createQuery([
+                ...getParams(query),
+                    {
+                        key: 'areaType',
+                        sign: '=',
+                        value: currentLocation.areaType
+                            .replace(/nhsNation/i, "nation")
+                    },
+                    { key: 'areaName', sign: '=', value: currentLocation.areaName }
+                ]),
+        prevQuery = usePrevious(newQuery),
+        [areaNameData, setAreaNameData] = useState({ grouped: {}, data: [] }),
+        data = useGenericAPI(
+            `genericApiPageArea${currentLocation.areaType !== "overview" ? "WithType" : ""}`,
+            [],
+            {
+                page: pathname.replace(/\/details\//i, ""),
+                ... currentLocation.areaType !== "overview"
+                    ? {area_type: currentLocation.areaType.replace(/^nhsNation$/i, "nation")}
+                    : {}
+            }
+        );
+
+    useEffect(() => {
+
+        setCurrentLocation(currentLocation);
+
+    }, [ currentLocation.areaType, currentLocation.areaName ]);
 
 
     useEffect(() => {
-        getStateFor(
-            getParamValueFor(initialParam, "areaName"),
-            order?.[getParamValueFor(initialParam, "areaType")] ?? null,
-        )
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ lookup, hierarchy ]);
+
+        if ( currentLocation.areaName && prevQuery !== newQuery )
+            history.push({
+                pathname: pathname,
+                search: newQuery
+            });
+
+    }, [ currentLocation.areaName, query, prevQuery, pathname ]);
 
 
-    const getStateFor = (value, areaTypeItem) => {
+    useEffect(() => {
+        const
+            groupedAreaNameData = groupBy(data || [], item => item.areaName),
+            areaNameDataPrepped = Object.keys(groupedAreaNameData)
+                .map(value => ({
+                    value: value,
+                    label: value,
+                    areaType: groupedAreaNameData[value]?.[0]?.areaType
+                }));
 
-        let
-            prevState = previousLocation,
-            newLocation = [],
-            orderKeys = Object.keys(order),
-            tempLoc;
+        setAreaNameData({ grouped: groupedAreaNameData, data: areaNameDataPrepped })
 
-        // Forward propagation of children
-        for ( let index = 0; index < prevState.length; index++ ) {
+    }, [ data ]);
 
-            tempLoc = (prevState[index].areaType === areaTypeItem?.key ?? null)
-                ? {
-                    areaType: areaTypeItem.key,
-                    areaName: value,
-                    options: getData(areaTypeItem.key, null)
-                }
-                : {
-                    ...prevState[index],
-                    areaName: null,
-                    options: getData(order[orderKeys[index]].key, tempLoc?.areaName ?? null)
-                };
-
-            newLocation.push(tempLoc)
-        }
-
-        // Backward propagation of parents
-        const indOfMain = Object.keys(order).indexOf(areaTypeItem?.key ?? null);
-
-        for ( let index = indOfMain; index > 0; index -- ) {
-
-            if ( !(newLocation[index]?.areaName ?? null) ) continue;
-
-            newLocation[index - 1].areaName = getData(
-                newLocation[index].areaType,
-                newLocation[index].areaName,
-                true
-            );
-
-        }
-
-        setLocation(newLocation)
-
-    };
-
-    const handleSubmission = (event) => {
-
-        event.preventDefault();
-
-        const selection = [...location]
-            .reverse()
-            .filter(({ areaName }) => areaName)[0];
-
-        const newQuery = createQuery([
-            ...getParams(query),
-            ...(
-                ( selection?.areaName ?? null )
-                    ? [
-                        { key: 'areaType', sign: '=', value: selection.areaType },
-                        { key: 'areaName', sign: '=', value: selection.areaName }
-                    ]
-                    : []
-            )
-        ]);
-
-        history.push(`${ newQuery }`)
-
-    };  // handleSubmission
+    if ( !show ) return null;
 
 
-    return <Fragment>
-        <form className={ "govuk-!-padding-left-5 govuk-!-padding-right-5" } onSubmit={ handleSubmission }>
-            <div className={ "govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2" }>
-                <div className={ "govuk-grid-column-two-thirds" }>
-                    <h4 className={ "govuk-heading-s govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                        Select a location to customise data
-                    </h4>
-                    <p className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1 govuk-body-s" }>
-                        Please note not all data is available for every location.
-                    </p>
+    const areaTypeData = getDefaultOutput(pathname).map(item => ({
+        value: item,
+        label: order?.[item]?.label ?? ""
+    }));
+
+
+    return <>
+            <LocalisationForm role={ 'form' }>
+                <div className={ "govuk-grid-row govuk-!-margin-top-2 govuk-!-margin-bottom-2" }>
+                    <div className={ "govuk-grid-column-two-thirds" }>
+                        <h2 className={ "govuk-heading-s govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
+                            Select a location to customise data
+                        </h2>
+                        <p className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1 govuk-body-s" }>
+                            Please note not all data is available for every location.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div className={ "govuk-grid-row " }>{
-                location.map(({ areaName, areaType, options }) => {
+                <LocalisationFormInputs>
+                    <div className="govuk-grid-column-one-quarter">
+                        <div className="govuk-form-group govuk-!-margin-bottom-0">
+                            <span id={ "aria-type-label" }
+                                  className={ "govuk-label govuk-label--s" }>Area type</span>
+                            <span id={ "aria-type-description" }
+                                  className={ "govuk-visually-hidden" }>
+                                Select or type in an area type then press enter (return).
+                                The options in the area name selector update based on the
+                                selected area type.
+                            </span>
+                            <div aria-labelledby={ "aria-type-label" }
+                                  aria-describedby={ 'aria-type-description' }>
+                                <Select options={ areaTypeData }
+                                        value={ areaTypeData.filter(item => item.value === currentLocation.areaType) }
+                                        onChange={ item => setCurrentLocation({ areaType: item.value }) }
+                                        styles={ SelectOptions }
+                                        isLoading={ areaTypeData.length < 1 }
+                                        placeholder={ "Select area type" }
+                                        className={ 'select' }/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="govuk-grid-column-one-quarter">
+                        <div className="govuk-form-group govuk-!-margin-bottom-0">
+                            <span id={ "aria-name-label" }
+                                  className={ "govuk-label govuk-label--s" }>Area name</span>
+                            <span id={ "aria-name-description" }
+                                  className={ "govuk-visually-hidden" }>
+                                Select or type in an area name then press enter (return).
+                                The page will immediately update to display the data for
+                                the selected area.
+                            </span>
+                            <div aria-labelledby={ "aria-name-label" }
+                                  aria-describedby={ 'aria-name-description' }>
+                                <Select options={ areaNameData.data }
+                                        styles={ SelectOptions }
+                                        value={ areaNameData.data.filter(item => item.label === currentLocation.areaName) }
+                                        isLoading={ data.length < 1 }
+                                        placeholder={ "Select area" }
+                                        onChange={ item => setCurrentLocation({
+                                            areaType: areaNameData.grouped[item.value][0].areaType,
+                                            areaName: item.value
+                                        }) }
+                                        className={ 'select' }/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={ "govuk-grid-column-one-quarter" }>
+                        <div className={ "govuk-form-group govuk-!-margin-bottom-0" }>
+                            <Link to={ pathname }
+                                  onClick={ () => setCurrentLocation({ areaType: "overview", areaName: "United Kingdom" }) }
+                                  className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }>
+                                <span className={ "govuk-visually-hidden" }>
+                                    Click to reset the page back to UK level.
+                                </span>
+                                Reset to UK
+                            </Link>
+                        </div>
+                    </div>
+                </LocalisationFormInputs>
 
-                    const areaTypeItem = order[areaType]
-
-                    return <Fragment>
-                        <label className={ "govuk-visually-hidden" } htmlFor={ areaType } key={ `${areaType}-label` }>{ areaType }</label>
-                        <Select value={ areaName ? areaName : "" }
-                                disabled={ (options?.length ?? 0) === 0 }
-                                key={ areaType }
-                                onChange={ ({ target: { value } }) => getStateFor(value, areaTypeItem) }
-                                className={ 'govuk-select' }
-                                name={ areaType }
-                                id={ areaType }>
-                        <option value={ "" }>All { areaTypeItem.label }</option>
-                        {
-                            options && options.map(({ name, code }) =>
-                                    <option value={ name }
-                                            key={ `${ areaTypeItem.key }-${ code }` }
-                                    >
-                                        { name }
-                                    </option>
-                                )
-                        }
-                    </Select>
-                    </Fragment>
-                })
-            }</div>
-
-            <div className={ "govuk-grid-row govuk-!-margin-top-4 govuk-!-margin-bottom-2" }>
-                <div className={ "govuk-grid-column-full" }>
-                    <input type={ "submit" }
-                           value={ "Update location" }
-                           className={ "govuk-button govuk-!-margin-right-1 govuk-!-margin-bottom-0" }/>
-                    <input type={ "reset" }
-                           value={ "Reset to UK" }
-                           onClick={ () => history.push('?') }
-                           className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }/>
-                </div>
-            </div>
-
-        </form>
-
-        <div className={ "govuk-grid-row govuk-!-margin-top-0" }>
-            <div className={ "govuk-grid-column-full" }>
-                <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
-            </div>
-        </div>
-    </Fragment>
+            </LocalisationForm>
+        <hr className={ "govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
+    </>
 
 };  // LocationPicker
 

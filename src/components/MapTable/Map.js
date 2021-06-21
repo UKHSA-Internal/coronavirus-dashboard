@@ -63,7 +63,7 @@ export class Map extends Component<MapProps, {}> {
 
         layerGroup: null,
         map: null,
-        canvas: null,
+        // canvas: null,
         loading: true,
         geoData: null,
         glStatus: utils.glAvailable(),
@@ -141,7 +141,9 @@ export class Map extends Component<MapProps, {}> {
 
     componentDidUpdate(prevProps: Readonly<MapProps>, prevState: Readonly<MapState>, snapshot: any): void {
 
-        if ( prevProps.geoKey !== this.props.geoKey && !this.props.geoData) {
+        const currentProps = this.props;
+
+        if ( prevProps.geoKey !== currentProps.geoKey && !currentProps.geoData) {
             this.setState({
                     loading: true,
                     ...prevState.glStatus && !prevState.map
@@ -151,8 +153,8 @@ export class Map extends Component<MapProps, {}> {
                 this.getGeoData
             );
 
-        } else if ( prevProps.geoKey !== this.props.geoKey && this.props.geoData) {
-            this.setState({ geoData: this.props.geoData })
+        } else if ( prevProps.geoKey !== currentProps.geoKey && currentProps.geoData) {
+            this.setState((pState, props) => ({ geoData: props.geoData }))
         }
 
     } // componentDidUpdate

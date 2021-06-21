@@ -93,7 +93,7 @@ const SortIcon = ({ headingId, sortBy, updater }) => {
 }; // SortIcon
 
 
-export class Table extends Component<TableProps, {}> {
+export class Table extends Component<*> {
 
     #baseUrl = URLs.baseData;
     #excluded = [
@@ -102,8 +102,7 @@ export class Table extends Component<TableProps, {}> {
 
     state: TableState = {
         loading: true,
-        data: null,
-        populationData: null
+        data: null
     } // state
 
     getData = async () => {

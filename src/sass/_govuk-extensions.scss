@@ -2,10 +2,32 @@
 */
 
 svg.back-to-top {
-  display: inline-block;
-  width: .8em;
-  height: 1em;
-  margin-top: -5px;
-  margin-right: 10px;
-  vertical-align: middle;
+    display: inline-block;
+    width: .8em;
+    height: 1em;
+    margin-top: -5px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+
+.govuk-table__cell--date {
+    font-variant-numeric: tabular-nums;
+}
+
+.govuk-main-wrapper {
+    padding-top: 0;
+    width: 100%;
+}
+
+
+.govuk-width-container {
+    overflow: hidden;
+}
+
+@include govuk-media-query($until: tablet) {
+  .govuk-width-container:not(.govuk-header__container) {
+    margin-right: 5px;
+    margin-left: 5px;
+  }
 }

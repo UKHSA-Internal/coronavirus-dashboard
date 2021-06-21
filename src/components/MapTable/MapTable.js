@@ -32,7 +32,7 @@ const Description = ({ text, show = true, ...props }): React.ReactNode => {
 }; // Footnote
 
 
-export class MapTable extends Component<MapTableProps, {}> {
+export class MapTable extends Component<*> {
 
     #populationData = URLs.populationData;
 
@@ -41,11 +41,8 @@ export class MapTable extends Component<MapTableProps, {}> {
         data: {},
         category: Content[0].textLabel,
         viewMapAs: "rate",
-        area: "",
-        populationData: null,
         geoData: null,
         loading: false,
-        mapObject: null,
         hash: "",
         tableSort: {}
 

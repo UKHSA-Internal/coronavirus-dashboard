@@ -1,1 +1,1 @@
-export { TabLinkContainer, TabLink } from "./TabLink"
+export { default } from "./TabLink"

@@ -1,20 +1,17 @@
 // @flow
 
+import React from 'react';
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
-export const Container: ComponentType<*> = (() => {
-    return styled.div ``;
-})();
 
-export const Content: ComponentType<*> = (() => {
-    return styled.main ``;
-})();
+export const Article: ComponentType<*> = (() =>
+    styled.article`
+        max-width: 50em;
+    `
+)();
 
-export const SectionHeader: ComponentType<*> = (() => {
-    return styled.h2``;
-})();
 
-export const Body: ComponentType<*> = (() => {
-    return styled.p``;
-})();
+export const Heading = ({ className = '', ...props }) => (
+    <h2 className={ `govuk-heading-m ${className}` } { ...props }/>
+);

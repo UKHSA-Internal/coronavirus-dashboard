@@ -1,0 +1,12 @@
+.select
+  font-family: $govuk-font-family
+
+  div[class*='control']
+    @extend .govuk-select
+    border-radius: 0
+    padding: 0 .3rem
+    height: unset
+
+    &:focus,
+    &:active
+      box-shadow: 0 0 0 3px #fd0

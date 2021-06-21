@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react';
+import React from 'react';
 
 import toc from "remark-toc";
 import slug from "remark-slug";
@@ -8,67 +8,47 @@ import html from "remark-html";
 import remark from "remark";
 import externalLink from "remark-external-links";
 
-import axios from "axios";
+import { Loading } from './About.styles';
+import useGenericAPI from 'hooks/useGenericAPI';
 
-import URLs from "common/urls";
+import {
+    Markdown,
+    Article
+} from './About.styles';
 
-import type { AboutProps, AboutState } from './About.types';
-import { Article } from './About.styles';
-
-
-export default class About extends Component<AboutProps, {}> {
-
-    #url = URLs.about;
-
-    state: AboutState = {
-        loading: false,
-        data: []
-    };
-
-    getData = async () => {
-
-        const
-            { data } = await axios.get(this.#url, {responseType: "text"});
-            remark()
-                .use(toc)
-                .use(slug)
-                .use(externalLink)
-                .use(html).process(data, (err, text) =>
-                this.setState({
-                    data: err ? data : String(text),
-                    loading: false
-                })
-            );
-
-    };
-
-    componentDidMount() {
-
-        this.setState({ loading: true }, this.getData)
-
-        // ToDo: This should be done for every page in the "app.js".
-        const base = document.querySelector("head>base");
-        base.href = document.location.pathname;
-
-    } // componentDidMount
-
-    display() {
-
-        const { loading, data } = this.state;
-
-        if ( loading ) return <p className={ "govuk-body" }>Loading&hellip;</p>
-
-        return <div className={ "markdown" } dangerouslySetInnerHTML={{ __html: data }}/>
-
-    } // display
-
-    render(): React$Node {
-
-        return <Article className={ "about" }>
-            { this.display() }
-            </Article>
+import type { AboutProps } from './About.types';
+import type { ComponentType } from "react";
+import { Helmet } from "react-helmet";
 
 
-    } // render
+const About: ComponentType<AboutProps> = ({ ...props }) => {
 
-} // About
+    let data = useGenericAPI("about", [], {}, "text");
+
+    if ( !data ) return <Loading>Loading&hellip;</Loading>;
+
+    remark()
+        .use(toc)
+        .use(slug)
+        .use(externalLink)
+        .use(html)
+        .process(data, (err, text) => {
+            data = err ? data : String(text);
+        });
+
+    return <>
+        <Helmet>
+            <title>About the data | Coronavirus in the UK</title>
+            <meta name="description"
+                  content="Sources, metric definitions, and other generic
+                  information about the data that presented on the dashboard." />
+        </Helmet>
+        <Article>
+            <Markdown dangerouslySetInnerHTML={{ __html: data }}/>
+        </Article>
+    </>
+
+
+};  // About
+
+export default About;

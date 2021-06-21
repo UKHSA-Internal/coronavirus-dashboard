@@ -4,32 +4,22 @@ import React from 'react';
 import type { ComponentType } from 'react';
 
 import { ArrowUp } from "common/Icons";
-import * as Styles from './BackToTop.styles';
+import {
+    OverlayContainer,
+    InlineContainer,
+    Link
+} from './BackToTop.styles';
 import type { Props } from './BackToTop.types';
 
 import useBackToTopOverlayVisible from 'hooks/useBackToTopOverlayVisible';
 
 
-const backToTopClickHandler = event => {
-
-    event.preventDefault();
-
-    window.scrollTo(0, 0);
-
-}; // backToTopClickHandler
-
-
 const BackToTopLink: ComponentType<Props> = () => {
 
-    return <div className={ "govuk-width-container" }>
-        <Styles.Link className={ "govuk-link govuk-link--no-visited-state" }
-                     role={ "button" }
-                     href={ "" }
-                     onClick={ backToTopClickHandler }>
-            <ArrowUp/>
-            Back to top
-        </Styles.Link>
-    </div>
+    return <Link href={ "#main-content" }>
+        <ArrowUp/>
+        Back to top
+    </Link>
 
 }; // BackToTopLink
 
@@ -48,19 +38,27 @@ const BackToTop: ComponentType<Props> = ({ mode }: Props) => {
 
     const visible = useBackToTopOverlayVisible('footer');
 
-    if ( mode === 'overlay' ) {
+    if ( mode === 'overlay' && visible ) {
 
-        return<Styles.OverlayContainer style={ { opacity: visible ? 1 : 0 } }>
+        return<OverlayContainer tabIndex={ "-1" }
+                                role={ "complementary" }
+                                aria-label={ "Scroll back to top" }
+                                style={ { opacity: visible ? 1 : 0, tabIndex: visible ? 0 : -1 } }>
             <BackToTopLink/>
-        </Styles.OverlayContainer>
+        </OverlayContainer>
 
-    } else {
+    } else if ( mode !== 'overlay' ) {
 
-        return <Styles.InlineContainer style={ { opacity: visible ? 0 : 1 } }>
+        return <InlineContainer tabIndex={ "-1" }
+                                role={ "complementary" }
+                                aria-label={ "Scroll back to top" }
+                                style={ { opacity: visible ? 0 : 1, tabIndex: visible ? -1 : 0  } }>
             <BackToTopLink/>
-        </Styles.InlineContainer>
+        </InlineContainer>
 
     }
+
+    return null
 
 }; // BackToTop
 

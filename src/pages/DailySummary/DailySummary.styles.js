@@ -1,21 +1,15 @@
 // @flow
 
+import React from 'react';
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
 
-export const FlexContainer: ComponentType<*> = (() => {
-  return styled.div`
-    display: flex;
-    flex-flow: row wrap;
-    grid-column: 1/-1;
-    margin: 0 -10px;
 
-    & .govuk-back-link {
-      width: fit-content;
-    }
+export const Container: ComponentType<*> = (() => {
+const
+    classes = 'util-flex util-flex-wrap',
+    Node = styled.div``;
 
-    @media only screen and (max-width: 768px) {
-      grid-column: span 2;
-    }
-  `;
+return ({ className = '', ...props }) =>
+    <Node className={ `${classes} ${className}` } { ...props }/>
 })();

@@ -7,11 +7,10 @@ import { createQuery } from "common/utils";
 import deepEqual from "deep-equal";
 
 import type {
-    useApiStructureInput,
-    useApiResponseInput,
+    generateUrlInputs,
+    useApiInputs,
     useApiResponse
 } from "./hooks.types";
-import type { ParsedParams } from "common/utils.types";
 
 
 const usePrevious = (value) => {
@@ -27,40 +26,113 @@ const usePrevious = (value) => {
 };  // usePrevious
 
 
-const useApi = ( params: ParsedParams, structure: useApiStructureInput, defaultResponse: useApiResponseInput=[] ): useApiResponse => {
+export const generateUrl = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
+                        extraParams=[], endpoint="mainApi"}: generateUrlInputs): string => {
 
     const
+        conjunctive = createQuery(conjunctiveFilters, ";", "") || "",
+        disjunctive = createQuery(disjunctiveFilters, "|", "", false) || "",
+        paramString = `${conjunctive}${(conjunctive && disjunctive) ? ";" : ""}${disjunctive}`;
+
+    return URLs[endpoint] + createQuery([
+        {
+            key: 'filters',
+            sign: '=',
+            value: paramString
+        },
+        ...extraParams,
+        {
+            key: 'structure',
+            sign: '=',
+            value: JSON.stringify(structure)
+        }
+    ]);
+
+};  // generateUrl
+
+
+const useApi = ({ conjunctiveFilters=[], disjunctiveFilters=[], structure,
+                    defaultResponse=[], extraParams=[],
+                    endpoint="mainApi", cache=false}: useApiInputs): useApiResponse => {
+
+    const
+        cachedData = useRef({}),
         [ data, setData ] = useState(defaultResponse),
-        prevParams =  usePrevious(params);
+        prevConjunctiveParams =  usePrevious(conjunctiveFilters),
+        prevDisjunctiveParams =  usePrevious(disjunctiveFilters),
+        prevStructure =  usePrevious(structure),
+        prevExtraParams =  usePrevious(extraParams);
 
     useEffect(() => {
 
-        const urlParams = createQuery([
-            {
-                key: 'filters',
-                sign: '=',
-                value: createQuery(params, ";", "")
-            },
-            {
-                key: 'structure',
-                sign: '=',
-                value: JSON.stringify(structure)
-            }
-        ]);
-
         (async () => {
 
-            if ( !deepEqual(prevParams, params) )
-                try {
-                    const { data: dt } = await axios.get(URLs.api + urlParams);
-                    setData(dt.data)
-                } catch (e) {
-                    console.error(e)
+            if (
+                (
+                    conjunctiveFilters.length > 0 ||
+                    disjunctiveFilters.length > 0 ||
+                    extraParams.length > 0
+                ) && (
+                    !deepEqual(prevConjunctiveParams, conjunctiveFilters) ||
+                    !deepEqual(prevDisjunctiveParams, disjunctiveFilters ) ||
+                    !deepEqual(prevStructure, structure) ||
+                    !deepEqual(prevExtraParams, extraParams)
+                )
+            ) {
+
+                setData(defaultResponse);
+
+                const requestURL = generateUrl({
+                    conjunctiveFilters:  conjunctiveFilters,
+                    disjunctiveFilters: disjunctiveFilters,
+                    structure: structure,
+                    extraParams: extraParams,
+                    endpoint: endpoint
+                });
+
+                if ( cache && requestURL in cachedData.current ) {
+
+                    setData(cachedData.current?.[requestURL] ?? [])
+
+                } else {
+
+                    try {
+                        const { data: dt, status } = await axios.get(requestURL);
+
+                        if ( status < 400 ) {
+
+                            if ( cache )
+                                cachedData.current[requestURL] = dt.data;
+
+                            setData(dt?.data ?? dt)
+
+                        } else {
+                            setData([])
+                        }
+
+                    } catch (e) {
+                        console.error(e)
+                        setData([])
+                    }
+
                 }
+            }
 
         })()
 
-    }, [ params ])
+    },
+        [
+            conjunctiveFilters,
+            disjunctiveFilters,
+            endpoint,
+            extraParams,
+            prevConjunctiveParams,
+            prevDisjunctiveParams,
+            prevExtraParams,
+            prevStructure,
+            structure
+        ]
+    )
 
     return data
 

@@ -13,7 +13,12 @@ import axios from "axios";
 import URLs from "common/urls";
 
 import type { AccessibilityState, AccessibilityProps } from './Accessibility.types';
-import * as Styles from './Accessibility.styles';
+import {
+    Loading,
+    Markdown,
+    Article
+} from './Accessibility.styles';
+import { Helmet } from "react-helmet";
 
 
 
@@ -47,33 +52,30 @@ export default class Accessibility extends Component<AccessibilityProps, {}> {
 
         this.setState({ loading: true }, this.getData)
 
-        // ToDo: This should be done for every page in the "app.js".
-        const base = document.querySelector("head>base");
-        base.href = document.location.pathname;
-
     } // componentDidMount
 
     display() {
 
         const { loading, data } = this.state;
 
-        if ( loading ) return <p>Loading&hellip;</p>
+        if ( loading ) return <Loading>Loading&hellip;</Loading>
 
-        return <div className={ "markdown" } dangerouslySetInnerHTML={{ __html: data }}/>
+        return <Markdown dangerouslySetInnerHTML={{ __html: data }}/>
 
     } // display
 
     render(): React$Node {
 
-        return <Styles.Container className={"govuk-width-container accessibility"}>
-            <Styles.Content className="govuk-main-wrapper" role="main">
-                <Styles.Container className="govuk-grid-row">
-                    <Styles.Container className="govuk-grid-column-two-thirds">
-                        { this.display() }
-                    </Styles.Container>
-                </Styles.Container>
-            </Styles.Content>
-        </Styles.Container>
+        return <>
+            <Helmet>
+                <title>Accessibility | Coronavirus in the UK</title>
+                <meta name="description"
+                      content="Information on the accessibility of the service." />
+            </Helmet>
+            <Article>
+                { this.display() }
+            </Article>
+        </>
 
     } // render
 
