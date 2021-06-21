@@ -631,9 +631,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                             <ScaleGroup>
                                 <ScaleColor style={{ background: "#fff" }}/>
                                 <ScaleValue>{
-                                    currentLocation.areaType === "msoa"
-                                        ? "Suppressed"
-                                        : "Data not shown"
+                                    "Data not shown"
                                 }</ScaleValue>
                             </ScaleGroup>
                             {
