@@ -9,11 +9,10 @@ import MomentLocaleUtils, { formatDate, parseDate } from "react-day-picker/momen
 
 import { MetricLastUpdated, SelectOptions } from "./Download.styles";
 import { AreaTypeOptions, MSOAMetricOptions } from "components/DashboardHeader/Constants";
-import { createQuery, groupBy, sort } from 'common/utils/utils';
+import { createQuery, groupBy } from 'common/utils/utils';
 import URLs from "common/urls";
 import { Radio } from 'components/GovUk';
 import Loading from "components/Loading";
-import useApi from "hooks/useApi";
 import useGenericAPI from 'hooks/useGenericAPI';
 import useTimestamp from 'hooks/useTimestamp';
 import MsoaSelectContainer from "./MsoaDownloads";
@@ -31,7 +30,6 @@ import {
 import type { ComponentType } from "react";
 import { Helmet } from "react-helmet";
 import usePrevious from "../../hooks/usePrevious";
-import time from "d3-scale/src/time";
 
 
 const MAX_METRICS = 5;
@@ -53,15 +51,6 @@ const dataFormatOptions = {
 const dataReleaseDateOptions = [
     { label: "Latest", value: "latest" },
     { label: "Archive", value: "archive" }
-];
-
-
-const excludedMetrics = [
-    "date",
-    "areaName",
-    "areaType",
-    "areaCode",
-    "areaNameLower"
 ];
 
 

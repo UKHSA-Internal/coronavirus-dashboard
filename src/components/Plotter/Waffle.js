@@ -1,9 +1,7 @@
 // @flow
 
 import React from "react";
-
 import { BasePlotter } from "./BasePlot";
-import { hexToRgb } from "common/utils";
 
 import type { ComponentType } from "react";
 
