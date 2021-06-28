@@ -19,14 +19,18 @@ const DefaultParams = [
 const DataPageHeaders = () => {
 
     const { search: query, pathname } = useLocation();
-    const { title="", description="", localised=false } = Path?.[pathname] ?? {};
+    let { title="", description="", localised=false } = Path?.[pathname] ?? {};
     const urlParams = getParams(query);
     const areaParams = urlParams.length ? urlParams : DefaultParams;
 
-    let areaName = getParamValueFor(areaParams, "areaName");
+    let areaName;
 
-    if ( areaName.toLowerCase() === "united kingdom" ) {
-        areaName = "the UK";
+    if ( localised ) {
+        areaName = getParamValueFor(areaParams, "areaName");
+
+        if ( areaName.toLowerCase() === "united kingdom" ) {
+            areaName = "the UK";
+        }
     }
 
     let [preppedTitle, preppedDescription] = localised
