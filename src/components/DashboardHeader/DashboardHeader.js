@@ -38,9 +38,9 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
             .toLowerCase()
             .replace(/[\s:]/g, "_"),
         { location: { pathname } } = useHistory(),
-        pageName = PathNameMapper[pathname]?.title ?? "",
-        noPicker = NoPickerPaths.indexOf(pathname) > -1;
-
+        uri = /^(\/(details\/)?[^/]+).*/.exec(pathname)?.[1],
+        pageName = PathNameMapper[uri]?.title ?? "",
+        noPicker = NoPickerPaths.indexOf(uri) > -1;
 
     return <>
         <HeaderContainer role={ "heading" }
@@ -83,7 +83,8 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
         areaName = getParamValueFor(params, "areaName", "United Kingdom"),
         pathname = history.location.pathname,
         areaTypeOrder = getOrder(history),
-        isExcluded = NoPickerPaths.indexOf(pathname) > -1,
+        uri = /^(\/(details\/)?[^/]+).*/.exec(pathname)?.[1],
+        isExcluded = NoPickerPaths.indexOf(uri) > -1,
         prevPathname = usePrevious(pathname),
         initialParam = getParams(history.location.query),
         [ location, setLocation ] = useState({
@@ -115,29 +116,30 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
     };
 
     return <StickyContainer>
-        <Sticky>{ ({ style }) =>
-            <MainContainer style={ style }>
-                <PageHeader areaName={ areaName }
-                            localisationState={ locationPickerState }
-                            localisationCallback={ locationPickerCallback }/>
-                {
-                    !isExcluded &&
-                    <LocationPicker show={ locationPickerState }
-                                    currentLocation={ location }
-                                    setCurrentLocation={ setLocation }/>
-                }
-                <LocationBanner pageTitle={ LocationBannerMapper?.[pathname] ?? null }
-                                areaTypes={ Object.keys(areaTypeOrder).map(key => areaTypeOrder[key]) }
-                                pathname={ pathname }/>
-
-                <ReactTooltip id={ "open-localisation-tooltip" }
-                              place={ "right" }
-                              backgroundColor={ "#0b0c0c" }
-                              className={ "tooltip" }
-                              effect={ "solid" }/>
-            </MainContainer>
-        }
-        </Sticky>
+        <MainContainer>
+            <PageHeader areaName={ areaName }
+                        localisationState={ locationPickerState }
+                        localisationCallback={ locationPickerCallback }/>
+            {
+                !isExcluded
+                    ? <LocationPicker show={ locationPickerState }
+                                      currentLocation={ location }
+                                      setCurrentLocation={ setLocation }/>
+                    : null
+            }
+            {
+                !isExcluded
+                    ? <LocationBanner pageTitle={ LocationBannerMapper?.[pathname] ?? null }
+                                      areaTypes={ Object.keys(areaTypeOrder).map(key => areaTypeOrder[key]) }
+                                      pathname={ pathname }/>
+                    : null
+            }
+            <ReactTooltip id={ "open-localisation-tooltip" }
+                          place={ "right" }
+                          backgroundColor={ "#0b0c0c" }
+                          className={ "tooltip" }
+                          effect={ "solid" }/>
+        </MainContainer>
     </StickyContainer>;
 
 };  // DashboardHeader
