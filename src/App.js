@@ -10,13 +10,14 @@ import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
 import CookieBanner from "components/CookieBanner";
-import DataPageHeader from "./components/DataPageHeader";
-
+import DataPageHeader from "components/DataPageHeader";
+import SideNavigation from "components/SideNavigation";
+import SideNavMobile from "components/SideNavMobile";
+import DashboardHeader from "components/DashboardHeader";
 import './index.scss';
 
 
 const
-    DashboardHeader = lazy(() => import('components/DashboardHeader')),
     Cases           = lazy(() => import('pages/Cases')),
     Healthcare      = lazy(() => import('pages/Healthcare')),
     Vaccinations    = lazy(() => import('pages/Vaccinations')),
@@ -30,7 +31,8 @@ const
     WhatsNew        = lazy(() => import("pages/WhatsNew")),
     Footer          = lazy(() => import('components/Footer')),
     Download        = lazy(() => import('pages/Download')),
-    Banner          = lazy(() => import('components/Banner'));
+    Banner          = lazy(() => import('components/Banner')),
+    MetricDocs      = lazy(() => import('pages/MetricDocs'));
 
 
 const LastUpdateTime = () => {
@@ -73,13 +75,9 @@ const
 
 const Navigation = ({ layout, ...props }) => {
 
-    const Nav = layout !== "mobile"
-        ? React.lazy(() => import('components/SideNavigation'))
-        : React.lazy(() => import('components/SideNavMobile'));
-
-    return <Suspense fallback={ <Loading/> }>
-         <Nav { ...props }/>
-    </Suspense>
+    return layout !== "mobile"
+        ? <SideNavigation {...props}/>
+        : <SideNavMobile {...props}/>;
 
 };  // MobileNavigation
 
@@ -122,18 +120,18 @@ const App = () => {
                 <div className={ "dashboard-container" }>
                     {
                         layout === "desktop" &&
-                        <aside className={ "dashboard-menu" }>
+                        <div className={ "dashboard-menu" }>
                             <Switch>
-                                <Route path={ "/details" }
+                                <Route path={ "/:page" }
                                        render={ props =>
                                            <Navigation layout={ layout }{ ...props}/>
                                        }/>
                             </Switch>
-                        </aside>
+                        </div>
                     }
                     <main className={ "govuk-main-wrapper" } role={ "main" } id={ 'main-content' }>
+                        <DashboardHeader/>
                         <Suspense fallback={ <Loading/> }>
-                            <DashboardHeader/>
                             <Switch>
                                 {/*<Route path="/details" exact render={ () => <Redirect to={ "/" }/> }/>*/}
                                 <Route path="/details/testing" exact component={ Tests }/>
@@ -150,6 +148,7 @@ const App = () => {
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
                                 <Route path="/details/developers-guide" exact component={ ApiDocs }/>
+                                <Route path="/metrics/:type?" exact component={ MetricDocs }/>
                                 <Route path={ "/:page" } component={ RedirectToDetails }/>
                             </Switch>
                         </Suspense>
@@ -159,20 +158,20 @@ const App = () => {
 
             <Switch>
                 {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */ }
-                <Route path="/details" render={ () => <BackToTop mode={ "overlay" }/> }/>
+                <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> }/>
             </Switch>
 
             {/* We only want back-to-top links on the main & about pages. */ }
             <Switch>
                 {/* These back-to-top links are the 'inline' style that sits
                     statically between the end of the content and the footer. */ }
-                <Route path="/details" render={ props => <BackToTop { ...props } mode="inline"/> }/>
+                <Route path="/" render={ props => <BackToTop { ...props } mode="inline"/> }/>
             </Switch>
         </div>
 
         <Switch>
             <Suspense fallback={ <Loading/> }>
-                <Route path="/details" component={ Footer }/>
+                <Route path="/" component={ Footer }/>
             </Suspense>
         </Switch>
     </>
