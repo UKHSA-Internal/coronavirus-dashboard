@@ -175,5 +175,6 @@ export const ShareRow: ComponentType<*> =
             
             @media only screen and (max-width: 768px) {
                 margin-left: -9px !important;
+                margin-right: -9px !important;
             }
         `;
