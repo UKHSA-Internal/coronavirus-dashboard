@@ -1,7 +1,7 @@
 import moment from "moment";
 import { max, min, group } from "d3-array";
 
-import type { ParsedParams } from "./utils.types";
+import type { ParsedParams, URLParams } from "./utils.types";
 import type { RGB } from "components/MapTable/MapTable.types";
 import { generateUrl } from "hooks/useApi";
 
@@ -147,6 +147,14 @@ export const getParams = (uri: string, separator: string="&"): ParsedParams => {
         }, [])
 
 }; // getParams
+
+
+export const getUriParams = (uri: string): URLParams => {
+
+    return getParams(uri)
+        .reduce((acc, cur) => ({ ...acc, [cur.key]: cur.value }), {})
+
+};  // parseUrlParams
 
 
 export const heading2id = ( heading: string ): string => {
