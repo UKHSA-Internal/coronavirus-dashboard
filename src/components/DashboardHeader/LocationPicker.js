@@ -121,7 +121,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
 
     useEffect(() => {
 
-        if ( currentLocation.areaName && prevQuery !== newQuery )
+        if ( /\/details/i.test(pathname) && currentLocation.areaName && prevQuery !== newQuery )
             history.push({
                 pathname: pathname,
                 search: newQuery
