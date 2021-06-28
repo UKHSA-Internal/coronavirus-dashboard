@@ -60,5 +60,10 @@
     "title": "Accessibility",
     "description": "Information on the accessibility of the service.",
     "localised": false
+  },
+  "/metrics": {
+    "title": "Metric documentation",
+    "description": "List of metrics and documentations thereof.",
+    "localised": false
   }
 }
