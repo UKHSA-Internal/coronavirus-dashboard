@@ -6,7 +6,6 @@ import type { ComponentType } from 'react';
 
 
 export const SideNav: ComponentType<*> =
-
     styled
         .nav
         .attrs(({ className, ...props }) => ({
