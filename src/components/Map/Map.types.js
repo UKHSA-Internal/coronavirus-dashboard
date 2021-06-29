@@ -57,3 +57,5 @@ export type MainContentItem = {
 
 
 export type MainContentType = MainContentItem[];
+
+export type Props = {||};
