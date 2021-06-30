@@ -12435,6 +12435,11 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
+react-compare-slider@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-compare-slider/-/react-compare-slider-2.0.2.tgz#b170f302ebf551357ba585f3fe6dab4aa26615f1"
+  integrity sha512-hL4mZ6asoez23Upoce9T2hbPKRg607lt8A8rYOXDuvL6QtO7ujkmsGS0+6EZe1EIDlmGibXH9jVuXNca6JrUow==
+
 react-day-picker@^7.4.10:
   version "7.4.10"
   resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-7.4.10.tgz#d3928fa65c04379ad28c76de22aa85374a8361e1"
