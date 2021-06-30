@@ -102,7 +102,7 @@ export const CasesMap: ComponentType<*> = () => {
                 The default view shows data by local authority. Zoom in for more local data.
             </p>
         </div>
-        <MainContainer className={ "govuk-body" }>
+        <MainContainer className={ "govuk-body govuk-!-margin-0" }>
             <Map date={ currentDate }
                  geoKey={ AreaLevel?.[areaType]?.geoKey ?? "ctry19" }
                  geoJSON={ AreaLevel?.[areaType]?.geoJSON }
@@ -150,6 +150,23 @@ export const CasesMap: ComponentType<*> = () => {
             <p className={ "govuk-!-margin-bottom-0" }>
                 This makes it easier to compare cases across areas of different population size.
             </p>
+
+            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Data not shown</h3>
+            <p>
+                There are 2 reasons why data may not be shown:
+            </p>
+
+            <ul className={ "govuk-list govuk-list--bullet" }>
+                <li className={ "govuk-!-margin-bottom-1" }>
+                    for areas with fewer than 3 cases at MSOA level, we do not show data to protect individuals'
+                    identities.
+                </li>
+                <li>
+                    data may be missing, for example because it is delayed or unavailable. If you zoom in to MSOA level,
+                    data for Northern Ireland, Scotland and Wales are not available.
+                </li>
+            </ul>
+
         </div>
     </MainTabLinkContainer>
 
