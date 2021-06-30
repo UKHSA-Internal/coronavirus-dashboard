@@ -151,6 +151,7 @@ export const ScaleLegendLabel: ComponentType<*> =
             margin: 0;
             font-weight: bold;
             width: max-content;
+            margin-left: 0 !important;
         `;
 
 
