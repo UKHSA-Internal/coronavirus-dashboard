@@ -181,6 +181,7 @@ export const MapToolbox: ComponentType<*> =
     
     @media only screen and (max-width: 560px) {
         max-width: 190px;
+        z-index: 1;
     }
     `;
 

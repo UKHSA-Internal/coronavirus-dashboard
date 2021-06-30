@@ -90,7 +90,7 @@ export const LegendContainer: ComponentType<*> =
         @media only screen and (max-width: 600px) {
             font-size: 0.8rem !important;
             padding: .3rem !important;
-            bottom: 10px;
+            bottom: 35px;
         }
         `;
 
