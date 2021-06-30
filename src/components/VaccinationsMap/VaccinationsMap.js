@@ -25,6 +25,7 @@ import { MapComponent } from "./MapComponent";
 import type { ComponentType } from "react";
 import * as constants from "./constants";
 import { LocalAuthorityCard, SoaCard } from "./InfoCard";
+import deepEqual from "deep-equal";
 
 
 
@@ -215,16 +216,23 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
                     });
 
-                    mapInstance.on('drag',  () =>
-                        otherMap.setCenter(mapInstance.getCenter())
-                    );
+                    mapInstance.on('move',  () => {
+                        const centre = mapInstance.getCenter();
+                        const otherCentre = otherMap.getCenter();
 
-                    mapInstance.on('zoom', function () {
+                        if ( !deepEqual(centre, otherCentre) ) {
+                            otherMap.setCenter(centre);
+                        }
+                    });
+
+                    mapInstance.on('zoom', () => {
 
                         const zoomLevel = mapInstance.getZoom();
+                        const otherZoomLevel = otherMap.getZoom();
 
-                        otherMap.setZoom(zoomLevel);
-                        otherMap.setCenter(mapInstance.getCenter());
+                        if ( !deepEqual(zoomLevel, otherZoomLevel) ) {
+                            otherMap.setZoom(zoomLevel);
+                        }
 
                         if ( zoomLevel < 7 ) {
                             setZoomLayerIndex(0);
