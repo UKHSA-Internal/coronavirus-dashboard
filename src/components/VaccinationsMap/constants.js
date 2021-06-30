@@ -17,20 +17,32 @@ export const bucketsFirst = [
 ];
 
 
+export const colourBucketReference = {
+    0: "#E7FBF9",
+    20: "#DAF5F3",
+    40: "#B8E9E6",
+    50: "#88D5D0",
+    60: "#41B1A8",
+    70: "#1D968C",
+    80: "#036961",
+    90: "#014D48"
+};
+
+
 export const bucketsSecond = bucketsFirst;
     // [
     //     "#EDF5F7",
-    //     10, "#C8E5EB",
+    //     // 10, "#C8E5EB",
     //     20, "#79C1D7",
-    //     30, "#6DA9BB",
+    //     // 30, "#6DA9BB",
     //     40, "#3E89A0",
     //     50, "#59A7BF",
     //     60, "#5696BB",
     //     70, "#2377C0",
     //     80, "#1F68A8",
     //     90, "#1B5180",
-    //     100, "#0A355A"
-    // ],
+    //     // 100, "#0A355A"
+    // ];
 
 
 export const MapLayers = [
