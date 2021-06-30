@@ -31,6 +31,8 @@ export const PathNames = {
 export const NoPickerPaths = [
     "/details",
     "/details/interactive-map",
+    "/details/interactive-map/cases",
+    "/details/interactive-map/vaccinations",
     "/details/download",
     "/details/about-data",
     "/details/cookies",
