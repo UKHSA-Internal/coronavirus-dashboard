@@ -33,7 +33,7 @@ export const InfoCard = ({ areaName, date, first, complete, postcode, areaType, 
                     <NumberBox>
                         <h3 className={ "govuk-heading-s" }>1st dose</h3>
                         <div className={ "number-row" }>
-                            <span className={ "number" }>{ first }</span>
+                            <span className={ "number" }>{ numeral(first).format("0,0.0") }</span>
                         </div>
                     </NumberBox>
                     <NumberBox>
