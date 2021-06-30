@@ -338,7 +338,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                            className={ "govuk-visually-hidden" }>
                         Search by postcode
                     </label>
-                    <input className={ "govuk-input govuk-input--width-10" }
+                    <input className={ "govuk-input govuk-input--width-6" }
                            name={ "postcode" }
                            maxLength={ 10 }
                            type={ "text" }
@@ -361,7 +361,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                 </ZoomControlContainer>
                 <LegendContainer>
                     <ScaleLegend>
-                        <ScaleLegendLabel>% adults<br/>vaccinated</ScaleLegendLabel>
+                        <ScaleLegendLabel>Percentage adults<br/>vaccinated</ScaleLegendLabel>
                         <ScaleGroup>
                             <ScaleColor style={{ background: "#fff" }}/>
                             <ScaleValue>{
