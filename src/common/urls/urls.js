@@ -56,6 +56,7 @@ const URLs = {
     genericApiAreaByType:                   `https://${ REACT_APP_API_ENDPOINT }/generic/area/{area_type}`,
     genericApiMetricAvailabilityByAreaType: `https://${ REACT_APP_API_ENDPOINT }/generic/metric_availability/{area_type}`,
     genericApiMetricAvailabilityByArea:     `https://${ REACT_APP_API_ENDPOINT }/generic/metric_availability/{area_type}/{area_code}`,
+    mapVaccinationData:                     `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/maps/vax-data_latest.geojson`
 };
 
 URLs.pageLayouts = {
