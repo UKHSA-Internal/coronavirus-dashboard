@@ -2,9 +2,10 @@
 
 import React from "react";
 
-import { MapToolbox, NumberBox, NumbersContainer } from "../VaccinationsMap.styles";
+import { ColourReference, MapToolbox, NumberBox, NumbersContainer } from "../VaccinationsMap.styles";
 import moment from "moment";
 import numeral from "numeral";
+import * as constants from "../constants";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 
 
@@ -16,7 +17,15 @@ export const InfoCard = ({ areaName, date, first, complete, postcode, areaType, 
 
     if ( !setShowInfo ) return null;
 
-    return <MapToolbox style={{ maxWidth: layout === "desktop" ? "300px" : "150px" }}>
+    const firstColourIdx = Object
+        .keys(constants.colourBucketReference)
+        .reduce((acc, cur, ) => first > cur ? cur : acc, 0);
+
+    const completeColourIdx = Object
+        .keys(constants.colourBucketReference)
+        .reduce((acc, cur, ) => complete > cur ? cur : acc, 0);
+
+    return <MapToolbox style={{ maxWidth: layout === "desktop" ? "300px" : "170px" }}>
         <button style={{ position: "absolute", top: 3, right: 8, margin: 0, padding: 0, cursor: "pointer", fontSize: 1.5 + "rem" }}
                 role={ "button" }
                 onClick={ () => setShowInfo(false) }>×</button>
@@ -33,13 +42,15 @@ export const InfoCard = ({ areaName, date, first, complete, postcode, areaType, 
                     <NumberBox>
                         <h3 className={ "govuk-heading-s" }>1st dose</h3>
                         <div className={ "number-row" }>
-                            <span className={ "number" }>{ numeral(first).format("0,0.0") }</span>
+                            <ColourReference colour={ constants.colourBucketReference[firstColourIdx] }/>
+                            <span className={ "number" }>{ numeral(first).format("0,0.0") + "%" }</span>
                         </div>
                     </NumberBox>
                     <NumberBox>
                         <h3 className={ "govuk-heading-s" }>2nd dose</h3>
                         <div className={ "number-row" }>
-                            <span className={ "number" }>{ numeral(complete).format("0,0.0") }</span>
+                            <ColourReference colour={ constants.colourBucketReference[completeColourIdx] }/>
+                            <span className={ "number" }>{ numeral(complete).format("0,0.0") + "%" }</span>
                         </div>
                     </NumberBox>
                 </NumbersContainer>
