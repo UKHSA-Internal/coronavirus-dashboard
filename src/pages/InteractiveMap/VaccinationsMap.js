@@ -18,13 +18,13 @@ export const VaccinationsMap: ComponentType<*> = () => {
             <div className={ "govuk-!-margin-bottom-5" }>
                 <p className={ "govuk-body" } style={{ maxWidth: 50 + "em" }}>
                     This map shows the percentage of adults vaccinated. The left view
-                    shows 1st doses and the right view shows 2nd doses at local authority.
+                    shows 1st doses and the right view shows 2nd doses by local authority.
                     Zoom in for more local data and use the slider to compare 1st and 2nd dose.
                 </p>
             </div>
             <Map width={ width }/>
             <div className={ "markdown govuk-!-margin-top-5 govuk-body govuk-!-margin-bottom-0 govuk-!-margin-left-0" } style={{ maxWidth: 50 + "em" }}>
-                <h3 className={ "govuk-heading-m govuk-!-margin-top-3" }>Vaccination updake</h3>
+                <h3 className={ "govuk-heading-m govuk-!-margin-top-3" }>Vaccination uptake</h3>
                 <p>
                     Vaccination uptake is shown as a percentage of all people aged 18 and over. We calculate
                     this by dividing the total number of people who have received a vaccination by the population
