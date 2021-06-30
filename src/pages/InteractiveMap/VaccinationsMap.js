@@ -14,13 +14,12 @@ export const VaccinationsMap: ComponentType<*> = () => {
     const width = useResponsiveLayout(860);
 
     return <MainTabLinkContainer>
-        <MainContainer className={ "govuk-body" }>
+        <MainContainer className={ "govuk-body govuk-!-margin-0" }>
             <div className={ "govuk-!-margin-bottom-5" }>
                 <p className={ "govuk-body" } style={{ maxWidth: 40 + "em" }}>
-                    <strike>This map shows 7-day case rate per 100,000 people.</strike>
-                </p>
-                <p className={ "govuk-body" } style={{ maxWidth: 40 + "em" }}>
-                    <strike>The default view shows data by local authority. Zoom in for more local data.</strike>
+                    This map shows the percentage of adults vaccinated. The left view
+                    shows 1st doses at local authority. Zoom in for more local data and
+                    use the slider to compare 1st and 2nd dose.
                 </p>
             </div>
             <Map width={ width }/>
