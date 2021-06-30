@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import {
+    LeftMarker, RightMarker,
     SlideMarker,
     SliderButton,
     SliderContainer,
@@ -18,16 +19,18 @@ export const CompareHandle = ({ portrait }) => {
 
     return <SliderContainer active={ active } focused={ isFocused } portrait={ portrait }
                             onMouseEnter={ () =>  setActive(true) }
-                        onMouseLeave={ () =>  setActive(false) }
-                        onMouseDown={ () => setIsFocused(true) }
-                        onMouseUp={ () => setIsFocused(false) }>
+                            onMouseLeave={ () =>  setActive(false) }
+                            onTouchStart={ () => setIsFocused(true) }
+                            onTouchEnd={ () => setIsFocused(false) }
+                            onMouseDown={ () => setIsFocused(true) }
+                            onMouseUp={ () => setIsFocused(false) }>
         <SliderRoot>
             <SliderLine active={ active } focused={ isFocused } portrait={ portrait }/>
+            <LeftMarker>1st dose</LeftMarker>
+            <RightMarker>2nd dose</RightMarker>
             <SliderButton active={ active } focused={ isFocused } portrait={ portrait }>
-                <SlideMarker>1st dose</SlideMarker>
                 <TriangleMarker direction={ "left" }/>
                 <TriangleMarker direction={ "right" }/>
-                <SlideMarker>2nd dose</SlideMarker>
             </SliderButton>
         </SliderRoot>
     </SliderContainer>
