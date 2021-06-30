@@ -35,7 +35,7 @@ const InteractiveMap: ComponentType<*> = () => {
     if ( !glAvailable() ) return <NoWebGL/>;
 
     return <MainTabLinkContainer>
-        <TabsContainer className={ "govuk-!-margin-top-6 govuk-!-margin-left-2" }>
+        <TabsContainer className={ "govuk-!-margin-top-6 govuk-!-margin-left-2 govuk-!-margin-bottom-7" }>
             <Link to={ "/details/interactive-map/cases" }
                   aria-label={ "cases-map-container" }
                   className={ `${ pathname.indexOf("cases") > -1 ? 'active govuk-!-font-weight-bold' : '' } tab-link` }>
@@ -71,22 +71,6 @@ const InteractiveMap: ComponentType<*> = () => {
                 <li>
                     Middle layer Super Output Areas (MSOA). These areas are smaller than local authorities, so show data
                     at the most local level.
-                </li>
-            </ul>
-
-            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Data not shown</h3>
-            <p>
-                There are 2 reasons why data may not be shown:
-            </p>
-
-            <ul className={ "govuk-list govuk-list--bullet" }>
-                <li className={ "govuk-!-margin-bottom-1" }>
-                    for areas with fewer than 3 cases at MSOA level, we do not show data to protect individuals'
-                    identities.
-                </li>
-                <li>
-                    data may be missing, for example because it is delayed or unavailable. If you zoom in to MSOA level,
-                    data for Northern Ireland, Scotland and Wales are not available.
                 </li>
             </ul>
 
