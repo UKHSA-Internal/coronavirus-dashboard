@@ -29,6 +29,11 @@ export const PostcodeSearchForm: ComponentType<*> =
     width: max-content;
     left: 0px;
     top: 0px;
+    max-width: initial;
+    
+    @media only screen and (max-width: 600px) {
+        max-width: 165px;
+    }
     
     & > input[type="submit"] {
         background: #000;
@@ -187,11 +192,11 @@ export const SliderContainer: ComponentType<*> =
             pointerEvents: all;
             border: 1px solid black;
             ${css`${({ active, focused, portrait }) => ({ 
-                backgroundColor: active && !focused ? "#1d70b8": focused ? "yellow" : "white",
-                color: active && !focused ? "#1d70b8": focused ? "yellow" :  "white",
-                // borderColor: active && !focused ? "#1d70b8": focused ? "yellow" :  "black",
-                boxShadow: active && !focused ? "#1d70b8 0 0 7px": focused ? "yellow 0 0 7px" : "white 0 0 3px",
-                height: portrait ? "2px" : "100%",
+                backgroundColor: active && !focused ? "#1d70b8": focused ? "#ffdd00" : "white",
+                // color: active && !focused ? "#1d70b8": focused ? "#ffdd00" :  "white",
+                // borderColor: active && !focused ? "#1d70b8": focused ? "#ffdd00" :  "black",
+                boxShadow: active && !focused ? "none": focused ? "none" : "white 0 0 3px",
+                height: portrait ? "3px" : "100%",
                 width: portrait ? "100%" : "3px"
             })}`}
         `;
@@ -208,7 +213,7 @@ export const SliderRoot: ComponentType<*> =
             cursor: ew-resize; 
             pointer-events: none; 
             // background-color: white;
-            border: 1px solid;
+            // border: 1px solid;
             height: 100%;
 
         `;
@@ -227,21 +232,22 @@ export const SliderButton: ComponentType<*> =
             top: 65px;
             align-self: center;
             grid-auto-flow: column; 
-            gap: 12px;
-            // place-content: center;
+            gap: 5px;
+            place-content: center;
             align-items: center;
             flex-shrink: 0; 
             width: max-content;
-            height: 27px;
-            border-radius: 5px;
-            border: 1px solid white;
+            height: 35px;
+            width: 35px;
+            border-radius: 50%;
+            border: 1px solid black;
             pointer-events: auto;
             backdrop-filter: blur(2px);
             box-shadow: rgba(0, 0, 0, 0.35) 0 0 7px;
             z-index: 9999999;
             ${css`${({ active, focused, portrait }) => ({ 
-                background: active && !focused ? "#1d70b8": focused ? "yellow" : "rgba(0, 0, 0, .8)",
-                color: active && !focused ? "white": focused ? "black" : "white"
+                background: active && !focused ? "#1d70b8": focused ? "#ffdd00" : "white",
+                color: active && !focused ? "white": focused ? "black" : "rgba(0, 0, 0, .8)"
             })}`}
         `;
 
@@ -251,9 +257,9 @@ export const TriangleMarker: ComponentType<*> =
         .div`
             width: 0; 
             height: 0; 
-            border-top: 8px solid transparent; 
-            border-right: 10px solid; 
-            border-bottom: 8px solid transparent;
+            border-top: 7px solid transparent; 
+            border-right: 9px solid; 
+            border-bottom: 7px solid transparent;
             ${css`${({ direction, active, focused }) => ({ 
                 transform: 
                     direction === "up" 
@@ -311,51 +317,69 @@ export const ZoomButton: ComponentType<*> =
         `;
 
 
-// export const LeftMarker: ComponentType<*> =
-//     styled
-//         .span`
-//             background: rgba(0,0,0,.8);
-//             top: 65px;
-//             position: absolute;
-//             right: 25px;
-//             padding: .3rem .6rem .3rem .5rem;
-//             border-bottom-left-radius: 8px;
-//             border-top-left-radius: 8px;
-//             font-size: small;
-//             white-space: nowrap;
-//             color: white;
-//             z-index: 1;
-//             font-weight: bold;
-//             box-shadow: #485052 0 0 10px;
-//             border: 1px solid white;
-//             backdrop-filter: blur(2px);
-//         `;
-//
-// export const RightMarker: ComponentType<*> =
-//     styled
-//         .span`
-//             background: rgba(0,0,0,.8);
-//             position: absolute;
-//             top: 65px;
-//             left: 28px;
-//             padding: .3rem .5rem .3rem .5rem;
-//             border-bottom-right-radius: 8px;
-//             border-top-right-radius: 8px;
-//             font-size: small;
-//             white-space: nowrap;
-//             color: white;
-//             z-index: 1;
-//             font-weight: bold;
-//             box-shadow: #485052 0 0 10px;
-//             border: 1px solid white;
-//             backdrop-filter: blur(2px);
-//         `;
-
-export const SlideMarker: ComponentType<*> =
+export const LeftMarker: ComponentType<*> =
     styled
         .span`
-            width: 58px;
+            background: rgba(0,0,0,.8);
+            top: 69px;
+            position: absolute;
+            right: 30px;
+            // padding: .3rem 1.2rem .3rem .5rem;
+            padding: .3rem .6rem;
+            // border-bottom-left-radius: 8px;
+            // border-top-left-radius: 8px;
+            border-radius: 8px;
             font-size: small;
-            padding: .3rem .5rem .3rem .5rem;
+            white-space: nowrap;
+            color: white;
+            z-index: 1;
             font-weight: bold;
+            box-shadow: #485052 0 0 7px;
+            border: 1px solid white;
+            backdrop-filter: blur(2px);
         `;
+
+export const RightMarker: ComponentType<*> =
+    styled
+        .span`
+            background: rgba(0,0,0,.8);
+            position: absolute;
+            top: 69px;
+            left: 30px;
+            // padding: .3rem .5rem .3rem 1.2rem;
+            padding: .3rem .6rem;
+            border-radius: 8px;
+            // border-bottom-right-radius: 8px;
+            // border-top-right-radius: 8px;
+            font-size: small;
+            white-space: nowrap;
+            color: white;
+            z-index: 1;
+            font-weight: bold;
+            box-shadow: #485052 0 0 7px;
+            border: 1px solid white;
+            backdrop-filter: blur(2px);
+        `;
+
+
+export const ColourReference: ComponentType<*> =
+    styled
+        .span`
+            border-radius: 50%;
+            border: 1px solid black;
+            margin-right: .5rem !important;
+            width: 20px;
+            height: 20px;
+            ${css`${ ({ colour }) => ({ background: colour }) }`};
+        `;
+
+
+// export const SlideMarker: ComponentType<*> =
+//     styled
+//         .span`
+//             position: absolute;
+//             width: 58px;
+//             font-size: small;
+//             padding: .3rem .5rem .3rem .5rem;
+//             font-weight: bold;
+//         `;
