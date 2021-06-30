@@ -372,14 +372,3 @@ export const ColourReference: ComponentType<*> =
             height: 20px;
             ${css`${ ({ colour }) => ({ background: colour }) }`};
         `;
-
-
-// export const SlideMarker: ComponentType<*> =
-//     styled
-//         .span`
-//             position: absolute;
-//             width: 58px;
-//             font-size: small;
-//             padding: .3rem .5rem .3rem .5rem;
-//             font-weight: bold;
-//         `;
