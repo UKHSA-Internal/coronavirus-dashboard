@@ -26,11 +26,11 @@ import type { ComponentType } from "react";
 import * as constants from "./constants";
 import { LocalAuthorityCard, SoaCard } from "./InfoCard";
 import deepEqual from "deep-equal";
+import useGenericAPI from "hooks/useGenericAPI";
 
 
 
-const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJSON, geoData, date,
-                                   extrema, minData, maxData, valueIndex, children, dates, maxDate, width, ...props }) => {
+const Map: ComponentType<*> = ({ width, ...props }) => {
 
     const
         bounds = new L.LatLngBounds(new L.LatLng(50.5, -14.5), new L.LatLng(58.8, 10)),
@@ -42,7 +42,8 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
         [currentLocation, setCurrentLocation] = useState({ currentLocation: null, areaType: "utla" }),
         [zoomLayerIndex, setZoomLayerIndex] = useState(0),
         prevAreaType = usePrevious(currentLocation.areaType),
-        rawTimestamp = useTimestamp();
+        rawTimestamp = useTimestamp(),
+        geoData = useGenericAPI("mapVaccinationData", null);
 
     let timestamp;
 
@@ -53,7 +54,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
     }, [rawTimestamp]);
 
     useEffect(() => {
-        if ( !map.length ) {
+        if ( !map.length && geoData ) {
             const mapInstances = [
                 new mapboxgl.Map({
                     container: 'first',
@@ -78,11 +79,17 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
             setMap(mapInstances);
 
         }
-    }, []);
+    }, [ geoData ]);
 
     useMemo(() => {
 
-        if ( map.length && !styleDataStatus ) {
+        const conditions = [
+            map.length,
+            !styleDataStatus,
+            geoData
+        ];
+
+        if ( conditions.every(item => item) ) {
 
             for ( let mapIndex = 0; mapIndex < map.length; mapIndex ++ ) {
 
@@ -95,14 +102,13 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
                     mapInstance.addSource(`timeSeries`, {
                         type: 'geojson',
-                        data: URLs.mapVaccinationData
+                        data: geoData
                     });
 
                     constants.MapLayers.map(layer => {
-
                         mapInstance.addSource(`geo-${ layer.label }`, {
                             type: 'geojson',
-                            data: layer.paths.outline,
+                            data: URLs[layer.outline],
                             buffer: layer.buffer,
                             tolerance: layer.tolerance,
                             maxzoom: layer.maxZoom
@@ -254,13 +260,12 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                     // disable map rotation using touch rotation gesture
                     mapInstance.touchZoomRotate.disableRotation();
                     mapInstance.touchZoomRotate.disableRotation();
-                    map.addControl(new mapboxgl.UIAccessibilityIsReduceMotionEnabled());
 
                 })
             }
         }
 
-    }, [map && map.length]);
+    }, [ map.length ]);
 
 
     useEffect(() => {
@@ -408,11 +413,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                 (currentLocation.areaType !== prevAreaType || !showInfo)
                     ? null
                     : currentLocation.areaType !== "msoa"
-                    ? <LocalAuthorityCard { ...currentLocation } date={ timestamp } maxDate={ maxDate } setShowInfo={ setShowInfo }/>
+                    ? <LocalAuthorityCard { ...currentLocation } date={ timestamp } setShowInfo={ setShowInfo }/>
                     : <SoaCard { ...currentLocation }
                                date={ timestamp }
                                postcodeData={ postcodeData }
-                               maxDate={ maxDate }
                                setShowInfo={ setShowInfo }/>
             }
             </MapContainer>
