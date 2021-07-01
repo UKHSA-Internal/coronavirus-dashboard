@@ -1680,10 +1680,10 @@
     d3-collection "1"
     d3-shape "^1.2.0"
 
-"@plotly/d3@^3.6.0":
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/@plotly/d3/-/d3-3.6.0.tgz#9af3beca8e744303ccdcead45fa9da44894fb600"
-  integrity sha512-5p6+3TlVn4k/xEfnohYzC2sWQBLW+4l0JbRdNJpO5dAVMOuNTXd0Bdbcsu299u/AjVHmBAGsXPrSNQSXugBrHA==
+"@plotly/d3@^3.6.1":
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/@plotly/d3/-/d3-3.6.1.tgz#98be5c0174129515c5b7df33d5c9dfec82d34e6d"
+  integrity sha512-lM2dmUqRX1qGtrWczC7QNbQ4Bdgp9sII9i7NV6Hokw06kLH1++x0Ehlj193+PkLYvi1us1IcYjC7IIw+h6GywA==
 
 "@plotly/point-cluster@^3.1.9":
   version "3.1.9"
@@ -1819,29 +1819,21 @@
     "@svgr/plugin-svgo" "^4.3.1"
     loader-utils "^1.2.3"
 
-"@turf/area@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@turf/area/-/area-6.0.1.tgz#50ed63c70ef2bdb72952384f1594319d94f3b051"
-  integrity sha512-Zv+3N1ep9P5JvR0YOYagLANyapGWQBh8atdeR3bKpWcigVXFsEKNUw03U/5xnh+cKzm7yozHD6MFJkqQv55y0g==
+"@turf/area@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@turf/area/-/area-6.4.0.tgz#de2edbedf9b66f95debc8700b66ae2d094d18083"
+  integrity sha512-zJxRZX8UUCHlKuk0oRfYUnEMKw6+TiNDJHJ3R4q7/AC+yz/Wh3m+CkEoTryiXJ8+VoMiPFXrseleUHidfOOZzQ==
   dependencies:
-    "@turf/helpers" "6.x"
-    "@turf/meta" "6.x"
+    "@turf/helpers" "^6.4.0"
+    "@turf/meta" "^6.4.0"
 
-"@turf/bbox@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@turf/bbox/-/bbox-6.0.1.tgz#b966075771475940ee1c16be2a12cf389e6e923a"
-  integrity sha512-EGgaRLettBG25Iyx7VyUINsPpVj1x3nFQFiGS3ER8KCI1MximzNLsam3eXRabqQDjyAKyAE1bJ4EZEpGvspQxw==
+"@turf/bbox@^6.3.0", "@turf/bbox@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@turf/bbox/-/bbox-6.4.0.tgz#aeca4ce9e5146cddbc133d8bbb9884b058d8c653"
+  integrity sha512-eASq6Op3sGAA293Qo3gTwuQAvdoQCKah4rgA5FZkQ2xvkYquQnkUhV2U18bFgw58aSP1g2Y+rpmSEPHDFX6/6g==
   dependencies:
-    "@turf/helpers" "6.x"
-    "@turf/meta" "6.x"
-
-"@turf/bbox@^6.3.0":
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/@turf/bbox/-/bbox-6.3.0.tgz#0e1a9b59f32d6a2a40c806f54cbaa73575bead25"
-  integrity sha512-N4ue5Xopu1qieSHP2MA/CJGWHPKaTrVXQJjzHRNcY1vtsO126xbSaJhWUrFc5x5vVkXp0dcucGryO0r5m4o/KA==
-  dependencies:
-    "@turf/helpers" "^6.3.0"
-    "@turf/meta" "^6.3.0"
+    "@turf/helpers" "^6.4.0"
+    "@turf/meta" "^6.4.0"
 
 "@turf/centroid@^6.0.2":
   version "6.0.2"
@@ -1856,10 +1848,10 @@
   resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-6.1.4.tgz#d6fd7ebe6782dd9c87dca5559bda5c48ae4c3836"
   integrity sha512-vJvrdOZy1ngC7r3MDA7zIGSoIgyrkWcGnNIEaqn/APmw+bVLF2gAW7HIsdTxd12s5wQMqEpqIQrmrbRRZ0xC7g==
 
-"@turf/helpers@^6.3.0":
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-6.3.0.tgz#87f90f806c3f8ad6385ef8d2041d3662bf3c9fb1"
-  integrity sha512-kr6KuD4Z0GZ30tblTEvi90rvvVNlKieXuMC8CTzE/rVQb0/f/Cb29zCXxTD7giQTEQY/P2nRW23wEqqyNHulCg==
+"@turf/helpers@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-6.4.0.tgz#e263d960ab1caed3bfe86a7f2f4b2096dbbf0635"
+  integrity sha512-7vVpWZwHP0Qn8DDSlM++nhs3/6zfPt+GODjvLVZ+sWIG4S3vOtUUOfO5eIjRzxsUHHqhgiIL0QA17u79uLM+mQ==
 
 "@turf/meta@6.x":
   version "6.0.2"
@@ -1868,12 +1860,12 @@
   dependencies:
     "@turf/helpers" "6.x"
 
-"@turf/meta@^6.3.0":
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-6.3.0.tgz#f3e280ab29641f21e4f99310ce77f9c8394ae394"
-  integrity sha512-qBJjaAJS9H3ap0HlGXyF/Bzfl0qkA9suafX/jnDsZvWMfVLt+s+o6twKrXOGk5t7nnNON2NFRC8+czxpu104EQ==
+"@turf/meta@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-6.4.0.tgz#6f6ff110199063c8eee3ee036ede2c1e52d12a04"
+  integrity sha512-fMra6vMskwz1knn0/tb22ppOeE8CCmpvOvTIxLdV1WYWAoC4bJ4WdXKvZRsJKpHOX5iFehx4DT8aaGdROA4Y3Q==
   dependencies:
-    "@turf/helpers" "^6.3.0"
+    "@turf/helpers" "^6.4.0"
 
 "@types/babel__core@^7.1.0":
   version "7.1.12"
@@ -2982,6 +2974,11 @@ binary-search-bounds@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/binary-search-bounds/-/binary-search-bounds-1.0.0.tgz#323ca317e3f2a40f4244c7255f5384a5b207bb69"
   integrity sha1-MjyjF+PypA9CRMclX1OEpbIHu2k=
+
+binary-search-bounds@^2.0.0:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/binary-search-bounds/-/binary-search-bounds-2.0.5.tgz#125e5bd399882f71e6660d4bf1186384e989fba7"
+  integrity sha512-H0ea4Fd3lS1+sTEB2TgcLoK21lLhwEJzlQv3IN47pJS976Gx4zoWe0ak3q+uYh60ppQxg9F16Ri4tS1sfD4+jA==
 
 binary-search-bounds@^2.0.3, binary-search-bounds@^2.0.4:
   version "2.0.4"
@@ -9621,12 +9618,12 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-matrix-camera-controller@^2.1.1, matrix-camera-controller@^2.1.3:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/matrix-camera-controller/-/matrix-camera-controller-2.1.3.tgz#35e5260cc1cd550962ba799f2d8d4e94b1a39370"
-  integrity sha1-NeUmDMHNVQliunmfLY1OlLGjk3A=
+matrix-camera-controller@^2.1.1, matrix-camera-controller@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/matrix-camera-controller/-/matrix-camera-controller-2.1.4.tgz#d316ae5e99fe801610c1d7842ab54566d4c62411"
+  integrity sha512-zsPGPONclrKSImNpqqKDTcqFpWLAIwMXEJtCde4IFPOw1dA9udzFg4HOFytOTosOFanchrx7+Hqq6glLATIxBA==
   dependencies:
-    binary-search-bounds "^1.0.0"
+    binary-search-bounds "^2.0.0"
     gl-mat4 "^1.1.2"
     gl-vec3 "^1.0.3"
     mat4-interpolate "^1.0.3"
@@ -11232,17 +11229,17 @@ planar-graph-to-polyline@^1.0.0:
     two-product "^1.0.0"
     uniq "^1.0.0"
 
-plotly.js@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/plotly.js/-/plotly.js-2.0.0.tgz#669a282a724eade25e736c34be177fc711a3134f"
-  integrity sha512-h3Qt6arIEBFnR3Vgw04SrORmjJEcsdGK29R6o6pyUqejJjXiRVR7zNBwQsPPfTP7JP5IHpXFs2sIukSSREmSAQ==
+plotly.js@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/plotly.js/-/plotly.js-2.2.0.tgz#bcfd67f4d5169de4056d84a469c90f395d1b232c"
+  integrity sha512-jqbEXFBW+6SlFpmpdxvn1QFmboNFlbUaybRzjGEEqbHG7/8uwusPqHDPq8EZPehOEch/zSYMWKBExHV+dZLmiw==
   dependencies:
-    "@plotly/d3" "^3.6.0"
+    "@plotly/d3" "^3.6.1"
     "@plotly/d3-sankey" "0.7.2"
     "@plotly/d3-sankey-circular" "0.33.1"
     "@plotly/point-cluster" "^3.1.9"
-    "@turf/area" "^6.0.1"
-    "@turf/bbox" "^6.0.1"
+    "@turf/area" "^6.4.0"
+    "@turf/bbox" "^6.4.0"
     "@turf/centroid" "^6.0.2"
     alpha-shape "^1.0.0"
     canvas-fit "^1.5.0"
@@ -11278,7 +11275,7 @@ plotly.js@^2.0.0:
     has-passive-events "^1.0.0"
     is-mobile "^2.2.2"
     mapbox-gl "1.10.1"
-    matrix-camera-controller "^2.1.3"
+    matrix-camera-controller "^2.1.4"
     mouse-change "^1.4.0"
     mouse-event-offset "^3.0.2"
     mouse-wheel "^1.2.0"
@@ -11287,7 +11284,7 @@ plotly.js@^2.0.0:
     ndarray-linear-interpolate "^1.0.0"
     parse-svg-path "^0.1.2"
     polybooljs "^1.2.0"
-    probe-image-size "^7.1.0"
+    probe-image-size "^7.2.1"
     regl "^1.6.1"
     regl-error2d "^2.0.11"
     regl-line2d "^3.1.0"
@@ -12126,7 +12123,7 @@ prismjs@^1.22.0, prismjs@~1.23.0:
   optionalDependencies:
     clipboard "^2.0.0"
 
-probe-image-size@^7.1.0:
+probe-image-size@^7.2.1:
   version "7.2.1"
   resolved "https://registry.yarnpkg.com/probe-image-size/-/probe-image-size-7.2.1.tgz#df0c924e67e247bc94f8fcb0fad7f0081061fc44"
   integrity sha512-d+6L3NvQBCNt4peRDoEfA7r9bPm6/qy18FnLKwg4NWBC5JrJm0pMLRg1kF4XNsPe1bUdt3WIMonPJzQWN2HXjQ==
