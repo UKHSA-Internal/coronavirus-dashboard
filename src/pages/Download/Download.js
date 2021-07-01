@@ -379,7 +379,7 @@ const Download: ComponentType<*> = () => {
     useEffect(() => {
         setAreaCode(null);
         setMetric([]);
-    }, [ areaType ])
+    }, [ areaType ]);
 
     useEffect(() => {
         setAreaCode(null);
