@@ -16,7 +16,6 @@ export const LocalAuthorityCard: ComponentType<*> = ({ currentLocation, date, ar
 
     const
         timestamp = useTimestamp(),
-        dataDate = moment(date).subtract(1, "d"),
         apiData = useApi({
             ...(areaType !== "msoa" && timestamp !== "" )
                 ? {
