@@ -32,7 +32,7 @@ export const VaccinationsMap: ComponentType<*> = () => {
                 </p>
                 <p>
                     For English areas, the population used is the number of people of the National Immunisation
-                    Management Service (NIMS) database. For Scottish areas, the population used in the mid-2019
+                    Management Service (NIMS) database. For Scottish areas, the population used is the mid-2019
                     population estimate from National Records of Scotland. Comparisons between English and Scottish
                     areas should be made with caution.
                 </p>
