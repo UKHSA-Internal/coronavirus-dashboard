@@ -49,11 +49,7 @@ export const MapLayers = [
     {
         label: "utla",
         name: "UTLA",
-        paths: {
-            // timeSeries: `https://${URLs.baseCDN}/downloads/maps/utla_data_latest.geojson`,
-            // timeSeriesMobile: `https://${ URLs.baseCDN }/downloads/maps/utla_data_latest-mobile.geojson`,
-            outline: `https://${ URLs.baseCDN }/downloads/maps/utla-ref.geojson`
-        },
+        outline: "mapUtlaRef",
         foreground: "building",
         tolerance: .25,
         buffer: 32,
@@ -63,11 +59,7 @@ export const MapLayers = [
     {
         label: "ltla",
         name: "LTLA",
-        paths: {
-            // timeSeries: `https://${ URLs.baseCDN }/downloads/maps/ltla_data_latest.geojson`,
-            // timeSeriesMobile: `https://${ URLs.baseCDN }/downloads/maps/ltla_data_latest-mobile.geojson`,
-            outline: `https://${ URLs.baseCDN }/downloads/maps/ltla-ref.geojson`
-        },
+        outline: "mapLtlaRef",
         tolerance: .4,
         buffer: 32,
         minZoom: 7,
@@ -77,11 +69,7 @@ export const MapLayers = [
     {
         label: "msoa",
         name: "MSOA",
-        paths: {
-            // timeSeries: `https://${ URLs.baseCDN }/downloads/maps/msoa_data_latest.geojson`,
-            // timeSeriesMobile: `https://${ URLs.baseCDN }/downloads/maps/msoa_data_latest-mobile.geojson`,
-            outline: `https://${ URLs.baseCDN }/downloads/maps/msoa-ref.geojson`
-        },
+        outline: "mapMsoaRef",
         tolerance: .5,
         buffer: 32,
         minZoom: 8.5,
