@@ -92,7 +92,7 @@ const Banner: ComponentType<*> = ({ ...props }) => {
                 </BannerContent>
             </BannerBase>
         )
-    }</>
+    }</>;
 
 };  // Banner
 
