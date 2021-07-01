@@ -38,7 +38,7 @@
     "styled-components": "^5.3.0",
     "leaflet": "^1.6.0",
     "mapbox-gl": "^1.13.1",
-    "@turf/bbox": "^6.3.0",
+    "@turf/bbox": "^6.4.0",
     "js-cookie": "^2.2.1",
     "lodash.clonedeep": "^4.5.0",
     "react-compare-slider": "^2.0.2"
