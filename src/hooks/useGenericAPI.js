@@ -10,13 +10,23 @@ import type { ResponseType } from "axios";
 import { strFormat } from "../common/utils";
 
 
-const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: any = {}, responseType: ResponseType="json", params={} ) => {
+const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: any = {},
+                         responseType: ResponseType="json", params={}, onError=undefined, onEmpty=undefined) => {
 
     const [ response, setResponse ] = useState(defaultResponse);
     const isGenericEndpoint = urlName.startsWith("genericApi");
 
+    if ( typeof onError === "undefined" ) {
+        onError = defaultResponse;
+    }
+
+    if ( typeof onEmpty === "undefined" ) {
+        onEmpty = defaultResponse;
+    }
+
     useEffect( () => {
 
+        setResponse(null);
         let url = URLs[urlName];
 
         if ( isGenericEndpoint ) {
@@ -31,11 +41,12 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: an
                 if ( status < 400 && status !== 204 )
                     setResponse(data);
                 else if ( response !== defaultResponse ) {
-                    setResponse(defaultResponse);
+                    setResponse(onEmpty);
                     console.warn(`Failed request for "${urlName}" with status ${status}`);
                 }
 
             } catch (e) {
+                setResponse(onError)
                 console.log("error")
                 console.error(e)
             }
