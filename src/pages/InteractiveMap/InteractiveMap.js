@@ -1,13 +1,12 @@
 // @flow
 
-import React, { useState } from "react";
+import React from "react";
 import { Redirect, useLocation } from "react-router";
-import { MainContainer as MainTabLinkContainer, TabsContainer, Tab } from "components/TabLink/TabLink.styles";
+import { MainContainer as MainTabLinkContainer } from "components/TabLink/TabLink.styles";
 import { CasesMap } from "./CasesMap";
 import { VaccinationsMap } from "./VaccinationsMap";
 import { Switch, Route } from "react-router";
 import { Link } from "react-router-dom";
-import { getParams } from "common/utils";
 
 import { MainContainer, Container } from "./InteractiveMap.styles"
 
@@ -35,18 +34,22 @@ const InteractiveMap: ComponentType<*> = () => {
     if ( !glAvailable() ) return <NoWebGL/>;
 
     return <MainTabLinkContainer>
-        <TabsContainer className={ "govuk-!-margin-top-6 govuk-!-margin-left-2 govuk-!-margin-bottom-7" }>
-            <Link to={ "/details/interactive-map/cases" }
-                  aria-label={ "cases-map-container" }
-                  className={ `${ pathname.indexOf("cases") > -1 ? 'active govuk-!-font-weight-bold' : '' } tab-link` }>
-                Cases
-            </Link>
-            <Link to={ "/details/interactive-map/vaccinations" }
-                 aria-label={ "vaccinations-map-container" }
-                 className={ `${ pathname.indexOf("vaccinations") > -1 ? 'active govuk-!-font-weight-bold' : '' } tab-link` }>
-                Vaccinations <DefaultTag className={ "govuk-tag" } style={{ marginLeft: "4px" }}>BETA</DefaultTag>
-            </Link>
-        </TabsContainer>
+        <div className={ "map-tabs govuk-!-margin-top-6 govuk-!-margin-left-2 govuk-!-margin-bottom-7" }>
+            <span className={ `map-tab-container ${ pathname.indexOf("cases") > -1 ? 'active' : '' }` }>
+                <Link to={ "/details/interactive-map/cases" }
+                      aria-label={ "cases-map-container" }
+                      className={ `${ pathname.indexOf("cases") > -1 ? 'active govuk-!-font-weight-bold' : '' } map-tab` }>
+                    Cases
+                </Link>
+            </span>
+            <span className={ `map-tab-container ${ pathname.indexOf("vaccinations") > -1 ? 'active' : '' }` }>
+                <Link to={ "/details/interactive-map/vaccinations" }
+                     aria-label={ "vaccinations-map-container" }
+                     className={ `${ pathname.indexOf("vaccinations") > -1 ? 'active govuk-!-font-weight-bold' : '' } map-tab` }>
+                    Vaccinations <DefaultTag className={ "govuk-tag" } style={{ marginLeft: "4px" }}>BETA</DefaultTag>
+                </Link>
+            </span>
+        </div>
         <MainContainer className={ "govuk-body" }>
             <Switch>
                 <Route path="/details/interactive-map/cases" exact component={ CasesMap }/>
