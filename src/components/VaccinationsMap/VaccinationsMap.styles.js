@@ -53,13 +53,14 @@ export const PostcodeSearchForm: ComponentType<*> =
 
 
 export const MapToolbox: ComponentType<*> =
-    styled.legend`
+    styled
+        .legend`
     width: 300px;
     font-family: "GDS Transport", Arial, sans-serif;
     position: absolute;
     background: rgba(255,255,255,0.9);
     border: 2px solid black;
-    padding: 0.5rem;
+    padding: 0.5rem 1.5rem 0.5rem 0.5rem !important;
     margin: 10px 10px;
     bottom: 0;
     left: 0;
