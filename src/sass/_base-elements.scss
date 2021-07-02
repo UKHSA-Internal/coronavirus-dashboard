@@ -134,3 +134,37 @@ div[role='heading'] {
         margin-top: 1rem;
     }
 }
+
+
+.map-tab-container {
+    &.active {
+        padding: 0 1rem;
+    }
+
+    &:not(.active) {
+        background: #f3f2f1;
+        padding: .5rem 1rem;
+    }
+}
+
+.map-tab {
+    @extend .govuk-link;
+    @extend .govuk-\!-margin-right-1;
+    @extend .govuk-link--no-visited-state;
+    @extend .govuk-\!-font-size-19;
+
+    color: #1e70b8;
+    cursor: pointer;
+    text-decoration: none;
+
+    &.active,
+    &.focus {
+        border-bottom: 4px solid #1e70b8 !important;
+        color: #1e70b8;
+        padding: .5rem 0;
+    }
+
+    @media only screen and (max-width: 768px) {
+        margin-top: 1rem;
+    }
+}
