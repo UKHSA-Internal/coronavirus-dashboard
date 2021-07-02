@@ -16,11 +16,11 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: an
     const [ response, setResponse ] = useState(defaultResponse);
     const isGenericEndpoint = urlName.startsWith("genericApi");
 
-    if ( typeof onError === "undefined" ) {
+    if ( onError === undefined ) {
         onError = defaultResponse;
     }
 
-    if ( typeof onEmpty === "undefined" ) {
+    if ( onEmpty === undefined ) {
         onEmpty = defaultResponse;
     }
 
