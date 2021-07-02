@@ -485,14 +485,12 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
                 });
 
-                // map.legendControl.addLegend(ReactDomServer.renderToStaticMarkup(children));
-
                 map.on('styledata', function (e) {
                     setStyleDataStatus(true)
-                    // map.
                 });
 
                 map.addControl(new mapboxgl.NavigationControl({ showCompass: false }));
+                map.addControl(new mapboxgl.FullscreenControl());
 
                 // disable map rotation using right click + drag
                 map.dragRotate.disable();
