@@ -16,17 +16,8 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: an
     const [ response, setResponse ] = useState(defaultResponse);
     const isGenericEndpoint = urlName.startsWith("genericApi");
 
-    if ( onError === undefined ) {
-        onError = defaultResponse;
-    }
-
-    if ( onEmpty === undefined ) {
-        onEmpty = defaultResponse;
-    }
-
     useEffect( () => {
 
-        setResponse(null);
         let url = URLs[urlName];
 
         if ( isGenericEndpoint ) {
@@ -41,12 +32,16 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: an
                 if ( status < 400 && status !== 204 )
                     setResponse(data);
                 else if ( response !== defaultResponse ) {
-                    setResponse(onEmpty);
+                    if ( onEmpty !== "undefined" ) {
+                        setResponse(onEmpty);
+                    }
                     console.warn(`Failed request for "${urlName}" with status ${status}`);
                 }
 
             } catch (e) {
-                setResponse(onError)
+                if ( onEmpty === "undefined" ) {
+                    setResponse(onError)
+                }
                 console.log("error")
                 console.error(e)
             }
