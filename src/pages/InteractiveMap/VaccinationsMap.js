@@ -24,9 +24,9 @@ export const VaccinationsMap: ComponentType<*> = () => {
             </div>
             <Map width={ width }/>
             <div className={ "markdown govuk-!-margin-top-5 govuk-body govuk-!-margin-bottom-0 govuk-!-margin-left-0" } style={{ maxWidth: 50 + "em" }}>
-                <h3 className={ "govuk-heading-m govuk-!-margin-top-3" }>Vaccination uptake</h3>
+                <h3 className={ "govuk-heading-m govuk-!-margin-top-3" }>Percentage of adults vaccinated</h3>
                 <p>
-                    Vaccination uptake is shown as a percentage of all people aged 18 and over. We calculate
+                    The percentage of all people aged 18 and over who have been vaccinated. We calculate
                     this by dividing the total number of people who have received a vaccination by the population
                     and multiplying by 100.
                 </p>
