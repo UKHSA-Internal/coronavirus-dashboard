@@ -7,13 +7,42 @@ import moment from "moment";
 import numeral from "numeral";
 import * as constants from "../constants";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
+import { analytics } from "../../../common/utils";
+
+
+const Panel = ({ children, setShowInfo }) => {
+
+    const layout = useResponsiveLayout("570");
+
+    return <MapToolbox style={{ maxWidth: layout === "desktop" ? "300px" : "170px" }}>
+        <button style={{ position: "absolute", top: 3, right: 8, margin: 0, padding: 0, cursor: "pointer", fontSize: 1.5 + "rem" }}
+                role={ "button" }
+                onClick={ () => setShowInfo(false) }>×</button>
+        { children }
+    </MapToolbox>
+};
+
+
+const Error = ({ setShowInfo }) => {
+
+    const layout = useResponsiveLayout("570");
+
+    return <Panel setShowInfo={ setShowInfo }>
+        <div className={ "govuk-warning-text govuk-!-margin-bottom-0" }>
+            <span className={ "govuk-warning-text__icon" } aria-hidden={ "true" }>!</span>
+            <strong className={ `govuk-warning-text__text ${layout !== "desktop" ? "govuk-!-font-size-14" : ""}` }>
+                <span className={ "govuk-warning-text__assistive" }>Warning</span>
+                This data couldn't load. Please click away from your selected map area
+                and then select it again.
+            </strong>
+        </div>
+    </Panel>;
+
+};
 
 
 export const InfoCard = ({ areaName, date, first, complete, postcode, areaType, areaCode,
-                      setShowInfo, maxDate, ...props }) => {
-
-
-    const layout = useResponsiveLayout("570");
+                      setShowInfo, maxDate, error, empty, showInfo, ...props }) => {
 
     if ( !setShowInfo ) return null;
 
@@ -25,10 +54,21 @@ export const InfoCard = ({ areaName, date, first, complete, postcode, areaType, 
         .keys(constants.colourBucketReference)
         .reduce((acc, cur, ) => complete > cur ? cur : acc, 0);
 
-    return <MapToolbox style={{ maxWidth: layout === "desktop" ? "300px" : "170px" }}>
-        <button style={{ position: "absolute", top: 3, right: 8, margin: 0, padding: 0, cursor: "pointer", fontSize: 1.5 + "rem" }}
-                role={ "button" }
-                onClick={ () => setShowInfo(false) }>×</button>
+    if ( error ) {
+        analytics("vaccinations map", "click::error", areaType, areaCode);
+
+        return <Error setShowInfo={ setShowInfo }/>;
+
+    } else if ( empty ) {
+        analytics("vaccinations map", "click::empty", areaType, areaCode);
+
+        return <Error setShowInfo={ setShowInfo }/>;
+
+    } else if ( areaType && areaCode ) {
+        analytics("vaccinations map", "click", areaType, areaCode);
+    }
+
+    return <Panel setShowInfo={ setShowInfo }>
         <h2 className={ 'govuk-heading-m' }>
             { areaName }
             <small className={ "govuk-caption-s" }>
@@ -68,7 +108,7 @@ export const InfoCard = ({ areaName, date, first, complete, postcode, areaType, 
                 </a>
             </p>
         }
-    </MapToolbox>
+    </Panel>
 
 };  // InfoCard
 
