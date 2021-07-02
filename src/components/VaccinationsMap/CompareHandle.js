@@ -1,34 +1,43 @@
 // @flow
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     LeftMarker, RightMarker,
-    SlideMarker,
     SliderButton,
     SliderContainer,
     SliderLine,
     SliderRoot,
     TriangleMarker
 } from "./VaccinationsMap.styles";
+import { analytics } from "common/utils";
 
 
 export const CompareHandle = ({ portrait }) => {
 
     const [active, setActive] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
+    const [focused, setFocused] = useState(false);
 
-    return <SliderContainer active={ active } focused={ isFocused } portrait={ portrait }
+    useEffect(() => {
+        analytics("vaccinations map", "slider", "click");
+    }, [ focused ]);
+
+    useEffect(() => {
+            analytics("vaccinations map", "slider", "hover");
+    }, [ active ]);
+
+    return <SliderContainer id={ "slider-container" }
+                            active={ active } focused={ focused } portrait={ portrait }
                             onMouseEnter={ () =>  setActive(true) }
                             onMouseLeave={ () =>  setActive(false) }
-                            onTouchStart={ () => setIsFocused(true) }
-                            onTouchEnd={ () => setIsFocused(false) }
-                            onMouseDown={ () => setIsFocused(true) }
-                            onMouseUp={ () => setIsFocused(false) }>
-        <SliderRoot>
-            <SliderLine active={ active } focused={ isFocused } portrait={ portrait }/>
+                            onTouchStart={ () => setFocused(true) }
+                            onTouchEnd={ () => setFocused(false) }
+                            onMouseDown={ () => setFocused(true) }
+                            onMouseUp={ () => setFocused(false) }>
+        <SliderRoot id={ "slider-root" }>
+            <SliderLine id={ "slider-line" } active={ active } focused={ focused } portrait={ portrait }/>
             <LeftMarker>1st dose</LeftMarker>
             <RightMarker>2nd dose</RightMarker>
-            <SliderButton active={ active } focused={ isFocused } portrait={ portrait }>
+            <SliderButton id={ "slider-button" } active={ active } focused={ focused } portrait={ portrait }>
                 <TriangleMarker direction={ "left" }/>
                 <TriangleMarker direction={ "right" }/>
             </SliderButton>
