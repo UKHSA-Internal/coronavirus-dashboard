@@ -22,7 +22,9 @@ export const SoaCard: ComponentType<*> = ({ currentLocation, postcodeData, date,
                 metric: "cumVaccinationFirstDoseUptakeByVaccinationDatePercentage"
             },
             "json",
-            {date}
+            {date},
+            null,
+            "empty"
         ),
         complete = useGenericAPI(
             "genericApiSoa",
@@ -33,11 +35,13 @@ export const SoaCard: ComponentType<*> = ({ currentLocation, postcodeData, date,
                 metric: "cumVaccinationCompleteCoverageByVaccinationDatePercentage"
             },
             "json",
-            {date}
+            {date},
+            "error",
+            "empty"
         ),
         locationData = useGenericAPI(
             "genericApiCode",
-            null,
+            "error",
             { area_type: "msoa", area_code: currentLocation }
         );
 
@@ -45,6 +49,8 @@ export const SoaCard: ComponentType<*> = ({ currentLocation, postcodeData, date,
         return <MapToolbox><Loading/></MapToolbox>;
 
     return <InfoCard areaName={ locationData?.msoaName ?? "" }
+                     error={ first === "error" || complete === "error" }
+                     empty={ first === "empty" || complete === "empty" }
                      date={ first?.date }
                      first={ first?.payload?.value ?? null }
                      complete={ complete?.payload?.value ?? null }
