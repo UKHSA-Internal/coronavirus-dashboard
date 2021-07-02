@@ -152,6 +152,7 @@ div[role='heading'] {
     @extend .govuk-\!-margin-right-1;
     @extend .govuk-link--no-visited-state;
     @extend .govuk-\!-font-size-19;
+    @extend .govuk-\!-font-weight-bold;
 
     color: #1e70b8;
     cursor: pointer;
