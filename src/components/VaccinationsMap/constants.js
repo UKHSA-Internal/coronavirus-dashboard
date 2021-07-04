@@ -1,7 +1,5 @@
 // @flow
 
-import URLs from "../../common/urls";
-
 export const bucketsFirst = [
     "#E7FBF9",
     20, "#DAF5F3",

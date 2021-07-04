@@ -5,13 +5,15 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import usePrevious from "hooks/usePrevious";
 
+import type { ComponentType } from "react";
 
-const BrowserHistory = ({ children }) => {
+
+const BrowserHistory: ComponentType<*> = ({ children }) => {
 
     const location = useLocation();
-    let { hash, search } = location;
     const [hashValue, setHashValue] = useState(null);
     let prevHash = usePrevious(hashValue);
+    let { hash, search } = location;
 
     useEffect(() => {
         setHashValue(
