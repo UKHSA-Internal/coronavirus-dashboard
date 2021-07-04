@@ -3,7 +3,6 @@
 import React from "react";
 
 import useTimestamp from "hooks/useTimestamp";
-import moment from "moment";
 import useApi from "hooks/useApi";
 import { MapToolbox } from "../VaccinationsMap.styles";
 import Loading from "components/Loading";
