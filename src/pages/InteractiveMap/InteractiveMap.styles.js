@@ -1,6 +1,6 @@
 // @flow
 
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import type { ComponentType } from "react";
 
@@ -60,9 +60,15 @@ export const MainContainer: ComponentType<*> =
 export const Slider: ComponentType<*> =
     styled
         .input
-        .attrs(() => ({
-            type: "range"
+        .attrs(({ ...props }) => ({
+            type: "range",
+            ...props
         }))`
+        ${ css`${
+            ({ value: v, length: l }) => ({
+                background: `linear-gradient(to right, #12407F 0%, #12407F ${ Math.ceil(v * 100 / l + .7) }%, white  ${ Math.ceil((v + .7) * 100 / l) }%, white 100%) !important`
+            })
+        }`};
         `;
 
 

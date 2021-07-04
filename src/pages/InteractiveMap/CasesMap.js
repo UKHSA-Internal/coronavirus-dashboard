@@ -54,6 +54,30 @@ const AreaLevel = {
 };
 
 
+const SliderComponent: ComponentType<*> = ({ dates, currentDate, setCurrentDate, width }) => {
+
+    if ( width !==  "desktop" ) return null;
+
+    return <>
+        <label id={ "month" }
+               className={ "govuk-body govuk-!-font-weight-bold" }
+               htmlFor={ "slider" }>
+            Case rate per 100,000 people for 7&ndash;day period ending
+            on <time dateTime={ currentDate }>{ moment(currentDate).format("D MMMM YYYY") }</time>:
+        </label>
+        <Slider id="slider"
+                   min={ 0 }
+                   max={ (dates.length ?? 0) - 1 }
+                   value={ dates.indexOf(currentDate) ?? 0 }
+                   length={ dates.length }
+                   onChange={ event => setCurrentDate(dates[parseInt(event.target.value)]) }/>
+        <Plotter type={ "XAxis" }
+                 data={ [{ x: dates, y: Array(dates.length).fill(null) }] }/>
+    </>;
+
+};  // SliderComponent
+
+
 export const CasesMap: ComponentType<*> = () => {
 
     const
@@ -91,57 +115,38 @@ export const CasesMap: ComponentType<*> = () => {
         }
     }, [period]);
 
-    if ( !dates || !extrema ) return <Loading/>;
+    if ( !dates || !extrema || !currentDate ) return <Loading/>;
 
-    return <MainTabLinkContainer>
-        <div className={ "govuk-!-margin-bottom-5" }>
-            <p className={ "govuk-body" } style={{ maxWidth: 40 + "em" }}>
-                This map shows 7-day case rate per 100,000 people.
-            </p>
-            <p className={ "govuk-body" } style={{ maxWidth: 40 + "em" }}>
-                The default view shows data by local authority. Zoom in for more local data.
-            </p>
-        </div>
-        <MainContainer className={ "govuk-body govuk-!-margin-0" }>
-            <Map date={ currentDate }
-                 geoKey={ AreaLevel?.[areaType]?.geoKey ?? "ctry19" }
-                 geoJSON={ AreaLevel?.[areaType]?.geoJSON }
-                 geoData={ AreaLevel?.[areaType]?.data }
-                 valueIndex={ areaType !== "msoa" ? 2 : 1 }
-                 dates={ dates }
-                 extrema={ extrema }
-                 colours={ colours }
-                 maxDate={ dates[dates.length - 1] }
-                 width={ width }
-            >
-                <label id={ "month" }
-                       className={ "govuk-body govuk-!-font-weight-bold" }
-                       htmlFor={ "slider" }>
-                    Case rate per 100,000 people for 7&ndash;day period ending on <time dateTime={ currentDate }>{ moment(currentDate).format("D MMMM YYYY") }</time>:
-                </label>
-                {
-                    width === "desktop"
-                        ? <>
-                            <Slider id="slider"
-                                      min={ 0 }
-                                      max={ (dates.length ?? 0) - 1 }
-                                      value={ dates.indexOf(currentDate) ?? 0 }
-                                      length={ dates.length }
-                                      onInput={ e => {
-                                          e.target.style.background = `linear-gradient(to right, #12407F 0%, #12407F ${ Math.ceil(parseInt(e.target.value) * 100 / dates.length + .7) }%, white  ${ Math.ceil((parseInt(e.target.value) + .7) * 100 / dates.length) }%, white 100%)`
-                                      } }
-                                      onChange={ event => setCurrentDate(dates[parseInt(event.target.value)]) }/>
-                            <Plotter type={ "XAxis" }
-                                     data={ [{
-                                         x: dates,
-                                         y: Array(dates.length).fill(null)
-                                     }] }/>
-                        </>
-                        : null
-                }
-            </Map>
-        </MainContainer>
-        <div className={ "markdown govuk-!-margin-top-5 govuk-body govuk-!-margin-bottom-0 govuk-!-margin-left-0" } style={{ maxWidth: 50 + "em" }}>
+    return <>
+        <MainTabLinkContainer>
+            <div className={ "govuk-!-margin-bottom-5" }>
+                <p className={ "govuk-body" } style={{ maxWidth: 40 + "em" }}>
+                    This map shows 7-day case rate per 100,000 people.
+                </p>
+                <p className={ "govuk-body" } style={{ maxWidth: 40 + "em" }}>
+                    The default view shows data by local authority. Zoom in for more local data.
+                </p>
+            </div>
+            <MainContainer className={ "govuk-body govuk-!-margin-0" }>
+                <Map date={ currentDate }
+                     geoKey={ AreaLevel?.[areaType]?.geoKey ?? "ctry19" }
+                     geoJSON={ AreaLevel?.[areaType]?.geoJSON }
+                     geoData={ AreaLevel?.[areaType]?.data }
+                     valueIndex={ areaType !== "msoa" ? 2 : 1 }
+                     dates={ dates }
+                     extrema={ extrema }
+                     colours={ colours }
+                     maxDate={ dates[dates.length - 1] }
+                     width={ width }
+                >
+                    <SliderComponent dates={ dates }
+                                     currentDate={ currentDate }
+                                     setCurrentDate={ setCurrentDate }
+                                     width={ width }/>
+                </Map>
+            </MainContainer>
+        </MainTabLinkContainer>
+        <div className={ "markdown govuk-!-margin-top-5 govuk-body govuk-!-margin-bottom-0" } style={{ maxWidth: 50 + "em" }}>
             <h3 className={ "govuk-heading-m govuk-!-margin-top-1" }>Case rates</h3>
             <p>
                 Case rates are shown per 100,000 people for the 7-day period ending on the date shown. <br/>
@@ -151,7 +156,7 @@ export const CasesMap: ComponentType<*> = () => {
                 This makes it easier to compare cases across areas of different population size.
             </p>
 
-            <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Data not shown</h3>
+            <h3 className={ "govuk-heading-m govuk-!-margin-top-7" }>Data not shown</h3>
             <p>
                 There are 2 reasons why data may not be shown:
             </p>
@@ -168,6 +173,6 @@ export const CasesMap: ComponentType<*> = () => {
             </ul>
 
         </div>
-    </MainTabLinkContainer>
+    </>
 
 };
