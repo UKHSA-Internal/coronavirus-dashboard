@@ -55,17 +55,32 @@ export const InfoCard = ({ areaName, date, first, complete, postcode, areaType, 
         .reduce((acc, cur, ) => complete > cur ? cur : acc, 0);
 
     if ( error ) {
-        analytics("vaccinations map", "click::error", areaType, areaCode);
+        analytics({
+            category: "vaccinations map",
+            action: "click::error",
+            label: areaType,
+            value: areaCode
+        });
 
         return <Error setShowInfo={ setShowInfo }/>;
 
     } else if ( empty ) {
-        analytics("vaccinations map", "click::empty", areaType, areaCode);
+        analytics({
+            category: "vaccinations map",
+            action: "click::empty",
+            label: areaType,
+            value: areaCode
+        });
 
         return <Error setShowInfo={ setShowInfo }/>;
 
     } else if ( areaType && areaCode ) {
-        analytics("vaccinations map", "click", areaType, areaCode);
+        analytics({
+            category: "vaccinations map",
+            action: "click",
+            label: areaType,
+            value: areaCode
+        });
     }
 
     return <Panel setShowInfo={ setShowInfo }>
