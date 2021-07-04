@@ -77,7 +77,9 @@ const InteractiveMap: ComponentType<*> = () => {
                 </li>
             </ul>
 
-            <h3 className={ "govuk-heading-s govuk-!-margin-top-8" }>Copyright information</h3>
+            <hr className={ "govuk-section-break--xl govuk-section-break--visible" }/>
+
+            <h3 className={ "govuk-heading-s govuk-!-margin-top-0" }>Copyright information</h3>
             <div className={ "govuk-body-s" }>
                 <p className={ "govuk-body-s" }>
                     All data used in the map are available in the public domain and may be
