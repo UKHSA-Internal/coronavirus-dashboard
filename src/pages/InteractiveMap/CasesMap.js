@@ -117,7 +117,7 @@ export const CasesMap: ComponentType<*> = () => {
                 <label id={ "month" }
                        className={ "govuk-body govuk-!-font-weight-bold" }
                        htmlFor={ "slider" }>
-                    Case rate per 100,000 people for 7&ndash;day period ending on <strong>{ moment(currentDate).format("D MMMM YYYY") }</strong>:
+                    Case rate per 100,000 people for 7&ndash;day period ending on <time dateTime={ currentDate }>{ moment(currentDate).format("D MMMM YYYY") }</time>:
                 </label>
                 {
                     width === "desktop"
