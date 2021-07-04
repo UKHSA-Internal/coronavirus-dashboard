@@ -50,15 +50,13 @@ const InteractiveMap: ComponentType<*> = () => {
                 </Link>
             </span>
         </div>
-        <MainContainer className={ "govuk-body" }>
-            <Switch>
-                <Route path="/details/interactive-map/cases" exact component={ CasesMap }/>
-                <Route path="/details/interactive-map/vaccinations" component={ VaccinationsMap }/>
-                <Route path="/details/interactive-map" component={ () => <Redirect to={ `/details/interactive-map/cases` }/> }/>
-            </Switch>
-        </MainContainer>
+        <Switch>
+            <Route path="/details/interactive-map/cases" exact component={ CasesMap }/>
+            <Route path="/details/interactive-map/vaccinations" component={ VaccinationsMap }/>
+            <Route path="/details/interactive-map" component={ () => <Redirect to={ `/details/interactive-map/cases` }/> }/>
+        </Switch>
 
-        <div className={ "markdown govuk-!-margin-top-5 govuk-body" } style={{ maxWidth: 50 + "em" }}>
+        <div className={ "markdown govuk-!-margin-top-0 govuk-body govuk-!-padding-top-0" } style={{ maxWidth: 50 + "em" }}>
             <h3 className={ "govuk-heading-m govuk-!-margin-top-6" }>Map areas</h3>
             <p>
                 Find your area by using the postcode search or the zoom.
