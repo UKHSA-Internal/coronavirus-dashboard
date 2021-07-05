@@ -9,11 +9,10 @@ import MomentLocaleUtils, { formatDate, parseDate } from "react-day-picker/momen
 
 import { MetricLastUpdated, SelectOptions } from "./Download.styles";
 import { AreaTypeOptions, MSOAMetricOptions } from "components/DashboardHeader/Constants";
-import { createQuery, groupBy, sort } from 'common/utils/utils';
+import { createQuery, groupBy } from 'common/utils/utils';
 import URLs from "common/urls";
 import { Radio } from 'components/GovUk';
 import Loading from "components/Loading";
-import useApi from "hooks/useApi";
 import useGenericAPI from 'hooks/useGenericAPI';
 import useTimestamp from 'hooks/useTimestamp';
 import MsoaSelectContainer from "./MsoaDownloads";
@@ -31,7 +30,6 @@ import {
 import type { ComponentType } from "react";
 import { Helmet } from "react-helmet";
 import usePrevious from "../../hooks/usePrevious";
-import time from "d3-scale/src/time";
 
 
 const MAX_METRICS = 5;
@@ -53,15 +51,6 @@ const dataFormatOptions = {
 const dataReleaseDateOptions = [
     { label: "Latest", value: "latest" },
     { label: "Archive", value: "archive" }
-];
-
-
-const excludedMetrics = [
-    "date",
-    "areaName",
-    "areaType",
-    "areaCode",
-    "areaNameLower"
 ];
 
 
@@ -134,7 +123,11 @@ const AreaTypeSelector = ({ areaType, setAreaType }) => {
 const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
 
     const [areaNameData, setAreaNameData] = useState({ grouped: {}, data: [] });
-    const areaNameOptions = useGenericAPI("genericApiAreaByType", [], {area_type: areaType});
+    const areaNameOptions = useGenericAPI(
+        "genericApiAreaByType",
+        [],
+        {area_type: areaType}
+    );
 
     useEffect(() => {
         const
@@ -163,7 +156,7 @@ const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
             <Select options={ areaNameData.data }
                     styles={ SelectOptions }
                     value={ areaNameData.data.filter(item => item?.value === areaCode) }
-                    isLoading={ areaNameOptions.length < 1 && areaType && areaType !== "overview" }
+                    isLoading={ areaNameOptions?.length < 1 && areaType && areaType !== "overview" }
                     placeholder={ "Select area" }
                     isDisabled={ !areaType || areaType === "overview" }
                     onChange={ item => setAreaCode(item?.value ?? null) }
@@ -194,15 +187,17 @@ const MetricMultiSelector = ({ areaType, areaCode, date, metrics, setMetrics }) 
         [],
         {area_type: areaType, area_code: areaCode || ""},
         "json",
-        apiParams
+        apiParams,
+        [],
+        []
     );
 
     const metricNames = areaType === MSOA_AREA_TYPE
         ? MSOAMetricOptions
-        : metricData.map(item => ({
+        : metricData?.map(item => ({
             label: <span>
                 { item.metric }<br/>
-                <MetricLastUpdated>Latest record: { item.last_update }</MetricLastUpdated>
+                <MetricLastUpdated>Latest record: { item?.last_update ?? "" }</MetricLastUpdated>
             </span>,
             value: item.metric
         }));
@@ -242,10 +237,10 @@ const MetricMultiSelector = ({ areaType, areaCode, date, metrics, setMetrics }) 
         <div aria-labelledby={ "metrics-label" }
             aria-describedby={ 'metrics-descr' }>
             <Select options={ metricNames }
-                    value={ metricNames.filter(obj => metrics.includes(obj.value)) }
+                    value={ metricNames?.filter(obj => metrics.includes(obj.value)) ?? [] }
                     onChange={ e => setMetrics(Array.isArray(e) ? e.map(item => item.value) : []) }
                     styles={ ExtendedOptionStyles }
-                    isLoading={ metricNames.length < 1 }
+                    isLoading={ metricNames?.length < 1 ?? true }
                     placeholder={ "Select Metrics" }
                     className={ 'select' }
                     isMulti/>
@@ -390,7 +385,7 @@ const Download: ComponentType<*> = () => {
     useEffect(() => {
         setAreaCode(null);
         setMetric([]);
-    }, [ areaType ])
+    }, [ areaType ]);
 
     useEffect(() => {
         setAreaCode(null);

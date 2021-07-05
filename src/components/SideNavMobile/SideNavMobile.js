@@ -53,8 +53,8 @@ const NavigationItems: ComponentType<Props> = ({ menuState, setMenuState, ...pro
             <li className={ "moj-side-navigation__item" }>
                 <hr className={ "govuk-section-break govuk-section-break--s govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
             </li>
-            <SideNavListItem className={`${pathname === '/details/about-data' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/interactive-map" }>Interactive map</Link>
+            <SideNavListItem className={`${pathname.startsWith('/details/about-data') ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/interactive-map/cases" }>Interactive map</Link>
             </SideNavListItem>
             <SideNavListItem className={`${pathname.startsWith('/metrics') ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/metrics" }>Metric documentations</Link>

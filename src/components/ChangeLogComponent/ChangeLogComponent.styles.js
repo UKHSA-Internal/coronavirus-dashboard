@@ -105,7 +105,7 @@ export const MonthlyGroup: ComponentType<*> =
             &:first-of-type {
                 border-top: none;
             }
-        `
+        `;
 
 export const MonthlyHeader: ComponentType<*> =
     styled

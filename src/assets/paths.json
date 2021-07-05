@@ -3,7 +3,17 @@
   "/details": {},
   "/details/interactive-map": {
     "title": "Interactive map",
-    "description": "Interactive map of coronavirus (COVID-19) prevalence rate for the United Kingdom by local authorities and small areas.",
+    "description": "Interactive map of coronavirus (COVID-19) prevalence rate of cases for the United Kingdom by local authorities and small areas.",
+    "localised": false
+  },
+  "/details/interactive-map/cases": {
+    "title": "Interactive map of cases",
+    "description": "Interactive map of coronavirus (COVID-19) prevalence rate of cases for the United Kingdom by local authorities and small areas.",
+    "localised": false
+  },
+  "/details/interactive-map/vaccinations": {
+    "title": "Interactive map of vaccinations",
+    "description": "Interactive map of coronavirus (COVID-19) prevalence rate of cases for the United Kingdom by local authorities and small areas.",
     "localised": false
   },
   "/details/cases": {

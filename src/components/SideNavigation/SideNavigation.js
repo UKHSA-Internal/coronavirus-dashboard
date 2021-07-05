@@ -51,8 +51,8 @@ const SideNavigation: ComponentType<Props> = ({ ...props }: Props) => {
         <SectionBreak/>
 
         <SideNavSecondaryContainer>
-            <SideNavListSecondaryItem className={`${pathname === '/details/interactive-map' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/interactive-map" }>Interactive map</Link>
+            <SideNavListSecondaryItem className={`${pathname.startsWith('/details/interactive-map') ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/interactive-map/cases" }>Interactive map</Link>
             </SideNavListSecondaryItem>
             <SideNavListSecondaryItem className={`${pathname.startsWith('/metrics') ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/metrics" }>Metric documentations</Link>

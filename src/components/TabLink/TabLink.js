@@ -59,7 +59,7 @@ const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
 };  // TabLink
 
 
-const TabLinkContainer: ComponentType<*> = ({ tabs, abstract=null, ...props }) => {
+export const TabLinkContainer: ComponentType<*> = ({ tabs, abstract=null, ...props }) => {
 
     const [ current, setCurrent ] = useState(tabs[0].heading);
 

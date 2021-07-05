@@ -139,7 +139,7 @@ const App = () => {
                                 <Route path="/details/healthcare" exact component={ Healthcare }/>
                                 <Route path="/details/vaccinations" exact component={ Vaccinations }/>
                                 <Route path="/details/deaths" exact component={ Deaths }/>
-                                <Route path="/details/interactive-map" component={ InteractiveMap }/>
+                                <Route path="/details/interactive-map/:page?" component={ InteractiveMap }/>
                                 <Route path="/details/whats-new" exact component={ WhatsNew }/>
                                 <Route path="/details/download" exact component={ Download }/>
                                 <Route path="/details/about-data" exact component={About}/>
