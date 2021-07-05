@@ -47,7 +47,6 @@ const Metrics: ComponentType<*> = ({ userInput, setIsLoading, isLoading, setUri,
         ...metrics.reduce((acc, cur) => acc.add(cur.category), new Set())
     ].map(cat => ({ label: cat, value: cat }));
 
-
     useEffect( () => {
 
         const params = [
@@ -65,7 +64,6 @@ const Metrics: ComponentType<*> = ({ userInput, setIsLoading, isLoading, setUri,
         setUri(pathname + createQuery(params))
 
     }, [ userInput, types.length, categories ]);
-
 
     useEffect(() => setIsLoading(prevInput !== userInput), [userInput, prevInput]);
 
