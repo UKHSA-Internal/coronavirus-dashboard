@@ -384,15 +384,11 @@ export const getHeatmapData = ( fields: Array<{}>, rawData, xKey="date" ) => {
             ...rest,
         };
 
-        for ( const { label } of metrics ) {
-            result.yData.push(label)
-        }
-
         for ( let index = 0; index < rawData.length; index++ ) {
-            result.xData.push(rawData?.[index]?.[xKey])
+            result.xData.push(rawData?.[index]?.[xKey]);
         }
 
-        for ( const { value: paramValue } of metrics ) {
+        for ( const { value: paramValue, label } of metrics ) {
 
             const zData = [];
             let tempData;
@@ -415,7 +411,13 @@ export const getHeatmapData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 
             }
 
-            result.zData.push(zData);
+            // Only add if zData has data - this
+            // is the accommodate inconsistencies
+            // in age bands amongst the DAs.
+            if ( zData.length > 0 ) {
+                result.zData.push(zData);
+                result.yData.push(label);
+            }
 
         }
 
