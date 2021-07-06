@@ -15,7 +15,6 @@
     "numeral": "^2.0.6",
     "plotly.js": "^2.2.0",
     "react": "^17.0.2",
-    "react-sticky": "^6.0.3",
     "react-app-polyfill": "^2.0.0",
     "react-day-picker": "^7.4.10",
     "react-dom": "^17.0.2",
