@@ -1,6 +1,6 @@
 // @flow
 
-import React from "react";
+import React, { useState } from "react";
 
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 import { PlotContainer } from "./Plotter.styles";
@@ -9,6 +9,7 @@ import type { ComponentType } from "react";
 import numeral from "numeral";
 import Plotly from "plotly.js";
 import createPlotlyComponent from 'react-plotly.js/factory';
+import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -16,9 +17,10 @@ const Plot = createPlotlyComponent(Plotly);
 export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, yaxis = {},
                                                   config = {}, margin = {}, style = {},
                                                   isTimeSeries = true, SrOnly = "",
-                                                  ...props }) => {
+                                                  noLogScale=false, ...props }) => {
 
     const width = useResponsiveLayout(640);
+    const [ yScale, setYScale ] = useState(false)
 
     let yAxisRef = {
         fixedragne: false,
@@ -27,12 +29,15 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
         tickson: "boundaries",
         ticklen: 'labels',
         tickcolor: "#f1f1f1",
-        tickformat: width === "desktop" ? ',.2r' : '3s',
         tickfont: {
             family: `"GDS Transport", Arial, sans-serif`,
             size: width === "desktop" ? 13 : 10,
             color: "#6B7276",
         },
+        ...yScale && !noLogScale
+            ? {type: 'log'}
+            : {tickformat: width === "desktop" ? ',.2r' : '3s'},
+
     };
 
     let tickvals, ticktext, tickmode = undefined;
@@ -99,7 +104,9 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
         for ( const value of row?.y ?? []) {
 
             if ( row?.showlegend === false || row?.type === 'heatmap' ) continue;
-            if ( !(row?.hovertemplate ?? null) ) row.hovertemplate = [];
+            if ( !row.hasOwnProperty("hovertemplate") ) {
+                row.hovertemplate = [];
+            }
 
             row.hovertemplate.push(numeral(value).format("0,0.[0]"));
 
@@ -108,6 +115,22 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
 
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
+        {
+            noLogScale
+                ? null
+                : <Toggle style={{ marginTop: "-25px", float: "right" }}>
+                    <ToggleButton onClick={ () => setYScale(false) }
+                                  className={ "govuk-!-font-size-14" }
+                                  active={ yScale === false }>
+                        Linear
+                    </ToggleButton>
+                    <ToggleButton onClick={ () => setYScale(true) }
+                                  className={ "govuk-!-font-size-14" }
+                                  active={ yScale === true }>
+                        Log
+                    </ToggleButton>
+                </Toggle>
+        }
         <p className={ "govuk-visually-hidden" }>
             The data that is visualised in the chart is that which is tabulated
             under the "Data" tab. The tables do not include the rolling average metric
