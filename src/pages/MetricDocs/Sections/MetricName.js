@@ -120,13 +120,15 @@ const Metrics: ComponentType<*> = ({ userInput, setIsLoading, isLoading, setUri,
                 <h3 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>Results</h3>
                 <a className={ "govuk-link govuk-link--no-visited-state" }
                    href={ URLs["genericApiMetricSearch"] + `?search=${userInput}` }
+                  rel={ "noopener noreferrer" }
+                   target={ "_blank" }
                    download={ `metrics_${userInput}.json` }>Export results as JSON</a>
             </div>
             {
                 metrics.map(item => <Option key={ item?.metric }>
                     <div className={ "govuk-!-margin-bottom-1" } style={{ display: "flex", justifyContent: "space-between"}}>
                         <Link className={ "govuk-link govuk-link--no-underline govuk-link--no-visited-state govuk-!-font-weight-bold" }
-                              to={ "#" }
+                              to={ `/metrics/doc/${item?.metric}` }
                               dangerouslySetInnerHTML={{ __html: item.metric_name.replace(new RegExp(userInput, "gi"), (match) => `<mark>${match}</mark>`) }}/>
                         <span className={ "govuk-tag govuk-!-margin-left-2" } style={{ fontSize: 14 }}>{ item.category }</span>
                     </div>
