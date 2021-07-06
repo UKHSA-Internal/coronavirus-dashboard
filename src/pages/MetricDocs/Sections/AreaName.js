@@ -3,8 +3,7 @@
 import React from "react";
 
 import type { ComponentType } from "react";
-import { ColumnEntry } from "components/Pane";
-
+import { ColumnEntry, PaneColumn } from "components/Pane";
 
 export const AreaNames: ComponentType<*> = ({ ...props }) => {
 
@@ -26,9 +25,11 @@ export const AreaNames: ComponentType<*> = ({ ...props }) => {
         }
     ];
 
-    return payload.map(item =>
-        <ColumnEntry { ...props } id={ item.id }
-                     label={ item.label } key={ item.id }/>
-    );
+    return <PaneColumn>{
+        payload.map(item =>
+            <ColumnEntry { ...props } id={ item.id }
+                         label={ item.label } key={ item.id }/>
+        )
+    }</PaneColumn>;
 
 };  // AreaType
