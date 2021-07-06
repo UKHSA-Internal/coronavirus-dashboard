@@ -14,89 +14,6 @@ import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
 const Plot = createPlotlyComponent(Plotly);
 
 
-
-// const prepareScale = (data, yAxisRef, margin, yScale, layout) => {
-//
-//     let tickvals, ticktext, tickmode = undefined;
-//
-//     if ( layout?.barmode === "logy" || yScale === true ) {
-//         tickmode = 'array';
-//
-//         const thresholds = [
-//             -1000, -10, 0, 10, 100, 1_000, 10_000, 100_000,
-//             1_000_000, 10_000_000, 100_000_000, 1_000_000_000
-//         ];
-//         const minVal = Math.min(...data[0].y);
-//         const maxVal = Math.max(...data[0].y);
-//
-//         ticktext = [
-//             minVal,
-//             ...thresholds.filter(value => value > minVal && value < maxVal),
-//             maxVal
-//         ];
-//
-//         for ( const item of data ) {
-//             item.text = item.y;
-//
-//             item.y = item.y.map(val =>
-//                 val >= 0
-//                     ? Math.log(val)
-//                     : -Math.log(Math.abs(val))
-//             );
-//
-//             item.hovertemplate = '%{text:.1f}';
-//         }
-//
-//         tickvals = ticktext.map(val =>
-//             val >= 0
-//                 ? val === 0
-//                 ? 0
-//                 : Math.log(val)
-//                 : -Math.log(Math.abs(val))
-//         );
-//
-//     }
-//
-//     for ( const row of data ) {
-//         if ( "overlaying" in row ) {
-//             yAxisRef = {
-//                 ...yAxisRef,
-//                 rangemode: "tozero",
-//             };
-//
-//             layout = {
-//                 yaxis2: {
-//                     ...yAxisRef,
-//                     overlaying: row.overlaying,
-//                     side: row.side,
-//                     rangemode: "tozero",
-//                     showgrid: false,
-//
-//                 }
-//             };
-//
-//             margin = {
-//                 r: 50,
-//             };
-//
-//         }
-//
-//         for ( const value of row?.y ?? [] ) {
-//
-//             if ( row?.showlegend === false || row?.type === 'heatmap' ) continue;
-//             if ( !row.hasOwnProperty("hovertemplate") || !Array.isArray(row.hovertemplate) ) {
-//                 row.hovertemplate = [];
-//             }
-//
-//             row.hovertemplate.push(numeral(value).format("0,0.[0]"));
-//
-//         }
-//     }
-//
-//     return [data, yAxisRef, margin, layout, tickvals, ticktext, tickmode];
-//
-// };
-
 export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxis = {}, yaxis = {},
                                                   config = {}, margin = {}, style = {},
                                                   isTimeSeries = true, SrOnly = "",
@@ -153,12 +70,8 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                 stackedSum.push(currSum);
             }
 
-            console.log(data)
-            console.log(data[0]?.y?.length);
-            console.log(stackedSum);
-
             [minVal, maxVal] = [
-                Math.min(...stackedSum.filter(item => !isNaN(item))),
+                Math.min(0, ...stackedSum.filter(item => !isNaN(item))),
                 Math.max(...stackedSum.filter(item => !isNaN(item)))
             ];
         }
@@ -233,20 +146,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
         }
 
-        // console.log(row.hovertemplate)
     }
-
-    // useEffect(() => {
-    //     revision += 1;
-    //     [data, yAxisRef, margin, layout, tickvals, ticktext, tickmode] = prepareScale(payload, yAxisRef, margin, yScale, layout);
-    //
-    // }, [yScale]);
-
-    // useEffect(() => {
-    //
-    //
-    // }, [ data, yScale ]);
-    // console.log(layout?.barmode)
 
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
