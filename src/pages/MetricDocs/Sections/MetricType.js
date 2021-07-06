@@ -14,7 +14,8 @@ import useMetricSearch from "hooks/useMetricSearch";
 import usePrevious from "hooks/usePrevious";
 import URLs from "common/urls";
 import { createQuery, getUriParams } from "common/utils";
-
+import useGenericAPI from "hooks/useGenericAPI";
+import { capitalise } from "common/utils";
 
 const ExtendedOptionStyles = Object.create(SelectOptions);
 
@@ -148,44 +149,18 @@ const Metrics: ComponentType<*> = ({ userInput, setIsLoading, isLoading, setUri,
 
 export const MetricType: ComponentType<*> = ({ ...props }) => {
 
-    const { pathname } = useLocation();
-    const [userInput, setUserInput] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [ uri, setUri ] = useState(pathname);
-    const responseDelay = 1000;  // milliseconds
-    const minInputChars = 3;
+    const metricTypeData = useGenericAPI(
+        "genericApiMetricProps",
+        [],
+        {},
+        "json",
+        {by: "tag"}
+    );
 
-    const metricInputCallback = ({ target }) => {
-        if ( target.value.length >=  minInputChars ) {
-            setIsLoading(true);
-            setTimeout(() => setUserInput(target.value), responseDelay);
-        }
-    };
-
-    return <ColumnEntry { ...props }>
-        <Container>
-            <div className={ "govuk-form-group" } style={{ display: "flex" }}>
-                <fieldset className="govuk-fieldset">
-                    <legend className="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h2 className="govuk-heading-l govuk-!-margin-bottom-0">
-                            Search metrics
-                        </h2>
-                    </legend>
-                    <label htmlFor={ "metric-search" } className={ "govuk-label govuk-!-font-weight-bold" }>Metric</label>
-                    <div id={ "metric-search-hint" } className={ "govuk-hint govuk-!-font-size-16" } style={{ maxWidth: "30em" }}>
-                        Enter 3 or more characters from a metric name to see results.
-                        For example, enter <strong>case</strong> to see all case metrics.
-                    </div>
-                    <input name={ "metric-search" } inputMode={ "search" } type={ "search" } autoComplete={ "off" }
-                           placeholder={ "Enter 3 or more characters to search" }
-                           onChange={ metricInputCallback }
-                           className={ "govuk-input" } minLength={ "3" } maxLength={ "120" }/>
-                </fieldset>
-            </div>
-            <Metrics userInput={ userInput } setIsLoading={ setIsLoading } isLoading={ isLoading } setUri={ setUri } uri={ uri }/>
-        </Container>
-        { userInput ? <Redirect to={ uri }/> : null }
-    </ColumnEntry>
+    return metricTypeData.map((item, index) =>
+        <ColumnEntry { ...props } id={ item.tag }
+                     label={ capitalise(item.tag) } key={ `tag-${index}` }/>
+    );
 
 };  // AreaType
 
