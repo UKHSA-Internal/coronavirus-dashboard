@@ -359,6 +359,14 @@ export const isIE = () => {
 
 };
 
+
+export const capitalise = (str: string): string => {
+
+    return str.substring(0, 1).toUpperCase() + str.substring(1)
+
+};  // capitalise
+
+
 export const analytics = ({ category, action, label, value }): void => {
 
     if ( "gtag" in window ) {
