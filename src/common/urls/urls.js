@@ -57,6 +57,7 @@ const URLs = {
     genericApiMetricAvailabilityByAreaType: `https://${ REACT_APP_API_ENDPOINT }/generic/metric_availability/{area_type}`,
     genericApiMetricAvailabilityByArea:     `https://${ REACT_APP_API_ENDPOINT }/generic/metric_availability/{area_type}/{area_code}`,
     genericApiMetricSearch:                 `https://${ REACT_APP_API_ENDPOINT }/generic/metrics`,
+    genericApiMetricProps:                 `https://${ REACT_APP_API_ENDPOINT }/generic/metrics/props`,
     mapVaccinationData:                     `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/maps/vax-data_latest.geojson`,
     mapUtlaRef:                             `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/maps/utla-ref.geojson`,
     mapLtlaRef:                             `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/maps/ltla-ref.geojson`,
