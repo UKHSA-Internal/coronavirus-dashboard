@@ -148,7 +148,7 @@ const App = () => {
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
                                 <Route path="/details/developers-guide" exact component={ ApiDocs }/>
-                                <Route path="/metrics/:type?" exact component={ MetricDocs }/>
+                                <Route path="/metrics/:type?" component={ MetricDocs }/>
                                 <Route path={ "/:page" } component={ RedirectToDetails }/>
                             </Switch>
                         </Suspense>
