@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 import { PlotContainer } from "./Plotter.styles";
@@ -14,13 +14,98 @@ import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
 const Plot = createPlotlyComponent(Plotly);
 
 
-export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, yaxis = {},
+
+// const prepareScale = (data, yAxisRef, margin, yScale, layout) => {
+//
+//     let tickvals, ticktext, tickmode = undefined;
+//
+//     if ( layout?.barmode === "logy" || yScale === true ) {
+//         tickmode = 'array';
+//
+//         const thresholds = [
+//             -1000, -10, 0, 10, 100, 1_000, 10_000, 100_000,
+//             1_000_000, 10_000_000, 100_000_000, 1_000_000_000
+//         ];
+//         const minVal = Math.min(...data[0].y);
+//         const maxVal = Math.max(...data[0].y);
+//
+//         ticktext = [
+//             minVal,
+//             ...thresholds.filter(value => value > minVal && value < maxVal),
+//             maxVal
+//         ];
+//
+//         for ( const item of data ) {
+//             item.text = item.y;
+//
+//             item.y = item.y.map(val =>
+//                 val >= 0
+//                     ? Math.log(val)
+//                     : -Math.log(Math.abs(val))
+//             );
+//
+//             item.hovertemplate = '%{text:.1f}';
+//         }
+//
+//         tickvals = ticktext.map(val =>
+//             val >= 0
+//                 ? val === 0
+//                 ? 0
+//                 : Math.log(val)
+//                 : -Math.log(Math.abs(val))
+//         );
+//
+//     }
+//
+//     for ( const row of data ) {
+//         if ( "overlaying" in row ) {
+//             yAxisRef = {
+//                 ...yAxisRef,
+//                 rangemode: "tozero",
+//             };
+//
+//             layout = {
+//                 yaxis2: {
+//                     ...yAxisRef,
+//                     overlaying: row.overlaying,
+//                     side: row.side,
+//                     rangemode: "tozero",
+//                     showgrid: false,
+//
+//                 }
+//             };
+//
+//             margin = {
+//                 r: 50,
+//             };
+//
+//         }
+//
+//         for ( const value of row?.y ?? [] ) {
+//
+//             if ( row?.showlegend === false || row?.type === 'heatmap' ) continue;
+//             if ( !row.hasOwnProperty("hovertemplate") || !Array.isArray(row.hovertemplate) ) {
+//                 row.hovertemplate = [];
+//             }
+//
+//             row.hovertemplate.push(numeral(value).format("0,0.[0]"));
+//
+//         }
+//     }
+//
+//     return [data, yAxisRef, margin, layout, tickvals, ticktext, tickmode];
+//
+// };
+
+export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxis = {}, yaxis = {},
                                                   config = {}, margin = {}, style = {},
                                                   isTimeSeries = true, SrOnly = "",
                                                   noLogScale=false, ...props }) => {
 
     const width = useResponsiveLayout(640);
-    const [ yScale, setYScale ] = useState(false)
+    const [ yScale, setYScale ] = useState(false);
+    const data = JSON.parse(JSON.stringify(payload));
+    let tickvals, ticktext, tickmode = undefined;
 
     let yAxisRef = {
         fixedragne: false,
@@ -34,20 +119,49 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
             size: width === "desktop" ? 13 : 10,
             color: "#6B7276",
         },
-        ...yScale && !noLogScale
+        ...(yScale && layout?.barmode === "stack") && !noLogScale
             ? {type: 'log'}
             : {tickformat: width === "desktop" ? ',.2r' : '3s'},
 
     };
 
-    let tickvals, ticktext, tickmode = undefined;
+    if ( yScale ) {
 
-    if ( layout?.barmode === "logy" ) {
         tickmode = 'array';
 
-        const thresholds = [-1000, -10, 0, 10, 100, 1000, 10000, 100000, 1000000, 10000000];
-        const minVal = Math.min(...data[0].y);
-        const maxVal = Math.max(...data[0].y);
+        const thresholds = [
+            -10_000, -1_000, -10, 0, 10, 100, 1_000, 10_000, 100_000,
+            1_000_000, 10_000_000, 100_000_000, 1_000_000_000
+        ];
+
+        let minVal, maxVal;
+
+        if ( layout?.barmode !== "stack" ) {
+            [minVal, maxVal] = [
+                Math.min(...data.map(item => Math.min(0, ...item.y)).filter(item => !isNaN(item))),
+                Math.max(...data.map(item => Math.max(...item.y)).filter(item => !isNaN(item)))
+            ];
+        }
+        else {
+            const stackedSum = [];
+
+            for ( let stackInd = 0; stackInd < Math.max(...data.map(item => item?.y?.length)); stackInd ++ ) {
+                let currSum = 0
+                for ( const item of data ) {
+                    currSum += item?.y?.[stackInd] ?? 0;
+                }
+                stackedSum.push(currSum);
+            }
+
+            console.log(data)
+            console.log(data[0]?.y?.length);
+            console.log(stackedSum);
+
+            [minVal, maxVal] = [
+                Math.min(...stackedSum.filter(item => !isNaN(item))),
+                Math.max(...stackedSum.filter(item => !isNaN(item)))
+            ];
+        }
 
         ticktext = [
             minVal,
@@ -55,30 +169,37 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
             maxVal
         ];
 
-        for ( const item of data ) {
-            item.text = item.y;
+        if ( layout?.barmode !== "stack" ) {
+            for ( const item of data ) {
+                item.text = item.y;
 
-            item.y = item.y.map(val =>
+                item.y = item.y.map(val =>
+                    val >= 0
+                        ? Math.log(val)
+                        : -Math.log(Math.abs(val))
+                );
+
+                item.hovertemplate = '%{text:.1f}';
+                item.textposition = 'none';
+            }
+
+            tickvals = ticktext.map(val =>
                 val >= 0
-                    ? Math.log(val)
+                    ? val === 0
+                    ? 0
+                    : Math.log(val)
                     : -Math.log(Math.abs(val))
             );
-
-            item.hovertemplate ='%{text:.1f}';
         }
-
-        tickvals = ticktext.map(val =>
-            val >= 0
-                ? val === 0
-                ? 0
-                : Math.log(val)
-                : -Math.log(Math.abs(val))
-        );
+        else {
+            tickvals = ticktext;
+        }
+        ticktext = ticktext.map(value => numeral(value).format("0,0.[0]"));
 
     }
 
-    for ( const row of data ) {
-        if ( "overlaying" in row ) {
+    for ( let index = 0; index < data.length; index ++ ) {
+        if ( "overlaying" in data[index] ) {
             yAxisRef = {
                 ...yAxisRef,
                 rangemode: "tozero",
@@ -87,8 +208,8 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
             layout = {
                 yaxis2: {
                     ...yAxisRef,
-                    overlaying: row.overlaying,
-                    side: row.side,
+                    overlaying: data[index].overlaying,
+                    side: data[index].side,
                     rangemode: "tozero",
                     showgrid: false,
 
@@ -101,17 +222,31 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
 
         }
 
-        for ( const value of row?.y ?? []) {
+        for ( const value of payload[index]?.y ?? [] ) {
 
-            if ( row?.showlegend === false || row?.type === 'heatmap' ) continue;
-            if ( !row.hasOwnProperty("hovertemplate") ) {
-                row.hovertemplate = [];
+            if ( data[index]?.showlegend === false || data[index]?.type === 'heatmap' ) continue;
+            if ( !data[index].hasOwnProperty("hovertemplate") || !Array.isArray(data[index].hovertemplate) ) {
+                data[index].hovertemplate = [];
             }
 
-            row.hovertemplate.push(numeral(value).format("0,0.[0]"));
+            data[index].hovertemplate.push(numeral(value).format("0,0.[0]"));
 
         }
+
+        // console.log(row.hovertemplate)
     }
+
+    // useEffect(() => {
+    //     revision += 1;
+    //     [data, yAxisRef, margin, layout, tickvals, ticktext, tickmode] = prepareScale(payload, yAxisRef, margin, yScale, layout);
+    //
+    // }, [yScale]);
+
+    // useEffect(() => {
+    //
+    //
+    // }, [ data, yScale ]);
+    // console.log(layout?.barmode)
 
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
@@ -167,6 +302,7 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
             layout={ {
                 hovermode: "x unified",
                 hoverdistance: 1,
+                // datarevision: yScale ? 1 : 0,
                 // barmode: "overlay",
                 // barmode: "stack",
                 // height: 320,
