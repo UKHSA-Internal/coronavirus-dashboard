@@ -9,7 +9,6 @@ import { useLocation } from "react-router";
 
 import Path from "assets/paths.json";
 
-
 const DefaultParams = [
     { key: 'areaName', sign: '=', value: 'United Kingdom' },
     { key: 'areaType', sign: '=', value: 'overview' }
@@ -19,7 +18,8 @@ const DefaultParams = [
 const DataPageHeaders = () => {
 
     const { search: query, pathname } = useLocation();
-    let { title="", description="", localised=false } = Path?.[pathname] ?? {};
+    const uri = /^(\/(details\/)?[^/]+).*/.exec(pathname)?.[1];
+    let { title="", description="", localised=false } = Path?.[uri] ?? {};
     const urlParams = getParams(query);
     const areaParams = urlParams.length ? urlParams : DefaultParams;
 
@@ -40,8 +40,8 @@ const DataPageHeaders = () => {
     preppedTitle +=  ' | Coronavirus in the UK';
 
     return <Helmet>
-        <title>{ preppedTitle }</title>
-        <meta name="description" content={ preppedDescription } />
+        <title itemProp={ "name" }>{ preppedTitle }</title>
+        <meta name="description" itemProp={ "abstract" } content={ preppedDescription } />
         <meta property="og:title" content={ preppedTitle }/>
         <meta name="twitter:title" content={ preppedTitle }/>
         <meta property="og:description" content={ preppedDescription }/>
