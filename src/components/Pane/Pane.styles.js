@@ -28,15 +28,14 @@ export const Column: ComponentType<*> =
             flex-direction: column;
             flex-shrink: 4;
             border-right: 1px solid #b1b4b6;
+            max-width: 200px;
+            min-width: 200px;
             
             &:last-of-type {
-                border-right: none;            
+                border-right: none;  
+                flex-grow: 4;   
+                max-width: 100%;       
             }
-            
-            ${({ isLast }) => css`
-                flex-grow: ${isLast ? 10 : 1 };
-                max-width: ${isLast ? "100%" : "200px"};
-            `} 
         `;
 
 
