@@ -8,7 +8,7 @@ import { useLocation} from "react-router";
 import { Link } from "react-router-dom";
 
 
-export const ColumnEntry: ComponentType<*> = ({id, label, description, children, parentPath }) => {
+export const ColumnEntry: ComponentType<*> = ({id, label, description, children, parentPath, nextColumn }) => {
 
     const { pathname } = useLocation();
 
@@ -35,34 +35,16 @@ export const ColumnEntry: ComponentType<*> = ({id, label, description, children,
 };  // ColumnEntry
 
 
-export const PaneColumn: ComponentType<*> = ({ isLast, children }) => {
+export const PaneColumn: ComponentType<*> = ({ children }) => {
 
-    return <Column isLast={ isLast }>
-        { children }
-    </Column>
+    return <Column>{ children }</Column>
 
-};
+};  // PaneColumn
 
 
 const Pane: ComponentType<*> = ({ basePath, children }) => {
 
-    const groupedChildren = groupBy(
-        children.filter(item => item),
-            el => el.props.level
-    );
-
-    const groups = Object.keys(groupedChildren).sort(sort).reverse();
-    const lastGroup = Math.max(...groups).toString();
-
-    return <MainContainer>
-        {
-            groups.map(level =>
-                <PaneColumn key={ `panel-col-${level}` } isLast={ level !== "undefined" && level === lastGroup }>
-                    { groupedChildren[level] }
-                </PaneColumn>
-            )
-        }
-    </MainContainer>
+    return <MainContainer>{ children }</MainContainer>
 
 };  // MetricDocs
 
