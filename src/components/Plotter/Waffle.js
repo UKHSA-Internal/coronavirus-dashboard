@@ -11,6 +11,7 @@ export const Waffle: ComponentType<*> = ({ data, layout, config, ...props }) => 
     const tickvals = [];
 
     return <BasePlotter
+        noLogScale
         data={ data }
         margin={{
             l: 22,
