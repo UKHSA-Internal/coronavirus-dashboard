@@ -10,11 +10,12 @@ import numeral from "numeral";
 import Plotly from "plotly.js";
 import createPlotlyComponent from 'react-plotly.js/factory';
 import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
+import { deviation, mean, median } from "d3-array";
 
 const Plot = createPlotlyComponent(Plotly);
 
 
-const getExtrema = ( data, barmode: string ): number[] => {
+const getExtrema = ( data, barmode: string ) => {
 
     let minVal, maxVal;
 
@@ -49,7 +50,10 @@ const getExtrema = ( data, barmode: string ): number[] => {
 
     }
 
-    return [minVal, maxVal]
+    const std = median(data.map(item => deviation(item.y)));
+    const mid = median(data.map(item => median(item.y)));
+
+    return {minVal, maxVal, std, mid}
 
 };  // getExtrema
 
@@ -86,6 +90,10 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
     };
 
+    const {minVal, maxVal, mid, std} = getExtrema(data, layout?.barmode);
+
+    // console.log(data[0].label, average, std)
+
     useEffect(() => {
 
         if ( yScale ) {
@@ -96,8 +104,6 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                 -10_000, -1_000, -10, 0, 10, 100, 1_000, 10_000, 100_000,
                 1_000_000, 10_000_000, 100_000_000, 1_000_000_000
             ];
-
-            const [minVal, maxVal] = getExtrema(data, layout?.barmode);
 
             // Calculate major grids
             ticktext = [
@@ -201,7 +207,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
         {
-            noLogScale || layout?.barmode === "stack"
+            noLogScale || layout?.barmode === "stack" || std < mid
                 ? null
                 : <Toggle style={{ marginTop: "-25px", float: "right" }}>
                     <ToggleButton onClick={ () => setYScale(false) }
