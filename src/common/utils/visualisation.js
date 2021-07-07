@@ -425,6 +425,6 @@ export const getHeatmapData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 
     }
 
-    return graphObjects
+    return graphObjects;
 
 };  // getHeatmapData
