@@ -1,6 +1,6 @@
 // @flow
 
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 
 import URLs from "common/urls";
 
@@ -10,12 +10,13 @@ import type { ResponseType } from "axios";
 import { strFormat } from "../common/utils";
 
 
-const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: any = {}, responseType: ResponseType="json", params={} ) => {
+const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: any = {},
+                         responseType: ResponseType="json", params={}, onError=undefined, onEmpty=undefined) => {
 
     const [ response, setResponse ] = useState(defaultResponse);
     const isGenericEndpoint = urlName.startsWith("genericApi");
 
-    useMemo( () => {
+    useEffect( () => {
 
         let url = URLs[urlName];
 
@@ -28,14 +29,19 @@ const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: an
             try {
                 const { data, status } = await axios.get(url, {responseType, params});
 
-                if ( status < 400 )
+                if ( status < 400 && status !== 204 )
                     setResponse(data);
                 else if ( response !== defaultResponse ) {
-                    setResponse(defaultResponse);
+                    if ( onEmpty !== "undefined" ) {
+                        setResponse(onEmpty);
+                    }
                     console.warn(`Failed request for "${urlName}" with status ${status}`);
                 }
 
             } catch (e) {
+                if ( onEmpty === "undefined" ) {
+                    setResponse(onError)
+                }
                 console.log("error")
                 console.error(e)
             }

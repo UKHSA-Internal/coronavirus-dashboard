@@ -1,6 +1,6 @@
 {
   "name": "uk-covid19-dashboard",
-  "version": "2.8.21",
+  "version": "2.9.14",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
@@ -13,12 +13,12 @@
     "moment": "^2.29.1",
     "node-sass": "^4.11.0",
     "numeral": "^2.0.6",
-    "plotly.js": "^2.0.0",
-    "react": "^16.14.0",
+    "plotly.js": "^2.2.0",
+    "react": "^17.0.2",
     "react-sticky": "^6.0.3",
     "react-app-polyfill": "^2.0.0",
     "react-day-picker": "^7.4.10",
-    "react-dom": "^16.14.0",
+    "react-dom": "^17.0.2",
     "react-focus-trap": "^2.7.1",
     "react-helmet": "^6.1.0",
     "react-plotly.js": "^2.5.1",
@@ -38,9 +38,10 @@
     "styled-components": "^5.3.0",
     "leaflet": "^1.6.0",
     "mapbox-gl": "^1.13.1",
-    "@turf/bbox": "^6.3.0",
+    "@turf/bbox": "^6.4.0",
     "js-cookie": "^2.2.1",
-    "lodash.clonedeep": "^4.5.0"
+    "lodash.clonedeep": "^4.5.0",
+    "react-compare-slider": "^2.0.2"
   },
   "scripts": {
     "lint": "yarn flow",
@@ -81,7 +82,7 @@
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "flow-bin": "^0.153.0",
+    "flow-bin": "^0.154.0",
     "stylelint": "^13.13.1",
     "stylelint-config-idiomatic-order": "^8.1.0",
     "stylelint-config-standard": "^22.0.0",

@@ -31,6 +31,8 @@ export const PathNames = {
 export const NoPickerPaths = [
     "/details",
     "/details/interactive-map",
+    "/details/interactive-map/cases",
+    "/details/interactive-map/vaccinations",
     "/details/download",
     "/details/about-data",
     "/details/cookies",
@@ -80,5 +82,12 @@ export const MSOAMetricOptions = [
     { value: "newCasesBySpecimenDateRollingRate", label: "newCasesBySpecimenDateRollingRate" },
     { value: "newCasesBySpecimenDateChange", label: "newCasesBySpecimenDateChange" },
     { value: "newCasesBySpecimenDateChangePercentage", label: "newCasesBySpecimenDateChangePercentage" },
-    { value: "newCasesBySpecimenDateDirection", label: "newCasesBySpecimenDateDirection" }
+    { value: "newCasesBySpecimenDateDirection", label: "newCasesBySpecimenDateDirection" },
+    { value: "cumPeopleVaccinatedFirstDoseByVaccinationDate", label: "cumPeopleVaccinatedFirstDoseByVaccinationDate" },
+    { value: "cumVaccinationFirstDoseUptakeByVaccinationDatePercentage", label: "cumVaccinationFirstDoseUptakeByVaccinationDatePercentage" },
+    { value: "cumVaccinationCompleteCoverageByVaccinationDatePercentage", label: "cumVaccinationCompleteCoverageByVaccinationDatePercentage" },
+    { value: "cumPeopleVaccinatedCompleteByVaccinationDate", label: "cumPeopleVaccinatedCompleteByVaccinationDate" },
+    { value: "cumVaccinationSecondDoseUptakeByVaccinationDatePercentage", label: "cumVaccinationSecondDoseUptakeByVaccinationDatePercentage" },
+    { value: "cumPeopleVaccinatedSecondDoseByVaccinationDate", label: "cumPeopleVaccinatedSecondDoseByVaccinationDate" },
+    { value: "VaccineRegisterPopulationByVaccinationDate", label: "VaccineRegisterPopulationByVaccinationDate" }
 ];

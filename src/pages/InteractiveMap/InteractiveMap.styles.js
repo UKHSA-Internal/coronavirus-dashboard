@@ -1,6 +1,6 @@
 // @flow
 
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import type { ComponentType } from "react";
 
@@ -60,9 +60,15 @@ export const MainContainer: ComponentType<*> =
 export const Slider: ComponentType<*> =
     styled
         .input
-        .attrs(() => ({
-            type: "range"
+        .attrs(({ ...props }) => ({
+            type: "range",
+            ...props
         }))`
+        ${ css`${
+            ({ value: v, length: l }) => ({
+                background: `linear-gradient(to right, #12407F 0%, #12407F ${ Math.ceil(v * 100 / l + .7) }%, white  ${ Math.ceil((v + .7) * 100 / l) }%, white 100%) !important`
+            })
+        }`};
         `;
 
 
@@ -82,9 +88,10 @@ export const LegendContainer: ComponentType<*> =
         right: 10px;
         bottom: 20px;
         z-index: 1;
-        padding: .5rem .8rem;
+        padding: .2rem;
         background: rgba(255,255,255,0.9);
         width: max-content;
+        max-width: 130px;
         border: 1px solid black;
         
         @media only screen and (max-width: 600px) {
@@ -138,7 +145,6 @@ export const ScaleValue: ComponentType<*> =
         .span`
             width: max-content;
             margin-left: 0.5rem;
-            // margin-right: 2rem;             
         `;
 
 
@@ -151,6 +157,7 @@ export const ScaleLegendLabel: ComponentType<*> =
             margin: 0;
             font-weight: bold;
             width: max-content;
+            margin-left: 0 !important;
         `;
 
 

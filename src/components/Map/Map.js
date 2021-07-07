@@ -309,7 +309,7 @@ const LocalAuthorityCard = ({ currentLocation, date, areaType, ...props }) => {
 };
 
 
-const Component = memo( ( props )=> <div {...props} id={ "map" }/>);
+const Component = memo( ( props )=> <div {...props} id={ "cases-map-container" }/>);
 
 
 const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJSON, geoData, date,
@@ -401,7 +401,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
     useEffect(() => {
         if ( !map ) {
             setMap(new mapboxgl.Map({
-                container: 'map',
+                container: 'cases-map-container',
                 style: URLs.mapStyle,
                 center: centrePoint,
                 zoom: 4.9,
@@ -542,28 +542,18 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
                 });
 
-                // map.legendControl.addLegend(ReactDomServer.renderToStaticMarkup(children));
-
                 map.on('styledata', function (e) {
                     setStyleDataStatus(true)
-                    // map.
                 });
 
                 map.addControl(new mapboxgl.NavigationControl({ showCompass: false }));
                 map.addControl(new mapboxgl.FullscreenControl());
 
-                // function sourceCallback() {
-                //     // assuming 'map' is defined globally, or you can use 'this'
-                //     if (map.getSource('my-data') && map.isSourceLoaded('my-data')) {
-                //         console.log('source loaded!');
-                //     }
-                // }
-                //
-                // map.on('sourcedata', sourceCallback)
+                // disable map rotation using right click + drag
+                map.dragRotate.disable();
 
-                // map.on("render", (e) => {
-                //     setIsLoading(false)
-                // });
+                // disable map rotation using touch rotation gesture
+                map.touchZoomRotate.disableRotation();
 
             })
         }

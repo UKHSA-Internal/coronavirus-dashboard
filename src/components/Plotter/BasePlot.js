@@ -1,6 +1,6 @@
 // @flow
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 import { PlotContainer } from "./Plotter.styles";
@@ -9,16 +9,64 @@ import type { ComponentType } from "react";
 import numeral from "numeral";
 import Plotly from "plotly.js";
 import createPlotlyComponent from 'react-plotly.js/factory';
+import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
 
 const Plot = createPlotlyComponent(Plotly);
 
 
-export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, yaxis = {},
+const getExtrema = ( data, barmode: string ): number[] => {
+
+    let minVal, maxVal;
+
+    if ( barmode !== "stack" ) {
+
+        [minVal, maxVal] = [
+            Math.min(...data.map(item => Math.min(0, ...item.y)).filter(item => !isNaN(item))),
+            Math.max(...data.map(item => Math.max(...item.y)).filter(item => !isNaN(item)))
+        ];
+
+    }
+    else {
+
+        data = data.reverse();
+
+        const stackedSum = [];
+        const longestLength = Math.max(...data.map(item => item?.y?.length));
+
+        for ( let stackInd = 0; stackInd < longestLength; stackInd ++ ) {
+            let currSum = 0
+            for ( const item of data ) {
+                currSum += item?.y?.[stackInd] ?? 0;
+            }
+
+            stackedSum.push(currSum);
+        }
+
+        [minVal, maxVal] = [
+            Math.min(0, ...stackedSum.filter(item => !isNaN(item))),
+            Math.max(...stackedSum.filter(item => !isNaN(item)))
+        ];
+
+    }
+
+    return [minVal, maxVal]
+
+};  // getExtrema
+
+
+export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxis = {}, yaxis = {},
                                                   config = {}, margin = {}, style = {},
                                                   isTimeSeries = true, SrOnly = "",
-                                                  ...props }) => {
+                                                  noLogScale=false, ...props }) => {
 
     const width = useResponsiveLayout(640);
+    const [ yScale, setYScale ] = useState(false);
+    let data = JSON.parse(JSON.stringify(payload));
+    let tickvals, ticktext, tickmode = undefined;
+    const [finalTickvals, setFinalTickvals] = useState(undefined);
+    const [finalTicktext, setFinalTicktext] = useState(undefined);
+    const [finalTickmode, setFinalTickmode] = useState(undefined);
+    const [ drawData, setDrawData ] = useState([]);
 
     let yAxisRef = {
         fixedragne: false,
@@ -27,87 +75,147 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
         tickson: "boundaries",
         ticklen: 'labels',
         tickcolor: "#f1f1f1",
-        tickformat: width === "desktop" ? ',.2r' : '3s',
         tickfont: {
             family: `"GDS Transport", Arial, sans-serif`,
             size: width === "desktop" ? 13 : 10,
             color: "#6B7276",
         },
+        ...(yScale && layout?.barmode === "stack") && !noLogScale
+            ? {type: 'log'}: {tickformat: width === "desktop" ? ',.2r' : '3s'},
+            // ...{tickformat: width === "desktop" ? ',.2r' : '3s'},
+
     };
 
-    let tickvals, ticktext, tickmode = undefined;
+    useEffect(() => {
 
-    if ( layout?.barmode === "logy" ) {
-        tickmode = 'array';
+        if ( yScale ) {
 
-        const thresholds = [-1000, -10, 0, 10, 100, 1000, 10000, 100000, 1000000, 10000000];
-        const minVal = Math.min(...data[0].y);
-        const maxVal = Math.max(...data[0].y);
+            tickmode = 'array';
 
-        ticktext = [
-            minVal,
-            ...thresholds.filter(value => value > minVal && value < maxVal),
-            maxVal
-        ];
+            const thresholds = [
+                -10_000, -1_000, -10, 0, 10, 100, 1_000, 10_000, 100_000,
+                1_000_000, 10_000_000, 100_000_000, 1_000_000_000
+            ];
 
-        for ( const item of data ) {
-            item.text = item.y;
+            const [minVal, maxVal] = getExtrema(data, layout?.barmode);
 
-            item.y = item.y.map(val =>
-                val >= 0
-                    ? Math.log(val)
-                    : -Math.log(Math.abs(val))
-            );
+            // Calculate major grids
+            ticktext = [
+                minVal,
+                ...thresholds.filter(value => value > minVal && value < maxVal),
+                maxVal
+            ];
 
-            item.hovertemplate ='%{text:.1f}';
+            if ( layout?.barmode !== "stack" ) {
+
+                for ( let itemIndex = 0; itemIndex < data.length; itemIndex++ ) {
+                    data[itemIndex].text = data[itemIndex].y;
+
+                    let value = 0;
+                    for ( let ind = 0; ind < data[itemIndex].y.length; ind++ ) {
+                        value = data[itemIndex].y?.[ind] ?? 0;
+                        data[itemIndex].y[ind] = !value
+                            ? NaN
+                            : Math.log10(Math.abs(value)) * ((value >= 0) || -1);
+                    }
+
+                    data[itemIndex].hovertemplate = '%{text:.1f}';
+                    data[itemIndex].textposition = 'none';
+                }
+
+                // Calculate minor grids
+                tickvals = ticktext.reduce((acc, cur, ind, arr) => {
+                    if ( cur >= -10 && cur <= 10 ) {
+                        acc.push(cur)
+                    } else {
+                        const prevValue = Math.abs(arr[ind - 1]) * 2;
+
+                        for ( let tick = arr[ind - 1] + prevValue; tick < cur; tick += prevValue ) {
+                            acc.push(tick)
+                        }
+
+                        acc.push(cur);
+                    }
+
+                    return acc
+                }, []);
+
+                ticktext = tickvals.map(val => ticktext.includes(val) ? numeral(val).format("0,0.[0]") : "");
+                tickvals = tickvals.map(val => !val ? val : Math.log10(Math.abs(val)) * ((val >= 0) || -1));
+
+            } else {
+
+                for ( let itemIndex = 0; itemIndex < data.length; itemIndex ++ ) {
+                    data[itemIndex].text = data[itemIndex].y;
+                    data[itemIndex].hovertemplate = '%{text:.1f}';
+                    data[itemIndex].textposition = 'none';
+                }
+
+                tickvals = ticktext.filter(val => val > 0).map(val => !val ? val : val * ((val >= 0) || -1));
+                ticktext = tickvals.map(val => ticktext.includes(val) ? numeral(val).format("0,0.[0]") : "");
+
+            }
+
         }
 
-        tickvals = ticktext.map(val =>
-            val >= 0
-                ? val === 0
-                ? 0
-                : Math.log(val)
-                : -Math.log(Math.abs(val))
-        );
+        setDrawData(data);
+        setFinalTickvals(tickvals);
+        setFinalTickmode(tickmode);
+        setFinalTicktext(ticktext);
 
-    }
+    }, [yScale]);
 
-    for ( const row of data ) {
-        if ( "overlaying" in row ) {
-            yAxisRef = {
-                ...yAxisRef,
-                rangemode: "tozero",
-            };
+
+    for ( let index = 0; index < drawData.length; index++ ) {
+
+        if ( "overlaying" in drawData[index] ) {
+            yAxisRef = { ...yAxisRef, rangemode: "tozero" };
 
             layout = {
                 yaxis2: {
                     ...yAxisRef,
-                    overlaying: row.overlaying,
-                    side: row.side,
+                    overlaying: drawData[index].overlaying,
+                    side: drawData[index].side,
                     rangemode: "tozero",
                     showgrid: false,
 
                 }
             };
 
-            margin = {
-                r: 50,
-            };
+            margin = { r: 50 };
 
         }
 
-        for ( const value of row?.y ?? []) {
+        if ( !drawData[index].hasOwnProperty("hovertemplate") ) {
+            drawData[index].hovertemplate = [];
 
-            if ( row?.showlegend === false || row?.type === 'heatmap' ) continue;
-            if ( !(row?.hovertemplate ?? null) ) row.hovertemplate = [];
-
-            row.hovertemplate.push(numeral(value).format("0,0.[0]"));
-
+            for ( const value of payload[index]?.y ?? [] ) {
+                drawData[index].hovertemplate.push(
+                    value > 0 ? numeral(value).format("0,0.[0]") : ""
+                );
+            }
         }
+
     }
 
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
+        {
+            noLogScale
+                ? null
+                : <Toggle style={{ marginTop: "-25px", float: "right" }}>
+                    <ToggleButton onClick={ () => setYScale(false) }
+                                  className={ "govuk-!-font-size-14" }
+                                  active={ yScale === false }>
+                        Linear
+                    </ToggleButton>
+                    <ToggleButton onClick={ () => setYScale(true) }
+                                  className={ "govuk-!-font-size-14" }
+                                  active={ yScale === true }>
+                        Log
+                    </ToggleButton>
+                </Toggle>
+        }
         <p className={ "govuk-visually-hidden" }>
             The data that is visualised in the chart is that which is tabulated
             under the "Data" tab. The tables do not include the rolling average metric
@@ -115,7 +223,7 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
             { SrOnly }
         </p>
         <Plot
-            data={ data }
+            data={ drawData }
             config={ {
                 showLink: false,
                 responsive: true,
@@ -144,6 +252,7 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
             layout={ {
                 hovermode: "x unified",
                 hoverdistance: 1,
+                // datarevision: yScale ? 1 : 0,
                 // barmode: "overlay",
                 // barmode: "stack",
                 // height: 320,
@@ -208,9 +317,9 @@ export const BasePlotter: ComponentType<*> = ({ data, layout = {}, xaxis = {}, y
                     ...xaxis
                 },
                 yaxis: {
-                    tickmode,
-                    tickvals,
-                    ticktext,
+                    tickmode: finalTickmode,
+                    tickvals: finalTickvals,
+                    ticktext: finalTicktext,
                     ...yAxisRef,
                     ...yaxis
                 },
