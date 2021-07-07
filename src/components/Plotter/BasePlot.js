@@ -15,7 +15,7 @@ import cloneDeep from "lodash.clonedeep"
 const Plot = createPlotlyComponent(Plotly);
 
 
-const getExtrema = ( data, barmode: string ) => {
+const getExtrema = ( data, barmode: string, yScale ) => {
 
     let minVal, maxVal;
 
@@ -27,9 +27,7 @@ const getExtrema = ( data, barmode: string ) => {
         ];
 
     }
-    else {
-
-        data = data.reverse();
+    else if ( yScale ) {
 
         const stackedSum = [];
         const longestLength = Math.max(...data.map(item => item?.y?.length));
@@ -89,9 +87,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             : {tickformat: width === "desktop" ? ',.2r' : '3s'},
     };
 
-    const {minVal, maxVal, mid, std} = getExtrema(data, layout?.barmode);
-
-    // console.log(data[0].label, average, std)
+    const {minVal, maxVal, mid, std} = getExtrema(data, layout?.barmode, yScale);
 
     useEffect(() => {
 
