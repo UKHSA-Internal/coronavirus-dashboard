@@ -49,6 +49,27 @@ export const Container: ComponentType<*> =
             flex-direction: column;
         `;
 
+export const LegendContainer: ComponentType<*> =
+styled
+    .div`
+    position: absolute;
+    display: inline-block;
+    right: 10px;
+    bottom: 20px;
+    z-index: 1;
+    padding: .2rem;
+    background: rgba(255,255,255,0.9);
+    width: max-content;
+    max-width: 130px;
+    border: 1px solid black;
+    
+    @media only screen and (max-width: 600px) {
+        font-size: 0.8rem !important;
+        padding: .3rem !important;
+        bottom: 35px;
+    }
+    `;
+    
 
 export const MainContainer: ComponentType<*> =
     styled
@@ -79,29 +100,7 @@ export const SideDataContainer: ComponentType<*> =
             margin: 0 .5rem 0 1rem;
         `;
 
-
-export const LegendContainer: ComponentType<*> =
-    styled
-        .div`
-        position: absolute;
-        display: inline-block;
-        right: 10px;
-        bottom: 20px;
-        z-index: 1;
-        padding: .2rem;
-        background: rgba(255,255,255,0.9);
-        width: max-content;
-        max-width: 130px;
-        border: 1px solid black;
         
-        @media only screen and (max-width: 600px) {
-            font-size: 0.8rem !important;
-            padding: .3rem !important;
-            bottom: 35px;
-        }
-        `;
-
-
 export const ScaleLegend: ComponentType<*> =
     styled
         .div

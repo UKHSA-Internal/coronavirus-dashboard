@@ -14,7 +14,8 @@ import {
     NumberBox,
     NumbersContainer,
     PostcodeSearchForm,
-    SliderContainer
+    SliderContainer,
+    TriangleMarker
 } from "./Map.styles";
 import useApi from "hooks/useApi";
 import moment from "moment";
@@ -348,7 +349,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
     const LegendExpanded: ComponentType<Props> = () => {
         return <LegendContainer>
                 <ScaleLegend>
-                    <ScaleLegendLabel><button onClick={() => setShowLegend(false)}>Case rate ▼</button></ScaleLegendLabel>
+                    <ScaleLegendLabel><button onClick={() => setShowLegend(false)}>Case rate &nbsp; <TriangleMarker style={{float: 'right'}} direction={'down'}/></button></ScaleLegendLabel>
                     <ScaleGroup>
                         <ScaleColor style={{ background: "#fff" }}/>
                         <ScaleValue>{
@@ -391,7 +392,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
     const LegendRetracted: ComponentType<Props> = () => {
         return <LegendContainer>
                 <ScaleLegend>
-                    <ScaleLegendLabel><button onClick={() => setShowLegend(true)}>Case rate ▲</button></ScaleLegendLabel>
+                    <ScaleLegendLabel><button onClick={() => setShowLegend(true)}>Case rate &nbsp; <TriangleMarker style={{float: 'right'}} direction={'up'}/></button></ScaleLegendLabel>
                 </ScaleLegend>
             </LegendContainer>
 

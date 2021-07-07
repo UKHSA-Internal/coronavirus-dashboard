@@ -9,6 +9,7 @@ import 'leaflet/dist/leaflet.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {
     MapContainer, PostcodeSearchForm,
+    TriangleMarker,
     ZoomButton, ZoomControlContainer
 } from "./VaccinationsMap.styles";
 import {
@@ -336,7 +337,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
     const LegendExpanded: ComponentType<*> = () => {
         return <LegendContainer>
                     <ScaleLegend>
-                        <ScaleLegendLabel><button onClick={() => setShowLegend(false)}>Percentage adults<br/>vaccinated ▼</button></ScaleLegendLabel>
+                        <ScaleLegendLabel><button onClick={() => setShowLegend(false)}>Percentage adults<br/>vaccinated &nbsp;<TriangleMarker style={{float: 'right'}} direction={'down'}/></button></ScaleLegendLabel>
                         <ScaleGroup>
                             <ScaleColor style={{ background: "#fff" }}/>
                             <ScaleValue>{
@@ -376,7 +377,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
     const LegendRetracted: ComponentType<*> = () => {
         return <LegendContainer>
                 <ScaleLegend>
-                    <ScaleLegendLabel><button onClick={() => setShowLegend(true)}>Percentage adults<br/>vaccinated ▲</button></ScaleLegendLabel>
+                    <ScaleLegendLabel><button onClick={() => setShowLegend(true)}>Percentage adults<br/>vaccinated &nbsp;<TriangleMarker style={{float: 'right'}} direction={'up'}/></button></ScaleLegendLabel>
                 </ScaleLegend>
             </LegendContainer>
 
