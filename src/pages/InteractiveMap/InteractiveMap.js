@@ -8,7 +8,7 @@ import { VaccinationsMap } from "./VaccinationsMap";
 import { Switch, Route } from "react-router";
 import { Link } from "react-router-dom";
 
-import { MainContainer, Container } from "./InteractiveMap.styles"
+import { Container } from "./InteractiveMap.styles"
 
 import type { ComponentType } from "react";
 import { glAvailable } from "components/Map/utils";
