@@ -48,8 +48,8 @@ const getExtrema = ( data, barmode: string, yScale ) => {
 
     }
 
-    const std = median(data.map(item => deviation(item.y)));
-    const mid = median(data.map(item => median(item.y)));
+    const std = median(data.filter(item => item.y.length > 10).map(item => deviation(item.y)));
+    const mid = median(data.filter(item => item.y.length > 10).map(item => median(item.y)));
 
     return {minVal, maxVal, std, mid}
 
@@ -96,7 +96,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             tickmode = 'array';
 
             const thresholds = [
-                -10_000, -1_000, -10, 0, 10, 100, 1_000, 10_000, 100_000,
+                -10_000, -1_000, -10, 1, 10, 100, 1_000, 10_000, 100_000,
                 1_000_000, 10_000_000, 100_000_000, 1_000_000_000
             ];
 
@@ -142,7 +142,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                 }, []);
 
                 ticktext = tickvals.map(val => ticktext.includes(val) ? numeral(val).format("0,0.[0]") : "");
-                tickvals = tickvals.map(val => !val ? val : Math.log10(Math.abs(val)) * ((val >= 0) || -1));
+                tickvals = tickvals.map(val => !val ? 1 : Math.log10(Math.abs(val)) * ((val >= 0) || -1));
 
             } else {
 
