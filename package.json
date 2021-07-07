@@ -1,6 +1,6 @@
 {
   "name": "uk-covid19-dashboard",
-  "version": "2.9.18",
+  "version": "2.9.19",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
