@@ -39,6 +39,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
         [map, setMap] = useState([]),
         [styleDataStatus, setStyleDataStatus] = useState(false),
         [showInfo, setShowInfo] = useState(false),
+        [showLegend, setShowLegend] = useState(true),
         [postcodeData, setPostcodeData] = useState(null),
         [currentLocation, setCurrentLocation] = useState({ currentLocation: null, areaType: "utla" }),
         [zoomLayerIndex, setZoomLayerIndex] = useState(0),
@@ -332,6 +333,55 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
         map[0].setZoom(map[0].getZoom() - 1);
     };
 
+    const LegendExpanded: ComponentType<*> = () => {
+        return <LegendContainer>
+                    <ScaleLegend>
+                        <ScaleLegendLabel><button onClick={() => setShowLegend(false)}>Percentage adults<br/>vaccinated ▼</button></ScaleLegendLabel>
+                        <ScaleGroup>
+                            <ScaleColor style={{ background: "#fff" }}/>
+                            <ScaleValue>{
+                                "Data missing"
+                            }</ScaleValue>
+                        </ScaleGroup>
+                        {
+
+                            constants.bucketsFirst.map( (item, index) => {
+                                const firstValue = constants.bucketsFirst?.[index - 2] ?? 0;
+                                if ( index % 2 > 0 ) {
+                                    return <ScaleGroup key={ `legend-${index}` }>
+                                        <ScaleColor style={ { background: constants.bucketsFirst?.[index - 1] ?? 0 } }/>
+                                        <ScaleValue>
+                                            {
+                                                firstValue === 0
+                                                    ? 0
+                                                    : firstValue
+                                            }
+                                            &nbsp;&ndash;&nbsp;
+                                            { constants.bucketsFirst?.[index] - 1 ?? "+" }
+                                        </ScaleValue>
+                                    </ScaleGroup>
+                                }
+                            })
+                        }
+                        <ScaleGroup>
+                            <ScaleColor style={ { background: constants.bucketsFirst.slice(-1) } }/>
+                            <ScaleValue>
+                                { constants.bucketsFirst.slice(-2, -1)[0] }&nbsp;+
+                            </ScaleValue>
+                        </ScaleGroup>
+                    </ScaleLegend>
+                </LegendContainer>
+    };
+
+    const LegendRetracted: ComponentType<*> = () => {
+        return <LegendContainer>
+                <ScaleLegend>
+                    <ScaleLegendLabel><button onClick={() => setShowLegend(true)}>Percentage adults<br/>vaccinated ▲</button></ScaleLegendLabel>
+                </ScaleLegend>
+            </LegendContainer>
+
+    };
+
     return <>
         <p id={ "month" } className={ "govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-3" }>
             Percentage of vaccinated adults up to and including <DateStamp/>:
@@ -376,43 +426,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                     <ZoomButton onClick={ zoomIn }>+<span className={"govuk-visually-hidden" }>Zoom in</span></ZoomButton>
                     <ZoomButton onClick={ zoomOut }>&ndash;<span className={"govuk-visually-hidden" }>Zoom out</span></ZoomButton>
                 </ZoomControlContainer>
-                <LegendContainer>
-                    <ScaleLegend>
-                        <ScaleLegendLabel>Percentage adults<br/>vaccinated</ScaleLegendLabel>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: "#fff" }}/>
-                            <ScaleValue>{
-                                "Data missing"
-                            }</ScaleValue>
-                        </ScaleGroup>
-                        {
-
-                            constants.bucketsFirst.map( (item, index) => {
-                                const firstValue = constants.bucketsFirst?.[index - 2] ?? 0;
-                                if ( index % 2 > 0 ) {
-                                    return <ScaleGroup key={ `legend-${index}` }>
-                                        <ScaleColor style={ { background: constants.bucketsFirst?.[index - 1] ?? 0 } }/>
-                                        <ScaleValue>
-                                            {
-                                                firstValue === 0
-                                                    ? 0
-                                                    : firstValue
-                                            }
-                                            &nbsp;&ndash;&nbsp;
-                                            { constants.bucketsFirst?.[index] - 1 ?? "+" }
-                                        </ScaleValue>
-                                    </ScaleGroup>
-                                }
-                            })
-                        }
-                        <ScaleGroup>
-                            <ScaleColor style={ { background: constants.bucketsFirst.slice(-1) } }/>
-                            <ScaleValue>
-                                { constants.bucketsFirst.slice(-2, -1)[0] }&nbsp;+
-                            </ScaleValue>
-                        </ScaleGroup>
-                    </ScaleLegend>
-                </LegendContainer>
+                { showLegend ? <LegendExpanded/> : <LegendRetracted/> }
             {
                 (currentLocation.areaType !== prevAreaType || !showInfo)
                     ? null
