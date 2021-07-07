@@ -109,7 +109,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             if ( layout?.barmode !== "stack" ) {
 
                 for ( let itemIndex = 0; itemIndex < data.length; itemIndex++ ) {
-                    data[itemIndex].text = data[itemIndex].y;
+                    data[itemIndex].text = payload[itemIndex].y;
 
                     let value = 0;
                     for ( let ind = 0; ind < data[itemIndex].y.length; ind++ ) {
@@ -186,7 +186,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
         }
 
-        if ( !drawData[index].hasOwnProperty("hovertemplate") ) {
+        if ( !drawData[index].hasOwnProperty("hovertemplate") || !Array.isArray(drawData[index].hovertemplate) ) {
             drawData[index].hovertemplate = [];
 
             for ( const value of payload[index]?.y ?? [] ) {
