@@ -56,7 +56,11 @@ const AreaLevel = {
 
 const SliderComponent: ComponentType<*> = ({ dates, currentDate, setCurrentDate, width }) => {
 
-    if ( width !==  "desktop" ) return null;
+    if ( width !==  "desktop" )
+        return <p id={ "month" } className={ "govuk-body govuk-!-font-weight-bold" }>
+            Case rate per 100,000 people for 7&ndash;day period ending
+            on <time dateTime={ currentDate }>{ moment(currentDate).format("D MMMM YYYY") }</time>:
+        </p>;
 
     return <>
         <label id={ "month" }
