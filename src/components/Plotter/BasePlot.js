@@ -10,8 +10,8 @@ import numeral from "numeral";
 import Plotly from "plotly.js";
 import createPlotlyComponent from 'react-plotly.js/factory';
 import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
-import { deviation, mean, median } from "d3-array";
-
+import { deviation, median } from "d3-array";
+import cloneDeep from "lodash.clonedeep"
 const Plot = createPlotlyComponent(Plotly);
 
 
@@ -65,7 +65,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
     const width = useResponsiveLayout(640);
     const [ yScale, setYScale ] = useState(false);
-    let data = JSON.parse(JSON.stringify(payload));
+    const data = cloneDeep(payload);
     let tickvals, ticktext, tickmode = undefined;
     const [finalTickvals, setFinalTickvals] = useState(undefined);
     const [finalTicktext, setFinalTicktext] = useState(undefined);
@@ -85,9 +85,8 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             color: "#6B7276",
         },
         ...(yScale && layout?.barmode === "stack") && !noLogScale
-            ? {type: 'log'}: {tickformat: width === "desktop" ? ',.2r' : '3s'},
-            // ...{tickformat: width === "desktop" ? ',.2r' : '3s'},
-
+            ? {type: 'log'}
+            : {tickformat: width === "desktop" ? ',.2r' : '3s'},
     };
 
     const {minVal, maxVal, mid, std} = getExtrema(data, layout?.barmode);
