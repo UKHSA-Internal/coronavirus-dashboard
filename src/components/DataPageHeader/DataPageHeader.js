@@ -1,6 +1,6 @@
 // @flow
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { getParams, getParamValueFor } from "common/utils";
 
@@ -34,6 +34,18 @@ const DataPageHeaders = () => {
         : [title, description];
 
     preppedTitle +=  ' | Coronavirus in the UK';
+
+    useEffect(() => {
+        if ( Array.isArray(window?.dataLayer) ) {
+            window.dataLayer.push({
+                event: 'pageview',
+                page: {
+                    url: pathname + query,
+                    title: title
+                }
+            });
+        }
+    }, [pathname, query ]);
 
     return <Helmet>
         <title>{ preppedTitle }</title>
