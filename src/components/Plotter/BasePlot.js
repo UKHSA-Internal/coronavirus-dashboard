@@ -12,6 +12,7 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
 import { deviation, median } from "d3-array";
 import cloneDeep from "lodash.clonedeep"
+import { analytics } from "common/utils";
 const Plot = createPlotlyComponent(Plotly);
 
 
@@ -163,6 +164,19 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
         setFinalTickvals(tickvals);
         setFinalTickmode(tickmode);
         setFinalTicktext(ticktext);
+
+    }, [yScale]);
+
+    useEffect(() => {
+
+        if ( yScale ) {
+            analytics({
+                category: "Log scale",
+                action: "activated",
+                label: document.title,
+                value: props?.heading
+            })
+        }
 
     }, [yScale]);
 
