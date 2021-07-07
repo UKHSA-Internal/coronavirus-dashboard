@@ -201,7 +201,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
         {
-            noLogScale
+            noLogScale || layout?.barmode === "stack"
                 ? null
                 : <Toggle style={{ marginTop: "-25px", float: "right" }}>
                     <ToggleButton onClick={ () => setYScale(false) }
