@@ -192,7 +192,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
         }
 
-        if ( !drawData[index].hasOwnProperty("hovertemplate") || !Array.isArray(drawData[index].hovertemplate) ) {
+        if ( !Array.isArray(drawData[index]?.hovertemplate) && drawData[index]?.type !== "heatmap" ) {
             drawData[index].hovertemplate = [];
 
             for ( const value of payload[index]?.y ?? [] ) {
