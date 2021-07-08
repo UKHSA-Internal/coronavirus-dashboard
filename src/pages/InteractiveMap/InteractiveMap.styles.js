@@ -3,6 +3,7 @@
 import styled, { css } from "styled-components";
 
 import type { ComponentType } from "react";
+import CaretDown from "assets/caret-down-black.svg";
 
 
 export const Header: ComponentType<*> =
@@ -153,10 +154,35 @@ export const ScaleLegendLabel: ComponentType<*> =
         .attrs(({ className="" }) => ({
             className: `govuk-body govuk-!-font-size-14 ${className}`
         }))`
-            margin: 0;
+            display: flex;
+            margin: 0 !important;
             font-weight: bold;
-            width: max-content;
-            margin-left: 0 !important;
+            text-align: left;
         `;
 
 
+
+
+export const LegendButton: ComponentType<*> =
+    styled
+        .button
+        .attrs(({ ...props }) => ({ type: "button", ...props }))`
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            cursor: pointer;
+            text-align: left;
+            
+            & abbr {
+                text-decoration: none;
+            }
+            
+            &:after {
+                height: 8px;
+                content: url(${CaretDown});
+                margin-left: 5px;
+                ${css` ${ ({ active }) => ({ transform: active ? "rotate(180deg)" : "none" }) }`};
+            }
+            
+        `;
