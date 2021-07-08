@@ -68,6 +68,7 @@ styled
         font-size: 0.8rem !important;
         padding: .3rem !important;
         bottom: 35px;
+        right: 0;
     }
     `;
     
