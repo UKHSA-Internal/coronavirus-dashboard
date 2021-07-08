@@ -13,6 +13,7 @@ import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
 import { deviation, median } from "d3-array";
 import cloneDeep from "lodash.clonedeep"
 import { analytics } from "common/utils";
+import Loading from "components/Loading";
 const Plot = createPlotlyComponent(Plotly);
 
 
@@ -212,6 +213,8 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
         }
 
     }
+
+    if ( !data?.length ) return <Loading/>;
 
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
