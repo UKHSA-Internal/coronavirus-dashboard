@@ -351,10 +351,10 @@ export const isIE = () => {
 
 };
 
-export const analytics = ({ action, category: event_category, label: event_label, value: event_value }): void => {
+export const analytics = ({ action, category: event_category, label: event_label, value: event_value, ...props }): void => {
 
     try {
-        window.gtag('event', action, { event_category, event_label, event_value });
+        window.gtag('event', action, { event_category, event_label, event_value, ...props });
     } catch (e) {
         console.group("Analytics")
         console.warn(e);
