@@ -9,14 +9,9 @@ import 'leaflet/dist/leaflet.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {
     MapContainer, PostcodeSearchForm,
-    TriangleMarker,
     ZoomButton, ZoomControlContainer
 } from "./VaccinationsMap.styles";
-import {
-    LegendContainer, ScaleColor,
-    ScaleGroup, ScaleLegend,
-    ScaleLegendLabel, ScaleValue
-} from "pages/InteractiveMap/InteractiveMap.styles";
+import { Legend } from "./Legend";
 import bbox from "@turf/bbox";
 import axios from "axios";
 import MapMarker from "assets/icon-mapmarker.svg";
@@ -334,55 +329,6 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
         map[0].setZoom(map[0].getZoom() - 1);
     };
 
-    const LegendExpanded: ComponentType<*> = () => {
-        return <LegendContainer>
-                    <ScaleLegend>
-                        <ScaleLegendLabel><button onClick={() => setShowLegend(false)}>Percentage adults<br/>vaccinated &nbsp;<TriangleMarker style={{float: 'right'}} direction={'down'}/></button></ScaleLegendLabel>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: "#fff" }}/>
-                            <ScaleValue>{
-                                "Data missing"
-                            }</ScaleValue>
-                        </ScaleGroup>
-                        {
-
-                            constants.bucketsFirst.map( (item, index) => {
-                                const firstValue = constants.bucketsFirst?.[index - 2] ?? 0;
-                                if ( index % 2 > 0 ) {
-                                    return <ScaleGroup key={ `legend-${index}` }>
-                                        <ScaleColor style={ { background: constants.bucketsFirst?.[index - 1] ?? 0 } }/>
-                                        <ScaleValue>
-                                            {
-                                                firstValue === 0
-                                                    ? 0
-                                                    : firstValue
-                                            }
-                                            &nbsp;&ndash;&nbsp;
-                                            { constants.bucketsFirst?.[index] - 1 ?? "+" }
-                                        </ScaleValue>
-                                    </ScaleGroup>
-                                }
-                            })
-                        }
-                        <ScaleGroup>
-                            <ScaleColor style={ { background: constants.bucketsFirst.slice(-1) } }/>
-                            <ScaleValue>
-                                { constants.bucketsFirst.slice(-2, -1)[0] }&nbsp;+
-                            </ScaleValue>
-                        </ScaleGroup>
-                    </ScaleLegend>
-                </LegendContainer>
-    };
-
-    const LegendRetracted: ComponentType<*> = () => {
-        return <LegendContainer>
-                <ScaleLegend>
-                    <ScaleLegendLabel><button onClick={() => setShowLegend(true)}>Percentage adults<br/>vaccinated &nbsp;<TriangleMarker style={{float: 'right'}} direction={'up'}/></button></ScaleLegendLabel>
-                </ScaleLegend>
-            </LegendContainer>
-
-    };
-
     return <>
         <p id={ "month" } className={ "govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-3" }>
             Percentage of vaccinated adults up to and including <DateStamp/>:
@@ -427,7 +373,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                     <ZoomButton onClick={ zoomIn }>+<span className={"govuk-visually-hidden" }>Zoom in</span></ZoomButton>
                     <ZoomButton onClick={ zoomOut }>&ndash;<span className={"govuk-visually-hidden" }>Zoom out</span></ZoomButton>
                 </ZoomControlContainer>
-                { showLegend ? <LegendExpanded/> : <LegendRetracted/> }
+                <Legend/>
             {
                 (currentLocation.areaType !== prevAreaType || !showInfo)
                     ? null
