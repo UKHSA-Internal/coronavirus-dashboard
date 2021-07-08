@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 
-import { getParams, getParamValueFor } from "common/utils";
+import { analytics, getParams, getParamValueFor } from "common/utils";
 
 import { Helmet } from "react-helmet";
 import { useLocation } from "react-router";
@@ -33,19 +33,20 @@ const DataPageHeaders = () => {
         ? [`${title} in ${areaName}`, `${description} in ${ areaName }`]
         : [title, description];
 
-    preppedTitle +=  ' | Coronavirus in the UK';
-
     useEffect(() => {
         if ( Array.isArray(window?.dataLayer) ) {
-            window.dataLayer.push({
-                event: 'pageview',
-                page: {
-                    url: pathname + query,
-                    title: title
-                }
+            analytics({
+                action: "page_view",
+                page_title: preppedTitle,
+                page_location: document.location.href,
+                page_path: pathname,
+                send_to: 'UA-161400643-2'
             });
         }
-    }, [pathname, query ]);
+    }, [ pathname, query ]);
+
+    preppedTitle =  decodeURIComponent(`${preppedTitle} | Coronavirus in the UK`);
+    preppedDescription = decodeURIComponent(preppedDescription);
 
     return <Helmet>
         <title>{ preppedTitle }</title>

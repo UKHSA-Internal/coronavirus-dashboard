@@ -13,16 +13,23 @@ import { Container } from "./InteractiveMap.styles"
 import type { ComponentType } from "react";
 import { glAvailable } from "components/Map/utils";
 import { DefaultTag } from "components/Card/Card.styles";
+import { analytics } from "common/utils";
 
 
 const NoWebGL: ComponentType<*> = ({ ...props }) => {
+
+    analytics({
+        action: "FAILURE",
+        category: "map",
+        label: "NoWebGL"
+    });
 
     return <Container { ...props }>
         <div>
             You must have WebGL installed and enabled on your browser to use the
             interactive map.
         </div>
-    </Container>
+    </Container>;
 
 };  // SectionHeader
 

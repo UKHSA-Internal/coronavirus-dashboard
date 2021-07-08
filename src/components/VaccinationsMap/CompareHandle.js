@@ -1,13 +1,10 @@
 // @flow
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
     LeftMarker, RightMarker,
-    SliderButton,
-    SliderContainer,
-    SliderLine,
-    SliderRoot,
-    TriangleMarker
+    SliderButton, SliderContainer,
+    SliderLine, SliderRoot, TriangleMarker
 } from "./VaccinationsMap.styles";
 import { analytics } from "common/utils";
 

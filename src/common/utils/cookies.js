@@ -14,8 +14,9 @@ export const setCookies = () => {
             'config',
             'UA-161400643-2',
             {
-                'anonymize_ip': true,
-                'allowAdFeatures': false
+                anonymize_ip: true,
+                allowAdFeatures: false,
+                send_page_view: false,
             }
         );
 
