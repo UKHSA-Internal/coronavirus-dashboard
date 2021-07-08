@@ -141,6 +141,10 @@ export const PostcodeSearchForm: ComponentType<*> =
     & > input[type="text"] {
         text-transform: uppercase;
     }
+    
+    @media only screen and (max-width: 600px) {
+        max-width: 165px;
+    }
     `;
 
 
@@ -179,9 +183,10 @@ export const MapToolbox: ComponentType<*> =
         max-width: 70%;
     }
     
-    @media only screen and (max-width: 560px) {
+    @media only screen and (max-width: 600px) {
         max-width: 190px;
         z-index: 1;
+        margin: 0 0 -2px 0;
     }
     `;
 
