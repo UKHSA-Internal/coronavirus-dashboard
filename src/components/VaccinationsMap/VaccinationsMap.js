@@ -35,7 +35,6 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
         [map, setMap] = useState([]),
         [styleDataStatus, setStyleDataStatus] = useState(false),
         [showInfo, setShowInfo] = useState(false),
-        [showLegend, setShowLegend] = useState(true),
         [postcodeData, setPostcodeData] = useState(null),
         [currentLocation, setCurrentLocation] = useState({ currentLocation: null, areaType: "utla" }),
         [zoomLayerIndex, setZoomLayerIndex] = useState(0),
@@ -44,7 +43,6 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
         geoData = useGenericAPI("mapVaccinationData", null);
 
     let timestamp;
-
     let hoveredStateId = null;
 
     useEffect(() => {
@@ -94,7 +92,6 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                 const mapInstance = map[mapIndex];
                 const otherMap = (mapIndex === 0 ? map[1] : map[0]);
                 // mapInstance.fitBounds([50.5, -14.5, 58.8, 10], {}, {source: 'fitBounds'})
-
 
                 mapInstance.once("style.load", function () {
 
@@ -240,9 +237,11 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
 
                         if ( zoomLevel < 7 ) {
                             setZoomLayerIndex(0);
-                        } else if ( zoomLevel >= 7 && zoomLevel < 8.5 ) {
+                        }
+                        else if ( zoomLevel >= 7 && zoomLevel < 8.5 ) {
                             setZoomLayerIndex(1);
-                        } else if ( zoomLevel >= 8.5 ) {
+                        }
+                        else if ( zoomLevel >= 8.5 ) {
                             setZoomLayerIndex(2);
                         }
 
