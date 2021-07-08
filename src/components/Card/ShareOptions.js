@@ -36,30 +36,18 @@ Click on the link or copy and paste it into your browser.
 
     useEffect(() => {
         analytics({
-            category: 'Share',
-            action: 'open',
+            category: 'share',
+            action: 'click',
             label: 'Selection dropdown'
         });
     });
-
-    useEffect(() => {
-        analytics({
-            category: 'Share',
-            action: 'open',
-            label: 'Selection dropdown'
-        });
-    });
-
 
     const shareTriggered = ( type, action = () => null ) => {
 
         analytics({
-            category: 'Share',
-            action: JSON.stringify({
-                areaName,
-                label
-            }),
-            label: type
+            category: 'share',
+            action: 'click',
+            label: `${type} [${areaName}: ${label}]`
         });
 
         action();

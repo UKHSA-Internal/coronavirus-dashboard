@@ -351,18 +351,10 @@ export const isIE = () => {
 
 };
 
-export const analytics = ({ category, action, label, value }): void => {
+export const analytics = ({ action, category: event_category, label: event_label, value: event_value }): void => {
 
     try {
-        window.dataLayer.push({
-            event: 'event',
-            eventProps: {
-                category,
-                action,
-                label,
-                value
-            }
-        });
+        window.gtag('event', action, { event_category, event_label, event_value });
     } catch (e) {
         console.group("Analytics")
         console.warn(e);

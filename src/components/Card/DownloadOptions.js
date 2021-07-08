@@ -9,16 +9,16 @@ const DownloadOptions = ({ heading, baseUrl, noCsv }) => {
 
     useEffect(() => {
         analytics({
-            category: 'Downloads',
-            action: 'open',
+            category: 'downloads',
+            action: 'click',
             label: 'Selection dropdown'
         });
     });
 
     const downloadTriggered = ( type ) => analytics({
-        category: 'Downloads',
-        action: heading,
-        label: type
+        category: 'downloads',
+        action: 'click',
+        label: `${type} [${heading}]`
     });
 
     return <>

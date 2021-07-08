@@ -172,10 +172,9 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
         if ( yScale ) {
             analytics({
-                category: "Log scale",
-                action: "activated",
-                label: document.title,
-                value: props?.heading
+                category: "log-scale",
+                action: "click",
+                label: `${props?.heading} [${document.title}]`,
             })
         }
 

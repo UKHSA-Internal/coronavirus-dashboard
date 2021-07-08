@@ -56,30 +56,27 @@ export const InfoCard = ({ areaName, date, first, complete, postcode, areaType, 
 
     if ( error ) {
         analytics({
-            category: "vaccinations map",
+            category: "vaccinations-map",
             action: "click::error",
-            label: areaType,
-            value: areaCode
+            label: `INFO: ${areaType} [${areaCode}]`
         });
 
         return <Error setShowInfo={ setShowInfo }/>;
 
     } else if ( empty ) {
         analytics({
-            category: "vaccinations map",
+            category: "vaccinations-map",
             action: "click::empty",
-            label: areaType,
-            value: areaCode
+            label: `INFO: ${areaType} [${areaCode}]`
         });
 
         return <Error setShowInfo={ setShowInfo }/>;
 
     } else if ( areaType && areaCode ) {
         analytics({
-            category: "vaccinations map",
+            category: "vaccinations-map",
             action: "click",
-            label: areaType,
-            value: areaCode
+            label: `INFO: ${areaType} [${areaCode}]`
         });
     }
 

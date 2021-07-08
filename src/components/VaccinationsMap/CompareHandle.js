@@ -17,21 +17,35 @@ export const CompareHandle = ({ portrait }) => {
     const [active, setActive] = useState(false);
     const [focused, setFocused] = useState(false);
 
-    useEffect(() => {
-        analytics("vaccinations map", "slider", "click");
-    }, [ focused ]);
+    const activationCallback = () => {
+        if ( !active ) {
+            setActive(true);
+            analytics({
+                category: "map-slider",
+                action: "click",
+                label: "vaccinations map"
+            });
+        }
+    };
 
-    useEffect(() => {
-            analytics("vaccinations map", "slider", "hover");
-    }, [ active ]);
+    const focusCallback = () => {
+        if ( !focused ) {
+            setFocused(true);
+            analytics({
+                category: "map-slider",
+                action: "hover",
+                label: "vaccinations map"
+            });
+        }
+    };
 
     return <SliderContainer id={ "slider-container" }
                             active={ active } focused={ focused } portrait={ portrait }
-                            onMouseEnter={ () =>  setActive(true) }
+                            onMouseEnter={ activationCallback }
                             onMouseLeave={ () =>  setActive(false) }
-                            onTouchStart={ () => setFocused(true) }
+                            onTouchStart={ focusCallback }
                             onTouchEnd={ () => setFocused(false) }
-                            onMouseDown={ () => setFocused(true) }
+                            onMouseDown={ focusCallback }
                             onMouseUp={ () => setFocused(false) }>
         <SliderRoot id={ "slider-root" }>
             <SliderLine id={ "slider-line" } active={ active } focused={ focused } portrait={ portrait }/>

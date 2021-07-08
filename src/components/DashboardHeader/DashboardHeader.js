@@ -110,7 +110,12 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
     }, [ pathname, prevPathname ])
 
     const locationPickerCallback = () => {
-        analytics("Interaction", "Location picker", locationPickerState ? "OPEN" : "CLOSE");
+        analytics({
+            action: "click",
+            category: "location-picker",
+            label: locationPickerState ? "OPEN" : "CLOSE"
+        });
+
         setLocationPickerState(state => !state)
     };
 
