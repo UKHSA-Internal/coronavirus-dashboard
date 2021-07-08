@@ -11,11 +11,7 @@ import {
     MapContainer, PostcodeSearchForm,
     ZoomButton, ZoomControlContainer
 } from "./VaccinationsMap.styles";
-import {
-    LegendContainer, ScaleColor,
-    ScaleGroup, ScaleLegend,
-    ScaleLegendLabel, ScaleValue
-} from "pages/InteractiveMap/InteractiveMap.styles";
+import { Legend } from "./Legend";
 import bbox from "@turf/bbox";
 import axios from "axios";
 import MapMarker from "assets/icon-mapmarker.svg";
@@ -39,6 +35,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
         [map, setMap] = useState([]),
         [styleDataStatus, setStyleDataStatus] = useState(false),
         [showInfo, setShowInfo] = useState(false),
+        [showLegend, setShowLegend] = useState(true),
         [postcodeData, setPostcodeData] = useState(null),
         [currentLocation, setCurrentLocation] = useState({ currentLocation: null, areaType: "utla" }),
         [zoomLayerIndex, setZoomLayerIndex] = useState(0),
@@ -376,43 +373,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                     <ZoomButton onClick={ zoomIn }>+<span className={"govuk-visually-hidden" }>Zoom in</span></ZoomButton>
                     <ZoomButton onClick={ zoomOut }>&ndash;<span className={"govuk-visually-hidden" }>Zoom out</span></ZoomButton>
                 </ZoomControlContainer>
-                <LegendContainer>
-                    <ScaleLegend>
-                        <ScaleLegendLabel>Percentage adults<br/>vaccinated</ScaleLegendLabel>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: "#fff" }}/>
-                            <ScaleValue>{
-                                "Data missing"
-                            }</ScaleValue>
-                        </ScaleGroup>
-                        {
-
-                            constants.bucketsFirst.map( (item, index) => {
-                                const firstValue = constants.bucketsFirst?.[index - 2] ?? 0;
-                                if ( index % 2 > 0 ) {
-                                    return <ScaleGroup key={ `legend-${index}` }>
-                                        <ScaleColor style={ { background: constants.bucketsFirst?.[index - 1] ?? 0 } }/>
-                                        <ScaleValue>
-                                            {
-                                                firstValue === 0
-                                                    ? 0
-                                                    : firstValue
-                                            }
-                                            &nbsp;&ndash;&nbsp;
-                                            { constants.bucketsFirst?.[index] - 1 ?? "+" }
-                                        </ScaleValue>
-                                    </ScaleGroup>
-                                }
-                            })
-                        }
-                        <ScaleGroup>
-                            <ScaleColor style={ { background: constants.bucketsFirst.slice(-1) } }/>
-                            <ScaleValue>
-                                { constants.bucketsFirst.slice(-2, -1)[0] }&nbsp;+
-                            </ScaleValue>
-                        </ScaleGroup>
-                    </ScaleLegend>
-                </LegendContainer>
+                <Legend/>
             {
                 (currentLocation.areaType !== prevAreaType || !showInfo)
                     ? null

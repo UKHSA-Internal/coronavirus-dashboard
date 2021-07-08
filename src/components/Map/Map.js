@@ -14,7 +14,8 @@ import {
     NumberBox,
     NumbersContainer,
     PostcodeSearchForm,
-    SliderContainer
+    SliderContainer,
+    TriangleMarker
 } from "./Map.styles";
 import useApi from "hooks/useApi";
 import moment from "moment";
@@ -25,7 +26,8 @@ import {
     ScaleGroup,
     ScaleLegend,
     ScaleLegendLabel,
-    ScaleValue
+    ScaleValue,
+    LegendButton
 } from "pages/InteractiveMap/InteractiveMap.styles";
 import bbox from "@turf/bbox";
 import axios from "axios";
@@ -37,6 +39,7 @@ import RedArrow from "assets/icon-arrow-red.svg";
 import { scaleColours } from "common/utils";
 import useGenericAPI from "hooks/useGenericAPI";
 import type { ComponentType } from "react";
+import type { Props } from './Map.types.js';
 
 
 const MapLayers = [
@@ -308,6 +311,66 @@ const LocalAuthorityCard = ({ currentLocation, date, areaType, ...props }) => {
 };
 
 
+const Legend: ComponentType<Props> = ({ zoomLayer }) => {
+
+    const [ showLegend, setShowLegend ] = useState(true);
+
+    if ( !MapLayers[zoomLayer]?.buckets ) return null;
+
+    if ( !showLegend )
+        return <LegendContainer>
+            <ScaleLegend>
+                <ScaleLegendLabel>
+                    <LegendButton onClick={ () => setShowLegend(true) }
+                                  active={ !showLegend }>Case rate</LegendButton>
+                </ScaleLegendLabel>
+            </ScaleLegend>
+        </LegendContainer>;
+
+    return <LegendContainer>
+        <ScaleLegend>
+            <ScaleLegendLabel>
+                <LegendButton onClick={ () => setShowLegend(false) }>Case rate</LegendButton>
+            </ScaleLegendLabel>
+            <ScaleGroup>
+                <ScaleColor style={{ background: "#fff" }}/>
+                <ScaleValue>{
+                    "Data not shown"
+                }</ScaleValue>
+            </ScaleGroup>
+            {
+                MapLayers[zoomLayer].buckets.map( (item, index) => {
+                    const firstValue = MapLayers[zoomLayer].buckets?.[index - 2] ?? 0;
+                    if ( index % 2 > 0 ) {
+                        return <ScaleGroup key={ `legend-${index}` }>
+                            <ScaleColor style={ { background: MapLayers[zoomLayer].buckets?.[index - 1] ?? 0 } }/>
+                            <ScaleValue>
+                                {
+                                    (MapLayers[zoomLayer].label === "msoa" && index === 1)
+                                        ? 0
+                                        : firstValue === 0
+                                        ? 0
+                                        : firstValue
+                                }
+                                &nbsp;&ndash;&nbsp;
+                                { MapLayers[zoomLayer].buckets?.[index] - 1 ?? "+" }
+                            </ScaleValue>
+                        </ScaleGroup>
+                    }
+                })
+            }
+            <ScaleGroup>
+                <ScaleColor style={ { background: MapLayers[zoomLayer].buckets.slice(-1) } }/>
+                <ScaleValue>
+                    { MapLayers[zoomLayer].buckets.slice(-2, -1)[0] }&nbsp;+
+                </ScaleValue>
+            </ScaleGroup>
+        </ScaleLegend>
+    </LegendContainer>;
+
+};
+
+
 const Component = memo( ( props )=> <div {...props} id={ "cases-map-container" }/>);
 
 
@@ -508,11 +571,6 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
     }, [date, styleDataStatus]);
 
-    // useEffect(() => {
-    //     if ( map ) {
-    //         map.remove();
-    //     }
-    // }, [ date ]);
 
     useEffect(() => {
 
@@ -615,45 +673,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                                type={ "submit" }
                                value={ "" }/>
                     </PostcodeSearchForm>
-                    <LegendContainer>
-                        <ScaleLegend>
-                            <ScaleLegendLabel>Case rate</ScaleLegendLabel>
-                            <ScaleGroup>
-                                <ScaleColor style={{ background: "#fff" }}/>
-                                <ScaleValue>{
-                                    "Data not shown"
-                                }</ScaleValue>
-                            </ScaleGroup>
-                            {
-
-                                MapLayers[zoomLayerIndex].buckets.map( (item, index) => {
-                                    const firstValue = MapLayers[zoomLayerIndex].buckets?.[index - 2] ?? 0;
-                                    if ( index % 2 > 0 ) {
-                                        return <ScaleGroup key={ `legend-${index}` }>
-                                            <ScaleColor style={ { background: MapLayers[zoomLayerIndex].buckets?.[index - 1] ?? 0 } }/>
-                                            <ScaleValue>
-                                                {
-                                                    (MapLayers[zoomLayerIndex].label === "msoa" && index === 1)
-                                                        ? 0
-                                                        : firstValue === 0
-                                                        ? 0
-                                                        : firstValue
-                                                }
-                                                &nbsp;&ndash;&nbsp;
-                                                { MapLayers[zoomLayerIndex].buckets?.[index] - 1 ?? "+" }
-                                            </ScaleValue>
-                                        </ScaleGroup>
-                                    }
-                                })
-                            }
-                            <ScaleGroup>
-                                <ScaleColor style={ { background: MapLayers[zoomLayerIndex].buckets.slice(-1) } }/>
-                                <ScaleValue>
-                                    { MapLayers[zoomLayerIndex].buckets.slice(-2, -1)[0] }&nbsp;+
-                                </ScaleValue>
-                            </ScaleGroup>
-                        </ScaleLegend>
-                    </LegendContainer>
+                    <Legend zoomLayer={ zoomLayerIndex }/>
                 </>
 
             }
