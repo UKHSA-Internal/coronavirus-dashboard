@@ -25,7 +25,6 @@ export const Button: ComponentType<*> =
         .button
         .attrs(({ ...props }) => ({ type: "button", ...props }))`
             display: inline-flex;
-            max-width: max-content;
             background: transparent;
             padding: .1rem .4rem;
             border-right: 1px solid #1d70b8;
