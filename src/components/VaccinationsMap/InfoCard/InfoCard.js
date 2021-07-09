@@ -92,7 +92,7 @@ export const InfoCard = ({ data, areaName, date, postcode, areaType,
             { locationData?.[`${areaType}Name`] ?? "" }
             <small className={ "govuk-caption-s" }>
                 {areaType.toUpperCase()} <br/>
-                Up to and including { moment(date).subtract(1, "day").format("DD MMMM YYYY") }
+                Up to and including { moment(date).subtract(1, "day").format("D MMMM YYYY") }
             </small>
         </h2>
         <NumbersContainer>
