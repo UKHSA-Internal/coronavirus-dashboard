@@ -5,7 +5,7 @@ import React from 'react';
 import PageTitle from 'components/PageTitle';
 import type { Props } from './ErrorBoundary.types';
 import { Container, DetailsBody } from './ErrorBoundary.styles';
-import { analytics } from "../../common/utils";
+import { analytics } from "common/utils";
 
 
 export default class ErrorBoundary extends React.Component<Props, State> {
