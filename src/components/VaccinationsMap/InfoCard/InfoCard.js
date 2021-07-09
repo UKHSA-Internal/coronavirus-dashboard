@@ -100,14 +100,14 @@ export const InfoCard = ({ data, areaName, date, postcode, areaType,
                 <h3 className={ "govuk-heading-s" }>1st dose</h3>
                 <div className={ "number-row" }>
                     <ColourReference colour={ constants.colourBucketReference[firstColourIdx] }/>
-                    <span className={ "number" }>{ numeral(first).format("0,0.0") + "%" }</span>
+                    <span className={ "number" }>{ first ? numeral(first).format("0,0.0") + "%" : "N/A" }</span>
                 </div>
             </NumberBox>
             <NumberBox>
                 <h3 className={ "govuk-heading-s" }>2nd dose</h3>
                 <div className={ "number-row" }>
                     <ColourReference colour={ constants.colourBucketReference[completeColourIdx] }/>
-                    <span className={ "number" }>{ numeral(complete).format("0,0.0") + "%" }</span>
+                    <span className={ "number" }>{ complete ? numeral(complete).format("0,0.0") + "%" : "N/A" }</span>
                 </div>
             </NumberBox>
         </NumbersContainer>
