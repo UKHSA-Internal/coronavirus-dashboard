@@ -10,10 +10,11 @@ import numeral from "numeral";
 import Plotly from "plotly.js";
 import createPlotlyComponent from 'react-plotly.js/factory';
 import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
-import { deviation, median } from "d3-array";
+import { deviation, max, median } from "d3-array";
 import cloneDeep from "lodash.clonedeep"
 import { analytics } from "common/utils";
 import Loading from "components/Loading";
+import moment from "moment";
 const Plot = createPlotlyComponent(Plotly);
 
 
@@ -205,20 +206,25 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             drawData[index].hovertemplate = [];
 
             for ( const value of payload[index]?.y ?? [] ) {
-                drawData[index].hovertemplate.push(
-                    value > 0 ? numeral(value).format("0,0.[0]") : ""
-                );
+                drawData[index].hovertemplate.push(numeral(value).format("0,0.[0]"));
             }
+
         }
 
     }
 
-    if ( !data?.length ) return <Loading/>;
+    if ( props?.chartMode === "percentage" ) {
+
+        yaxis.range = [Math.min(0, minVal), Math.min(100, maxVal)];
+
+    }
+
+    if ( !drawData?.length ) return <Loading/>;
 
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
         {
-            noLogScale || layout?.barmode === "stack" || std < mid
+            noLogScale || layout?.barmode === "stack" || props?.chartMode === "percentage" || std < mid
                 ? null
                 : <Toggle style={{ marginTop: "-25px", float: "right" }}>
                     <ToggleButton onClick={ () => setYScale(false) }
@@ -331,7 +337,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                     //     },
                     //     {step: 'all'}
                     //   ]},
-                    ...xaxis
+                    ...xaxis,
                 },
                 yaxis: {
                     tickmode: finalTickmode,
