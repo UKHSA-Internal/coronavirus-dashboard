@@ -11,7 +11,6 @@ import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
 import CookieBanner from "components/CookieBanner";
 import DataPageHeader from "./components/DataPageHeader";
-import CookieOps from "js-cookie";
 
 import './index.scss';
 
@@ -102,14 +101,6 @@ const App = () => {
 
     const { pathname } = useLocation();
     const layout = useResponsiveLayout(768);
-    const cookiePref = JSON.parse(
-        decodeURIComponent(CookieOps.get("cookies_policy_21_3") || "{}")
-    );
-
-    if ( cookiePref?.usage ?? false ) {
-        window['ga-disable-UA-161400643-2'] = true;
-        window['ga-disable-UA-145652997-1'] = true;
-    }
 
     let hasMenu;
 

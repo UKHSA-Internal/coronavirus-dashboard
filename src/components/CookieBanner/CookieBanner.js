@@ -42,9 +42,18 @@ const CookieBanner: ComponentType<Props> = ({ ...props }: Props) => {
             }
             else {
                 const cookiePolicy = JSON.parse(cookiePolicyRaw);
-                !cookiePolicy.usage
-                    ? deleteCookies()
-                    : setCookies();
+
+                if ( cookiePolicy.usage === false ) {
+                    window['ga-disable-UA-161400643-2'] = true;
+                    window['ga-disable-UA-145652997-1'] = true;
+                    deleteCookies()
+                }
+                else if ( !cookiePolicy.usage ) {
+                    deleteCookies()
+                }
+                else {
+                    setCookies();
+                }
 
                 setCookieStateIsSet(true);
             }
