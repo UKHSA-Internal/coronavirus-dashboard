@@ -5,6 +5,7 @@ import React from 'react';
 import PageTitle from 'components/PageTitle';
 import type { Props } from './ErrorBoundary.types';
 import { Container, DetailsBody } from './ErrorBoundary.styles';
+import { analytics } from "../../common/utils";
 
 
 export default class ErrorBoundary extends React.Component<Props, State> {
@@ -12,29 +13,38 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     state: State = {
         error: null,
         errorInfo: null
-  };
+    };
 
-  componentDidCatch(error, errorInfo) {
-        // Catch errors in any components below and re-render with error message
+    componentDidCatch(error, errorInfo) {
+
         this.setState({
             error: error,
             errorInfo: errorInfo
         })
-        // You can also log error messages to an error reporting service here
-  }
 
-  render() {
-        if (this.state.errorInfo) {
+        analytics({
+            action: "exception",
+            description: error,
+            fatal: true
+        });
+
+    }
+
+    render() {
+
+        if ( this.state.errorInfo ) {
 
             // Error path
             return <Container role="main">
-                <PageTitle title={"Something went wrong"} />
+                <PageTitle title={ "Something went wrong" }/>
 
                 <p className="govuk-body">
                     There was an error. Please try again later.
                 </p>
                 <p className="govuk-body">
-                    If the problem persists, contact us via <a href="mailto:coronavirus-tracker@phe.gov.uk" className="govuk-link">coronavirus-tracker@phe.gov.uk</a> and include:
+                    If the problem persists, contact us via <a href="mailto:coronavirus-tracker@phe.gov.uk"
+                                                               className="govuk-link">coronavirus-tracker@phe.gov.uk</a> and
+                    include:
                 </p>
                 <ul className="govuk-list govuk-list--bullet">
                     <li>details of what you were trying to do that caused the problem</li>
@@ -50,14 +60,15 @@ export default class ErrorBoundary extends React.Component<Props, State> {
                         </span>
                     </summary>
                     <DetailsBody>
-                        {this.state.error && this.state.error.toString()}
+                        { this.state.error && this.state.error.toString() }
                         <br/>
-                        {this.state.errorInfo.componentStack}
+                        { this.state.errorInfo.componentStack }
                     </DetailsBody>
                 </details>
-            </Container>
+            </Container>;
 
         }
+
         // Normally, just render children
         return this.props.children;
     }
