@@ -20,10 +20,10 @@ import usePrevious from "hooks/usePrevious";
 import { MapComponent } from "./MapComponent";
 import type { ComponentType } from "react";
 import * as constants from "./constants";
-import { LocalAuthorityCard, SoaCard } from "./InfoCard";
 import deepEqual from "deep-equal";
 import useGenericAPI from "hooks/useGenericAPI";
 import { DateStamp } from "./InfoCard/DateStamp";
+import InfoCard from "./InfoCard";
 
 
 
@@ -376,12 +376,13 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
             {
                 (currentLocation.areaType !== prevAreaType || !showInfo)
                     ? null
-                    : currentLocation.areaType !== "msoa"
-                    ? <LocalAuthorityCard { ...currentLocation } date={ timestamp } setShowInfo={ setShowInfo }/>
-                    : <SoaCard { ...currentLocation }
-                               date={ timestamp }
-                               postcodeData={ postcodeData }
-                               setShowInfo={ setShowInfo }/>
+                    : <InfoCard data={ geoData } { ...currentLocation } setShowInfo={ setShowInfo }/>
+                    // : currentLocation.areaType !== "msoa"
+                    // ? <LocalAuthorityCard { ...currentLocation } date={ timestamp } setShowInfo={ setShowInfo }/>
+                    // : <SoaCard { ...currentLocation }
+                    //            date={ timestamp }
+                    //            postcodeData={ postcodeData }
+                    //            setShowInfo={ setShowInfo }/>
             }
             </MapContainer>
         {/*<span style={{ textAlign: "right" }}>*/}
