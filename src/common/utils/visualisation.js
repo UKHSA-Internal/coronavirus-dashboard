@@ -139,15 +139,6 @@ const processGenericField = ({ field, index, xData, yData }) => {
     let plotFeatures;
 
     switch ( field.type ) {
-        case "bar":
-            plotFeatures = {
-                type: field.type,
-                marker: {
-                    color: baseColour
-                }
-            }
-            break;
-
         case "line":
             plotFeatures = {
                 type: field.type,
@@ -163,6 +154,16 @@ const processGenericField = ({ field, index, xData, yData }) => {
                     color: colours[field?.colour ?? index]
                 }
             };
+            break;
+
+        case "bar":
+        default:
+            plotFeatures = {
+                type: field.type,
+                marker: {
+                    color: baseColour
+                }
+            }
             break;
 
     }
