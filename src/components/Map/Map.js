@@ -33,6 +33,7 @@ import { scaleColours } from "common/utils";
 import useGenericAPI from "hooks/useGenericAPI";
 import type { ComponentType } from "react";
 import type { Props } from './Map.types.js';
+import deepEqual from "deep-equal";
 
 
 const MapLayers = [
@@ -350,6 +351,7 @@ const Legend: ComponentType<Props> = ({ zoomLayer }) => {
                             </ScaleValue>
                         </ScaleGroup>
                     }
+                    else return null;
                 })
             }
             <ScaleGroup>
@@ -379,22 +381,24 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
         [postcodeData, setPostcodeData] = useState(null),
         [currentLocation, setCurrentLocation] = useState({ currentLocation: null, areaType: "utla" }),
         [zoomLayerIndex, setZoomLayerIndex] = useState(0),
-        prevAreaType = usePrevious(currentLocation.areaType);
-
-    let hoveredStateId = null;
+        prevAreaType = usePrevious(currentLocation.areaType),
+        [ hoverState, setHoverSate ] = useState({}),
+        prevHoverState = usePrevious(hoverState),
+        [ mapHasLoaded, setMapHasLoaded ] = useState(false);
 
     const filterBy = (date: string) => {
 
         const filters = ['==', 'date', date.split(/T/)[0]];
 
-        if ( map )
-            MapLayers.map(layer => {
-                const mapLayer = map.getLayer(`choropleth-${layer.label}`);
+        if ( map ) {
+            for ( const layer of MapLayers ) {
+                const mapLayer = map.getLayer(`choropleth-${ layer.label }`);
 
-                if ( mapLayer ) map.setFilter(`choropleth-${layer.label}`, filters);
-
-            });
-
+                if ( mapLayer ) {
+                    map.setFilter(`choropleth-${ layer.label }`, filters);
+                }
+            }
+        }
     };
 
     useEffect(() => {
@@ -409,16 +413,18 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                 preserveDrawingBuffer: true
             }));
         }
-    }, []);
+    }, [ map, centrePoint ]);
 
     useMemo(() => {
+
+        // let hoveredStateId = null;
 
         if ( map && !styleDataStatus ) {
 
             map.once("style.load", function () {
 
-                MapLayers.map( layer => {
-                    map.addSource(`timeSeries-${layer.label}`, {
+                for ( const layer of MapLayers ) {
+                    map.addSource(`timeSeries-${ layer.label }`, {
                         type: 'geojson',
                         data: width === "desktop" ? layer.paths.timeSeries : layer.paths.timeSeriesMobile,
                         buffer: layer.buffer,
@@ -426,20 +432,18 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                         maxzoom: layer.maxZoom
                     });
 
-                    map.addSource(`geo-${layer.label}`, {
+                    map.addSource(`geo-${ layer.label }`, {
                         type: 'geojson',
                         data: layer.paths.outline,
                         buffer: layer.buffer,
                         tolerance: layer.tolerance,
                         maxzoom: layer.maxZoom
                     });
-                });
 
-                MapLayers.map( layer => {
                     map.addLayer({
                         'id': layer.label,
                         'type': 'line',
-                        'source': `geo-${layer.label}`,
+                        'source': `geo-${ layer.label }`,
                         'minzoom': layer.minZoom,
                         'maxzoom': layer.maxZoom,
                         'layout': {
@@ -458,10 +462,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                     }, layer.foreground);
 
                     map.addLayer({
-                        'id': `choropleth-${layer.label}`,
+                        'id': `choropleth-${ layer.label }`,
                         'type': 'fill',
                         "fill-antialias": true,
-                        'source': `timeSeries-${layer.label}`,
+                        'source': `timeSeries-${ layer.label }`,
                         'minzoom': layer.minZoom,
                         'maxzoom': layer.maxZoom,
                         'paint': {
@@ -475,55 +479,36 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                     }, layer.label);
 
                     map.addLayer({
-                        'id': `${layer.label}-click`,
+                        'id': `${ layer.label }-click`,
                         'type': 'fill',
-                        'source': `geo-${layer.label}`,
+                        'source': `geo-${ layer.label }`,
                         'minzoom': layer.minZoom,
                         'maxzoom': layer.maxZoom,
                         'paint': {
                             'fill-color': "#ffffff",
                             'fill-opacity': .001
                         },
-                    }, `choropleth-${layer.label}`);
+                    }, `choropleth-${ layer.label }`);
 
-                    map.on('click', `${layer.label}-click`, function (e) {
-
-                        setCurrentLocation(prev => ({
-                            ...prev,
-                            currentLocation: e.features[0].properties.code
-                        }));
-                        setShowInfo(true);
+                    map.on('click', `${ layer.label }-click`, function (e) {
 
                         const outlineId = map
                             .queryRenderedFeatures({ layers: [layer.label] })
                             .find(item => item.properties.code === e.features[0].properties.code)
                             .id;
 
-                        if ( hoveredStateId?.id ) {
-                            map.setFeatureState(
-                                { source: `geo-${ hoveredStateId.location }`, id: hoveredStateId.id },
-                                { hover: false }
-                            );
-                        }
-
-                        hoveredStateId = {
+                        const newState = {
                             id: outlineId,
-                            location: layer.label
+                            location: layer.label,
+                            features: e.features[0],
+                            layer: layer.label
                         };
 
-                        map.setFeatureState(
-                            { source: `geo-${ hoveredStateId.location }`, id: hoveredStateId.id },
-                            { hover: true }
-                        );
-
-                        map.fitBounds(bbox(e.features[0]), {
-                            padding: 20,
-                            maxZoom: Math.max(map.getLayer(layer.label).minzoom + 0.5, map.getZoom())
-                        });
+                        if ( !deepEqual(prevHoverState, newState) ) setHoverSate(newState);
 
                     });
 
-                });
+                }
 
                 map.on('zoom', function() {
 
@@ -554,9 +539,11 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                 // disable map rotation using touch rotation gesture
                 map.touchZoomRotate.disableRotation();
 
+                setMapHasLoaded(true);
+
             })
         }
-    }, [map]);
+    }, [ map, prevHoverState, styleDataStatus, width ]);
 
     useEffect(() => {
 
@@ -564,12 +551,41 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
     }, [date, styleDataStatus]);
 
+    useEffect(() => {
+
+        if ( !map || !mapHasLoaded || !hoverState?.id ) return;
+
+        if ( prevHoverState?.id ) {
+            map.setFeatureState(
+                { source: `geo-${ prevHoverState.location }`, id: prevHoverState.id },
+                { hover: false }
+            );
+        }
+
+        map.setFeatureState(
+            { source: `geo-${ hoverState.location }`, id: hoverState.id },
+            { hover: true }
+        );
+
+        map.fitBounds(bbox(hoverState.features), {
+            padding: 20,
+            maxZoom: Math.max(map.getLayer(hoverState.layer).minzoom + 0.5, map.getZoom())
+        });
+
+        setCurrentLocation(prev => ({
+            ...prev,
+            currentLocation: hoverState.features.properties.code
+        }));
+
+        setShowInfo(true);
+
+    }, [ map, hoverState.id, hoverState.layer, prevHoverState, mapHasLoaded ])
+
 
     useEffect(() => {
 
         if ( map && postcodeData ) {
 
-            setShowInfo(true);
             const el = document.createElement("div");
             el.className = "marker";
             el.style.backgroundImage = `url(${MapMarker})`;
@@ -594,7 +610,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
             // setShowInfo(true);
         }
 
-    }, [postcodeData, map]);
+    }, [ postcodeData, map, styleDataStatus, width ]);
 
 
     useEffect(() => {
@@ -671,7 +687,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
             }
             {
-                (currentLocation.areaType !== prevAreaType || !showInfo)
+                (currentLocation.areaType !== prevAreaType || !showInfo || !currentLocation.currentLocation)
                     ? null
                     : currentLocation.areaType !== "msoa"
                     ? <LocalAuthorityCard { ...currentLocation } date={ date } maxDate={ maxDate } setShowInfo={ setShowInfo }/>
