@@ -59,26 +59,28 @@ const Banner: ComponentType<*> = ({ ...props }) => {
     const timestamp = useTimestamp();
     const { pathname } = useLocation();
 
-    const ts = moment(timestamp);
-    const pattern = new RegExp(pathname, 'ig');
-
-    const bannerFilter = ( { appearByUpdate, disappearByUpdate, displayUri=[] }: BannerType ): boolean => {
-
-        if ( moment(appearByUpdate) > ts || ts > moment(disappearByUpdate) ) return false;
-
-        return (
-            displayUri.length > 0
-                ? displayUri.filter(item => pattern.test(item)).length > 0
-                : true
-        )
-
-    };  // bannerFilter
-
     useEffect(() => {
+
+        const ts = moment(timestamp);
+        const pattern = new RegExp(pathname, 'ig');
+
+        const bannerFilter = ( { appearByUpdate, disappearByUpdate, displayUri=[] }: BannerType ): boolean => {
+
+            if ( moment(appearByUpdate) > ts || ts > moment(disappearByUpdate) ) return false;
+
+            return (
+                displayUri.length > 0
+                    ? displayUri.filter(item => pattern.test(item)).length > 0
+                    : true
+            )
+
+        };  // bannerFilter
+
         if ( banners && timestamp !== "" ) {
             setPreppedBanners(banners.filter(bannerFilter))
         }
-    }, [banners, timestamp]);
+
+    }, [banners, timestamp, pathname]);
 
 
     if ( banners === null || !preppedBanners.length ) return null;
