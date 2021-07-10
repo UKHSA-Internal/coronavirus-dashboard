@@ -1,6 +1,6 @@
 {
   "name": "uk-covid19-dashboard",
-  "version": "2.10.10",
+  "version": "2.10.11",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
@@ -45,7 +45,7 @@
   "scripts": {
     "lint": "yarn flow",
     "start": "unset HOST && react-scripts start",
-    "build": "unset HOST && export NODE_OPTIONS=--max-old-space-size=8192 && react-scripts build && node scripts/patchUrls.js",
+    "build": "unset HOST && export NODE_OPTIONS=--max-old-space-size=8192 && react-scripts build",
     "ppostbuild": "react-snap",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
