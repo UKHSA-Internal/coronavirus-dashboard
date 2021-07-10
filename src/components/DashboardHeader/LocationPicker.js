@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 
@@ -106,28 +106,26 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
             [],
             {
                 page: pathname.replace(/\/details\//i, ""),
-                ... currentLocation.areaType !== "overview"
+                ...currentLocation.areaType !== "overview"
                     ? {area_type: currentLocation.areaType.replace(/^nhsNation$/i, "nation")}
                     : {}
             }
         );
 
-    useEffect(() => {
+    const { areaName, areaType } = currentLocation;
 
-        setCurrentLocation(currentLocation);
-
-    }, [ currentLocation.areaType, currentLocation.areaName ]);
+    useCallback(() => setCurrentLocation({ areaType, areaName }), [ areaName, areaType ]);
 
 
     useEffect(() => {
 
-        if ( currentLocation.areaName && prevQuery !== newQuery )
+        if ( areaName && prevQuery !== newQuery )
             history.push({
                 pathname: pathname,
                 search: newQuery
             });
 
-    }, [ currentLocation.areaName, query, prevQuery, pathname ]);
+    }, [ areaName, query, prevQuery, pathname, newQuery, history ]);
 
 
     useEffect(() => {
