@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useEffect, lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Switch, Route, useLocation, Redirect, useParams } from 'react-router';
 import Header from "components/Header";
 import BackToTop from 'components/BackToTop';
@@ -58,19 +58,6 @@ const LastUpdateTime = () => {
 }; // LastUpdateTime
 
 
-const
-    PathWithSideMenu = [
-        "/details/",
-        "/details/testing",
-        "/details/cases",
-        "/details/healthcare",
-        "/details/deaths",
-        "/details/about-data",
-        "/details/download",
-        "/details/whats-new"
-    ];
-
-
 const Navigation = ({ layout, ...props }) => {
 
     const Nav = layout !== "mobile"
@@ -99,19 +86,11 @@ const RedirectToDetails = () => {
 
 const App = () => {
 
-    const { pathname } = useLocation();
+    const { search: query, pathname } = useLocation();
     const layout = useResponsiveLayout(768);
 
-    let hasMenu;
-
-    useEffect(() => {
-
-        hasMenu = PathWithSideMenu.indexOf(pathname) > -1;
-
-    }, [ pathname ]);
-
     return <>
-        <DataPageHeader/>
+        <DataPageHeader pathname={ pathname } query={ query }/>
         <CookieBanner/>
         <Header/>
         { layout === "mobile" && <Navigation layout={ layout }/> }
