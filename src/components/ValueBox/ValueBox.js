@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { analytics, colours, strFormat } from "common/utils";
+import { colours, strFormat } from "common/utils";
 import {
     DataColour,
     DataContainer,

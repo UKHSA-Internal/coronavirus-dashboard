@@ -9,24 +9,17 @@ import URLs from "common/urls";
 import 'leaflet/dist/leaflet.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {
-    MapContainer,
-    MapToolbox,
-    NumberBox,
-    NumbersContainer,
-    PostcodeSearchForm,
-    SliderContainer,
-    TriangleMarker
+    MapContainer, MapToolbox,
+    NumberBox, NumbersContainer,
+    PostcodeSearchForm, SliderContainer,
 } from "./Map.styles";
 import useApi from "hooks/useApi";
 import moment from "moment";
 import numeral from "numeral";
 import {
-    LegendContainer,
-    ScaleColor,
-    ScaleGroup,
-    ScaleLegend,
-    ScaleLegendLabel,
-    ScaleValue,
+    LegendContainer, ScaleColor,
+    ScaleGroup, ScaleLegend,
+    ScaleLegendLabel,ScaleValue,
     LegendButton
 } from "pages/InteractiveMap/InteractiveMap.styles";
 import bbox from "@turf/bbox";
