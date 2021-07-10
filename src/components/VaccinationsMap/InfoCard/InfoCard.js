@@ -81,7 +81,10 @@ export const InfoCard = ({ data, areaName, date, postcode, areaType,
 
         return <Error setShowInfo={ setShowInfo }/>;
     }
-    else if ( !locationData ) {
+    else if ( !locationData || !Object.keys(locationData).length ) {
+
+        if ( !first ) return null;
+
         return <Panel setShowInfo={ setShowInfo }>
             <Loading/>
         </Panel>;
