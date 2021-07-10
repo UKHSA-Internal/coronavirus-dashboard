@@ -12,7 +12,6 @@ import LocationBanner from "components/LocationBanner";
 import { analytics, getParams } from "common/utils";
 import { getParamValueFor } from "./utils";
 import { getOrder } from "./GenericHooks";
-import { StickyContainer, Sticky } from 'react-sticky';
 import {
     PathNameMapper,
     NoPickerPaths,
@@ -107,7 +106,7 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
                 areaName: getParamValueFor(initialParam, "areaName", "United Kingdom"),
             });
 
-    }, [ pathname, prevPathname ])
+    }, [ pathname, prevPathname, initialParam ])
 
     const locationPickerCallback = () => {
         analytics({
@@ -119,31 +118,27 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
         setLocationPickerState(state => !state)
     };
 
-    return <StickyContainer>
-        <Sticky>{ ({ style }) =>
-            <MainContainer style={ style }>
-                <PageHeader areaName={ areaName }
-                            localisationState={ locationPickerState }
-                            localisationCallback={ locationPickerCallback }/>
-                {
-                    !isExcluded &&
-                    <LocationPicker show={ locationPickerState }
-                                    currentLocation={ location }
-                                    setCurrentLocation={ setLocation }/>
-                }
-                <LocationBanner pageTitle={ LocationBannerMapper?.[pathname] ?? null }
-                                areaTypes={ Object.keys(areaTypeOrder).map(key => areaTypeOrder[key]) }
-                                pathname={ pathname }/>
-
-                <ReactTooltip id={ "open-localisation-tooltip" }
-                              place={ "right" }
-                              backgroundColor={ "#0b0c0c" }
-                              className={ "tooltip" }
-                              effect={ "solid" }/>
-            </MainContainer>
+    return <MainContainer>
+        <PageHeader areaName={ areaName }
+                    localisationState={ locationPickerState }
+                    localisationCallback={ locationPickerCallback }/>
+        {
+            !isExcluded
+                ? <LocationPicker show={ locationPickerState }
+                                  currentLocation={ location }
+                                  setCurrentLocation={ setLocation }/>
+                : null
         }
-        </Sticky>
-    </StickyContainer>;
+        <LocationBanner pageTitle={ LocationBannerMapper?.[pathname] ?? null }
+                        areaTypes={ Object.keys(areaTypeOrder).map(key => areaTypeOrder[key]) }
+                        pathname={ pathname }/>
+
+        <ReactTooltip id={ "open-localisation-tooltip" }
+                      place={ "right" }
+                      backgroundColor={ "#0b0c0c" }
+                      className={ "tooltip" }
+                      effect={ "solid" }/>
+    </MainContainer>;
 
 };  // DashboardHeader
 
