@@ -1,21 +1,7 @@
 @charset "UTF-8";
 // Global settings
-$govuk-fonts-path: "~govuk-frontend/govuk/assets/fonts/";
-$govuk-images-path: "~govuk-frontend/govuk/assets/images/";
-@font-face {
-  font-family: "GDS Transport";
-  font-style: normal;
-  font-weight: normal;
-  src: url("/assets/govuk-frontend/govuk/assets/fonts/light-94a07e06a1-v2.woff2") format("woff2"), url("/assets/govuk-frontend/govuk/assets/fonts/light-f591b13f7d-v2.woff") format("woff");
-  font-display: fallback;
-}
-@font-face {
-  font-family: "GDS Transport";
-  font-style: normal;
-  font-weight: bold;
-  src: url("/assets/govuk-frontend/govuk/assets/fonts/bold-b542beb274-v2.woff2") format("woff2"), url("/assets/govuk-frontend/govuk/assets/fonts/bold-affa96571d-v2.woff") format("woff");
-  font-display: fallback;
-}
+$govuk-fonts-path: "https://coronavirus.data.gov.uk/assets/govuk-frontend/govuk/assets/fonts/";
+$govuk-images-path: "https://coronavirus.data.gov.uk/assets/govuk-frontend/govuk/assets/images/";
 $govuk-page-width: 1920px;
 $govuk-font-family: "GDS Transport", Arial, sans-serif;
 $govuk-breakpoints: (
@@ -27,6 +13,20 @@ $govuk-breakpoints: (
 $primary-colour: #1d70b8;
 $govuk-secondary-text-colour: #6B7276;
 
+@font-face {
+  font-family: "GDS Transport";
+  font-style: normal;
+  font-weight: normal;
+  src: url($govuk-fonts-path + "light-94a07e06a1-v2.woff2") format("woff2"), url($govuk-fonts-path + "light-f591b13f7d-v2.woff") format("woff");
+  font-display: fallback;
+}
+@font-face {
+  font-family: "GDS Transport";
+  font-style: normal;
+  font-weight: bold;
+  src: url($govuk-fonts-path + "/bold-b542beb274-v2.woff2") format("woff2"), url($govuk-fonts-path + "bold-affa96571d-v2.woff") format("woff");
+  font-display: fallback;
+}
 
 // GOVUK Frontend
 @import 'node_modules/govuk-frontend/govuk/all';
