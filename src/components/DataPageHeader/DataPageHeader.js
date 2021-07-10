@@ -5,7 +5,6 @@ import React, { useEffect } from "react";
 import { analytics, getParams, getParamValueFor } from "common/utils";
 
 import { Helmet } from "react-helmet";
-import { useLocation } from "react-router";
 
 import Path from "assets/paths.json";
 
@@ -16,9 +15,8 @@ const DefaultParams = [
 ];
 
 
-const DataPageHeaders = () => {
+const DataPageHeaders = ({ pathname, query }) => {
 
-    const { search: query, pathname } = useLocation();
     const { title="", description="", localised=false } = Path?.[pathname] ?? {};
     const urlParams = getParams(query);
     const areaParams = urlParams.length ? urlParams : DefaultParams;
@@ -43,7 +41,7 @@ const DataPageHeaders = () => {
                 send_to: 'UA-161400643-2'
             });
         }
-    }, [ pathname, query ]);
+    }, [ pathname, query, preppedTitle ]);
 
     preppedTitle =  decodeURIComponent(`${preppedTitle} | Coronavirus in the UK`);
     preppedDescription = decodeURIComponent(preppedDescription);
