@@ -1680,7 +1680,7 @@
     d3-collection "1"
     d3-shape "^1.2.0"
 
-"@plotly/d3@^3.6.1":
+"@plotly/d3@3.6.1":
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/@plotly/d3/-/d3-3.6.1.tgz#98be5c0174129515c5b7df33d5c9dfec82d34e6d"
   integrity sha512-lM2dmUqRX1qGtrWczC7QNbQ4Bdgp9sII9i7NV6Hokw06kLH1++x0Ehlj193+PkLYvi1us1IcYjC7IIw+h6GywA==
@@ -11217,12 +11217,12 @@ planar-graph-to-polyline@^1.0.0:
     two-product "^1.0.0"
     uniq "^1.0.0"
 
-plotly.js@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/plotly.js/-/plotly.js-2.2.0.tgz#bcfd67f4d5169de4056d84a469c90f395d1b232c"
-  integrity sha512-jqbEXFBW+6SlFpmpdxvn1QFmboNFlbUaybRzjGEEqbHG7/8uwusPqHDPq8EZPehOEch/zSYMWKBExHV+dZLmiw==
+plotly.js@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/plotly.js/-/plotly.js-2.2.1.tgz#a933992d5b5fd8e260bd0fd6c470112a5f02c31e"
+  integrity sha512-9kUkGnUmFxHrU7MUkmptKceBVyjSIXEwXpAsXpWtbhzzEstm5gsyajV1YbMwF+G6sBvxkeLM9X2JbaiqHGooSg==
   dependencies:
-    "@plotly/d3" "^3.6.1"
+    "@plotly/d3" "3.6.1"
     "@plotly/d3-sankey" "0.7.2"
     "@plotly/d3-sankey-circular" "0.33.1"
     "@plotly/point-cluster" "^3.1.9"
