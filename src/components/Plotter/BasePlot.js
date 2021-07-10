@@ -10,11 +10,10 @@ import numeral from "numeral";
 import Plotly from "plotly.js";
 import createPlotlyComponent from 'react-plotly.js/factory';
 import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
-import { deviation, max, median } from "d3-array";
+import { deviation, median } from "d3-array";
 import cloneDeep from "lodash.clonedeep"
 import { analytics } from "common/utils";
 import Loading from "components/Loading";
-import moment from "moment";
 const Plot = createPlotlyComponent(Plotly);
 
 
@@ -54,7 +53,7 @@ const getExtrema = ( data, barmode: string, yScale ) => {
     const std = median(data.filter(item => item.y.length > 10).map(item => deviation(item.y)));
     const mid = median(data.filter(item => item.y.length > 10).map(item => median(item.y)));
 
-    return {minVal, maxVal, std, mid}
+    return { minVal, maxVal, std, mid };
 
 };  // getExtrema
 
