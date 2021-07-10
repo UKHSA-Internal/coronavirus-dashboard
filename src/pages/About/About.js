@@ -19,6 +19,7 @@ import {
 import type { AboutProps } from './About.types';
 import type { ComponentType } from "react";
 import { Helmet } from "react-helmet";
+import BrowserHistory from "components/BrowserHistory";
 
 
 const About: ComponentType<AboutProps> = ({ ...props }) => {
@@ -36,7 +37,7 @@ const About: ComponentType<AboutProps> = ({ ...props }) => {
             data = err ? data : String(text);
         });
 
-    return <>
+    return <BrowserHistory>
         <Helmet>
             <title>About the data | Coronavirus in the UK</title>
             <meta name="description"
@@ -46,7 +47,7 @@ const About: ComponentType<AboutProps> = ({ ...props }) => {
         <Article>
             <Markdown dangerouslySetInnerHTML={{ __html: data }}/>
         </Article>
-    </>
+    </BrowserHistory>;
 
 
 };  // About
