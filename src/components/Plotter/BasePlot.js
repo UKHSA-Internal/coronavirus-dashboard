@@ -182,6 +182,8 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
     }, [yScale]);
 
 
+    let labelSuffix = props?.chartMode === "percentage" ? "%" : "";
+
     for ( let index = 0; index < drawData.length; index++ ) {
 
         if ( "overlaying" in drawData[index] ) {
@@ -206,16 +208,10 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             drawData[index].hovertemplate = [];
 
             for ( const value of payload[index]?.y ?? [] ) {
-                drawData[index].hovertemplate.push(numeral(value).format("0,0.[0]"));
+                drawData[index].hovertemplate.push(numeral(value).format("0,0.[0]") + labelSuffix);
             }
 
         }
-
-    }
-
-    if ( props?.chartMode === "percentage" ) {
-
-        yaxis.range = [Math.min(0, minVal), Math.min(100, maxVal)];
 
     }
 
