@@ -81,7 +81,7 @@ export const InfoCard = ({ data, areaName, date, postcode, areaType,
 
         return <Error setShowInfo={ setShowInfo }/>;
     }
-    else if ( !locationData || !Object.keys(locationData).length ) {
+    else if ( !locationData || !currentLocation ) {
 
         if ( !first ) return null;
 
