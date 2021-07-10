@@ -18,7 +18,7 @@
     "moment": "^2.29.1",
     "node-sass": "^6.0.1",
     "numeral": "^2.0.6",
-    "plotly.js": "^2.2.0",
+    "plotly.js": "^2.2.1",
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",
     "react-compare-slider": "^2.0.2",
@@ -82,7 +82,7 @@
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "flow-bin": "^0.154.0",
+    "flow-bin": "^0.155.0",
     "stylelint": "^13.13.1",
     "stylelint-config-idiomatic-order": "^8.1.0",
     "stylelint-config-standard": "^22.0.0",
