@@ -20,7 +20,7 @@ const BrowserHistory: ComponentType<*> = ({ children }) => {
                 ? hash
                 : (`#${ /%23(.*)$/ig.exec(search)?.[1] ?? "" }`)
         )
-    }, [ hash, search ]);
+    }, [ hash, search, prevHash ]);
 
     useEffect(() => {
 
@@ -38,9 +38,9 @@ const BrowserHistory: ComponentType<*> = ({ children }) => {
             }, 1000)
         }
 
-    }, [ hashValue ]);
+    }, [ hashValue, prevHash ]);
 
-    return children
+    return <>{ children }</>
 
 }; // BrowserHistory
 
