@@ -606,8 +606,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                 zoom: 12.5
             });
 
-                // console.log(postcodeData)
-            // setShowInfo(true);
+            setShowInfo(true);
         }
 
     }, [ postcodeData, map, styleDataStatus, width ]);
