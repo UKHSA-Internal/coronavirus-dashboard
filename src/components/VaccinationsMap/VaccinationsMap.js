@@ -342,7 +342,6 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
         map[0].setZoom(map[0].getZoom() - 1);
     };
 
-    console.log(currentLocation)
     return <>
         <p id={ "month" } className={ "govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-3" }>
             Percentage of vaccinated adults up to and including <DateStamp/>:
