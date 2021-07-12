@@ -579,7 +579,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
         setShowInfo(true);
 
-    }, [ map, hoverState.id, hoverState.layer, prevHoverState, mapHasLoaded ])
+    }, [ map, hoverState.id, hoverState.layer, prevHoverState, mapHasLoaded ]);
 
 
     useEffect(() => {
