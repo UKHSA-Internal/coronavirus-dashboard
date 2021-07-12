@@ -5,7 +5,6 @@ import React, { useState, useEffect } from "react";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 import { PlotContainer } from "./Plotter.styles";
 
-import type { ComponentType } from "react";
 import numeral from "numeral";
 import Plotly from "plotly.js";
 import createPlotlyComponent from 'react-plotly.js/factory';
@@ -14,7 +13,98 @@ import { deviation, median } from "d3-array";
 import cloneDeep from "lodash.clonedeep"
 import { analytics } from "common/utils";
 import Loading from "components/Loading";
+
+import type { ComponentType } from "react";
+
+
 const Plot = createPlotlyComponent(Plotly);
+
+
+const axRef = {
+    y: {
+        fixedragne: false,
+        tickslen: 0,
+        tickson: "boundaries",
+        ticklen: 'labels',
+        tickcolor: "#f1f1f1",
+        tickfont: {
+            family: `"GDS Transport", Arial, sans-serif`,
+            color: "#6B7276",
+        }
+    }
+};
+
+
+const logThresholds = [
+    -10_000, -1_000, -10, 1, 10, 100, 1_000, 10_000, 100_000,
+    1_000_000, 10_000_000, 100_000_000, 1_000_000_000
+];
+
+
+const prepLogData = (data, original, barmode, minVal, maxVal, width) => {
+
+    let ticktext = [
+        minVal,
+        ...logThresholds.filter(value => value > minVal && value < maxVal),
+        maxVal
+    ];
+
+    let tickvals;
+
+    if ( barmode === "stack" ) {
+        // Log stack bars:
+        // This is not currently used on the website - but just in case.
+        for ( let itemIndex = 0; itemIndex < data.length; itemIndex ++ ) {
+            data[itemIndex].text = data[itemIndex].y;
+            data[itemIndex].hovertemplate = '%{text:.1f}';
+            data[itemIndex].textposition = 'none';
+        }
+
+        tickvals = ticktext.filter(val => val > 0).map(val => !val ? val : val * ((val >= 0) || -1));
+        ticktext = tickvals.map(val => ticktext.includes(val) ? numeral(val).format("0,0.[0]") : "");
+    }
+
+    for ( let itemIndex = 0; itemIndex < data.length; itemIndex++ ) {
+        data[itemIndex].text = original[itemIndex].y;
+
+        for ( let ind = 0; ind < data[itemIndex].y.length; ind++ ) {
+            const value = data[itemIndex].y?.[ind] ?? 0;
+            data[itemIndex].y[ind] = !value
+                ? NaN
+                : Math.log10(Math.abs(value)) * ((value >= 0) || -1);
+        }
+
+        data[itemIndex].hovertemplate = '%{text:.1f}';
+        data[itemIndex].textposition = 'none';
+    }
+
+    // Calculate minor grids
+    tickvals = ticktext.reduce((acc, cur, ind, arr) => {
+        if ( cur >= -10 && cur <= 10 ) {
+            acc.push(cur)
+        } else {
+            const prevValue = Math.abs(arr[ind - 1]) * 2;
+
+            for ( let tick = arr[ind - 1] + prevValue; tick < cur; tick += prevValue ) {
+                acc.push(tick)
+            }
+
+            acc.push(cur);
+        }
+
+        return acc
+    }, []);
+
+    let tickFormat = "0,0.[0]";
+    if ( width !== "desktop" ) tickFormat = "0.[0]a";
+
+    ticktext = tickvals.map(val => ticktext.includes(val) ? numeral(val).format(tickFormat) : "");
+    tickvals = tickvals.map(val => !val ? 1 : Math.log10(Math.abs(val)) * ((val >= 0) || -1));
+
+    return { ticktext, tickvals, data, tickmode: 'array'}
+
+};  // prepLogData
+
 
 
 const getExtrema = ( data, barmode: string, yScale ) => {
@@ -35,12 +125,7 @@ const getExtrema = ( data, barmode: string, yScale ) => {
         const longestLength = Math.max(...data.map(item => item?.y?.length));
 
         for ( let stackInd = 0; stackInd < longestLength; stackInd ++ ) {
-            let currSum = 0
-            for ( const item of data ) {
-                currSum += item?.y?.[stackInd] ?? 0;
-            }
-
-            stackedSum.push(currSum);
+            stackedSum.push(data.reduce((acc, cur) => acc + (cur?.y?.[stackInd] ?? 0), 0));
         }
 
         [minVal, maxVal] = [
@@ -64,172 +149,117 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                                                   noLogScale=false, ...props }) => {
 
     const width = useResponsiveLayout(640);
-    const [ yScale, setYScale ] = useState(false);
-    const data = cloneDeep(payload);
-    let tickvals, ticktext, tickmode = undefined;
-    const [finalTickvals, setFinalTickvals] = useState(undefined);
-    const [finalTicktext, setFinalTicktext] = useState(undefined);
-    const [finalTickmode, setFinalTickmode] = useState(undefined);
-    const [ drawData, setDrawData ] = useState([]);
+    const [ isLog, setIsLog ] = useState(false);
+    const { barmode } = layout;
+    const { chartMode } = props;
+    const yAxisRef = Object.assign({}, axRef.y);
+    let labelSuffix = "";
+    let [mid, std] = [0, 0];
+    const [ drawData, setDrawData ] = useState({
+        data: [],
+        ticktext: undefined,
+        tickvals: undefined,
+        tickmode: undefined,
+        mid: mid,
+        std: std
+    });
 
-    let yAxisRef = {
-        fixedragne: false,
-        tickslen: 0,
-        ticks: width === "desktop" ? "outside" : "inside",
-        tickson: "boundaries",
-        ticklen: 'labels',
-        tickcolor: "#f1f1f1",
-        tickfont: {
-            family: `"GDS Transport", Arial, sans-serif`,
-            size: width === "desktop" ? 13 : 10,
-            color: "#6B7276",
-        },
-        ...(yScale && layout?.barmode === "stack") && !noLogScale
-            ? {type: 'log'}
-            : {tickformat: width === "desktop" ? ',.2r' : '3s'},
-    };
+    const isLogScale = (isLog && barmode === "stack") && !noLogScale;
+    yAxisRef.ticks = "outside";
+    // Alternatives - Non-log: ",.2r" / mobile: 3s
 
-    const {minVal, maxVal, mid, std} = getExtrema(data, layout?.barmode, yScale);
+    if ( width === "desktop" ) {
+        yAxisRef.tickfont.size = 13;
+        if ( isLogScale ) {
+            yAxisRef.type = "log";
+        }
+    }
+    else {
+        yAxisRef.tickfont.size = 10;
+        yAxisRef.ticks = "inside";
+    }
 
     useEffect(() => {
 
-        if ( yScale ) {
+        const {minVal, maxVal, mid, std} = getExtrema(payload, barmode, isLog);
 
-            tickmode = 'array';
+        if ( isLog ) {
+            let data = cloneDeep(payload);
 
-            const thresholds = [
-                -10_000, -1_000, -10, 1, 10, 100, 1_000, 10_000, 100_000,
-                1_000_000, 10_000_000, 100_000_000, 1_000_000_000
-            ];
-
-            // Calculate major grids
-            ticktext = [
-                minVal,
-                ...thresholds.filter(value => value > minVal && value < maxVal),
-                maxVal
-            ];
-
-            if ( layout?.barmode !== "stack" ) {
-
-                for ( let itemIndex = 0; itemIndex < data.length; itemIndex++ ) {
-                    data[itemIndex].text = payload[itemIndex].y;
-
-                    let value = 0;
-                    for ( let ind = 0; ind < data[itemIndex].y.length; ind++ ) {
-                        value = data[itemIndex].y?.[ind] ?? 0;
-                        data[itemIndex].y[ind] = !value
-                            ? NaN
-                            : Math.log10(Math.abs(value)) * ((value >= 0) || -1);
-                    }
-
-                    data[itemIndex].hovertemplate = '%{text:.1f}';
-                    data[itemIndex].textposition = 'none';
-                }
-
-                // Calculate minor grids
-                tickvals = ticktext.reduce((acc, cur, ind, arr) => {
-                    if ( cur >= -10 && cur <= 10 ) {
-                        acc.push(cur)
-                    } else {
-                        const prevValue = Math.abs(arr[ind - 1]) * 2;
-
-                        for ( let tick = arr[ind - 1] + prevValue; tick < cur; tick += prevValue ) {
-                            acc.push(tick)
-                        }
-
-                        acc.push(cur);
-                    }
-
-                    return acc
-                }, []);
-
-                ticktext = tickvals.map(val => ticktext.includes(val) ? numeral(val).format("0,0.[0]") : "");
-                tickvals = tickvals.map(val => !val ? 1 : Math.log10(Math.abs(val)) * ((val >= 0) || -1));
-
-            } else {
-
-                for ( let itemIndex = 0; itemIndex < data.length; itemIndex ++ ) {
-                    data[itemIndex].text = data[itemIndex].y;
-                    data[itemIndex].hovertemplate = '%{text:.1f}';
-                    data[itemIndex].textposition = 'none';
-                }
-
-                tickvals = ticktext.filter(val => val > 0).map(val => !val ? val : val * ((val >= 0) || -1));
-                ticktext = tickvals.map(val => ticktext.includes(val) ? numeral(val).format("0,0.[0]") : "");
-
-            }
-
+            setDrawData({
+                ...prepLogData(data, payload, barmode, minVal, maxVal),
+                mid,
+                std
+            });
+        }
+        else {
+            setDrawData({data: payload, mid, std});
         }
 
-        setDrawData(data);
-        setFinalTickvals(tickvals);
-        setFinalTickmode(tickmode);
-        setFinalTicktext(ticktext);
-
-    }, [yScale]);
-
-    useEffect(() => {
-
-        if ( yScale ) {
-            analytics({
-                category: "log-scale",
-                action: "click",
-                label: `${props?.heading} [${document.title}]`,
-            })
-        }
-
-    }, [yScale]);
+    }, [ isLog, barmode, payload ]);
 
 
-    let labelSuffix = props?.chartMode === "percentage" ? "%" : "";
+    if ( chartMode === "percentage" ) labelSuffix += "%";
 
-    for ( let index = 0; index < drawData.length; index++ ) {
+    for ( let index = 0; index < drawData.data.length; index++ ) {
 
-        if ( "overlaying" in drawData[index] ) {
-            yAxisRef = { ...yAxisRef, rangemode: "tozero" };
-
+        if ( "overlaying" in drawData.data[index] ) {
+            yAxisRef.rangemode = "tozero";
             layout = {
                 yaxis2: {
                     ...yAxisRef,
-                    overlaying: drawData[index].overlaying,
-                    side: drawData[index].side,
+                    overlaying: drawData.data[index].overlaying,
+                    side: drawData.data[index].side,
                     rangemode: "tozero",
                     showgrid: false,
 
                 }
             };
 
-            margin = { r: 50 };
-
+            margin = { ...margin, r: 50 };
         }
 
-        if ( !Array.isArray(drawData[index]?.hovertemplate) && drawData[index]?.type !== "heatmap" ) {
-            drawData[index].hovertemplate = [];
+        if ( !Array.isArray(drawData.data[index]?.hovertemplate) && drawData.data[index]?.type !== "heatmap" ) {
+
+            drawData.data[index].hovertemplate = [];
 
             for ( const value of payload[index]?.y ?? [] ) {
-                drawData[index].hovertemplate.push(numeral(value).format("0,0.[0]") + labelSuffix);
+                drawData.data[index].hovertemplate.push(
+                    numeral(value).format("0,0.[0]") + labelSuffix
+                );
             }
 
         }
 
     }
 
-    if ( !drawData?.length ) return <Loading/>;
+    useEffect(() => {
+        if ( isLog ) {
+            analytics({
+                category: "log-scale",
+                action: "click",
+                label: `${props?.heading} [${document.title}]`,
+            })
+        }
+    }, [ isLog ]);
+
+    if ( !drawData.data?.length ) return <Loading/>;
 
     return <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
         {
-            noLogScale || layout?.barmode === "stack" || props?.chartMode === "percentage" || std < mid
+            noLogScale || barmode === "stack" ||
+            props?.chartMode === "percentage" || drawData.std < drawData.mid
                 ? null
                 : <Toggle style={{ marginTop: "-25px", float: "right" }}>
-                    <ToggleButton onClick={ () => setYScale(false) }
+                    <ToggleButton onClick={ () => setIsLog(false) }
                                   className={ "govuk-!-font-size-14" }
-                                  active={ yScale === false }>
+                                  active={ isLog === false }>
                         Linear
                     </ToggleButton>
-                    <ToggleButton onClick={ () => setYScale(true) }
+                    <ToggleButton onClick={ () => setIsLog(true) }
                                   className={ "govuk-!-font-size-14" }
-                                  active={ yScale === true }>
+                                  active={ isLog === true }>
                         Log
                     </ToggleButton>
                 </Toggle>
@@ -241,7 +271,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             { SrOnly }
         </p>
         <Plot
-            data={ drawData }
+            data={ drawData.data }
             config={ {
                 showLink: false,
                 responsive: true,
@@ -270,10 +300,6 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             layout={ {
                 hovermode: "x unified",
                 hoverdistance: 1,
-                // datarevision: yScale ? 1 : 0,
-                // barmode: "overlay",
-                // barmode: "stack",
-                // height: 320,
                 legend: {
                     orientation: 'h',
                     font: {
@@ -286,7 +312,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                 },
                 showlegend: true,
                 margin: {
-                    l: width === "desktop" ? 85 : 30,
+                    l: width === "desktop" ? 45 : 35,
                     r: width === "desktop" ? 10 : 5,
                     b: 25,
                     t: 10,
@@ -304,7 +330,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                     tickson: "boundaries",
                     ticklen: 'labels',
                     type: isTimeSeries ? "date" : "category",
-                    tickformat: '%d %b',
+                    tickformat: '%-d %b',
                     tickfont: {
                         family: `"GDS Transport", Arial, sans-serif`,
                         size: width === "desktop" ? 14 : 10,
@@ -335,9 +361,9 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                     ...xaxis,
                 },
                 yaxis: {
-                    tickmode: finalTickmode,
-                    tickvals: finalTickvals,
-                    ticktext: finalTicktext,
+                    tickmode: drawData?.tickmode,
+                    tickvals: drawData?.tickvals,
+                    ticktext: drawData?.ticktext,
                     ...yAxisRef,
                     ...yaxis
                 },
