@@ -46,7 +46,8 @@
   "scripts": {
     "lint": "yarn flow",
     "start": "unset HOST && react-scripts start",
-    "build": "unset HOST && export NODE_OPTIONS=--max-old-space-size=8192 && react-scripts build && node scripts/patchUrls.js",
+    "build": "unset HOST && export NODE_OPTIONS=--max-old-space-size=8192 && react-scripts build",
+    "postbuild": "node scripts/patchUrls.js",
     "ppostbuild": "react-snap",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
