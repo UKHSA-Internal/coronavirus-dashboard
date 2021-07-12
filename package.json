@@ -21,7 +21,7 @@
     "plotly.js": "^2.2.1",
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",
-    "react-compare-slider": "^2.0.2",
+    "react-compare-slider": "^2.0.3",
     "react-day-picker": "^7.4.10",
     "react-dom": "^17.0.2",
     "react-focus-trap": "^2.7.1",
