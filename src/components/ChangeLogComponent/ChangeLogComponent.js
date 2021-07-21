@@ -4,20 +4,22 @@ import React, { useState, useEffect } from 'react';
 
 import moment from "moment";
 
-import { Form } from "components/Formset";
-import { groupBy, sort } from "common/utils";
+import { createQuery, getParams, groupBy, strFormat } from "common/utils";
 
-import {
-    Container, MainContent, SideContent,
-    MonthlyGroup, MonthlyHeader
-} from './ChangeLogComponent.styles';
+import { MonthlyGroup, MonthlyHeader } from './ChangeLogComponent.styles';
 
 import type { ChangeLogInputProps } from "./ChangeLogComponent.types";
 import type { ComponentType } from "react";
 
 import { ChangeLogItem } from "./ChangeLogItem";
-import { ChangeLogTextSearch, searchContent } from "./ChangeLogTextSearch";
-import BrowserHistory from "../BrowserHistory";
+import InfiniteScroll from "react-infinite-scroll-component";
+import axios from "axios";
+import URLs from "common/urls";
+import Loading from "components/Loading";
+import { useHistory, useParams } from "react-router";
+import usePrevious from "hooks/usePrevious";
+
+import { PageComponent } from "./PageComponent";
 
 
 const ChangeLogItemHeader: ComponentType = ({ date }) => {
@@ -36,18 +38,16 @@ const ChangeLogItemHeader: ComponentType = ({ date }) => {
 }; // ChangeLogItemHeader
 
 
-const DateGroup: ComponentType = ({ data, group, colours, changeTypes }) => {
+const DateGroup: ComponentType = ({ data, group, changeTypes }) => {
 
     return <MonthlyGroup aria-describedby={ `monthly_${group}` }>
         <ChangeLogItemHeader date={ group }/>
         {
-            data.map((change, index ) =>
-                <ChangeLogItem id={ `cl-item-${ index }` }
-                               key={ `cl-item-${ index }` }
+            data.map(change =>
+                <ChangeLogItem id={ `cl-item-${ change.id }` }
+                               key={ `cl-item-${ change.id }` }
                                data={ change }
-                               changeTypes={ changeTypes }
-                               index={ index }
-                               colour={ colours.find(element => element.type === change.type) }/>
+                               changeTypes={ changeTypes }/>
             )
         }
     </MonthlyGroup>
@@ -55,74 +55,128 @@ const DateGroup: ComponentType = ({ data, group, colours, changeTypes }) => {
 };  // DateGroup
 
 
-const ChangeLogComponent: ComponentType = ({ data, colours }: ChangeLogInputProps) => {
 
-    const changeTypes = new Set(data.map(item => item.type));
-    // const [changeLogType, setChangeLogType] = useState(changeTypes.map(item => ({[item]: true})));
-    const [changeLogSearch, setChangeLogSearch] = useState("");
-    const [groupedData, setGroupedData] = useState([]);
+const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) => {
 
-    // const filterByType = (item) => {
-    //
-    //     const keys = Object.keys(changeLogType).filter(key => changeLogType[key]);
-    //     return Object.values(keys).some((key) => changeTypes[key] === item.type);
-    //
-    // }; // filterByType
-    //
-    // const isTypeSet = () => {
-    //
-    //     return Object.keys(changeLogType).some((key) => changeLogType[key]);
-    //
-    // } // isTypeSet
+    const history = useHistory();
+    const { search: query, pathname } = history.location;
+    let params = getParams(query);
+    const currUri = `${pathname}/${createQuery(params)}`;
+    const prevUri = usePrevious();
+
+    const [data, setData] = useState({});
+    const [page, setPage] = useState(1);
+    const { date } = useParams();
+    const [metadata, setMetadata] = useState({});
+    const [dataLength, setDataLength] = useState(0);
+    const [isLoading, setIsLoading] = useState(1);
+
 
     useEffect(() => {
 
-        setGroupedData(groupBy(
-            data.filter(item => searchContent(item, changeLogSearch)),
-            item => item.date.substring(0, 7)
-        ))
+        if ( currUri !== prevUri ) {
+            setPage(1);
+            setData({});
+        }
 
-    }, [changeLogSearch, data])
+    }, [currUri, prevUri]);
 
 
-    return <>
-        <Container>
-            <BrowserHistory>
-                <MainContent className={ "no-border" }>
-                    <p className={ "govuk-body govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>
-                        We regularly update the dashboard with new data and features.
-                        Here is a timeline of changes.
-                    </p>
+    useEffect(() => {
+        setIsLoading(true);
 
-                    <div className={ "govuk-!-margin-top-1" }>
-                        {
-                            Object
-                                .keys(groupedData)
-                                .sort(sort)
-                                .map(groupKey =>
-                                    <DateGroup data={ groupedData[groupKey] }
-                                               group={ groupKey }
-                                               changeTypes={ changeTypes }
-                                               colours={ colours }
-                                               key={ groupKey }/>
-                                )
-                        }
-                    </div>
-                </MainContent>
-            </BrowserHistory>
-            <SideContent>
-                <div className={ "govuk-!-margin-top-1" }>
+        (async () => {
 
-                    <Form className={ "govuk-!-padding-left-0 govuk-!-padding-right-5" }>
-                        <ChangeLogTextSearch changeLogSearch={ changeLogSearch }
-                                             setChangeLogSearch={ setChangeLogSearch }/>
-                        {/*<ChangeLogType data={ data } changeTypes={ changeTypes } changeLogType={ changeLogType }*/}
-                        {/*               setChangeLogType={ setChangeLogType }/>*/}
-                    </Form>
-                </div>
-            </SideContent>
-        </Container>
-    </>
+            const queryParams = {};
+            for ( const { key, value } of getParams(query) ) {
+                queryParams[key] = value;
+            }
+
+            try {
+
+                const { data: resp, status } = await axios.get(
+                    !date
+                        ? URLs.genericApiChangeLogs
+                        : strFormat(URLs.genericApiDatedChangeLogs, { kwargs: { date } }),
+                    {
+                        responseType: "json",
+                        params: { page, ...queryParams }
+                    }
+                );
+
+                if ( status < 400 && status !== 204 ) {
+
+                    const processedData = groupBy(
+                        resp.data,
+                        item => item.date.substring(0, 7)
+                    );
+
+                    if ( page === 1 ) {
+                        setData(processedData);
+                    } else {
+                        setData(prev => ({ ...prev, ...processedData }));
+                    }
+
+                    setMetadata(
+                        Object.keys(resp)
+                            .reduce((acc, cur) =>
+                                    cur !== "data" ? { ...acc, [cur]: resp[cur] } : acc,
+                                {}
+                            )
+                    );
+
+                    setDataLength(prev => prev + resp.length);
+                    setIsLoading(false);
+                }
+                else {
+                    setData(prev => ({...prev}));
+                    setIsLoading(false);
+                }
+
+            } catch (e) {
+                setData(data => ({...data}))
+                console.log("error")
+                console.error(e)
+                setIsLoading(false);
+            }
+        })();
+
+    }, [page, query, date])
+
+    const groups = Object.keys(data);
+    if ( !groups.length && !isLoading ) {
+        return <PageComponent>
+            <p className={ "govuk-!-font-weight-bold" }>There are no logs that match the criteria.</p>
+        </PageComponent>;
+    }
+
+    if ( isLoading ) {
+        return <PageComponent><Loading/></PageComponent>;
+    }
+
+    return <PageComponent>
+        <InfiniteScroll
+            dataLength={ dataLength }
+            next={ () => setPage(metadata.page + 1) }
+            hasMore={ page < metadata.total_pages }
+            loader={ <Loading/> }
+            endMessage={
+                <p className={ "govuk-body govuk-!-margin-7" } style={{ textAlign: 'center' }}>
+                  <b>There are no more logs to display.</b>
+                </p>
+            }
+        >
+        {
+            groups.map(groupKey =>
+                <DateGroup data={ data[groupKey] }
+                           group={ groupKey }
+                           changeTypes={ [] }
+                           colours={ {} }
+                           key={ groupKey }/>
+            )
+        }
+        </InfiniteScroll>
+    </PageComponent>
 }; //ChangeLogComponent
 
 export default ChangeLogComponent;
