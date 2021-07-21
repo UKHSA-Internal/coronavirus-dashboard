@@ -276,7 +276,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
 
         setShowInfo(true);
 
-    }, [ map, hoverState.id, hoverState.layer, prevHoverState, mapHasLoaded ])
+    }, [ map, hoverState.id, hoverState.layer, prevHoverState, mapHasLoaded ]);
 
 
     useEffect(() => {

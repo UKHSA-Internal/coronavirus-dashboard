@@ -101,7 +101,7 @@ const prepLogData = (data, original, barmode, minVal, maxVal, width) => {
     ticktext = tickvals.map(val => ticktext.includes(val) ? numeral(val).format(tickFormat) : "");
     tickvals = tickvals.map(val => !val ? 1 : Math.log10(Math.abs(val)) * ((val >= 0) || -1));
 
-    return { ticktext, tickvals, data, tickmode: 'array'}
+    return { ticktext, tickvals, data, tickmode: 'array'};
 
 };  // prepLogData
 

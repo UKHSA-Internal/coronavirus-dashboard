@@ -1,9 +1,8 @@
 // @flow
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { ChangeLogHeader } from "components/ChangeLogComponent/ChangeLogHeader";
-import useGenericAPI from "hooks/useGenericAPI";
 import useTimestamp from "hooks/useTimestamp";
 
 import type { ComponentType } from "react";

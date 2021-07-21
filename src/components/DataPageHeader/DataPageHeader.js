@@ -46,7 +46,7 @@ const DataPageHeaders = () => {
         <meta name="twitter:title" content={ preppedTitle }/>
         <meta property="og:description" content={ preppedDescription }/>
         <meta name="twitter:description" content={ preppedDescription }/>
-    </Helmet>
+    </Helmet>;
 
 };
 
