@@ -60,6 +60,10 @@ const URLs = {
     mapUtlaRef:                             `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/maps/utla-ref.geojson`,
     mapLtlaRef:                             `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/maps/ltla-ref.geojson`,
     mapMsoaRef:                             `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/maps/msoa-ref.geojson`,
+    genericApiChangeLogs:                   `https://${ REACT_APP_API_ENDPOINT }/generic/change_logs`,
+    genericApiChangeLogsComponent:          `https://${ REACT_APP_API_ENDPOINT }/generic/change_logs/components/{component}`,
+    genericApiDatedChangeLogs:              `https://${ REACT_APP_API_ENDPOINT }/generic/change_logs/{date}`,
+    genericApiLogBanners:                   `https://${ REACT_APP_API_ENDPOINT }/generic/log_banners/{date}/{page}/{area_type}/{area_name}`,
 };
 
 URLs.pageLayouts = {

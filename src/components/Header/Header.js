@@ -11,20 +11,7 @@ import type { ComponentType } from "react";
 
 const Header: ComponentType<*> = ({ ...props }) => {
 
-    const changeData = useGenericAPI("changeLogData", null, "json");
-    const [data, setData] = useState(null);
     const timestamp = useTimestamp();
-
-    useEffect(() => {
-
-        if ( timestamp && (changeData?.changeLog ?? null) ) {
-            const date = timestamp.split("T")[0];
-
-            setData(changeData?.changeLog?.filter(
-                item => item.date === date && (item?.displayBanner ?? false)
-            ) ?? null);
-        }
-    }, [ timestamp, changeData?.changeLog ]);
 
     return <>
         <header className="govuk-header" role="banner" data-module="govuk-header">
@@ -95,7 +82,7 @@ const Header: ComponentType<*> = ({ ...props }) => {
                 </div>
             </div>
         </header>
-        <ChangeLogHeader data={ data }/>
+        { timestamp ? <ChangeLogHeader timestamp={ timestamp }/> : null }
     </>
 
 };  // Header

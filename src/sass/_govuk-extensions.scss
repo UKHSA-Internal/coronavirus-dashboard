@@ -20,14 +20,16 @@ svg.back-to-top {
     width: 100%;
 }
 
-
-.govuk-width-container {
-    overflow: hidden;
-}
-
 @include govuk-media-query($until: tablet) {
   .govuk-width-container:not(.govuk-header__container) {
     margin-right: 5px;
     margin-left: 5px;
   }
+}
+
+
+.govuk-footer__meta {
+  @extend .govuk-footer__meta;
+  display: flex;
+  margin: .5rem 1rem;
 }
