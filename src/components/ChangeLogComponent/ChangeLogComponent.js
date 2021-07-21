@@ -33,7 +33,7 @@ const ChangeLogItemHeader: ComponentType = ({ date }) => {
                 { moment(date).format("MMMM YYYY") }
             </time>
         </h2>
-    </MonthlyHeader>
+    </MonthlyHeader>;
 
 }; // ChangeLogItemHeader
 
@@ -50,7 +50,7 @@ const DateGroup: ComponentType = ({ data, group, changeTypes }) => {
                                changeTypes={ changeTypes }/>
             )
         }
-    </MonthlyGroup>
+    </MonthlyGroup>;
 
 };  // DateGroup
 
@@ -64,7 +64,7 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
     const currUri = `${pathname}/${createQuery(params)}`;
     const prevUri = usePrevious();
 
-    const [data, setData] = useState({});
+    const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
     const { date } = useParams();
     const [metadata, setMetadata] = useState({});
@@ -83,7 +83,8 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
 
 
     useEffect(() => {
-        setIsLoading(true);
+
+        setIsLoading(page === 1);
 
         (async () => {
 
@@ -106,15 +107,12 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
 
                 if ( status < 400 && status !== 204 ) {
 
-                    const processedData = groupBy(
-                        resp.data,
-                        item => item.date.substring(0, 7)
-                    );
-
                     if ( page === 1 ) {
-                        setData(processedData);
+                        setData(resp.data);
+                        setDataLength(resp.length);
                     } else {
-                        setData(prev => ({ ...prev, ...processedData }));
+                        setData(prev => ([ ...prev, ...resp.data ]));
+                        setDataLength(prev => prev + resp.length);
                     }
 
                     setMetadata(
@@ -125,11 +123,9 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
                             )
                     );
 
-                    setDataLength(prev => prev + resp.length);
                     setIsLoading(false);
                 }
                 else {
-                    setData(prev => ({...prev}));
                     setIsLoading(false);
                 }
 
@@ -143,16 +139,20 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
 
     }, [page, query, date])
 
-    const groups = Object.keys(data);
-    if ( !groups.length && !isLoading ) {
+    if ( !data.length && !isLoading ) {
         return <PageComponent>
-            <p className={ "govuk-!-font-weight-bold" }>There are no logs that match the criteria.</p>
+            <p className={ "govuk-!-font-weight-bold" }>
+                There are no logs that match the criteria.
+            </p>
         </PageComponent>;
     }
 
     if ( isLoading ) {
         return <PageComponent><Loading/></PageComponent>;
     }
+
+    const processedData = groupBy(data, item => item.date.substring(0, 7));
+    const groups = Object.keys(processedData);
 
     return <PageComponent>
         <InfiniteScroll
@@ -165,18 +165,17 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
                   <b>There are no more logs to display.</b>
                 </p>
             }
-        >
-        {
+        >{
             groups.map(groupKey =>
-                <DateGroup data={ data[groupKey] }
+                <DateGroup data={ processedData[groupKey] }
                            group={ groupKey }
                            changeTypes={ [] }
                            colours={ {} }
                            key={ groupKey }/>
             )
-        }
-        </InfiniteScroll>
-    </PageComponent>
+        }</InfiniteScroll>
+    </PageComponent>;
+
 }; //ChangeLogComponent
 
 export default ChangeLogComponent;
