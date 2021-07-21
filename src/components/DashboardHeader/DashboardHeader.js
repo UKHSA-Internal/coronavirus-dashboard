@@ -37,9 +37,9 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
             .toLowerCase()
             .replace(/[\s:]/g, "_"),
         { location: { pathname } } = useHistory(),
-        pageName = PathNameMapper[pathname]?.title ?? "",
-        noPicker = NoPickerPaths.indexOf(pathname) > -1;
-
+        uri = /^(\/(details\/)?[^/]+).*/.exec(pathname)?.[1],
+        pageName = PathNameMapper[uri]?.title ?? "",
+        noPicker = NoPickerPaths.indexOf(uri) > -1;
 
     return <>
         <HeaderContainer role={ "heading" }
@@ -82,7 +82,8 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
         areaName = getParamValueFor(params, "areaName", "United Kingdom"),
         pathname = history.location.pathname,
         areaTypeOrder = getOrder(history),
-        isExcluded = NoPickerPaths.indexOf(pathname) > -1,
+        uri = /^(\/(details\/)?[^/]+).*/.exec(pathname)?.[1],
+        isExcluded = NoPickerPaths.indexOf(uri) > -1,
         prevPathname = usePrevious(pathname),
         initialParam = getParams(history.location.query),
         [ location, setLocation ] = useState({
@@ -106,15 +107,10 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
                 areaName: getParamValueFor(initialParam, "areaName", "United Kingdom"),
             });
 
-    }, [ pathname, prevPathname, initialParam ])
+    }, [ pathname, prevPathname ])
 
     const locationPickerCallback = () => {
-        analytics({
-            action: "click",
-            category: "location-picker",
-            label: locationPickerState ? "OPEN" : "CLOSE"
-        });
-
+        analytics("Interaction", "Location picker", locationPickerState ? "OPEN" : "CLOSE");
         setLocationPickerState(state => !state)
     };
 
@@ -129,10 +125,13 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
                                   setCurrentLocation={ setLocation }/>
                 : null
         }
-        <LocationBanner pageTitle={ LocationBannerMapper?.[pathname] ?? null }
-                        areaTypes={ Object.keys(areaTypeOrder).map(key => areaTypeOrder[key]) }
-                        pathname={ pathname }/>
-
+        {
+            !isExcluded
+                ? <LocationBanner pageTitle={ LocationBannerMapper?.[pathname] ?? null }
+                                  areaTypes={ Object.keys(areaTypeOrder).map(key => areaTypeOrder[key]) }
+                                  pathname={ pathname }/>
+                : null
+        }
         <ReactTooltip id={ "open-localisation-tooltip" }
                       place={ "right" }
                       backgroundColor={ "#0b0c0c" }
