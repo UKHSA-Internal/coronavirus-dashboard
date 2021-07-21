@@ -20,6 +20,6 @@ export const PageComponent: ComponentType<*> = ({ children }) => {
             </MainContent>
         </BrowserHistory>
         <ChangeLogFilters/>
-    </Container>
+    </Container>;
 
 };  // PageComponent
