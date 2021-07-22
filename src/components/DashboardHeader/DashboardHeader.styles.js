@@ -69,28 +69,15 @@ export const Title: ComponentType<*> =
     styled
         .h1
         .attrs(({ className }) => ({
-            className: `govuk-caption-l govuk-!-margin-0 ${ className }`
-        }))``;
-    // <h1 className={  }>
-    //         { pageName }
-    //         {
-    //             hasPicker
-    //                 ? <>&nbsp;<Node htmlType={ "button" }
-    //                                 role={ "button" }
-    //                                 className={ className }
-    //                                 { ...props }/>
-    //                 </>
-    //                 : null
-    //         }
-    //     </h1>
+            className: `govuk-heading-m govuk-!-margin-0 ${ className }`
+        }))`
+            font-size: 1.65rem;
+            
+            @media only screen and (max-width: 768px) {
+                font-size: 1.15rem;
+            }
+        `;
 
-
-//     (() => {
-//
-//     return ({ pageName, className, hasPicker, ...props }) =>
-//
-//
-// })();
 
 
 export const CurrentLocation: ComponentType<*> = (() => {
