@@ -104,8 +104,11 @@ const Details: ComponentType = ({ data }) => {
                 Additional details
             </span>
         </summary>
-        <Markdown className="govuk-details__text govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0"
-                  dangerouslySetInnerHTML={{ __html: details }}/>
+        {   !data?.details
+                ? null
+                : <Markdown className="govuk-details__text govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0"
+                            dangerouslySetInnerHTML={ { __html: details } }/>
+        }
         <Metrics data={ data }/>
     </details>
 
