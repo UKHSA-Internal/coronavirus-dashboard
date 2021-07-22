@@ -188,3 +188,20 @@ export const ChangeLogBannerTag: ComponentType<*> =
             margin: 0 1rem 0 0;
             line-height: initial;
         `;
+
+
+export const DataList: ComponentType<*> =
+    styled
+        .dt`   
+            & > dd {
+                margin-bottom: 1rem;
+                margin-top: .3rem;
+
+                code {
+                    background: #f3f2f1;
+                    border: 1px solid #D7D7D7;
+                    padding: 3px 5px;
+                    border-radius: 3px;
+                }
+            }
+        `;

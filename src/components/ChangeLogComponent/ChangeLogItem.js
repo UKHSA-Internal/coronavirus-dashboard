@@ -1,8 +1,8 @@
 // @flow
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, Fragment } from "react";
 import moment from "moment";
-import { Markdown, ChangeLogSpan } from "./ChangeLogComponent.styles";
+import { Markdown, ChangeLogSpan, DataList } from "./ChangeLogComponent.styles";
 import { Link } from "react-router-dom";
 
 import type { ComponentType } from "react";
@@ -78,13 +78,14 @@ const Metrics: ComponentType = ({ data }) => {
 
     return <div className={ "govuk-!-padding-top-4 govuk-details__text govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
         <h3 className={ "govuk-heading-s" }>Affected metrics</h3>
-        <ul>{
+        <DataList>{
             data.metrics.map(item =>
-                <li key={ item.metric }>
-                    { item.metric_name }: <code>{ item.metric }</code>
-                </li>
+                <Fragment key={ item.metric }>
+                    <dt>{ item.metric_name }</dt>
+                    <dd><code>{ item.metric }</code></dd>
+                </Fragment>
             )
-        }</ul>
+        }</DataList>
     </div>
 
 };  // Details
@@ -94,7 +95,7 @@ const Details: ComponentType = ({ data }) => {
 
     const details = useMarkdown(data?.details);
 
-    if ( !data?.details ) return null;
+    if ( !data?.details && !data?.metrics?.length ) return null;
 
     return <details className="govuk-details govuk-!-margin-top-2"
                     data-module="govuk-details">
