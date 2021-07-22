@@ -44,8 +44,7 @@ export const TextSearch: ComponentType<*> = ({ children }) => {
                 <input
                     id={ "search" }
                     name={ "search" }
-                    value={ getParamValueFor(params,"search") }
-                    // ref={ inputRef }
+                    value={ search }
                     className={ "govuk-input govuk-input--width-15" }
                     type={ "search" }
                     maxLength={ 40 }
