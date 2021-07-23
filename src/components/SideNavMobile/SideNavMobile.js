@@ -54,7 +54,7 @@ const NavigationItems: ComponentType<Props> = ({ menuState, setMenuState, ...pro
                 <hr className={ "govuk-section-break govuk-section-break--s govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
             </li>
             <SideNavListItem className={`${pathname.startsWith('/details/about-data') ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/interactive-map/cases" }>Interactive map</Link>
+                <Link to={ "/details/interactive-map/cases" }>Interactive maps</Link>
             </SideNavListItem>
             <SideNavListItem className={`${pathname === '/details/about-data' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/about-data" }>About the data</Link>
@@ -79,14 +79,16 @@ const SideNavMobile: ComponentType<Props> = ({ ...props }: Props) => {
 
     const [menuState, setMenuState] = useState(false);
 
-    return <MobileNavWrapper { ...props }>
+    return <>
         <MobileNavTogglerWrapper>
             <MobileNavToggler onClick={ () => setMenuState(state => !state) }>
                 Menu ▼
             </MobileNavToggler>
         </MobileNavTogglerWrapper>
-        <NavigationItems menuState={ menuState } setMenuState={ setMenuState }/>
-    </MobileNavWrapper>;
+        <MobileNavWrapper { ...props } id={ "mobile-nav" }>
+            <NavigationItems menuState={ menuState } setMenuState={ setMenuState }/>
+        </MobileNavWrapper>
+    </>;
 
 };  // SideNavMobile
 
