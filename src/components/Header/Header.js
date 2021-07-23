@@ -4,11 +4,12 @@ import React from "react";
 
 import { ChangeLogHeader } from "components/ChangeLogComponent/ChangeLogHeader";
 import useTimestamp from "hooks/useTimestamp";
+import SideNavMobile from "components/SideNavMobile";
 
 import type { ComponentType } from "react";
 
 
-const Header: ComponentType<*> = ({ ...props }) => {
+const Header: ComponentType<*> = ({ layout, ...props }) => {
 
     const timestamp = useTimestamp();
 
@@ -81,6 +82,7 @@ const Header: ComponentType<*> = ({ ...props }) => {
                 </div>
             </div>
         </header>
+        { layout === "mobile" && <SideNavMobile layout={ layout }/> }
         { timestamp ? <ChangeLogHeader timestamp={ timestamp }/> : null }
     </>
 
