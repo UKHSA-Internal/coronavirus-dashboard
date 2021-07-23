@@ -21,13 +21,16 @@ export const Markdown: ComponentType<*> =
             }
         `;
 
+
 const calcColour = ({color}) => {
     return color ? color : '#000000';
 };
+
         
 const calcBgColour = ({bgColor}) => {
     return bgColor ? bgColor : 'inherit';
 };
+
 
 export const ChangeLogSpan: ComponentType<*> =
     styled
@@ -53,34 +56,30 @@ export const Container: ComponentType<*> =
             className: `${className} govuk-body`,
             ...props
         }))`
-            display: grid;
-            grid-gap: 2rem;
-            grid-template-columns: 1fr;
+            display: flex;
+            flex-direction: row;
             
-            @media only screen and (min-width: 800px) {
-                grid-template-columns: repeat(3, 1fr);
+            @media only screen and (max-width: 1000px) {
+                flex-direction: column-reverse;
+                
             }
+            
         `;
 
 
 export const MainContent: ComponentType<*> =
     styled
         .section`
+            flex-grow: 1;
             display: grid;
             border-top: 2px solid #b1b4b6;
             margin-top: 2rem;
             grid-column: 1/-1;
             align-content: start;
-
-            @media only screen and (min-width: 800px) {
-                grid-column: 1/3;
-                
-                .*-one-half {
-                    width: 100%;
-                }
-            }
-            @media only screen and (min-width: 1100px) {
-                grid-column: 1/3;
+            margin-right: 2rem;
+            
+            @media only screen and (max-width: 1000px) {
+                margin-right: 0;
             }
             
             &.no-border {
@@ -89,15 +88,19 @@ export const MainContent: ComponentType<*> =
             }
         `;
 
+
 export const SideContent: ComponentType<*> =
     styled
         .section`
+            min-width: max(30%, 280px);
             display: grid;
             grid-column: 1/-1;
-            border-top: 2px solid #1d70b8;
+            // border-top: 2px solid #1d70b8;
             margin-top: 2rem;
             align-content: start;
             grid-gap: 1rem;
+            grid-auto-flow: row;
+            grid-template-column: auto;
             
             & form {
                 padding-right: 0 !important;
@@ -114,6 +117,10 @@ export const SideContent: ComponentType<*> =
                 margin-left: 2px;  
             }
     
+            @media only screen and (max-width: 1000px) {
+                min-width: unset;
+                width: auto;
+            }
             
             @media only screen and (min-width: 800px) {
                 grid-column: 3/-1;
@@ -144,6 +151,7 @@ export const MonthlyGroup: ComponentType<*> =
                 margin-right: 0;
             }
         `;
+
 
 export const MonthlyHeader: ComponentType<*> =
     styled
