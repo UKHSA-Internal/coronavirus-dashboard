@@ -11,12 +11,13 @@ import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
 import CookieBanner from "components/CookieBanner";
 import DataPageHeader from "./components/DataPageHeader";
+import SideNavigation from "components/SideNavigation";
+import DashboardHeader from "components/DashboardHeader";
 
 import './index.scss';
 
 
 const
-    DashboardHeader = lazy(() => import('components/DashboardHeader')),
     Cases           = lazy(() => import('pages/Cases')),
     Healthcare      = lazy(() => import('pages/Healthcare')),
     Vaccinations    = lazy(() => import('pages/Vaccinations')),
@@ -60,15 +61,11 @@ const LastUpdateTime = () => {
 
 const Navigation = ({ layout, ...props }) => {
 
-    const Nav = layout !== "mobile"
-        ? React.lazy(() => import('components/SideNavigation'))
-        : React.lazy(() => import('components/SideNavMobile'));
+    return layout !== "mobile"
+        ? <SideNavigation {...props}/>
+        : null
 
-    return <Suspense fallback={ <Loading/> }>
-         <Nav { ...props }/>
-    </Suspense>
-
-};  // MobileNavigation
+};  // Navigation
 
 
 const RedirectToDetails = () => {
@@ -92,7 +89,7 @@ const App = () => {
     return <>
         <DataPageHeader pathname={ pathname } query={ query }/>
         <CookieBanner/>
-        <Header/>
+        <Header layout={ layout }/>
         { layout === "mobile" && <Navigation layout={ layout }/> }
         <Suspense fallback={ <Loading/> }><Banner/></Suspense>
         <div className={ "govuk-width-container" }>
@@ -101,18 +98,18 @@ const App = () => {
                 <div className={ "dashboard-container" }>
                     {
                         layout === "desktop" &&
-                        <aside className={ "dashboard-menu" }>
+                        <div className={ "dashboard-menu" }>
                             <Switch>
-                                <Route path={ "/details" }
+                                <Route path={ "/:page" }
                                        render={ props =>
                                            <Navigation layout={ layout }{ ...props}/>
                                        }/>
                             </Switch>
-                        </aside>
+                        </div>
                     }
                     <main className={ "govuk-main-wrapper" } role={ "main" } id={ 'main-content' }>
+                        <DashboardHeader/>
                         <Suspense fallback={ <Loading/> }>
-                            <DashboardHeader/>
                             <Switch>
                                 {/*<Route path="/details" exact render={ () => <Redirect to={ "/" }/> }/>*/}
                                 <Route path="/details/testing" exact component={ Tests }/>
