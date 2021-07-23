@@ -12,7 +12,7 @@ export const PageComponent: ComponentType<*> = ({ children }) => {
     return <Container>
         <BrowserHistory>
             <MainContent className={ "no-border" }>
-                <p>
+                <p className={ "govuk-!-margin-left-1" }>
                     We regularly update the dashboard with new data and features.
                     Here is a timeline of changes.
                 </p>
