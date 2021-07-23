@@ -38,24 +38,23 @@ export const DateSearch: ComponentType<*> = ({}) => {
     if ( !options ) return <Loading/>;
 
     return <Form className={ "govuk-!-padding-left-0 govuk-!-padding-right-5" }>
-        <FormItem aria-labelledby={ "aria-search-filter-label" }
-                  aria-describedby={ "aria-search-filter-descr" }
+        <FormItem aria-labelledby={ "date-filter-label" }
+                  aria-describedby={ "date-filter-descr" }
                   className={ "inline govuk-!-margin-top-2" }
                   width={ "full" }>
-            <span id={ "search-filter-label" } className={ "govuk-label govuk-label--s" }>
-                Months
-            </span>
-            <div className={ "govuk-hint govuk-!-font-size-16" } style={{ width: "80%" }}>
+            <label htmlFor={ "date" } id={ "date-filter-label" }
+                   className={ "govuk-label govuk-label--s" }>Months</label>
+            <div id={"date-filter-descr"} className={ "govuk-hint govuk-!-font-size-16" }>
                 <p className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
                     Filter data by a specific month &mdash; e.g. June 2021
+                    <span className={ "govuk-visually-hidden" }>
+                        Your selection will be applied automatically.
+                    </span>
                 </p>
             </div>
-            <div aria-describedby={ "search-filter-descr" }
-                 aria-labelledby={ "search-filter-label" }
-                 style={{ display: "flex", flexDirection: "row" }}>
-                <select id={ "search" }
-                        name={ "search" }
-                        style={{ width: "80%" }}
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <select id={ "date" }
+                        name={ "date" }
                         className={ "govuk-select" }
                         onChange={ e => setDate(e.target.value) }
                         value={ date }>

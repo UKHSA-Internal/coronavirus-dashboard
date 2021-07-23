@@ -24,27 +24,26 @@ export const TextSearch: ComponentType<*> = ({ children }) => {
 
     return <Form className={ "govuk-!-padding-left-0 govuk-!-padding-right-5" }
                   onSubmit={ onSubmit }>
-        <FormItem aria-labelledby={ "aria-search-filter-label" }
-             aria-describedby={ "aria-search-filter-descr" }
+        <FormItem aria-labelledby={ "search-filter-label" }
+             aria-describedby={ "search-filter-descr" }
              className={ "inline govuk-!-margin-top-2" }
              width={ "full" }>
-            <span
-                id={ "search-filter-label" }
-                className={ "govuk-label govuk-label--s" }>
-                Search
-            </span>
-            <div className={ "govuk-hint govuk-!-font-size-16" }>
+            <label htmlFor={ "search" } id={ "search-filter-label" }
+                   className={ "govuk-label govuk-label--s" }>Search</label>
+            <div id={ "search-filter-descr" } className={ "govuk-hint govuk-!-font-size-16" }>
                 <p className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
                     Enter a phrase to search &mdash; e.g. "headline figures"
+                    <span className={ "govuk-visually-hidden" }>
+                        Press return or click "Submit search" to apply the filter.
+                    </span>
                 </p>
             </div>
-            <div aria-describedby={ "search-filter-descr" }
-                 aria-labelledby={ "search-filter-label" }
-                 style={{ display: "flex", flexDirection: "row" }}>
+            <div style={{ display: "flex", flexDirection: "row" }}>
                 <input
                     id={ "search" }
                     name={ "search" }
                     value={ search }
+                    style={{ minWidth: "80%"}}
                     className={ "govuk-input govuk-input--width-15" }
                     type={ "search" }
                     maxLength={ 40 }
