@@ -23,7 +23,7 @@ import {
     HeaderContainer,
     Title,
     TitleButton,
-    SectionBreak,
+    SectionBreak, TriangleMarker,
 } from './DashboardHeader.styles'
 
 import type { ComponentType } from 'react';
@@ -47,23 +47,21 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
             <Title data-for={ !noPicker && "open-localisation-tooltip" }
                    data-tip={ !noPicker && "Click to change location" }
                    id={ `page-heading-${ preppedLabel }` }
-                   className={ localisationState ? "open" : "" }
-                   onClick={ localisationCallback }>
+                   className={ localisationState ? "open" : "" }>
                 { `${ pageName }${ noPicker ? "" : " in" }` }
                 { noPicker
                     ? null
                     : (pathname && pathname !== "/") &&
-                    <>
-                        <TitleButton aria-describedby={ `${ preppedLabel }-loc-desc` }>
-                            { areaName }
+                        <TitleButton aria-describedby={ `${ preppedLabel }-loc-desc` }
+                                     onClick={ localisationCallback }>
+                            { areaName }&nbsp;<TriangleMarker direction={ localisationState ? "up" : "down" }/>
                             <span id={ `${ preppedLabel }-loc-desc` }
                                   className={ "govuk-visually-hidden" }>
-                                Opens the localisation banner, which provides options to
+                                Click to open the localisation banner, which provides options to
                                 switch location and receive data at different geographical
                                 levels.
                             </span>
                         </TitleButton>
-                    </>
                 }
             </Title>
         </HeaderContainer>
