@@ -274,7 +274,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             data={ drawData.data }
             config={ {
                 showLink: false,
-                responsive: true,
+                // responsive: true,
                 displaylogo: false,
                 // displayModeBar: true,
                 modeBarButtonsToRemove: [
@@ -300,11 +300,14 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             layout={ {
                 hovermode: "x unified",
                 hoverdistance: 1,
+                hoverlabel: {
+                    namelength: 50
+                },
                 legend: {
                     orientation: 'h',
                     font: {
                         family: `"GDS Transport", Arial, sans-serif`,
-                        size: width === "desktop" ? 15 : 12,
+                        size: width === "desktop" ? 14 : 12,
                     },
                     xanchor: 'auto',
                     // yanchor: 'auto'
