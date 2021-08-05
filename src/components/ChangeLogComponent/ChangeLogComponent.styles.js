@@ -40,8 +40,9 @@ export const ChangeLogSpan: ComponentType<*> =
         bgColor,
         className: `${className} govuk-!-font-size-14`
     }))`
-        float: right;
+        float: left;
         padding: 2px 5px;
+        margin-right: 5px;
         font-weight: 600;
         text-transform: uppercase;
         color: ${calcColour};

@@ -40,8 +40,6 @@ const ChangeLogFilters: ComponentType<*> = ({ children }) => {
             !isOpen
                 ? null
                 : <>
-                    <hr className={ "govuk-section-break govuk-section-break--visible" }
-                        style={ { borderColor: "#1d70b8", borderWidth: 2 } }/>
                     <p className={ "govuk-visually-hidden" }>Use these options to filter the logs.</p>
                     <TextSearch/>
                     <div style={ { display: "grid", gridGap: "1rem" } }>
