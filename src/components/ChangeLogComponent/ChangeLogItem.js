@@ -124,11 +124,11 @@ const ChangeLogHeading: ComponentType = ({ data }) => {
                 <span className={ "govuk-visually-hidden" }>Date of change: </span>
                 { moment(data.date).format("D MMMM") }
             </time>
-            <ChangeLogSpan color={ colours[data.type]?.text ?? "#000000" }
-                           bgColor={ colours[data.type]?.background ?? "inherit" }>
-                <span className={ "govuk-visually-hidden" }>Type of log: </span>{ data.type }
-            </ChangeLogSpan>
         </small>
+        <ChangeLogSpan color={ colours[data.type]?.text ?? "#000000" }
+                       bgColor={ colours[data.type]?.background ?? "inherit" }>
+            <span className={ "govuk-visually-hidden" }>Type of log: </span>{ data.type }
+        </ChangeLogSpan>
         {
             data?.relativeUrl
                 ? data.relativeUrl.indexOf("details") > -1
