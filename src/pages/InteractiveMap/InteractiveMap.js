@@ -94,7 +94,7 @@ const InteractiveMap: ComponentType<*> = () => {
                     <li className={ "govuk-!-margin-bottom-1" }>Contains MSOA names &copy; Open Parliament copyright and database right 2020</li>
                     <li className={ "govuk-!-margin-bottom-1" }>Contains Ordnance Survey data &copy; Crown copyright and database right 2020</li>
                     <li className={ "govuk-!-margin-bottom-1" }>Contains Royal Mail data &copy; Royal Mail copyright and database right 2020</li>
-                    <li className={ "govuk-!-margin-bottom-1" }>Contains Public Health England data &copy; Crown copyright and database right 2020&ndash;2021</li>
+                    <li className={ "govuk-!-margin-bottom-1" }>Contains Public Health England data &copy; Crown copyright and database right 2020&ndash;{ new Date().getFullYear() }</li>
                     <li>Office for National Statistics licensed under the Open Government Licence v.3.0</li>
                 </ul>
 
