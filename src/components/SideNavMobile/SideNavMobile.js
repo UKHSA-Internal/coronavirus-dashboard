@@ -62,7 +62,7 @@ const NavigationItems: ComponentType<Props> = ({ menuState, setMenuState, ...pro
             <SideNavListItem className={`${pathname === '/details/download' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/download" }>Download data</Link>
             </SideNavListItem>
-            <SideNavListItem className={`${pathname === '/details/whats-new' ? "moj-side-navigation__item--active" : ""}`}>
+            <SideNavListItem className={`${pathname.startsWith('/details/whats-new') ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/whats-new" }>What's new</Link>
             </SideNavListItem>
             <SideNavListItem className={`${pathname === '/details/developers-guide' ? "moj-side-navigation__item--active" : ""}`}>
