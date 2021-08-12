@@ -34,7 +34,8 @@ const ChangeLogFilters: ComponentType<*> = ({ children }) => {
     const layout = useResponsiveLayout(1000);
     const [isOpen, setIsOpen] = useState(layout === "desktop");
 
-    return <SideContent style={ layout !== "desktop" && isOpen ? { borderBottom: "2px solid #1d70b8" } : {} }>
+    return <>
+        { children }
         <Heading layout={ layout } isOpen={ isOpen } setIsOpen={ setIsOpen }/>
         {
             !isOpen
@@ -54,7 +55,7 @@ const ChangeLogFilters: ComponentType<*> = ({ children }) => {
                     </Link>
                 </>
         }
-    </SideContent>;
+    </>;
 
 };  // PageComponent
 
