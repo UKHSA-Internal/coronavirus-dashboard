@@ -4,6 +4,7 @@ import { max, min, group } from "d3-array";
 import type { ParsedParams } from "./utils.types";
 import type { RGB } from "components/MapTable/MapTable.types";
 import { generateUrl } from "hooks/useApi";
+import Path from "assets/paths.json";
 
 
 export const sort = (a, b) => {
@@ -47,6 +48,19 @@ export const dateRange = (startDate: string, stopDate: string, step: number = 1,
     return dateArray;
 
 }; // getDates
+
+
+export const getPathAttributes = ( pathname: string ) => {
+
+    for ( const path in Path ) {
+        if ( Path.hasOwnProperty(path) && pathname.startsWith(path) ) {
+            return Path[path];
+        }
+    }
+
+    return {};
+
+};  // getPathStatus
 
 
 export const fillDateGaps = (data: Array<any>, defaultValue: number = 0): Array<any> => {
