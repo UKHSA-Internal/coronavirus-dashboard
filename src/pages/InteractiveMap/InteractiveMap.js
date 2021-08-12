@@ -53,7 +53,7 @@ const InteractiveMap: ComponentType<*> = () => {
                 <Link to={ "/details/interactive-map/vaccinations" }
                      aria-label={ "vaccinations-map-container" }
                      className={ `${ pathname.indexOf("vaccinations") > -1 ? 'active govuk-!-font-weight-bold' : '' } map-tab` }>
-                    Vaccinations <DefaultTag className={ "govuk-tag" } style={{ marginLeft: "4px" }}>BETA</DefaultTag>
+                    Vaccinations
                 </Link>
             </span>
         </div>
