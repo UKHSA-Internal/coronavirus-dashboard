@@ -18,20 +18,23 @@ import './index.scss';
 
 
 const
-    Cases           = lazy(() => import('pages/Cases')),
-    Healthcare      = lazy(() => import('pages/Healthcare')),
-    Vaccinations    = lazy(() => import('pages/Vaccinations')),
-    Deaths          = lazy(() => import('pages/Deaths')),
-    Tests           = lazy(() => import('pages/Testing')),
-    About           = lazy(() => import('pages/About')),
-    Accessibility   = lazy(() => import('pages/Accessibility')),
-    Cookies         = lazy(() => import('pages/Cookies')),
-    ApiDocs         = lazy(() => import('pages/ApiDocs')),
-    InteractiveMap  = lazy(() => import("pages/InteractiveMap")),
-    WhatsNew        = lazy(() => import("pages/WhatsNew")),
-    Footer          = lazy(() => import('components/Footer')),
-    Download        = lazy(() => import('pages/Download')),
-    Banner          = lazy(() => import('components/Banner'));
+    Cases               = lazy(() => import('pages/Cases')),
+    Healthcare          = lazy(() => import('pages/Healthcare')),
+    Vaccinations        = lazy(() => import('pages/Vaccinations')),
+    Deaths              = lazy(() => import('pages/Deaths')),
+    Tests               = lazy(() => import('pages/Testing')),
+    About               = lazy(() => import('pages/About')),
+    Accessibility       = lazy(() => import('pages/Accessibility')),
+    Cookies             = lazy(() => import('pages/Cookies')),
+    ApiDocs             = lazy(() => import('pages/ApiDocs')),
+    InteractiveMap      = lazy(() => import("pages/InteractiveMap")),
+    WhatsNew            = lazy(() => import("pages/WhatsNew")),
+    ChangeLogRecord     = lazy(() => import("pages/WhatsNew/ChangeLogRecord")),
+    AnnouncementRecord  = lazy(() => import("pages/Announcements/AnnouncementsRecord")),
+    Announcements       = lazy(() => import("pages/Announcements")),
+    Footer              = lazy(() => import('components/Footer')),
+    Download            = lazy(() => import('pages/Download')),
+    Banner              = lazy(() => import('components/Banner'));
 
 
 const LastUpdateTime = () => {
@@ -120,6 +123,9 @@ const App = () => {
                                 <Route path="/details/interactive-map/:page?" component={ InteractiveMap }/>
                                 <Route path="/details/whats-new/:date" exact component={ WhatsNew }/>
                                 <Route path="/details/whats-new" exact component={ WhatsNew }/>
+                                <Route path="/details/whats-new/record/:id" exact component={ ChangeLogRecord }/>
+                                <Route path="/details/announcements" exact component={ Announcements }/>
+                                <Route path="/details/announcements/:id" exact component={ AnnouncementRecord }/>
                                 <Route path="/details/download" exact component={ Download }/>
                                 <Route path="/details/about-data" exact component={About}/>
                         
