@@ -1,25 +1,25 @@
 // @flow
 
 import React from "react";
-import { Container, MainContent } from "./ChangeLogComponent.styles";
-import BrowserHistory from "../BrowserHistory";
+import { Container, FeedContainer, MainContent, SideContent } from "./ChangeLogComponent.styles";
 import ChangeLogFilters from "./FilterComponents";
 import type { ComponentType } from "react";
+import Feed from "components/FeedButton"
 
 
-export const PageComponent: ComponentType<*> = ({ children }) => {
+export const PageComponent: ComponentType<*> = ({ filters=true, feedPath, children }) => {
 
     return <Container>
-        <BrowserHistory>
-            <MainContent className={ "no-border" }>
-                <p className={ "govuk-!-margin-left-1" }>
-                    We regularly update the dashboard with new data and features.
-                    Here is a timeline of changes.
-                </p>
-                <div className={ "govuk-!-margin-top-1" }>{ children }</div>
-            </MainContent>
-        </BrowserHistory>
-        <ChangeLogFilters/>
+        <MainContent className={ "no-border" }>
+            { children }
+        </MainContent>
+        <SideContent>
+            <FeedContainer>
+                <Feed type={ "Atom 1.0" } url={ `https://api.coronavirus.data.gov.uk/generic/${feedPath}/atom.xml` }/>
+                <Feed type={ "RSS 2.0" } url={ `https://api.coronavirus.data.gov.uk/generic/${feedPath}/rss.xml` }/>
+            </FeedContainer>
+            { filters ? <ChangeLogFilters/> : null }
+        </SideContent>
     </Container>;
 
 };  // PageComponent
