@@ -1,5 +1,5 @@
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { ComponentType } from 'react';
 import Magnifier from "assets/icon-magnify.svg";
 
@@ -11,10 +11,6 @@ export const Markdown: ComponentType<*> =
             className: `markdown ${className}`,
             ...props
         }))`
-            @media only screen and (min-width: 800px) {
-                max-width: 85%;
-            }
-            
             & > * {
                 margin-left: 0;
                 margin-right: 0;
@@ -32,21 +28,29 @@ const calcBgColour = ({bgColor}) => {
 };
 
 
-export const ChangeLogSpan: ComponentType<*> =
+export const Category: ComponentType<*> =
     styled
-    .div
-    .attrs(({ color="", bgColor="", className="" }) => ({
+    .span
+    .attrs(({ color="", bgColor="", className="", standAlone }) => ({
         color,
         bgColor,
-        className: `${className} govuk-!-font-size-14`
+        className: `${className} ${ standAlone ? "govuk-!-font-size-16" : "govuk-!-font-size-14" }`
     }))`
-        float: left;
         padding: 2px 5px;
         margin-right: 5px;
         font-weight: 600;
         text-transform: uppercase;
         color: ${calcColour};
         background-color: ${calcBgColour};
+    `;
+
+export const CategoryContainer: ComponentType<*> =
+    styled
+    .div`
+        display: ${ css`${ ({ standAlone }) => standAlone ? "flex" : "inline-flex" }` };
+        justify-self: start;
+        margin-right: ${ css`${ ({ standAlone }) => standAlone ? "auto" : "0.5rem" }` };
+        margin-bottom: ${ css`${ ({ standAlone }) => standAlone ? "1rem" : "0" }` };
     `;
 
 
@@ -77,7 +81,8 @@ export const MainContent: ComponentType<*> =
             margin-top: 2rem;
             grid-column: 1/-1;
             align-content: start;
-            margin-right: 2rem;
+            margin-right: auto;
+            max-width: 50em;
             
             @media only screen and (max-width: 1000px) {
                 margin-right: 0;
@@ -97,7 +102,7 @@ export const SideContent: ComponentType<*> =
             display: grid;
             grid-column: 1/-1;
             // border-top: 2px solid #1d70b8;
-            margin-top: 2rem;
+            margin-top: 1rem;
             align-content: start;
             grid-gap: 1rem;
             grid-auto-flow: row;
@@ -132,9 +137,21 @@ export const SideContent: ComponentType<*> =
         `;
 
 
+export const FeedContainer: ComponentType<*> =
+    styled
+        .div`
+            display: flex;
+            justify-content: flex-end;
+            
+            & > a:not(a:first-of-type) {
+                margin-left: 1rem;
+            }
+        `;
+
+
 export const MonthlyGroup: ComponentType<*> =
     styled
-        .article`
+        .li`
             margin-top: 30px;
             border-top: 1px solid #e1e1e1;
             
@@ -201,9 +218,16 @@ export const ChangeLogBannerTag: ComponentType<*> =
 
 export const DataList: ComponentType<*> =
     styled
-        .dt`   
+        .dl`   
+            display: flex !important;
+            flex-direction: column;
+            font-size: larger;
+            & > dt {
+                margin-right: auto !important;
+                margin-bottom: .3rem;
+            }
             & > dd {
-                margin-bottom: 1rem;
+                margin-bottom: 1.5rem;
                 margin-top: .3rem;
 
                 code {

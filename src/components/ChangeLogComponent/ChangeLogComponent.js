@@ -41,15 +41,17 @@ const ChangeLogItemHeader: ComponentType = ({ date }) => {
 const DateGroup: ComponentType = ({ data, group, changeTypes }) => {
 
     return <MonthlyGroup aria-describedby={ `monthly_${group}` }>
-        <ChangeLogItemHeader date={ group }/>
-        {
-            data.map(change =>
-                <ChangeLogItem id={ `cl-item-${ change.id }` }
-                               key={ `cl-item-${ change.id }` }
-                               data={ change }
-                               changeTypes={ changeTypes }/>
-            )
-        }
+        <ul className={ "govuk-list" }>
+            <ChangeLogItemHeader date={ group }/>
+            {
+                data.map(change =>
+                    <ChangeLogItem id={ `cl-item-${ change.id }` }
+                                   key={ `cl-item-${ change.id }` }
+                                   data={ change }
+                                   changeTypes={ changeTypes }/>
+                )
+            }
+        </ul>
     </MonthlyGroup>;
 
 };  // DateGroup
@@ -154,7 +156,11 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
     const processedData = groupBy(data, item => item.date.substring(0, 7));
     const groups = Object.keys(processedData);
 
-    return <PageComponent>
+    return <PageComponent feedPath={ "change_logs" }>
+        <p className={ "govuk-!-margin-left-1" }>
+            We regularly update the dashboard with new data and features.
+            Here is a timeline of changes.
+        </p>
         <InfiniteScroll
             dataLength={ dataLength }
             next={ () => setPage(metadata.page + 1) }
@@ -165,7 +171,7 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
                   <b>There are no more logs to display.</b>
                 </p>
             }
-        >{
+        ><ul className={ "govuk-list" }>{
             groups.map(groupKey =>
                 <DateGroup data={ processedData[groupKey] }
                            group={ groupKey }
@@ -173,7 +179,7 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
                            colours={ {} }
                            key={ groupKey }/>
             )
-        }</InfiniteScroll>
+        }</ul></InfiniteScroll>
     </PageComponent>;
 
 }; //ChangeLogComponent

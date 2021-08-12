@@ -3,7 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
-import { getParams, getParamValueFor } from "common/utils";
+import { getParams, getParamValueFor, getPathAttributes } from "common/utils";
 import { ChangeLogBanner, ChangeLogBannerContainer, ChangeLogBannerTag } from "./ChangeLogComponent.styles";
 
 import type { ChangeLogInputProps } from "./ChangeLogComponent.types";
@@ -21,7 +21,7 @@ const DefaultParams = [
 export const ChangeLogHeader: ComponentType<*> = ({ timestamp, ...props }: ChangeLogInputProps) => {
 
     const { pathname, search } = useLocation();
-    const { title="Daily Summary" } = Path?.[pathname] ?? {};
+    const { title="Daily Summary", hasLog=true } = getPathAttributes(pathname);
     const urlParams = getParams(search);
     const areaParams = urlParams.length ? urlParams : DefaultParams;
 
@@ -39,7 +39,7 @@ export const ChangeLogHeader: ComponentType<*> = ({ timestamp, ...props }: Chang
         null
     );
 
-    if ( !data ) {
+    if ( !hasLog || !data ) {
         return null;
     }
 
@@ -52,7 +52,7 @@ export const ChangeLogHeader: ComponentType<*> = ({ timestamp, ...props }: Chang
                 <time dateTime={ item.date }>
                     { moment(item.date).format("D MMMM YYYY") }
                 </time> &mdash; { item.heading }
-                <Link to={ `/details/whats-new#${ item.id }` }
+                <Link to={ `/details/whats-new/record/${ item.id }` }
                       className={ "govuk-link govuk-link--no-visited-state govuk-!-margin-left-1" }>
                     More
                 </Link>

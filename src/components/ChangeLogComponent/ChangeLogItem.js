@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, Fragment } from "react";
 import moment from "moment";
-import { Markdown, ChangeLogSpan, DataList } from "./ChangeLogComponent.styles";
+import { Markdown, Category, DataList, CategoryContainer } from "./ChangeLogComponent.styles";
 import { Link } from "react-router-dom";
 
 import type { ComponentType } from "react";
@@ -42,7 +42,7 @@ const colours = {
 };
 
 
-const useMarkdown = (content: string | undefined) => {
+export const useMarkdown = (content: string | undefined) => {
 
     const [body, setBody] = useState(null);
 
@@ -60,12 +60,12 @@ const useMarkdown = (content: string | undefined) => {
 };  // ProcessedMarkdown
 
 
-const ChangeLogItemBody: ComponentType = ({ data }) => {
+export const ChangeLogItemBody: ComponentType = ({ data }) => {
 
     const body = useMarkdown(data?.body)
 
     return <div className="govuk-body govuk-!-margin-0">
-        <Markdown className="govuk-body govuk-!-margin-top-0 govuk-!-margin-bottom-0"
+        <Markdown className="govuk-!-margin-top-0 govuk-!-margin-bottom-0"
                   dangerouslySetInnerHTML={{ __html: body }}/>
     </div>
 
@@ -77,7 +77,7 @@ const Metrics: ComponentType = ({ data }) => {
     if ( !data?.metrics?.length ) return null;
 
     return <div className={ "govuk-!-padding-top-4 govuk-details__text govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
-        <h3 className={ "govuk-heading-s" }>Affected metrics</h3>
+        <h4 className={ "govuk-heading-s" }>Affected metrics</h4>
         <DataList>{
             data.metrics.map(item =>
                 <Fragment key={ item.metric }>
@@ -115,42 +115,48 @@ const Details: ComponentType = ({ data }) => {
 };  // Details
 
 
-const ChangeLogHeading: ComponentType = ({ data }) => {
+export const ChangeLogHeading: ComponentType = ({ data, standAlone=false }) => {
 
-    return <h3 className={ "govuk-heading-s govuk-!-font-size-19 govuk-!-margin-bottom-1" }
+    return <h3 className={ `govuk-heading-s govuk-!-font-size-${standAlone ? 24 : 19} govuk-!-margin-bottom-1` }
                id={ data.id }>
         <small className={ "govuk-caption-m govuk-!-font-size-19 govuk-!-margin-bottom-1" }>
             <time dateTime={ data.date }>
-                <span className={ "govuk-visually-hidden" }>Date of change: </span>
-                { moment(data.date).format("D MMMM") }
+                <span className={ "govuk-visually-hidden" }>Log date:</span>
+                {
+                    standAlone
+                        ? moment(data.date).format("D MMMM YYYY")
+                        : moment(data.date).format("D MMMM")
+                }
             </time>
         </small>
-        <ChangeLogSpan color={ colours[data.type]?.text ?? "#000000" }
-                       bgColor={ colours[data.type]?.background ?? "inherit" }>
-            <span className={ "govuk-visually-hidden" }>Type of log: </span>{ data.type }
-        </ChangeLogSpan>
+
+        <CategoryContainer standAlone={ standAlone }>
+            <Category color={ colours[data.type]?.text ?? "#000000" }
+                      bgColor={ colours[data.type]?.background ?? "inherit" }
+                      standAlone={ standAlone }>
+                <span className={ "govuk-visually-hidden" }>Log category:</span>
+                { data.type }
+            </Category>
+        </CategoryContainer>
         {
-            data?.relativeUrl
-                ? data.relativeUrl.indexOf("details") > -1
-                ? <Link to={ data.relativeUrl } className={ "govuk-link govuk-!-font-weight-bold" }>
+            !standAlone
+                ? <Link to={ `/details/whats-new/record/${data.id}` }
+                        className={ "govuk-link govuk-!-font-weight-bold" }>
                     { data.heading }
                 </Link>
-                : <a href={ data.relativeUrl } className={ "govuk-link govuk-!-font-weight-bold" }>
-                    { data.heading }
-                </a>
                 : data.heading
         }
-    </h3>
+    </h3>;
 
 };  // ChangeLogHeading
 
 
 export const ChangeLogItem: ComponentType = ({ data, changeTypes, ...props }) => {
 
-    return <section className="govuk-body-s govuk-!-margin-top-3 govuk-!-margin-bottom-6" {...props}>
+    return <li className="govuk-body-s govuk-!-margin-top-3 govuk-!-margin-bottom-6" {...props}>
         <ChangeLogHeading data={ data }/>
         <ChangeLogItemBody changeTypes={ changeTypes } data={ data }/>
         <Details data={ data }/>
-    </section>
+    </li>
 
 }; // ChangeLogItem
