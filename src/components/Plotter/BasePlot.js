@@ -9,12 +9,13 @@ import numeral from "numeral";
 import Plotly from "plotly.js";
 import createPlotlyComponent from 'react-plotly.js/factory';
 import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
-import { deviation, median } from "d3-array";
+import { deviation, median, min } from "d3-array";
 import cloneDeep from "lodash.clonedeep"
 import { analytics } from "common/utils";
 import Loading from "components/Loading";
 
 import type { ComponentType } from "react";
+import moment from "moment";
 
 
 const Plot = createPlotlyComponent(Plotly);
@@ -40,6 +41,38 @@ const logThresholds = [
     1_000_000, 10_000_000, 100_000_000, 1_000_000_000
 ];
 
+
+const rangeSelector =  {
+    buttons: [
+        {
+            step: 'all'
+        },
+        {
+          count: 1,
+          label: '1y',
+          step: 'year',
+          stepmode: 'backward'
+        },
+        {
+          count: 3,
+          label: '3m',
+          step: 'month',
+          stepmode: 'backward'
+        },
+        {
+          count: 1,
+          label: '1m',
+          step: 'month',
+          stepmode: 'backward'
+        },
+        {
+          count: 7,
+          label: '7d',
+          step: 'day',
+          stepmode: 'backward'
+        },
+    ]
+};
 
 const prepLogData = (data, original, barmode, minVal, maxVal, width) => {
 
@@ -219,7 +252,9 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             margin = { ...margin, r: 50 };
         }
 
-        if ( !Array.isArray(drawData.data[index]?.hovertemplate) && drawData.data[index]?.type !== "heatmap" ) {
+        if ( !Array.isArray(drawData.data[index]?.hovertemplate) &&
+                drawData.data[index]?.type !== "heatmap" &&
+                drawData.data[index]?.hoverinfo !== "none") {
 
             drawData.data[index].hovertemplate = [];
 
@@ -245,137 +280,141 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
     if ( !drawData.data?.length ) return <Loading/>;
 
-    return <PlotContainer className={ "govuk-grid-row" }
-                          aria-label={ "Displaying a graph of the data" }>
-        {
-            noLogScale || barmode === "stack" ||
-            props?.chartMode === "percentage" || drawData.std < drawData.mid
-                ? null
-                : <Toggle style={{ marginTop: "-25px", float: "right" }}>
-                    <ToggleButton onClick={ () => setIsLog(false) }
-                                  className={ "govuk-!-font-size-14" }
-                                  active={ isLog === false }>
-                        Linear
-                    </ToggleButton>
-                    <ToggleButton onClick={ () => setIsLog(true) }
-                                  className={ "govuk-!-font-size-14" }
-                                  active={ isLog === true }>
-                        Log
-                    </ToggleButton>
-                </Toggle>
+    if ( isTimeSeries ) {
+
+        const minX = moment(min(drawData.data, v => min(v.x)));
+        const now = moment();
+        const deltaDate = moment.duration(now.diff(minX)).asMonths();
+
+        if ( deltaDate >= 12 ) {
+            xaxis.rangeselector = rangeSelector;
         }
+        else if ( deltaDate >= 3 ) {
+            xaxis.rangeselector = {
+                buttons: [rangeSelector.buttons[0], ...rangeSelector.buttons.slice(3)]
+            };
+        }
+        else if ( deltaDate >= 1 ) {
+            xaxis.rangeselector = {
+                buttons: [rangeSelector.buttons[0], ...rangeSelector.buttons.slice(4)]
+            };
+        }
+
+    }
+
+    return <>
         <p className={ "govuk-visually-hidden" }>
             The data that is visualised in the chart is that which is tabulated
             under the "Data" tab. The tables do not include the rolling average metric
             (where the metric is included).
             { SrOnly }
         </p>
-        <Plot
-            data={ drawData.data }
-            config={ {
-                showLink: false,
-                // responsive: true,
-                displaylogo: false,
-                // displayModeBar: true,
-                modeBarButtonsToRemove: [
-                    "autoScale2d",
-                    "toggleSpikelines",
-                    "hoverClosestCartesian",
-                    "pan2d",
-                    "select2d",
-                    "lasso2d",
-                ],
-                toImageButtonOptions: {
-                    format: 'png',
-                    filename: 'export',
-                    height: 989,
-                    width: 1600,
-                    scale: 4
-                },
-                ...config
-                // onLegendItem
-            } }
-            useResizeHandler={ true }
-            style={ { display: "block", height: 350, ...style } }
-            layout={ {
-                hovermode: "x unified",
-                hoverdistance: 1,
-                hoverlabel: {
-                    namelength: 50
-                },
-                legend: {
-                    orientation: 'h',
-                    font: {
-                        family: `"GDS Transport", Arial, sans-serif`,
-                        size: width === "desktop" ? 14 : 12,
+        <PlotContainer className={ "govuk-grid-row" }
+                          aria-label={ "Displaying a graph of the data" }>
+            {
+                noLogScale || barmode === "stack" ||
+                props?.chartMode === "percentage" || drawData.std < drawData.mid
+                    ? null
+                    : <Toggle style={{ marginTop: "-25px", float: "right" }}>
+                        <ToggleButton onClick={ () => setIsLog(false) }
+                                      className={ "govuk-!-font-size-14" }
+                                      active={ isLog === false }>
+                            Linear
+                        </ToggleButton>
+                        <ToggleButton onClick={ () => setIsLog(true) }
+                                      className={ "govuk-!-font-size-14" }
+                                      active={ isLog === true }>
+                            Log
+                        </ToggleButton>
+                    </Toggle>
+            }
+            <Plot
+                ariaHidden={ "true" }
+                data={ drawData.data }
+                config={ {
+                    showLink: false,
+                    // responsive: true,
+                    displaylogo: false,
+                    // displayModeBar: true,
+                    modeBarButtonsToRemove: [
+                        "autoScale2d",
+                        "toggleSpikelines",
+                        "hoverClosestCartesian",
+                        "pan2d",
+                        "select2d",
+                        "lasso2d",
+                    ],
+                    toImageButtonOptions: {
+                        format: 'png',
+                        filename: 'export',
+                        height: 989,
+                        width: 1600,
+                        scale: 4
                     },
-                    xanchor: 'auto',
-                    // yanchor: 'auto'
-                    y: -.2
-                },
-                showlegend: true,
-                margin: {
-                    l: width === "desktop" ? 45 : 35,
-                    r: width === "desktop" ? 10 : 5,
-                    b: 25,
-                    t: 10,
-                    pad: 0,
-                    ...margin
-                },
-                xaxis: {
-                    showgrid: false,
-                    zeroline: false,
-                    showline: false,
-                    // fixedrange: width !== "desktop",
-                    fixedrange: false,
-                    tickslen: 10,
-                    ticks: "outside",
-                    tickson: "boundaries",
-                    ticklen: 'labels',
-                    type: isTimeSeries ? "date" : "category",
-                    tickformat: '%-d %b',
-                    tickfont: {
-                        family: `"GDS Transport", Arial, sans-serif`,
-                        size: width === "desktop" ? 14 : 10,
-                        color: "#6B7276"
+                    ...config
+                    // onLegendItem
+                } }
+                useResizeHandler={ true }
+                style={ { display: "block", height: 350, ...style } }
+                layout={ {
+                    hovermode: "x unified",
+                    hoverdistance: 1,
+                    hoverlabel: {
+                        namelength: 50
                     },
-                    // rangeslider: {range: ['20202-01-01', new Date().toString()]},
-                    // rangeselector: {buttons: [
-                    //     {
-                    //       count: 7,
-                    //       label: '7d',
-                    //       step: 'day',
-                    //       stepmode: 'backward'
-                    //     },
-                    //         {
-                    //       count: 1,
-                    //       label: '1m',
-                    //       step: 'month',
-                    //       stepmode: 'backward'
-                    //     },
-                    //         {
-                    //       count: 3,
-                    //       label: '3m',
-                    //       step: 'month',
-                    //       stepmode: 'backward'
-                    //     },
-                    //     {step: 'all'}
-                    //   ]},
-                    ...xaxis,
-                },
-                yaxis: {
-                    tickmode: drawData?.tickmode,
-                    tickvals: drawData?.tickvals,
-                    ticktext: drawData?.ticktext,
-                    ...yAxisRef,
-                    ...yaxis
-                },
-                plot_bgcolor: "rgba(231,231,231,0)",
-                paper_bgcolor: "rgba(255,255,255,0)",
-                ...layout
-            } }
-            { ...props }
-        />
-    </PlotContainer>;
+                    legend: {
+                        orientation: 'h',
+                        font: {
+                            family: `"GDS Transport", Arial, sans-serif`,
+                            size: width === "desktop" ? 14 : 12,
+                        },
+                        xanchor: 'auto',
+                        // yanchor: 'auto'
+                        y: -.2
+                    },
+                    showlegend: true,
+                    margin: {
+                        l: width === "desktop" ? 45 : 35,
+                        r: width === "desktop" ? 10 : 5,
+                        b: 25,
+                        t: 10,
+                        pad: 0,
+                        ...margin
+                    },
+                    xaxis: {
+                        showgrid: false,
+                        zeroline: false,
+                        showline: false,
+                        // fixedrange: width !== "desktop",
+                        fixedrange: false,
+                        tickslen: 10,
+                        ticks: "outside",
+                        tickson: "boundaries",
+                        ticklen: 'labels',
+                        type: isTimeSeries ? "date" : "category",
+                        tickformat: '%-d %b %Y',
+                        tickfont: {
+                            family: `"GDS Transport", Arial, sans-serif`,
+                            size: width === "desktop" ? 14 : 10,
+                            color: "#6B7276"
+                        },
+                        // rangeslider: {range: ['20202-01-01', new Date().toString()]},
+                        ...xaxis,
+                    },
+                    yaxis: {
+                        tickmode: drawData?.tickmode,
+                        tickvals: drawData?.tickvals,
+                        ticktext: drawData?.ticktext,
+                        ...yAxisRef,
+                        ...yaxis
+                    },
+                    plot_bgcolor: "rgba(231,231,231,0)",
+                    paper_bgcolor: "rgba(255,255,255,0)",
+                    ...layout
+                } }
+                { ...props }
+            />
+        </PlotContainer>
+    </>;
 
 }; // Plotter
