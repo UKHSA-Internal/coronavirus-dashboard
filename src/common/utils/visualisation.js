@@ -252,7 +252,6 @@ export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date", 
         for ( const { value } of fields ) {
             trace.x.push(row?.[xKey] ?? null)
             trace.y.push(row?.[value] ?? null);
-            // trace.y.push(row?.[value]?.map(_ => {marker}) ?? null);
         }
 
         data.push(trace);
