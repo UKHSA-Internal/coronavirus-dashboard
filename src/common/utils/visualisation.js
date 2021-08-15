@@ -231,10 +231,7 @@ export const getPlotData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 };  // getPlotData
 
 
-export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date", threshold: number,
-                                       markerColourBelowThreshold: number, markerColourAboveThreshold: number,
-                                       symbolBelowThreshold: string, symbolAboveThreshold: string,
-                                       lineColour: number ) => {
+export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 
     const data = [];
 

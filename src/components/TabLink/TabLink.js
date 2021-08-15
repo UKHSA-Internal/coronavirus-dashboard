@@ -163,17 +163,7 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
                             }}
                             xaxis={{ range: [xMin, xMax] }}
                             yaxis={{ zeroline: false }}
-                            data={
-                                getTwoWayLollipopData(
-                                    fields, data, xKey,
-                                    props?.threshold,
-                                    props?.markerColourBelowThreshold,
-                                    props?.markerColourAboveThreshold,
-                                    props?.symbolBelowThreshold,
-                                    props?.symbolAboveThreshold,
-                                    props?.lineColour,
-                                )
-                            }
+                            data={ getTwoWayLollipopData(fields, data, xKey) }
                             { ...props }/>;
 
         case "nestedTable":
