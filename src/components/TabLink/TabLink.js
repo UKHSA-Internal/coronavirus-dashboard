@@ -19,6 +19,7 @@ import {
     getTwoWayLollipopData,
     groupBy
 } from "common/utils";
+import { min, max } from "d3-array";
 import { DataTable, NestedDataTable } from "components/GovUk";
 import useApi from "hooks/useApi";
 import Loading from "components/Loading";
@@ -133,7 +134,15 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
 
         case "twoWayLollipop":
             return <Plotter type={ "twoWayLollipop" }
-                            layout={{}}
+                            layout={{
+                                shapes: [{
+                                    'type': 'line', 'y0': 1, 'y1': 1, 'yref': 'y',
+                                    'x0': min(data, v => v.date),
+                                    'x1': max(data, v => v.date),
+                                    'xref': 'paper'
+                                }]
+                            }}
+                            yaxis={{ zeroline: false }}
                             data={
                                 getTwoWayLollipopData(
                                     fields, data, xKey,
