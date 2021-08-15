@@ -244,17 +244,20 @@ export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date", 
             y: [],
             type: "scatter",
             showlegend: false,
-            hoverinfo: 'skip',
-            line: {color: asCssRgb(colours[lineColour]), width: 1},
+            hoverinfo: 'none',
+            line: { color: colours[3], width: 1 },
+            marker: { color: colours[0], size: 12 }
         };
 
         for ( const { value } of fields ) {
             trace.x.push(row?.[xKey] ?? null)
             trace.y.push(row?.[value] ?? null);
+            // trace.y.push(row?.[value]?.map(_ => {marker}) ?? null);
         }
 
         data.push(trace);
     }
+
 
     for ( const { value, label } of fields ) {
         const trace = {
@@ -265,29 +268,19 @@ export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date", 
             type: "scatter",
             showlegend: false,
             marker: {
-                color: [],
-                symbol: [],
-                size: 12
+                color: colours[3],
+                size: 5
             },
         }
 
         for ( const row of rawData ) {
             trace.x.push(row?.[xKey] ?? null);
             trace.y.push(row?.[value] ?? null);
-            trace.marker.color.push(
-                (row?.[value] ?? 0) >= threshold
-                    ? asCssRgb(colours[markerColourAboveThreshold])
-                    : asCssRgb(colours[markerColourBelowThreshold])
-            );
-            trace.marker.symbol.push(
-                (row?.[value] ?? 0) >= threshold
-                    ? symbolAboveThreshold
-                    : symbolBelowThreshold
-            );
         }
 
         data.push(trace);
     }
+
 
     return data;
 
