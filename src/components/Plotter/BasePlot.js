@@ -54,6 +54,12 @@ const rangeSelector =  {
           stepmode: 'backward'
         },
         {
+          count: 6,
+          label: '6m',
+          step: 'month',
+          stepmode: 'backward'
+        },
+        {
           count: 3,
           label: '3m',
           step: 'month',
@@ -63,12 +69,6 @@ const rangeSelector =  {
           count: 1,
           label: '1m',
           step: 'month',
-          stepmode: 'backward'
-        },
-        {
-          count: 7,
-          label: '7d',
-          step: 'day',
           stepmode: 'backward'
         },
     ]
@@ -239,6 +239,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
         if ( "overlaying" in drawData.data[index] ) {
             yAxisRef.rangemode = "tozero";
             layout = {
+                ...layout,
                 yaxis2: {
                     ...yAxisRef,
                     overlaying: drawData.data[index].overlaying,
@@ -280,6 +281,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
     if ( !drawData.data?.length ) return <Loading/>;
 
+    // Preset zoom feature
     if ( isTimeSeries ) {
 
         const minX = moment(min(drawData.data, v => min(v.x)));
@@ -289,14 +291,14 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
         if ( deltaDate >= 12 ) {
             xaxis.rangeselector = rangeSelector;
         }
+        else if ( deltaDate >= 6 ) {
+            xaxis.rangeselector = {
+                buttons: [rangeSelector.buttons[0], ...rangeSelector.buttons.slice(2)]
+            };
+        }
         else if ( deltaDate >= 3 ) {
             xaxis.rangeselector = {
                 buttons: [rangeSelector.buttons[0], ...rangeSelector.buttons.slice(3)]
-            };
-        }
-        else if ( deltaDate >= 1 ) {
-            xaxis.rangeselector = {
-                buttons: [rangeSelector.buttons[0], ...rangeSelector.buttons.slice(4)]
             };
         }
 
