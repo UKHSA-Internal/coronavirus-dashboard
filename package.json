@@ -36,7 +36,7 @@
     "react-syntax-highlighter": "^15.4.4",
     "react-tooltip": "^4.2.21",
     "remark": "^13.0.0",
-    "remark-external-links": "^8.0.0",
+    "remark-external-links": "^9.0.1",
     "remark-html": "^14.0.0",
     "remark-slug": "^6.1.0",
     "remark-toc": "^7.2.0",
