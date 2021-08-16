@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 
 const Metrics: ComponentType<*> = ({ metrics }) => {
 
-    if ( !metrics ) return null;
+    if ( !metrics || !metrics?.length ) return null;
 
     return <div className={ "govuk-!-padding-top-4 govuk-details__text govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
         <h4 className={ "govuk-heading-s" }>Affected metrics</h4>
