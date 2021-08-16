@@ -37,7 +37,7 @@
     "react-tooltip": "^4.2.21",
     "remark": "^13.0.0",
     "remark-external-links": "^8.0.0",
-    "remark-html": "^13.0.1",
+    "remark-html": "^14.0.0",
     "remark-slug": "^6.1.0",
     "remark-toc": "^7.2.0",
     "replacestream": "^4.0.3",
@@ -85,7 +85,7 @@
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "flow-bin": "^0.156.0",
+    "flow-bin": "^0.157.0",
     "react-snap": "^1.23.0",
     "stylelint": "^13.13.1",
     "stylelint-config-idiomatic-order": "^8.1.0",
