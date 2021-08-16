@@ -9,9 +9,9 @@ import numeral from "numeral";
 import Plotly from "plotly.js";
 import createPlotlyComponent from 'react-plotly.js/factory';
 import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
-import { deviation, median } from "d3-array";
+import { deviation, median, min, max } from "d3-array";
 import cloneDeep from "lodash.clonedeep"
-import { analytics, sort, sortByDate } from "common/utils";
+import { analytics } from "common/utils";
 import Loading from "components/Loading";
 
 import type { ComponentType } from "react";
@@ -194,6 +194,9 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
         std: std
     });
 
+    const minDate = isTimeSeries ? min(payload, item => min(item.x)) : null;
+    const maxDate = isTimeSeries ? max(payload, item => max(item.x)) : null;
+
     const isLogScale = (isLog && barmode === "stack") && !noLogScale;
     yAxisRef.ticks = "outside";
     // Alternatives - Non-log: ",.2r" / mobile: 3s
@@ -305,28 +308,6 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
     if ( !drawData.data?.length ) return <Loading/>;
 
-    // Preset zoom feature
-    // if ( isTimeSeries ) {
-    //
-    //     const minX = moment(min(drawData.data, v => min(v.x)));
-    //     const now = moment();
-    //     const deltaDate = moment.duration(now.diff(minX)).asMonths();
-    //
-    //     if ( deltaDate >= 12 ) {
-    //         xaxis.rangeselector = rangeSelector;
-    //     } else if ( deltaDate >= 6 ) {
-    //         xaxis.rangeselector = {
-    //             buttons: [rangeSelector.buttons[0], ...rangeSelector.buttons.slice(2)]
-    //         };
-    //     } else if ( deltaDate >= 3 ) {
-    //         xaxis.rangeselector = {
-    //             buttons: [rangeSelector.buttons[0], ...rangeSelector.buttons.slice(3)]
-    //         };
-    //     }
-    //
-    // }
-
-
     return <div className={ "govuk-!-margin-top-2" }>
         <p className={ "govuk-visually-hidden" }>
             The data that is visualised in the chart is that which is tabulated
@@ -353,17 +334,24 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                         </ToggleButton>
                     </Toggle>
             }
-            <Toggle style={{ marginTop: "-25px", position: "relative" }}>
-                {
-                    rangeSelector.map(item =>
-                        <ToggleButton key={ item.label }
-                                      className={ "govuk-!-font-size-14" }
-                                      onClick={ () => setZoom(item.label) }
-                                      active={ zoom === item.label }>
-                            { item.label }
-                        </ToggleButton>)
-                }
-            </Toggle>
+            {
+                isTimeSeries
+                    ? <Toggle style={ { marginTop: "-25px", position: "relative" } }>
+                        {
+                            rangeSelector.map(item =>
+                                moment(minDate) <= moment(maxDate).subtract(item.count, item.step)
+                                    ? <ToggleButton key={ item.label }
+                                              className={ "govuk-!-font-size-14" }
+                                              onClick={ () => setZoom(item.label) }
+                                              active={ zoom === item.label }>
+                                        { item.label }
+                                    </ToggleButton>
+                                    : null
+                            )
+                        }
+                    </Toggle>
+                    : null
+            }
             <Plot
                 ariaHidden={ "true" }
                 data={ drawData.data }
