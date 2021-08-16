@@ -287,9 +287,10 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
             let yValues = [...(payload[index].y ?? [])];
 
-            if ( payload[index].x[0] < payload[index].x[payload[index].x.length - 1] ) {
+            if ( payload[index].x[0] < payload[index].x[payload[index].x.length - 1] &&
+                    isTimeSeries &&
+                    chartMode !== "waffle" )
                 yValues = yValues.reverse();
-            }
 
             for ( const value of yValues ) {
                 drawData.data[index].hovertemplate.push(
@@ -323,23 +324,6 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
         <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
             {
-                noLogScale || barmode === "stack" ||
-                props?.chartMode === "percentage" || drawData.std < drawData.mid
-                    ? null
-                    : <Toggle style={{ marginTop: "-25px", float: "right", position: "relative", top: "25px" }}>
-                        <ToggleButton onClick={ () => setIsLog(false) }
-                                      className={ "govuk-!-font-size-14" }
-                                      active={ isLog === false }>
-                            Linear
-                        </ToggleButton>
-                        <ToggleButton onClick={ () => setIsLog(true) }
-                                      className={ "govuk-!-font-size-14" }
-                                      active={ isLog === true }>
-                            Log
-                        </ToggleButton>
-                    </Toggle>
-            }
-            {
                 isTimeSeries
                     ? <Toggle style={ { marginTop: "-25px", position: "relative" } }>
                         {
@@ -356,6 +340,23 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                         }
                     </Toggle>
                     : null
+            }
+            {
+                noLogScale || barmode === "stack" ||
+                props?.chartMode === "percentage" || drawData.std < drawData.mid
+                    ? null
+                    : <Toggle style={{ marginTop: "-25px", float: "right", position: "relative", top: "25px" }}>
+                        <ToggleButton onClick={ () => setIsLog(false) }
+                                      className={ "govuk-!-font-size-14" }
+                                      active={ isLog === false }>
+                            Linear
+                        </ToggleButton>
+                        <ToggleButton onClick={ () => setIsLog(true) }
+                                      className={ "govuk-!-font-size-14" }
+                                      active={ isLog === true }>
+                            Log
+                        </ToggleButton>
+                    </Toggle>
             }
             <Plot
                 ariaHidden={ "true" }
