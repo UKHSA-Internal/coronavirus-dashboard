@@ -144,8 +144,6 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
                 .add(2, 'day')
                 .toDate();
 
-            console.log(props)
-
             return <Plotter type={ "twoWayLollipop" }
                             layout={{
                                 shapes: [{
