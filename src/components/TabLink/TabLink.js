@@ -130,6 +130,8 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
         case "percentageWaffle":
             return <Plotter type={ "percentageWaffle" }
                             layout={{}}
+                            isTimeSeries={ false }
+                            chartMode={ "waffle" }
                             data={ getPercentageWaffleData(fields, data, xKey) }
                             { ...props }/>;
 
