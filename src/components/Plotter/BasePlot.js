@@ -345,7 +345,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                 noLogScale || barmode === "stack" ||
                 props?.chartMode === "percentage" || drawData.std < drawData.mid
                     ? null
-                    : <Toggle style={{ marginTop: "-25px", float: "right", position: "relative", top: "25px" }}>
+                    : <Toggle style={{ marginTop: "-25px", float: "right", position: "relative" }}>
                         <ToggleButton onClick={ () => setIsLog(false) }
                                       className={ "govuk-!-font-size-14" }
                                       active={ isLog === false }>
