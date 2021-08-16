@@ -44,15 +44,15 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
     return <>
         <HeaderContainer role={ "heading" }
                          aria-level={ 1 }>
-            <Title data-for={ localised && "open-localisation-tooltip" }
-                   data-tip={ localised && "Click to change location" }
+            <Title data-for={ localised ? "open-localisation-tooltip" : null }
+                   data-tip={ localised ? "Click to change location" : null }
                    id={ `page-heading-${ preppedLabel }` }
                    className={ localisationState ? "open" : "" }>
                 { `${ attrs.title }${ !localised ? "" : " in" }` }
                 { !localised
                     ? null
-                    : (pathname && pathname !== "/") &&
-                        <TitleButton aria-describedby={ `${ preppedLabel }-loc-desc` }
+                    : (pathname && pathname !== "/")
+                        ? <TitleButton aria-describedby={ `${ preppedLabel }-loc-desc` }
                                      onClick={ localisationCallback }>
                             { areaName }&nbsp;<TriangleMarker direction={ localisationState ? "up" : "down" }/>
                             <span id={ `${ preppedLabel }-loc-desc` }
@@ -62,6 +62,7 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
                                 levels.
                             </span>
                         </TitleButton>
+                    : null
                 }
             </Title>
         </HeaderContainer>
