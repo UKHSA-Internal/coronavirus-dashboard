@@ -245,7 +245,6 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
         }
 
         if ( isLog ) {
-
             setDrawData({
                 ...prepLogData(data, payload, barmode, minVal, maxVal),
                 mid,
@@ -253,7 +252,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             });
         }
         else {
-            setDrawData({data: data, mid, std});
+            setDrawData({data, mid, std});
         }
 
     }, [ isLog, barmode, payload, zoom ]);
@@ -282,11 +281,17 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
         if ( !Array.isArray(drawData.data[index]?.hovertemplate) &&
                 drawData.data[index]?.type !== "heatmap" &&
-                drawData.data[index]?.hoverinfo !== "none") {
+                drawData.data[index]?.hoverinfo !== "none" ) {
 
             drawData.data[index].hovertemplate = [];
 
-            for ( const value of payload[index]?.y ?? [] ) {
+            let yValues = [...(payload[index].y ?? [])];
+
+            if ( payload[index].x[0] < payload[index].x[payload[index].x.length - 1] ) {
+                yValues = yValues.reverse();
+            }
+
+            for ( const value of yValues ) {
                 drawData.data[index].hovertemplate.push(
                     numeral(value).format("0,0.[0]") + labelSuffix
                 );
