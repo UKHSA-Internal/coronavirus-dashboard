@@ -218,7 +218,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
         let data = cloneDeep(payload);
 
         // Zoom feature
-        if ( isTimeSeries || data?.[0]?.type === "heatmap" ) {
+        if ( isTimeSeries && chartMode !== "waffle" ) {
             const currentRange = rangeSelector.find(item => item.label === zoom);
             const since =
                 zoom !== 'all'
