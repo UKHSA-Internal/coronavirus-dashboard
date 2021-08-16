@@ -9,9 +9,9 @@ import numeral from "numeral";
 import Plotly from "plotly.js";
 import createPlotlyComponent from 'react-plotly.js/factory';
 import { Toggle, ToggleButton } from "components/ToggleButton/ToggleButton";
-import { deviation, median, min } from "d3-array";
+import { deviation, median } from "d3-array";
 import cloneDeep from "lodash.clonedeep"
-import { analytics } from "common/utils";
+import { analytics, sort, sortByDate } from "common/utils";
 import Loading from "components/Loading";
 
 import type { ComponentType } from "react";
@@ -42,37 +42,33 @@ const logThresholds = [
 ];
 
 
-const rangeSelector =  {
-    buttons: [
-        {
-            step: 'all'
-        },
-        {
-          count: 1,
-          label: '1y',
-          step: 'year',
-          stepmode: 'backward'
-        },
-        {
-          count: 6,
-          label: '6m',
-          step: 'month',
-          stepmode: 'backward'
-        },
-        {
-          count: 3,
-          label: '3m',
-          step: 'month',
-          stepmode: 'backward'
-        },
-        {
-          count: 1,
-          label: '1m',
-          step: 'month',
-          stepmode: 'backward'
-        },
-    ]
-};
+const rangeSelector =  [
+    {
+      count: null,
+      step: 'all',
+      label: 'all',
+    },
+    {
+      count: 1,
+      label: '1y',
+      step: 'year',
+    },
+    {
+      count: 6,
+      label: '6m',
+      step: 'months',
+    },
+    {
+      count: 3,
+      label: '3m',
+      step: 'months',
+    },
+    {
+      count: 1,
+      label: '1m',
+      step: 'month',
+    },
+];
 
 const prepLogData = (data, original, barmode, minVal, maxVal, width) => {
 
@@ -183,6 +179,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
     const width = useResponsiveLayout(640);
     const [ isLog, setIsLog ] = useState(false);
+    const [ zoom, setZoom ] = useState("all");
     const { barmode } = layout;
     const { chartMode } = props;
     const yAxisRef = Object.assign({}, axRef.y);
@@ -215,9 +212,36 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
     useEffect(() => {
 
         const {minVal, maxVal, mid, std} = getExtrema(payload, barmode, isLog);
+        let data = cloneDeep(payload);
+
+        // Zoom feature
+        if ( isTimeSeries || data?.[0]?.type === "heatmap" ) {
+            const currentRange = rangeSelector.find(item => item.label === zoom);
+            const since =
+                zoom !== 'all'
+                    ? moment()
+                        .subtract(currentRange.count, currentRange.step)
+                        .format("YYYY-MM-DD")
+                    : "0";
+
+            for ( let ind = 0; ind < data.length; ind++ ) {
+                if ( data[ind].x[0] < data[ind].x[data[ind].x.length - 1] ) {
+                    data[ind].x = data[ind].x.reverse();
+                    data[ind].y = data[ind].y.reverse();
+
+                    if ( data[ind].hasOwnProperty("z") )
+                        data[ind].z = data[ind].z.map(item => item.reverse());
+                }
+
+                data[ind].x = data[ind].x.filter(v => v >= since);
+                data[ind].y = data[ind].y.slice(0, data[ind].x.length);
+
+                if ( data[ind].hasOwnProperty("z") )
+                    data[ind].z = data[ind].z.map(item => item.slice(0, data[ind].x.length));
+            }
+        }
 
         if ( isLog ) {
-            let data = cloneDeep(payload);
 
             setDrawData({
                 ...prepLogData(data, payload, barmode, minVal, maxVal),
@@ -226,10 +250,10 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             });
         }
         else {
-            setDrawData({data: payload, mid, std});
+            setDrawData({data: data, mid, std});
         }
 
-    }, [ isLog, barmode, payload ]);
+    }, [ isLog, barmode, payload, zoom ]);
 
 
     if ( chartMode === "percentage" ) labelSuffix += "%";
@@ -282,29 +306,28 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
     if ( !drawData.data?.length ) return <Loading/>;
 
     // Preset zoom feature
-    if ( isTimeSeries ) {
+    // if ( isTimeSeries ) {
+    //
+    //     const minX = moment(min(drawData.data, v => min(v.x)));
+    //     const now = moment();
+    //     const deltaDate = moment.duration(now.diff(minX)).asMonths();
+    //
+    //     if ( deltaDate >= 12 ) {
+    //         xaxis.rangeselector = rangeSelector;
+    //     } else if ( deltaDate >= 6 ) {
+    //         xaxis.rangeselector = {
+    //             buttons: [rangeSelector.buttons[0], ...rangeSelector.buttons.slice(2)]
+    //         };
+    //     } else if ( deltaDate >= 3 ) {
+    //         xaxis.rangeselector = {
+    //             buttons: [rangeSelector.buttons[0], ...rangeSelector.buttons.slice(3)]
+    //         };
+    //     }
+    //
+    // }
 
-        const minX = moment(min(drawData.data, v => min(v.x)));
-        const now = moment();
-        const deltaDate = moment.duration(now.diff(minX)).asMonths();
 
-        if ( deltaDate >= 12 ) {
-            xaxis.rangeselector = rangeSelector;
-        }
-        else if ( deltaDate >= 6 ) {
-            xaxis.rangeselector = {
-                buttons: [rangeSelector.buttons[0], ...rangeSelector.buttons.slice(2)]
-            };
-        }
-        else if ( deltaDate >= 3 ) {
-            xaxis.rangeselector = {
-                buttons: [rangeSelector.buttons[0], ...rangeSelector.buttons.slice(3)]
-            };
-        }
-
-    }
-
-    return <>
+    return <div className={ "govuk-!-margin-top-2" }>
         <p className={ "govuk-visually-hidden" }>
             The data that is visualised in the chart is that which is tabulated
             under the "Data" tab. The tables do not include the rolling average metric
@@ -317,7 +340,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                 noLogScale || barmode === "stack" ||
                 props?.chartMode === "percentage" || drawData.std < drawData.mid
                     ? null
-                    : <Toggle style={{ marginTop: "-25px", float: "right" }}>
+                    : <Toggle style={{ marginTop: "-25px", float: "right", position: "relative", top: "25px" }}>
                         <ToggleButton onClick={ () => setIsLog(false) }
                                       className={ "govuk-!-font-size-14" }
                                       active={ isLog === false }>
@@ -330,6 +353,17 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                         </ToggleButton>
                     </Toggle>
             }
+            <Toggle style={{ marginTop: "-25px", position: "relative" }}>
+                {
+                    rangeSelector.map(item =>
+                        <ToggleButton key={ item.label }
+                                      className={ "govuk-!-font-size-14" }
+                                      onClick={ () => setZoom(item.label) }
+                                      active={ zoom === item.label }>
+                            { item.label }
+                        </ToggleButton>)
+                }
+            </Toggle>
             <Plot
                 ariaHidden={ "true" }
                 data={ drawData.data }
@@ -378,8 +412,8 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                     margin: {
                         l: width === "desktop" ? 45 : 35,
                         r: width === "desktop" ? 10 : 5,
-                        b: 25,
-                        t: 10,
+                        b: 45,
+                        t: 5,
                         pad: 0,
                         ...margin
                     },
@@ -417,6 +451,6 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                 { ...props }
             />
         </PlotContainer>
-    </>;
+    </div>;
 
 }; // Plotter
