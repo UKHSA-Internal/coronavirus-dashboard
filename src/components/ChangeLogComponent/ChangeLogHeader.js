@@ -10,7 +10,6 @@ import type { ChangeLogInputProps } from "./ChangeLogComponent.types";
 import type { ComponentType } from "react";
 import useGenericAPI from "hooks/useGenericAPI";
 import { useLocation } from "react-router";
-import Path from "assets/paths.json";
 
 
 const DefaultParams = [

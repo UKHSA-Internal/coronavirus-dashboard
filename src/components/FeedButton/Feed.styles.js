@@ -1,12 +1,7 @@
 // @flow
 
-import React from "react";
-
 import styled from 'styled-components';
 import type { ComponentType } from 'react';
-
-
-const col = "#c75e0d";
 
 export const Container: ComponentType<*> =
     styled
