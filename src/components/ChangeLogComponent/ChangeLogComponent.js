@@ -139,7 +139,7 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
             }
         })();
 
-    }, [page, query, date])
+    }, [page, query, date]);
 
     if ( !data.length && !isLoading ) {
         return <PageComponent>
