@@ -12,11 +12,7 @@ import LocationBanner from "components/LocationBanner";
 import { analytics, getParams, getPathAttributes } from "common/utils";
 import { getParamValueFor } from "./utils";
 import { getOrder } from "./GenericHooks";
-import {
-    PathNameMapper,
-    NoPickerPaths,
-    LocationBannerMapper
-} from "./Constants";
+import { LocationBannerMapper } from "./Constants";
 
 import {
     MainContainer,

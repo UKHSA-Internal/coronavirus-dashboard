@@ -1,7 +1,6 @@
 // @flow
 
 import React, { useState } from "react";
-import { SideContent } from "../ChangeLogComponent.styles";
 import { TriangleMarker, TitleButton } from "components/DashboardHeader/DashboardHeader.styles";
 import { TextSearch } from "./TextSearch";
 import { DateSearch } from "./DateSearch";
