@@ -12,7 +12,6 @@ import { Container } from "./InteractiveMap.styles"
 
 import type { ComponentType } from "react";
 import { glAvailable } from "components/Map/utils";
-import { DefaultTag } from "components/Card/Card.styles";
 import { analytics } from "common/utils";
 
 
