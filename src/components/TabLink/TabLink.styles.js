@@ -50,7 +50,7 @@ export const Body: ComponentType<*> =
         .div`
             display: grid;
             grid-auto-columns: auto;
-            ${({ height }) => css`height: ${height ? height : "350px"}`} 
+            ${({ height }) => css`height: ${height ? height : "360px"}`} 
         `;
 
 

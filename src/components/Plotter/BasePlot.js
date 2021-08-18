@@ -414,7 +414,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                     // onLegendItem
                 } }
                 useResizeHandler={ true }
-                style={ { display: "block", height: 350, ...style } }
+                style={ { display: "block", height: 360, ...style } }
                 layout={ {
                     hovermode: "x unified",
                     hoverdistance: 1,
@@ -429,13 +429,13 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                         },
                         xanchor: 'auto',
                         // yanchor: 'auto'
-                        y: -.2
+                        y: -.15
                     },
                     showlegend: true,
                     margin: {
                         l: width === "desktop" ? 45 : 35,
                         r: width === "desktop" ? 10 : 5,
-                        b: 45,
+                        b: 35,
                         t: 5,
                         pad: 0,
                         ...margin

@@ -66,12 +66,11 @@ export const THead: ComponentType<*> =
 export const TableContainer: ComponentType<*> =
     styled
         .div`
-            max-height: 350px;
+            max-height: 360px;
             overflow: auto;
             
             &>table {
                 width: 99%;
-                // font-size: 1.1rem;
                 background-color: transparent !important;
             }
             
