@@ -33,8 +33,7 @@ const
     AnnouncementRecord  = lazy(() => import("pages/Announcements/AnnouncementsRecord")),
     Announcements       = lazy(() => import("pages/Announcements")),
     Footer              = lazy(() => import('components/Footer')),
-    Download            = lazy(() => import('pages/Download')),
-    Banner              = lazy(() => import('components/Banner'));
+    Download            = lazy(() => import('pages/Download'));
 
 
 const LastUpdateTime = () => {
@@ -94,7 +93,6 @@ const App = () => {
         <CookieBanner/>
         <Header layout={ layout }/>
         { layout === "mobile" && <Navigation layout={ layout }/> }
-        <Suspense fallback={ <Loading/> }><Banner/></Suspense>
         <div className={ "govuk-width-container" }>
             <LastUpdateTime/>
             <ErrorBoundary>
