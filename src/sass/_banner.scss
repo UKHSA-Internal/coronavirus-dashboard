@@ -1,0 +1,51 @@
+.banner {
+  background: #FEDE02;
+  @extend .govuk-grid-row;
+  @extend .govuk-\!-padding-top-2 ;
+  @extend .govuk-\!-padding-bottom-2;
+  @extend .govuk-\!-margin-bottom-1;
+  margin-left: unset;
+  margin-right: unset;
+
+  &>.content {
+    @extend .govuk-grid-column-one-half;
+    @extend .govuk-body-s;
+
+    float: none;
+    margin: auto;
+
+    &>.timestamp {
+      @extend .govuk-\!-font-weight-bold;
+      @extend .govuk-\!-margin-bottom-1;
+
+      width: 100%;
+      text-align: center;
+    }
+
+    &>.body {
+      @extend .govuk-\!-padding-left-2;
+      @extend .govuk-\!-padding-right-2;
+      @extend .govuk-body-s;
+      @extend .govuk-\!-margin-bottom-0;
+      display: grid;
+
+      a {
+        @extend .govuk-link;
+        @extend .govuk-\!-font-weight-bold
+      }
+
+      &>p {
+        width: fit-content;
+        justify-self: center;
+      }
+
+      &>p:last-of-type {
+        @extend .govuk-\!-margin-bottom-0;
+      }
+
+      &>p:first-of-type {
+        @extend .govuk-\!-margin-top-0;
+      }
+    }
+  }
+}
