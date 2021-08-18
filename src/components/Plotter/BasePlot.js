@@ -228,6 +228,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                     : "0";
 
             for ( let ind = 0; ind < data.length; ind++ ) {
+
                 if ( data[ind].x[0] < data[ind].x[data[ind].x.length - 1] ) {
                     data[ind].x = data[ind].x.reverse();
                     data[ind].y = data[ind].y.reverse();
@@ -236,11 +237,39 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                         data[ind].z = data[ind].z.map(item => item.reverse());
                 }
 
-                data[ind].x = data[ind].x.filter(v => v >= since);
-                data[ind].y = data[ind].y.slice(0, data[ind].x.length);
 
-                if ( data[ind].hasOwnProperty("z") )
-                    data[ind].z = data[ind].z.map(item => item.slice(0, data[ind].x.length));
+                const lenTs = data[ind].x.filter(v => v >= since).length;
+                const repls = {
+                    x: new Array(lenTs).fill(NaN),
+                    y: new Array(lenTs).fill(NaN)
+                };
+
+                if ( data[ind].hasOwnProperty("z") ) {
+                    repls.z = new Array(data[ind].z.length);
+                    for ( let rowInd = 0; rowInd < data[ind].z.length; rowInd ++ ) {
+                        repls.z[rowInd] = new Array(lenTs).fill(NaN);
+                    }
+                }
+
+                let counter = 0;
+                for ( let valueInd = 0; valueInd < data[ind].x.length; valueInd ++ ) {
+                    if ( data[ind].x[valueInd] >= since ) {
+                        repls.x[counter] = data[ind].x[valueInd];
+                        repls.y[counter] = data[ind].y[valueInd];
+                        if ( data[ind].hasOwnProperty("z") ) {
+                            for ( let rowInd = 0; rowInd < repls.z.length; rowInd ++ ) {
+                                repls.z[rowInd][counter] = data[ind].z[rowInd][valueInd];
+                            }
+                        }
+                        counter ++;
+                    }
+                }
+
+                data[ind].x = repls.x;
+                data[ind].y = repls.y;
+
+                if ( data[ind].hasOwnProperty("z") ) data[ind].z = repls.z;
+
             }
         }
 
@@ -255,7 +284,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
             setDrawData({data, mid, std});
         }
 
-    }, [ isLog, barmode, payload, zoom ]);
+    }, [ isLog, barmode, payload, zoom, isTimeSeries, chartMode ]);
 
 
     if ( chartMode === "percentage" ) labelSuffix += "%";
