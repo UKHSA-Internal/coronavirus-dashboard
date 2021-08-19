@@ -70,7 +70,8 @@ const rangeSelector =  [
     },
 ];
 
-const prepLogData = (data, original, barmode, minVal, maxVal, width) => {
+
+const getAxisAttributes = ({ minVal, maxVal, width }) => {
 
     let ticktext = [
         minVal,
@@ -78,37 +79,8 @@ const prepLogData = (data, original, barmode, minVal, maxVal, width) => {
         maxVal
     ];
 
-    let tickvals;
-
-    if ( barmode === "stack" ) {
-        // Log stack bars:
-        // This is not currently used on the website - but just in case.
-        for ( let itemIndex = 0; itemIndex < data.length; itemIndex ++ ) {
-            data[itemIndex].text = data[itemIndex].y;
-            data[itemIndex].hovertemplate = '%{text:.1f}';
-            data[itemIndex].textposition = 'none';
-        }
-
-        tickvals = ticktext.filter(val => val > 0).map(val => !val ? val : val * ((val >= 0) || -1));
-        ticktext = tickvals.map(val => ticktext.includes(val) ? numeral(val).format("0,0.[0]") : "");
-    }
-
-    for ( let itemIndex = 0; itemIndex < data.length; itemIndex++ ) {
-        data[itemIndex].text = original[itemIndex].y;
-
-        for ( let ind = 0; ind < data[itemIndex].y.length; ind++ ) {
-            const value = data[itemIndex].y?.[ind] ?? 0;
-            data[itemIndex].y[ind] = !value
-                ? NaN
-                : Math.log10(Math.abs(value)) * ((value >= 0) || -1);
-        }
-
-        data[itemIndex].hovertemplate = '%{text:.1f}';
-        data[itemIndex].textposition = 'none';
-    }
-
     // Calculate minor grids
-    tickvals = ticktext.reduce((acc, cur, ind, arr) => {
+    let tickvals = ticktext.reduce((acc, cur, ind, arr) => {
         if ( cur >= -10 && cur <= 10 ) {
             acc.push(cur)
         } else {
@@ -130,7 +102,28 @@ const prepLogData = (data, original, barmode, minVal, maxVal, width) => {
     ticktext = tickvals.map(val => ticktext.includes(val) ? numeral(val).format(tickFormat) : "");
     tickvals = tickvals.map(val => !val ? 1 : Math.log10(Math.abs(val)) * ((val >= 0) || -1));
 
-    return { ticktext, tickvals, data, tickmode: 'array'};
+    return { ticktext, tickvals, tickmode: 'array'};
+
+};  // getAxisAttributes
+
+
+const prepLogData = (data, { original }) => {
+
+    for ( let itemIndex = 0; itemIndex < data.length; itemIndex++ ) {
+        data[itemIndex].text = original[itemIndex].y;
+
+        for ( let ind = 0; ind < data[itemIndex].y.length; ind++ ) {
+            const value = data[itemIndex].y?.[ind] ?? 0;
+            data[itemIndex].y[ind] = !value
+                ? NaN
+                : Math.log10(Math.abs(value)) * ((value >= 0) || -1);
+        }
+
+        data[itemIndex].hovertemplate = '%{text:.1f}';
+        data[itemIndex].textposition = 'none';
+    }
+
+    return data
 
 };  // prepLogData
 
@@ -172,6 +165,160 @@ const getExtrema = ( data, barmode: string, yScale ) => {
 };  // getExtrema
 
 
+export const applyZoom = function (data, { zoomLevel, labelSuffix }) {
+
+    const currentRange = rangeSelector.find(item => item.label === zoomLevel);
+    const since =
+        zoomLevel !== 'all'
+            ? moment()
+                .subtract(currentRange.count, currentRange.step)
+                .format("YYYY-MM-DD")
+            : "0";
+
+    if ( since === "0" ) {
+        return data;
+    }
+
+    for ( let ind = 0; ind < data.length; ind++ ) {
+
+        if ( data[ind].x[0] < data[ind].x[data[ind].x.length - 1] ) {
+            data[ind].x = data[ind].x.reverse();
+            data[ind].y = data[ind].y.reverse();
+
+            if ( data[ind].hasOwnProperty("z") )
+                data[ind].z = data[ind].z.map(item => item.reverse());
+        }
+
+        const lenTs = data[ind].x.filter(v => v >= since).length;
+        const repls = {
+            x: new Array(lenTs).fill(NaN),
+            y: new Array(lenTs).fill(NaN),
+            hovertemplate: new Array(lenTs).fill("")
+        };
+
+        if ( data[ind].hasOwnProperty("z") ) {
+            repls.z = new Array(data[ind].z.length);
+            for ( let rowInd = 0; rowInd < data[ind].z.length; rowInd++ ) {
+                repls.z[rowInd] = new Array(lenTs).fill(NaN);
+            }
+        }
+
+        let counter = 0;
+        for ( let valueInd = 0; valueInd < data[ind].x.length; valueInd++ ) {
+            if ( data[ind].x[valueInd] >= since ) {
+                repls.x[counter] = data[ind].x[valueInd];
+                repls.y[counter] = data[ind].y[valueInd];
+                repls.hovertemplate[counter] = numeral(data[ind].y[valueInd]).format("0,0.[0]") + labelSuffix;
+                if ( data[ind].hasOwnProperty("z") ) {
+                    for ( let rowInd = 0; rowInd < repls.z.length; rowInd++ ) {
+                        repls.z[rowInd][counter] = data[ind].z[rowInd][valueInd];
+                    }
+                }
+                counter++;
+            }
+        }
+
+        data[ind].x = repls.x;
+        data[ind].y = repls.y;
+
+        if ( data[ind].hasOwnProperty("z") ) {
+            data[ind].z = repls.z;
+        }
+        else {
+            data[ind].hovertemplate = repls.hovertemplate;
+        }
+    }
+
+    return data
+
+};  // applyZoom
+
+
+const adjustAxes = (drawData, { payload, labelSuffix, zoom }) => {
+
+    if ( zoom !== "all" ) return drawData;
+
+    for ( let index = 0; index < drawData.data.length; index++ ) {
+
+        if ( !Array.isArray(drawData.data[index]?.hovertemplate) &&
+                drawData.data[index]?.type !== "heatmap" &&
+                drawData.data[index]?.hoverinfo !== "none" ) {
+
+            drawData.data[index].hovertemplate = [];
+
+            let yValues = [...(payload[index].y ?? [])];
+
+            drawData.data[index].hovertemplate = yValues
+                .map(value => numeral(value).format("0,0.[0]") + labelSuffix);
+
+        }
+
+    }
+
+    return drawData
+
+};  // adjustAxes
+
+
+class Data {
+    constructor(data) {
+        this.data = data;
+    }
+
+    pipe(func, kwargs, cond = true) {
+        if ( cond ) {
+            this.data = func(this.data, kwargs)
+        }
+
+        return this
+    }
+} // Data
+
+
+
+export const ZoomButtons: ComponentType<*> = ({ timeSeries, minDate, maxDate, setZoom, zoom }) => {
+
+    if ( !timeSeries ) return null;
+
+    return <Toggle style={ { marginTop: "-25px", position: "relative" } }>
+        {
+            rangeSelector.map(item =>
+                moment(minDate) <= moment(maxDate).subtract(item.count, item.step)
+                    ? <ToggleButton key={ item.label }
+                              className={ "govuk-!-font-size-14" }
+                              onClick={ () => setZoom(item.label) }
+                              active={ zoom === item.label }>
+                        { item.label }
+                    </ToggleButton>
+                    : null
+            )
+        }
+    </Toggle>;
+
+}; // ZoomButtons
+
+
+export const LogButton: ComponentType<*> = ({ noLogScale, barmode, std, mid, chartMode, setIsLog, isLog  }) => {
+
+    if (noLogScale || barmode === "stack" || chartMode === "percentage" || std < mid)
+        return null;
+
+    return <Toggle style={{ marginTop: "-25px", float: "right", position: "relative" }}>
+        <ToggleButton onClick={ () => setIsLog(false) }
+                      className={ "govuk-!-font-size-14" }
+                      active={ isLog === false }>
+            Linear
+        </ToggleButton>
+        <ToggleButton onClick={ () => setIsLog(true) }
+                      className={ "govuk-!-font-size-14" }
+                      active={ isLog === true }>
+            Log
+        </ToggleButton>
+    </Toggle>;
+
+}; // LogButton
+
+
 export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxis = {}, yaxis = {},
                                                   config = {}, margin = {}, style = {},
                                                   isTimeSeries = true, SrOnly = "",
@@ -199,10 +346,10 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
     const isLogScale = (isLog && barmode === "stack") && !noLogScale;
     yAxisRef.ticks = "outside";
-    // Alternatives - Non-log: ",.2r" / mobile: 3s
 
+    // Alternatives - Non-log: ",.2r" / mobile: 3s
     if ( width === "desktop" ) {
-        yAxisRef.tickfont.size = 13;
+        yAxisRef.tickfont.size = 12;
         if ( isLogScale ) {
             yAxisRef.type = "log";
         }
@@ -212,85 +359,31 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
         yAxisRef.ticks = "inside";
     }
 
-    useEffect(() => {
-
-        const {minVal, maxVal, mid, std} = getExtrema(payload, barmode, isLog);
-        let data = cloneDeep(payload);
-
-        // Zoom feature
-        if ( isTimeSeries && chartMode !== "waffle" ) {
-            const currentRange = rangeSelector.find(item => item.label === zoom);
-            const since =
-                zoom !== 'all'
-                    ? moment()
-                        .subtract(currentRange.count, currentRange.step)
-                        .format("YYYY-MM-DD")
-                    : "0";
-
-            for ( let ind = 0; ind < data.length; ind++ ) {
-
-                if ( data[ind].x[0] < data[ind].x[data[ind].x.length - 1] ) {
-                    data[ind].x = data[ind].x.reverse();
-                    data[ind].y = data[ind].y.reverse();
-
-                    if ( data[ind].hasOwnProperty("z") )
-                        data[ind].z = data[ind].z.map(item => item.reverse());
-                }
-
-
-                const lenTs = data[ind].x.filter(v => v >= since).length;
-                const repls = {
-                    x: new Array(lenTs).fill(NaN),
-                    y: new Array(lenTs).fill(NaN)
-                };
-
-                if ( data[ind].hasOwnProperty("z") ) {
-                    repls.z = new Array(data[ind].z.length);
-                    for ( let rowInd = 0; rowInd < data[ind].z.length; rowInd ++ ) {
-                        repls.z[rowInd] = new Array(lenTs).fill(NaN);
-                    }
-                }
-
-                let counter = 0;
-                for ( let valueInd = 0; valueInd < data[ind].x.length; valueInd ++ ) {
-                    if ( data[ind].x[valueInd] >= since ) {
-                        repls.x[counter] = data[ind].x[valueInd];
-                        repls.y[counter] = data[ind].y[valueInd];
-                        if ( data[ind].hasOwnProperty("z") ) {
-                            for ( let rowInd = 0; rowInd < repls.z.length; rowInd ++ ) {
-                                repls.z[rowInd][counter] = data[ind].z[rowInd][valueInd];
-                            }
-                        }
-                        counter ++;
-                    }
-                }
-
-                data[ind].x = repls.x;
-                data[ind].y = repls.y;
-
-                if ( data[ind].hasOwnProperty("z") ) data[ind].z = repls.z;
-
-            }
-        }
-
-        if ( isLog ) {
-            setDrawData({
-                ...prepLogData(data, payload, barmode, minVal, maxVal),
-                mid,
-                std
-            });
-        }
-        else {
-            setDrawData({data, mid, std});
-        }
-
-    }, [ isLog, barmode, payload, zoom, isTimeSeries, chartMode ]);
-
-
     if ( chartMode === "percentage" ) labelSuffix += "%";
 
-    for ( let index = 0; index < drawData.data.length; index++ ) {
+    useEffect(() => {
 
+        const { minVal, maxVal, mid, std } = getExtrema(payload, barmode, isLog);
+
+        let data = new Data(payload)
+            .pipe(cloneDeep)
+            .pipe(applyZoom, { zoomLevel: zoom, labelSuffix }, isTimeSeries && chartMode !== "waffle" )
+            .pipe(prepLogData, { original: payload, barmode, minVal, maxVal, width }, isLog)
+            .data;
+
+        setDrawData(
+            adjustAxes(
+                {
+                    data, mid, std,
+                    ... isLog ? getAxisAttributes({ minVal, maxVal, width }) : {}
+                },
+                { payload, isTimeSeries, chartMode, labelSuffix, zoom }
+            )
+        );
+
+    }, [ isLog, payload, zoom, barmode, width, isLog, labelSuffix, isTimeSeries, chartMode ]);
+
+    for ( let index = 0; index < drawData.data.length; index++ ) {
         if ( "overlaying" in drawData.data[index] ) {
             yAxisRef.rangemode = "tozero";
             layout = {
@@ -307,28 +400,6 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
             margin = { ...margin, r: 50 };
         }
-
-        if ( !Array.isArray(drawData.data[index]?.hovertemplate) &&
-                drawData.data[index]?.type !== "heatmap" &&
-                drawData.data[index]?.hoverinfo !== "none" ) {
-
-            drawData.data[index].hovertemplate = [];
-
-            let yValues = [...(payload[index].y ?? [])];
-
-            if ( payload[index].x[0] < payload[index].x[payload[index].x.length - 1] &&
-                    isTimeSeries &&
-                    chartMode !== "waffle" )
-                yValues = yValues.reverse();
-
-            for ( const value of yValues ) {
-                drawData.data[index].hovertemplate.push(
-                    numeral(value).format("0,0.[0]") + labelSuffix
-                );
-            }
-
-        }
-
     }
 
     useEffect(() => {
@@ -341,6 +412,16 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
         }
     }, [ isLog ]);
 
+    useEffect(() => {
+        if ( isLog ) {
+            analytics({
+                category: "preset-zoom",
+                action: `${zoom}`,
+                label: `${props?.heading} [${document.title}]`,
+            })
+        }
+    }, [ zoom ]);
+
     if ( !drawData.data?.length ) return <Loading/>;
 
     return <div className={ "govuk-!-margin-top-2" }>
@@ -352,41 +433,11 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
         </p>
         <PlotContainer className={ "govuk-grid-row" }
                           aria-label={ "Displaying a graph of the data" }>
-            {
-                isTimeSeries
-                    ? <Toggle style={ { marginTop: "-25px", position: "relative" } }>
-                        {
-                            rangeSelector.map(item =>
-                                moment(minDate) <= moment(maxDate).subtract(item.count, item.step)
-                                    ? <ToggleButton key={ item.label }
-                                              className={ "govuk-!-font-size-14" }
-                                              onClick={ () => setZoom(item.label) }
-                                              active={ zoom === item.label }>
-                                        { item.label }
-                                    </ToggleButton>
-                                    : null
-                            )
-                        }
-                    </Toggle>
-                    : null
-            }
-            {
-                noLogScale || barmode === "stack" ||
-                props?.chartMode === "percentage" || drawData.std < drawData.mid
-                    ? null
-                    : <Toggle style={{ marginTop: "-25px", float: "right", position: "relative" }}>
-                        <ToggleButton onClick={ () => setIsLog(false) }
-                                      className={ "govuk-!-font-size-14" }
-                                      active={ isLog === false }>
-                            Linear
-                        </ToggleButton>
-                        <ToggleButton onClick={ () => setIsLog(true) }
-                                      className={ "govuk-!-font-size-14" }
-                                      active={ isLog === true }>
-                            Log
-                        </ToggleButton>
-                    </Toggle>
-            }
+            <ZoomButtons timeSeries={ isTimeSeries } minDate={ minDate }
+                         maxDate={ maxDate } zoom={ zoom } setZoom={ setZoom }/>
+            <LogButton noLogScale={ noLogScale } barmode={ barmode }
+                       setIsLog={ setIsLog } isLog={ isLog }
+                       { ...props } { ...drawData }/>
             <Plot
                 ariaHidden={ "true" }
                 data={ drawData.data }
@@ -395,6 +446,8 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                     // responsive: true,
                     displaylogo: false,
                     // displayModeBar: true,
+                    staticPlot: width !== "desktop",
+                    // modeBarButtonsToAdd: ["drawline", "eraseshape"],
                     modeBarButtonsToRemove: [
                         "autoScale2d",
                         "toggleSpikelines",
@@ -402,6 +455,9 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                         "pan2d",
                         "select2d",
                         "lasso2d",
+                        "zoomIn2d",
+                        "zoomOut2d",
+                        ...width === "desktop" ? []: ["zoom"]
                     ],
                     toImageButtonOptions: {
                         format: 'png',
@@ -429,7 +485,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                         },
                         xanchor: 'auto',
                         // yanchor: 'auto'
-                        y: -.15
+                        y: -.2
                     },
                     showlegend: true,
                     margin: {
