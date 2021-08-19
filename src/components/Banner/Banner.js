@@ -2,10 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-import { useLocation } from "react-router";
-
 import useGenericAPI from "hooks/useGenericAPI";
-import useTimestamp from "hooks/useTimestamp";
 
 import html from "remark-html";
 import remark from "remark";
