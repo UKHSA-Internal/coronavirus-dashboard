@@ -33,7 +33,8 @@ const
     AnnouncementRecord  = lazy(() => import("pages/Announcements/AnnouncementsRecord")),
     Announcements       = lazy(() => import("pages/Announcements")),
     Footer              = lazy(() => import('components/Footer')),
-    Download            = lazy(() => import('pages/Download'));
+    Download            = lazy(() => import('pages/Download')),
+    GenericApiDocs       = lazy(() => import('pages/GenericApiDocs'));
 
 
 const LastUpdateTime = () => {
@@ -131,6 +132,7 @@ const App = () => {
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
                                 <Route path="/details/developers-guide" exact component={ ApiDocs }/>
+                                <Route path="/details/api-docs" exact component={ GenericApiDocs }/>
                                 <Route path={ "/:page" } component={ RedirectToDetails }/>
                             </Switch>
                         </Suspense>

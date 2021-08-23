@@ -88,6 +88,12 @@
     "localised": false,
     "hasLog": false
   },
+  "/details/api-docs": {
+    "title": "Generic API Docs",
+    "description": "Documentation of the generic APIs.",
+    "localised": false,
+    "hasLog": false
+  },
   "/details/": {},
   "/details": {}
 }
