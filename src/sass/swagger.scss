@@ -1,0 +1,16 @@
+.swagger-ui {
+  &>* {
+    margin: 1rem;
+  }
+
+  & .wrapper {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin: 0 !important;
+  }
+
+  & .scheme-container {
+    padding-top: 0 !important;
+    box-shadow: none !important;
+  }
+}
