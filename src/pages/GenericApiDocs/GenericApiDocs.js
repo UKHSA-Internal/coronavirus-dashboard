@@ -1,11 +1,20 @@
-import React, { Component } from 'react';
+// @flow
+
+import React from 'react';
 import SwaggerUI from "swagger-ui-react";
+
+import URLs from "common/urls";
+
+import type { GenericApiDocsProps } from './GenericApiDocs.types';
+import type { ComponentType } from "react";
+
 import "swagger-ui-react/swagger-ui.css";
 
-function GenericApiDocs() {
-    return <>
-            <SwaggerUI url="https://raw.githubusercontent.com/publichealthengland/coronavirus-dashboard-generic-apis/development/assets/openapi.json" />
-        </>   
-};
+
+const GenericApiDocs: ComponentType<GenericApiDocsProps> = ({}) => {
+
+    return <SwaggerUI url={ URLs.genericApiOpenApi } />;
+
+} ;
 
 export default GenericApiDocs;
