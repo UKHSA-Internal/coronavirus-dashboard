@@ -33,3 +33,11 @@ svg.back-to-top {
   display: flex;
   margin: .5rem 1rem;
 }
+
+.govuk-list--dashed {
+  & > li::before {
+    content: "\2014";
+    margin-right: 0.5rem;
+    color: #7f7f7f;
+  }
+}
