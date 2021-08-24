@@ -26,14 +26,14 @@ const
     About               = lazy(() => import('pages/About')),
     Accessibility       = lazy(() => import('pages/Accessibility')),
     Cookies             = lazy(() => import('pages/Cookies')),
-    ApiDocs             = lazy(() => import('pages/ApiDocs')),
     InteractiveMap      = lazy(() => import("pages/InteractiveMap")),
     WhatsNew            = lazy(() => import("pages/WhatsNew")),
     ChangeLogRecord     = lazy(() => import("pages/WhatsNew/ChangeLogRecord")),
     AnnouncementRecord  = lazy(() => import("pages/Announcements/AnnouncementsRecord")),
     Announcements       = lazy(() => import("pages/Announcements")),
     Footer              = lazy(() => import('components/Footer')),
-    Download            = lazy(() => import('pages/Download'));
+    Download            = lazy(() => import('pages/Download')),
+    DeveloperGuide      = lazy(() => import('pages/DevelopersGuide'));
 
 
 const LastUpdateTime = () => {
@@ -130,7 +130,7 @@ const App = () => {
                                 {/*<Route path="/archive" component={ Archive }/>*/}
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
-                                <Route path="/details/developers-guide" exact component={ ApiDocs }/>
+                                <Route path="/details/developers-guide" component={ DeveloperGuide }/>
                                 <Route path={ "/:page" } component={ RedirectToDetails }/>
                             </Switch>
                         </Suspense>

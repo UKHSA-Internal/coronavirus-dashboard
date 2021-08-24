@@ -71,7 +71,7 @@
     "hasLog": false
   },
   "/details/developers-guide": {
-    "title": "Developers guide - APIv1",
+    "title": "Developers guide",
     "description": "Documentations and guidance for developers on how to use the API.",
     "localised": false,
     "hasLog": false
@@ -85,6 +85,18 @@
   "/details/accessibility": {
     "title": "Accessibility",
     "description": "Information on the accessibility of the service.",
+    "localised": false,
+    "hasLog": false
+  },
+  "/details/developers-guide/generic-api": {
+    "title": "Generic API Documentation",
+    "description": "Documentation of the generic APIs.",
+    "localised": false,
+    "hasLog": false
+  },
+    "/details/developers-guide/main-api": {
+    "title": "Open Data API Documentation",
+    "description": "Documentation of the generic APIs.",
     "localised": false,
     "hasLog": false
   },
