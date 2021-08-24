@@ -2,11 +2,13 @@
 
 import React, { lazy, Suspense } from "react";
 
-import { ComponentType } from "react";
 import { Link } from "react-router-dom";
 import { Route, Switch, useLocation } from "react-router";
 import Loading from "components/Loading";
 import { Content } from "./DevelopersGuide.styles";
+
+import type { ComponentType } from "react";
+
 
 const
     ApiDocs        = lazy(() => import('pages/ApiDocs')),
