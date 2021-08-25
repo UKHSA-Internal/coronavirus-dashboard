@@ -445,8 +445,6 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                     showLink: false,
                     // responsive: true,
                     displaylogo: false,
-                    // displayModeBar: true,
-                    staticPlot: width !== "desktop",
                     // modeBarButtonsToAdd: ["drawline", "eraseshape"],
                     modeBarButtonsToRemove: [
                         "autoScale2d",
@@ -500,8 +498,6 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                         showgrid: false,
                         zeroline: false,
                         showline: false,
-                        // fixedrange: width !== "desktop",
-                        fixedrange: false,
                         tickslen: 10,
                         ticks: "outside",
                         tickson: "boundaries",
@@ -515,13 +511,15 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                         },
                         // rangeslider: {range: ['20202-01-01', new Date().toString()]},
                         ...xaxis,
+                        fixedrange: width !== "desktop"
                     },
                     yaxis: {
                         tickmode: drawData?.tickmode,
                         tickvals: drawData?.tickvals,
                         ticktext: drawData?.ticktext,
                         ...yAxisRef,
-                        ...yaxis
+                        ...yaxis,
+                        fixedrange: width !== "desktop"
                     },
                     plot_bgcolor: "rgba(231,231,231,0)",
                     paper_bgcolor: "rgba(255,255,255,0)",
