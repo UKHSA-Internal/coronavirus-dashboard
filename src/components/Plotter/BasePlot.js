@@ -229,7 +229,7 @@ export const applyZoom = function (data, { zoomLevel, labelSuffix }) {
         }
     }
 
-    return data
+    return data;
 
 };  // applyZoom
 
@@ -255,7 +255,7 @@ const adjustAxes = (drawData, { payload, labelSuffix, zoom }) => {
 
     }
 
-    return drawData
+    return drawData;
 
 };  // adjustAxes
 
