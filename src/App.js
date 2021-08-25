@@ -33,6 +33,7 @@ const
     Announcements       = lazy(() => import("pages/Announcements")),
     Footer              = lazy(() => import('components/Footer')),
     Download            = lazy(() => import('pages/Download')),
+    MetricDocs          = lazy(() => import('pages/MetricDocs')),
     DeveloperGuide      = lazy(() => import('pages/DevelopersGuide'));
 
 
