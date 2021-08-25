@@ -373,8 +373,6 @@ export const isIE = () => {
 
 };
 
-export const analytics = ({ action, category: event_category, label: event_label, value: event_value, ...props }): void => {
-
 export const capitalise = (str: string): string => {
 
     return str.substring(0, 1).toUpperCase() + str.substring(1)
@@ -382,7 +380,7 @@ export const capitalise = (str: string): string => {
 };  // capitalise
 
 
-export const analytics = ({ category, action, label, value }): void => {
+export const analytics = ({ action, category: event_category, label: event_label, value: event_value, ...props }): void => {
 
     try {
         window.gtag('event', action, { event_category, event_label, event_value, ...props });
