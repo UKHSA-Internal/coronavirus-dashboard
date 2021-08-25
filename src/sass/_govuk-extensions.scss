@@ -33,3 +33,30 @@ svg.back-to-top {
   display: flex;
   margin: .5rem 1rem;
 }
+
+.govuk-list--dashed {
+  & > li::before {
+    content: "\2014";
+    margin-right: 0.5rem;
+    color: #7f7f7f;
+  }
+}
+
+dl.metrics {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: initial;
+
+  & > dt {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  & > dd {
+    display: block;
+    justify-self: stretch;
+    max-width: initial;
+    width: initial;
+    margin-bottom: 2rem;
+  }
+}

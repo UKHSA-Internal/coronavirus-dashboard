@@ -8,21 +8,27 @@ import { VaccinationsMap } from "./VaccinationsMap";
 import { Switch, Route } from "react-router";
 import { Link } from "react-router-dom";
 
-import { MainContainer, Container } from "./InteractiveMap.styles"
+import { Container } from "./InteractiveMap.styles"
 
 import type { ComponentType } from "react";
 import { glAvailable } from "components/Map/utils";
-import { DefaultTag } from "components/Card/Card.styles";
+import { analytics } from "common/utils";
 
 
 const NoWebGL: ComponentType<*> = ({ ...props }) => {
+
+    analytics({
+        action: "FAILURE",
+        category: "map",
+        label: "NoWebGL"
+    });
 
     return <Container { ...props }>
         <div>
             You must have WebGL installed and enabled on your browser to use the
             interactive map.
         </div>
-    </Container>
+    </Container>;
 
 };  // SectionHeader
 
@@ -46,7 +52,7 @@ const InteractiveMap: ComponentType<*> = () => {
                 <Link to={ "/details/interactive-map/vaccinations" }
                      aria-label={ "vaccinations-map-container" }
                      className={ `${ pathname.indexOf("vaccinations") > -1 ? 'active govuk-!-font-weight-bold' : '' } map-tab` }>
-                    Vaccinations <DefaultTag className={ "govuk-tag" } style={{ marginLeft: "4px" }}>BETA</DefaultTag>
+                    Vaccinations
                 </Link>
             </span>
         </div>
@@ -87,7 +93,7 @@ const InteractiveMap: ComponentType<*> = () => {
                     <li className={ "govuk-!-margin-bottom-1" }>Contains MSOA names &copy; Open Parliament copyright and database right 2020</li>
                     <li className={ "govuk-!-margin-bottom-1" }>Contains Ordnance Survey data &copy; Crown copyright and database right 2020</li>
                     <li className={ "govuk-!-margin-bottom-1" }>Contains Royal Mail data &copy; Royal Mail copyright and database right 2020</li>
-                    <li className={ "govuk-!-margin-bottom-1" }>Contains Public Health England data &copy; Crown copyright and database right 2020&ndash;2021</li>
+                    <li className={ "govuk-!-margin-bottom-1" }>Contains Public Health England data &copy; Crown copyright and database right 2020&ndash;{ new Date().getFullYear() }</li>
                     <li>Office for National Statistics licensed under the Open Government Licence v.3.0</li>
                 </ul>
 

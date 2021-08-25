@@ -23,7 +23,7 @@ const URLs = {
     lookups:         `https://${ REACT_APP_MAIN_CDN      }/public/assets/lookups/`,
     lookupApi:       `https://${ REACT_APP_API_ENDPOINT  }/v1/lookup`,
     pageLayoutsBase: `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/`,
-    banner:          `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/banner.json`,
+    banner:          `https://${ REACT_APP_API_ENDPOINT }/generic/announcements/latest`,
     mainApi:         `https://${ REACT_APP_API_ENDPOINT  }/v1/data`,
     soaApi:          `https://${ REACT_APP_API_ENDPOINT  }/v1/soa`,
     modals:          `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/`,
@@ -47,7 +47,6 @@ const URLs = {
     downloadData:                           `https://${ REACT_APP_API_ENDPOINT  }/v2/data`,
     supplementaryDownloads:                 `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/downloads.json`,
     msoaData:                               `https://${ REACT_APP_MAIN_CDN      }/public/assets/dispatch/region2la2msoa.json`,
-    changeLogData:                          `https://${ REACT_APP_MAIN_CDN      }/public/assets/cms/changeLog.json`,
     permalinkDownloadData:                  `https://${ REACT_APP_USER_API_ENDPOINT  }/v2/data`,
     genericApiPageArea:                     `https://${ REACT_APP_API_ENDPOINT }/generic/page_areas/{page}`,
     genericApiPageAreaWithType:             `https://${ REACT_APP_API_ENDPOINT }/generic/page_areas/{page}/{area_type}`,
@@ -62,6 +61,15 @@ const URLs = {
     mapUtlaRef:                             `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/maps/utla-ref.geojson`,
     mapLtlaRef:                             `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/maps/ltla-ref.geojson`,
     mapMsoaRef:                             `https://${ REACT_APP_DOWNLOADS_CDN }/downloads/maps/msoa-ref.geojson`,
+    genericApiChangeLogs:                   `https://${ REACT_APP_API_ENDPOINT }/generic/change_logs`,
+    genericApiChangeLogsRecord:             `https://${ REACT_APP_API_ENDPOINT }/generic/change_logs/log/{id}`,
+    genericApiAnnouncementsRecord:          `https://${ REACT_APP_API_ENDPOINT }/generic/announcements/{id}`,
+    genericApiAnnouncements:                `https://${ REACT_APP_API_ENDPOINT }/generic/announcements`,
+    genericApiChangeLogsComponent:          `https://${ REACT_APP_API_ENDPOINT }/generic/change_logs/components/{component}`,
+    genericApiDatedChangeLogs:              `https://${ REACT_APP_API_ENDPOINT }/generic/change_logs/{date}`,
+    genericApiLogBanners:                   `https://${ REACT_APP_API_ENDPOINT }/generic/log_banners/{date}/{page}/{area_type}/{area_name}`,
+    genericApiOpenApi:                      `https://${ REACT_APP_API_ENDPOINT }/generic/openapi.json`,
+    genericApiMetrics:                      `https://${ REACT_APP_API_ENDPOINT }/generic/metrics`,
 };
 
 URLs.pageLayouts = {

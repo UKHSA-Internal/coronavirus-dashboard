@@ -8,16 +8,15 @@ import type { ComponentType } from 'react';
 export const MobileNavWrapper: ComponentType<*> = (() => {
   return styled.div`
     position: relative;
-    margin-top: 12px;
-    margin-bottom: -12px;
+    top: 5px;
   `;
 })();
 
 export const MobileNavTogglerWrapper: ComponentType<*> = (() => {
   return styled.div`
-    position: absolute;
+    position: relative;
     top: -80px;
-    right: 12px;
+    right: 10px;
   `;
 })();
 
@@ -45,15 +44,18 @@ export const MobileNavToggler: ComponentType<*> =
               position: absolute;
               display: inline-block;
               background: transparent;
-              color: black;
               border: 2px solid white;
               right: -4px;
               width: max-content !important;
               padding: .3rem .5rem;
             }
             
+            &:focus {
+                color: black;
+            }
+            
             @media only screen and (max-width: 528px) {
-                top: -5px
+                top: -5px;
             }
             @media only screen and (min-width: 528px) {
                 top: 25px !important;

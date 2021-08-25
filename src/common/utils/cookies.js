@@ -14,10 +14,13 @@ export const setCookies = () => {
             'config',
             'UA-161400643-2',
             {
-                'anonymize_ip': true,
-                'allowAdFeatures': false
+                anonymize_ip: true,
+                allowAdFeatures: false,
+                send_page_view: false,
             }
         );
+
+        window.gtag = window?.gtag || gtag;
         window.ga('create', 'UA-145652997-1', 'auto', 'govuk_shared', { 'allowLinker': true });
         window.ga('govuk_shared.require', 'linker');
         window.ga('govuk_shared.set', 'anonymizeIp', true);

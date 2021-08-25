@@ -1,9 +1,10 @@
 import moment from "moment";
 import { max, min, group } from "d3-array";
 
-import type { ParsedParams, URLParams } from "./utils.types";
+import type { ParsedParams } from "./utils.types";
 import type { RGB } from "components/MapTable/MapTable.types";
 import { generateUrl } from "hooks/useApi";
+import Path from "assets/paths.json";
 
 
 export const sort = (a, b) => {
@@ -47,6 +48,19 @@ export const dateRange = (startDate: string, stopDate: string, step: number = 1,
     return dateArray;
 
 }; // getDates
+
+
+export const getPathAttributes = ( pathname: string ) => {
+
+    for ( const path in Path ) {
+        if ( Path.hasOwnProperty(path) && pathname.startsWith(path) ) {
+            return Path[path];
+        }
+    }
+
+    return {};
+
+};  // getPathStatus
 
 
 export const fillDateGaps = (data: Array<any>, defaultValue: number = 0): Array<any> => {
@@ -359,6 +373,7 @@ export const isIE = () => {
 
 };
 
+export const analytics = ({ action, category: event_category, label: event_label, value: event_value, ...props }): void => {
 
 export const capitalise = (str: string): string => {
 
@@ -369,10 +384,12 @@ export const capitalise = (str: string): string => {
 
 export const analytics = ({ category, action, label, value }): void => {
 
-    if ( "gtag" in window ) {
-        try {
-            window.gtag('event', category, { action, label, value })
-        } catch {}
+    try {
+        window.gtag('event', action, { event_category, event_label, event_value, ...props });
+    } catch (e) {
+        console.group("Analytics")
+        console.warn(e);
+        console.groupEnd()
     }
 
 };  // analytics

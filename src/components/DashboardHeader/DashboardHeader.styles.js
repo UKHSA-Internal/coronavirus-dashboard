@@ -1,12 +1,7 @@
 // @flow
 
-import React from "react";
-
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import type { ComponentType } from 'react';
-
-import CarretUp from "assets/caret-up.svg";
-import CarretDown from "assets/caret-down.svg";
 
 
 export const MainContainer: ComponentType<*> =
@@ -15,22 +10,18 @@ export const MainContainer: ComponentType<*> =
         .attrs(({ className="", ...props }) => ({
             className: `sticky-header govuk-!-padding-top-3 ${className}`,
             ...props
-        }))
-        `
+        }))`
           background-color: rgba(255, 255, 255, 0.95);
           z-index: 999999;
         `;
 
 
-
-export const HeaderContainer: ComponentType<*> = (() => {
-
-    return styled.div`
-        display: flex;
-        justify-content: space-between;
-    `;
-
-})();
+export const HeaderContainer: ComponentType<*> =
+    styled
+        .div`
+            display: flex;
+            justify-content: space-between;
+        `;
 
 
 export const TitleButton: ComponentType<*> =
@@ -41,9 +32,8 @@ export const TitleButton: ComponentType<*> =
             htmlType: 'button',
             'aria-label': 'Click to change location'
         }))` 
-            display: a;
+            display: inline-flex;
             cursor: pointer;
-            background: url("${ CarretDown }");
             background-repeat: no-repeat;
             background-size: 20px 20px;
             padding-right: 20px;
@@ -52,123 +42,80 @@ export const TitleButton: ComponentType<*> =
             background-position: center right;
             color: #1d70b8;
             text-decoration: none;
-            
-            &.open {
-            background: url("${ CarretUp }");
-                background-repeat: no-repeat;
-                background-size: 20px 20px;
-                padding-right: 20px;
-                padding-left: 0;
-                margin-left: 0;
-                background-position: center right;
+            align-items: center;
+            &:hover, 
+            &:active {
+                color: #003078
             }
-        `
+        `;
 
 
 export const Title: ComponentType<*> =
     styled
         .h1
         .attrs(({ className }) => ({
-            className: `govuk-caption-l govuk-!-margin-0 ${ className }`
-        }))``;
-    // <h1 className={  }>
-    //         { pageName }
-    //         {
-    //             hasPicker
-    //                 ? <>&nbsp;<Node htmlType={ "button" }
-    //                                 role={ "button" }
-    //                                 className={ className }
-    //                                 { ...props }/>
-    //                 </>
-    //                 : null
-    //         }
-    //     </h1>
+            className: `govuk-heading-m govuk-!-margin-0 ${ className }`
+        }))`
+            font-size: 1.65rem;
+            @media only screen and (max-width: 768px) {
+                font-size: 1.15rem;
+            }
+        `;
 
 
-//     (() => {
-//
-//     return ({ pageName, className, hasPicker, ...props }) =>
-//
-//
-// })();
+export const CurrentLocation: ComponentType<*> =
+    styled
+        .span`
+          font-weight: normal;
+        `;
 
 
-export const CurrentLocation: ComponentType<*> = (() => {
-
-    return styled.span`
-      font-weight: normal;
-    `
-
-})();
-
-
-export const CollapsibleLinkContainer: ComponentType<*> = (() => {
-  return styled.div`
-  display: flex;
-  flex-wrap: wrap;
-
-  // justify-self: space-between;
-  `
-})();
+export const CollapsibleLinkContainer: ComponentType<*> =
+  styled
+      .div`
+          display: flex;
+          flex-wrap: wrap;
+      `;
 
 
-export const CollapsibleLink: ComponentType<*> = (() => {
-  const
-    Node = styled.button`
-      cursor: pointer;
-      font-weight: bold;
-      outline: none;
-      color: #1d70b8;
-      justify-self: flex-end;
-      
-      &::before {
-        padding-right: 4px;
-      }
-      
-      &.closed::before {
-        content: "►";
-      }
-
-      &.opened::before {
-        content: "▼";
-      }
-    `;
-
-  return ({ className="", ...props }) =>
-    <Node className={ `govuk-body-s govuk-body govuk-!-margin-bottom-0 ${ className }` }
-          htmlType={ "button" }
-          { ...props }/>
-})();
-
-
-export const LocationPickerContainer: ComponentType<*> = (() => {
-
-    return styled.div`
-        width: 100%;
-        justify-self: stretch;
-    `
-
-})()
+export const TriangleMarker: ComponentType<*> =
+    styled
+        .div
+        .attrs(({ ...props }) => ({
+            "aria-hidden": true,
+            ...props
+        }))`
+            width: 0; 
+            height: 0; 
+            border-top: 7px solid transparent; 
+            border-right: 10px solid; 
+            border-bottom: 7px solid transparent;
+            margin-top: 5px;
+            margin-left: .3rem;
+            &:hover, 
+            &:active {
+                color: #003078
+            }
+            ${css`${({ direction, active, focused }) => ({ 
+                transform: 
+                    direction === "up" 
+                        ? "rotate(90deg)"
+                        : direction === "down"
+                        ? "rotate(-90deg)"
+                        : direction === "right"
+                        ? "rotate(180deg)"
+                        : "rotate(0)"
+            })}`}
+        `;
 
 
-export const SectionBreak = ({ className, ...props }) => (
-  <hr className={ `govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible ${className}` } { ...props }/>
-);
-
-
-export const Select: ComponentType<*> = (() => {
-
-  const Node = styled.select`
-    width: 100%;
-  `;
-
-  return ({ ...props }) =>
-      <div className={ "govuk-grid-column-one-quarter" }>
-        <div className={ "govuk-form-group govuk-!-margin-bottom-0" }>
-          <Node { ...props }/>
-        </div>
-      </div>
-})();
+export const SectionBreak: ComponentType<*> =
+    styled
+        .hr
+        .attrs(({ className="", ...props }) => ({
+           className: `govuk-section-break govuk-section-break--m govuk-!-margin-top-2 govuk-!-margin-bottom-0 govuk-section-break--visible ${className}`,
+           ...props
+       }))``;
 
 
 export const LocalisationForm = styled.form`

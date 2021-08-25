@@ -11,11 +11,7 @@ import {
     MapContainer, PostcodeSearchForm,
     ZoomButton, ZoomControlContainer
 } from "./VaccinationsMap.styles";
-import {
-    LegendContainer, ScaleColor,
-    ScaleGroup, ScaleLegend,
-    ScaleLegendLabel, ScaleValue
-} from "pages/InteractiveMap/InteractiveMap.styles";
+import { Legend } from "./Legend";
 import bbox from "@turf/bbox";
 import axios from "axios";
 import MapMarker from "assets/icon-mapmarker.svg";
@@ -24,10 +20,11 @@ import usePrevious from "hooks/usePrevious";
 import { MapComponent } from "./MapComponent";
 import type { ComponentType } from "react";
 import * as constants from "./constants";
-import { LocalAuthorityCard, SoaCard } from "./InfoCard";
 import deepEqual from "deep-equal";
 import useGenericAPI from "hooks/useGenericAPI";
 import { DateStamp } from "./InfoCard/DateStamp";
+import InfoCard from "./InfoCard";
+import { MapLayers } from "./constants";
 
 
 
@@ -44,11 +41,12 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
         [zoomLayerIndex, setZoomLayerIndex] = useState(0),
         prevAreaType = usePrevious(currentLocation.areaType),
         rawTimestamp = useTimestamp(),
-        geoData = useGenericAPI("mapVaccinationData", null);
+        geoData = useGenericAPI("mapVaccinationData", null),
+        [ hoverState, setHoverSate ] = useState({}),
+        prevHoverState = usePrevious(hoverState),
+        [ mapHasLoaded, setMapHasLoaded ] = useState([false, false]);
 
     let timestamp;
-
-    let hoveredStateId = null;
 
     useEffect(() => {
         timestamp = rawTimestamp.split("T")[0];
@@ -92,12 +90,11 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
 
         if ( conditions.every(item => item) ) {
 
-            for ( let mapIndex = 0; mapIndex < map.length; mapIndex ++ ) {
+            for ( let mapIndex = 0; mapIndex < map.length; mapIndex++ ) {
 
                 const mapInstance = map[mapIndex];
                 const otherMap = (mapIndex === 0 ? map[1] : map[0]);
                 // mapInstance.fitBounds([50.5, -14.5, 58.8, 10], {}, {source: 'fitBounds'})
-
 
                 mapInstance.once("style.load", function () {
 
@@ -106,7 +103,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                         data: geoData
                     });
 
-                    constants.MapLayers.map(layer => {
+                    for ( const layer of MapLayers ) {
                         mapInstance.addSource(`geo-${ layer.label }`, {
                             type: 'geojson',
                             data: URLs[layer.outline],
@@ -114,9 +111,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                             tolerance: layer.tolerance,
                             maxzoom: layer.maxZoom
                         });
-                    });
 
-                    constants.MapLayers.map(layer => {
                         mapInstance.addLayer({
                             'id': layer.label,
                             'type': 'line',
@@ -174,56 +169,26 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
 
                         mapInstance.on('click', `${ layer.label }-click`, function (e) {
 
-                            setCurrentLocation(prev => ({
-                                ...prev,
-                                currentLocation: e.features[0].properties.code
-                            }));
-                            setShowInfo(true);
-
                             const outlineId = mapInstance
                                 .queryRenderedFeatures({ layers: [layer.label] })
                                 .find(item => item.properties.code === e.features[0].properties.code)
                                 .id;
 
-                            if ( hoveredStateId?.id ) {
-                                mapInstance.setFeatureState(
-                                    { source: `geo-${ hoveredStateId.location }`, id: hoveredStateId.id },
-                                    { hover: false }
-                                );
-                                otherMap.setFeatureState(
-                                    { source: `geo-${ hoveredStateId.location }`, id: hoveredStateId.id },
-                                    { hover: false }
-                                );
-                            }
-
-                            hoveredStateId = {
+                            const newState = {
                                 id: outlineId,
-                                location: layer.label
+                                location: layer.label,
+                                features: e.features[0],
+                                layer: layer.label,
+                                mapInstanceIndex: mapIndex
                             };
 
-                            mapInstance.setFeatureState(
-                                { source: `geo-${ hoveredStateId.location }`, id: hoveredStateId.id },
-                                { hover: true }
-                            );
-                            otherMap.setFeatureState(
-                                { source: `geo-${ hoveredStateId.location }`, id: hoveredStateId.id },
-                                { hover: true }
-                            );
-
-                            mapInstance.fitBounds(bbox(e.features[0]), {
-                                padding: 20,
-                                maxZoom: Math.max(mapInstance.getLayer(layer.label).minzoom + 0.5, mapInstance.getZoom())
-                            });
-                            otherMap.fitBounds(bbox(e.features[0]), {
-                                padding: 20,
-                                maxZoom: Math.max(otherMap.getLayer(layer.label).minzoom + 0.5, otherMap.getZoom())
-                            });
+                            if ( !deepEqual(prevHoverState, newState) ) setHoverSate(newState);
 
                         });
 
-                    });
+                    }
 
-                    mapInstance.on('move',  () => {
+                    mapInstance.on('move', () => {
                         const centre = mapInstance.getCenter();
                         const otherCentre = otherMap.getCenter();
 
@@ -262,11 +227,56 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                     mapInstance.touchZoomRotate.disableRotation();
                     mapInstance.touchZoomRotate.disableRotation();
 
-                })
+                    setMapHasLoaded(prev => {
+                        prev[mapIndex] = true;
+                        return prev
+                    });
+
+                });
+            }
+        }
+    }, [ map.length ]);
+
+    useEffect(() => {
+
+        if ( !map || !mapHasLoaded.every(v => v) || !hoverState?.id ) return;
+
+        // The following iterations must be defined separately
+        // so that the two maps change state simultaneously.
+        // If combined, one moves before the other.
+        for ( const mapInstance of map ) {
+            if ( prevHoverState?.id ) {
+                mapInstance.setFeatureState(
+                    { source: `geo-${ prevHoverState.location }`, id: prevHoverState.id },
+                    { hover: false }
+                );
             }
         }
 
-    }, [ map.length ]);
+        for ( const mapInstance of map ) {
+            mapInstance.setFeatureState(
+                { source: `geo-${ hoverState.location }`, id: hoverState.id },
+                { hover: true }
+            );
+
+            mapInstance.fitBounds(bbox(hoverState.features), {
+                padding: 20,
+                maxZoom: Math.max(
+                    mapInstance.getLayer(hoverState.layer).minzoom + 0.5,
+                    mapInstance.getZoom()
+                )
+            });
+
+        }
+
+        setCurrentLocation(prev => ({
+            ...prev,
+            currentLocation: hoverState.features.properties.code
+        }));
+
+        setShowInfo(true);
+
+    }, [ map, hoverState.id, hoverState.layer, prevHoverState, mapHasLoaded ]);
 
 
     useEffect(() => {
@@ -376,60 +386,13 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                     <ZoomButton onClick={ zoomIn }>+<span className={"govuk-visually-hidden" }>Zoom in</span></ZoomButton>
                     <ZoomButton onClick={ zoomOut }>&ndash;<span className={"govuk-visually-hidden" }>Zoom out</span></ZoomButton>
                 </ZoomControlContainer>
-                <LegendContainer>
-                    <ScaleLegend>
-                        <ScaleLegendLabel>Percentage adults<br/>vaccinated</ScaleLegendLabel>
-                        <ScaleGroup>
-                            <ScaleColor style={{ background: "#fff" }}/>
-                            <ScaleValue>{
-                                "Data missing"
-                            }</ScaleValue>
-                        </ScaleGroup>
-                        {
-
-                            constants.bucketsFirst.map( (item, index) => {
-                                const firstValue = constants.bucketsFirst?.[index - 2] ?? 0;
-                                if ( index % 2 > 0 ) {
-                                    return <ScaleGroup key={ `legend-${index}` }>
-                                        <ScaleColor style={ { background: constants.bucketsFirst?.[index - 1] ?? 0 } }/>
-                                        <ScaleValue>
-                                            {
-                                                firstValue === 0
-                                                    ? 0
-                                                    : firstValue
-                                            }
-                                            &nbsp;&ndash;&nbsp;
-                                            { constants.bucketsFirst?.[index] - 1 ?? "+" }
-                                        </ScaleValue>
-                                    </ScaleGroup>
-                                }
-                            })
-                        }
-                        <ScaleGroup>
-                            <ScaleColor style={ { background: constants.bucketsFirst.slice(-1) } }/>
-                            <ScaleValue>
-                                { constants.bucketsFirst.slice(-2, -1)[0] }&nbsp;+
-                            </ScaleValue>
-                        </ScaleGroup>
-                    </ScaleLegend>
-                </LegendContainer>
+                <Legend/>
             {
                 (currentLocation.areaType !== prevAreaType || !showInfo)
                     ? null
-                    : currentLocation.areaType !== "msoa"
-                    ? <LocalAuthorityCard { ...currentLocation } date={ timestamp } setShowInfo={ setShowInfo }/>
-                    : <SoaCard { ...currentLocation }
-                               date={ timestamp }
-                               postcodeData={ postcodeData }
-                               setShowInfo={ setShowInfo }/>
+                    : <InfoCard data={ geoData } { ...currentLocation } setShowInfo={ setShowInfo }/>
             }
             </MapContainer>
-        {/*<span style={{ textAlign: "right" }}>*/}
-        {/*    <button onClick={ downloadImage }*/}
-        {/*       className={"govuk-button govuk-!-margin-top-3 govuk-!-margin-bottom-1"}*/}
-        {/*       id={ "download-map" }*/}
-        {/*       data-module={"govuk-button"}*/}
-        {/*       download={ `cases_${date}.png` }>Download image</button></span>*/}
     </>;
 
 };  // Map

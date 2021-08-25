@@ -7,7 +7,9 @@ import moment from "moment";
 import numeral from "numeral";
 import * as constants from "../constants";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
-import { analytics } from "../../../common/utils";
+import { analytics } from "common/utils";
+import useGenericAPI from "hooks/useGenericAPI";
+import Loading from "components/Loading";
 
 
 const Panel = ({ children, setShowInfo }) => {
@@ -41,10 +43,22 @@ const Error = ({ setShowInfo }) => {
 };
 
 
-export const InfoCard = ({ areaName, date, first, complete, postcode, areaType, areaCode,
-                      setShowInfo, maxDate, error, empty, showInfo, ...props }) => {
+export const InfoCard = ({ data, areaName, date, postcode, areaType,
+                      setShowInfo, maxDate, error, empty, showInfo, currentLocation, ...props }) => {
 
-    if ( !setShowInfo ) return null;
+    const locationData = useGenericAPI(
+        "genericApiCode",
+        null,
+        { area_type: areaType, area_code: currentLocation },
+        "json",
+        {},
+        "error",
+        "error"
+    );
+
+    const { f: first, c: complete, cd: areaCode } = data?.features?.find(
+        ft => ft.properties.cd === currentLocation
+    )?.properties ?? {};
 
     const firstColourIdx = Object
         .keys(constants.colourBucketReference)
@@ -54,76 +68,65 @@ export const InfoCard = ({ areaName, date, first, complete, postcode, areaType, 
         .keys(constants.colourBucketReference)
         .reduce((acc, cur, ) => complete > cur ? cur : acc, 0);
 
-    if ( error ) {
+
+    if ( !setShowInfo ) {
+        return null;
+    }
+    else if ( locationData === "error" ) {
         analytics({
-            category: "vaccinations map",
+            category: "vaccinations-map",
             action: "click::error",
-            label: areaType,
-            value: areaCode
+            label: `INFO: ${ areaType } [${ areaCode }]`
         });
 
         return <Error setShowInfo={ setShowInfo }/>;
+    }
+    else if ( !locationData || !currentLocation ) {
 
-    } else if ( empty ) {
-        analytics({
-            category: "vaccinations map",
-            action: "click::empty",
-            label: areaType,
-            value: areaCode
-        });
+        if ( !first ) return null;
 
-        return <Error setShowInfo={ setShowInfo }/>;
-
-    } else if ( areaType && areaCode ) {
-        analytics({
-            category: "vaccinations map",
-            action: "click",
-            label: areaType,
-            value: areaCode
-        });
+        return <Panel setShowInfo={ setShowInfo }>
+            <Loading/>
+        </Panel>;
     }
 
     return <Panel setShowInfo={ setShowInfo }>
         <h2 className={ 'govuk-heading-m' }>
-            { areaName }
+            { locationData?.[`${areaType}Name`] ?? "" }
             <small className={ "govuk-caption-s" }>
                 {areaType.toUpperCase()} <br/>
-                Up to and including { moment(date).format("DD MMMM YYYY") }
+                Up to and including { moment(date).subtract(1, "day").format("D MMMM YYYY") }
             </small>
         </h2>
-        { typeof first === "number"
-            ? <>
-                <NumbersContainer>
-                    <NumberBox>
-                        <h3 className={ "govuk-heading-s" }>1st dose</h3>
-                        <div className={ "number-row" }>
-                            <ColourReference colour={ constants.colourBucketReference[firstColourIdx] }/>
-                            <span className={ "number" }>{ numeral(first).format("0,0.0") + "%" }</span>
-                        </div>
-                    </NumberBox>
-                    <NumberBox>
-                        <h3 className={ "govuk-heading-s" }>2nd dose</h3>
-                        <div className={ "number-row" }>
-                            <ColourReference colour={ constants.colourBucketReference[completeColourIdx] }/>
-                            <span className={ "number" }>{ numeral(complete).format("0,0.0") + "%" }</span>
-                        </div>
-                    </NumberBox>
-                </NumbersContainer>
-            </>
-            : <p>Data missing.</p>
-        }
+        <NumbersContainer>
+            <NumberBox>
+                <h3 className={ "govuk-heading-s" }>1st dose</h3>
+                <div className={ "number-row" }>
+                    <ColourReference colour={ constants.colourBucketReference[firstColourIdx] }/>
+                    <span className={ "number" }>{ first ? numeral(first).format("0,0.0") + "%" : "N/A" }</span>
+                </div>
+            </NumberBox>
+            <NumberBox>
+                <h3 className={ "govuk-heading-s" }>2nd dose</h3>
+                <div className={ "number-row" }>
+                    <ColourReference colour={ constants.colourBucketReference[completeColourIdx] }/>
+                    <span className={ "number" }>{ complete ? numeral(complete).format("0,0.0") + "%" : "N/A" }</span>
+                </div>
+            </NumberBox>
+        </NumbersContainer>
         {
-            postcode &&
-            <p className={ "govuk-body-s govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>
-                <a className={ "govuk-link govuk-link--no-visited-state" }
-                   target={ "_blank" }
-                   rel={ "noopener noreferrer" }
-                   href={ `/search?postcode=${postcode.replace(/[\s]/gi, "")}` }>
-                    See more data for { postcode }
-                </a>
-            </p>
+            postcode
+                ? <p className={ "govuk-body-s govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>
+                    <a className={ "govuk-link govuk-link--no-visited-state" }
+                       target={ "_blank" }
+                       rel={ "noopener noreferrer" }
+                       href={ `/search?postcode=${postcode.replace(/[\s]/gi, "")}` }>
+                        See more data for { postcode }
+                    </a>
+                </p>
+                : null
         }
-    </Panel>
+    </Panel>;
 
 };  // InfoCard
 

@@ -90,6 +90,7 @@ export const MapToolbox: ComponentType<*> =
     
     @media only screen and (max-width: 600px) {
         max-width: 250px;
+        margin: 0;
     }
     `;
 

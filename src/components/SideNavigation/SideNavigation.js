@@ -52,7 +52,7 @@ const SideNavigation: ComponentType<Props> = ({ ...props }: Props) => {
 
         <SideNavSecondaryContainer>
             <SideNavListSecondaryItem className={`${pathname.startsWith('/details/interactive-map') ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/interactive-map/cases" }>Interactive map</Link>
+                <Link to={ "/details/interactive-map/cases" }>Interactive maps</Link>
             </SideNavListSecondaryItem>
             <SideNavListSecondaryItem className={`${pathname.startsWith('/metrics') ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/metrics" }>Metric documentations</Link>
@@ -63,10 +63,10 @@ const SideNavigation: ComponentType<Props> = ({ ...props }: Props) => {
             <SideNavListSecondaryItem className={`${pathname === '/details/download' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/download" }>Download data</Link>
             </SideNavListSecondaryItem>
-            <SideNavListSecondaryItem className={`${pathname === '/details/whats-new' ? "moj-side-navigation__item--active" : ""}`}>
+            <SideNavListSecondaryItem className={`${pathname.startsWith('/details/whats-new') ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/whats-new" }>What&#39;s new</Link>
             </SideNavListSecondaryItem>
-            <SideNavListSecondaryItem className={`${pathname === '/details/developers-guide' ? "moj-side-navigation__item--active" : ""}`}>
+            <SideNavListSecondaryItem className={`${pathname.startsWith('/details/developers-guide') ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/developers-guide" }>Developer's guide</Link>
             </SideNavListSecondaryItem>
         </SideNavSecondaryContainer>

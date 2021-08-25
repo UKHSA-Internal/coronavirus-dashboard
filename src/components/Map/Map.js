@@ -9,23 +9,18 @@ import URLs from "common/urls";
 import 'leaflet/dist/leaflet.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {
-    MapContainer,
-    MapToolbox,
-    NumberBox,
-    NumbersContainer,
-    PostcodeSearchForm,
-    SliderContainer
+    MapContainer, MapToolbox,
+    NumberBox, NumbersContainer,
+    PostcodeSearchForm, SliderContainer,
 } from "./Map.styles";
 import useApi from "hooks/useApi";
 import moment from "moment";
 import numeral from "numeral";
 import {
-    LegendContainer,
-    ScaleColor,
-    ScaleGroup,
-    ScaleLegend,
-    ScaleLegendLabel,
-    ScaleValue
+    LegendContainer, ScaleColor,
+    ScaleGroup, ScaleLegend,
+    ScaleLegendLabel,ScaleValue,
+    LegendButton
 } from "pages/InteractiveMap/InteractiveMap.styles";
 import bbox from "@turf/bbox";
 import axios from "axios";
@@ -37,6 +32,8 @@ import RedArrow from "assets/icon-arrow-red.svg";
 import { scaleColours } from "common/utils";
 import useGenericAPI from "hooks/useGenericAPI";
 import type { ComponentType } from "react";
+import type { Props } from './Map.types.js';
+import deepEqual from "deep-equal";
 
 
 const MapLayers = [
@@ -308,6 +305,67 @@ const LocalAuthorityCard = ({ currentLocation, date, areaType, ...props }) => {
 };
 
 
+const Legend: ComponentType<Props> = ({ zoomLayer }) => {
+
+    const [ showLegend, setShowLegend ] = useState(true);
+
+    if ( !MapLayers[zoomLayer]?.buckets ) return null;
+
+    if ( !showLegend )
+        return <LegendContainer>
+            <ScaleLegend>
+                <ScaleLegendLabel>
+                    <LegendButton onClick={ () => setShowLegend(true) }
+                                  active={ !showLegend }>Case rate</LegendButton>
+                </ScaleLegendLabel>
+            </ScaleLegend>
+        </LegendContainer>;
+
+    return <LegendContainer>
+        <ScaleLegend>
+            <ScaleLegendLabel>
+                <LegendButton onClick={ () => setShowLegend(false) }>Case rate</LegendButton>
+            </ScaleLegendLabel>
+            <ScaleGroup>
+                <ScaleColor style={{ background: "#fff" }}/>
+                <ScaleValue>{
+                    "Data not shown"
+                }</ScaleValue>
+            </ScaleGroup>
+            {
+                MapLayers[zoomLayer].buckets.map( (item, index) => {
+                    const firstValue = MapLayers[zoomLayer].buckets?.[index - 2] ?? 0;
+                    if ( index % 2 > 0 ) {
+                        return <ScaleGroup key={ `legend-${index}` }>
+                            <ScaleColor style={ { background: MapLayers[zoomLayer].buckets?.[index - 1] ?? 0 } }/>
+                            <ScaleValue>
+                                {
+                                    (MapLayers[zoomLayer].label === "msoa" && index === 1)
+                                        ? 0
+                                        : firstValue === 0
+                                        ? 0
+                                        : firstValue
+                                }
+                                &nbsp;&ndash;&nbsp;
+                                { MapLayers[zoomLayer].buckets?.[index] - 1 ?? "+" }
+                            </ScaleValue>
+                        </ScaleGroup>
+                    }
+                    else return null;
+                })
+            }
+            <ScaleGroup>
+                <ScaleColor style={ { background: MapLayers[zoomLayer].buckets.slice(-1) } }/>
+                <ScaleValue>
+                    { MapLayers[zoomLayer].buckets.slice(-2, -1)[0] }&nbsp;+
+                </ScaleValue>
+            </ScaleGroup>
+        </ScaleLegend>
+    </LegendContainer>;
+
+};
+
+
 const Component = memo( ( props )=> <div {...props} id={ "cases-map-container" }/>);
 
 
@@ -323,22 +381,24 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
         [postcodeData, setPostcodeData] = useState(null),
         [currentLocation, setCurrentLocation] = useState({ currentLocation: null, areaType: "utla" }),
         [zoomLayerIndex, setZoomLayerIndex] = useState(0),
-        prevAreaType = usePrevious(currentLocation.areaType);
-
-    let hoveredStateId = null;
+        prevAreaType = usePrevious(currentLocation.areaType),
+        [ hoverState, setHoverSate ] = useState({}),
+        prevHoverState = usePrevious(hoverState),
+        [ mapHasLoaded, setMapHasLoaded ] = useState(false);
 
     const filterBy = (date: string) => {
 
         const filters = ['==', 'date', date.split(/T/)[0]];
 
-        if ( map )
-            MapLayers.map(layer => {
-                const mapLayer = map.getLayer(`choropleth-${layer.label}`);
+        if ( map ) {
+            for ( const layer of MapLayers ) {
+                const mapLayer = map.getLayer(`choropleth-${ layer.label }`);
 
-                if ( mapLayer ) map.setFilter(`choropleth-${layer.label}`, filters);
-
-            });
-
+                if ( mapLayer ) {
+                    map.setFilter(`choropleth-${ layer.label }`, filters);
+                }
+            }
+        }
     };
 
     useEffect(() => {
@@ -353,16 +413,18 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                 preserveDrawingBuffer: true
             }));
         }
-    }, []);
+    }, [ map, centrePoint ]);
 
     useMemo(() => {
+
+        // let hoveredStateId = null;
 
         if ( map && !styleDataStatus ) {
 
             map.once("style.load", function () {
 
-                MapLayers.map( layer => {
-                    map.addSource(`timeSeries-${layer.label}`, {
+                for ( const layer of MapLayers ) {
+                    map.addSource(`timeSeries-${ layer.label }`, {
                         type: 'geojson',
                         data: width === "desktop" ? layer.paths.timeSeries : layer.paths.timeSeriesMobile,
                         buffer: layer.buffer,
@@ -370,20 +432,18 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                         maxzoom: layer.maxZoom
                     });
 
-                    map.addSource(`geo-${layer.label}`, {
+                    map.addSource(`geo-${ layer.label }`, {
                         type: 'geojson',
                         data: layer.paths.outline,
                         buffer: layer.buffer,
                         tolerance: layer.tolerance,
                         maxzoom: layer.maxZoom
                     });
-                });
 
-                MapLayers.map( layer => {
                     map.addLayer({
                         'id': layer.label,
                         'type': 'line',
-                        'source': `geo-${layer.label}`,
+                        'source': `geo-${ layer.label }`,
                         'minzoom': layer.minZoom,
                         'maxzoom': layer.maxZoom,
                         'layout': {
@@ -402,10 +462,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                     }, layer.foreground);
 
                     map.addLayer({
-                        'id': `choropleth-${layer.label}`,
+                        'id': `choropleth-${ layer.label }`,
                         'type': 'fill',
                         "fill-antialias": true,
-                        'source': `timeSeries-${layer.label}`,
+                        'source': `timeSeries-${ layer.label }`,
                         'minzoom': layer.minZoom,
                         'maxzoom': layer.maxZoom,
                         'paint': {
@@ -419,55 +479,36 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                     }, layer.label);
 
                     map.addLayer({
-                        'id': `${layer.label}-click`,
+                        'id': `${ layer.label }-click`,
                         'type': 'fill',
-                        'source': `geo-${layer.label}`,
+                        'source': `geo-${ layer.label }`,
                         'minzoom': layer.minZoom,
                         'maxzoom': layer.maxZoom,
                         'paint': {
                             'fill-color': "#ffffff",
                             'fill-opacity': .001
                         },
-                    }, `choropleth-${layer.label}`);
+                    }, `choropleth-${ layer.label }`);
 
-                    map.on('click', `${layer.label}-click`, function (e) {
-
-                        setCurrentLocation(prev => ({
-                            ...prev,
-                            currentLocation: e.features[0].properties.code
-                        }));
-                        setShowInfo(true);
+                    map.on('click', `${ layer.label }-click`, function (e) {
 
                         const outlineId = map
                             .queryRenderedFeatures({ layers: [layer.label] })
                             .find(item => item.properties.code === e.features[0].properties.code)
                             .id;
 
-                        if ( hoveredStateId?.id ) {
-                            map.setFeatureState(
-                                { source: `geo-${ hoveredStateId.location }`, id: hoveredStateId.id },
-                                { hover: false }
-                            );
-                        }
-
-                        hoveredStateId = {
+                        const newState = {
                             id: outlineId,
-                            location: layer.label
+                            location: layer.label,
+                            features: e.features[0],
+                            layer: layer.label
                         };
 
-                        map.setFeatureState(
-                            { source: `geo-${ hoveredStateId.location }`, id: hoveredStateId.id },
-                            { hover: true }
-                        );
-
-                        map.fitBounds(bbox(e.features[0]), {
-                            padding: 20,
-                            maxZoom: Math.max(map.getLayer(layer.label).minzoom + 0.5, map.getZoom())
-                        });
+                        if ( !deepEqual(prevHoverState, newState) ) setHoverSate(newState);
 
                     });
 
-                });
+                }
 
                 map.on('zoom', function() {
 
@@ -498,9 +539,11 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                 // disable map rotation using touch rotation gesture
                 map.touchZoomRotate.disableRotation();
 
+                setMapHasLoaded(true);
+
             })
         }
-    }, [map]);
+    }, [ map, prevHoverState, styleDataStatus, width ]);
 
     useEffect(() => {
 
@@ -508,17 +551,41 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
     }, [date, styleDataStatus]);
 
-    // useEffect(() => {
-    //     if ( map ) {
-    //         map.remove();
-    //     }
-    // }, [ date ]);
+    useEffect(() => {
+
+        if ( !map || !mapHasLoaded || !hoverState?.id ) return;
+
+        if ( prevHoverState?.id ) {
+            map.setFeatureState(
+                { source: `geo-${ prevHoverState.location }`, id: prevHoverState.id },
+                { hover: false }
+            );
+        }
+
+        map.setFeatureState(
+            { source: `geo-${ hoverState.location }`, id: hoverState.id },
+            { hover: true }
+        );
+
+        map.fitBounds(bbox(hoverState.features), {
+            padding: 20,
+            maxZoom: Math.max(map.getLayer(hoverState.layer).minzoom + 0.5, map.getZoom())
+        });
+
+        setCurrentLocation(prev => ({
+            ...prev,
+            currentLocation: hoverState.features.properties.code
+        }));
+
+        setShowInfo(true);
+
+    }, [ map, hoverState.id, hoverState.layer, prevHoverState, mapHasLoaded ]);
+
 
     useEffect(() => {
 
         if ( map && postcodeData ) {
 
-            setShowInfo(true);
             const el = document.createElement("div");
             el.className = "marker";
             el.style.backgroundImage = `url(${MapMarker})`;
@@ -539,11 +606,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                 zoom: 12.5
             });
 
-                // console.log(postcodeData)
-            // setShowInfo(true);
+            setShowInfo(true);
         }
 
-    }, [postcodeData, map]);
+    }, [ postcodeData, map, styleDataStatus, width ]);
 
 
     useEffect(() => {
@@ -615,50 +681,12 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                                type={ "submit" }
                                value={ "" }/>
                     </PostcodeSearchForm>
-                    <LegendContainer>
-                        <ScaleLegend>
-                            <ScaleLegendLabel>Case rate</ScaleLegendLabel>
-                            <ScaleGroup>
-                                <ScaleColor style={{ background: "#fff" }}/>
-                                <ScaleValue>{
-                                    "Data not shown"
-                                }</ScaleValue>
-                            </ScaleGroup>
-                            {
-
-                                MapLayers[zoomLayerIndex].buckets.map( (item, index) => {
-                                    const firstValue = MapLayers[zoomLayerIndex].buckets?.[index - 2] ?? 0;
-                                    if ( index % 2 > 0 ) {
-                                        return <ScaleGroup key={ `legend-${index}` }>
-                                            <ScaleColor style={ { background: MapLayers[zoomLayerIndex].buckets?.[index - 1] ?? 0 } }/>
-                                            <ScaleValue>
-                                                {
-                                                    (MapLayers[zoomLayerIndex].label === "msoa" && index === 1)
-                                                        ? 0
-                                                        : firstValue === 0
-                                                        ? 0
-                                                        : firstValue
-                                                }
-                                                &nbsp;&ndash;&nbsp;
-                                                { MapLayers[zoomLayerIndex].buckets?.[index] - 1 ?? "+" }
-                                            </ScaleValue>
-                                        </ScaleGroup>
-                                    }
-                                })
-                            }
-                            <ScaleGroup>
-                                <ScaleColor style={ { background: MapLayers[zoomLayerIndex].buckets.slice(-1) } }/>
-                                <ScaleValue>
-                                    { MapLayers[zoomLayerIndex].buckets.slice(-2, -1)[0] }&nbsp;+
-                                </ScaleValue>
-                            </ScaleGroup>
-                        </ScaleLegend>
-                    </LegendContainer>
+                    <Legend zoomLayer={ zoomLayerIndex }/>
                 </>
 
             }
             {
-                (currentLocation.areaType !== prevAreaType || !showInfo)
+                (currentLocation.areaType !== prevAreaType || !showInfo || !currentLocation.currentLocation)
                     ? null
                     : currentLocation.areaType !== "msoa"
                     ? <LocalAuthorityCard { ...currentLocation } date={ date } maxDate={ maxDate } setShowInfo={ setShowInfo }/>

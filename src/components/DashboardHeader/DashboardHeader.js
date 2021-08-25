@@ -9,14 +9,10 @@ import 'moment/locale/en-gb';
 import usePrevious from "hooks/usePrevious";
 import LocationPicker from "./LocationPicker";
 import LocationBanner from "components/LocationBanner";
-import { analytics, getParams } from "common/utils";
+import { analytics, getParams, getPathAttributes } from "common/utils";
 import { getParamValueFor } from "./utils";
 import { getOrder } from "./GenericHooks";
-import {
-    PathNameMapper,
-    NoPickerPaths,
-    LocationBannerMapper
-} from "./Constants";
+import { LocationBannerMapper } from "./Constants";
 
 import {
     MainContainer,
@@ -24,6 +20,7 @@ import {
     Title,
     TitleButton,
     SectionBreak,
+    TriangleMarker,
 } from './DashboardHeader.styles'
 
 import type { ComponentType } from 'react';
@@ -36,34 +33,33 @@ const PageHeader = ({ areaName, localisationState, localisationCallback }) => {
         preppedLabel = areaName
             .toLowerCase()
             .replace(/[\s:]/g, "_"),
-        { location: { pathname } } = useHistory(),
-        uri = /^(\/(details\/)?[^/]+).*/.exec(pathname)?.[1],
-        pageName = PathNameMapper[uri]?.title ?? "",
-        noPicker = NoPickerPaths.indexOf(uri) > -1;
+        { location: { pathname } } = useHistory();
+
+    const attrs = getPathAttributes(pathname);
+    const { localised=null } = attrs;
 
     return <>
         <HeaderContainer role={ "heading" }
                          aria-level={ 1 }>
-            <Title data-for={ !noPicker && "open-localisation-tooltip" }
-                   data-tip={ !noPicker && "Click to change location" }
+            <Title data-for={ localised ? "open-localisation-tooltip" : null }
+                   data-tip={ localised ? "Click to change location" : null }
                    id={ `page-heading-${ preppedLabel }` }
-                   className={ localisationState ? "open" : "" }
-                   onClick={ localisationCallback }>
-                { `${ pageName }${ noPicker ? "" : " in" }` }
-                { noPicker
+                   className={ localisationState ? "open" : "" }>
+                { `${ attrs.title }${ !localised ? "" : " in" }` }
+                { !localised
                     ? null
-                    : (pathname && pathname !== "/") &&
-                    <>
-                        <TitleButton aria-describedby={ `${ preppedLabel }-loc-desc` }>
-                            { areaName }
+                    : (pathname && pathname !== "/")
+                        ? <TitleButton aria-describedby={ `${ preppedLabel }-loc-desc` }
+                                     onClick={ localisationCallback }>
+                            { areaName }&nbsp;<TriangleMarker direction={ localisationState ? "up" : "down" }/>
                             <span id={ `${ preppedLabel }-loc-desc` }
                                   className={ "govuk-visually-hidden" }>
-                                Opens the localisation banner, which provides options to
+                                Click to open the localisation banner, which provides options to
                                 switch location and receive data at different geographical
                                 levels.
                             </span>
                         </TitleButton>
-                    </>
+                    : null
                 }
             </Title>
         </HeaderContainer>
@@ -82,8 +78,8 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
         areaName = getParamValueFor(params, "areaName", "United Kingdom"),
         pathname = history.location.pathname,
         areaTypeOrder = getOrder(history),
-        uri = /^(\/(details\/)?[^/]+).*/.exec(pathname)?.[1],
-        isExcluded = NoPickerPaths.indexOf(uri) > -1,
+        attrs = getPathAttributes(pathname),
+        { localised=null } = attrs,
         prevPathname = usePrevious(pathname),
         initialParam = getParams(history.location.query),
         [ location, setLocation ] = useState({
@@ -119,14 +115,14 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
                     localisationState={ locationPickerState }
                     localisationCallback={ locationPickerCallback }/>
         {
-            !isExcluded
+            localised
                 ? <LocationPicker show={ locationPickerState }
                                   currentLocation={ location }
                                   setCurrentLocation={ setLocation }/>
                 : null
         }
         {
-            !isExcluded
+            localised
                 ? <LocationBanner pageTitle={ LocationBannerMapper?.[pathname] ?? null }
                                   areaTypes={ Object.keys(areaTypeOrder).map(key => areaTypeOrder[key]) }
                                   pathname={ pathname }/>

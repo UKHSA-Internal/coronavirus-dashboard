@@ -19,7 +19,7 @@ const DataPageHeaders = () => {
 
     const { search: query, pathname } = useLocation();
     const uri = /^(\/(details\/)?[^/]+).*/.exec(pathname)?.[1];
-    let { title="", description="", localised=false } = Path?.[uri] ?? {};
+    let { title="", description="", localised=false } = Path?.[pathname] ?? Path?.[uri] ?? {};
     const urlParams = getParams(query);
     const areaParams = urlParams.length ? urlParams : DefaultParams;
 
@@ -46,7 +46,7 @@ const DataPageHeaders = () => {
         <meta name="twitter:title" content={ preppedTitle }/>
         <meta property="og:description" content={ preppedDescription }/>
         <meta name="twitter:description" content={ preppedDescription }/>
-    </Helmet>
+    </Helmet>;
 
 };
 

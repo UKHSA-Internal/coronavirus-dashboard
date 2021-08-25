@@ -2,10 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-import { useLocation } from "react-router";
-
 import useGenericAPI from "hooks/useGenericAPI";
-import useTimestamp from "hooks/useTimestamp";
 
 import html from "remark-html";
 import remark from "remark";
@@ -45,9 +42,11 @@ const Datestamp: ComponentType<*> = ({ banner, ...props }) => {
 
     const timestamp = banner?.date ?? banner.appearByUpdate;
 
-    return <Timestamp dateTime={ moment(timestamp).toISOString() } { ...props }>{
+    return <div className={ "timestamp" }>
+        <Timestamp dateTime={ moment(timestamp).toISOString() } { ...props }>{
         moment(timestamp).format("D MMMM YYYY")
     }</Timestamp>
+    </div>
 
 };  // Datestamp
 
@@ -56,38 +55,25 @@ const Banner: ComponentType<*> = ({ ...props }) => {
 
     const banners: BannerType[] = useGenericAPI("banner", null);
     const [preppedBanners, setPreppedBanners] = useState([]);
-    const timestamp = useTimestamp();
-    const { pathname } = useLocation();
-
-    const ts = moment(timestamp);
-    const pattern = new RegExp(pathname, 'ig');
-
-    const bannerFilter = ( { appearByUpdate, disappearByUpdate, displayUri=[] }: BannerType ): boolean => {
-
-        if ( moment(appearByUpdate) > ts || ts > moment(disappearByUpdate) ) return false;
-
-        return (
-            displayUri.length > 0
-                ? displayUri.filter(item => pattern.test(item)).length > 0
-                : true
-        )
-
-    };  // bannerFilter
 
     useEffect(() => {
-        if ( banners && timestamp !== "" ) {
-            setPreppedBanners(banners.filter(bannerFilter))
+
+        if ( Array.isArray(banners) && banners.length > 0 ) {
+            setPreppedBanners(banners);
+        } else if ( banners && Object.keys(banners).length ) {
+            setPreppedBanners([banners])
         }
-    }, [banners, timestamp]);
+
+    }, [banners]);
 
 
-    if ( banners === null || !preppedBanners.length ) return null;
+    if ( banners === null ) return null;
 
     return <>{
         preppedBanners.map((banner, index) =>
             <BannerBase key={ `banner-${index}-${banner?.appearByUpdate}` } { ...props }>
                 <BannerContent>
-                    <Datestamp banner={ banner }/>
+                    <Datestamp banner={ banner.date }/>
                     <BannerBody rawBody={ banner?.body ?? "" }/>
                 </BannerContent>
             </BannerBase>

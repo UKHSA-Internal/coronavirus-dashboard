@@ -1,25 +1,27 @@
 {
-  "/details/": {},
-  "/details": {},
-  "/details/interactive-map": {
-    "title": "Interactive map",
-    "description": "Interactive map of coronavirus (COVID-19) prevalence rate of cases for the United Kingdom by local authorities and small areas.",
-    "localised": false
-  },
   "/details/interactive-map/cases": {
     "title": "Interactive map of cases",
     "description": "Interactive map of coronavirus (COVID-19) prevalence rate of cases for the United Kingdom by local authorities and small areas.",
-    "localised": false
+    "localised": false,
+    "hasLog": false
   },
   "/details/interactive-map/vaccinations": {
     "title": "Interactive map of vaccinations",
     "description": "Interactive map of coronavirus (COVID-19) prevalence rate of cases for the United Kingdom by local authorities and small areas.",
-    "localised": false
+    "localised": false,
+    "hasLog": true
+  },
+  "/details/interactive-map": {
+    "title": "Interactive map",
+    "description": "Interactive map of coronavirus (COVID-19) prevalence rate of cases for the United Kingdom by local authorities and small areas.",
+    "localised": false,
+    "hasLog": true
   },
   "/details/cases": {
     "title": "Cases",
     "description": "Data and charts for confirmed cases of coronavirus (COVID-19)",
-    "localised": true
+    "localised": true,
+    "hasLog": true
   },
   "/details/testing": {
     "title": "Testing",
@@ -29,51 +31,81 @@
   "/details/healthcare": {
     "title": "Healthcare",
     "description": "Data and charts on hospital admissions, ICUs, and other healthcare statistics for coronavirus (COVID-19)",
-    "localised": true
+    "localised": true,
+    "hasLog": true
   },
   "/details/vaccinations": {
     "title": "Vaccinations",
     "description": "Data and charts on vaccinations for coronavirus (COVID-19)",
-    "localised": true
+    "localised": true,
+    "hasLog": true
   },
   "/details/deaths": {
     "title": "Deaths",
     "description": "Data and charts for coronavirus (COVID-19) deaths",
-    "localised": true
+    "localised": true,
+    "hasLog": true
   },
   "/details/about-data": {
     "title": "About the data",
     "description": "Sources, metric definitions, and other generic information about the data that presented on the dashboard.",
-    "localised": false
+    "localised": false,
+    "hasLog": false
   },
   "/details/download": {
     "title": "Download data",
     "description": "Download data on the coronavirus pandemic in the United Kingdom.",
-    "localised": false
+    "localised": false,
+    "hasLog": true
   },
   "/details/whats-new": {
     "title": "What's new",
     "description": "Log of updates and changes to the service.",
-    "localised": false
+    "localised": false,
+    "hasLog": false
+  },
+  "/details/announcements": {
+    "title": "Announcements",
+    "description": "Announcements and general updates",
+    "localised": false,
+    "hasLog": false
   },
   "/details/developers-guide": {
-    "title": "Developers guide - APIv1",
+    "title": "Developers guide",
     "description": "Documentations and guidance for developers on how to use the API.",
-    "localised": false
+    "localised": false,
+    "hasLog": false
   },
   "/details/cookies": {
     "title": "Cookies",
     "description": "Cookies policy and preferences.",
-    "localised": false
+    "localised": false,
+    "hasLog": false
   },
   "/details/accessibility": {
     "title": "Accessibility",
     "description": "Information on the accessibility of the service.",
-    "localised": false
+    "localised": false,
+    "hasLog": false
+  },
+  "/details/developers-guide/generic-api": {
+    "title": "Generic API Documentation",
+    "description": "Documentation of the generic APIs.",
+    "localised": false,
+    "hasLog": false
+  },
+    "/details/developers-guide/main-api": {
+    "title": "Open Data API Documentation",
+    "description": "Documentation of the generic APIs.",
+    "localised": false,
+    "hasLog": false
   },
   "/metrics": {
     "title": "Metric documentation",
     "description": "List of metrics and documentations thereof.",
-    "localised": false
-  }
+    "localised": false,
+    "hasLog": false
+  },
+  "/details/": {},
+  "/details": {}
 }

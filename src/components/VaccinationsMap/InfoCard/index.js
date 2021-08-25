@@ -1,2 +1,1 @@
-export { LocalAuthorityCard } from "./LACard";
-export { SoaCard } from "./SOACard";
+export { default } from "./InfoCard";

@@ -5,10 +5,24 @@ import React from "react";
 import { Footer as GovUKFooter } from "govuk-react-jsx";
 
 import type { ComponentType } from "react";
+import { Link } from "react-router-dom";
 
 
 const FooterContents: ComponentType<*> = () => (
     <>
+        <p className={ "govuk-footer__meta-custom govuk-!-margin-top-0" }>
+            <Link className="govuk-footer__link govuk-!-margin-right-3" to={ "/details/announcements" }>
+                Announcements
+            </Link>
+        </p>
+        <p className={ "govuk-footer__meta-custom" }>
+            <Link className="govuk-footer__link govuk-!-margin-right-3" to={ "/details/accessibility" }>
+                Accessibility
+            </Link>
+            <Link className="govuk-footer__link" to={ "Cookies" }>
+                Cookies
+            </Link>
+        </p>
         <p className={ "govuk-footer__meta-custom" }>
             For feedback email&nbsp;
             <a className="govuk-footer__link"
@@ -36,17 +50,7 @@ const FooterContents: ComponentType<*> = () => (
 
 
 const Footer = () => (
-    <GovUKFooter
-        meta={ {
-            children: <FooterContents/>,
-            items: [
-                // { children: ['Archive'], href: '/archive' },
-                { children: ['Accessibility'], href: '/details/accessibility' },
-                { children: ['Cookies'], href: '/details/cookies' }
-            ],
-            visuallyHiddenTitle: 'Items',
-        } }
-    />
+    <GovUKFooter meta={ { children: <FooterContents/> } }/>
 );  // Footer
 
 

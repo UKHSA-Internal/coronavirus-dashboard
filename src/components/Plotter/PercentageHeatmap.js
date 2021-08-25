@@ -51,6 +51,7 @@ export const PercentageHeatmap: ComponentType<*> = ({ data, layout, config, ...p
     );
 
     return <BasePlotter
+        noLogScale
         data={
             data.map(dataset => ({
                 x: dataset.xData,

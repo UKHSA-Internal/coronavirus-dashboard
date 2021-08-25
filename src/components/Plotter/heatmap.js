@@ -37,6 +37,7 @@ export const Heatmap: ComponentType<*> = ({ data, layout, config, ...props }) =>
     );
 
     return <BasePlotter
+        noLogScale
         data={
             data.map(dataset => ({
                 x: dataset.xData,

@@ -1,6 +1,6 @@
 // @flow
 
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import type { ComponentType } from "react";
 import Magnifier from "assets/icon-magnify.svg";
@@ -141,6 +141,10 @@ export const PostcodeSearchForm: ComponentType<*> =
     & > input[type="text"] {
         text-transform: uppercase;
     }
+    
+    @media only screen and (max-width: 600px) {
+        max-width: 165px;
+    }
     `;
 
 
@@ -180,7 +184,9 @@ export const MapToolbox: ComponentType<*> =
     }
     
     @media only screen and (max-width: 600px) {
-        max-width: 250px;
+        max-width: 190px;
+        z-index: 1;
+        margin: 0 0 -2px 0;
     }
     `;
 
@@ -273,3 +279,23 @@ export const IndicatorLegend: ComponentType<*> =
                 word-wrap: wrap;
             }
         `;
+
+export const TriangleMarker: ComponentType<*> =
+styled
+    .div`
+        width: 0; 
+        height: 0; 
+        border-top: 7px solid transparent; 
+        border-right: 9px solid; 
+        border-bottom: 7px solid transparent;
+        ${css`${({ direction, active, focused }) => ({ 
+            transform: 
+                direction === "up" 
+                    ? "rotate(90deg)"
+                    : direction === "down"
+                    ? "rotate(-90deg)"
+                    : direction === "right"
+                    ? "rotate(180deg)"
+                    : "rotate(0)"
+        })}`}
+    `;

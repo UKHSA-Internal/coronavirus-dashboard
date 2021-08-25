@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useEffect, lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Switch, Route, useLocation, Redirect, useParams } from 'react-router';
 import Header from "components/Header";
 import BackToTop from 'components/BackToTop';
@@ -12,27 +12,28 @@ import Loading from "components/Loading";
 import CookieBanner from "components/CookieBanner";
 import DataPageHeader from "components/DataPageHeader";
 import SideNavigation from "components/SideNavigation";
-import SideNavMobile from "components/SideNavMobile";
 import DashboardHeader from "components/DashboardHeader";
+
 import './index.scss';
 
 
 const
-    Cases           = lazy(() => import('pages/Cases')),
-    Healthcare      = lazy(() => import('pages/Healthcare')),
-    Vaccinations    = lazy(() => import('pages/Vaccinations')),
-    Deaths          = lazy(() => import('pages/Deaths')),
-    Tests           = lazy(() => import('pages/Testing')),
-    About           = lazy(() => import('pages/About')),
-    Accessibility   = lazy(() => import('pages/Accessibility')),
-    Cookies         = lazy(() => import('pages/Cookies')),
-    ApiDocs         = lazy(() => import('pages/ApiDocs')),
-    InteractiveMap  = lazy(() => import("pages/InteractiveMap")),
-    WhatsNew        = lazy(() => import("pages/WhatsNew")),
-    Footer          = lazy(() => import('components/Footer')),
-    Download        = lazy(() => import('pages/Download')),
-    Banner          = lazy(() => import('components/Banner')),
-    MetricDocs      = lazy(() => import('pages/MetricDocs'));
+    Cases               = lazy(() => import('pages/Cases')),
+    Healthcare          = lazy(() => import('pages/Healthcare')),
+    Vaccinations        = lazy(() => import('pages/Vaccinations')),
+    Deaths              = lazy(() => import('pages/Deaths')),
+    Tests               = lazy(() => import('pages/Testing')),
+    About               = lazy(() => import('pages/About')),
+    Accessibility       = lazy(() => import('pages/Accessibility')),
+    Cookies             = lazy(() => import('pages/Cookies')),
+    InteractiveMap      = lazy(() => import("pages/InteractiveMap")),
+    WhatsNew            = lazy(() => import("pages/WhatsNew")),
+    ChangeLogRecord     = lazy(() => import("pages/WhatsNew/ChangeLogRecord")),
+    AnnouncementRecord  = lazy(() => import("pages/Announcements/AnnouncementsRecord")),
+    Announcements       = lazy(() => import("pages/Announcements")),
+    Footer              = lazy(() => import('components/Footer')),
+    Download            = lazy(() => import('pages/Download')),
+    DeveloperGuide      = lazy(() => import('pages/DevelopersGuide'));
 
 
 const LastUpdateTime = () => {
@@ -60,26 +61,13 @@ const LastUpdateTime = () => {
 }; // LastUpdateTime
 
 
-const
-    PathWithSideMenu = [
-        "/details/",
-        "/details/testing",
-        "/details/cases",
-        "/details/healthcare",
-        "/details/deaths",
-        "/details/about-data",
-        "/details/download",
-        "/details/whats-new"
-    ];
-
-
 const Navigation = ({ layout, ...props }) => {
 
     return layout !== "mobile"
         ? <SideNavigation {...props}/>
-        : <SideNavMobile {...props}/>;
+        : null
 
-};  // MobileNavigation
+};  // Navigation
 
 
 const RedirectToDetails = () => {
@@ -97,23 +85,14 @@ const RedirectToDetails = () => {
 
 const App = () => {
 
-    const { pathname } = useLocation();
+    const { search: query, pathname } = useLocation();
     const layout = useResponsiveLayout(768);
 
-    let hasMenu;
-
-    useEffect(() => {
-
-        hasMenu = PathWithSideMenu.indexOf(pathname) > -1;
-
-    }, [ pathname ]);
-
     return <>
-        <DataPageHeader/>
+        <DataPageHeader pathname={ pathname } query={ query }/>
         <CookieBanner/>
-        <Header/>
+        <Header layout={ layout }/>
         { layout === "mobile" && <Navigation layout={ layout }/> }
-        <Suspense fallback={ <Loading/> }><Banner/></Suspense>
         <div className={ "govuk-width-container" }>
             <LastUpdateTime/>
             <ErrorBoundary>
@@ -140,14 +119,18 @@ const App = () => {
                                 <Route path="/details/vaccinations" exact component={ Vaccinations }/>
                                 <Route path="/details/deaths" exact component={ Deaths }/>
                                 <Route path="/details/interactive-map/:page?" component={ InteractiveMap }/>
+                                <Route path="/details/whats-new/:date" exact component={ WhatsNew }/>
                                 <Route path="/details/whats-new" exact component={ WhatsNew }/>
+                                <Route path="/details/whats-new/record/:id" exact component={ ChangeLogRecord }/>
+                                <Route path="/details/announcements" exact component={ Announcements }/>
+                                <Route path="/details/announcements/:id" exact component={ AnnouncementRecord }/>
                                 <Route path="/details/download" exact component={ Download }/>
                                 <Route path="/details/about-data" exact component={About}/>
                         
                                 {/*<Route path="/archive" component={ Archive }/>*/}
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
-                                <Route path="/details/developers-guide" exact component={ ApiDocs }/>
+                                <Route path="/details/developers-guide" component={ DeveloperGuide }/>
                                 <Route path="/metrics/:type?" component={ MetricDocs }/>
                                 <Route path={ "/:page" } component={ RedirectToDetails }/>
                             </Switch>

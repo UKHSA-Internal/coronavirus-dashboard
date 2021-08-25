@@ -19,12 +19,14 @@ import {
     getTwoWayLollipopData,
     groupBy
 } from "common/utils";
+import { min, max } from "d3-array";
 import { DataTable, NestedDataTable } from "components/GovUk";
 import useApi from "hooks/useApi";
 import Loading from "components/Loading";
 import Metadata from "components/Metadata";
 import Abstract from "components/Abstract";
 import Plotter from "components/Plotter";
+import moment from "moment";
 
 
 const TabLink: ComponentType<*> = ({ cardType, ...props }) => {
@@ -128,23 +130,40 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
         case "percentageWaffle":
             return <Plotter type={ "percentageWaffle" }
                             layout={{}}
+                            isTimeSeries={ false }
+                            chartMode={ "waffle" }
                             data={ getPercentageWaffleData(fields, data, xKey) }
                             { ...props }/>;
 
         case "twoWayLollipop":
+            const xMin = moment(min(data, v => v.date))
+                .subtract(2, 'day')
+                .toDate();
+
+            const xMax = moment(max(data, v => v.date))
+                .add(2, 'day')
+                .toDate();
+
             return <Plotter type={ "twoWayLollipop" }
-                            layout={{}}
-                            data={
-                                getTwoWayLollipopData(
-                                    fields, data, xKey,
-                                    props?.threshold,
-                                    props?.markerColourBelowThreshold,
-                                    props?.markerColourAboveThreshold,
-                                    props?.symbolBelowThreshold,
-                                    props?.symbolAboveThreshold,
-                                    props?.lineColour,
-                                )
-                            }
+                            layout={{
+                                shapes: [{
+                                    type: 'line',
+                                    y0: props?.threshold ?? 0,
+                                    y1: props?.threshold ?? 0,
+                                    yref: 'y',
+                                    x0: xMin,
+                                    x1: xMax,
+                                    xref: 'x',
+                                    line: {
+                                        width: 2,
+                                        color: "#a5a5a5"
+                                    },
+                                    layer: "below"
+                                }]
+                            }}
+                            xaxis={{ range: [xMin, xMax] }}
+                            yaxis={{ zeroline: false }}
+                            data={ getTwoWayLollipopData(fields, data, xKey) }
                             { ...props }/>;
 
         case "nestedTable":

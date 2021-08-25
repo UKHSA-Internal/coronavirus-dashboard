@@ -139,15 +139,6 @@ const processGenericField = ({ field, index, xData, yData }) => {
     let plotFeatures;
 
     switch ( field.type ) {
-        case "bar":
-            plotFeatures = {
-                type: field.type,
-                marker: {
-                    color: baseColour
-                }
-            }
-            break;
-
         case "line":
             plotFeatures = {
                 type: field.type,
@@ -163,6 +154,16 @@ const processGenericField = ({ field, index, xData, yData }) => {
                     color: colours[field?.colour ?? index]
                 }
             };
+            break;
+
+        case "bar":
+        default:
+            plotFeatures = {
+                type: field.type,
+                marker: {
+                    color: baseColour
+                }
+            }
             break;
 
     }
@@ -230,10 +231,7 @@ export const getPlotData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 };  // getPlotData
 
 
-export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date", threshold: number,
-                                       markerColourBelowThreshold: number, markerColourAboveThreshold: number,
-                                       symbolBelowThreshold: string, symbolAboveThreshold: string,
-                                       lineColour: number ) => {
+export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 
     const data = [];
 
@@ -243,8 +241,9 @@ export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date", 
             y: [],
             type: "scatter",
             showlegend: false,
-            hoverinfo: 'skip',
-            line: {color: asCssRgb(colours[lineColour]), width: 1},
+            hoverinfo: 'none',
+            line: { color: colours[3], width: 1 },
+            marker: { color: colours[0], size: 12 }
         };
 
         for ( const { value } of fields ) {
@@ -255,6 +254,7 @@ export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date", 
         data.push(trace);
     }
 
+
     for ( const { value, label } of fields ) {
         const trace = {
             name: label,
@@ -264,29 +264,19 @@ export const getTwoWayLollipopData = ( fields: Array<{}>, rawData, xKey="date", 
             type: "scatter",
             showlegend: false,
             marker: {
-                color: [],
-                symbol: [],
-                size: 12
+                color: colours[3],
+                size: 5
             },
         }
 
         for ( const row of rawData ) {
             trace.x.push(row?.[xKey] ?? null);
             trace.y.push(row?.[value] ?? null);
-            trace.marker.color.push(
-                (row?.[value] ?? 0) >= threshold
-                    ? asCssRgb(colours[markerColourAboveThreshold])
-                    : asCssRgb(colours[markerColourBelowThreshold])
-            );
-            trace.marker.symbol.push(
-                (row?.[value] ?? 0) >= threshold
-                    ? symbolAboveThreshold
-                    : symbolBelowThreshold
-            );
         }
 
         data.push(trace);
     }
+
 
     return data;
 
@@ -384,15 +374,11 @@ export const getHeatmapData = ( fields: Array<{}>, rawData, xKey="date" ) => {
             ...rest,
         };
 
-        for ( const { label } of metrics ) {
-            result.yData.push(label)
-        }
-
         for ( let index = 0; index < rawData.length; index++ ) {
-            result.xData.push(rawData?.[index]?.[xKey])
+            result.xData.push(rawData?.[index]?.[xKey]);
         }
 
-        for ( const { value: paramValue } of metrics ) {
+        for ( const { value: paramValue, label } of metrics ) {
 
             const zData = [];
             let tempData;
@@ -415,7 +401,13 @@ export const getHeatmapData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 
             }
 
-            result.zData.push(zData);
+            // Only add if zData has data - this
+            // is the accommodate inconsistencies
+            // in age bands amongst the DAs.
+            if ( zData.length > 0 ) {
+                result.zData.push(zData);
+                result.yData.push(label);
+            }
 
         }
 
@@ -423,6 +415,6 @@ export const getHeatmapData = ( fields: Array<{}>, rawData, xKey="date" ) => {
 
     }
 
-    return graphObjects
+    return graphObjects;
 
 };  // getHeatmapData

@@ -1,30 +1,18 @@
 // @flow
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { ChangeLogHeader } from "components/ChangeLogComponent/ChangeLogHeader";
-import useGenericAPI from "hooks/useGenericAPI";
 import useTimestamp from "hooks/useTimestamp";
+import SideNavMobile from "components/SideNavMobile";
+import Banner from "components/Banner";
 
 import type { ComponentType } from "react";
 
 
-const Header: ComponentType<*> = ({ ...props }) => {
+const Header: ComponentType<*> = ({ layout, ...props }) => {
 
-    const changeData = useGenericAPI("changeLogData", null, "json");
-    const [data, setData] = useState(null);
     const timestamp = useTimestamp();
-
-    useEffect(() => {
-
-        if ( timestamp && (changeData?.changeLog ?? null) ) {
-            const date = timestamp.split("T")[0];
-
-            setData(changeData?.changeLog?.filter(
-                item => item.date === date && (item?.displayBanner ?? false)
-            ) ?? null);
-        }
-    }, [ timestamp, changeData?.changeLog ]);
 
     return <>
         <header className="govuk-header" role="banner" data-module="govuk-header">
@@ -95,7 +83,9 @@ const Header: ComponentType<*> = ({ ...props }) => {
                 </div>
             </div>
         </header>
-        <ChangeLogHeader data={ data }/>
+        { layout === "mobile" && <SideNavMobile layout={ layout }/> }
+        { timestamp ? <ChangeLogHeader timestamp={ timestamp }/> : null }
+        <Banner/>
     </>
 
 };  // Header

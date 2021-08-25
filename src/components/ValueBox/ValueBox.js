@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { analytics, colours, strFormat } from "common/utils";
+import { colours, strFormat } from "common/utils";
 import {
     DataColour,
     DataContainer,
@@ -104,7 +104,6 @@ const ValueBox: ComponentType<*> = ({ heading, caption, valueItems, embedded=fal
         tipId = `${ label }_tooltip`,
         { chart={}, isEnabled=true, setChartState=() => null } = rest,
         chartToggleCallback = () => {
-            analytics("Chart toggle", caption, isEnabled ? "ON" : "OFF" );
             setChartState();
         };
 

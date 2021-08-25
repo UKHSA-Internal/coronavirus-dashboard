@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 
 import numeral from "numeral";
 
@@ -116,12 +116,13 @@ export const Table: ComponentType<*> = ({ className, stickyHeader=true,
 
     const [ sorting, setSorting ] = useState({ direction: false, by: 0 });
     const [ currentBody, setCurrentBody ] = useState(compareData(body, sorting));
+    const { by, direction } = sorting;
 
-    useEffect(() => {
+    useCallback(() => {
 
-        setCurrentBody(compareData(currentBody, sorting))
+        setCurrentBody(compareData(currentBody, { by, direction }))
 
-    }, [ sorting.by, sorting.direction, currentBody ]);
+    }, [ by, direction, currentBody ]);
 
     const sortingCallback = index => {
 
