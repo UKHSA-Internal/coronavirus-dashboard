@@ -161,7 +161,6 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
                                     layer: "below"
                                 }]
                             }}
-                            xaxis={{ range: [xMin, xMax] }}
                             yaxis={{ zeroline: false }}
                             data={ getTwoWayLollipopData(fields, data, xKey) }
                             { ...props }/>;
