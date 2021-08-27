@@ -9,7 +9,8 @@ import { Helmet } from "react-helmet";
 
 import { useParams } from "react-router";
 import { PageComponent } from "components/ChangeLogComponent/PageComponent";
-import { ChangeLogHeading, ChangeLogItemBody, useMarkdown } from "components/ChangeLogComponent/ChangeLogItem";
+import { ChangeLogHeading, ChangeLogItemBody } from "components/ChangeLogComponent/ChangeLogItem";
+import { useMarkdown } from "hooks/useMarkdown";
 import { DataList, Markdown } from "components/ChangeLogComponent/ChangeLogComponent.styles";
 
 import type { ComponentType } from "react";
