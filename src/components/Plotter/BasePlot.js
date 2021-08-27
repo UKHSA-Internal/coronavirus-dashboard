@@ -424,6 +424,19 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
 
     if ( !drawData.data?.length ) return <Loading/>;
 
+    // Shapes (specially lines) require custom range.
+    if ( "shapes" in layout ) {
+        const xMin = moment(min(drawData.data.map(v => min(v.x))))
+            .subtract(2, 'day')
+            .toDate();
+
+        const xMax = moment(max(drawData.data.map(v => max(v.x))))
+            .add(2, 'day')
+            .toDate();
+
+        xaxis.range = [xMin, xMax];
+    }
+
     return <div className={ "govuk-!-margin-top-2" }>
         <p className={ "govuk-visually-hidden" }>
             The data that is visualised in the chart is that which is tabulated
