@@ -37,7 +37,7 @@ svg.back-to-top {
 .govuk-list--dashed {
   & > li::before {
     content: "\2014";
-    margin-right: 0.5rem;
+    padding-right: 0.5rem;
     color: #7f7f7f;
   }
 }
@@ -59,4 +59,9 @@ dl.metrics {
     width: initial;
     margin-bottom: 2rem;
   }
+}
+
+.govuk-accordion__section-summary {
+  margin-top: 0;
+  margin-left: 0 !important;
 }
