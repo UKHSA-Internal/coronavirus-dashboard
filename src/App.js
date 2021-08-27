@@ -34,6 +34,7 @@ const
     Footer              = lazy(() => import('components/Footer')),
     Download            = lazy(() => import('pages/Download')),
     MetricDocs          = lazy(() => import('pages/MetricDocs')),
+    Metric              = lazy(() => import('pages/MetricDocs/Documentation')),
     DeveloperGuide      = lazy(() => import('pages/DevelopersGuide'));
 
 
@@ -132,6 +133,7 @@ const App = () => {
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
                                 <Route path="/details/developers-guide" component={ DeveloperGuide }/>
+                                <Route path="/metrics/doc/:metric" exact component={ Metric }/>
                                 <Route path="/metrics/:type?" component={ MetricDocs }/>
                                 <Route path={ "/:page" } component={ RedirectToDetails }/>
                             </Switch>
