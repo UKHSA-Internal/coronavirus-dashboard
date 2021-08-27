@@ -7595,10 +7595,10 @@ good-listener@^1.2.2:
   dependencies:
     delegate "^3.1.2"
 
-govuk-frontend@^3.12.0:
-  version "3.12.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.12.0.tgz#55d7057ed8f480a3f83ffeae54b68e0fc81607a3"
-  integrity sha512-+mM8BqEUqsBVSV/ud0dEhE8OmMdhkK53eEUp5YyPN+y3mwcdRnwwP2A2B5qFdFi6E6j/2AYuCG8l5kXD+JXNxA==
+govuk-frontend@^3.13.0:
+  version "3.13.0"
+  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.13.0.tgz#c52f3a3d54edccf58439db038dd75bbee5df0efa"
+  integrity sha512-JiPCeasuHZ+9m1VyqhsfE81PhWIW4Sweoe6Jvn6oMjQNr75ZpupiytN3DGwA+WKOoESHZibIG+heAzlkdZ/MhA==
 
 govuk-react-jsx@6.0.0:
   version "6.0.0"
