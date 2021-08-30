@@ -250,6 +250,11 @@ export const NumberBox: ComponentType<*> =
                 background-color: rgb(199,39,8,.2);
                 background: rgb(199,39,8,.2);
             }
+            
+            &.neutral {
+                color: rgb(56,63,67);
+                background-color: rgb(235,233,231.2);
+            }
         }
     }
     `;
