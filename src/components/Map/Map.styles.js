@@ -253,7 +253,7 @@ export const NumberBox: ComponentType<*> =
             
             &.neutral {
                 color: rgb(56,63,67);
-                background-color: rgb(235,233,231.2);
+                background-color: rgb(235,233,231);
             }
         }
     }
