@@ -28,6 +28,7 @@ import MapMarker from "assets/icon-mapmarker.svg";
 import useTimestamp from "hooks/useTimestamp";
 import usePrevious from "hooks/usePrevious";
 import GreenArrow from "assets/icon-arrow-green.svg";
+import GreyArrow from "assets/arrow.svg";
 import RedArrow from "assets/icon-arrow-red.svg";
 import { scaleColours } from "common/utils";
 import useGenericAPI from "hooks/useGenericAPI";
@@ -127,7 +128,7 @@ const Arrow = ({ direction }) => {
         case "SAME":
         default:
             angle = 90;
-            ArrowImage = GreenArrow;
+            ArrowImage = GreyArrow;
             altText = "The rate has not changed relative to the previous week.";
             break;
     }
@@ -143,6 +144,9 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
 
 
     if ( !setShowInfo ) return null;
+
+    let colourStatus = percentageChange > 0 ? "red" : "green";
+    if ( percentageChange === 0 ) colourStatus = "neutral";
 
     return <MapToolbox>
         <button style={{ position: "absolute", top: 3, right: 8, margin: 0, padding: 0, cursor: "pointer", fontSize: 1.5 + "rem" }}
@@ -162,7 +166,7 @@ const InfoCard = ({ areaName, date, rollingRate, totalThisWeek, totalChange, tre
                         <h3 className={ "govuk-heading-s" }>Total cases</h3>
                         <div className={ "number-row" }>
                             <span className={ "number" }>{ totalThisWeek }</span>
-                            <strong className={ `govuk-tag ${ percentageChange > 0 ? "red" : "green" } number` }>
+                            <strong className={ `govuk-tag ${ colourStatus } number` }>
                                 <Arrow direction={ trend }/>
                                 { numeral(totalChange).format("0,0") }&nbsp;{ `(${ numeral(percentageChange).format("0,0.0") }%)` }
                             </strong>
