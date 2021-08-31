@@ -7,11 +7,18 @@ import URLs from "common/urls";
 import axios from "axios";
 
 import type { ResponseType } from "axios";
-import { strFormat } from "../common/utils";
+import { strFormat } from "common/utils";
+
+import type {
+    JsonPayload,
+    URLNameOptions,
+} from "./GenericApi.types";
 
 
-const useGenericAPI  = ( urlName: string, defaultResponse: any= null, kwargs: any = {},
-                         responseType: ResponseType="json", params={}, onError=undefined, onEmpty=undefined) => {
+const useGenericAPI = (
+    urlName: URLNameOptions, defaultResponse: any= null, kwargs: JsonPayload = {},
+    responseType: ResponseType="json", params={}, onError=undefined, onEmpty=undefined
+): JsonPayload | JsonPayload[] | null | string => {
 
     const [ response, setResponse ] = useState(defaultResponse);
     const isGenericEndpoint = urlName.startsWith("genericApi");
