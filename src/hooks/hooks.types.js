@@ -29,8 +29,6 @@ export type generateUrlInputs = {
 }
 
 
-
-
 declare type GeoDataResponseItem = {
     properties: {
         [string]: {
