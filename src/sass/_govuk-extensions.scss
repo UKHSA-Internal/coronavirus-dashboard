@@ -35,11 +35,10 @@ svg.back-to-top {
 }
 
 .govuk-list--dashed {
-  & > li::before {
-    content: "\2014";
-    padding-right: 0.5rem;
-    color: #7f7f7f;
-  }
+  list-style-type: "\2014\00a0";
+  background-clip: content-box;
+  list-style-position: outside;
+  padding-left: 1.4rem;
 }
 
 dl.metrics {
