@@ -1,6 +1,6 @@
 {
   "name": "uk-covid19-dashboard",
-  "version": "2.14.1",
+  "version": "2.14.2",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
@@ -19,7 +19,7 @@
     "moment": "^2.29.1",
     "node-sass": "^4.11.0",
     "numeral": "^2.0.6",
-    "plotly.js": "^2.3.1",
+    "plotly.js": "^2.4.1",
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",
     "react-compare-slider": "^2.1.0",
@@ -29,8 +29,8 @@
     "react-helmet": "^6.1.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-plotly.js": "^2.5.1",
-    "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0",
+    "react-router": "^5.2.1",
+    "react-router-dom": "^5.2.1",
     "react-scripts": "^3.4.4",
     "react-select": "^4.3.1",
     "react-spinners": "^0.11.0",
