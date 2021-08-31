@@ -1,6 +1,6 @@
 // @flow
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import type { ComponentType } from 'react';
 
@@ -15,27 +15,70 @@ export const MarkdownContent: ComponentType<*> =
 export const APIMetricContainer: ComponentType<*> =
     styled
         .div`
-        display: inline-block;
-        background: #D9D9D9FF;
+        display: flex;
+        flex-wrap: wrap;
         margin-right: auto;
         width: auto;
-        margin-top: 1rem;
-        margin-bottom: 2rem;
+        ${ css`${ ({ small }) => ({ 
+            ...small 
+                ? { marginTop: '0.2rem', marginBottom: '0.2rem' }
+                : { marginTop: '1rem', marginBottom: '1rem' }
+        })}`}
         `;
 
 export const APILabel: ComponentType<*> =
     styled
-        .span`
+        .span
+        .attrs(({ small, className="", ...props }) => ({
+            className: `govuk-!-font-size-${ small ? 14 : 16 } ${className}`,
+            ...props
+        }))`
         background: #4c4c4c; 
         color: white;
-        padding: .5rem 1rem;
-        font-size: 1rem;
+        ${ css`${ ({ small }) => ({ 
+            ...small 
+                ? { padding: '.25rem .5rem' }
+                : { padding: '.5rem 1rem' }
+        })}`}
         `;
 
 export const APIMetric: ComponentType<*> =
     styled
-        .code`
+        .span
+        .attrs(({ small, className="", ...props }) => ({
+            className: `govuk-!-font-size-${ small ? 14 : 16 } ${className}`,
+            ...props
+        }))`
         background: #d9d9d9;
-        font-size: 1rem;
-        padding: .5rem 1rem;
+        font-family: menlo, monaco, courier, monospace;
+        ${ css`${ ({ small }) => ({ 
+            ...small 
+                ? { padding: '.25rem .5rem' }
+                : { padding: '.5rem 1rem' }
+        })}`}
+        `;
+
+
+export const MetadataContainer: ComponentType<*> =
+    styled
+        .dl
+        .attrs(({ small, className="", ...props }) => ({
+            className: `govuk-body ${className}`,
+            ...props
+        }))`
+        display: grid;
+        grid-template-columns: auto 1fr;
+        
+        & > dt {
+            grid-column: 1;
+            font-weight: bold;
+        }
+        
+        & > dd {
+            grid-column: 2;
+            
+            & > * {
+                white-space: nowrap;
+            }
+        }
         `;
