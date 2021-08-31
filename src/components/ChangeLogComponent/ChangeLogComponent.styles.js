@@ -66,9 +66,7 @@ export const Container: ComponentType<*> =
             
             @media only screen and (max-width: 1000px) {
                 flex-direction: column-reverse;
-                
             }
-            
         `;
 
 
