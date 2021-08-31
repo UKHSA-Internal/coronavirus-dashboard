@@ -57,7 +57,7 @@ const NavigationItems: ComponentType<Props> = ({ menuState, setMenuState, ...pro
                 <Link to={ "/details/interactive-map/cases" }>Interactive maps</Link>
             </SideNavListItem>
             <SideNavListItem className={`${pathname.startsWith('/metrics') ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/metrics" }>Metric documentations</Link>
+                <Link to={ "/metrics" }>Metrics documentation</Link>
             </SideNavListItem>
             <SideNavListItem className={`${pathname === '/details/about-data' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/about-data" }>About the data</Link>
