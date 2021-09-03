@@ -344,7 +344,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
 
     return <>
         <p id={ "month" } className={ "govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-3" }>
-            Percentage of vaccinated adults up to and including <DateStamp/>:
+            Percentage of people aged 16+ vaccinated up to and including <DateStamp/>:
         </p>
         <MapContainer>
             <MapComponent/>
