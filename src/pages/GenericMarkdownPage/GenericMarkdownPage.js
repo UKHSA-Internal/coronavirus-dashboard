@@ -13,7 +13,7 @@ import useGenericAPI from 'hooks/useGenericAPI';
 import { Markdown, Article } from './GenericMarkdownPage.styles';
 import type { GenericProps } from './GenericMarkdownPage.types';
 import type { ComponentType } from "react";
-// import { Helmet } from "react-helmet";
+
 import BrowserHistory from "components/BrowserHistory";
 import Loading from "components/Loading";
 
@@ -24,15 +24,16 @@ const GenericMarkdownPage: ComponentType<GenericProps> = ({ pathName }) => {
     let [ data, setData ] = useState(null);
 
     useEffect(() =>
-    remark()
-        .use(toc)
-        .use(slug)
-        .use(externalLink)
-        .use(html)
-        .process(rawData, (err, text) =>
-            setData(String(text))
-        ), [ rawData ])
-
+        remark()
+            .use(toc)
+            .use(slug)
+            .use(externalLink)
+            .use(html)
+            .process(rawData, (err, text) =>
+                setData(String(text))
+            ),
+        [ rawData ]
+    );
 
     if ( !data ) return <Loading/>;
 
@@ -43,6 +44,6 @@ const GenericMarkdownPage: ComponentType<GenericProps> = ({ pathName }) => {
     </BrowserHistory>;
 
 
-};  // About
+};  // GenericMarkdownPage
 
 export default GenericMarkdownPage;
