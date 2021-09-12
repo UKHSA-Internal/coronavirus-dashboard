@@ -38,7 +38,7 @@
     "react-tooltip": "^4.2.21",
     "remark": "^13.0.0",
     "remark-external-links": "^9.0.1",
-    "remark-html": "^14.0.0",
+    "remark-html": "^14.0.1",
     "remark-slug": "^7.0.0",
     "remark-toc": "^8.0.0",
     "replacestream": "^4.0.3",
