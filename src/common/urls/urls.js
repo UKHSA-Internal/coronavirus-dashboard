@@ -40,6 +40,7 @@ const URLs = {
     baseUrl:                                REACT_APP_BASE_URL,
     baseCDN:                                REACT_APP_DOWNLOADS_CDN,
     about:                                  `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/about.md`,
+    compliance:                             `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/compliance.md`,
     accessibility:                          `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/accessibility.md`,
     newWebsite:                             `https://${ REACT_APP_MAIN_CDN      }/public/assets/new_website.md`,
     archiveList:                            `https://${ REACT_APP_DOWNLOADS_CDN }/downloads?restype=container&comp=list`,
