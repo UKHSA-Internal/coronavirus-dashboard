@@ -13689,10 +13689,10 @@ remark-external-links@^9.0.1:
     unified "^10.0.0"
     unist-util-visit "^4.0.0"
 
-remark-html@^14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/remark-html/-/remark-html-14.0.0.tgz#48f5d1e3e0d6dfe957153f27fe11024c2432d1e1"
-  integrity sha512-ISQjSlOI3Hb99REjDz0cAhPJVJZDednsj4GNj4Ve7DEZdEXhVPOzBvym0Di+1K3p/RmKXqSw0r02JDmtATh6Dw==
+remark-html@^14.0.1:
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/remark-html/-/remark-html-14.0.1.tgz#2118516604c1a6c2ea9d5914a526942554e04e30"
+  integrity sha512-a/x5bTlFrkwYkz43zuJIk0m0IuS5Rx8zLztGwdzmAdUj0Hsi4C4nkJ8gTQRNXY/ET/gMrqQORMMI0arRItq/aQ==
   dependencies:
     "@types/mdast" "^3.0.0"
     hast-util-sanitize "^4.0.0"
