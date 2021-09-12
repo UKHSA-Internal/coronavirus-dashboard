@@ -52,6 +52,12 @@
     "localised": false,
     "hasLog": false
   },
+  "/details/compliance": {
+    "title": "Compliance",
+    "description": "statement of voluntary application of the Code of Practice for Statistics",
+    "localised": false,
+    "hasLog": false
+  },
   "/details/download": {
     "title": "Download data",
     "description": "Download data on the coronavirus pandemic in the United Kingdom.",
