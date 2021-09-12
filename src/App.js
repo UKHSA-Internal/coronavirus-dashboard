@@ -10,10 +10,9 @@ import moment from "moment";
 import useResponsiveLayout from "./hooks/useResponsiveLayout";
 import Loading from "components/Loading";
 import CookieBanner from "components/CookieBanner";
-import DataPageHeader from "./components/DataPageHeader";
+import DataPageHeader from "components/DataPageHeader";
 import SideNavigation from "components/SideNavigation";
 import DashboardHeader from "components/DashboardHeader";
-
 import './index.scss';
 
 
@@ -112,7 +111,6 @@ const App = () => {
                         <DashboardHeader/>
                         <Suspense fallback={ <Loading/> }>
                             <Switch>
-                                {/*<Route path="/details" exact render={ () => <Redirect to={ "/" }/> }/>*/}
                                 <Route path="/details/testing" exact component={ Tests }/>
                                 <Route path="/details/cases" exact component={ Cases }/>
                                 <Route path="/details/healthcare" exact component={ Healthcare }/>
@@ -125,13 +123,16 @@ const App = () => {
                                 <Route path="/details/announcements" exact component={ Announcements }/>
                                 <Route path="/details/announcements/:id" exact component={ AnnouncementRecord }/>
                                 <Route path="/details/download" exact component={ Download }/>
-                                <Route path="/details/about-data" exact component={ () => <MarkdownPage pathName={ "about" }/> }/>
-                                <Route path="/details/compliance" exact component={ () => <MarkdownPage pathName={ "compliance" }/> }/>
 
-                                {/*<Route path="/archive" component={ Archive }/>*/}
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
                                 <Route path="/details/developers-guide" component={ DeveloperGuide }/>
+                                <Route path="/details/about-data" exact>
+                                    <MarkdownPage pathName={ "about" }/>
+                                </Route>
+                                <Route path="/details/compliance" exact>
+                                    <MarkdownPage pathName={ "compliance" }/>
+                                </Route>
                                 <Route path={ "/:page" } component={ RedirectToDetails }/>
                             </Switch>
                         </Suspense>
