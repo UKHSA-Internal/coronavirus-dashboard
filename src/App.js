@@ -23,7 +23,6 @@ const
     Vaccinations        = lazy(() => import('pages/Vaccinations')),
     Deaths              = lazy(() => import('pages/Deaths')),
     Tests               = lazy(() => import('pages/Testing')),
-    About               = lazy(() => import('pages/About')),
     Accessibility       = lazy(() => import('pages/Accessibility')),
     Cookies             = lazy(() => import('pages/Cookies')),
     InteractiveMap      = lazy(() => import("pages/InteractiveMap")),
@@ -33,6 +32,7 @@ const
     Announcements       = lazy(() => import("pages/Announcements")),
     Footer              = lazy(() => import('components/Footer')),
     Download            = lazy(() => import('pages/Download')),
+    MarkdownPage        = lazy(() => import('pages/GenericMarkdownPage')),
     DeveloperGuide      = lazy(() => import('pages/DevelopersGuide'));
 
 
@@ -125,8 +125,9 @@ const App = () => {
                                 <Route path="/details/announcements" exact component={ Announcements }/>
                                 <Route path="/details/announcements/:id" exact component={ AnnouncementRecord }/>
                                 <Route path="/details/download" exact component={ Download }/>
-                                <Route path="/details/about-data" exact component={About}/>
-                        
+                                <Route path="/details/about-data" exact component={ () => <MarkdownPage pathName={ "about" }/> }/>
+                                <Route path="/details/compliance" exact component={ () => <MarkdownPage pathName={ "compliance" }/> }/>
+
                                 {/*<Route path="/archive" component={ Archive }/>*/}
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
