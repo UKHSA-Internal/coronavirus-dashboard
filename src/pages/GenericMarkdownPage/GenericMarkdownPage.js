@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 
 import toc from "remark-toc";
 import slug from "remark-slug";
@@ -9,7 +9,6 @@ import remark from "remark";
 import externalLink from "remark-external-links";
 
 import useGenericAPI from 'hooks/useGenericAPI';
-
 import { Markdown, Article } from './GenericMarkdownPage.styles';
 import type { GenericProps } from './GenericMarkdownPage.types';
 import type { ComponentType } from "react";
@@ -21,25 +20,28 @@ import Loading from "components/Loading";
 const GenericMarkdownPage: ComponentType<GenericProps> = ({ pathName }) => {
 
     const rawData = useGenericAPI(pathName, [], {}, "text");
-    let [ data, setData ] = useState(null);
+    const [ data, setData ] = useState(null);
 
-    useEffect(() =>
+    useMemo(() => {
         remark()
             .use(toc)
             .use(slug)
             .use(externalLink)
             .use(html)
             .process(rawData, (err, text) =>
-                setData(String(text))
-            ),
-        [ rawData ]
-    );
+                err ? err : setData(String(text))
+            );
+    }, [ rawData ]);
 
-    if ( !data ) return <Loading/>;
+    if ( !data || !rawData ) return <Loading/>;
 
     return <BrowserHistory>
         <Article>
-            <Markdown dangerouslySetInnerHTML={{ __html: data }}/>
+            <Markdown dangerouslySetInnerHTML={{
+                // Not entirely sure which plugin add the prefix, but
+                // we don't need it.
+                __html: data.replace(/(id=")user-content-/ig, '$1')
+            }}/>
         </Article>
     </BrowserHistory>;
 
