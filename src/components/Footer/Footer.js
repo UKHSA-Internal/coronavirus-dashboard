@@ -22,7 +22,7 @@ const FooterContents: ComponentType<*> = () => (
             <Link className="govuk-footer__link govuk-!-margin-right-3" to={ "/details/accessibility" }>
                 Accessibility
             </Link>
-            <Link className="govuk-footer__link" to={ "Cookies" }>
+            <Link className="govuk-footer__link" to={ "/details/cookies" }>
                 Cookies
             </Link>
         </p>
