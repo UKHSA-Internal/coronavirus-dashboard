@@ -162,9 +162,8 @@ export const CasesMap: ComponentType<*> = () => {
                 size.
             </p>
             <p className={ "govuk-!-margin-bottom-0" }>
-                For local authorities, the population used is the mid-2020 population
-                estimate from the Office for National Statistics. For Middle layer Super
-                Output Areas (MSOAs), the mid-2019 population estimates are used.
+                The population used is the mid-2020 population estimate from the Office
+                for National Statistics.
             </p>
 
             <h3 className={ "govuk-heading-m govuk-!-margin-top-7" }>Data not shown</h3>
