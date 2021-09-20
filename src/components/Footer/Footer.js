@@ -16,10 +16,13 @@ const FooterContents: ComponentType<*> = () => (
             </Link>
         </p>
         <p className={ "govuk-footer__meta-custom" }>
+            <Link className="govuk-footer__link govuk-!-margin-right-3" to={ "/details/compliance" }>
+                Compliance
+            </Link>
             <Link className="govuk-footer__link govuk-!-margin-right-3" to={ "/details/accessibility" }>
                 Accessibility
             </Link>
-            <Link className="govuk-footer__link" to={ "Cookies" }>
+            <Link className="govuk-footer__link" to={ "/details/cookies" }>
                 Cookies
             </Link>
         </p>

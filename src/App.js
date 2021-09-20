@@ -13,7 +13,6 @@ import CookieBanner from "components/CookieBanner";
 import DataPageHeader from "components/DataPageHeader";
 import SideNavigation from "components/SideNavigation";
 import DashboardHeader from "components/DashboardHeader";
-
 import './index.scss';
 
 
@@ -23,7 +22,6 @@ const
     Vaccinations        = lazy(() => import('pages/Vaccinations')),
     Deaths              = lazy(() => import('pages/Deaths')),
     Tests               = lazy(() => import('pages/Testing')),
-    About               = lazy(() => import('pages/About')),
     Accessibility       = lazy(() => import('pages/Accessibility')),
     Cookies             = lazy(() => import('pages/Cookies')),
     InteractiveMap      = lazy(() => import("pages/InteractiveMap")),
@@ -33,6 +31,7 @@ const
     Announcements       = lazy(() => import("pages/Announcements")),
     Footer              = lazy(() => import('components/Footer')),
     Download            = lazy(() => import('pages/Download')),
+    MarkdownPage        = lazy(() => import('pages/GenericMarkdownPage')),
     MetricDocs          = lazy(() => import('pages/MetricDocs')),
     Metric              = lazy(() => import('pages/MetricDocs/Documentation')),
     DeveloperGuide      = lazy(() => import('pages/DevelopersGuide'));
@@ -127,14 +126,18 @@ const App = () => {
                                 <Route path="/details/announcements" exact component={ Announcements }/>
                                 <Route path="/details/announcements/:id" exact component={ AnnouncementRecord }/>
                                 <Route path="/details/download" exact component={ Download }/>
-                                <Route path="/details/about-data" exact component={About}/>
-                        
-                                {/*<Route path="/archive" component={ Archive }/>*/}
+
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
                                 <Route path="/details/developers-guide" component={ DeveloperGuide }/>
                                 <Route path="/metrics/doc/:metric" exact component={ Metric }/>
                                 <Route path="/metrics/:type?" component={ MetricDocs }/>
+                                <Route path="/details/about-data" exact>
+                                    <MarkdownPage pathName={ "about" }/>
+                                </Route>
+                                <Route path="/details/compliance" exact>
+                                    <MarkdownPage pathName={ "compliance" }/>
+                                </Route>
                                 <Route path={ "/:page" } component={ RedirectToDetails }/>
                             </Switch>
                         </Suspense>
