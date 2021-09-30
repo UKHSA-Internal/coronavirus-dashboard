@@ -6604,10 +6604,10 @@ flip-pixels@^1.0.2:
   resolved "https://registry.yarnpkg.com/flip-pixels/-/flip-pixels-1.0.2.tgz#aad7b7d9fc65932d5f27e2e4dac4b494140845e4"
   integrity sha512-oXbJGbjDnfJRWPC7Va38EFhd+A8JWE5/hCiKcK8qjCdbLj9DTpsq6MEudwpRTH+V4qq+Jw7d3pUgQdSr3x3mTA==
 
-flow-bin@^0.160.1:
-  version "0.160.1"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.160.1.tgz#ae24ad6def1f05ae37789b6cc332b58975d29de0"
-  integrity sha512-LvQ9lB/vwW+lPjYIyACcGQCSLvL9f9hOM9jJJtfHQRrIgIShWqjvyv5V24M57HSxh0+6dBbVDYhUiZjjeArf7A==
+flow-bin@^0.161.0:
+  version "0.161.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.161.0.tgz#1c03ea4a9e3036a8bc639f050bd8dc6f5288e8bb"
+  integrity sha512-5BKQi+sjOXz67Kbc1teiBwd5e0Da6suW7S5oUCm9VclnzSZ3nlfNZUdrkvgJ5S4w5KDBDToEL7rREpn8rKF1zg==
 
 flush-write-stream@^1.0.0:
   version "1.1.1"
