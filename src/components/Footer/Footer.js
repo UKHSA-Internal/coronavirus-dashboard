@@ -37,10 +37,10 @@ const FooterContents: ComponentType<*> = () => (
         <p className={ "govuk-footer__meta-custom" }>
             Developed by&nbsp;
             <a className="govuk-footer__link"
-               href="https://www.gov.uk/government/organisations/public-health-england"
+               href="https://www.gov.uk/government/organisations/uk-health-security-agency"
                target="_blank"
                rel="noopener noreferrer"
-            >Public Health England</a>.
+            >UK Health Security Agency</a>.
         </p>
         <p className="govuk-footer__meta-custom">
             This service is open source. See our repositories
