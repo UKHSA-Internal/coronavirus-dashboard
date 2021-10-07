@@ -32,7 +32,7 @@ export const Legend: ComponentType<*> = () => {
         <ScaleLegend>
             <ScaleLegendLabel>
                 <LegendButton onClick={ () => setShowLegend(false) }>
-                    <span><abbr title={ "Percentage" }>%</abbr>&nbsp;16+ vaccinated</span>
+                    <span><abbr title={ "Percentage" }>%</abbr>&nbsp;12+ vaccinated</span>
                 </LegendButton>
             </ScaleLegendLabel>
             <ScaleGroup>
