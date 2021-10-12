@@ -5573,11 +5573,6 @@ elliptic@^6.5.3:
     minimalistic-assert "^1.0.1"
     minimalistic-crypto-utils "^1.0.1"
 
-emitter-component@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/emitter-component/-/emitter-component-1.1.1.tgz#065e2dbed6959bf470679edabeaf7981d1003ab6"
-  integrity sha1-Bl4tvtaVm/RwZ57avq95gdEAOrY=
-
 "emoji-regex@>=6.0.0 <=6.1.1":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-6.1.1.tgz#c6cd0ec1b0642e2a3c67a1137efc5e796da4f88e"
@@ -14921,13 +14916,6 @@ stream-shift@^1.0.0:
   resolved "https://registry.yarnpkg.com/stream-shift/-/stream-shift-1.0.1.tgz#d7088281559ab2778424279b0877da3c392d5a3d"
   integrity sha512-AiisoFqQ0vbGcZgQPY1cdP2I76glaVA/RauYR4G4thNFgkTqr90yXTo4LYX60Jl+sIlPNHHdGSwo01AvbKUSVQ==
 
-stream@=0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/stream/-/stream-0.0.2.tgz#7f5363f057f6592c5595f00bc80a27f5cec1f0ef"
-  integrity sha1-f1Nj8Ff2WSxVlfALyAon9c7B8O8=
-  dependencies:
-    emitter-component "^1.1.1"
-
 strict-uri-encode@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
@@ -15463,10 +15451,10 @@ swagger-client@^3.16.1:
     traverse "~0.6.6"
     url "~0.11.0"
 
-swagger-ui-react@^4.0.0-rc.1:
-  version "4.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/swagger-ui-react/-/swagger-ui-react-4.0.0-rc.1.tgz#b2bcf8d187dc267b9cbb3df24c6f3bb10fa719e1"
-  integrity sha512-eKa0QsDUknImmU7SrhagdDtAi3G+hU+Oyc0z5fN5at0mWqoRsH2Vm6nvUI+j39Y9MlfdPl7Yzu7T3sUhnUJ0ww==
+swagger-ui-react@^4.0.0-rc.3:
+  version "4.0.0-rc.3"
+  resolved "https://registry.yarnpkg.com/swagger-ui-react/-/swagger-ui-react-4.0.0-rc.3.tgz#393f424daf55272dd36737be654d978daf870d3d"
+  integrity sha512-Mo3+NvwLbbPy+ZJZoQkc3UudevSM03SHTZqwZOI7EY4KyMgqeet3xElnAUGZC94GqBZTstU0rf/znkgdaNo9qg==
   dependencies:
     "@babel/runtime-corejs3" "^7.14.7"
     "@braintree/sanitize-url" "^5.0.2"
@@ -15496,7 +15484,6 @@ swagger-ui-react@^4.0.0-rc.1:
     reselect "^4.0.0"
     serialize-error "^8.1.0"
     sha.js "^2.4.11"
-    stream "=0.0.2"
     swagger-client "^3.16.1"
     url-parse "^1.5.3"
     xml "=1.0.1"
