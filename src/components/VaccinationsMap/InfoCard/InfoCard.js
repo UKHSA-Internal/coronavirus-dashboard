@@ -10,6 +10,7 @@ import useResponsiveLayout from "hooks/useResponsiveLayout";
 import { analytics } from "common/utils";
 import useGenericAPI from "hooks/useGenericAPI";
 import Loading from "components/Loading";
+import { DateStamp } from "./DateStamp";
 
 
 const Panel = ({ children, setShowInfo }) => {
@@ -95,7 +96,7 @@ export const InfoCard = ({ data, areaName, date, postcode, areaType,
             { locationData?.[`${areaType}Name`] ?? "" }
             <small className={ "govuk-caption-s" }>
                 {areaType.toUpperCase()} <br/>
-                Up to and including { moment(date).subtract(1, "day").format("D MMMM YYYY") }
+                Up to and including <DateStamp/>
             </small>
         </h2>
         <NumbersContainer>

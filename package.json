@@ -1,6 +1,6 @@
 {
   "name": "uk-covid19-dashboard",
-  "version": "2.15.3-dev-1",
+  "version": "2.15.6-dev-2",
   "private": true,
   "homepage": "https://coronavirus.data.gov.uk/",
   "dependencies": {
@@ -10,7 +10,7 @@
     "d3-array": "^3.0.4",
     "d3-scale": "^4.0.1",
     "deep-equal": "^2.0.5",
-    "govuk-frontend": "^3.13.0",
+    "govuk-frontend": "^3.12.0",
     "govuk-react-jsx": "6.0.0",
     "js-cookie": "^3.0.1",
     "leaflet": "^1.6.0",

@@ -18,7 +18,7 @@ export const VaccinationsMap: ComponentType<*> = () => {
             <MainContainer className={ "govuk-body govuk-!-margin-0" }>
                 <div className={ "govuk-body govuk-!-margin-bottom-5" } style={{ maxWidth: 40 + "em" }}>
                     <p>
-                        This map shows the percentage of people aged 16 and over who have
+                        This map shows the percentage of people aged 12 and over who have
                         been vaccinated.
                     </p>
                     <p>
@@ -33,10 +33,10 @@ export const VaccinationsMap: ComponentType<*> = () => {
         <div className={ "markdown govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-7" }
              style={{ maxWidth: 50 + "em" }}>
             <h3 className={ "govuk-heading-m govuk-!-margin-top-3" }>
-                Percentage of people aged 16 and over who have been vaccinated
+                Percentage of people aged 12 and over who have been vaccinated
             </h3>
             <p>
-                The percentage of all people aged 16 and over who have been vaccinated.
+                The percentage of all people aged 12 and over who have been vaccinated.
                 We calculate this by dividing the total number of people who have received
                 a vaccination by the population and multiplying by 100.
             </p>
