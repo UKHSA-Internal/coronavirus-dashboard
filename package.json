@@ -43,7 +43,7 @@
     "remark-toc": "^8.0.0",
     "replacestream": "^4.0.3",
     "styled-components": "^5.3.1",
-    "swagger-ui-react": "^4.0.0-rc.1"
+    "swagger-ui-react": "^4.0.0-rc.4"
   },
   "scripts": {
     "lint": "yarn flow",
