@@ -15,9 +15,12 @@ export const MainContainer: ComponentType<*> =
             display: flex;
             flex-direction: row;
             width: 100%;
-            // height: 100%;
             margin-left: 0 !important;
             padding-top: 1px;
+            
+            @media screen and (max-width: 900px) {
+                flex-direction: column;
+            }
         `;
 
 
@@ -36,6 +39,10 @@ export const Column: ComponentType<*> =
                 flex-grow: 4;   
                 max-width: 100%;       
             }
+            
+            @media screen and (max-width: 900px) {
+                max-width: 100%;
+            }
         `;
 
 
@@ -48,9 +55,6 @@ export const SelectorLabel: ComponentType<*> =
         }))`
             padding: .5rem;
             text-decoration: underline;
-            //white-space: nowrap;
-            //overflow-x: hidden !important;
-            //text-overflow: ellipsis;
             
             ${({ isActive }) => css`
                 font-weight: ${isActive ? "bold" : "normal"};
@@ -78,6 +82,13 @@ export const SelectorContainer: ComponentType<*> =
                 }
                 
                 ${({ isActive }) => css`background: ${isActive ? "#1d70b8" : "inherit"}`};
+                
+                @media screen and (max-width: 900px) {
+                    ${({ isActive }) => css`${ {
+                        // display: isActive ? "block" : "none",
+                        maxWidth: "initial"
+                    }}`};
+                }
             }
         `;
 
