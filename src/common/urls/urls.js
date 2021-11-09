@@ -27,7 +27,7 @@ const URLs = {
     mainApi:         `https://${ REACT_APP_API_ENDPOINT  }/v1/data`,
     soaApi:          `https://${ REACT_APP_API_ENDPOINT  }/v1/soa`,
     modals:          `https://${ REACT_APP_MAIN_CDN      }/public/assets/modals/`,
-    postcode:        `https://${ REACT_APP_API_ENDPOINT  }/v1/code`,
+    postcode:        `https://${ REACT_APP_API_ENDPOINT  }/generic/code/postcode/{postcode}`,
     userApiEndpoint: `https://${ REACT_APP_USER_API_ENDPOINT  }`,
     latestCases: {
         csv:  `${ REACT_APP_BASE_URL }/downloads/csv/coronavirus-cases_latest.csv`,

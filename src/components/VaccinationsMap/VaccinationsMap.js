@@ -25,6 +25,7 @@ import useGenericAPI from "hooks/useGenericAPI";
 import { DateStamp } from "./InfoCard/DateStamp";
 import InfoCard from "./InfoCard";
 import { MapLayers } from "./constants";
+import { strFormat } from "../../common/utils";
 
 
 
@@ -296,9 +297,10 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                 el.style.backgroundSize = "100% 100%";
                 el.style.width = "70px";
                 el.style.height = "70px";
+                const postcodeCoords = postcodeData?.msoaCentroid ?? postcodeData?.utlaCentroid;
 
                 new mapboxgl.Marker(el, {anchor: "bottom"})
-                    .setLngLat(postcodeData.geometry.coordinates)
+                    .setLngLat(postcodeCoords)
                     .addTo(mapInstance);
 
                 if ( ind === 1 ) {
@@ -306,8 +308,8 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                 }
 
                 mapInstance.setCenter([
-                    postcodeData.geometry.coordinates[0],
-                    postcodeData.geometry.coordinates[1]
+                    postcodeCoords[0],
+                    postcodeCoords[1]
                 ]);
             }
         }
@@ -320,7 +322,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
 
             setCurrentLocation(prev => ({
                 ...prev,
-                currentLocation: postcodeData?.msoa
+                currentLocation: postcodeData?.msoaCentroid ?? postcodeData?.utlaCentroid
             }))
 
         }
@@ -352,12 +354,9 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                         e.preventDefault();
                         const postcode: string = document.getElementById("postcode").value;
                         (async () => {
-                            const { data } = await axios.get(URLs.postcode, {
-                                params: {
-                                    category: "postcode",
-                                    search: postcode.replace(/\s/, "").toUpperCase().trim()
-                                }
-                            });
+                            const { data } = await axios.get(
+                                strFormat(URLs.postcode, {kwargs: {postcode: postcode}})
+                            );
                             setPostcodeData(data)
                         })();
                     } }>
