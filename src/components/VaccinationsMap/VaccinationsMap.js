@@ -297,14 +297,23 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                 el.style.backgroundSize = "100% 100%";
                 el.style.width = "70px";
                 el.style.height = "70px";
-                const postcodeCoords = postcodeData?.msoaCentroid ?? postcodeData?.utlaCentroid;
+
+                let postcodeCoords, zoomLevel;
+
+                if (postcodeData.hasOwnProperty("msoaCentroid")) {
+                    postcodeCoords = postcodeData?.msoaCentroid;
+                    zoomLevel = 12.5;
+                } else {
+                    postcodeCoords = postcodeData.utlaCentroid;
+                    zoomLevel = 8;
+                }
 
                 new mapboxgl.Marker(el, {anchor: "bottom"})
                     .setLngLat(postcodeCoords)
                     .addTo(mapInstance);
 
                 if ( ind === 1 ) {
-                    mapInstance.setZoom(12.5);
+                    mapInstance.setZoom(zoomLevel);
                 }
 
                 mapInstance.setCenter([
