@@ -322,7 +322,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
 
             setCurrentLocation(prev => ({
                 ...prev,
-                currentLocation: postcodeData.msoa
+                currentLocation: postcodeData?.msoa
             }))
 
         }

@@ -625,7 +625,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
             setCurrentLocation(prev => ({
                 ...prev,
-                currentLocation: postcodeData.msoa
+                currentLocation: postcodeData?.msoa
             }))
 
         }
