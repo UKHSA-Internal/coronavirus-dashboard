@@ -30,7 +30,7 @@ import usePrevious from "hooks/usePrevious";
 import GreenArrow from "assets/icon-arrow-green.svg";
 import GreyArrow from "assets/arrow.svg";
 import RedArrow from "assets/icon-arrow-red.svg";
-import { scaleColours } from "common/utils";
+import { scaleColours, strFormat } from "common/utils";
 import useGenericAPI from "hooks/useGenericAPI";
 import type { ComponentType } from "react";
 import type { Props } from './Map.types.js';
@@ -598,16 +598,26 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
             el.style.width = "70px";
             el.style.height = "70px";
 
+            let postcodeCoords, zoomLevel;
+
+            if (postcodeData.hasOwnProperty("msoaCentroid")) {
+                postcodeCoords = postcodeData?.msoaCentroid;
+                zoomLevel = 12.5;
+            } else {
+                postcodeCoords = postcodeData.utlaCentroid;
+                zoomLevel = 8;
+            }
+
             new mapboxgl.Marker(el, {anchor: "bottom"})
-                .setLngLat(postcodeData.geometry.coordinates)
+                .setLngLat(postcodeCoords)
                 .addTo(map);
 
             map.flyTo({
                 center: [
-                    postcodeData.geometry.coordinates[0],
-                    postcodeData.geometry.coordinates[1]
+                    postcodeCoords[0],
+                    postcodeCoords[1]
                 ],
-                zoom: 12.5
+                zoom: zoomLevel
             });
 
             setShowInfo(true);
@@ -655,12 +665,9 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                             e.preventDefault();
                             const postcode: string = document.getElementById("postcode").value;
                             (async () => {
-                                const { data } = await axios.get(URLs.postcode, {
-                                    params: {
-                                        category: "postcode",
-                                        search: postcode.replace(/\s/, "").toUpperCase().trim()
-                                    }
-                                });
+                                const { data } = await axios.get(
+                                    strFormat(URLs.postcode, {kwargs: {postcode: postcode}})
+                                );
                                 setPostcodeData(data)
                             })();
                         } }>
@@ -700,7 +707,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                                maxDate={ maxDate }
                                setShowInfo={ setShowInfo }/>
             }
-            </MapContainer>
+        </MapContainer>
         <span style={{ textAlign: "right" }}>
             <a onClick={ downloadImage }
                className={"govuk-button govuk-!-margin-top-3 govuk-!-margin-bottom-1"}
