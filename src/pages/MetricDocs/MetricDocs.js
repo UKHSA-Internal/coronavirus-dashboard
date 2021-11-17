@@ -10,7 +10,7 @@ import { TopicSection } from "./Sections/GenericSection";
 
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 
-import Pane, { ColumnEntry, PaneColumn } from "components/Pane";
+import Pane, { ColumnEntry, PaneColumn, BREAKPOINT } from "components/Pane";
 
 import type { ComponentType } from "react";
 
@@ -43,7 +43,7 @@ const MetricDocs: ComponentType<*> = () => {
 
     const basePath = "/metrics";
     const { pathname } = useLocation();
-    const layout = useResponsiveLayout(900);
+    const layout = useResponsiveLayout(BREAKPOINT);
 
     return <Pane basePath={ basePath }>
         <Switch>
