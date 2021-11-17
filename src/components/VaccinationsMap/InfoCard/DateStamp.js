@@ -20,7 +20,7 @@ export const DateStamp: ComponentType<*> = ({ date }) => {
             {
                 area_type: "nation",
                 area_code: "E92000001",
-                metric: "cumVaccinationCompleteCoverageByVaccinationDatePercentage"
+                metric: "cumVaccinationSecondDoseUptakeByVaccinationDatePercentage"
             },
             "json",
             {date},
