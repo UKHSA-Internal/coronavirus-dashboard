@@ -137,7 +137,7 @@ export const Table: ComponentType<*> = ({ className, stickyHeader=true,
 
     };  // sortingCallback
 
-    return <TableContainer { ...props }>
+    return <TableContainer className={ props?.parentClassName ?? "" } { ...props }>
 
         <GovUKTable
             className={ `govuk-table ${ stickyHeader ? "sticky-header" : "" } ${ className }`  }
@@ -194,7 +194,7 @@ export const DataTable = ({ fields, data, ...props }) => {
         </span>
         <Table
             head={[
-                fields.map(item => ({ value: item.label, type: item.type }))
+                fields.map(item => ({ value: item.label, type: item.type, className: item.className }))
             ]}
             body={
                 data.map(item => fieldNames.map(name =>
