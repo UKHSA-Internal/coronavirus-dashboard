@@ -30,6 +30,10 @@ export const FieldSet: ComponentType<*> =
             & > .govuk-hint {
                 max-width: 30em;
             }
+            
+            &:last-of-type {
+                margin-bottom: 0;
+            }
         `;
 
 
