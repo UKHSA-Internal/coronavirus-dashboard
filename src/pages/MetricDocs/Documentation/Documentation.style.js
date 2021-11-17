@@ -26,6 +26,26 @@ export const APIMetricContainer: ComponentType<*> =
         })}`}
         `;
 
+export const Deprecated: ComponentType<*> =
+    styled
+        .strong
+        .attrs(({ small, className="", ...props }) => ({
+            className: `govuk-!-font-size-${ small ? 14 : 16 } ${className}`,
+            ...props
+        }))`
+        display: inline-flex;
+        align-content: center;
+        color: #942514;
+        background: #f6d7d2;
+        margin-bottom: .5rem;
+        ${ css`${ ({ small }) => ({ 
+            ...small 
+                ? { padding: '.25rem .5rem' }
+                : { padding: '.5rem 1rem' }
+        })}`}
+        `;
+
+
 export const APILabel: ComponentType<*> =
     styled
         .span
@@ -35,6 +55,7 @@ export const APILabel: ComponentType<*> =
         }))`
         background: #4c4c4c; 
         color: white;
+        margin-bottom: .5rem;
         ${ css`${ ({ small }) => ({ 
             ...small 
                 ? { padding: '.25rem .5rem' }
@@ -51,6 +72,8 @@ export const APIMetric: ComponentType<*> =
         }))`
         background: #d9d9d9;
         font-family: menlo, monaco, courier, monospace;
+        margin-right: .5rem;
+        margin-bottom: .5rem;
         ${ css`${ ({ small }) => ({ 
             ...small 
                 ? { padding: '.25rem .5rem' }
@@ -76,6 +99,9 @@ export const MetadataContainer: ComponentType<*> =
         
         & > dd {
             grid-column: 2;
+            display: flex;
+            flex-wrap: wrap;
+            row-gap: .3rem;
             
             & > * {
                 white-space: nowrap;
