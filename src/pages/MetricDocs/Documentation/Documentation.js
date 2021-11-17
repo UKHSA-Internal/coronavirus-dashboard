@@ -11,7 +11,7 @@ import type { ComponentType } from "react";
 import {
     APILabel,
     APIMetric,
-    APIMetricContainer,
+    APIMetricContainer, Deprecated,
     MarkdownContent,
     MetadataContainer
 } from "./Documentation.style";
@@ -88,26 +88,28 @@ const AssociatingLogs: ComponentType<*> = ({ data }) => {
         <DataTable
             sortable={ false }
             fields={[
-                { label: "Date", value: "dt", type: "text" },
-                { label: "Headline", value: "link", type: "text" },
+                { label: "Date", value: "dt", type: "date" },
+                { label: "Headline", value: "link", type: "text", className: "body-text" },
                 { label: "Type", value: "type", type: "text" },
-                { label: "Applicable until", value: "expiry", type: "text" }
+                { label: "Applicable until", value: "expiry", type: "date" }
             ]}
-           data={
-               data.map(item => ({
-                   dt: <Timestamp timestamp={ item.date }/>,
-                   link:
-                       <Link className={ "govuk-link" }
-                             to={ `/details/whats-new/record/${item.id}` }>
-                           { item.heading }
-                       </Link>,
-                   type: <ChangeLogType type={ item.type }/>,
-                   expiry:
-                       item?.expiry
-                           ? <Timestamp timestamp={ item.expiry }/>
-                           : <span style={{ color: "#797979" }}>N/A</span>,
-               }))
-           }
+            className={ "metric-doc-table" }
+            parentClassName={ "doc-table-container" }
+            data={
+                data.map(item => ({
+                    dt: <Timestamp timestamp={ item.date } format={ "DD MMM YYYY" }/>,
+                    link:
+                        <Link className={ "govuk-link" }
+                              to={ `/details/whats-new/record/${item.id}` }>
+                            { item.heading }
+                        </Link>,
+                    type: <ChangeLogType type={ item.type }/>,
+                    expiry:
+                        item?.expiry
+                            ? <Timestamp timestamp={ item.expiry } format={ "DD MMM YYYY" }/>
+                            : <span style={{ color: "#797979" }}>N/A</span>,
+                }))
+            }
         />
         {
             data ? null : <span>No records for this metric.</span>
@@ -238,6 +240,13 @@ const MetricDocumentation: ComponentType<*> = ({}) => {
                     </span>
                 </APILabel>
                 <APIMetric>{ data.metric }</APIMetric>
+                {
+                    data.deprecated
+                        ? <Deprecated>
+                            Deprecated on&nbsp;<Timestamp timestamp={ data.deprecated }/>
+                        </Deprecated>
+                        : null
+                }
             </APIMetricContainer>
         </header>
         <Container>
