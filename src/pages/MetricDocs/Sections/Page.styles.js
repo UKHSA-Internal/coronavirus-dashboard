@@ -6,7 +6,7 @@ import type { ComponentType } from 'react';
 
 export const PageHeading: ComponentType<*> =
     styled
-        .div
+        .header
         .attrs(({ className="", ...props }) => ({
             className: `govuk-!-margin-bottom-4 ${className}`,
             ...props
@@ -14,6 +14,7 @@ export const PageHeading: ComponentType<*> =
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         `;
 
 
@@ -35,7 +36,7 @@ export const FieldSet: ComponentType<*> =
 
 export const Container: ComponentType<*> =
     styled
-        .div
+        .article
         .attrs(({ className="", ...props }) => ({
             className: `govuk-body-s ${className}`,
             ...props
