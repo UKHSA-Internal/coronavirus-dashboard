@@ -6,10 +6,11 @@ import type { ComponentType } from "react";
 
 export const Option: ComponentType<*> =
     styled
-        .section`
+        .li`
             padding: 1rem .5rem;
             border-bottom: 1px dotted #b1b4b6;
-            
+            margin-bottom: 0 !important;
+
             &:last-of-type {
                 border-bottom: none;
             }
@@ -42,10 +43,11 @@ export const Category: ComponentType<*> =
 
 export const Tag: ComponentType<*> =
     styled
-        .span
+        .li
         .attrs(({ className="", ...props }) => ({
             className: `govuk-tag govuk-tag--blue govuk-!-margin-right-1 ${className}`,
             ...props
         }))`
             font-size: 12px !important;
+            margin-bottom: 0 !important;
         `;

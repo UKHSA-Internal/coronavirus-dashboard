@@ -39,9 +39,9 @@ const RenderMetrics: ComponentType<*> = ({ data, filter }) => {
                 </strong>
                 <code dangerouslySetInnerHTML={ markedContent(metric.metric, filter) }/>
             </div>
-            <div className={ "govuk-!-margin-top-1" }>{
+            <ul className={ "govuk-list govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>{
                 (metric?.tag ?? metric?.tags).map( tag => <Tag key={ tag }>{ tag }</Tag> )
-            }</div>
+            }</ul>
         </Option>
     );
 
