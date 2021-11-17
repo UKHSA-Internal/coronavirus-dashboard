@@ -13,6 +13,18 @@ export const MarkdownContent: ComponentType<*> =
         &.no-left-margin {
             margin-left: 0 !important;
         }
+        
+        &.with-toc {
+            &>ul:first-of-type {
+                margin-bottom: 2rem;
+                
+                &,
+                & * {
+                    list-style-type: none;
+                    font-size: 16px;
+                }
+            }
+        }
         `;
 
 
