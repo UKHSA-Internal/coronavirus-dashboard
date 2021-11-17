@@ -125,7 +125,7 @@ export const SelectorDescription: ComponentType<*> =
             ...props,
         }))`
             padding: 0 .5rem .5rem 0;
-            margin: 0;
+            margin: 0 0 0 0.5rem !important;
             text-decoration: none !important;
             ${({ isActive }) => css`color: ${isActive ? "#f3f2f1" : "black"}`};
         `;
