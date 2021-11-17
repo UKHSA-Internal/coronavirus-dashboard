@@ -3,8 +3,8 @@
 import React from "react";
 
 import {
-    Option, Header, Category, Tag,
-    SearchToken, TagsContainer, APIMetricContainer
+    Option, Header, Category, Tag, SearchToken,
+    TagsContainer, APIMetricContainer, ResultsHeader
 } from "./MetricView.styles";
 import { Link } from "react-router-dom";
 
@@ -52,14 +52,22 @@ const Metrics: ComponentType<*> = ({ data, filter }) => {
 };  // Metrics
 
 
-const RenderMetrics: ComponentType<*> = ({ data, filterFunc, userInput, category=null, types=null }) => {
+const RenderMetrics: ComponentType<*> = ({ data, filterFunc, download, downloadName,
+                                           userInput, category=null, types=null }) => {
 
     const filteredData = data.filter(filterFunc);
 
     return <>
-        <p className={ "govuk-body govuk-!-margin-top-3 govuk-body-s" }>
-            <b>Count:</b> { data.length } metrics
-        </p>
+        <ResultsHeader>
+            <span>
+                <b>Count:</b> { data.length } metrics
+            </span>
+            <a className={ "govuk-link govuk-link--no-visited-state" }
+               download={ downloadName }
+               rel={ "noopener noreferrer" }
+               target={ "_blank" }
+               href={ download }>Export results as JSON</a>
+        </ResultsHeader>
         <ul className={ "govuk-list" }>{
             !filteredData.length
                 ? <li>
