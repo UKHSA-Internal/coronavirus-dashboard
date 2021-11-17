@@ -64,3 +64,24 @@ dl.metrics {
   margin-top: 0;
   margin-left: 0 !important;
 }
+
+
+.doc-table-container {
+  max-height: inherit !important;
+}
+
+.metric-doc-table {
+  max-height: inherit;
+
+  & > thead > tr,
+  & > tbody > tr {
+    & > th.govuk-table__header--date,
+    & > td.govuk-table__cell--date {
+          max-width: 5rem;
+    }
+  }
+
+  & .body-text {
+    width: 60%;
+  }
+}
