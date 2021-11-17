@@ -6,14 +6,13 @@ import Select from 'react-select';
 import type { ComponentType } from "react";
 import { ColumnEntry } from "components/Pane";
 import { SelectOptions } from "pages/Download/Download.styles";
-import { Container, Option } from "./Options.styles";
-import { Link } from "react-router-dom";
 import { Redirect, useLocation } from "react-router";
 import Loading from "components/Loading";
-import useMetricSearch from "hooks/useMetricSearch";
-import usePrevious from "hooks/usePrevious";
 import URLs from "common/urls";
-import { createQuery, getUriParams } from "common/utils";
+import { capitalise, createQuery, getUriParams } from "common/utils";
+import useGenericAPI from "hooks/useGenericAPI";
+import RenderMetrics from "components/MetricView";
+import { FieldSet, PageHeading, Container } from "./Page.styles";
 
 
 const ExtendedOptionStyles = Object.create(SelectOptions);
@@ -23,25 +22,22 @@ ExtendedOptionStyles.control = ( base, state ) => ({
     boxShadow: state.isFocused ? "0 0 0 3px #fd0" : "none"
 });
 
-const Metrics: ComponentType<*> = ({ userInput, setIsLoading, isLoading, setUri, uri }) => {
 
-    const prevInput = usePrevious(userInput);
+const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
+
     const { pathname, search: queries } = useLocation();
     const { search=null, category=null, tags=null } = getUriParams(queries);
-    const [categories, setCategory] = useState(category ? category : null);
-    const [types, setType] = useState(tags ? tags.split(",") : []);
-
-    const metrics = useMetricSearch({
-        defaultResponse: null,
-        params: { search, category, tags }
-    });
+    const [ categories, setCategory ] = useState(category ? category : null);
+    const [ types, setType ] = useState(tags ? tags.split(",") : []);
+    const [ userInput, setUserInput ] = useState(search);
+    const [ data, setData ] = useState(metrics);
 
     const tagOptions = metrics && [
         ...metrics.reduce((acc, cur) => {
             cur.tags.map(tag => acc.add(tag));
             return acc
         }, new Set())
-    ].map(tag => ({ label: tag, value: tag }));
+    ].map(tag => ({ label: capitalise(tag), value: tag }));
 
     const categoryOptions = metrics && [
         ...metrics.reduce((acc, cur) => acc.add(cur.category), new Set())
@@ -49,9 +45,11 @@ const Metrics: ComponentType<*> = ({ userInput, setIsLoading, isLoading, setUri,
 
     useEffect( () => {
 
-        const params = [
-            {key: "search", sign: "=", value: userInput.replace(/[^a-z6028\s]/gi, "")}
-        ];
+        const params = [];
+
+        if ( userInput ) {
+            params.push({key: "search", sign: "=", value: userInput.replace(/[^a-z6028\s]/gi, "")});
+        }
 
         if ( types.length ) {
             params.push({ key: "tags", sign: "=", value: types.join(",") });
@@ -63,85 +61,105 @@ const Metrics: ComponentType<*> = ({ userInput, setIsLoading, isLoading, setUri,
 
         setUri(pathname + createQuery(params))
 
-    }, [ userInput, types.length, categories ]);
+        setData(
+            metrics.filter(item =>
+                (
+                    userInput
+                        ?  (
+                            item.metric.indexOf(userInput.replace(/[^a-z6028\s]/gi, "")) > -1 ||
+                            item.metric_name.indexOf(userInput.replace(/[^a-z6028\s]/gi, "")) > -1
+                        )
+                        : true
+                ) &&
+                (
+                    categories
+                        ? item.category.toLowerCase() === categories.toLowerCase()
+                        : true
+                ) &&
+                (
+                    types.length
+                        ? item.tags.filter(tag => types.indexOf(tag) > -1).length === types.length
+                        : true
+                )
+            )
+        )
 
-    useEffect(() => setIsLoading(prevInput !== userInput), [userInput, prevInput]);
-
-    if ( isLoading )
-        return <Loading/>;
-
-    if ( !isLoading && userInput.length < 3 )
-        return null;
-
-    if ( !isLoading && !metrics?.length )
-        return <div><p>
-            No metrics to match <code style={{ border: "1px solid #b1b4b6", borderRadius: "2px", padding: "1px 2px"}}>{ userInput }</code>
-            {
-                categories || types
-                    ? "."
-                    : " and / or the defined criteria."
-            }
-        </p></div>;
+    }, [ types, categories, metrics, userInput ]);
 
     return <>
+        <PageHeading>
+            <h2 className={ "govuk-heading-l govuk-!-margin-bottom-0" }>Metrics by name</h2>
+            <a className={ "govuk-link govuk-link--no-visited-state" }
+               href={ URLs["genericApiMetricSearch"] + `?search=${userInput}` }
+               rel={ "noopener noreferrer" }
+               target={ "_blank" }
+               download={ `metrics_${userInput}.json` }>Export results as JSON</a>
+        </PageHeading>
         <div className={ "govuk-form-group" }>
-            <fieldset className="govuk-fieldset">
-                <label htmlFor={ "metric-category" } className={ "govuk-label govuk-!-font-weight-bold" }>Filter by category</label>
-                <div id={ "metric-search-hint" } className={ "govuk-hint govuk-!-font-size-16" } style={{ maxWidth: "30em" }}>
+            <FieldSet>
+                <label htmlFor={ "metric-search" }
+                       className={ "govuk-label govuk-!-font-weight-bold" }>
+                    Metric
+                </label>
+                <div id={ "metric-search-hint" } className={ "govuk-hint govuk-!-font-size-16" }>
+                    Enter 3 or more characters from a metric name to see results.
+                    For example, enter <strong>case</strong> to see all case metrics.
+                </div>
+                <input name={ "metric-search" } inputMode={ "search" } type={ "search" } autoComplete={ "off" }
+                       placeholder={ "Search by metric or API name" }
+                       onChange={ ({ target }) => setUserInput(target.value) }
+                       value={ userInput || "" }
+                       style={{ maxWidth: "20em" }}
+                       className={ "govuk-input" } maxLength={ "120" }/>
+            </FieldSet>
+            <FieldSet>
+                <label htmlFor={ "metric-category" }
+                       className={ "govuk-label govuk-!-font-weight-bold" }>
+                    Filter by category
+                </label>
+                <div id={ "metric-search-hint" } className={ "govuk-hint govuk-!-font-size-16" }>
                     Optional. Select the category you want to include - for example,
                     select <strong>Cases</strong> to only include metrics associated with cases.
                 </div>
                 <Select name={ "metric-category" }
                         options={ categoryOptions }
-                       placeholder={ "Select metric categories for your search" }
+                        placeholder={ "Select metric categories for your search" }
                         isClearable
                         styles={ ExtendedOptionStyles }
                         className={ "select" }
-                       onChange={ ({ value }) => setCategory(value) }/>
-            </fieldset>
-            <fieldset className="govuk-fieldset govuk-!-margin-top-5">
-                <label htmlFor={ "metric-tag" } className={ "govuk-label govuk-!-font-weight-bold" }>Filter by type</label>
-                <div id={ "metric-search-hint" } className={ "govuk-hint govuk-!-font-size-16" } style={{ maxWidth: "30em" }}>
+                        value={ categoryOptions.find(item => item.value === category) }
+                        onChange={ ( target ) => setCategory(target?.value ?? null) }/>
+            </FieldSet>
+            <FieldSet>
+                <label htmlFor={ "metric-tag" }
+                       className={ "govuk-label govuk-!-font-weight-bold" }>
+                    Filter by type
+                </label>
+                <div id={ "metric-search-hint" } className={ "govuk-hint govuk-!-font-size-16" }>
                     Optional. Select the types you want to include - for example,
                     select <strong>cumulative</strong> to only include cumulative metrics.
                 </div>
                 <Select name={ "metric-tag" } options={ tagOptions }
-                       placeholder={ "Select metric types for your search" }
+                        placeholder={ "Select metric types for your search" }
                         isClearable
                         isMulti
                         styles={ ExtendedOptionStyles }
+                        value={ tagOptions?.filter(item => types.indexOf(item.value.toLowerCase()) > -1) ?? [] }
                         className={ "select" }
-                       onChange={ item => setType(item.map(({value}) => value)) }/>
-            </fieldset>
+                        onChange={ item => setType(item.map(({ value }) => value)) }/>
+            </FieldSet>
         </div>
-        <div className={ "govuk-!-margin-top-7" } style={{ display: "flex", justifyContent: "stretch", flexDirection: "column" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
-                 className={ "govuk-!-margin-bottom-4" }>
-                <h3 className={ "govuk-heading-m govuk-!-margin-bottom-0" }>Results</h3>
-                <a className={ "govuk-link govuk-link--no-visited-state" }
-                   href={ URLs["genericApiMetricSearch"] + `?search=${userInput}` }
-                  rel={ "noopener noreferrer" }
-                   target={ "_blank" }
-                   download={ `metrics_${userInput}.json` }>Export results as JSON</a>
-            </div>
-            {
-                metrics.map(item => <Option key={ item?.metric }>
-                    <div className={ "govuk-!-margin-bottom-1" } style={{ display: "flex", justifyContent: "space-between"}}>
-                        <Link className={ "govuk-link govuk-link--no-underline govuk-link--no-visited-state govuk-!-font-weight-bold" }
-                              to={ `/metrics/doc/${item?.metric}` }
-                              dangerouslySetInnerHTML={{ __html: item.metric_name.replace(new RegExp(userInput, "gi"), (match) => `<mark>${match}</mark>`) }}/>
-                        <span className={ "govuk-tag govuk-!-margin-left-2" } style={{ fontSize: 14 }}>{ item.category }</span>
-                    </div>
-                    <div className={ "govuk-!-margin-bottom-2" }>
-                        <strong className={ "govuk-!-font-size-14 govuk-!-margin-right-1" }>API name:</strong>
-                        <code dangerouslySetInnerHTML={{ __html: item.metric.replace(new RegExp(userInput, "gi"), (match) => `<mark>${match}</mark>`) }}/>
-                    </div>
-                    <div className={ "govuk-!-margin-top-1" }>
-                    { item.tags.map(tag => <span className={ "govuk-tag govuk-tag--blue govuk-!-margin-right-1" } style={{ fontSize: 12 }} key={ tag }>{ tag }</span>) }
-                    </div>
-                </Option>)
-            }
-        </div>
+        <p className={ "govuk-body govuk-body-s" }>
+            <b>Count:</b> { data.length } metrics
+        </p>
+        <ul className={ "govuk-list govuk-!-margin-top-3" } style={{ display: "flex", justifyContent: "stretch", flexDirection: "column" }}>{
+            !data?.length
+                ? <li>
+                    No metrics to match <code style={{ border: "1px solid #b1b4b6", borderRadius: "2px", padding: "1px 2px"}}>{ userInput }</code>
+                    { categories || types ? "." : " and / or the defined criteria." }
+                </li>
+                : <RenderMetrics data={ data } filter={ userInput }/>
+        }</ul>
     </>
 
 };
@@ -149,43 +167,23 @@ const Metrics: ComponentType<*> = ({ userInput, setIsLoading, isLoading, setUri,
 
 export const MetricName: ComponentType<*> = ({ ...props }) => {
 
-    const { pathname } = useLocation();
-    const [userInput, setUserInput] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [ uri, setUri ] = useState(pathname);
-    const responseDelay = 1000;  // milliseconds
-    const minInputChars = 3;
+    const { pathname, search: queries } = useLocation();
+    const [ uri, setUri ] = useState(pathname + queries);
 
-    const metricInputCallback = ({ target }) => {
-        if ( target.value.length >=  minInputChars ) {
-            setIsLoading(true);
-            setTimeout(() => setUserInput(target.value), responseDelay);
-        }
-    };
+    const data = useGenericAPI(
+        "genericApiMetricSearch",
+        [],
+        {},
+        "json",
+    );
+
+    if ( !data.length ) return <ColumnEntry { ...props }><Loading/></ColumnEntry>;
 
     return <ColumnEntry { ...props }>
         <Container>
-            <div className={ "govuk-form-group" } style={{ display: "flex" }}>
-                <fieldset className="govuk-fieldset">
-                    <legend className="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        <h2 className="govuk-heading-l govuk-!-margin-bottom-0">
-                            Search metrics
-                        </h2>
-                    </legend>
-                    <label htmlFor={ "metric-search" } className={ "govuk-label govuk-!-font-weight-bold" }>Metric</label>
-                    <div id={ "metric-search-hint" } className={ "govuk-hint govuk-!-font-size-16" } style={{ maxWidth: "30em" }}>
-                        Enter 3 or more characters from a metric name to see results.
-                        For example, enter <strong>case</strong> to see all case metrics.
-                    </div>
-                    <input name={ "metric-search" } inputMode={ "search" } type={ "search" } autoComplete={ "off" }
-                           placeholder={ "Enter 3 or more characters to search" }
-                           onChange={ metricInputCallback }
-                           className={ "govuk-input" } minLength={ "3" } maxLength={ "120" }/>
-                </fieldset>
-            </div>
-            <Metrics userInput={ userInput } setIsLoading={ setIsLoading } isLoading={ isLoading } setUri={ setUri } uri={ uri }/>
+            <Metrics metrics={ data } setUri={ setUri } uri={ uri }/>
         </Container>
-        { userInput ? <Redirect to={ uri }/> : null }
+        <Redirect to={ uri }/>
     </ColumnEntry>
 
 };  // AreaType
