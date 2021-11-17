@@ -20,7 +20,7 @@ export const MainContainer: ComponentType<*> =
             width: 100%;
             margin-left: 0 !important;
             padding-top: 1px;
-            margin-top: .5rem;
+            margin-top: 1px;
             
             @media screen and (max-width: ${BREAKPOINT}px) {
                 flex-direction: column;
@@ -46,7 +46,6 @@ export const Column: ComponentType<*> =
             
             @media screen and (max-width: ${BREAKPOINT}px) {
                 max-width: 100%;
-                border-bottom: 1px solid grey;
                 border-right: none;
             }
         `;
