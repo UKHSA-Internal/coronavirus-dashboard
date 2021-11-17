@@ -1,12 +1,14 @@
 // @flow
 
-import React, { useState, useEffect } from "react";
-import { groupBy, sort } from "common/utils";
+import React from "react";
 import type { ComponentType } from "react";
-import { Column, MainContainer, SelectorLabelContainer, SelectorDescription, SelectorLabel, SelectorContainer } from "./Pane.styles";
+import {
+    Column, MainContainer, SelectorLabelContainer,
+    SelectorDescription, SelectorLabel, SelectorContainer,
+    BREAKPOINT
+} from "./Pane.styles";
 import { useLocation} from "react-router";
 import { Link } from "react-router-dom";
-import useResponsiveLayout from "../../hooks/useResponsiveLayout";
 
 
 export const ColumnEntry: ComponentType<*> = ({id, label, description, children, parentPath, nextColumn }) => {
@@ -51,3 +53,6 @@ const Pane: ComponentType<*> = ({ basePath, children }) => {
 
 
 export default Pane;
+export {
+    BREAKPOINT
+}

@@ -5,6 +5,9 @@ import styled, { css } from 'styled-components';
 import type { ComponentType } from 'react';
 
 
+export const BREAKPOINT = 1140;
+
+
 export const MainContainer: ComponentType<*> =
     styled
         .div
@@ -19,7 +22,7 @@ export const MainContainer: ComponentType<*> =
             padding-top: 1px;
             margin-top: .5rem;
             
-            @media screen and (max-width: 900px) {
+            @media screen and (max-width: ${BREAKPOINT}px) {
                 flex-direction: column;
             }
         `;
@@ -41,7 +44,7 @@ export const Column: ComponentType<*> =
                 max-width: 100%;       
             }
             
-            @media screen and (max-width: 900px) {
+            @media screen and (max-width: ${BREAKPOINT}px) {
                 max-width: 100%;
                 border-bottom: 1px solid grey;
                 border-right: none;
@@ -89,9 +92,8 @@ export const SelectorContainer: ComponentType<*> =
                 
                 ${({ isActive }) => css`background: ${isActive ? "#1d70b8" : "inherit"}`};
                 
-                @media screen and (max-width: 900px) {
+                @media screen and (max-width: ${BREAKPOINT}px) {
                     ${({ isActive }) => css`${ {
-                        // display: isActive ? "block" : "none",
                         maxWidth: "initial"
                     }}`};
                 }
