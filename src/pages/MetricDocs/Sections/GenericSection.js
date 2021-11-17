@@ -11,7 +11,7 @@ import RenderMetrics from "components/MetricView";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 import useGenericAPI from "hooks/useGenericAPI";
 import { capitalise } from "common/utils";
-import { ColumnEntry } from "components/Pane";
+import { BREAKPOINT, ColumnEntry } from "components/Pane";
 
 import { Column } from "components/Pane/Pane.styles";
 import { FieldSet, PageHeading, Container } from "./Page.styles";
@@ -67,7 +67,6 @@ const LabelLookup = {
 };
 
 
-
 const Content: ComponentType<*> = ({ data, heading, sectionType, typeKey }) => {
 
     const [ filter, setFilter ] = useState(null);
@@ -88,21 +87,21 @@ const Content: ComponentType<*> = ({ data, heading, sectionType, typeKey }) => {
         { data.map( item =>
             <Route path={ `/metrics/${sectionType}/${ encodeURI(item[typeKey].replace(/\s/g, '-')) }` } key={ `${typeKey}-routes-${item[typeKey]}` }>
                 <Container>
-                    <div style={{ display: "flex", justifyContent: "stretch", flexDirection: "column" }}>
-                        <PageHeading>
-                            <h2 className={ "govuk-heading-l govuk-!-margin-bottom-0" }>
-                                Metrics by { heading }
-                                <small style={{ display: 'flex' }} className={ "govuk-caption-m govuk-!-margin-top-1" }>{
-                                    LabelLookup?.[sectionType]?.[item[typeKey]]?.label ?? capitalise(item[typeKey])
-                                }</small>
-                            </h2>
-                            <a className={ "govuk-link govuk-link--no-visited-state" }
-                               href={ URLs["genericApiMetricSearch"] + `?areaType=${item[typeKey]}` }
-                               rel={ "noopener noreferrer" }
-                               target={ "_blank" }
-                               download={ `metrics_${item[typeKey]}.json` }>Export results as JSON</a>
+                    <PageHeading>
+                        <h2 className={ "govuk-heading-l govuk-!-margin-bottom-0" }>
+                            Metrics by { heading }
+                            <small style={{ display: 'flex' }} className={ "govuk-caption-m govuk-!-margin-top-1" }>{
+                                LabelLookup?.[sectionType]?.[item[typeKey]]?.label ?? capitalise(item[typeKey])
+                            }</small>
+                        </h2>
+                        <a className={ "govuk-link govuk-link--no-visited-state" }
+                           href={ URLs["genericApiMetricSearch"] + `?areaType=${item[typeKey]}` }
+                           rel={ "noopener noreferrer" }
+                           target={ "_blank" }
+                           download={ `metrics_${item[typeKey]}.json` }>Export results as JSON</a>
 
-                        </PageHeading>
+                    </PageHeading>
+                    <div style={{ display: "flex", justifyContent: "stretch", flexDirection: "column" }}>
                         <FieldSet>
                             <label htmlFor={ "metric-search" } className={ "govuk-label govuk-!-font-weight-bold" }>
                                 Metric
@@ -122,12 +121,9 @@ const Content: ComponentType<*> = ({ data, heading, sectionType, typeKey }) => {
                                    minLength={ "0" }
                                    maxLength={ "120" }/>
                         </FieldSet>
-                        <p className={ "govuk-body govuk-!-margin-top-3 govuk-body-s" }>
-                            <b>Count:</b> { item.payload.filter(filterFunc).length } metrics
-                        </p>
-                        <ul className={ "govuk-list" }>
-                            <RenderMetrics data={ item.payload.filter(filterFunc) } filter={ filter }/>
-                        </ul>
+                        <RenderMetrics data={ item.payload }
+                                       filterFunc={ filterFunc }
+                                       userInput={ filter }/>
                     </div>
                 </Container>
             </Route>
@@ -172,16 +168,9 @@ const getAreaParam = ( sectionType: string ): Object<string, string> => {
 };  // getAreaParam
 
 
-const getAreaLabel = ( sectionType: string, key: string, payload: Object ) => {
-
-    return payload?.[sectionType]?.[key] ?? payload[key]
-
-};  // getAreaLabel
-
-
 export const TopicSection: ComponentType<*> = ({ parent, urlName, parentPath, ...props }) => {
 
-    const layout = useResponsiveLayout(900);
+    const layout = useResponsiveLayout(BREAKPOINT);
     const { pathname } = useLocation();
     const sectionType = /.*\/(\w+)$/.exec(parentPath)[1];
     const areaParams = getAreaParam(sectionType);
@@ -211,7 +200,7 @@ export const TopicSection: ComponentType<*> = ({ parent, urlName, parentPath, ..
                                      description={ LabelLookup?.[sectionType]?.[item?.[sectionType]]?.description ?? null}/>
                     )
                 }</Column>
-                : <Link className="govuk-back-link" to={ parentPath }>Back to { areaParams.name.toLowerCase() }</Link>
+                : <Link className="govuk-back-link govuk-!-margin-left-3" to={ parentPath }>Back to { areaParams.label }</Link>
         }
         <Switch>
             <Route path={ `${parentPath}/:${sectionType}` } exact>
