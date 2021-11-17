@@ -89,11 +89,6 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
     return <>
         <PageHeading>
             <h2 className={ "govuk-heading-l govuk-!-margin-bottom-0" }>Metrics by name</h2>
-            <a className={ "govuk-link govuk-link--no-visited-state" }
-               href={ URLs["genericApiMetricSearch"] + `?search=${userInput}` }
-               rel={ "noopener noreferrer" }
-               target={ "_blank" }
-               download={ `metrics_${userInput}.json` }>Export results as JSON</a>
         </PageHeading>
         <div className={ "govuk-form-group" }>
             <FieldSet>
@@ -102,11 +97,11 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
                     Metric
                 </label>
                 <div id={ "metric-search-hint" } className={ "govuk-hint govuk-!-font-size-16" }>
-                    Enter 3 or more characters from a metric name to see results.
+                    Enter metric name or API name to see results.
                     For example, enter <strong>case</strong> to see all case metrics.
                 </div>
                 <input name={ "metric-search" } inputMode={ "search" } type={ "search" } autoComplete={ "off" }
-                       placeholder={ "Search by metric or API name" }
+                       placeholder={ "Search metrics" }
                        onChange={ ({ target }) => setUserInput(target.value) }
                        value={ userInput || "" }
                        style={{ maxWidth: "20em" }}
@@ -151,6 +146,8 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
         </div>
         <RenderMetrics data={ data }
                        filterFunc={ () => true }
+                       download={ URLs["genericApiMetricSearch"] + `?search=${userInput}` }
+                       downloadName={ `metrics_${userInput}.json` }
                        userInput={ userInput }
                        category={ categories }
                        types={ types }/>

@@ -94,12 +94,6 @@ const Content: ComponentType<*> = ({ data, heading, sectionType, typeKey }) => {
                                 LabelLookup?.[sectionType]?.[item[typeKey]]?.label ?? capitalise(item[typeKey])
                             }</small>
                         </h2>
-                        <a className={ "govuk-link govuk-link--no-visited-state" }
-                           href={ URLs["genericApiMetricSearch"] + `?areaType=${item[typeKey]}` }
-                           rel={ "noopener noreferrer" }
-                           target={ "_blank" }
-                           download={ `metrics_${item[typeKey]}.json` }>Export results as JSON</a>
-
                     </PageHeading>
                     <div style={{ display: "flex", justifyContent: "stretch", flexDirection: "column" }}>
                         <FieldSet>
@@ -107,8 +101,9 @@ const Content: ComponentType<*> = ({ data, heading, sectionType, typeKey }) => {
                                 Metric
                             </label>
                             <div id={ "metric-search-hint" } className={ "govuk-hint govuk-!-font-size-16" }>
-                                Enter the name or an API metric to see results.
-                                For example, enter <strong>case</strong> to see all case metrics.
+                                Enter metric name or API name to see results.
+                                For example, enter <strong>case</strong> to see all case
+                                metrics in this category.
                             </div>
                             <input name={ "metric-search" }
                                    inputMode={ "search" }
@@ -122,6 +117,8 @@ const Content: ComponentType<*> = ({ data, heading, sectionType, typeKey }) => {
                                    maxLength={ "120" }/>
                         </FieldSet>
                         <RenderMetrics data={ item.payload }
+                                       download={ URLs["genericApiMetricSearch"] + `?areaType=${item[typeKey]}` }
+                                       downloadName={ `metrics_${item[typeKey]}.json` }
                                        filterFunc={ filterFunc }
                                        userInput={ filter }/>
                     </div>
