@@ -2,7 +2,10 @@
 
 import React from "react";
 
-import { Option, Header, Category, Tag } from "./MetricView.styles";
+import {
+    Option, Header, Category, Tag,
+    SearchToken, TagsContainer, APIMetricContainer
+} from "./MetricView.styles";
 import { Link } from "react-router-dom";
 
 import type { ComponentType } from "react";
@@ -21,7 +24,7 @@ const markedContent = ( content: string, filter: string ): MarkedContentData => 
 };  // MarkedContent
 
 
-const RenderMetrics: ComponentType<*> = ({ data, filter }) => {
+const Metrics: ComponentType<*> = ({ data, filter }) => {
 
     return data.map(metric =>
         <Option key={ metric.metric }>
@@ -33,19 +36,41 @@ const RenderMetrics: ComponentType<*> = ({ data, filter }) => {
                     <Category>{ metric.category }</Category>
                 </div>
             </Header>
-            <div className={ "govuk-!-margin-bottom-2" }>
+            <APIMetricContainer>
                 <strong className={ "govuk-!-font-size-14 govuk-!-margin-right-1" }>
                     API name:
                 </strong>
                 <code dangerouslySetInnerHTML={ markedContent(metric.metric, filter) }/>
-            </div>
-            <ul className={ "govuk-list govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>{
-                (metric?.tag ?? metric?.tags).map( tag => <Tag key={ tag }>{ tag }</Tag> )
-            }</ul>
+            </APIMetricContainer>
+            <TagsContainer>{
+                ( metric?.tag ?? metric?.tags )
+                    .map( tag => <Tag key={ tag }>{ tag }</Tag> )
+            }</TagsContainer>
         </Option>
     );
 
-};  // RenderMetrics
+};  // Metrics
+
+
+const RenderMetrics: ComponentType<*> = ({ data, filterFunc, userInput, category=null, types=null }) => {
+
+    const filteredData = data.filter(filterFunc);
+
+    return <>
+        <p className={ "govuk-body govuk-!-margin-top-3 govuk-body-s" }>
+            <b>Count:</b> { data.length } metrics
+        </p>
+        <ul className={ "govuk-list" }>{
+            !filteredData.length
+                ? <li>
+                    No metrics to match <SearchToken>{ userInput }</SearchToken>
+                    { category || types ? "." : " and / or the defined criteria." }
+                </li>
+                : <Metrics data={ filteredData } filter={ userInput }/>
+        }</ul>
+    </>
+
+}; // RenderMetrics
 
 
 export default RenderMetrics;
