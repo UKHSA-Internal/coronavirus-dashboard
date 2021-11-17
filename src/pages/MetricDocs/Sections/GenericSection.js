@@ -14,10 +14,9 @@ import { capitalise } from "common/utils";
 import { ColumnEntry } from "components/Pane";
 
 import { Column } from "components/Pane/Pane.styles";
-import { Container } from "./Options.styles";
+import { FieldSet, PageHeading, Container } from "./Page.styles";
 
 import type { ComponentType } from "react";
-import { FieldSet, PageHeading } from "./Page.styles";
 
 
 const LabelLookup = {
