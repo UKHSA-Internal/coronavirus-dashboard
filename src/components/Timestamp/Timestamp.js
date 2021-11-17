@@ -10,9 +10,9 @@ import type { TimestampProps } from "./Timestamp.types";
 
 const Timestamp: ComponentType<TimestampProps> = ({ timestamp, format="D MMMM YYYY", ...props }) => {
 
-    return <time dateTime={ timestamp } { ...props }>
-        { moment(timestamp).format(format) }
-    </time>;
+    return <time dateTime={ timestamp }
+                 dangerouslySetInnerHTML={{ __html: moment(timestamp).format(format).replace(/\s/g, "&nbsp;") }}
+                 { ...props }/>
 
 };  // Timestamp
 
