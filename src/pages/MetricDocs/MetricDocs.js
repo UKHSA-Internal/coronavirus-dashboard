@@ -59,7 +59,9 @@ const MetricDocs: ComponentType<*> = () => {
                         <ColumnEntry level={ 0 } id={ "area_type" } label={ "Area type" } parentPath={ basePath }
                                      description={ "Search metrics based on the area type for which they are published." }/>
                     </PaneColumn>
-                    : pathname.split("/").length === 3 ? <Link className="govuk-back-link" to={ basePath }>Back to metrics</Link> : null
+                    : pathname.split("/").length === 3
+                        ? <Link className="govuk-back-link govuk-!-margin-left-3" to={ basePath }>Back to metrics</Link>
+                        : null
                 }
                 <SubTypes/>
             </Route>
