@@ -6,6 +6,7 @@ import type { ComponentType } from "react";
 import { Column, MainContainer, SelectorLabelContainer, SelectorDescription, SelectorLabel, SelectorContainer } from "./Pane.styles";
 import { useLocation} from "react-router";
 import { Link } from "react-router-dom";
+import useResponsiveLayout from "../../hooks/useResponsiveLayout";
 
 
 export const ColumnEntry: ComponentType<*> = ({id, label, description, children, parentPath, nextColumn }) => {
@@ -16,12 +17,12 @@ export const ColumnEntry: ComponentType<*> = ({id, label, description, children,
         return children
     }
 
-    const active = pathname.indexOf(id) > -1;
+    const active = pathname.split("/").indexOf(id) > -1;
 
     return <SelectorContainer isActive={ active }>
         <Link className={ "govuk-link govuk-link--no-visited-state govuk-link--no-underline " }
               to={ active ? parentPath : `${parentPath}/${id}` }>
-            <SelectorLabelContainer>
+            <SelectorLabelContainer isActive={ active }>
                 <SelectorLabel isActive={ active }>{ label }</SelectorLabel>
             </SelectorLabelContainer>
             {
