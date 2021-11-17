@@ -45,7 +45,7 @@ const AreaTypes = {
 };
 
 
-const Markdown: ComponentType<*> = ({ payload }) => {
+const Markdown: ComponentType<*> = ({ payload, className="" }) => {
 
     const data = useMarkdown(payload ? payload.replace(/([#]+)/g, '###$1') : null);
 
@@ -53,24 +53,24 @@ const Markdown: ComponentType<*> = ({ payload }) => {
     else if ( !data ) return <Loading/>;
 
     return <MarkdownContent
-        className={ "govuk-body markdown page" }
+        className={ `govuk-body markdown page ${className}` }
         dangerouslySetInnerHTML={ { __html: data } }
     />;
 
 };  // Markdown
 
 
-const Introduction: ComponentType<*> = ({ data }) => {
+const Summary: ComponentType<*> = ({ data }) => {
 
     if ( !data ) return null;
 
     return <section>
-        <h3 className={ "govuk-heading-m" }>Introduction</h3>
-        <Markdown payload={ data?.body }/>
+        <h3 className={ "govuk-heading-m" }>Summary</h3>
+        <Markdown payload={ data?.body } className={ "no-left-margin" }/>
         <hr className={ "govuk-section-break govuk-section-break--l" }/>
     </section>;
 
-}; // Introduction
+}; // Summary
 
 
 const AssociatingLogs: ComponentType<*> = ({ data }) => {
@@ -251,7 +251,7 @@ const MetricDocumentation: ComponentType<*> = ({}) => {
         </header>
         <Container>
             <MainContent style={{ borderTop: "none" }}>
-                <Introduction data={ data.documentation?.abstract }/>
+                <Summary data={ data.documentation?.abstract }/>
                 <AdditionalDetails documentation={ data.documentation }/>
                 <hr className={ "govuk-section-break govuk-section-break--l"  }/>
                 <AssociatingLogs data={ data?.logs }/>
