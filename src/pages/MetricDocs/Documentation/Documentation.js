@@ -45,15 +45,20 @@ const AreaTypes = {
 };
 
 
-const Markdown: ComponentType<*> = ({ payload, className="" }) => {
+const Markdown: ComponentType<*> = ({ payload, className="", toc=false }) => {
 
-    const data = useMarkdown(payload ? payload.replace(/([#]+)/g, '###$1') : null);
+    payload = toc ? "# Table of contents\n\r\n\r" + payload : payload;
+
+    const data = useMarkdown(
+        payload ? payload.replace(/([#]+)/g, '###$1') : null,
+        toc
+    );
 
     if ( !payload ) return null
     else if ( !data ) return <Loading/>;
 
     return <MarkdownContent
-        className={ `govuk-body markdown page ${className}` }
+        className={ `govuk-body markdown page ${className} ${ toc ? "with-toc" : "" }` }
         dangerouslySetInnerHTML={ { __html: data } }
     />;
 
@@ -77,7 +82,7 @@ const AssociatingLogs: ComponentType<*> = ({ data }) => {
 
     return <section>
         <h3 className={ "govuk-heading-m" }>Changes and updates</h3>
-        <MarkdownContent className={ "markdown page" }>
+        <MarkdownContent className={ "markdown page no-left-margin" }>
             <p>Logs of changes made to the metric over time.</p>
             <p>
                 Note that all log entries come into effect from the date on which they are
@@ -112,7 +117,9 @@ const AssociatingLogs: ComponentType<*> = ({ data }) => {
             }
         />
         {
-            data ? null : <span>No records for this metric.</span>
+            !data || !(data?.length)
+                ? <span>There are no logs associated with this metric.</span>
+                : null
         }
     </section>;
 
@@ -183,7 +190,7 @@ const AdditionalDetails: ComponentType<*> = ({ documentation }) => {
                                 </span>
                         },
                         content: {
-                            children: <Markdown payload={ documentation?.[docName]?.body }/>
+                            children: <Markdown payload={ documentation?.[docName]?.body } toc/>
                         }
                     }
                 }
