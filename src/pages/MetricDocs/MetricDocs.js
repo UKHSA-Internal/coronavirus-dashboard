@@ -2,14 +2,17 @@
 
 import React from "react";
 
-import type { ComponentType } from "react";
-import Pane, { ColumnEntry, PaneColumn } from "components/Pane";
-import { AreaTypes } from "./Sections/AreaType";
-import { AreaNames } from "./Sections/AreaName";
-import { Category } from "./Sections/Category";
 import { Route, Switch, useLocation } from "react-router";
+import { Link } from "react-router-dom";
+
 import { MetricName } from "./Sections/MetricName";
-import { MetricType } from "./Sections/MetricType";
+import { TopicSection } from "./Sections/GenericSection";
+
+import useResponsiveLayout from "hooks/useResponsiveLayout";
+
+import Pane, { ColumnEntry, PaneColumn } from "components/Pane";
+
+import type { ComponentType } from "react";
 
 
 const SubTypes: ComponentType<*> = () => {
@@ -17,16 +20,8 @@ const SubTypes: ComponentType<*> = () => {
     const { pathname } = useLocation();
 
     return <>
-        <Route path={ "/metrics/areaType" }>
-            <PaneColumn>
-                <AreaTypes parent={ pathname } level={ 1 }/>
-            </PaneColumn>
-        </Route>
-        <Route path={ "/metrics/areaName" }>
-            <AreaNames parent={ pathname } level={ 1 }/>
-        </Route>
         <Route path={ "/metrics/category" }>
-            <Category parent={ pathname } level={ 1 }/>
+            <TopicSection parent={ pathname } level={ 1 } urlName={ "genericApiMetricProps" } parentPath={ "/metrics/category" }/>
         </Route>
         <Route path={ "/metrics/name" }>
             <PaneColumn>
@@ -34,9 +29,10 @@ const SubTypes: ComponentType<*> = () => {
             </PaneColumn>
         </Route>
         <Route path={ "/metrics/type" }>
-            <PaneColumn>
-                <MetricType parent={ pathname } level={ 1 }/>
-            </PaneColumn>
+            <TopicSection parent={ pathname } level={ 1 } urlName={ "genericApiMetricProps" } parentPath={ "/metrics/type" }/>
+        </Route>
+        <Route path={ "/metrics/area_type" }>
+            <TopicSection parent={ pathname } level={ 1 } urlName={ "genericApiMetricProps" } parentPath={ "/metrics/area_type" }/>
         </Route>
     </>;
 
@@ -46,22 +42,25 @@ const SubTypes: ComponentType<*> = () => {
 const MetricDocs: ComponentType<*> = () => {
 
     const basePath = "/metrics";
+    const { pathname } = useLocation();
+    const layout = useResponsiveLayout(900);
 
     return <Pane basePath={ basePath }>
         <Switch>
             <Route path={ "/metrics" }>
-                <PaneColumn>
-                    <ColumnEntry level={ 0 } id={ "name" } label={  "Metric name" } parentPath={ basePath }
-                                 description={ "See all available metrics." }/>
-                    <ColumnEntry level={ 0 } id={ "category" } label={  "Metric category" } parentPath={ basePath }
-                                 description={ "Search metrics based on their category - that is, the page of the website on which they are displayed." }/>
-                    <ColumnEntry level={ 0 } id={ "type" } label={  "Metric type" } parentPath={ basePath }
-                                 description={ "Search metrics based on their type - for example, all cumulative metrics." }/>
-                    <ColumnEntry level={ 0 } id={ "areaType" } label={  "Area type" } parentPath={ basePath }
-                                 description={ "Search metrics based on the area type for which they are published." }/>
-                    <ColumnEntry level={ 0 } id={ "areaName" } label={  "Area name" } parentPath={ basePath }
-                                 description={ "Search metrics based on the area name for which they are published." }/>
-                </PaneColumn>
+                { layout === "desktop" || pathname === basePath
+                    ? <PaneColumn>
+                        <ColumnEntry level={ 0 } id={ "name" } label={ "Metric name" } parentPath={ basePath }
+                                     description={ "See all available metrics." }/>
+                        <ColumnEntry level={ 0 } id={ "category" } label={ "Metric category" } parentPath={ basePath }
+                                     description={ "Search metrics based on their category - that is, the page of the website on which they are displayed." }/>
+                        <ColumnEntry level={ 0 } id={ "type" } label={ "Metric type" } parentPath={ basePath }
+                                     description={ "Search metrics based on their type - for example, all cumulative metrics." }/>
+                        <ColumnEntry level={ 0 } id={ "area_type" } label={ "Area type" } parentPath={ basePath }
+                                     description={ "Search metrics based on the area type for which they are published." }/>
+                    </PaneColumn>
+                    : pathname.split("/").length === 3 ? <Link className="govuk-back-link" to={ basePath }>Back to metrics</Link> : null
+                }
                 <SubTypes/>
             </Route>
         </Switch>
