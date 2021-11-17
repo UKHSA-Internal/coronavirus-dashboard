@@ -97,12 +97,11 @@ const Details: ComponentType = ({ data }) => {
 export const ChangeLogType: ComponentType<*> = ({ type, standAlone=false, ...props }) => {
 
     return <CategoryContainer standAlone={ standAlone } { ...props } >
+        <span className={ "govuk-visually-hidden" }>Log category:</span>
         <Category color={ colours[type]?.text ?? "#000000" }
                   bgColor={ colours[type]?.background ?? "inherit" }
-                  standAlone={ standAlone }>
-            <span className={ "govuk-visually-hidden" }>Log category:</span>
-            { type }
-        </Category>
+                  standAlone={ standAlone }
+                  dangerouslySetInnerHTML={{ __html: type.replace(/\s/g, "&nbsp;") }}/>
     </CategoryContainer>
 
 }; // ChangeLogType
