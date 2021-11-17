@@ -149,17 +149,11 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
                         onChange={ item => setType(item.map(({ value }) => value)) }/>
             </FieldSet>
         </div>
-        <p className={ "govuk-body govuk-body-s" }>
-            <b>Count:</b> { data.length } metrics
-        </p>
-        <ul className={ "govuk-list govuk-!-margin-top-3" } style={{ display: "flex", justifyContent: "stretch", flexDirection: "column" }}>{
-            !data?.length
-                ? <li>
-                    No metrics to match <code style={{ border: "1px solid #b1b4b6", borderRadius: "2px", padding: "1px 2px"}}>{ userInput }</code>
-                    { categories || types ? "." : " and / or the defined criteria." }
-                </li>
-                : <RenderMetrics data={ data } filter={ userInput }/>
-        }</ul>
+        <RenderMetrics data={ data }
+                       filterFunc={ () => true }
+                       userInput={ userInput }
+                       category={ categories }
+                       types={ types }/>
     </>
 
 };
