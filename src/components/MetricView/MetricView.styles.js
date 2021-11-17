@@ -9,7 +9,7 @@ export const Option: ComponentType<*> =
         .li`
             display: flex;
             flex-flow: column;
-            padding: 1rem .5rem;
+            padding: 1rem 0;
             border-bottom: 1px dotted #b1b4b6;
             margin-bottom: 0 !important;
 
@@ -101,4 +101,13 @@ export const SearchToken: ComponentType<*> =
             border: 1px solid #b1b4b6;
             border-radius: 2px;
             padding: 1px 2px;
+        `;
+
+
+export const ResultsHeader: ComponentType<*> =
+    styled
+        .div`
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
         `;
