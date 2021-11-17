@@ -17,6 +17,7 @@ export const MainContainer: ComponentType<*> =
             width: 100%;
             margin-left: 0 !important;
             padding-top: 1px;
+            margin-top: .5rem;
             
             @media screen and (max-width: 900px) {
                 flex-direction: column;
@@ -42,6 +43,8 @@ export const Column: ComponentType<*> =
             
             @media screen and (max-width: 900px) {
                 max-width: 100%;
+                border-bottom: 1px solid grey;
+                border-right: none;
             }
         `;
 
@@ -72,11 +75,14 @@ export const SelectorContainer: ComponentType<*> =
                 flex-direction: column;
                 padding: .5rem;
                 min-width: 100px;
+                margin-bottom: 4px;
+                margin-right: 2px;
+                margin-left: 2px;
                 
                 &:focus, 
                 &:hover, 
                 &:active {
-                    ${({ isActive }) => css`background-color: ${isActive ? "#1d70b8" : "transparent"}`} !important;
+                    ${({ isActive }) => css`background-color: ${isActive ? "#1d70b8" : "#e7e7e7"}`} !important;
                     box-shadow: none !important;
                     text-decoration: none;
                 }
@@ -102,12 +108,13 @@ export const SelectorLabelContainer: ComponentType<*> =
             
             &::after {
                 content: "\\203A";
-                color: #6B7276;
+                color: ${({ isActive }) => css`${ isActive ?  '#fff' : '#6B7276' }`};
                 text-decoration: none;
                 padding-right: .5rem;
                 padding-left: 1rem;
             }
         `;
+
 
 export const SelectorDescription: ComponentType<*> =
     styled
