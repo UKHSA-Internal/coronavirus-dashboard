@@ -9,6 +9,10 @@ export const MarkdownContent: ComponentType<*> =
     styled
         .div`
         max-width: 40em;
+        
+        &.no-left-margin {
+            margin-left: 0 !important;
+        }
         `;
 
 
@@ -63,6 +67,7 @@ export const APILabel: ComponentType<*> =
         })}`}
         `;
 
+
 export const APIMetric: ComponentType<*> =
     styled
         .span
@@ -100,11 +105,12 @@ export const MetadataContainer: ComponentType<*> =
         & > dd {
             grid-column: 2;
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             row-gap: .3rem;
             
             & > * {
                 white-space: nowrap;
+                max-width: fit-content;
             }
         }
         `;
