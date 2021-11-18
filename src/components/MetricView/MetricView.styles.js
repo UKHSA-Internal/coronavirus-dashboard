@@ -1,6 +1,6 @@
 // @flow
 
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import type { ComponentType } from "react";
 
 
@@ -19,7 +19,7 @@ export const Option: ComponentType<*> =
         `;
 
 
-export const Header: ComponentType<*> =
+export const Content: ComponentType<*> =
     styled
         .div
         .attrs(({ className="", ...props }) => ({
@@ -32,23 +32,51 @@ export const Header: ComponentType<*> =
              row-gap: .5rem;
              flex-wrap: wrap;
              justify-content: space-between;    
-             margin-bottom: .5rem !important;
+             margin-bottom: 0 !important;
              
-             & > a {
-                max-width: 60%;
+             @media only screen and (max-width: 400px) {
+                flex-flow: column;
+                
+                & > a {
+                    align-self: start !important;
+                }
+             }
+
+             & > a { 
+                justify-self: flex-start;
+                align-self: center;             
+                @media only screen and (min-width: 400px) {
+                    max-width: 60%;
+                }
              }   
         `;
 
 
-export const APIMetricContainer: ComponentType<*> =
+export const HeadingLabels: ComponentType<*> =
+    styled
+        .div`
+            display: flex;
+            flex-direction: row;
+            row-gap: 3px;
+            column-gap: 3px;
+            justify-self: flex-end;
+            margin-left: auto;
+            align-items: start;
+        `;
+
+
+export const InfoRow: ComponentType<*> =
     styled
         .div
         .attrs(({ className="", ...props }) => ({
             className: `govuk-!-margin-bottom-2 ${className}`,
             ...props
         }))`
-             display: grid;
-             grid-template-columns: auto 1fr;
+             display: flex;
+             flex-direction: row;
+             flex-wrap: wrap;
+             justify-content: space-between;
+             flex: 1 1 100%;
              
              & > * {
                 word-break: break-all;
@@ -110,4 +138,20 @@ export const ResultsHeader: ComponentType<*> =
             display: flex;
             justify-content: space-between;
             margin-bottom: 1.5rem;
+        `;
+
+
+export const Deprecated: ComponentType<*> =
+    styled
+        .strong
+        .attrs(({ className="", ...props }) => ({
+            className: `govuk-tag ${ className }`,
+            ...props
+        }))`
+        font-size: 14px !important;
+        align-self: top;
+        display: inline-flex;
+        align-content: center;
+        color: #942514;
+        background: #f6d7d2;
         `;
