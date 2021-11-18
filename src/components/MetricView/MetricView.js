@@ -3,8 +3,9 @@
 import React from "react";
 
 import {
-    Option, Header, Category, Tag, SearchToken,
-    TagsContainer, APIMetricContainer, ResultsHeader
+    Option, Content, Category, Tag,
+    SearchToken, HeadingLabels, TagsContainer,
+    InfoRow, ResultsHeader, Deprecated
 } from "./MetricView.styles";
 import { Link } from "react-router-dom";
 
@@ -28,20 +29,23 @@ const Metrics: ComponentType<*> = ({ data, filter }) => {
 
     return data.map(metric =>
         <Option key={ metric.metric }>
-            <Header>
+            <Content>
                 <Link className={ "govuk-link govuk-link--no-underline govuk-link--no-visited-state govuk-!-font-weight-bold" }
                       to={ `/metrics/doc/${metric.metric}` }
                       dangerouslySetInnerHTML={ markedContent(metric.metric_name, filter) }/>
-                <div>
+                <HeadingLabels>
+                    { metric.deprecated ? <Deprecated>DEPRECATED</Deprecated> : null }
                     <Category>{ metric.category }</Category>
-                </div>
-            </Header>
-            <APIMetricContainer>
-                <strong className={ "govuk-!-font-size-14 govuk-!-margin-right-1" }>
-                    API name:
-                </strong>
-                <code dangerouslySetInnerHTML={ markedContent(metric.metric, filter) }/>
-            </APIMetricContainer>
+                </HeadingLabels>
+                <InfoRow>
+                    <span>
+                        <strong className={ "govuk-!-font-size-14 govuk-!-margin-right-1" }>
+                            API name:
+                        </strong>
+                        <code dangerouslySetInnerHTML={ markedContent(metric.metric, filter) }/>
+                    </span>
+                </InfoRow>
+            </Content>
             <TagsContainer>{
                 ( metric?.tag ?? metric?.tags )
                     .map( tag => <Tag key={ tag }>{ tag }</Tag> )
