@@ -136,6 +136,8 @@ const Availability: ComponentType<*> = ({ metric, timestamp }) => {
 
     if ( !areaAvailability ) return <Loading/>;
 
+    if ( !areaAvailability || !areaAvailability?.length ) return null;
+
     return <section>
         <h3>Availability by area</h3>
         <ul className={ "govuk-list govuk-list--dashed" }>{
@@ -221,6 +223,46 @@ const Metadata: ComponentType<*> = ({ data }) => {
 };  // Metadata
 
 
+const NoData: ComponentType<*> = ({ data, metric, deprecated }) => {
+
+    if ( data && Object.keys(data).length ) {
+        return null;
+    }
+
+    const messageSubject = encodeURI(`Metric documentation: issue with '${metric}'`);
+
+    return <div className={ "govuk-notification-banner govuk-!-margin-bottom-1" }
+                role={ "region" }
+                aria-labelledby={ "govuk-notification-banner-title" }
+                data-module={ "govuk-notification-banner" }>
+        <div className={ "govuk-notification-banner__header" }>
+            <h2 className={ "govuk-notification-banner__title" } id={ "govuk-notification-banner-title" }>
+                Documentation not found
+            </h2>
+        </div>
+        <div className={ "govuk-notification-banner__content" }>
+            <p className={ "govuk-notification-banner__heading" }>
+                We do not have the documentation for this metric.
+            </p>
+            <p>{
+                deprecated
+                    ? <>
+                        This is because the metric was deprecated
+                        on <Timestamp timestamp={ deprecated }/>.
+                    </>
+                    : "The documentation may be under construction. Please check back later."
+            }</p>
+            <p>
+               If you believe that this information incorrect, please&nbsp;
+                <a className={ "govuk-notification-banner__link" }
+                   href={ `mailto:coronavirus-tracker@phe.gov.uk?Subject=${messageSubject}` }>contact us</a>.
+            </p>
+        </div>
+    </div>;
+
+};  // NoData
+
+
 const MetricDocumentation: ComponentType<*> = ({}) => {
 
     const { metric } = useParams();
@@ -258,6 +300,7 @@ const MetricDocumentation: ComponentType<*> = ({}) => {
         </header>
         <Container>
             <MainContent style={{ borderTop: "none" }}>
+                <NoData data={ data?.documentation } metric={ metric } deprecated={ data?.deprecated }/>
                 <Summary data={ data.documentation?.abstract }/>
                 <AdditionalDetails documentation={ data.documentation }/>
                 <hr className={ "govuk-section-break govuk-section-break--l"  }/>
