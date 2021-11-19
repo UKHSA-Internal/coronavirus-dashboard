@@ -19,7 +19,8 @@ import {
     HeaderContainer,
     Title,
     TitleButton,
-    SectionBreak, TriangleMarker,
+    SectionBreak,
+    TriangleMarker,
 } from './DashboardHeader.styles'
 
 import type { ComponentType } from 'react';

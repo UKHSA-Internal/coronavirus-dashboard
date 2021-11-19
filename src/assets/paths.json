@@ -106,6 +106,12 @@
     "localised": false,
     "hasLog": false
   },
+  "/metrics": {
+    "title": "Metrics documentation",
+    "description": "List of metrics and documentations thereof.",
+    "localised": false,
+    "hasLog": false
+  },
   "/details/": {},
   "/details": {}
 }

@@ -163,6 +163,14 @@ export const getParams = (uri: string, separator: string="&"): ParsedParams => {
 }; // getParams
 
 
+export const getUriParams = (uri: string): URLParams => {
+
+    return getParams(uri)
+        .reduce((acc, cur) => ({ ...acc, [cur.key]: cur.value }), {})
+
+};  // parseUrlParams
+
+
 export const heading2id = ( heading: string ): string => {
 
     return heading
@@ -364,6 +372,13 @@ export const isIE = () => {
     return msie > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./);
 
 };
+
+export const capitalise = (str: string): string => {
+
+    return str.substring(0, 1).toUpperCase() + str.substring(1)
+
+};  // capitalise
+
 
 export const analytics = ({ action, category: event_category, label: event_label, value: event_value, ...props }): void => {
 

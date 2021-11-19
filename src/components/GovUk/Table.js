@@ -103,11 +103,13 @@ const compareData = (data, sorting, dateFormat="DD-MM-YYYY") => {
  * @param stickyHeader { boolean }
  * @param head {Array<Array<{[string]: string|number}>>} Must be 2D array of JSONs.
  * @param body {Array<Array<any>>} Must be a 2D array of values.
+ * @param sortable { boolean }
  * @param props { { [string]: any } }
  * @returns {*}
  */
 export const Table: ComponentType<*> = ({ className, stickyHeader=true,
-                                            head, body, ...props }) => {
+                                            head, body,
+                                            sortable=true, ...props }) => {
 
     const typeDefinitions = head
         .slice(-1)
@@ -135,7 +137,7 @@ export const Table: ComponentType<*> = ({ className, stickyHeader=true,
 
     };  // sortingCallback
 
-    return <TableContainer { ...props }>
+    return <TableContainer className={ props?.parentClassName ?? "" } { ...props }>
 
         <GovUKTable
             className={ `govuk-table ${ stickyHeader ? "sticky-header" : "" } ${ className }`  }
@@ -146,9 +148,14 @@ export const Table: ComponentType<*> = ({ className, stickyHeader=true,
                         <TH key={ `head-th-${rInd}-${ cInd }` } { ...props }>
                             <TableHeadingCell>
                                 { value }
-                                <SortIcon setSorting={ () => sortingCallback(cInd) }
-                                          sorting={ sorting }
-                                          isSorted={ sorting.by === cInd }/>
+                                {
+                                    sortable
+                                        ? <SortIcon
+                                            setSorting={ () => sortingCallback(cInd) }
+                                            sorting={ sorting }
+                                            isSorted={ sorting.by === cInd }/>
+                                        : null
+                                }
                             </TableHeadingCell>
                         </TH>
                     )
@@ -187,7 +194,7 @@ export const DataTable = ({ fields, data, ...props }) => {
         </span>
         <Table
             head={[
-                fields.map(item => ({ value: item.label, type: item.type }))
+                fields.map(item => ({ value: item.label, type: item.type, className: item.className }))
             ]}
             body={
                 data.map(item => fieldNames.map(name =>

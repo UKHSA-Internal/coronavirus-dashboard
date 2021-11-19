@@ -32,6 +32,8 @@ const
     Footer              = lazy(() => import('components/Footer')),
     Download            = lazy(() => import('pages/Download')),
     MarkdownPage        = lazy(() => import('pages/GenericMarkdownPage')),
+    MetricDocs          = lazy(() => import('pages/MetricDocs')),
+    Metric              = lazy(() => import('pages/MetricDocs/Documentation')),
     DeveloperGuide      = lazy(() => import('pages/DevelopersGuide'));
 
 
@@ -111,6 +113,7 @@ const App = () => {
                         <DashboardHeader/>
                         <Suspense fallback={ <Loading/> }>
                             <Switch>
+                                {/*<Route path="/details" exact render={ () => <Redirect to={ "/" }/> }/>*/}
                                 <Route path="/details/testing" exact component={ Tests }/>
                                 <Route path="/details/cases" exact component={ Cases }/>
                                 <Route path="/details/healthcare" exact component={ Healthcare }/>
@@ -127,6 +130,8 @@ const App = () => {
                                 <Route path="/details/accessibility" exact component={ Accessibility }/>
                                 <Route path="/details/cookies" exact component={ Cookies }/>
                                 <Route path="/details/developers-guide" component={ DeveloperGuide }/>
+                                <Route path="/metrics/doc/:metric" exact component={ Metric }/>
+                                <Route path="/metrics/:type?" component={ MetricDocs }/>
                                 <Route path="/details/about-data" exact>
                                     <MarkdownPage pathName={ "about" }/>
                                 </Route>
@@ -142,20 +147,20 @@ const App = () => {
 
             <Switch>
                 {/* These back-to-top links are the 'overlay' style that stays on screen as we scroll. */ }
-                <Route path="/details" render={ () => <BackToTop mode={ "overlay" }/> }/>
+                <Route path="/" render={ () => <BackToTop mode={ "overlay" }/> }/>
             </Switch>
 
             {/* We only want back-to-top links on the main & about pages. */ }
             <Switch>
                 {/* These back-to-top links are the 'inline' style that sits
                     statically between the end of the content and the footer. */ }
-                <Route path="/details" render={ props => <BackToTop { ...props } mode="inline"/> }/>
+                <Route path="/" render={ props => <BackToTop { ...props } mode="inline"/> }/>
             </Switch>
         </div>
 
         <Switch>
             <Suspense fallback={ <Loading/> }>
-                <Route path="/details" component={ Footer }/>
+                <Route path="/" component={ Footer }/>
             </Suspense>
         </Switch>
     </>

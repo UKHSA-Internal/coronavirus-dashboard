@@ -7,7 +7,7 @@ import type { ComponentType } from 'react';
 export const InlineContainer: ComponentType<*> = (() => {
 
     return styled.div`
-        width: 100%;
+        width: 90%;
         margin: 0;
         margin-bottom: 32px;
     `

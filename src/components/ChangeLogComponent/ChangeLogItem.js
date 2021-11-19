@@ -1,13 +1,11 @@
 // @flow
 
-import React, { useState, useMemo, Fragment } from "react";
+import React, { Fragment } from "react";
 import moment from "moment";
 import { Markdown, Category, DataList, CategoryContainer } from "./ChangeLogComponent.styles";
 import { Link } from "react-router-dom";
-
+import { useMarkdown } from "hooks/useMarkdown";
 import type { ComponentType } from "react";
-import remark from "remark";
-import html from "remark-html";
 
 
 const colours = {
@@ -40,25 +38,6 @@ const colours = {
         "text": "#144E81"
     },
 };
-
-
-export const useMarkdown = (content: string | undefined) => {
-
-    const [body, setBody] = useState(null);
-
-    useMemo(() => {
-        remark()
-            .use(html)
-            .process(content, (err, text) => {
-                setBody(err ? null : String(text));
-            });
-
-    }, [ content ])
-
-    return body
-
-};  // ProcessedMarkdown
-
 
 export const ChangeLogItemBody: ComponentType = ({ data }) => {
 
@@ -115,6 +94,18 @@ const Details: ComponentType = ({ data }) => {
 };  // Details
 
 
+export const ChangeLogType: ComponentType<*> = ({ type, standAlone=false, ...props }) => {
+
+    return <CategoryContainer standAlone={ standAlone } { ...props } >
+        <span className={ "govuk-visually-hidden" }>Log category:</span>
+        <Category color={ colours[type]?.text ?? "#000000" }
+                  bgColor={ colours[type]?.background ?? "inherit" }
+                  standAlone={ standAlone }
+                  dangerouslySetInnerHTML={{ __html: type.replace(/\s/g, "&nbsp;") }}/>
+    </CategoryContainer>
+
+}; // ChangeLogType
+
 export const ChangeLogHeading: ComponentType = ({ data, standAlone=false }) => {
 
     return <h3 className={ `govuk-heading-s govuk-!-font-size-${standAlone ? 24 : 19} govuk-!-margin-bottom-1` }
@@ -129,15 +120,7 @@ export const ChangeLogHeading: ComponentType = ({ data, standAlone=false }) => {
                 }
             </time>
         </small>
-
-        <CategoryContainer standAlone={ standAlone }>
-            <Category color={ colours[data.type]?.text ?? "#000000" }
-                      bgColor={ colours[data.type]?.background ?? "inherit" }
-                      standAlone={ standAlone }>
-                <span className={ "govuk-visually-hidden" }>Log category:</span>
-                { data.type }
-            </Category>
-        </CategoryContainer>
+        <ChangeLogType type={ data.type } standAlone={ standAlone }/>
         {
             !standAlone
                 ? <Link to={ `/details/whats-new/record/${data.id}` }

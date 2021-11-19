@@ -35,11 +35,10 @@ svg.back-to-top {
 }
 
 .govuk-list--dashed {
-  & > li::before {
-    content: "\2014";
-    margin-right: 0.5rem;
-    color: #7f7f7f;
-  }
+  list-style-type: "\2014\00a0";
+  background-clip: content-box;
+  list-style-position: outside;
+  padding-left: 1.4rem;
 }
 
 dl.metrics {
@@ -58,5 +57,31 @@ dl.metrics {
     max-width: initial;
     width: initial;
     margin-bottom: 2rem;
+  }
+}
+
+.govuk-accordion__section-summary {
+  margin-top: 0;
+  margin-left: 0 !important;
+}
+
+
+.doc-table-container {
+  max-height: inherit !important;
+}
+
+.metric-doc-table {
+  max-height: inherit;
+
+  & > thead > tr,
+  & > tbody > tr {
+    & > th.govuk-table__header--date,
+    & > td.govuk-table__cell--date {
+          max-width: 5rem;
+    }
+  }
+
+  & .body-text {
+    width: 60%;
   }
 }
