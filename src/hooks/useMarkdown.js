@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import remark from "remark";
 import html from "remark-html";
