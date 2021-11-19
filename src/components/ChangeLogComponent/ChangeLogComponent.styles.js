@@ -63,6 +63,7 @@ export const Container: ComponentType<*> =
         }))`
             display: flex;
             flex-direction: row;
+            column-gap: .5rem;
             
             @media only screen and (max-width: 1000px) {
                 flex-direction: column-reverse;
