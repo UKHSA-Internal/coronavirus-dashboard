@@ -285,7 +285,7 @@ const MetricDocumentation: ComponentType<*> = ({}) => {
                 experimental
             </strong>
             <span className="govuk-phase-banner__text">
-                This is a new prat of the service.
+                This is a new part of the service.
                 Your <a className="govuk-link"
                         href="mailto:coronavirus-tracker@phe.gov.uk?Subject=Metrics%20documentation%20feedback">
                     feedback
