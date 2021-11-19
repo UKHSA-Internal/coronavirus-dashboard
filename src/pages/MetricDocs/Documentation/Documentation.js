@@ -11,9 +11,10 @@ import type { ComponentType } from "react";
 import {
     APILabel,
     APIMetric,
-    APIMetricContainer, Deprecated,
+    MainLabelsContainer, Deprecated,
     MarkdownContent,
-    MetadataContainer
+    MetadataContainer,
+    APIMetricContainer
 } from "./Documentation.style";
 
 import { Accordion } from "govuk-react-jsx/govuk/components/accordion" ;
@@ -41,7 +42,7 @@ const AreaTypes = {
     "nhsTrust": "NHS Trusts",
     "utla": "Upper Tier Local Authorities (UTLA)",
     "ltla": "Lower Tier Local Authorities (LTLA)",
-    "msoa": "Middle layer Super Out Areas (MSOA)"
+    "msoa": "Middle layer Super Output Areas (MSOA)"
 };
 
 
@@ -152,7 +153,7 @@ const Availability: ComponentType<*> = ({ metric, timestamp }) => {
                     Latest record:&nbsp;<Timestamp timestamp={ item.last_update }/>
                 </span>
                     <br/>
-                    <APIMetricContainer small>
+                    <MainLabelsContainer small>
                         <APILabel small>
                             API
                             <span className={ "govuk-visually-hidden" }>
@@ -160,7 +161,7 @@ const Availability: ComponentType<*> = ({ metric, timestamp }) => {
                         </span>
                         </APILabel>
                         <APIMetric small>{ area_type }</APIMetric>
-                    </APIMetricContainer>
+                    </MainLabelsContainer>
                 </li>
             })
         }</ul>
@@ -208,11 +209,11 @@ const Metadata: ComponentType<*> = ({ data }) => {
     return <div>
         <MetadataContainer className={ "govuk-!-margin-bottom-0" }>
             <dt>Category</dt>
-            <dd><span className={ "govuk-tag" }>{ data.category }</span></dd>
+            <dd><span className={ "dark-blue" }>{ data.category }</span></dd>
             <dt>Types</dt>
             <dd>{
                 data.tags.map(tag =>
-                    <span className={ "govuk-tag govuk-tag--blue govuk-!-margin-right-1" }
+                    <span className={ "light-blue govuk-!-margin-right-1" }
                           key={ tag }
                     >{ tag }</span>
                 )
@@ -233,6 +234,7 @@ const NoData: ComponentType<*> = ({ data, metric, deprecated }) => {
 
     return <div className={ "govuk-notification-banner govuk-!-margin-bottom-1" }
                 role={ "region" }
+                style={{ maxWidth: "40em" }}
                 aria-labelledby={ "govuk-notification-banner-title" }
                 data-module={ "govuk-notification-banner" }>
         <div className={ "govuk-notification-banner__header" }>
@@ -276,19 +278,37 @@ const MetricDocumentation: ComponentType<*> = ({}) => {
 
     if ( !data ) return <Loading/>;
 
-    return <article className={ "govuk-body govuk-!-margin-top-5" }>
+    return <>
+    <div className="govuk-phase-banner">
+        <p className="govuk-phase-banner__content">
+            <strong className="govuk-tag govuk-phase-banner__content__tag">
+                experimental
+            </strong>
+            <span className="govuk-phase-banner__text">
+                This is a new prat of the service.
+                Your <a className="govuk-link"
+                        href="mailto:coronavirus-tracker@phe.gov.uk?Subject=Metrics%20documentation%20feedback">
+                    feedback
+                </a> will
+                help us to improve it.
+            </span>
+        </p>
+    </div>
+    <article className={ "govuk-body govuk-!-margin-top-5" }>
         <header>
             <h2 className={ "govuk-heading-l govuk-!-margin-bottom-1" }>
                 { data.metric_name }
             </h2>
-            <APIMetricContainer>
-                <APILabel>
-                    API
-                    <span className={ "govuk-visually-hidden" }>
-                        Metric name to be used for API access.
-                    </span>
-                </APILabel>
-                <APIMetric>{ data.metric }</APIMetric>
+            <MainLabelsContainer>
+                <APIMetricContainer>
+                    <APILabel>
+                        API
+                        <span className={ "govuk-visually-hidden" }>
+                            Metric name to be used for API access.
+                        </span>
+                    </APILabel>
+                    <APIMetric>{ data.metric }</APIMetric>
+                </APIMetricContainer>
                 {
                     data.deprecated
                         ? <Deprecated>
@@ -296,7 +316,7 @@ const MetricDocumentation: ComponentType<*> = ({}) => {
                         </Deprecated>
                         : null
                 }
-            </APIMetricContainer>
+            </MainLabelsContainer>
         </header>
         <Container>
             <MainContent style={{ borderTop: "none" }}>
@@ -316,7 +336,7 @@ const MetricDocumentation: ComponentType<*> = ({}) => {
             </SideContent>
         </Container>
     </article>
-
+    </>
 };
 
 
