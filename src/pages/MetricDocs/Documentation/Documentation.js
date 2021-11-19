@@ -253,7 +253,7 @@ const NoData: ComponentType<*> = ({ data, metric, deprecated }) => {
                     : "The documentation may be under construction. Please check back later."
             }</p>
             <p>
-               If you believe that this information incorrect, please&nbsp;
+               If you believe that this information is incorrect, please&nbsp;
                 <a className={ "govuk-notification-banner__link" }
                    href={ `mailto:coronavirus-tracker@phe.gov.uk?Subject=${messageSubject}` }>contact us</a>.
             </p>
