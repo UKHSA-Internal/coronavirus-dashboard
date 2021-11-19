@@ -66,8 +66,8 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
                 (
                     userInput
                         ?  (
-                            item.metric.indexOf(userInput.replace(/[^a-z6028\s]/gi, "")) > -1 ||
-                            item.metric_name.indexOf(userInput.replace(/[^a-z6028\s]/gi, "")) > -1
+                            item.metric.toLowerCase().indexOf(userInput.replace(/[^a-z6028\s]/gi, "")) > -1 ||
+                            item.metric_name.toLowerCase().indexOf(userInput.replace(/[^a-z6028\s]/gi, "")) > -1
                         )
                         : true
                 ) &&
@@ -102,7 +102,7 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
                 </div>
                 <input name={ "metric-search" } inputMode={ "search" } type={ "search" } autoComplete={ "off" }
                        placeholder={ "Search metrics" }
-                       onChange={ ({ target }) => setUserInput(target.value) }
+                       onChange={ ({ target }) => setUserInput(target.value.toLowerCase()) }
                        value={ userInput || "" }
                        style={{ maxWidth: "20em" }}
                        className={ "govuk-input" } maxLength={ "120" }/>
