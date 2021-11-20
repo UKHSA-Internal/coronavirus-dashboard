@@ -118,7 +118,7 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
                 </div>
                 <Select name={ "metric-category" }
                         options={ categoryOptions }
-                        placeholder={ "Select metric categories for your search" }
+                        placeholder={ "Select a category" }
                         isClearable
                         styles={ ExtendedOptionStyles }
                         className={ "select" }
@@ -135,7 +135,7 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
                     select <strong>cumulative</strong> to only include cumulative metrics.
                 </div>
                 <Select name={ "metric-tag" } options={ tagOptions }
-                        placeholder={ "Select metric types for your search" }
+                        placeholder={ "Select types" }
                         isClearable
                         isMulti
                         styles={ ExtendedOptionStyles }
