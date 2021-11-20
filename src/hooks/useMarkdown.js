@@ -14,9 +14,9 @@ export const useMarkdown = (content: string | undefined, withToc=false) => {
 
     useMemo(() => {
         remark()
-            .use(slug)
+            .use(slug, { prefix: '' })
             .use(externalLink)
-            .use(toc)
+            .use(withToc ? toc : item => item, {prefix: '', maxDepth: 6})
             .use(html)
             .process(content, (err, text) => {
                 setBody(err ? null : String(text).replace(/(id=")user-content-/ig, '$1'));
