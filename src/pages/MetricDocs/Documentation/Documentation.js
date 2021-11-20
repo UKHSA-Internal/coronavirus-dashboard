@@ -18,9 +18,7 @@ import {
 } from "./Documentation.style";
 
 import { Accordion } from "govuk-react-jsx/govuk/components/accordion" ;
-import { Link } from "react-router-dom";
-import { ChangeLogType } from "components/ChangeLogComponent/ChangeLogItem";
-import { DataTable } from "components/GovUk";
+import LogItems from "components/LogItems";
 import { Container, MainContent, SideContent } from "components/ChangeLogComponent/ChangeLogComponent.styles";
 import useTimestamp from "hooks/useTimestamp";
 import Timestamp from "components/Timestamp";
@@ -38,7 +36,7 @@ const AreaTypes = {
     "overview": "United Kingdom",
     "nation": "Nations",
     "region": "Regions",
-    "nhsRegion": "Healthcare Regions",
+    "nhsRegion": "NHS Regions",
     "nhsTrust": "NHS Trusts",
     "utla": "Upper Tier Local Authorities (UTLA)",
     "ltla": "Lower Tier Local Authorities (LTLA)",
@@ -79,6 +77,7 @@ const Summary: ComponentType<*> = ({ data }) => {
 }; // Summary
 
 
+
 const AssociatingLogs: ComponentType<*> = ({ data }) => {
 
     return <section>
@@ -91,32 +90,7 @@ const AssociatingLogs: ComponentType<*> = ({ data }) => {
                 affect the data published during a specific period.
             </p>
         </MarkdownContent>
-        <DataTable
-            sortable={ false }
-            fields={[
-                { label: "Date", value: "dt", type: "date" },
-                { label: "Headline", value: "link", type: "text", className: "body-text" },
-                { label: "Type", value: "type", type: "text" },
-                { label: "Applicable until", value: "expiry", type: "date" }
-            ]}
-            className={ "metric-doc-table" }
-            parentClassName={ "doc-table-container" }
-            data={
-                data.map(item => ({
-                    dt: <Timestamp timestamp={ item.date } format={ "DD MMM YYYY" }/>,
-                    link:
-                        <Link className={ "govuk-link" }
-                              to={ `/details/whats-new/record/${item.id}` }>
-                            { item.heading }
-                        </Link>,
-                    type: <ChangeLogType type={ item.type }/>,
-                    expiry:
-                        item?.expiry
-                            ? <Timestamp timestamp={ item.expiry } format={ "DD MMM YYYY" }/>
-                            : <span style={{ color: "#797979" }}>N/A</span>,
-                }))
-            }
-        />
+        <LogItems data={ data }/>
         {
             !data || !(data?.length)
                 ? <span>There are no logs associated with this metric.</span>
@@ -140,7 +114,7 @@ const Availability: ComponentType<*> = ({ metric, timestamp }) => {
     if ( !areaAvailability || !areaAvailability?.length ) return null;
 
     return <section>
-        <h3>Availability by area</h3>
+        <h3>Availability by area type</h3>
         <ul className={ "govuk-list govuk-list--dashed" }>{
             Object.keys(AreaTypes).map( area_type => {
                 const item = areaAvailability.find(v => v.area_type === area_type);
@@ -160,7 +134,7 @@ const Availability: ComponentType<*> = ({ metric, timestamp }) => {
                             Metric name to be used for API access.
                         </span>
                         </APILabel>
-                        <APIMetric small>{ area_type }</APIMetric>
+                        <APIMetric small>areaType={ area_type }</APIMetric>
                     </MainLabelsContainer>
                 </li>
             })
