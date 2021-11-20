@@ -89,7 +89,7 @@ const Content: ComponentType<*> = ({ data, heading, sectionType, typeKey }) => {
                 <Container>
                     <PageHeading>
                         <h2 className={ "govuk-heading-l govuk-!-margin-bottom-0" }>
-                            Metrics by { heading }
+                            Metrics by { heading.toLowerCase() }
                             <small style={{ display: 'flex' }} className={ "govuk-caption-m govuk-!-margin-top-1" }>{
                                 LabelLookup?.[sectionType]?.[item[typeKey]]?.label ?? capitalise(item[typeKey])
                             }</small>
