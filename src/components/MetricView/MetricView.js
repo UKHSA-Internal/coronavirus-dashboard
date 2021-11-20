@@ -64,7 +64,7 @@ const RenderMetrics: ComponentType<*> = ({ data, filterFunc, download, downloadN
     return <>
         <ResultsHeader>
             <span>
-                <b>Count:</b> { data.length } metrics
+                <b>Count:</b> { filteredData.length } metrics
             </span>
             <a className={ "govuk-link govuk-link--no-visited-state" }
                download={ downloadName }
