@@ -1,8 +1,8 @@
 // @flow
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { Route, Switch, useLocation } from "react-router";
+import { Redirect, Route, Switch, useLocation } from "react-router";
 import { Link } from "react-router-dom";
 
 import URLs from "common/urls";
@@ -10,7 +10,7 @@ import Loading from "components/Loading";
 import RenderMetrics from "components/MetricView";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 import useGenericAPI from "hooks/useGenericAPI";
-import { capitalise } from "common/utils";
+import { capitalise, createQuery, getUriParams } from "common/utils";
 import { BREAKPOINT, ColumnEntry } from "components/Pane";
 
 import { Column } from "components/Pane/Pane.styles";
@@ -67,11 +67,25 @@ const LabelLookup = {
 };
 
 
-const Content: ComponentType<*> = ({ data, heading, sectionType, typeKey }) => {
+const Content: ComponentType<*> = ({ data, heading, sectionType, typeKey, setUri }) => {
 
-    const [ filter, setFilter ] = useState(null);
+    const { pathname, search: queries } = useLocation();
+    const { search=null } = getUriParams(queries);
+    const [ filter, setFilter ] = useState(search);
 
     const searchCallback = ({ target }) => setFilter(target.value.toLowerCase().trim());
+
+    useEffect(() => {
+
+        const params = [];
+
+        if ( filter ) {
+            params.push({ key: "search", sign: "=", value: filter.replace(/[^a-z6028\s]/gi, "") });
+        }
+
+        setUri(pathname + createQuery(params));
+
+    }, [ filter ]);
 
     const filterFunc = item => {
         if ( !filter ) return true;
@@ -82,10 +96,10 @@ const Content: ComponentType<*> = ({ data, heading, sectionType, typeKey }) => {
         )
     };
 
-
     return <Switch>
         { data.map( item =>
-            <Route path={ `/metrics/${sectionType}/${ encodeURI(item[typeKey].replace(/\s/g, '-')) }` } key={ `${typeKey}-routes-${item[typeKey]}` }>
+            <Route path={ `/metrics/${sectionType}/${ encodeURI(item[typeKey].replace(/\s/g, '-')) }` }
+                   key={ `${typeKey}-routes-${item[typeKey]}` }>
                 <Container>
                     <PageHeading>
                         <h2 className={ "govuk-heading-l govuk-!-margin-bottom-0" }>
@@ -111,6 +125,7 @@ const Content: ComponentType<*> = ({ data, heading, sectionType, typeKey }) => {
                                    autoComplete={ "off" }
                                    placeholder={ "Search metrics" }
                                    onChange={ searchCallback }
+                                   value={ filter }
                                    style={{ maxWidth: "20em" }}
                                    className={ "govuk-input" }
                                    minLength={ "0" }
@@ -168,9 +183,10 @@ const getAreaParam = ( sectionType: string ): Object<string, string> => {
 export const TopicSection: ComponentType<*> = ({ parent, urlName, parentPath, ...props }) => {
 
     const layout = useResponsiveLayout(BREAKPOINT);
-    const { pathname } = useLocation();
+    const { pathname, search: queries } = useLocation();
     const sectionType = /.*\/(\w+)$/.exec(parentPath)[1];
     const areaParams = getAreaParam(sectionType);
+    const [ uri, setUri ] = useState(pathname + queries);
 
     const data = useGenericAPI(
         urlName,
@@ -202,10 +218,15 @@ export const TopicSection: ComponentType<*> = ({ parent, urlName, parentPath, ..
         <Switch>
             <Route path={ `${parentPath}/:${sectionType}` } exact>
                 <Column>
-                    <Content data={ data } heading={ LabelLookup[sectionType].heading } sectionType={ sectionType } typeKey={ areaParams.typeKey }/>
+                    <Content data={ data }
+                             heading={ LabelLookup[sectionType].heading }
+                             sectionType={ sectionType }
+                             typeKey={ areaParams.typeKey }
+                             setUri={ setUri }/>
                 </Column>
             </Route>
         </Switch>
+        <Redirect to={ uri }/>
     </>;
 
 };  // AreaType
