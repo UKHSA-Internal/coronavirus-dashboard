@@ -11,8 +11,9 @@ import type { ComponentType } from "react";
 
 
 const
-    ApiDocs        = lazy(() => import('pages/ApiDocs')),
-    GenericApiDocs = lazy(() => import('pages/GenericApiDocs'));
+    ApiDocs         = lazy(() => import('pages/ApiDocs')),
+    DownloadApiDocs = lazy(() => import('pages/DownloadApiDocs')),
+    GenericApiDocs  = lazy(() => import('pages/GenericApiDocs'));
 
 
 const DevelopersGuide: ComponentType<*> = ({}) => {
@@ -20,8 +21,9 @@ const DevelopersGuide: ComponentType<*> = ({}) => {
     const { pathname } = useLocation();
 
     const pages = [
-        {label: "Open Data API", uri: "/details/developers-guide/main-api"},
-        {label: "Generic API", uri: "/details/developers-guide/generic-api"}
+        {label: "Open Data API (APIv1)", uri: "/details/developers-guide/main-api" },
+        {label: "Bulk downloads API (APIv2)", uri: "/details/developers-guide/bulk-downloads-api"},
+        {label: "Generic API", uri: "/details/developers-guide/generic-api"},
     ];
 
     return <Content className={ "govuk-body" }>
@@ -47,6 +49,7 @@ const DevelopersGuide: ComponentType<*> = ({}) => {
         <Suspense fallback={ <Loading/> }>
             <Switch>
                 <Route path="/details/developers-guide/main-api" exact component={ ApiDocs }/>
+                <Route path="/details/developers-guide/bulk-downloads-api" exact component={ DownloadApiDocs }/>
                 <Route path="/details/developers-guide/generic-api" exact component={ GenericApiDocs }/>
             </Switch>
         </Suspense>
