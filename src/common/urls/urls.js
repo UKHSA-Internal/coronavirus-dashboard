@@ -73,6 +73,7 @@ const URLs = {
     genericApiDatedChangeLogs:              `https://${ REACT_APP_API_ENDPOINT }/generic/change_logs/{date}`,
     genericApiLogBanners:                   `https://${ REACT_APP_API_ENDPOINT }/generic/log_banners/{date}/{page}/{area_type}/{area_name}`,
     genericApiOpenApi:                      `https://${ REACT_APP_API_ENDPOINT }/generic/openapi.json`,
+    downloadApiOpenApi:                     `https://${ REACT_APP_API_ENDPOINT }/v2/openapi.json`,
     genericApiMetrics:                      `https://${ REACT_APP_API_ENDPOINT }/generic/metrics`,
 };
 
