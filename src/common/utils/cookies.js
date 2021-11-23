@@ -1,5 +1,14 @@
 import Cookies from "js-cookie";
 
+export const stripPII = function (str) {
+    return str.replace(/(.*)([A-Z]{1,2}\d{1,2}[A-Z]?\s?\d{1,2}[A-Z]{1,2})(.*)/gi, '$1[REDACTED]$3')
+};
+
+
+export const stripPIIUri = function (str) {
+    return str.replace(/(.*)(postcode=[^&]+)(.*)/gi, '$1[REDACTED]$3')
+};
+
 
 export const setCookies = () => {
     try {
@@ -14,20 +23,38 @@ export const setCookies = () => {
             'config',
             'UA-161400643-2',
             {
-                anonymize_ip: true,
-                allowAdFeatures: false,
-                send_page_view: false,
+                'anonymize_ip': true,
+                'allowAdFeatures': false,
+                'allow_google_signals': false,
+                'allowLinker': true,
+                'allow_ad_personalization_signals': false
             }
         );
-
-        window.gtag = window?.gtag || gtag;
-        window.ga('create', 'UA-145652997-1', 'auto', 'govuk_shared', { 'allowLinker': true });
-        window.ga('govuk_shared.require', 'linker');
-        window.ga('govuk_shared.set', 'anonymizeIp', true);
-        window.ga('govuk_shared.set', 'allowAdFeatures', false);
-        window.ga('govuk_shared.linker:autoLink', ['www.gov.uk']);
-        window.ga('send', 'pageview');
-        window.ga('govuk_shared.send', 'pageview');
+        gtag(
+            'config',
+            'UA-145652997-1',
+            {
+                'anonymize_ip': true,
+                'allowAdFeatures': false,
+                'allowLinker': true,
+                'allow_google_signals': false,
+                'allow_ad_personalization_signals': false,
+                'send_page_view': false,
+            }
+        );
+        gtag('event', 'page_view', {
+            page_title: stripPII(document.title),
+            page_location: stripPIIUri(window.location.href),
+            page_path: window.location.pathname + (window.location.search !== "" ? "?" + stripPII(window.location.search) : ""),
+            send_to: 'UA-161400643-2'
+        });
+        gtag('event', 'page_view', {
+            page_title: stripPII(document.title),
+            page_location: stripPIIUri(window.location.href),
+            page_path: window.location.pathname + (window.location.search !== "" ? "?" + stripPII(window.location.search) : ""),
+            send_to: 'UA-145652997-1'
+        });
+        gtag('linker:autoLink', ["www.gov.uk", "coronavirus.data.gov.uk", "data.gov.uk", "gov.uk"]);
 
     } catch (error) {
         console.group("Cookie preferences")
@@ -42,7 +69,10 @@ export const deleteCookies = () => {
     Cookies.remove("_ga");
     Cookies.remove("_gid");
     Cookies.remove("_gat_gtag_UA_161400643_2");
+    Cookies.remove("_gat_gtag_UA_145652997_1");
     Cookies.remove("LocationBanner");
+    window['ga-disable-UA-161400643-2'] = false;
+    window['ga-disable-UA-145652997-1'] = false;
 };
 
 
