@@ -39,19 +39,25 @@ const DataPageHeaders = () => {
 
     preppedTitle +=  ' | Coronavirus in the UK';
 
-    gtag('event', 'page_view', {
-            page_title: stripPII(preppedTitle),
-            page_location: stripPIIUri(href),
-            page_path: pathname + (query !== "" ? "?" + stripPII(query) : ""),
-            send_to: 'UA-161400643-2'
-    });
+    try {
+        window.gtag('event', 'page_view', {
+                page_title: stripPII(preppedTitle),
+                page_location: stripPIIUri(href),
+                page_path: pathname + (query !== "" ? "?" + stripPII(query) : ""),
+                send_to: 'UA-161400643-2'
+        });
 
-    gtag('event', 'page_view', {
-            page_title: stripPII(preppedTitle),
-            page_location: stripPIIUri(window.location.href),
-            page_path: pathname + (query !== "" ? "?" + stripPII(query) : ""),
-        send_to: 'UA-145652997-1'
-    });
+        window.gtag('event', 'page_view', {
+                page_title: stripPII(preppedTitle),
+                page_location: stripPIIUri(window.location.href),
+                page_path: pathname + (query !== "" ? "?" + stripPII(query) : ""),
+            send_to: 'UA-145652997-1'
+        });
+    } catch (e) {
+        console.group("Analytics")
+        console.warn(e);
+        console.groupEnd()
+    }
 
     return <Helmet>
         <title itemProp={ "name" }>{ preppedTitle }</title>
