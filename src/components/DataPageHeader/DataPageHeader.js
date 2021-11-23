@@ -6,7 +6,7 @@ import { getParams, getParamValueFor } from "common/utils";
 
 import { Helmet } from "react-helmet";
 import { useLocation } from "react-router";
-
+import { stripPII, stripPIIUri } from "common/utils/cookies";
 import Path from "assets/paths.json";
 
 const DefaultParams = [
@@ -17,7 +17,7 @@ const DefaultParams = [
 
 const DataPageHeaders = () => {
 
-    const { search: query, pathname } = useLocation();
+    const { href, search: query, pathname } = useLocation();
     const uri = /^(\/(details\/)?[^/]+).*/.exec(pathname)?.[1];
     let { title="", description="", localised=false } = Path?.[pathname] ?? Path?.[uri] ?? {};
     const urlParams = getParams(query);
@@ -38,6 +38,20 @@ const DataPageHeaders = () => {
         : [title, description];
 
     preppedTitle +=  ' | Coronavirus in the UK';
+
+    gtag('event', 'page_view', {
+            page_title: stripPII(preppedTitle),
+            page_location: stripPIIUri(href),
+            page_path: pathname + (query !== "" ? "?" + stripPII(query) : ""),
+            send_to: 'UA-161400643-2'
+    });
+
+    gtag('event', 'page_view', {
+            page_title: stripPII(preppedTitle),
+            page_location: stripPIIUri(window.location.href),
+            page_path: pathname + (query !== "" ? "?" + stripPII(query) : ""),
+        send_to: 'UA-145652997-1'
+    });
 
     return <Helmet>
         <title itemProp={ "name" }>{ preppedTitle }</title>
