@@ -47,8 +47,6 @@ const ContentBox: ComponentType<*> = ({ children, horizontal=false, ...props }) 
 }; // ContentBox
 
 
-
-
 const CardHeader: ComponentType<Props> = ({ heading, caption="", linkToHeading=false,
                                               experimental=false, children }: Props) => {
 
@@ -113,7 +111,8 @@ const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, n
                             launcherSrOnly={ `Share card data for "${ heading }"` }
                             buttonLabel={ "Share" }
                             icon={ ShareIcon }
-                            heading={ heading }>
+                            heading={ heading }
+                            props={}>
                 <ShareOptions subject={ heading }
                               label={ heading2id(heading) }/>
             </DropdownButton>
