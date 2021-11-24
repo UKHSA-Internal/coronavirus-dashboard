@@ -112,7 +112,7 @@ const Card: ComponentType<Props> = ({ heading, url, children, fullWidth=false, n
                             buttonLabel={ "Share" }
                             icon={ ShareIcon }
                             heading={ heading }
-                            props={}>
+                            props={{}}>
                 <ShareOptions subject={ heading }
                               label={ heading2id(heading) }/>
             </DropdownButton>
