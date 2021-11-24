@@ -48,10 +48,11 @@ const Metadata: ComponentType<*> = ({ download, ...props }) => {
             the <Link className={ "govuk-link govuk-link--no-visited-state" }
                       to={ "/metrics" }>Metrics documentation</Link> page.
         </p>
-        <p>
-            Click on each of the { download.length } metrics used in
-            this card to see the details:
-        </p>
+        <p>{
+            download.length > 1
+                ? `Click on each of the ${ download.length } metric used in this card to see additional details:`
+                : "Click on the metric to see additional details:"
+        }</p>
         <MetricsList>{
             download.map(metric =>
                 <li key={ metric }>
