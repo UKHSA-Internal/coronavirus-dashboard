@@ -172,7 +172,7 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
             return <DataTable fields={ fields } data={ data } { ...props }/>;
 
         case "metadata":
-            return <Metadata { ...props }/>;
+            return <Metadata fields={ fields } { ...props }/>;
 
         default:
             return null;
