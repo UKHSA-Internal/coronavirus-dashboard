@@ -49,6 +49,10 @@ export const MetadataContainer: ComponentType<*> =
             className: `${className} govuk-body govuk-!-padding-right-2`
         }))`
             overflow-y: auto;  
+            
+            & > * {
+                max-width: 40em;
+            }
         `;
 
 
