@@ -40,19 +40,16 @@ const MetricItem: ComponentType<*> = ({ metric }) => {
 };  // MetricItem
 
 
-const Metadata: ComponentType<*> = ({ download, ...props }) => {
+const Metadata: ComponentType<*> = ({ download, heading, ...props }) => {
 
     return <MetadataContainer { ...props }>
         <p>
-            Documentation for all metrics are available under
-            the <Link className={ "govuk-link govuk-link--no-visited-state" }
-                      to={ "/metrics" }>Metrics documentation</Link> page.
+            Read about the { download.length > 1 ? `${download.length} metrics` : "metric" } used for
+            presenting the <strong>{ heading }</strong> data on
+            the&nbsp;<Link className={ "govuk-link govuk-link--no-visited-state" }
+                      to={ "/metrics" }>Metrics&nbsp;documentation</Link> page or click
+            on metric names below:
         </p>
-        <p>{
-            download.length > 1
-                ? `Click on each of the ${ download.length } metric used in this card to see additional details:`
-                : "Click on the metric to see additional details:"
-        }</p>
         <MetricsList>{
             download.map(metric =>
                 <li key={ metric }>
