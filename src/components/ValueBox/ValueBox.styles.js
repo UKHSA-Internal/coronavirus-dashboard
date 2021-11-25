@@ -112,6 +112,8 @@ export const DataNumbersContainer: ComponentType<*> = (() => {
             className: `${ className } govuk-!-margin-bottom-21 govuk-!-margin-left-4`
         }))`
             display: flex;
+            column-gap: 1.5rem;
+            row-gap: 1rem;
             flex-wrap: wrap !important;
         `
 
