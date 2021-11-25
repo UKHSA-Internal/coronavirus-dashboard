@@ -1,11 +1,15 @@
 import Cookies from "js-cookie";
 
 export const stripPII = function (str) {
+    if ( !str || str === "" ) return "";
+
     return str.replace(/(.*)([A-Z]{1,2}\d{1,2}[A-Z]?\s?\d{1,2}[A-Z]{1,2})(.*)/gi, '$1[REDACTED]$3')
 };
 
 
 export const stripPIIUri = function (str) {
+    if ( !str || str === "" ) return "";
+
     return str.replace(/(.*)(postcode=[^&]+)(.*)/gi, '$1[REDACTED]$3')
 };
 
