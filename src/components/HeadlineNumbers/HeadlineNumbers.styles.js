@@ -16,9 +16,10 @@ export const Container: ComponentType<*> =
             flex-wrap: wrap;
             justify-content: flex-start;
             margin: 1rem 0 0 0;
+            column-gap: 1.5rem;
             
             & > * {
-                margin-right: 2rem;
-                margin-bottom: 0;
+                column-gap: 1rem;
+                row-gap: .5rem;
             }
         `;
