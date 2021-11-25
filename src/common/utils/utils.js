@@ -383,7 +383,7 @@ export const capitalise = (str: string): string => {
 export const analytics = ({ action, category: event_category, label: event_label, value: event_value, ...props }): void => {
 
     try {
-        window.gtag('event', action, { event_category, event_label, event_value, ...props });
+        window.gtag('event', action, { event_category, event_label, event_value, ...props, send_to: 'UA-161400643-2' });
     } catch (e) {
         console.group("Analytics")
         console.warn(e);
