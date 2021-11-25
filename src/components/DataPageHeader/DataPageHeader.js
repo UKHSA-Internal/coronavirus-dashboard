@@ -1,6 +1,6 @@
 // @flow
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { getParams, getParamValueFor } from "common/utils";
 
@@ -17,7 +17,7 @@ const DefaultParams = [
 
 const DataPageHeaders = () => {
 
-    const { href, search: query, pathname } = useLocation();
+    const { search: query, pathname } = useLocation();
     const uri = /^(\/(details\/)?[^/]+).*/.exec(pathname)?.[1];
     let { title="", description="", localised=false } = Path?.[pathname] ?? Path?.[uri] ?? {};
     const urlParams = getParams(query);
@@ -37,20 +37,24 @@ const DataPageHeaders = () => {
         ? [`${title} in ${areaName}`, `${description} in ${ areaName }`]
         : [title, description];
 
-    try {
-        const gtagPayload = {
-            page_title: stripPII(preppedTitle),
-            page_location: stripPIIUri(href),
-            page_path: pathname + (query !== "" ? "?" + stripPII(query).replace("?", "") : "")
-        };
+    useEffect(() => {
+        try {
+            if ( "gtag" in window && pathname ) {
+                const gtagPayload = {
+                    page_title: stripPII(preppedTitle),
+                    page_location: stripPIIUri(document.location.href),
+                    page_path: (pathname + (query !== "" ? "?" + stripPII(query) : "")).replace(/[?]+/, "?")
+                };
 
-        window.gtag('event', 'page_view', { ...gtagPayload, send_to: 'UA-161400643-2' });
-        window.gtag('event', 'page_view', { ...gtagPayload, send_to: 'UA-145652997-1' });
-    } catch (e) {
-        console.group("Analytics");
-        console.warn(e);
-        console.groupEnd();
-    }
+                window.gtag('event', 'page_view', { ...gtagPayload, send_to: 'UA-161400643-2' });
+                window.gtag('event', 'page_view', { ...gtagPayload, send_to: 'UA-145652997-1' });
+            }
+        } catch (e) {
+            console.group("Analytics");
+            console.warn(e);
+            console.groupEnd();
+        }
+    }, [ preppedTitle, query, pathname, window.gtag ]);
 
     preppedTitle +=  ' | Coronavirus in the UK';
 
