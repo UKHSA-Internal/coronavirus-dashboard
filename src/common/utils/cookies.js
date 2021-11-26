@@ -15,6 +15,9 @@ export const stripPIIUri = function (str) {
 
 
 export const setCookies = () => {
+    window['ga-disable-UA-161400643-2'] = false;
+    window['ga-disable-UA-145652997-1'] = false;
+
     try {
         window.dataLayer = window.dataLayer || [];
 
@@ -75,9 +78,9 @@ export const deleteCookies = () => {
     Cookies.remove("_gid");
     Cookies.remove("_gat_gtag_UA_161400643_2");
     Cookies.remove("_gat_gtag_UA_145652997_1");
-    Cookies.remove("LocationBanner");
-    window['ga-disable-UA-161400643-2'] = false;
-    window['ga-disable-UA-145652997-1'] = false;
+
+    window['ga-disable-UA-161400643-2'] = true;
+    window['ga-disable-UA-145652997-1'] = true;
 };
 
 
