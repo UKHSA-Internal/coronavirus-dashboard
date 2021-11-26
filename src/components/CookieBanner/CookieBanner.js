@@ -53,6 +53,8 @@ const CookieBanner: ComponentType<Props> = ({ ...props }: Props) => {
                 }
                 else {
                     setCookies();
+                    window['ga-disable-UA-161400643-2'] = false;
+                    window['ga-disable-UA-145652997-1'] = false;
                 }
 
                 setCookieStateIsSet(true);
