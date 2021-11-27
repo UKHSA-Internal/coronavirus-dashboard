@@ -15,16 +15,20 @@ export const stripPIIUri = function (str) {
 
 
 export const setCookies = () => {
+    console.info("Cookies accepted - setting up GA.");
+
     window['ga-disable-UA-161400643-2'] = false;
     window['ga-disable-UA-145652997-1'] = false;
 
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        window.dataLayer.push(arguments)
+    }
+
+    window.gtag = window.gtag || gtag;
+
     try {
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            window.dataLayer.push(arguments)
-        }
-
         gtag('js', new Date());
         gtag(
             'config',
@@ -38,6 +42,8 @@ export const setCookies = () => {
                 'send_page_view': false,
             }
         );
+
+        // GovUK tracker
         gtag(
             'config',
             'UA-145652997-1',
@@ -48,27 +54,17 @@ export const setCookies = () => {
                 'allow_google_signals': false,
                 'allow_ad_personalization_signals': false,
                 'send_page_view': false,
+                'linker': {
+                    'domains': ["www.gov.uk", "coronavirus.data.gov.uk", "data.gov.uk", "gov.uk"]
+                }
             }
         );
-        gtag('event', 'page_view', {
-            page_title: stripPII(document.title),
-            page_location: stripPIIUri(window.location.href),
-            page_path: window.location.pathname + (window.location.search !== "" ? "?" + stripPII(window.location.search) : ""),
-            send_to: 'UA-161400643-2'
-        });
-        gtag('event', 'page_view', {
-            page_title: stripPII(document.title),
-            page_location: stripPIIUri(window.location.href),
-            page_path: window.location.pathname + (window.location.search !== "" ? "?" + stripPII(window.location.search) : ""),
-            send_to: 'UA-145652997-1'
-        });
-        gtag('linker:autoLink', ["www.gov.uk", "coronavirus.data.gov.uk", "data.gov.uk", "gov.uk"]);
+
+        console.info("GA successfully set up.");
 
     } catch (error) {
-        console.group("Cookie preferences")
         console.warn("Cookies accepted, but tracking is blocked by the browser.")
         console.warn("Failed to set GA cookies.")
-        console.groupEnd()
     }
 };
 
@@ -81,6 +77,8 @@ export const deleteCookies = () => {
 
     window['ga-disable-UA-161400643-2'] = true;
     window['ga-disable-UA-145652997-1'] = true;
+
+    console.info("Removed cookies and disabled tracking.");
 };
 
 
@@ -91,10 +89,10 @@ export const handleCookieAccept = ( accepted ) => {
         cookieExpiryDate = new Date(year, month + 1, day).toUTCString();
 
     if ( accepted ) {
-        document.cookie = `cookies_policy_21_3=${ encodeURIComponent('{"essential":true,"usage":true}') }; expires=${ cookieExpiryDate };`;
+        document.cookie = `cookies_policy_21_3=${ encodeURIComponent('{"essential":true,"usage":true,"preferences":true}') }; expires=${ cookieExpiryDate };`;
         setCookies();
     } else {
-        document.cookie = `cookies_policy_21_3=${ encodeURIComponent('{"essential":true,"usage":false}') }; expires=${ cookieExpiryDate };`;
+        document.cookie = `cookies_policy_21_3=${ encodeURIComponent('{"essential":true,"usage":false,"preferences":false}') }; expires=${ cookieExpiryDate };`;
         deleteCookies();
     }
 
