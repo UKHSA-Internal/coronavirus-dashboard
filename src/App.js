@@ -90,8 +90,8 @@ const App = () => {
     const layout = useResponsiveLayout(768);
 
     return <>
-        <DataPageHeader pathname={ pathname } query={ query }/>
         <CookieBanner/>
+        <DataPageHeader pathname={ pathname } query={ query }/>
         <Header layout={ layout }/>
         { layout === "mobile" && <Navigation layout={ layout }/> }
         <div className={ "govuk-width-container" }>
