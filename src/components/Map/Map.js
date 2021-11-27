@@ -30,7 +30,7 @@ import usePrevious from "hooks/usePrevious";
 import GreenArrow from "assets/icon-arrow-green.svg";
 import GreyArrow from "assets/arrow.svg";
 import RedArrow from "assets/icon-arrow-red.svg";
-import { scaleColours, strFormat } from "common/utils";
+import { analytics, scaleColours, strFormat } from "common/utils";
 import useGenericAPI from "hooks/useGenericAPI";
 import type { ComponentType } from "react";
 import type { Props } from './Map.types.js';
@@ -583,6 +583,12 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
         setShowInfo(true);
 
+        analytics({
+            category: "map::cases",
+            action: "select area",
+            label: `${hoverState.location}::${hoverState.features.properties.code}`
+        });
+
     }, [ map, hoverState.id, hoverState.layer, prevHoverState, mapHasLoaded ]);
 
 
@@ -655,8 +661,6 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
             { children }
         </SliderContainer>
         <MapContainer>
-            {/*{ isLoading && <Loading/> }*/}
-            {/*<div id={ "map" }/>*/}
             <Component/>
             {
                 // !isLoading &&
@@ -664,6 +668,10 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                     <PostcodeSearchForm onSubmit={  (e) => {
                             e.preventDefault();
                             const postcode: string = document.getElementById("postcode").value;
+                            analytics({
+                                category: "map::cases",
+                                action: "postcode-search",
+                            });
                             (async () => {
                                 const { data } = await axios.get(
                                     strFormat(URLs.postcode, {kwargs: {postcode: postcode}})

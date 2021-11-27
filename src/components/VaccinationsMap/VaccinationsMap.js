@@ -25,7 +25,7 @@ import useGenericAPI from "hooks/useGenericAPI";
 import { DateStamp } from "./InfoCard/DateStamp";
 import InfoCard from "./InfoCard";
 import { MapLayers } from "./constants";
-import { strFormat } from "../../common/utils";
+import { analytics, strFormat } from "common/utils";
 
 
 
@@ -275,6 +275,12 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
             currentLocation: hoverState.features.properties.code
         }));
 
+        analytics({
+            category: "map::cases",
+            action: "select area",
+            label: `${hoverState.location}::${hoverState.features.properties.code}`
+        });
+
         setShowInfo(true);
 
     }, [ map, hoverState.id, hoverState.layer, prevHoverState, mapHasLoaded ]);
@@ -362,6 +368,10 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                 <PostcodeSearchForm onSubmit={  (e) => {
                         e.preventDefault();
                         const postcode: string = document.getElementById("postcode").value;
+                        analytics({
+                            category: "map::vaccinations",
+                            action: "postcode-search",
+                        });
                         (async () => {
                             const { data } = await axios.get(
                                 strFormat(URLs.postcode, {kwargs: {postcode: postcode}})
