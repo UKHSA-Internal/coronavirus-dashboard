@@ -39,16 +39,16 @@ const DataPageHeaders = () => {
 
     useEffect(() => {
         try {
-            if ( "gtag" in window && pathname ) {
-                const gtagPayload = {
-                    page_title: stripPII(preppedTitle),
-                    page_location: stripPIIUri(document.location.href),
-                    page_path: (pathname + (query !== "" ? "?" + stripPII(query) : "")).replace(/[?]+/, "?")
-                };
 
-                window.gtag('event', 'page_view', { ...gtagPayload, send_to: 'UA-161400643-2' });
-                window.gtag('event', 'page_view', { ...gtagPayload, send_to: 'UA-145652997-1' });
-            }
+            const gtagPayload = {
+                page_title: stripPII(preppedTitle),
+                page_location: stripPIIUri(document.location.href).replace(/[?]+/, "?"),
+                page_path: (pathname + (query !== "" ? "?" + stripPII(query) : "")).replace(/[?]+/, "?")
+            };
+
+            window.gtag('event', 'page_view', { ...gtagPayload, send_to: 'UA-161400643-2' });
+            window.gtag('event', 'page_view', { ...gtagPayload, send_to: 'UA-145652997-1' });
+
         } catch (e) {
             console.group("Analytics");
             console.warn(e);
