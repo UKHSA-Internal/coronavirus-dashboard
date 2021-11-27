@@ -21,40 +21,44 @@ const CookieBanner: ComponentType<Props> = ({ ...props }: Props) => {
 
         if ( cookieAccepted ) {
             handleCookieAccept(true);
+            console.info("Cookies accepted.");
             setCookieStateIsSet(true);
         }
         else if ( cookieAccepted === false )  {
             handleCookieAccept(false);
+            console.info("Cookies declined.");
             setCookieStateIsSet(true);
         }
 
     }, [ cookieAccepted ]);
 
     useEffect(() => {
+
         const cookiePreference = Cookies.get('cookies_preferences_set_21_3');
 
         if ( cookiePreference === 'true' ) {
+            console.info("Cookies preferences have been set.");
+
             const cookiePolicyRaw = Cookies.get('cookies_policy_21_3');
 
             if ( !cookiePolicyRaw ) {
                 Cookies.remove("cookies_preferences_set_21_3");
                 setCookieStateIsSet(false)
+                console.info("Cookies policy has not been set.");
             }
             else {
+                console.info("Cookies policy has been set.");
                 const cookiePolicy = JSON.parse(cookiePolicyRaw);
 
-                if ( cookiePolicy.usage === false ) {
+                if ( cookiePolicy.usage === false || !cookiePolicy.usage ) {
                     window['ga-disable-UA-161400643-2'] = true;
                     window['ga-disable-UA-145652997-1'] = true;
-                    deleteCookies()
-                }
-                else if ( !cookiePolicy.usage ) {
-                    deleteCookies()
+                    deleteCookies();
+                    console.info("Cookies are disabled.");
                 }
                 else {
                     setCookies();
-                    window['ga-disable-UA-161400643-2'] = false;
-                    window['ga-disable-UA-145652997-1'] = false;
+                    console.info("Cookies successfully set.");
                 }
 
                 setCookieStateIsSet(true);
@@ -62,7 +66,9 @@ const CookieBanner: ComponentType<Props> = ({ ...props }: Props) => {
         }
         else {
             setCookieStateIsSet(false);
+            console.info("Cookies preferences have not been set.");
         }
+
     }, [ cookieAccepted ]);
 
 
