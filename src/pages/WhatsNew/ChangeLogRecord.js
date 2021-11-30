@@ -11,29 +11,14 @@ import { useParams } from "react-router";
 import { PageComponent } from "components/ChangeLogComponent/PageComponent";
 import { ChangeLogHeading, ChangeLogItemBody } from "components/ChangeLogComponent/ChangeLogItem";
 import { useMarkdown } from "hooks/useMarkdown";
-import { DataList, Markdown } from "components/ChangeLogComponent/ChangeLogComponent.styles";
+import { Markdown } from "components/ChangeLogComponent/ChangeLogComponent.styles";
+import { Content } from "./WhatsNew.styles";
+
+import { Link } from "react-router-dom";
+import AffectedLogMetrics from "components/AffectedLogMetrics";
+import AssociatedAreas from "components/AssociatedAreas";
 
 import type { ComponentType } from "react";
-import { Link } from "react-router-dom";
-
-
-const Metrics: ComponentType<*> = ({ metrics }) => {
-
-    if ( !metrics || !metrics?.length ) return null;
-
-    return <div className={ "govuk-!-padding-top-4 govuk-details__text govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
-        <h4 className={ "govuk-heading-s" }>Affected metrics</h4>
-        <DataList>{
-            metrics.map(item =>
-                <Fragment key={ item.metric }>
-                    <dt>{ item.metric_name }</dt>
-                    <dd><code>{ item.metric }</code></dd>
-                </Fragment>
-            )
-        }</DataList>
-    </div>;
-
-};
 
 
 const Details: ComponentType<*> = ({ details }) => {
@@ -84,13 +69,13 @@ const WhatsNewRecord: ComponentType<*> = () => {
                     All records
                 </Link>
             </div>
-            <section className="govuk-body-s govuk-!-margin-top-3 govuk-!-margin-bottom-6"
-                     style={{ maxWidth: 50 + "em" }}>
+            <Content>
                 <ChangeLogHeading data={ data } standAlone={ true }/>
                 <ChangeLogItemBody data={ data }/>
                 <Details details={ data?.details ?? "" }/>
-                <Metrics metrics={ data?.metrics }/>
-            </section>
+                <AssociatedAreas areas={ data?.applicable_to ?? [] } className={ "govuk-!-margin-bottom-2" }/>
+                <AffectedLogMetrics metrics={ data?.metrics }/>
+            </Content>
         </PageComponent>
     </>;
 

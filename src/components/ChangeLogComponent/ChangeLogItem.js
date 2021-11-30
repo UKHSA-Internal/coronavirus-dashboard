@@ -1,11 +1,14 @@
 // @flow
 
-import React, { Fragment } from "react";
+import React from "react";
 import moment from "moment";
-import { Markdown, Category, DataList, CategoryContainer } from "./ChangeLogComponent.styles";
+import { Markdown, Category, CategoryContainer } from "./ChangeLogComponent.styles";
 import { Link } from "react-router-dom";
 import { useMarkdown } from "hooks/useMarkdown";
+import AffectedLogMetrics from "components/AffectedLogMetrics";
+
 import type { ComponentType } from "react";
+import AssociatedAreas from "../AssociatedAreas";
 
 
 const colours = {
@@ -51,25 +54,6 @@ export const ChangeLogItemBody: ComponentType = ({ data }) => {
 }; // ChangeLogItemBody
 
 
-const Metrics: ComponentType = ({ data }) => {
-
-    if ( !data?.metrics?.length ) return null;
-
-    return <div className={ "govuk-!-padding-top-4 govuk-details__text govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0" }>
-        <h4 className={ "govuk-heading-s" }>Affected metrics</h4>
-        <DataList>{
-            data.metrics.map(item =>
-                <Fragment key={ item.metric }>
-                    <dt>{ item.metric_name }</dt>
-                    <dd><code>{ item.metric }</code></dd>
-                </Fragment>
-            )
-        }</DataList>
-    </div>
-
-};  // Details
-
-
 const Details: ComponentType = ({ data }) => {
 
     const details = useMarkdown(data?.details);
@@ -88,7 +72,7 @@ const Details: ComponentType = ({ data }) => {
                 : <Markdown className="govuk-details__text govuk-body-s govuk-!-margin-top-0 govuk-!-margin-bottom-0"
                             dangerouslySetInnerHTML={ { __html: details } }/>
         }
-        <Metrics data={ data }/>
+        <AffectedLogMetrics metrics={ data?.metrics ?? [] }/>
     </details>
 
 };  // Details
@@ -139,6 +123,7 @@ export const ChangeLogItem: ComponentType = ({ data, changeTypes, ...props }) =>
     return <li className="govuk-body-s govuk-!-margin-top-3 govuk-!-margin-bottom-6" {...props}>
         <ChangeLogHeading data={ data }/>
         <ChangeLogItemBody changeTypes={ changeTypes } data={ data }/>
+        <AssociatedAreas areas={ data?.applicable_to ?? [] } className={ "govuk-!-margin-bottom-2" }/>
         <Details data={ data }/>
     </li>
 
