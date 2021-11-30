@@ -5,20 +5,13 @@ import React from "react";
 import Timestamp from "components/Timestamp";
 import { ChangeLogType } from "components/ChangeLogComponent/ChangeLogItem";
 import { Link } from "react-router-dom";
+import AssociatedAreas from "components/AssociatedAreas";
 import {
-    AffectedAreas, ExpiryContainer, LogArea,
-    LogAreasContainer, LogItemContainer,
+    ExpiryContainer, LogItemContainer,
     LogItemHeader, LogItemHeaderDates
 } from "./LogItems.styles";
 
 import type { LogItemsType, LogType } from "./LogItems.types";
-
-
-const sortFunc = (a, b) => {
-
-    return a === "UK" ? -1 : b === "UK" ? 1 : a > b || -1
-
-}; // sortFunc
 
 
 const Log: LogType<*> = ({ data }) => {
@@ -46,16 +39,7 @@ const Log: LogType<*> = ({ data }) => {
                 { data.heading }
             </Link>
         </div>
-        <AffectedAreas>
-            <span>Affected&nbsp;areas:</span>
-            <LogAreasContainer>{
-                !data.applicable_to.length
-                    ? <span className={ "na" }>N/A</span>
-                    : data.applicable_to.sort(sortFunc).map(item =>
-                        <LogArea key={ item }>{ item }</LogArea>
-                    )
-            }</LogAreasContainer>
-        </AffectedAreas>
+        <AssociatedAreas areas={ data?.applicable_to ?? [] }/>
     </LogItemContainer>;
 
 };  // Log
