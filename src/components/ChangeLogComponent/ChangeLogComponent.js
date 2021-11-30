@@ -171,15 +171,17 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
                   <b>There are no more logs to display.</b>
                 </p>
             }
-        ><ul className={ "govuk-list" }>{
-            groups.map(groupKey =>
-                <DateGroup data={ processedData[groupKey] }
-                           group={ groupKey }
-                           changeTypes={ [] }
-                           colours={ {} }
-                           key={ groupKey }/>
-            )
-        }</ul></InfiniteScroll>
+        >
+            <ul className={ "govuk-list" }>{
+                groups.map(groupKey =>
+                    <DateGroup data={ processedData[groupKey] }
+                               group={ groupKey }
+                               changeTypes={ [] }
+                               colours={ {} }
+                               key={ groupKey }/>
+                )
+            }</ul>
+        </InfiniteScroll>
     </PageComponent>;
 
 }; //ChangeLogComponent
