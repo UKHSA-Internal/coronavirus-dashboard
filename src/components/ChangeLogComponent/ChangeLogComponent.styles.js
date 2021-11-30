@@ -213,27 +213,3 @@ export const ChangeLogBannerTag: ComponentType<*> =
             margin: 0 1rem 0 0;
             line-height: initial;
         `;
-
-
-export const DataList: ComponentType<*> =
-    styled
-        .dl`   
-            display: flex !important;
-            flex-direction: column;
-            font-size: larger;
-            & > dt {
-                margin-right: auto !important;
-                margin-bottom: .3rem;
-            }
-            & > dd {
-                margin-bottom: 1.5rem;
-                margin-top: .3rem;
-
-                code {
-                    background: #f3f2f1;
-                    border: 1px solid #D7D7D7;
-                    padding: 3px 5px;
-                    border-radius: 3px;
-                }
-            }
-        `;
