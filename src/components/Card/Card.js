@@ -215,7 +215,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
             {
                 key: "date",
                 sign: ">",
-                value: moment().subtract(3, "months").format("YYYY-MM-DD")
+                value: moment().subtract(1, "year").format("YYYY-MM-DD")
             }
         ]
     }
