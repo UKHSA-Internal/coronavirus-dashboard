@@ -26,11 +26,12 @@ ExtendedOptionStyles.control = ( base, state ) => ({
 const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
 
     const { pathname, search: queries } = useLocation();
-    const { search="", category=null, tags=null } = getUriParams(queries);
+    const { search=null, category=null, tags=null } = getUriParams(queries);
     const [ categories, setCategory ] = useState(category ? category : null);
     const [ types, setType ] = useState(tags ? tags.split(",") : []);
     const [ userInput, setUserInput ] = useState(search);
     const [ data, setData ] = useState(metrics);
+    const [ download, setDownload ] = useState(queries);
 
     const tagOptions = metrics && [
         ...metrics.reduce((acc, cur) => {
@@ -60,6 +61,8 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
         }
 
         setUri(pathname + createQuery(params))
+
+        setDownload(URLs["genericApiMetrics"] + createQuery(params));
 
         setData(
             metrics.filter(item =>
@@ -146,7 +149,7 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
         </div>
         <RenderMetrics data={ data }
                        filterFunc={ () => true }
-                       download={ URLs["genericApiMetricSearch"] + `?search=${userInput}` + `&category=${category}` + `&tags=${types.join(",")}` }
+                       download={ download }
                        downloadName={ `metrics_${userInput}.json` }
                        userInput={ userInput }
                        category={ categories }
