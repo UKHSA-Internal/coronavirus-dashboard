@@ -31,6 +31,7 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
     const [ types, setType ] = useState(tags ? tags.split(",") : []);
     const [ userInput, setUserInput ] = useState(search);
     const [ data, setData ] = useState(metrics);
+    const [ download, setDownload ] = useState(queries);
 
     const tagOptions = metrics && [
         ...metrics.reduce((acc, cur) => {
@@ -60,6 +61,8 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
         }
 
         setUri(pathname + createQuery(params))
+
+        setDownload(URLs["genericApiMetrics"] + createQuery(params));
 
         setData(
             metrics.filter(item =>
@@ -146,7 +149,7 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
         </div>
         <RenderMetrics data={ data }
                        filterFunc={ () => true }
-                       download={ URLs["genericApiMetricSearch"] + `?search=${userInput}` }
+                       download={ download }
                        downloadName={ `metrics_${userInput}.json` }
                        userInput={ userInput }
                        category={ categories }
