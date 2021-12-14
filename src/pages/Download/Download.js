@@ -8,7 +8,7 @@ import moment from "moment";
 import MomentLocaleUtils, { formatDate, parseDate } from "react-day-picker/moment";
 
 import { MetricLastUpdated, SelectOptions } from "./Download.styles";
-import { AreaTypeOptions, MSOAMetricOptions } from "components/DashboardHeader/Constants";
+import { AreaTypeOptions } from "components/DashboardHeader/Constants";
 import { createQuery, groupBy } from 'common/utils/utils';
 import URLs from "common/urls";
 import { Radio } from 'components/GovUk';
@@ -17,6 +17,7 @@ import useGenericAPI from 'hooks/useGenericAPI';
 import useTimestamp from 'hooks/useTimestamp';
 import MsoaSelectContainer from "./MsoaDownloads";
 import FormItem, { Form } from "components/Formset";
+import { Deprecated } from "components/MetricView/MetricView.styles";
 
 import {
     Container,
@@ -29,7 +30,7 @@ import {
 
 import type { ComponentType } from "react";
 import { Helmet } from "react-helmet";
-import usePrevious from "../../hooks/usePrevious";
+import usePrevious from "hooks/usePrevious";
 
 
 const MAX_METRICS = 5;
@@ -192,11 +193,17 @@ const MetricMultiSelector = ({ areaType, areaCode, date, metrics, setMetrics }) 
         []
     );
 
-    const metricNames = areaType === MSOA_AREA_TYPE
-        ? MSOAMetricOptions
-        : metricData?.map(item => ({
+    const metricNames = metricData?.map(item => ({
             label: <span>
-                { item.metric }<br/>
+                { item.metric }
+                {
+                    item.deprecated
+                        ? <Deprecated className={ "govuk-!-margin-left-1" }>
+                            Deprecated &mdash; { moment(item.deprecated).format("D MMM YYYY") }
+                        </Deprecated>
+                        : null
+                }
+                <br/>
                 <MetricLastUpdated>Latest record: { item?.last_update ?? "" }</MetricLastUpdated>
             </span>,
             value: item.metric
