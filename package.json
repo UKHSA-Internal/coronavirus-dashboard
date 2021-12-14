@@ -34,7 +34,7 @@
     "react-scripts": "^3.4.4",
     "react-select": "^4.3.1",
     "react-spinners": "^0.11.0",
-    "react-syntax-highlighter": "^15.4.4",
+    "react-syntax-highlighter": "^15.4.5",
     "react-tooltip": "^4.2.21",
     "remark": "^13.0.0",
     "remark-external-links": "^9.0.1",
@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "flow-bin": "^0.160.1",
+    "flow-bin": "^0.167.1",
     "react-snap": "^1.23.0",
     "stylelint": "^13.13.1",
     "stylelint-config-idiomatic-order": "^8.1.0",
