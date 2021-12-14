@@ -6589,10 +6589,10 @@ flip-pixels@^1.0.2:
   resolved "https://registry.yarnpkg.com/flip-pixels/-/flip-pixels-1.0.2.tgz#aad7b7d9fc65932d5f27e2e4dac4b494140845e4"
   integrity sha512-oXbJGbjDnfJRWPC7Va38EFhd+A8JWE5/hCiKcK8qjCdbLj9DTpsq6MEudwpRTH+V4qq+Jw7d3pUgQdSr3x3mTA==
 
-flow-bin@^0.160.1:
-  version "0.160.1"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.160.1.tgz#ae24ad6def1f05ae37789b6cc332b58975d29de0"
-  integrity sha512-LvQ9lB/vwW+lPjYIyACcGQCSLvL9f9hOM9jJJtfHQRrIgIShWqjvyv5V24M57HSxh0+6dBbVDYhUiZjjeArf7A==
+flow-bin@^0.167.1:
+  version "0.167.1"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.167.1.tgz#c2cfc2ca326ca16fbf9bf6ab273bb865b26b528b"
+  integrity sha512-YL3sy3YEa5do5O/dBmUFHqzsWGIj2Yhx3+FzNTQsmfimX5DTlUj9uC0LFmuG+c5pDtVo/d/1e38Vgd1o0fgh9g==
 
 flush-write-stream@^1.0.0:
   version "1.1.1"
@@ -7563,10 +7563,10 @@ govuk-frontend@^3.12.0:
   resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.14.0.tgz#d3a9c54437c08f5188f87b1f4480ba60e95c8eb6"
   integrity sha512-y7FTuihCSA8Hty+e9h0uPhCoNanCAN+CLioNFlPmlbeHXpbi09VMyxTcH+XfnMPY4Cp++7096v0rLwwdapTXnA==
 
-govuk-react-jsx@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/govuk-react-jsx/-/govuk-react-jsx-6.0.0.tgz#5bb604168a1855cbaed3082c496067f3795d1b52"
-  integrity sha512-eE9wNFykc7lLl0zU9uAyo2IaUb0e1x362tMqSc59yuhg5Eg1E2RnPkTPyUrV3ZSNCU68jniYtBAffiw/DXYBLg==
+govuk-react-jsx@6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/govuk-react-jsx/-/govuk-react-jsx-6.2.1.tgz#2372838885eaf677ca6aece52c2fd5af53a376c4"
+  integrity sha512-NHaEx/7z1d4S9RsUFsFYvJHgkU/hHHZOXYsUWYTCBJDcOoNNgumNU1xyXs2teF06OPq/eiFRJ5/lf9LVVuToUg==
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0:
   version "4.2.4"

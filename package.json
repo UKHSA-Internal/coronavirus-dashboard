@@ -11,7 +11,7 @@
     "d3-scale": "^4.0.1",
     "deep-equal": "^2.0.5",
     "govuk-frontend": "^3.12.0",
-    "govuk-react-jsx": "6.0.0",
+    "govuk-react-jsx": "6.2.1",
     "js-cookie": "^3.0.1",
     "leaflet": "^1.6.0",
     "lodash.clonedeep": "^4.5.0",
@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "flow-bin": "^0.160.1",
+    "flow-bin": "^0.167.1",
     "react-snap": "^1.23.0",
     "stylelint": "^13.13.1",
     "stylelint-config-idiomatic-order": "^8.1.0",
