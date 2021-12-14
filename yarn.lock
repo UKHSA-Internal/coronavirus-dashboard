@@ -1301,12 +1301,12 @@
     "@babel/helper-plugin-utils" "^7.8.3"
     "@babel/plugin-transform-typescript" "^7.9.0"
 
-"@babel/runtime-corejs3@^7.11.2", "@babel/runtime-corejs3@^7.12.1", "@babel/runtime-corejs3@^7.14.7":
-  version "7.15.3"
-  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.15.3.tgz#28754263988198f2a928c09733ade2fb4d28089d"
-  integrity sha512-30A3lP+sRL6ml8uhoJSs+8jwpKzbw8CqBvDc1laeptxPm5FahumJxirigcbD2qTs71Sonvj1cyZB0OKGAmxQ+A==
+"@babel/runtime-corejs3@^7.11.2", "@babel/runtime-corejs3@^7.12.1", "@babel/runtime-corejs3@^7.16.3":
+  version "7.16.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.16.5.tgz#9057d879720c136193f0440bc400088212a74894"
+  integrity sha512-F1pMwvTiUNSAM8mc45kccMQxj31x3y3P+tA/X8hKNWp3/hUsxdGxZ3D3H8JIkxtfA8qGkaBTKvcmvStaYseAFw==
   dependencies:
-    core-js-pure "^3.16.0"
+    core-js-pure "^3.19.0"
     regenerator-runtime "^0.13.4"
 
 "@babel/runtime@7.9.0":
@@ -4424,10 +4424,10 @@ core-js-compat@^3.6.2:
     browserslist "^4.14.7"
     semver "7.0.0"
 
-core-js-pure@^3.16.0:
-  version "3.16.2"
-  resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.16.2.tgz#0ef4b79cabafb251ea86eb7d139b42bd98c533e8"
-  integrity sha512-oxKe64UH049mJqrKkynWp6Vu0Rlm/BTXO/bJZuN2mmR3RtOFNepLlSWDd1eo16PzHpQAoNG97rLU1V/YxesJjw==
+core-js-pure@^3.19.0:
+  version "3.19.3"
+  resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.19.3.tgz#c69b2b36b58927317824994b532ec3f0f7e49607"
+  integrity sha512-N3JruInmCyt7EJj5mAq3csCgGYgiSqu7p7TQp2KOztr180/OAIxyIvL1FCjzgmQk/t3Yniua50Fsak7FShI9lA==
 
 core-js@^2.4.0:
   version "2.6.12"
@@ -12611,7 +12611,12 @@ pretty-format@^24.9.0:
     ansi-styles "^3.2.0"
     react-is "^16.8.4"
 
-prismjs@^1.22.0, prismjs@~1.23.0:
+prismjs@^1.25.0:
+  version "1.25.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.25.0.tgz#6f822df1bdad965734b310b315a23315cf999756"
+  integrity sha512-WCjJHl1KEWbnkQom1+SzftbtXMKQoezOCYs5rECqMN+jP+apI7ftoflyqigqzopSO3hMhTEb0mFClA8lkolgEg==
+
+prismjs@~1.23.0:
   version "1.23.0"
   resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.23.0.tgz#d3b3967f7d72440690497652a9d40ff046067f33"
   integrity sha512-c29LVsqOaLbBHuIbsTxaKENh1N2EQBOHaWv7gkHN4dgRbxSREqDnDbtFJYdpPauS4YCplMSNCABQ6Eeor69bAA==
@@ -12944,10 +12949,10 @@ react-compare-slider@^2.1.0:
   resolved "https://registry.yarnpkg.com/react-compare-slider/-/react-compare-slider-2.1.0.tgz#a77a88ef2825b21b1b001c913339f591c3657272"
   integrity sha512-cBB9Ih5SHYWXjgH4SXHywvfLJVN0x+8WXdNRTipmt47ju0oxlcCJzuS0XLJ9oC6zwKPD7KZS2sS1/QcnrjZkbw==
 
-react-copy-to-clipboard@5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/react-copy-to-clipboard/-/react-copy-to-clipboard-5.0.3.tgz#2a0623b1115a1d8c84144e9434d3342b5af41ab4"
-  integrity sha512-9S3j+m+UxDZOM0Qb8mhnT/rMR0NGSrj9A/073yz2DSxPMYhmYFBMYIdI2X4o8AjOjyFsSNxDRnCX6s/gRxpriw==
+react-copy-to-clipboard@5.0.4:
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/react-copy-to-clipboard/-/react-copy-to-clipboard-5.0.4.tgz#42ec519b03eb9413b118af92d1780c403a5f19bf"
+  integrity sha512-IeVAiNVKjSPeGax/Gmkqfa/+PuMTBhutEvFUaMQLwE2tS0EXrAdgOpWDX26bWTXF3HrioorR7lr08NqeYUWQCQ==
   dependencies:
     copy-to-clipboard "^3"
     prop-types "^15.5.8"
@@ -13220,15 +13225,15 @@ react-spinners@^0.11.0:
   dependencies:
     "@emotion/react" "^11.1.4"
 
-react-syntax-highlighter@^15.4.4:
-  version "15.4.4"
-  resolved "https://registry.yarnpkg.com/react-syntax-highlighter/-/react-syntax-highlighter-15.4.4.tgz#dc9043f19e7bd063ff3ea78986d22a6eaa943b2a"
-  integrity sha512-PsOFHNTzkb3OroXdoR897eKN5EZ6grht1iM+f1lJSq7/L0YVnkJaNVwC3wEUYPOAmeyl5xyer1DjL6MrumO6Zw==
+react-syntax-highlighter@^15.4.4, react-syntax-highlighter@^15.4.5:
+  version "15.4.5"
+  resolved "https://registry.yarnpkg.com/react-syntax-highlighter/-/react-syntax-highlighter-15.4.5.tgz#db900d411d32a65c8e90c39cd64555bf463e712e"
+  integrity sha512-RC90KQTxZ/b7+9iE6s9nmiFLFjWswUcfULi4GwVzdFVKVMQySkJWBuOmJFfjwjMVCo0IUUuJrWebNKyviKpwLQ==
   dependencies:
     "@babel/runtime" "^7.3.1"
     highlight.js "^10.4.1"
     lowlight "^1.17.0"
-    prismjs "^1.22.0"
+    prismjs "^1.25.0"
     refractor "^3.2.0"
 
 react-tooltip@^4.2.21:
@@ -13426,10 +13431,10 @@ redux-immutable@^4.0.0:
   resolved "https://registry.yarnpkg.com/redux-immutable/-/redux-immutable-4.0.0.tgz#3a1a32df66366462b63691f0e1dc35e472bbc9f3"
   integrity sha1-Ohoy32Y2ZGK2NpHw4dw15HK7yfM=
 
-redux@^4.0.0, redux@^4.1.0:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/redux/-/redux-4.1.1.tgz#76f1c439bb42043f985fbd9bf21990e60bd67f47"
-  integrity sha512-hZQZdDEM25UY2P493kPYuKqviVwZ58lEmGQNeQ+gXa+U0gYPUBf7NKYazbe3m+bs/DzM/ahN12DbF+NG8i0CWw==
+redux@^4.0.0, redux@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-4.1.2.tgz#140f35426d99bb4729af760afcf79eaaac407104"
+  integrity sha512-SH8PglcebESbd/shgf6mii6EIoRM0zrQyjcuQ+ojmfxjTtE0z9Y8pa62iA/OJ58qjP6j27uyW4kUF4jl/jd6sw==
   dependencies:
     "@babel/runtime" "^7.9.2"
 
@@ -15423,12 +15428,12 @@ swagger-client@^3.17.0:
     traverse "~0.6.6"
     url "~0.11.0"
 
-swagger-ui-react@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/swagger-ui-react/-/swagger-ui-react-4.1.0.tgz#6033d40de813b5ac2f76392be77f8b2c9d734b15"
-  integrity sha512-+25y5Hn39S6MjRbKLfdcwwe1xRdAMCNabHKDHc3LAQ0PE1xPT7aWY6KTQIOGOwsb36ev5ic5ZoUz0Wx6xeDfnQ==
+swagger-ui-react@^4.1.3:
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/swagger-ui-react/-/swagger-ui-react-4.1.3.tgz#a722ecbe54ef237fa9080447a7c708c4c72d846a"
+  integrity sha512-o1AoXUTNH40cxWus0QOeWQ8x9tSIEmrLBrOgAOHDnvWJ1qyjT8PjgHjPbUVjMbja18coyuaAAeUdyLKvLGmlDA==
   dependencies:
-    "@babel/runtime-corejs3" "^7.14.7"
+    "@babel/runtime-corejs3" "^7.16.3"
     "@braintree/sanitize-url" "^5.0.2"
     base64-js "^1.5.1"
     classnames "^2.3.1"
@@ -15443,14 +15448,14 @@ swagger-ui-react@^4.1.0:
     memoizee "^0.4.15"
     prop-types "^15.7.2"
     randombytes "^2.1.0"
-    react-copy-to-clipboard "5.0.3"
+    react-copy-to-clipboard "5.0.4"
     react-debounce-input "=3.2.4"
     react-immutable-proptypes "2.2.0"
     react-immutable-pure-component "^2.2.0"
     react-inspector "^5.1.1"
     react-redux "^7.2.4"
-    react-syntax-highlighter "^15.4.4"
-    redux "^4.1.0"
+    react-syntax-highlighter "^15.4.5"
+    redux "^4.1.2"
     redux-immutable "^4.0.0"
     remarkable "^2.0.1"
     reselect "^4.0.0"
