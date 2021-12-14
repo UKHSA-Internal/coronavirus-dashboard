@@ -27,7 +27,7 @@ export const DateSearch: ComponentType<*> = ({}) => {
                 pathname: `/details/whats-new/${ date }`,
                 search: history.location.search
             })
-        } else {
+        } else if (!!history.location.search) { // do not push into history stack when not searched
             history.push({
                 pathname: `/details/whats-new`,
                 search: history.location.search
