@@ -12939,10 +12939,10 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
-react-compare-slider@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/react-compare-slider/-/react-compare-slider-2.1.0.tgz#a77a88ef2825b21b1b001c913339f591c3657272"
-  integrity sha512-cBB9Ih5SHYWXjgH4SXHywvfLJVN0x+8WXdNRTipmt47ju0oxlcCJzuS0XLJ9oC6zwKPD7KZS2sS1/QcnrjZkbw==
+react-compare-slider@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-compare-slider/-/react-compare-slider-2.2.0.tgz#c4229aa39a7a30c9b3efc2937c471107b437ac4c"
+  integrity sha512-I77xqulpoibZ9eqjn5wjpZL5IRpUZYcUlde70YaJ+MORGbUThrjTlHKl/UeGyCIPUWtPID5f5/zK9Q+1ovQLeA==
 
 react-copy-to-clipboard@5.0.3:
   version "5.0.3"
