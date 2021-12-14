@@ -22,7 +22,7 @@
     "plotly.js": "^2.5.1",
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",
-    "react-compare-slider": "^2.1.0",
+    "react-compare-slider": "^2.2.0",
     "react-day-picker": "^7.4.10",
     "react-dom": "^17.0.2",
     "react-focus-trap": "^2.7.1",
@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "flow-bin": "^0.160.1",
+    "flow-bin": "^0.167.1",
     "react-snap": "^1.23.0",
     "stylelint": "^13.13.1",
     "stylelint-config-idiomatic-order": "^8.1.0",
