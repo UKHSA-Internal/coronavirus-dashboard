@@ -7563,10 +7563,10 @@ govuk-frontend@^3.12.0:
   resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.14.0.tgz#d3a9c54437c08f5188f87b1f4480ba60e95c8eb6"
   integrity sha512-y7FTuihCSA8Hty+e9h0uPhCoNanCAN+CLioNFlPmlbeHXpbi09VMyxTcH+XfnMPY4Cp++7096v0rLwwdapTXnA==
 
-govuk-react-jsx@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/govuk-react-jsx/-/govuk-react-jsx-6.0.0.tgz#5bb604168a1855cbaed3082c496067f3795d1b52"
-  integrity sha512-eE9wNFykc7lLl0zU9uAyo2IaUb0e1x362tMqSc59yuhg5Eg1E2RnPkTPyUrV3ZSNCU68jniYtBAffiw/DXYBLg==
+govuk-react-jsx@6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/govuk-react-jsx/-/govuk-react-jsx-6.2.1.tgz#2372838885eaf677ca6aece52c2fd5af53a376c4"
+  integrity sha512-NHaEx/7z1d4S9RsUFsFYvJHgkU/hHHZOXYsUWYTCBJDcOoNNgumNU1xyXs2teF06OPq/eiFRJ5/lf9LVVuToUg==
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0:
   version "4.2.4"
