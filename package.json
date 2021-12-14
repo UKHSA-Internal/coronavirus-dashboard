@@ -15,7 +15,7 @@
     "js-cookie": "^3.0.1",
     "leaflet": "^1.6.0",
     "lodash.clonedeep": "^4.5.0",
-    "mapbox-gl": "^1.13.1",
+    "mapbox-gl": "^1.13.2",
     "moment": "^2.29.1",
     "node-sass": "^4.11.0",
     "numeral": "^2.0.6",
@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "flow-bin": "^0.160.1",
+    "flow-bin": "^0.167.1",
     "react-snap": "^1.23.0",
     "stylelint": "^13.13.1",
     "stylelint-config-idiomatic-order": "^8.1.0",
