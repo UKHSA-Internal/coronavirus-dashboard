@@ -38,7 +38,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        npm install
+        npm install --package-lock=false
         yarn install --production=true --no-lockfile
 
     # NOTE: Do NOT use trailing slashes in the URLs.
