@@ -38,9 +38,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        rm coronavirus-dashboard/yarn.lock
         npm install
-        yarn install
+        yarn install --production=true --no-lockfile
 
     # NOTE: Do NOT use trailing slashes in the URLs.
     # ATTENTION: `BASE_URL` must have the HTTP(S) protocol, but other URLs must not.
