@@ -8,7 +8,7 @@ import moment from "moment";
 import MomentLocaleUtils, { formatDate, parseDate } from "react-day-picker/moment";
 
 import { MetricLastUpdated, SelectOptions } from "./Download.styles";
-import { AreaTypeOptions } from "components/DashboardHeader/Constants";
+import { AreaTypeOptions, MSOAMetricOptions } from "components/DashboardHeader/Constants";
 import { createQuery, groupBy } from 'common/utils/utils';
 import URLs from "common/urls";
 import { Radio } from 'components/GovUk';
@@ -193,7 +193,9 @@ const MetricMultiSelector = ({ areaType, areaCode, date, metrics, setMetrics }) 
         []
     );
 
-    const metricNames = metricData?.map(item => ({
+    const metricNames = areaType === MSOA_AREA_TYPE
+        ? MSOAMetricOptions
+        : metricData?.map(item => ({
             label: <span>
                 { item.metric }
                 {

@@ -80,16 +80,68 @@ export const AreaTypeOptions = [
 
 
 export const MSOAMetricOptions = [
-    { value: "newCasesBySpecimenDateRollingSum", label: "newCasesBySpecimenDateRollingSum" },
-    { value: "newCasesBySpecimenDateRollingRate", label: "newCasesBySpecimenDateRollingRate" },
-    { value: "newCasesBySpecimenDateChange", label: "newCasesBySpecimenDateChange" },
-    { value: "newCasesBySpecimenDateChangePercentage", label: "newCasesBySpecimenDateChangePercentage" },
-    { value: "newCasesBySpecimenDateDirection", label: "newCasesBySpecimenDateDirection" },
-    { value: "cumPeopleVaccinatedFirstDoseByVaccinationDate", label: "cumPeopleVaccinatedFirstDoseByVaccinationDate" },
-    { value: "cumVaccinationFirstDoseUptakeByVaccinationDatePercentage", label: "cumVaccinationFirstDoseUptakeByVaccinationDatePercentage" },
-    { value: "cumVaccinationCompleteCoverageByVaccinationDatePercentage", label: "cumVaccinationCompleteCoverageByVaccinationDatePercentage" },
-    { value: "cumPeopleVaccinatedCompleteByVaccinationDate", label: "cumPeopleVaccinatedCompleteByVaccinationDate" },
-    { value: "cumVaccinationSecondDoseUptakeByVaccinationDatePercentage", label: "cumVaccinationSecondDoseUptakeByVaccinationDatePercentage" },
-    { value: "cumPeopleVaccinatedSecondDoseByVaccinationDate", label: "cumPeopleVaccinatedSecondDoseByVaccinationDate" },
-    { value: "VaccineRegisterPopulationByVaccinationDate", label: "VaccineRegisterPopulationByVaccinationDate" }
+    {
+        value: "newCasesBySpecimenDateRollingSum",
+        label: "newCasesBySpecimenDateRollingSum",
+        deprecated: null
+    },
+    {
+        value: "newCasesBySpecimenDateRollingRate",
+        label: "newCasesBySpecimenDateRollingRate",
+        deprecated: null
+    },
+    {
+        value: "newCasesBySpecimenDateChange",
+        label: "newCasesBySpecimenDateChange",
+        deprecated: null
+    },
+    {
+        value: "newCasesBySpecimenDateChangePercentage",
+        label: "newCasesBySpecimenDateChangePercentage",
+        deprecated: null
+    },
+    {
+        value: "newCasesBySpecimenDateDirection",
+        label: "newCasesBySpecimenDateDirection",
+        deprecated: null
+    },
+    {
+        value: "cumPeopleVaccinatedFirstDoseByVaccinationDate",
+        label: "cumPeopleVaccinatedFirstDoseByVaccinationDate",
+        deprecated: null
+    },
+    {
+        value: "cumVaccinationFirstDoseUptakeByVaccinationDatePercentage",
+        label: "cumVaccinationFirstDoseUptakeByVaccinationDatePercentage",
+        deprecated: null
+    },
+    {
+        value: "cumVaccinationThirdInjectionUptakeByVaccinationDatePercentage",
+        label: "cumVaccinationThirdInjectionUptakeByVaccinationDatePercentage",
+        deprecated: null
+    },
+    {
+        value: "cumVaccinationSecondDoseUptakeByVaccinationDatePercentage",
+        label: "cumVaccinationSecondDoseUptakeByVaccinationDatePercentage",
+        deprecated: null
+    },
+    {
+        value: "cumPeopleVaccinatedSecondDoseByVaccinationDate",
+        label: "cumPeopleVaccinatedSecondDoseByVaccinationDate",
+        deprecated: null
+    },
+    {
+        value: "VaccineRegisterPopulationByVaccinationDate",
+        label: "VaccineRegisterPopulationByVaccinationDate",
+        deprecated: null
+    },
+    {
+        value: "cumPeopleVaccinatedThirdInjectionByVaccinationDate",
+        label: "cumPeopleVaccinatedThirdInjectionByVaccinationDate",
+        deprecated: null
+    },
+
+    // Deprecated
+    // { value: "cumVaccinationCompleteCoverageByVaccinationDatePercentage", label: "cumVaccinationCompleteCoverageByVaccinationDatePercentage", deprecated: "2021-10-16" },
+    // { value: "cumPeopleVaccinatedCompleteByVaccinationDate", label: "cumPeopleVaccinatedCompleteByVaccinationDate", deprecated: "2021-10-16" },
 ];
