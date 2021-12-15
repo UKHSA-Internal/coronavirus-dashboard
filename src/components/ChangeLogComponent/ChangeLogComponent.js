@@ -141,7 +141,7 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
 
     }, [page, query, date]);
 
-    if ( !data.length && !isLoading ) {
+    if ( data !== undefined && !data.length && !isLoading ) {
         return <PageComponent>
             <p className={ "govuk-!-font-weight-bold" }>
                 There are no logs that match the criteria.
@@ -153,7 +153,7 @@ const ChangeLogComponent: ComponentType<*> = ({ colours }: ChangeLogInputProps) 
         return <PageComponent><Loading/></PageComponent>;
     }
 
-    const processedData = groupBy(data, item => item.date.substring(0, 7));
+    const processedData = groupBy(data ? data : [], item => item.date.substring(0, 7));
     const groups = Object.keys(processedData);
 
     return <PageComponent feedPath={ "change_logs" }>

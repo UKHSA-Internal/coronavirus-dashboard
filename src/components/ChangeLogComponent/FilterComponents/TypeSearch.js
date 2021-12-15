@@ -27,7 +27,10 @@ export const TypeSearch: ComponentType<*> = ({}) => {
         } else {
             params = params.filter(item => item.key !== "type");
         }
-        history.push({ search: createQuery(params) });
+        // do not push into history stack when not searched
+        if( params !== undefined && params.length !== 0 ) {
+            history.push({ search: createQuery(params) });
+        }
     }, [type]);
 
     if ( !options ) return <Loading/>;
