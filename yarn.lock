@@ -7553,7 +7553,7 @@ good-listener@^1.2.2:
   dependencies:
     delegate "^3.1.2"
 
-govuk-frontend@^3.12.0:
+govuk-frontend@^3.14.0:
   version "3.14.0"
   resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-3.14.0.tgz#d3a9c54437c08f5188f87b1f4480ba60e95c8eb6"
   integrity sha512-y7FTuihCSA8Hty+e9h0uPhCoNanCAN+CLioNFlPmlbeHXpbi09VMyxTcH+XfnMPY4Cp++7096v0rLwwdapTXnA==
