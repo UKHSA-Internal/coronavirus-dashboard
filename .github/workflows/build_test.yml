@@ -38,6 +38,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        rm yarn.lock
         npm install
         yarn install
 
