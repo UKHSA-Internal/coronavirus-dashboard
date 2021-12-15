@@ -38,7 +38,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        rm yarn.lock
+        rm coronavirus-dashboard/yarn.lock
         npm install
         yarn install
 
