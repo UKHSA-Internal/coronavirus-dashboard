@@ -495,21 +495,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                     }, `choropleth-${ layer.label }`);
 
                     map.on('click', `${ layer.label }-click`, function (e) {
-
-                        const outlineId = map
-                            .queryRenderedFeatures({ layers: [layer.label] })
-                            .find(item => item.properties.code === e.features[0].properties.code)
-                            .id;
-
-                        const newState = {
-                            id: outlineId,
-                            location: layer.label,
-                            features: e.features[0],
-                            layer: layer.label
-                        };
-
-                        if ( !deepEqual(prevHoverState, newState) ) setHoverSate(newState);
-
+                        addOutline(layer, e)
                     });
 
                 }
@@ -548,6 +534,23 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
             })
         }
     }, [ map, prevHoverState, styleDataStatus, width ]);
+
+    const addOutline = (layer, e) => {
+      const outlineId = map
+        .queryRenderedFeatures({ layers: [layer.label] })
+        .find((item) => {
+          return item.properties.code === e.features[0].properties.code;
+        }).id;
+
+      const newState = {
+        id: outlineId,
+        location: layer.label,
+        features: e.features[0],
+        layer: layer.label,
+      };
+
+      if (!deepEqual(prevHoverState, newState)) setHoverSate(newState);
+    };
 
     useEffect(() => {
 
@@ -593,9 +596,9 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
 
 
     useEffect(() => {
-
+        // in order to add an outline for postcode search
         if ( map && postcodeData ) {
-
+            let postCodeOutline = postcodeData;
             const el = document.createElement("div");
             el.className = "marker";
             el.style.backgroundImage = `url(${MapMarker})`;
@@ -618,6 +621,23 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                 .setLngLat(postcodeCoords)
                 .addTo(map);
 
+            map.on("zoomend", () => {
+                if (postCodeOutline) {
+                const l = { label: MapLayers[2].label };
+
+                const outlineId = map
+                    .queryRenderedFeatures({ layers: [MapLayers[2].label] })
+                    .find((item) => {
+                    return (
+                        item.properties.code ===
+                        postCodeOutline[MapLayers[2].label]
+                    );
+                    });
+                addOutline(l, { features: [outlineId] });
+                }
+                postCodeOutline = null;
+            });
+
             map.flyTo({
                 center: [
                     postcodeCoords[0],
@@ -627,6 +647,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
             });
 
             setShowInfo(true);
+
         }
 
     }, [ postcodeData, map, styleDataStatus, width ]);
