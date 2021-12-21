@@ -132,9 +132,11 @@ export const ScaleColor: ComponentType<*> =
     styled
         .span`
             display: inline-flex;
+            justify-self: center;
+            align-self: center;
             border-radius: 100%;
             padding: 7px;
-            border: 2px solid #6e6e6e;
+            border: 1px solid #6e6e6e;
             @media only screen and (max-width: 600px) {
                 padding: 5px;
             }
