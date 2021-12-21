@@ -49,14 +49,14 @@ export const
 
 
 export const scaleColours = [
-    "#e0e543",
-    "#74bb68",
-    "#399384",
-    "#2067AB",
-    "#12407F",
-    "#590b4f",
-    "#3b0930",
-    "#000000"
+    "#e0e543",  // Pear
+    "#74bb68",  // Mantis (light green)
+    "#399384",  // Paradiso (green)
+    "#2067AB",  // Matisse (blue)
+    "#12407F",  // Chathams Blue
+    "#640058",  // Pompadour (purple)
+    "#3b0930",  // Loulou (dark purple)
+    "#000000",  // Black
 ];
 
 
