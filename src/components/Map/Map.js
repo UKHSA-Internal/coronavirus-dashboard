@@ -59,6 +59,7 @@ const MapLayers = [
             200, scaleColours[4],
             400, scaleColours[5],
             800, scaleColours[6],
+            1600, scaleColours[7],
         ]
     },
     {
@@ -82,6 +83,7 @@ const MapLayers = [
             200, scaleColours[4],
             400, scaleColours[5],
             800, scaleColours[6],
+            1600, scaleColours[7],
         ]
     },
     {
@@ -105,6 +107,7 @@ const MapLayers = [
             200, scaleColours[4],
             400, scaleColours[5],
             800, scaleColours[6],
+            1600, scaleColours[7],
         ]
     }
 ];
@@ -455,7 +458,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                             'line-cap': 'round'
                         },
                         'paint': {
-                            'line-color': '#000000',
+                            'line-color': 'rgba(173,173,173,0.5)',
                             'line-width': [
                                 'case',
                                 ['boolean', ['feature-state', 'hover'], false],
@@ -489,7 +492,7 @@ const Map: ComponentType<*> = ({ data, geoKey, isRate = true, scaleColours, geoJ
                         'minzoom': layer.minZoom,
                         'maxzoom': layer.maxZoom,
                         'paint': {
-                            'fill-color': "#ffffff",
+                            'fill-color': "#adadad",
                             'fill-opacity': .001
                         },
                     }, `choropleth-${ layer.label }`);
