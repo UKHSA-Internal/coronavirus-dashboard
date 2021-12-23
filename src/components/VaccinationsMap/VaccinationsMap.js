@@ -29,7 +29,7 @@ import { analytics, strFormat } from "common/utils";
 
 
 
-const Map: ComponentType<*> = ({ width, ...props }) => {
+const Map: ComponentType<*> = ({ width, frameOption, ...props }) => {
 
     const
         bounds = new L.LatLngBounds(new L.LatLng(50.5, -14.5), new L.LatLng(58.8, 10)),
@@ -45,7 +45,8 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
         geoData = useGenericAPI("mapVaccinationData", null),
         [ hoverState, setHoverSate ] = useState({}),
         prevHoverState = usePrevious(hoverState),
-        [ mapHasLoaded, setMapHasLoaded ] = useState([false, false]);
+        [ mapHasLoaded, setMapHasLoaded ] = useState([false, false]),
+        { left: leftFrame, right: rightFrame } = frameOption;
 
     let timestamp;
 
@@ -57,7 +58,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
         if ( !map.length && geoData ) {
             const mapInstances = [
                 new mapboxgl.Map({
-                    container: 'first',
+                    container: leftFrame,
                     style: URLs.mapStyle,
                     center: centrePoint,
                     zoom: 4.9,
@@ -66,7 +67,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                     preserveDrawingBuffer: true,
                 }),
                 new mapboxgl.Map({
-                    container: 'second',
+                    container: rightFrame,
                     style: URLs.mapStyle,
                     center: centrePoint,
                     zoom: 4.9,
@@ -144,7 +145,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                             'paint': {
                                 'fill-color': [
                                     "step",
-                                    ['get', mapIndex === 0 ? 'f' : 'c'],
+                                    ['get', mapIndex === 0 ? leftFrame : rightFrame],
                                     ...(
                                         mapIndex === 0
                                             ? constants.bucketsFirst
@@ -236,7 +237,33 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
                 });
             }
         }
-    }, [ map.length ]);
+    }, [ map.length, leftFrame, rightFrame ]);
+
+    useEffect(() => {
+
+        // Updating frames based on user selection.
+        for ( let mapIndex = 0; mapIndex < map.length; mapIndex++ ) {
+            for ( const layer of MapLayers ) {
+
+                map[mapIndex].setPaintProperty(
+                    `choropleth-${ layer.label }`,
+                    'fill-color',
+                    [
+                        "step",
+                        ['get', mapIndex === 0 ? leftFrame : rightFrame],
+                        ...(
+                            mapIndex === 0
+                                ? constants.bucketsFirst
+                                : constants.bucketsSecond
+                        )
+                    ]
+                );
+
+            }
+        }
+
+    }, [ leftFrame, rightFrame ]);
+
 
     useEffect(() => {
 
@@ -364,7 +391,7 @@ const Map: ComponentType<*> = ({ width, ...props }) => {
             Percentage of people aged 12+ vaccinated up to and including <DateStamp/>:
         </p>
         <MapContainer>
-            <MapComponent/>
+            <MapComponent frameOption={ frameOption }/>
                 <PostcodeSearchForm onSubmit={  (e) => {
                         e.preventDefault();
                         const postcode: string = document.getElementById("postcode").value;
