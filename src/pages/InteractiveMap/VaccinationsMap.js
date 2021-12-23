@@ -1,17 +1,79 @@
 // @flow
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useResponsiveLayout from "hooks/useResponsiveLayout";
 import { MainContainer } from "./InteractiveMap.styles";
 import Map from "components/VaccinationsMap";
 import { MainContainer as MainTabLinkContainer } from "components/TabLink/TabLink.styles";
-
+import { frameOptionToLabel, FrameOptions } from "components/VaccinationsMap/FrameOptionTools";
 import type { ComponentType } from "react";
+import { analytics } from "common/utils";
+
+
+const MapOptions: ComponentType<*> = ({ frameOption, setFrameOption }) => {
+
+    return <div>
+        <p className={ "govuk-!-margin-top-7 govuk-!-font-weight-bold" }>
+            Use the dropdowns to select the vaccination dose you would like
+            see on each side of the map frame:
+        </p>
+        <div className={ "govuk-grid-row" }>
+            <div className="govuk-form-group govuk-grid-column-one-half">
+                <label className="govuk-label" htmlFor="sort">
+                    Left side
+                </label>
+                <select className="govuk-select" id="sort" name="sort"
+                        style={{ width: "90%" }} value={ frameOption.left }
+                        onChange={ e => setFrameOption( prev => ({ ...prev, left: e.target.value})) }>
+                    {
+                        Object
+                            .values(FrameOptions)
+                            .map(item =>
+                                <option key={ item } value={ item } disabled={ item === frameOption.right }>
+                                    { frameOptionToLabel(item) }
+                                </option>
+                            )
+                    }
+                </select>
+            </div>
+            <div className="govuk-form-group govuk-grid-column-one-half">
+                <label className="govuk-label" htmlFor="sort">
+                    Right side
+                </label>
+                <select className="govuk-select" id="sort" name="sort"
+                        style={{ width: "90%" }} value={ frameOption.right }
+                        onChange={ e => setFrameOption( prev => ({ ...prev, right: e.target.value})) }>
+                    {
+                        Object
+                            .values(FrameOptions)
+                            .map(item =>
+                                <option key={ item } value={ item } disabled={ item === frameOption.left }>
+                                    { frameOptionToLabel(item) }
+                                </option>
+                            )
+                    }
+                </select>
+            </div>
+        </div>
+    </div>;
+
+};  // MapOptions
 
 
 export const VaccinationsMap: ComponentType<*> = () => {
 
     const width = useResponsiveLayout(860);
+    const [ frameOption, setFrameOption ] = useState({
+        left: FrameOptions.SecondDose, right: FrameOptions.ThirdDoseAndBoosters
+    });
+
+    useEffect(() => {
+        analytics({
+            category: "map::vaccinations",
+            action: "frame-switch",
+            label: JSON.stringify(frameOption)
+        });
+    }, [ frameOption ]);
 
     return <>
         <MainTabLinkContainer>
@@ -21,13 +83,15 @@ export const VaccinationsMap: ComponentType<*> = () => {
                         This map shows the percentage of people aged 12 and over who have
                         been vaccinated.
                     </p>
+                    <MapOptions frameOption={ frameOption } setFrameOption={ setFrameOption } />
                     <p>
-                        The left view shows 1st doses and the right view shows 2nd doses
-                        by local authority. Zoom in for more local data and move the slider
-                        to compare 1st and 2nd dose.
+                        The left view shows <strong>{ frameOptionToLabel(frameOption.left) }</strong> and
+                        the right view shows <strong>{ frameOptionToLabel(frameOption.right) }</strong> by
+                        local authority. Zoom in for more local data and move the slider
+                        to compare { frameOptionToLabel(frameOption.left) } and { frameOptionToLabel(frameOption.right) }.
                     </p>
                 </div>
-                <Map width={ width }/>
+                <Map width={ width } frameOption={ frameOption }/>
             </MainContainer>
         </MainTabLinkContainer>
         <div className={ "markdown govuk-body govuk-!-margin-bottom-0 govuk-!-margin-top-7" }

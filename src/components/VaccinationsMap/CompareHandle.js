@@ -7,9 +7,10 @@ import {
     SliderLine, SliderRoot, TriangleMarker
 } from "./VaccinationsMap.styles";
 import { analytics } from "common/utils";
+import { frameOptionToLabel } from "./FrameOptionTools";
 
 
-export const CompareHandle = ({ portrait }) => {
+export const CompareHandle = ({ portrait, frameOption }) => {
 
     const [active, setActive] = useState(false);
     const [focused, setFocused] = useState(false);
@@ -46,8 +47,8 @@ export const CompareHandle = ({ portrait }) => {
                             onMouseUp={ () => setFocused(false) }>
         <SliderRoot id={ "slider-root" }>
             <SliderLine id={ "slider-line" } active={ active } focused={ focused } portrait={ portrait }/>
-            <LeftMarker>1st dose</LeftMarker>
-            <RightMarker>2nd dose</RightMarker>
+            <LeftMarker>{ frameOptionToLabel(frameOption.left) }</LeftMarker>
+            <RightMarker>{ frameOptionToLabel(frameOption.right) }</RightMarker>
             <SliderButton id={ "slider-button" } active={ active } focused={ focused } portrait={ portrait }>
                 <TriangleMarker direction={ "left" }/>
                 <TriangleMarker direction={ "right" }/>
