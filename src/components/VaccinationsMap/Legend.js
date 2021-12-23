@@ -13,6 +13,10 @@ import * as constants from "./constants";
 import type { ComponentType } from "react";
 
 
+const LegendHeader: ComponentType<*> = () =>
+    <span><abbr title={ "Percentage" }>%</abbr>&nbsp;12+ vaccinated</span>;
+
+
 export const Legend: ComponentType<*> = () => {
 
     const [ showLegend, setShowLegend ] = useState(true);
@@ -22,7 +26,7 @@ export const Legend: ComponentType<*> = () => {
             <ScaleLegend>
                 <ScaleLegendLabel>
                     <LegendButton onClick={ () => setShowLegend(true) } active={ !showLegend }>
-                        <span><abbr title={ "Percentage" }>%</abbr>&nbsp;adults vaccinated</span>
+                        <LegendHeader/>
                     </LegendButton>
                 </ScaleLegendLabel>
             </ScaleLegend>
@@ -32,7 +36,7 @@ export const Legend: ComponentType<*> = () => {
         <ScaleLegend>
             <ScaleLegendLabel>
                 <LegendButton onClick={ () => setShowLegend(false) }>
-                    <span><abbr title={ "Percentage" }>%</abbr>&nbsp;12+ vaccinated</span>
+                    <LegendHeader/>
                 </LegendButton>
             </ScaleLegendLabel>
             <ScaleGroup>
