@@ -11,6 +11,7 @@ import { analytics } from "common/utils";
 import useGenericAPI from "hooks/useGenericAPI";
 import Loading from "components/Loading";
 import { DateStamp } from "./DateStamp";
+import { FrameOptions, frameOptionToLabel } from "../FrameOptionTools";
 
 
 const Panel = ({ children, setShowInfo }) => {
@@ -44,6 +45,28 @@ const Error = ({ setShowInfo }) => {
 };
 
 
+const NumberItem = ({ rowData, item }) => {
+
+    const colourRefs = Object.keys(constants.colourBucketReference);
+    const colourId = Object.keys(rowData).length
+        ? colourRefs.reduce((acc, cur) => rowData[item] > cur ? cur : acc, 0)
+        : 0;
+
+    return <NumberBox>
+        <h3 className={ "govuk-heading-s" }>{ frameOptionToLabel(item) }</h3>
+        <div className={ "number-row" }>
+            <ColourReference colour={ constants.colourBucketReference[colourId] }/>
+            <span className={ "number" }>{
+                Object.keys(rowData).length
+                    ? numeral(rowData[item]).format("0,0.0") + "%"
+                    : "N/A"
+            }</span>
+        </div>
+    </NumberBox>;
+
+};  // NumberItem
+
+
 export const InfoCard = ({ data, areaName, date, postcode, areaType,
                       setShowInfo, maxDate, error, empty, showInfo, currentLocation, ...props }) => {
 
@@ -57,18 +80,9 @@ export const InfoCard = ({ data, areaName, date, postcode, areaType,
         "error"
     );
 
-    const { f: first, c: complete, cd: areaCode } = data?.features?.find(
+    const { cd: areaCode, ...rowData } = data?.features?.find(
         ft => ft.properties.cd === currentLocation
     )?.properties ?? {};
-
-    const firstColourIdx = Object
-        .keys(constants.colourBucketReference)
-        .reduce((acc, cur, ) => first > cur ? cur : acc, 0);
-
-    const completeColourIdx = Object
-        .keys(constants.colourBucketReference)
-        .reduce((acc, cur, ) => complete > cur ? cur : acc, 0);
-
 
     if ( !setShowInfo ) {
         return null;
@@ -84,8 +98,6 @@ export const InfoCard = ({ data, areaName, date, postcode, areaType,
     }
     else if ( !locationData || !currentLocation ) {
 
-        if ( !first ) return null;
-
         return <Panel setShowInfo={ setShowInfo }>
             <Loading/>
         </Panel>;
@@ -99,22 +111,11 @@ export const InfoCard = ({ data, areaName, date, postcode, areaType,
                 Up to and including <DateStamp/>
             </small>
         </h2>
-        <NumbersContainer>
-            <NumberBox>
-                <h3 className={ "govuk-heading-s" }>1st dose</h3>
-                <div className={ "number-row" }>
-                    <ColourReference colour={ constants.colourBucketReference[firstColourIdx] }/>
-                    <span className={ "number" }>{ first ? numeral(first).format("0,0.0") + "%" : "N/A" }</span>
-                </div>
-            </NumberBox>
-            <NumberBox>
-                <h3 className={ "govuk-heading-s" }>2nd dose</h3>
-                <div className={ "number-row" }>
-                    <ColourReference colour={ constants.colourBucketReference[completeColourIdx] }/>
-                    <span className={ "number" }>{ complete ? numeral(complete).format("0,0.0") + "%" : "N/A" }</span>
-                </div>
-            </NumberBox>
-        </NumbersContainer>
+        <NumbersContainer>{
+            Object
+                .values(FrameOptions)
+                .map(item => <NumberItem key={ item } item={ item } rowData={ rowData }/>)
+        }</NumbersContainer>
         {
             postcode
                 ? <p className={ "govuk-body-s govuk-!-margin-top-1 govuk-!-margin-bottom-0" }>
