@@ -136,7 +136,7 @@ const App = () => {
                                     <MarkdownPage pathName={ "compliance" }/>
                                 </Route>
                                 <Route path="/about" exact>
-                                    <MarkdownPage pathName={ "about" } maxDepth={ 3 }/>
+                                    <MarkdownPage pathName={ "about" } maxDepth={ 4 }/>
                                 </Route>
                                 <Route path="/details/about-data" exact>
                                     <Redirect to={ "/metrics" }/>
