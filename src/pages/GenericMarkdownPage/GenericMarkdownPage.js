@@ -17,14 +17,14 @@ import BrowserHistory from "components/BrowserHistory";
 import Loading from "components/Loading";
 
 
-const GenericMarkdownPage: ComponentType<GenericProps> = ({ pathName }) => {
+const GenericMarkdownPage: ComponentType<GenericProps> = ({ pathName, maxDepth=6 }) => {
 
     const rawData = useGenericAPI(pathName, [], {}, "text");
     const [ data, setData ] = useState(null);
 
     useMemo(() => {
         remark()
-            .use(toc)
+            .use(toc, { maxDepth })
             .use(slug)
             .use(externalLink)
             .use(html)
