@@ -132,11 +132,14 @@ const App = () => {
                                 <Route path="/details/developers-guide" component={ DeveloperGuide }/>
                                 <Route path="/metrics/doc/:metric" exact component={ Metric }/>
                                 <Route path="/metrics/:type?" component={ MetricDocs }/>
-                                <Route path="/details/about-data" exact>
-                                    <MarkdownPage pathName={ "about" }/>
-                                </Route>
                                 <Route path="/details/compliance" exact>
                                     <MarkdownPage pathName={ "compliance" }/>
+                                </Route>
+                                <Route path="/about" exact>
+                                    <MarkdownPage pathName={ "about" }/>
+                                </Route>
+                                <Route path="/details/about-data" exact>
+                                    <Redirect to={ "/metrics" }/>
                                 </Route>
                                 <Route path={ "/:page" } component={ RedirectToDetails }/>
                             </Switch>
