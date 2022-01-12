@@ -59,9 +59,6 @@ const NavigationItems: ComponentType<Props> = ({ menuState, setMenuState, ...pro
             <SideNavListItem className={`${pathname.startsWith('/metrics') ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/metrics" }>Metrics documentation</Link>
             </SideNavListItem>
-            <SideNavListItem className={`${pathname === '/details/about-data' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/about-data" }>About the data</Link>
-            </SideNavListItem>
             <SideNavListItem className={`${pathname === '/details/download' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/download" }>Download data</Link>
             </SideNavListItem>
@@ -70,6 +67,9 @@ const NavigationItems: ComponentType<Props> = ({ menuState, setMenuState, ...pro
             </SideNavListItem>
             <SideNavListItem className={`${pathname.startsWith('/details/developers-guide') ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/developers-guide" }>Developer's guide</Link>
+            </SideNavListItem>
+            <SideNavListItem className={`${pathname === '/about' ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/about" }>About</Link>
             </SideNavListItem>
         </SideNavList>
         <SectionBreak/>
