@@ -52,6 +52,12 @@
     "localised": false,
     "hasLog": false
   },
+  "/about": {
+    "title": "About",
+    "description": "About UK coronavirus dashboard service",
+    "localised": false,
+    "hasLog": false
+  },
   "/details/compliance": {
     "title": "Compliance",
     "description": "Statement of voluntary application of the Code of Practice for Statistics",
