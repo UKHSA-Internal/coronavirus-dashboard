@@ -15,6 +15,10 @@ export const Markdown: ComponentType<*> =
                 margin-left: 0;
                 margin-right: 0;
             }
+            
+            & ul {
+                list-style: disc inside;
+            }
         `;
 
 
