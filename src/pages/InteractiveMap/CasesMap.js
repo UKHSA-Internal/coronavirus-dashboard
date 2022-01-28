@@ -161,9 +161,13 @@ export const CasesMap: ComponentType<*> = () => {
                 This makes it easier to compare cases across areas of different population
                 size.
             </p>
-            <p className={ "govuk-!-margin-bottom-0" }>
+            <p>
                 The population used is the mid-2020 population estimate from the Office
                 for National Statistics.
+            </p>
+            <p className={ "govuk-!-margin-bottom-0" }>
+                Definitions of cases vary by nation. For example, not all nations include
+                lateral flow testing in their case counts.
             </p>
 
             <h3 className={ "govuk-heading-m govuk-!-margin-top-7" }>Data not shown</h3>
