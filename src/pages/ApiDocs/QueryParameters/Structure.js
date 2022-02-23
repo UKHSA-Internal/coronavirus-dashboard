@@ -30,7 +30,7 @@ structure = {
     "name": "areaName",
     "code": "areaCode",
     "dailyCases": "newCasesByPublishDate",
-    "cumulativeCases": "cumCasesByPublishDate"
+    "cumulativeCases": "cumCasesByPublishDate",
     "dailyDeaths": "newDeaths28DaysByPublishDate",
     "cumulativeDeaths": "cumDeaths28DaysByPublishDate"
 }
