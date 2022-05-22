@@ -31,23 +31,23 @@ const NavigationItems: ComponentType<Props> = ({ menuState, setMenuState, ...pro
                 <a href={ "/" } aria-current="location">Daily update</a>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/details/testing' ? "moj-side-navigation__item--active" : ""}`}>
+            <SideNavListItem className={`${pathname === '/details/testing?areaType=nation&areaName=England' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/testing" }>Testing</Link>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/details/cases' ? "moj-side-navigation__item--active" : ""}`}>
+            <SideNavListItem className={`${pathname === '/details/cases?areaType=nation&areaName=England' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/cases" }>Cases</Link>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/details/healthcare' ? "moj-side-navigation__item--active" : ""}`}>
+            <SideNavListItem className={`${pathname === '/details/healthcare?areaType=nation&areaName=England' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/healthcare" }>Healthcare</Link>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/details/vaccinations' ? "moj-side-navigation__item--active" : ""}`}>
+            <SideNavListItem className={`${pathname === '/details/vaccinations?areaType=nation&areaName=England' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/vaccinations" }>Vaccinations</Link>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/details/deaths' ? "moj-side-navigation__item--active" : ""}`}>
+            <SideNavListItem className={`${pathname === '/details/deaths?areaType=nation&areaName=England' ? "moj-side-navigation__item--active" : ""}`}>
                 <Link to={ "/details/deaths" }>Deaths</Link>
             </SideNavListItem>
             <li className={ "moj-side-navigation__item" }>
