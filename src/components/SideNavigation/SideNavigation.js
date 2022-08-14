@@ -27,7 +27,7 @@ const SideNavigation: ComponentType<Props> = ({ ...props }: Props) => {
             </SideNavListItem>
 
             <SideNavListItem className={`${pathname.startsWith('/details/testing') ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/testin?areaType=nation&areaName=England" }>Testing</Link>
+                <Link to={ "/details/testing?areaType=nation&areaName=England" }>Testing</Link>
             </SideNavListItem>
 
             <SideNavListItem className={`${pathname.startsWith('/details/cases') ? "moj-side-navigation__item--active" : ""}`}>
