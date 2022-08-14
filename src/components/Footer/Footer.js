@@ -32,7 +32,7 @@ const FooterContents: ComponentType<*> = () => (
                href={ encodeURI("mailto:coronavirus-tracker@ukhsa.gov.uk?Subject=Dashboard feedback") }
                rel="noopener noreferrer"
                target="_blank"
-            >coronavirus-tracker@phe.gov.uk</a>
+            >coronavirus-tracker@ukhsa.gov.uk</a>
         </p>
         <p className={ "govuk-footer__meta-custom" }>
             Developed by&nbsp;
