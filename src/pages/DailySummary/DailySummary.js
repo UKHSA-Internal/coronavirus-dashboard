@@ -26,13 +26,7 @@ import type {
     DailySummaryCardProps
 } from "./DailySummary.types";
 import Loading from "components/Loading";
-
-
-const
-    DefaultParams = [
-        { key: 'areaName', sign: '=', value: 'United Kingdom' },
-        { key: 'areaType', sign: '=', value: 'overview' },
-    ];
+import { DefaultParams } from "common/utils";
 
 
 // const NationDeathsPlot = ({ ...props }) => {

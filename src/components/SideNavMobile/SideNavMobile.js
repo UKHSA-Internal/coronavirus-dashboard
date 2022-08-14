@@ -31,24 +31,24 @@ const NavigationItems: ComponentType<Props> = ({ menuState, setMenuState, ...pro
                 <a href={ "/" } aria-current="location">Daily update</a>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/details/testing?areaType=nation&areaName=England' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/testing" }>Testing</Link>
+            <SideNavListItem className={`${pathname.startsWith('/details/testing') ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/testing?areaType=nation&areaName=England" }>Testing</Link>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/details/cases?areaType=nation&areaName=England' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/cases" }>Cases</Link>
+            <SideNavListItem className={`${pathname.startsWith('/details/cases') ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/cases?areaType=nation&areaName=England" }>Cases</Link>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/details/healthcare?areaType=nation&areaName=England' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/healthcare" }>Healthcare</Link>
+            <SideNavListItem className={`${pathname.startsWith('/details/healthcare') ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/healthcare?areaType=nation&areaName=England" }>Healthcare</Link>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/details/vaccinations?areaType=nation&areaName=England' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/vaccinations" }>Vaccinations</Link>
+            <SideNavListItem className={`${pathname.startsWith('/details/vaccinations') ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/vaccinations?areaType=nation&areaName=England" }>Vaccinations</Link>
             </SideNavListItem>
 
-            <SideNavListItem className={`${pathname === '/details/deaths?areaType=nation&areaName=England' ? "moj-side-navigation__item--active" : ""}`}>
-                <Link to={ "/details/deaths" }>Deaths</Link>
+            <SideNavListItem className={`${pathname.startsWith('/details/deaths') ? "moj-side-navigation__item--active" : ""}`}>
+                <Link to={ "/details/deaths?areaType=nation&areaName=England" }>Deaths</Link>
             </SideNavListItem>
             <li className={ "moj-side-navigation__item" }>
                 <hr className={ "govuk-section-break govuk-section-break--s govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-section-break--visible" }/>
