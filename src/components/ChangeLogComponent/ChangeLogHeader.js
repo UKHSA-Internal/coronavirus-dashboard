@@ -10,12 +10,8 @@ import type { ChangeLogInputProps } from "./ChangeLogComponent.types";
 import type { ComponentType } from "react";
 import useGenericAPI from "hooks/useGenericAPI";
 import { useLocation } from "react-router";
+import { DefaultParams } from "common/utils";
 
-
-const DefaultParams = [
-    { key: 'areaName', sign: '=', value: 'United Kingdom' },
-    { key: 'areaType', sign: '=', value: 'overview' }
-];
 
 export const ChangeLogHeader: ComponentType<*> = ({ timestamp, ...props }: ChangeLogInputProps) => {
 

@@ -8,11 +8,7 @@ import { Helmet } from "react-helmet";
 import { useLocation } from "react-router";
 import { stripPII, stripPIIUri } from "common/utils/cookies";
 import Path from "assets/paths.json";
-
-const DefaultParams = [
-    { key: 'areaName', sign: '=', value: 'United Kingdom' },
-    { key: 'areaType', sign: '=', value: 'overview' }
-];
+import { DefaultParams } from "common/utils";
 
 
 const DataPageHeaders = () => {

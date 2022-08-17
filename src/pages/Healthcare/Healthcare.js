@@ -12,13 +12,7 @@ import { getParams } from "common/utils";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import Loading from "components/Loading";
-
-
-const
-    DefaultParams = [
-        { key: 'areaName', sign: '=', value: 'United Kingdom' },
-        { key: 'areaType', sign: '=', value: 'overview' }
-    ];
+import { DefaultParams } from "common/utils";
 
 
 const Healthcare: ComponentType<Props> = () => {

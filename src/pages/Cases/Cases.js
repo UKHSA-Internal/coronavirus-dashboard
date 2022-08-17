@@ -12,13 +12,8 @@ import { getParams } from "common/utils";
 import usePageLayout from "hooks/usePageLayout";
 import URLs from "common/urls";
 import Loading from "components/Loading";
+import { DefaultParams } from "common/utils";
 
-
-const
-    DefaultParams = [
-        { key: 'areaName', sign: '=', value: 'United Kingdom' },
-        { key: 'areaType', sign: '=', value: 'overview' }
-    ];
 
 
 const Cases: ComponentType<Props> = () => {

@@ -312,10 +312,14 @@ const ArchiveDatePicker = ({ display=true, areaType, date, setDate, minDate, max
                         dayPickerProps={ {
                             locale: 'en-gb',
                             localeUtils: MomentLocaleUtils,
-                            disabledDays: [{
-                                before: new Date(minDate),
-                                after: new Date(maxDate)
-                            }]
+                            disabledDays: [
+                                {
+                                    before: new Date(minDate),
+                                    after: new Date(maxDate)
+                                },
+                                // Publication of data during weekends stopped after 20 Feb 2022.
+                                day => day >= new Date('2022-02-21') && (day.getDay() === 6 || day.getDay() === 0)
+                            ]
                         }}
                     />
                 </div>
