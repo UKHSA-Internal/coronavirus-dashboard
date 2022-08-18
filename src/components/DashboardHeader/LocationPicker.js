@@ -214,7 +214,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                     </div>
                     <div className={ "govuk-grid-column-one-quarter" }>
                         <div className={ "govuk-form-group govuk-!-margin-bottom-0" }>
-                            <Link to={ pathname }
+                            <Link to={ pathname + "?areaType=overview&areaName=United%20Kingdom" }
                                   onClick={ () => setCurrentLocation({ areaType: "overview", areaName: "United Kingdom" }) }
                                   className={ "govuk-button govuk-button--secondary govuk-!-margin-bottom-0" }>
                                 <span className={ "govuk-visually-hidden" }>
