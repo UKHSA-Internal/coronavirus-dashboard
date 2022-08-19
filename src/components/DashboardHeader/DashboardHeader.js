@@ -99,8 +99,8 @@ const DashboardHeader: ComponentType<Props> = ({}: Props) => {
 
         if ( pathname !== prevPathname )
             setLocation({
-                areaType: getParamValueFor(initialParam, "areaType", "overview"),
-                areaName: getParamValueFor(initialParam, "areaName", "United Kingdom"),
+                areaType: getParamValueFor(initialParam, "areaType", "nation"),
+                areaName: getParamValueFor(initialParam, "areaName", "England"),
             });
 
     }, [ pathname, prevPathname ])
