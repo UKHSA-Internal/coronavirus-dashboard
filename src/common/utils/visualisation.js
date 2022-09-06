@@ -403,7 +403,7 @@ export const getHeatmapData = ( fields: Array<{}>, rawData, xKey="date" ) => {
             }
 
             // Only add if zData has data - this
-            // is the accommodate inconsistencies
+            // is to accommodate inconsistencies
             // in age bands amongst the DAs.
             if ( zData.length > 0 ) {
                 result.zData.push(zData);
