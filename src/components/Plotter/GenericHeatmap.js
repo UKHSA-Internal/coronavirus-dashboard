@@ -58,7 +58,7 @@ export const GenericHeatmap: ComponentType<*> = ({ data, layout, config, ...prop
         data={
             data.map(dataset => ({
                 x: dataset.xData,
-                y: dataset.yData.map(item => item.replace(/(.+)\s[(](.+)/, "<sub>$1</sub><br>($2")),
+                y: dataset.yData.map(item => item.replace(/(.+)\s[(](.+)[)]/, "<sub>$1</sub><br>$2")),
                 z: dataset.zData,
                 type: "heatmap",
                 colorscale,
