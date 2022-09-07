@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  dashboard:
+    build: .
+    volumes:
+      - ./src:/app/src
+    ports:
+      - 3001:3000
+
+    env_file:
+      - .env.development
+    environment:
+      CI: 'true'
+
+    working_dir: /app
+    entrypoint: ["yarn", "run", "start"]
+    stdin_open: true
