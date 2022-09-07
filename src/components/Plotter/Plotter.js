@@ -9,6 +9,7 @@ import Waffle from "./Waffle";
 
 import type { ComponentType } from "react";
 import PercentageHeatmap from "./PercentageHeatmap";
+import GenericHeatmap from "./GenericHeatmap";
 
 
 const Plotter: ComponentType<*> = ({ type = "generic", ...props }) => {
@@ -19,6 +20,9 @@ const Plotter: ComponentType<*> = ({ type = "generic", ...props }) => {
 
         case "percentageHeatmap":
             return <PercentageHeatmap { ...props }/>;
+
+        case "GenericHeatmap":
+            return <GenericHeatmap { ...props }/>;
 
         case "Heatmap":
             return <Heatmap { ...props }/>;

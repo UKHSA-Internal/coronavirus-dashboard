@@ -127,6 +127,12 @@ const TabContentWithData: ComponentType<*> = ({ fields, tabType, barType=null, d
                             data={ getHeatmapData(fields, data, xKey) }
                             { ...props }/>;
 
+        case "GenericHeatmap":
+            return <Plotter type={ "GenericHeatmap" }
+                            layout={{}}
+                            data={ getHeatmapData(fields, data, xKey) }
+                            { ...props }/>;
+
         case "percentageWaffle":
             return <Plotter type={ "percentageWaffle" }
                             layout={{}}
