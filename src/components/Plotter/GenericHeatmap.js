@@ -12,11 +12,13 @@ import { zip } from "d3-array";
 const scaleLevels = [
     0,
     .05,
-    .1,
-    .2,
-    .3,
-    .6,
-    .7,
+    // .1,
+    .25,
+    // .3,
+    .5,
+    .75,
+    .8,
+    .9,
     .95,
     1
 ];
@@ -34,6 +36,7 @@ export const scaleColours = [
 ];
 
 
+
 const asCssRgb = ( hex ) => {
 
     const { r, g, b } = hexToRgb(hex);
@@ -45,7 +48,11 @@ const asCssRgb = ( hex ) => {
 
 export const GenericHeatmap: ComponentType<*> = ({ data, layout, config, ...props }) => {
 
-    console.log(data)
+    const colorscale = zip(
+        scaleLevels,
+        scaleColours.map(asCssRgb)
+    );
+
     return <BasePlotter
         noLogScale
         data={
@@ -54,8 +61,8 @@ export const GenericHeatmap: ComponentType<*> = ({ data, layout, config, ...prop
                 y: dataset.yData.map(item => item.replace(/(.+)\s[(](.+)/, "<sub>$1</sub><br>($2")),
                 z: dataset.zData,
                 type: "heatmap",
-                colorscale: "Teal",
-                reversescale: false,
+                colorscale,
+                reversescale: true,
                 ygap: 1,
                 fixedrange: true,
                 zauto: false,
