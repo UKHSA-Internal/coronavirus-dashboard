@@ -93,6 +93,12 @@ const Header: ComponentType<*> = ({ layout, ...props }) => {
                     <p className={ "govuk-body" }>
                         21 April 1926 to 8 September 2022
                     </p>
+                    <p className={ "govuk-body" }>
+                        <a className={ "govuk-link" }
+                           href={ "https://www.gov.uk/government/topical-events/her-majesty-queen-elizabeth-ii" }>
+                            Read about the arrangements following The Queen's death
+                        </a>
+                    </p>
                 </div>
             </div>
         </div>
