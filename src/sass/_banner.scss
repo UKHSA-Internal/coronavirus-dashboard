@@ -49,3 +49,32 @@
     }
   }
 }
+
+
+.banner.emergency {
+  @extend .govuk-\!-margin-bottom-1;
+  @extend .govuk-\!-margin-top-1;
+  background: #000 !important;
+  color: #fff !important;
+
+  &>.content {
+    @extend .govuk-\!-margin-bottom-3;
+    @extend .govuk-\!-margin-top-3;
+
+    &>.body {
+      &>h2 {
+        color: #fff !important;
+        font-size: 1.5rem;
+      }
+
+      &>p {
+        color: #fff !important;
+        margin-left: 0;
+        padding-left: 0;
+        width: fit-content;
+        justify-self: left;
+        font-size: 1.3rem;
+      }
+    }
+  }
+}
