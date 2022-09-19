@@ -84,24 +84,6 @@ const Header: ComponentType<*> = ({ layout, ...props }) => {
             </div>
         </header>
         { layout === "mobile" && <SideNavMobile layout={ layout }/> }
-        <div className={ "banner emergency" }>
-            <div className={ "content" }>
-                <div className={ "body" }>
-                    <h2 className={ "govuk-heading-m govuk-!-margin-bottom-1" }>
-                        Her Majesty Queen Elizabeth II
-                    </h2>
-                    <p className={ "govuk-body" }>
-                        21 April 1926 to 8 September 2022
-                    </p>
-                    <p className={ "govuk-body" }>
-                        <a className={ "govuk-link" }
-                           href={ "https://www.gov.uk/government/topical-events/her-majesty-queen-elizabeth-ii" }>
-                            Read about the arrangements following The Queen's death
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </div>
         { timestamp ? <ChangeLogHeader timestamp={ timestamp }/> : null }
         <Banner/>
     </>
