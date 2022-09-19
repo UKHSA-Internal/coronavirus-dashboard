@@ -40,7 +40,7 @@
     "remark-external-links": "^9.0.1",
     "remark-html": "^15.0.1",
     "remark-slug": "^7.0.0",
-    "remark-toc": "^8.0.0",
+    "remark-toc": "^8.0.1",
     "replacestream": "^4.0.3",
     "styled-components": "^5.3.3",
     "swagger-ui-react": "^4.1.0"
