@@ -17,7 +17,7 @@
     "lodash.clonedeep": "^4.5.0",
     "mapbox-gl": "^1.13.2",
     "moment": "^2.29.1",
-    "node-sass": "^4.11.0",
+    "node-sass": "^8.0.0",
     "numeral": "^2.0.6",
     "plotly.js": "^2.5.1",
     "react": "^17.0.2",
