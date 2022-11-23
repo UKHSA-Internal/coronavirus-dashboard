@@ -28,7 +28,7 @@ jobs:
   - name: Installs and Setup Nodejs Version
     uses: actions/setup-node@v3
     with:
-      node-version: '14.5.0'
+      node-version: '14.13.1'
   
   - name : Installs Dependancies 
     run: |
