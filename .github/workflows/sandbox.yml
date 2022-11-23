@@ -51,7 +51,7 @@ jobs:
        azcliversion: 2.30.0
        inlineScript: |
           # Upload files using the generated SAS token. We are using the sync command of azcopy which removes old files from storage
-          azcopy sync "build" "https://c19dashsbuksfe01static.blob.core.windows.net/`$web?${{ secrets.STORAGE_SAS_KEY }}" --delete-destination "true" --recursive --put-md5
+          azcopy sync "build" "https://c19dashsbuksfe01static.blob.core.windows.net/$web?${{ secrets.STORAGE_SAS_KEY }}" --delete-destination "true" --recursive --put-md5
 
 
 
