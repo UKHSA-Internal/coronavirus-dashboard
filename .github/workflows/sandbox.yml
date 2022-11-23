@@ -26,20 +26,19 @@ jobs:
     uses: actions/checkout@v3
 
   - name: Installs and Setup Nodejs Version
-    uses: actions/setup-node@v3
+    uses: actions/setup-node@v2.1.5
     with:
       node-version: '14.13.1'
   
   - name : Installs Dependancies 
     run: |
-        npm install -g yarn
-        yarn install
-        npm install
+        npm install --package-lock=false
+        yarn install --production=true --no-lockfile
 
 
   - name : Build Yarn
     run: |
-        yarn run build
+        npm run build
 
   - name: Azure Login
     uses: azure/login@v1
