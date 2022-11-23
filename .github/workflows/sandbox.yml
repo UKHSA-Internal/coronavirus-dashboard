@@ -7,14 +7,6 @@ on:
   branches:
    - sandbox
 
-env:
-  BASE_URL: 'https://sandbox.coronavirus.data.gov.uk' 
-  MAIN_CDN: 'sandbox.coronavirus.data.gov.uk' 
-  DOWNLOADS_CDN: 'sandbox.coronavirus.data.gov.uk'  
-  API_ENDPOINT: 'sandbox.coronavirus.data.gov.uk/api' 
-  USER_API_ENDPOINT: 'api-sandbox.coronavirus.data.gov.uk' 
-  APPINSIGHTS_INSTRUMENTATIONKEY: '0ab69a6e-1f5f-4c00-95a4-805490645471'  
-
 jobs:
  deploy:
   runs-on: ubuntu-latest
@@ -39,6 +31,13 @@ jobs:
 
 
   - name : Build Yarn
+    env:
+        BASE_URL: 'https://sandbox.coronavirus.data.gov.uk' 
+        MAIN_CDN: 'sandbox.coronavirus.data.gov.uk' 
+        DOWNLOADS_CDN: 'sandbox.coronavirus.data.gov.uk'  
+        API_ENDPOINT: 'sandbox.coronavirus.data.gov.uk/api' 
+        USER_API_ENDPOINT: 'api-sandbox.coronavirus.data.gov.uk' 
+        APPINSIGHTS_INSTRUMENTATIONKEY: '0ab69a6e-1f5f-4c00-95a4-805490645471'  
     run: |
         npm run build
 

@@ -25,3 +25,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 /.vs/slnx.sqlite
+/.vs/coronavirus-dashboard/config/applicationhost.config
+/.vs/coronavirus-dashboard/v16/.suo
