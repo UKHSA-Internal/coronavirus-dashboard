@@ -33,7 +33,6 @@ jobs:
   - name : Installs Dependancies 
     run: |
         npm install -g yarn
-        npm install
         yarn install
 
 
