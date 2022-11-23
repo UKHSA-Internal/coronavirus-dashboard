@@ -30,7 +30,7 @@ jobs:
         yarn install --production=true --no-lockfile
 
 
-  - name : Build Yarn
+  - name : Build
     env:
         CI: false    
         BASE_URL: 'https://sandbox.coronavirus.data.gov.uk' 
@@ -52,7 +52,7 @@ jobs:
        inlineScript: |
           # Upload files using the generated SAS token. We are using the sync command of azcopy which removes old files from storage
           azcopy sync "build" "https://c19dashsbuksfe01static.blob.core.windows.net/`$web?${{ secrets.STORAGE_SAS_KEY }}" --delete-destination "true" --recursive --put-md5
-          az logout
+
 
 
 
