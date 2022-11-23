@@ -34,6 +34,7 @@ jobs:
     run: |
         npm install -g yarn
         yarn install
+        npm install
 
 
   - name : Build Yarn
