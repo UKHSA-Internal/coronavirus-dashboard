@@ -25,14 +25,20 @@ jobs:
   - name: Checks out the Repo
     uses: actions/checkout@v3
 
-  - name: Installs and Setup NPM and Yarn
+  - name: Installs and Setup Nodejs Version
     uses: actions/setup-node@v3
     with:
-      node-version: 14
-  - run: |
-        sudo npm install -g yarn
+      node-version: '14.5.0'
+  
+  - name : Installs Dependancies 
+    run: |
+        npm install -g yarn
         npm install
         yarn install
+
+
+  - name : Build Yarn
+    run: |
         yarn run build
 
   - name: Azure Login
