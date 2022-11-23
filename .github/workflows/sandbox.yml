@@ -45,7 +45,7 @@ jobs:
         npm run build
    
         
-    ## Install the azcopy tool
+    ## Install the azcopy tool  
   - name: Install azcopy
     uses: kheiakiyama/install-azcopy-action@v1.0.3
     with:
