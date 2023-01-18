@@ -6,7 +6,7 @@
   "dependencies": {
     "@babel/helper-define-map": "^7.15.4",
     "@turf/bbox": "^6.5.0",
-    "axios": "^0.21.4",
+    "axios": "^1.2.3",
     "d3-array": "^3.1.1",
     "d3-scale": "^4.0.1",
     "deep-equal": "^2.0.5",
