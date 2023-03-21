@@ -57,14 +57,14 @@ jobs:
   - name: Generate SAS Token for $web container
     uses: azure/powershell@v1
     with:
-     inlineScript: |
+      inlineScript: |
         # Generate SAS token for the $web container
         $expiry=(Get-Date).AddMinutes(10).ToString("yyyy-MM-ddTHH:mm:ssZ")
         $sas=$(az storage container generate-sas --name "`$web" --account-name c19dashsbuksfe01static --permissions dlrw --expiry $expiry --auth-mode key -o tsv)
 
         # Upload files using the generated SAS token. We are using the sync command of azcopy which removes old files from storage
         azcopy sync "./build/*" "https://c19dashsbuksfe01static.blob.core.windows.net/%24web?$sas" --delete-destination "true" --recursive --put-md5
-       azPSVersion: "latest"
+      azPSVersion: "latest"
    
         
   #  ## Install the azcopy tool  
