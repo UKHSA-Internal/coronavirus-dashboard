@@ -28,6 +28,18 @@ export const
         '#FFDD00',  // Yellow
         '#d4351c',  // Red
         '#009f56',  // green
+        '#003B5C',  // Midnight Pantone 302
+        '#582C83',  // Plum Pantone 268
+        '#1D57A5',  // Moonlight Pantone 2133
+        '#8A1B61',  // Wine Pantone 7649
+        '#E40046',  // Cherry Pantone 192
+        '#00AB8E',  // DHSC Green Panntone 3268
+        '#00A5DF',  // Ocean Pantone 2202
+        '#84BD00',  // Grass Pantone 376
+        '#FF7F32',  // Tangerine Pantone 1575
+        '#FFB81C',  // Sunny Pantone 1235
+        '#D5CB9F'  // Sand Pantone 4545
+
         // New colours
         // '#206BC9',  // blue
         // '#90C1FE',  // blue (tint 3)
