@@ -1,0 +1,79 @@
+
+
+name: Deploy Dashboard (Static Website) to Sandbox Environment.
+
+on:
+ push:
+  branches:
+   - sandbox
+
+jobs:
+ deploy:
+  runs-on: ubuntu-latest
+  name: Deploy Dashboard (Static Website) to Sandbox Environment
+  environment: sandbox
+
+  steps:
+  - name: Checks out the Repo
+    uses: actions/checkout@v3
+
+  - name: Installs and Setup Nodejs Version
+    uses: actions/setup-node@v2.1.5
+    with:
+      node-version: '14'
+    env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+  
+  - name : Installs Dependancies 
+    run: |
+        npm install --package-lock=false
+        yarn install --production=true --no-lockfile
+
+
+  - name : Build
+    env:
+        CI: false    
+        BASE_URL: 'https://sandbox.coronavirus.data.gov.uk' 
+        MAIN_CDN: 'sandbox.coronavirus.data.gov.uk' 
+        DOWNLOADS_CDN: 'sandbox.coronavirus.data.gov.uk'  
+        API_ENDPOINT: 'sandbox.coronavirus.data.gov.uk/api' 
+        USER_API_ENDPOINT: 'api-sandbox.coronavirus.data.gov.uk' 
+        APPINSIGHTS_INSTRUMENTATIONKEY: '0ab69a6e-1f5f-4c00-95a4-805490645471'
+        BUILD_ENV: sandbox
+        NODE_ENV: sandbox
+    run: |
+        npm run build
+
+
+
+    ## Generate SAS Token for the $web container
+
+  - name: Login via Az module
+    uses: azure/login@v1
+    with:
+      creds: ${{secrets.AZURE_CREDENTIALS}}
+      enable-AzPSSession: true 
+        
+  - name: Copy Build Files to $web Container in Static Strorage Account
+    uses: azure/powershell@v1
+    with:
+      inlineScript: |
+        # Generate SAS token for the $web container
+        $expiry=(Get-Date).AddMinutes(10).ToString("yyyy-MM-ddTHH:mm:ssZ")
+        $sas=$(az storage container generate-sas --name "`$web" --account-name c19dashsbuksfe01static --permissions dlrw --expiry $expiry --auth-mode key -o tsv)
+
+        # Upload files using the generated SAS token. We are using the sync command of azcopy which removes old files from storage
+        azcopy copy "./build/*" "https://c19dashsbuksfe01static.blob.core.windows.net/%24web?$sas" --recursive --put-md5
+      azPSVersion: "latest"
+  
+
+
+
+
+
+
+
+
+
+
+

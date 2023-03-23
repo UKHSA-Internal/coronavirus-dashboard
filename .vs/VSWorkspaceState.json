@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\.github",
+    "\\.github\\workflows",
+    "\\public",
+    "\\scripts",
+    "\\src"
+  ],
+  "SelectedNode": "\\.github\\workflows\\sandbox.yml",
+  "PreviewInSolutionExplorer": false
+}
