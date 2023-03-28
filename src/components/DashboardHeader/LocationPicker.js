@@ -201,7 +201,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                                   aria-describedby={ 'aria-name-description' }>
                                 <Select options={ areaNameData.data.filter(item => item.label.toLowerCase() !== "united kingdom" && !ExcludedAreaNames.includes(item.label)) }
                                         styles={ SelectOptions }
-                                        value={ areaNameData.data.filter(item => item.label === currentLocation.areaName ) }
+                                        value={ areaNameData.data.filter(item => item.label === currentLocation.areaName) }
                                         isLoading={ data.length < 1 }
                                         placeholder={ "Select area" }
                                         onChange={ item => setCurrentLocation({
