@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import { createQuery, getParams, groupBy } from "common/utils";
 import { getOrder } from "./GenericHooks";
-import { PathNames } from "./Constants";
+import { PathNames, ExcludedAreaNames } from "./Constants";
 import Select from "react-select";
 import { LocalisationForm, LocalisationFormInputs } from "./DashboardHeader.styles";
 import useGenericAPI from "../../hooks/useGenericAPI";
@@ -199,7 +199,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                             </span>
                             <div aria-labelledby={ "aria-name-label" }
                                   aria-describedby={ 'aria-name-description' }>
-                                <Select options={ areaNameData.data.filter(item => item.label.toLowerCase() !== "united kingdom") }
+                                <Select options={ areaNameData.data.filter(item => !ExcludedAreaNames.includes(item.label)) }
                                         styles={ SelectOptions }
                                         value={ areaNameData.data.filter(item => item.label === currentLocation.areaName) }
                                         isLoading={ data.length < 1 }
