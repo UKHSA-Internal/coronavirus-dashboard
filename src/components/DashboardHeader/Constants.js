@@ -146,5 +146,5 @@ export const MSOAMetricOptions = [
     // { value: "cumPeopleVaccinatedCompleteByVaccinationDate", label: "cumPeopleVaccinatedCompleteByVaccinationDate", deprecated: "2021-10-16" },
 ];
 
-export const ExcludedAreaNames = ["Isles of Scilly", "City of London"
+export const ExcludedAreaNames = ["Isles of Scilly", "City of London", "United Kingdom"
 ];

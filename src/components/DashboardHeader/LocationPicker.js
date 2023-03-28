@@ -199,7 +199,7 @@ const LocationPicker = ({ show, setCurrentLocation, currentLocation }) => {
                             </span>
                             <div aria-labelledby={ "aria-name-label" }
                                   aria-describedby={ 'aria-name-description' }>
-                                <Select options={ areaNameData.data.filter(item => item.label.toLowerCase() !== "united kingdom" && !ExcludedAreaNames.includes(item.label)) }
+                                <Select options={ areaNameData.data.filter(item => !ExcludedAreaNames.includes(item.label)) }
                                         styles={ SelectOptions }
                                         value={ areaNameData.data.filter(item => item.label === currentLocation.areaName) }
                                         isLoading={ data.length < 1 }
