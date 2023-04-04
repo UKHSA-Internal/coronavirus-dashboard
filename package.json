@@ -9,7 +9,7 @@
     "axios": "^0.21.4",
     "d3-array": "^3.1.1",
     "d3-scale": "^4.0.1",
-    "deep-equal": "^2.0.5",
+    "deep-equal": "^2.2.0",
     "govuk-frontend": "^3.14.0",
     "govuk-react-jsx": "6.2.1",
     "js-cookie": "^3.0.1",
