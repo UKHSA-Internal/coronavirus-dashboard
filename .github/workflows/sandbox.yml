@@ -1,6 +1,6 @@
 
 
-name: Deploy Dashboard (Static Website) to Sandbox Environment.
+name: Deploy Dashboard (Static Website) to Sandbox Environment....
 
 on:
  push:
