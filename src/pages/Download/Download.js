@@ -38,6 +38,7 @@ const MIN_ARCHIVE_DATE = "2020-06-27";
 const DATE_FORMAT = "YYYY-MM-DD";
 const MSOA_AREA_TYPE = "msoa";
 
+const ExcludedAreaNames = ["Isles of Scilly", "City of London", "United Kingdom"];
 
 const dataFormatOptions = {   
     choices: [
@@ -156,7 +157,7 @@ const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
         <div aria-labelledby={ "areaname-label" } aria-describedby={ 'areaname-descr' }>
             <Select options={ areaNameData.data }
                     styles={ SelectOptions }
-                    value={ areaNameData.data.filter(item => item?.value === areaCode) }
+                    value={ areaNameData.data.filter(item => item?.value === areaCode && !ExcludedAreaNames.includes(item.label)) }
                     isLoading={ areaNameOptions?.length < 1 && areaType && areaType !== "overview" }
                     placeholder={ "Select area" }
                     isDisabled={ !areaType || areaType === "overview" }
