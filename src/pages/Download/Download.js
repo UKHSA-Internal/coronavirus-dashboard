@@ -38,6 +38,7 @@ const MIN_ARCHIVE_DATE = "2020-06-27";
 const DATE_FORMAT = "YYYY-MM-DD";
 const MSOA_AREA_TYPE = "msoa";
 
+const ExcludedAreaCodes = ["K02000001", "E09000001", "E06000053"];
 
 const dataFormatOptions = {   
     choices: [
@@ -154,7 +155,7 @@ const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
             area type.
         </p>
         <div aria-labelledby={ "areaname-label" } aria-describedby={ 'areaname-descr' }>
-            <Select options={ areaNameData.data }
+            <Select options={ areaNameData.data.filter(item => !ExcludedAreaCodes.includes(item?.value)) }
                     styles={ SelectOptions }
                     value={ areaNameData.data.filter(item => item?.value === areaCode) }
                     isLoading={ areaNameOptions?.length < 1 && areaType && areaType !== "overview" }
