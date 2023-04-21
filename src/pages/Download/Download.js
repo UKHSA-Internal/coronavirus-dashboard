@@ -155,7 +155,7 @@ const AreaNameSelector = ({ areaType, areaCode, setAreaCode }) => {
             area type.
         </p>
         <div aria-labelledby={ "areaname-label" } aria-describedby={ 'areaname-descr' }>
-            <Select options={ areaNameData.data.filter(item => !ExcludedAreaCodes.includes(item?.value)) }
+            <Select options={ areaNameData.data.filter(item => !ExcludedAreaCodes.includes(item?.value)) } // filters out excluded items
                     styles={ SelectOptions }
                     value={ areaNameData.data.filter(item => item?.value === areaCode) }
                     isLoading={ areaNameOptions?.length < 1 && areaType && areaType !== "overview" }
