@@ -22,7 +22,6 @@ export const TypeSearch: ComponentType<*> = ({typeValue, setTypeValue}) => {
 
     const haldleChange = (e) => {
         setTypeValue(e.target.value)
-        console.log("Type Search Value:", e.target.value)
 
         if (e.target.value === "") {
             params = params.filter(item => item.key != "type");
@@ -33,13 +32,10 @@ export const TypeSearch: ComponentType<*> = ({typeValue, setTypeValue}) => {
     useEffect(() => {
         const valueAlreadyInParams = params.some(x => x.key === "type" && x.value === typeValue)
 
-        if (
-            !!typeValue && !valueAlreadyInParams
-        ) {
+        if (!!typeValue && !valueAlreadyInParams) {
             params = params.filter(item => item.key !== "type");
             params.push({key: "type", sign: "=", value: typeValue});
 
-            // do not push into history stack when not searched
             if( params !== undefined && params.length !== 0 ) {
                 history.push({ search: createQuery(params) });
             }
@@ -47,13 +43,6 @@ export const TypeSearch: ComponentType<*> = ({typeValue, setTypeValue}) => {
     }, [typeValue, params]);
 
     if ( !options ) return <Loading/>;
-
-    if (options === {data: []}) {
-        options = []
-        console.log("TypeSearch options SUCK!")
-    }
-
-    // console.log("options =", options)
 
     return <Form className={ "govuk-!-padding-left-0 govuk-!-padding-right-5" }>
         <FormItem aria-labelledby={ "type-filter-label" }
@@ -81,13 +70,11 @@ export const TypeSearch: ComponentType<*> = ({typeValue, setTypeValue}) => {
                 >
                     <option value={ "" }>-------</option>
                     {
-                        !!options
-                            ? options.map(({ tag }) =>
-                                <option key={ tag } value={ tag }>
-                                    { tag.toUpperCase() }
-                                </option>
-                            )
-                            : null
+                        options.map(({ tag }) =>
+                            <option key={ tag } value={ tag }>
+                                { tag.toUpperCase() }
+                            </option>
+                        )
                     }
                 </select>
             </div>

@@ -19,7 +19,6 @@ export const CategorySearch: ComponentType<*> = ({categoryValue, setCategoryValu
         null,
         {component: "titles"}
     );
-    // const [title, setTitle] = useState(getParamValueFor(params, "title", ""));
 
     useEffect(() => {
         if (categoryValue) {
@@ -27,7 +26,7 @@ export const CategorySearch: ComponentType<*> = ({categoryValue, setCategoryValu
         } else {
             params = params.filter(item => item.key !== "title");
         }
-        // do not push into history stack when not searched
+
         if( params !== undefined && params.length !== 0 ) {
             history.push({ search: createQuery(params) });
         }
@@ -61,13 +60,11 @@ export const CategorySearch: ComponentType<*> = ({categoryValue, setCategoryValu
                 >
                     <option value={ "" }>-------</option>
                     {
-                        !!options
-                            ? options.map(({ title }) =>
-                                <option key={ title } value={ title }>
-                                    { title }
-                                </option>
-                            )
-                            : null
+                        options.map(({ title }) =>
+                            <option key={ title } value={ title }>
+                                { title }
+                            </option>
+                        )
                     }
                 </select>
             </div>

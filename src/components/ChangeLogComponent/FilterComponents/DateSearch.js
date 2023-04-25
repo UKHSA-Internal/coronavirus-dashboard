@@ -32,8 +32,6 @@ export const DateSearch: ComponentType<*> = ({dateValue, setDateValue}) => {
     }
 
     useEffect(() => {
-        // console.log("useEffect 1... date/params:", dateValue, params)
-
         if (
             (!!params && dateValue && (params?.date != dateValue))
         ) {
@@ -69,14 +67,12 @@ export const DateSearch: ComponentType<*> = ({dateValue, setDateValue}) => {
                         value={dateValue}>
                     <option value={ "" }>-------</option>
                     {
-                        !!options
-                            ? options.map(item =>
-                                <option key={ item.date }
-                                    value={ moment(item.date).format("YYYY-MM") }>
-                                    { moment(item.date).format("MMMM YYYY") }
-                                </option>
-                            )
-                            : null
+                        options.map(item =>
+                            <option key={ item.date }
+                                value={ moment(item.date).format("YYYY-MM") }>
+                                { moment(item.date).format("MMMM YYYY") }
+                            </option>
+                        )
                     }
                 </select>
             </div>
