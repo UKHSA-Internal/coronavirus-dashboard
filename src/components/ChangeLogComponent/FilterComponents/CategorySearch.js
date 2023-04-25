@@ -20,6 +20,15 @@ export const CategorySearch: ComponentType<*> = ({categoryValue, setCategoryValu
         {component: "titles"}
     );
 
+    const handleChange = (e) => {
+        setCategoryValue(e.target.value)
+
+        if (e.target.value === "") {
+            params = params.filter(item => item.key != "title");
+            history.push({ search: createQuery(params) });
+        }
+    }
+
     useEffect(() => {
         if (categoryValue) {
             params.push({key: "title", sign: "=", value: categoryValue});
@@ -55,7 +64,7 @@ export const CategorySearch: ComponentType<*> = ({categoryValue, setCategoryValu
                     id={ "category" }
                     name={ "category" }
                     className={ "govuk-select" }
-                    onChange={ e => setCategoryValue(e.target.value) }
+                    onChange={ e => handleChange(e) }
                     value={categoryValue}
                 >
                     <option value={ "" }>-------</option>

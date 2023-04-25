@@ -20,7 +20,7 @@ export const TypeSearch: ComponentType<*> = ({typeValue, setTypeValue}) => {
         {component: "types"},
     );
 
-    const haldleChange = (e) => {
+    const handleChange = (e) => {
         setTypeValue(e.target.value)
 
         if (e.target.value === "") {
@@ -65,7 +65,7 @@ export const TypeSearch: ComponentType<*> = ({typeValue, setTypeValue}) => {
                     id={ "search" }
                     name={ "search" }
                     className={ "govuk-select" }
-                    onChange={ e => haldleChange(e) }
+                    onChange={ e => handleChange(e) }
                     value={typeValue}
                 >
                     <option value={ "" }>-------</option>

@@ -20,7 +20,7 @@ export const DateSearch: ComponentType<*> = ({dateValue, setDateValue}) => {
     );
     const params = useParams()
 
-    const haldleChange = (e) => {
+    const handleChange = (e) => {
         setDateValue(e.target.value)
 
         if (e.target.value === "") {
@@ -63,7 +63,7 @@ export const DateSearch: ComponentType<*> = ({dateValue, setDateValue}) => {
                 <select id={ "date" }
                         name={ "date" }
                         className={ "govuk-select" }
-                        onChange={ e => haldleChange(e) }
+                        onChange={ e => handleChange(e) }
                         value={dateValue}>
                     <option value={ "" }>-------</option>
                     {
