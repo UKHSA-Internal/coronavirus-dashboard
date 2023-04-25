@@ -10,7 +10,7 @@ import FormItem, { Form } from "components/Formset";
 import type { ComponentType } from "react";
 
 
-export const CategorySearch: ComponentType<*> = ({}) => {
+export const CategorySearch: ComponentType<*> = ({categoryValue, setCategoryValue}) => {
 
     const history = useHistory();
     let params = getParams(history.location.search);
@@ -19,11 +19,11 @@ export const CategorySearch: ComponentType<*> = ({}) => {
         null,
         {component: "titles"}
     );
-    const [title, setTitle] = useState(getParamValueFor(params, "title", ""));
+    // const [title, setTitle] = useState(getParamValueFor(params, "title", ""));
 
     useEffect(() => {
-        if ( title ) {
-            params.push({key: "title", sign: "=", value: title});
+        if (categoryValue) {
+            params.push({key: "title", sign: "=", value: categoryValue});
         } else {
             params = params.filter(item => item.key !== "title");
         }
@@ -31,7 +31,7 @@ export const CategorySearch: ComponentType<*> = ({}) => {
         if( params !== undefined && params.length !== 0 ) {
             history.push({ search: createQuery(params) });
         }
-    }, [title]);
+    }, [categoryValue]);
 
     if ( !options ) return <Loading/>;
 
@@ -56,16 +56,18 @@ export const CategorySearch: ComponentType<*> = ({}) => {
                     id={ "category" }
                     name={ "category" }
                     className={ "govuk-select" }
-                    onChange={ e => setTitle(e.target.value) }
-                    value={ title }
+                    onChange={ e => setCategoryValue(e.target.value) }
+                    value={categoryValue}
                 >
                     <option value={ "" }>-------</option>
                     {
-                        options.map(({ title }) =>
-                            <option key={ title } value={ title }>
-                                { title }
-                            </option>
-                        )
+                        !!options
+                            ? options.map(({ title }) =>
+                                <option key={ title } value={ title }>
+                                    { title }
+                                </option>
+                            )
+                            : null
                     }
                 </select>
             </div>
