@@ -22,18 +22,13 @@ export const DateSearch: ComponentType<*> = ({}) => {
     const [date, setDate] = useState(params?.date ?? "");
 
     useEffect(() => {
-        if ( date ) {
+        if (date && params?.date !== date) {
             history.push({
                 pathname: `/details/whats-new/${ date }`,
                 search: history.location.search
             })
-        } else if (!!history.location.search) { // do not push into history stack when not searched
-            history.push({
-                pathname: `/details/whats-new`,
-                search: history.location.search
-            })
         }
-    }, [date]);
+    }, [date, history, params]);
 
     if ( !options ) return <Loading/>;
 

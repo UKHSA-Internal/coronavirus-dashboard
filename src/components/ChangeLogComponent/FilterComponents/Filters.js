@@ -43,7 +43,7 @@ const ChangeLogFilters: ComponentType<*> = ({ children }) => {
                     <p className={ "govuk-visually-hidden" }>Use these options to filter the logs.</p>
                     <TextSearch/>
                     <div style={ { display: "grid", gridGap: "1rem" } }>
-                        <DateSearch/>
+                        <DateSearch key={new Date().getTime()}/>
                         <TypeSearch/>
                         <CategorySearch/>
                     </div>
