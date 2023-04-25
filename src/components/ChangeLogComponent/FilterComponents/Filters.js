@@ -35,12 +35,14 @@ const ChangeLogFilters: ComponentType<*> = ({ children }) => {
     const [isOpen, setIsOpen] = useState(layout === "desktop");
     const history = useHistory()
 
+    const [textValue, setTextValue] = useState("")
     const [dateValue, setDateValue] = useState("")
     const [typeValue, setTypeValue] = useState("")
     const [categoryValue, setCategoryValue] = useState("")
 
     const onLinkClick = (e) => {
         e.preventDefault();
+        setTextValue("")
         setDateValue("")
         setTypeValue("")
         setCategoryValue("")
@@ -55,7 +57,7 @@ const ChangeLogFilters: ComponentType<*> = ({ children }) => {
                 ? null
                 : <>
                     <p className={ "govuk-visually-hidden" }>Use these options to filter the logs.</p>
-                    <TextSearch/>
+                    <TextSearch textValue={textValue} setTextValue={setTextValue}/>
                     <div style={ { display: "grid", gridGap: "1rem" } }>
                         <DateSearch dateValue={dateValue} setDateValue={setDateValue}/>
                         <TypeSearch typeValue={typeValue} setTypeValue={setTypeValue}/>

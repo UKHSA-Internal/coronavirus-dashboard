@@ -1,8 +1,8 @@
 // @flow
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router";
-import { createQuery, getParams, getParamValueFor } from "common/utils";
+import { createQuery, getParams } from "common/utils";
 import useGenericAPI from "hooks/useGenericAPI";
 import Loading from "components/Loading";
 import FormItem, { Form } from "components/Formset";
@@ -24,13 +24,14 @@ export const CategorySearch: ComponentType<*> = ({categoryValue, setCategoryValu
         setCategoryValue(e.target.value)
 
         if (e.target.value === "") {
-            params = params.filter(item => item.key != "title");
+            params = params.filter(item => item.key !== "title");
             history.push({ search: createQuery(params) });
         }
     }
 
     useEffect(() => {
         if (categoryValue) {
+            params = params.filter(item => item.key !== "title");
             params.push({key: "title", sign: "=", value: categoryValue});
         } else {
             params = params.filter(item => item.key !== "title");

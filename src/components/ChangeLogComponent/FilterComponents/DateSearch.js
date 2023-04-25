@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import useGenericAPI from "hooks/useGenericAPI";
 import Loading from "components/Loading";
@@ -33,7 +33,7 @@ export const DateSearch: ComponentType<*> = ({dateValue, setDateValue}) => {
 
     useEffect(() => {
         if (
-            (!!params && dateValue && (params?.date != dateValue))
+            (!!params && dateValue && (params?.date !== dateValue))
         ) {
             history.push({
                 pathname: `/details/whats-new/${dateValue}`,
