@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import useGenericAPI from "hooks/useGenericAPI";
 import Loading from "components/Loading";
@@ -10,7 +10,7 @@ import moment from "moment";
 import type { ComponentType } from "react";
 
 
-export const DateSearch: ComponentType<*> = ({}) => {
+export const DateSearch: ComponentType<*> = ({dateValue, setDateValue}) => {
 
     const history = useHistory();
     const options = useGenericAPI(
@@ -19,21 +19,28 @@ export const DateSearch: ComponentType<*> = ({}) => {
         {component: "dates"}
     );
     const params = useParams()
-    const [date, setDate] = useState(params?.date ?? "");
 
-    useEffect(() => {
-        if ( date ) {
-            history.push({
-                pathname: `/details/whats-new/${ date }`,
-                search: history.location.search
-            })
-        } else if (!!history.location.search) { // do not push into history stack when not searched
+    const handleChange = (e) => {
+        setDateValue(e.target.value)
+
+        if (e.target.value === "") {
             history.push({
                 pathname: `/details/whats-new`,
                 search: history.location.search
             })
         }
-    }, [date]);
+    }
+
+    useEffect(() => {
+        if (
+            (!!params && dateValue && (params?.date !== dateValue))
+        ) {
+            history.push({
+                pathname: `/details/whats-new/${dateValue}`,
+                search: history.location.search
+            })
+        }
+    }, [dateValue, history, params]);
 
     if ( !options ) return <Loading/>;
 
@@ -56,13 +63,13 @@ export const DateSearch: ComponentType<*> = ({}) => {
                 <select id={ "date" }
                         name={ "date" }
                         className={ "govuk-select" }
-                        onChange={ e => setDate(e.target.value) }
-                        value={ date }>
+                        onChange={ e => handleChange(e) }
+                        value={dateValue}>
                     <option value={ "" }>-------</option>
                     {
                         options.map(item =>
                             <option key={ item.date }
-                                    value={ moment(item.date).format("YYYY-MM") }>
+                                value={ moment(item.date).format("YYYY-MM") }>
                                 { moment(item.date).format("MMMM YYYY") }
                             </option>
                         )

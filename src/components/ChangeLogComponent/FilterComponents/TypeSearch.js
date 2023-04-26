@@ -1,8 +1,8 @@
 // @flow
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router";
-import { createQuery, getParams, getParamValueFor } from "common/utils";
+import { createQuery, getParams } from "common/utils";
 import useGenericAPI from "hooks/useGenericAPI";
 import Loading from "components/Loading";
 import FormItem, { Form } from "components/Formset";
@@ -10,28 +10,37 @@ import FormItem, { Form } from "components/Formset";
 import type { ComponentType } from "react";
 
 
-export const TypeSearch: ComponentType<*> = ({}) => {
+export const TypeSearch: ComponentType<*> = ({typeValue, setTypeValue}) => {
 
     const history = useHistory();
     let params = getParams(history.location.search);
-        const options = useGenericAPI(
+    const options = useGenericAPI(
         "genericApiChangeLogsComponent",
         null,
-        {component: "types"}
+        {component: "types"},
     );
-    const [type, setType] = useState(getParamValueFor(params, "type", ""));
 
-    useEffect(() => {
-        if ( type ) {
-            params.push({key: "type", sign: "=", value: type});
-        } else {
+    const handleChange = (e) => {
+        setTypeValue(e.target.value)
+
+        if (e.target.value === "") {
             params = params.filter(item => item.key !== "type");
-        }
-        // do not push into history stack when not searched
-        if( params !== undefined && params.length !== 0 ) {
             history.push({ search: createQuery(params) });
         }
-    }, [type]);
+    }
+
+    useEffect(() => {
+        const valueAlreadyInParams = params.some(x => x.key === "type" && x.value === typeValue)
+
+        if (!!typeValue && !valueAlreadyInParams) {
+            params = params.filter(item => item.key !== "type");
+            params.push({key: "type", sign: "=", value: typeValue});
+
+            if( params !== undefined && params.length !== 0 ) {
+                history.push({ search: createQuery(params) });
+            }
+        }
+    }, [typeValue, params]);
 
     if ( !options ) return <Loading/>;
 
@@ -56,8 +65,8 @@ export const TypeSearch: ComponentType<*> = ({}) => {
                     id={ "search" }
                     name={ "search" }
                     className={ "govuk-select" }
-                    onChange={ e => setType(e.target.value) }
-                    value={ type }
+                    onChange={ e => handleChange(e) }
+                    value={typeValue}
                 >
                     <option value={ "" }>-------</option>
                     {
