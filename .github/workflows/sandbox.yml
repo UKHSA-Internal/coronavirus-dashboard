@@ -1,6 +1,6 @@
 
 
-name: Deploy Dashboard (Static Website) to Sandbox Environment. 
+name: Deploy Dashboard (Static Website) to Sandbox Environment. .
 ###
 on:
  push:
@@ -65,6 +65,11 @@ jobs:
         # Upload files using the generated SAS token. We are using the sync command of azcopy which removes old files from storage
         azcopy copy "./build/*" "https://c19dashsbuksfe01static.blob.core.windows.net/%24web?$sas" --recursive --put-md5
       azPSVersion: "latest"
+
+
+
+
+
   
  test:
   runs-on: ubuntu-latest
@@ -83,9 +88,58 @@ jobs:
             -d '{"ref":"main","inputs": { "DExecution_Env":"Sandbox", "DScenarioNameTest":"SmokeTests_Scenario" }}'
 
 
+#$accountName = "$(namePrefix)static"
+#$rgname = "$(AzureResourceGroup)"
 
+#$key = Get-AzStorageAccountKey -Name $accountname -ResourceGroupName $rgname
+#$context = New-AzStorageContext -StorageAccountName $accountName -StorageAccountKey $key[0].Value
 
+## List all blob ins $web container
+#$blobs = Get-AzStorageBlob -Context $context -Container "`$web" -Blob "*"
 
+#foreach($blob in $blobs)
+#{
+#  if($blob.Name -eq "index.html")
+#  {
+#    # The index.html gets a different cache setting than all the other files
+#    $cacheControl = "no-cache"
+#  } 
+#  else 
+#  {
+#    $cacheControl = "max-age=604800"
+#  }
+#  $blobName = $blob.Name
+#  Write-Host "Setting CacheControl property on blob $blobName to $cacheControl"
+
+#  $blob.ICloudBlob.Properties.CacheControl = $cacheControl
+#  # Send the update to the cloud
+#  $blob.ICloudBlob.SetProperties()
+#}
+
+## List all svg image blobs in $web container to change the blob property Content Type to image/svg+xml
+#$blobs = Get-AzStorageBlob -Context $context -Container "`$web" -Blob "*.svg"
+
+#foreach($blob in $blobs)
+#{
+#  if($blob.Name -eq "index.html")
+#  {
+#    # The index.html gets a different cache setting than all the other files
+#    $cacheControl = "no-cache"
+#  } 
+#  else 
+#  {
+#    # Set the cache control and content type of svg image blobs 
+#    $cacheControl = "max-age=604800"
+#    $contentType = "image/svg+xml"
+#  }
+#  $blobName = $blob.Name
+#  Write-Host "Setting CacheControl property on blob $blobName to $cacheControl and Content Type to $contentType "
+
+#  $blob.ICloudBlob.Properties.CacheControl = $cacheControl
+#  $blob.ICloudBlob.Properties.ContentType = $contentType
+#  # Send the update to the cloud
+#  $blob.ICloudBlob.SetProperties()
+#}
 
 
 
