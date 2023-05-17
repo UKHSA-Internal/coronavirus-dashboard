@@ -1,5 +1,3 @@
-
-
 name: Deploy Dashboard (Static Website) to Sandbox Environment. 
 ###
 on:

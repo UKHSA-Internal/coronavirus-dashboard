@@ -1,25 +1,28 @@
 // @flow
 
-import React, { useState } from "react";
+import React from "react";
 import { useHistory } from "react-router";
-import { createQuery, getParams, getParamValueFor } from "common/utils";
+import { createQuery, getParams } from "common/utils";
 import FormItem, { Form } from "components/Formset";
 import type { ComponentType } from "react";
 
 
-export const TextSearch: ComponentType<*> = ({ children }) => {
+export const TextSearch: ComponentType<*> = ({textValue, setTextValue}) => {
 
     const history = useHistory();
     let params = getParams(history.location.search);
-    const [ search, setSearch ] = useState(getParamValueFor(params, "search", ""));
 
     const onSubmit = (e) => {
         e.preventDefault();
 
-        if ( search ) {
-            params.push({key: "search", sign: "=", value: search});
-            history.push({ search: createQuery(params) });
+        if (textValue) {
+            params = params.filter(item => item.key !== "search")
+            params.push({key: "search", sign: "=", value: textValue});
+        } else {
+            params = params.filter(item => item.key !== "search")
         }
+
+        history.push({ search: createQuery(params) });
     };
 
     return <Form className={ "govuk-!-padding-left-0 govuk-!-padding-right-5" }
@@ -42,13 +45,13 @@ export const TextSearch: ComponentType<*> = ({ children }) => {
                 <input
                     id={ "search" }
                     name={ "search" }
-                    value={ search }
+                    value={textValue}
                     style={{ minWidth: "80%"}}
                     className={ "govuk-input govuk-input--width-15" }
                     type={ "search" }
                     maxLength={ 40 }
                     minLength={ 3 }
-                    onChange={ e => setSearch(e.target.value) }
+                    onChange={ e => setTextValue(e.target.value) }
                 />
                 <label htmlFor={ "submit-search" }
                    className={ "govuk-visually-hidden" }>Submit search</label>
