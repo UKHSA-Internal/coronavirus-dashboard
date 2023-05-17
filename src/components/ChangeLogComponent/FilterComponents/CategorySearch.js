@@ -1,8 +1,8 @@
 // @flow
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router";
-import { createQuery, getParams, getParamValueFor } from "common/utils";
+import { createQuery, getParams } from "common/utils";
 import useGenericAPI from "hooks/useGenericAPI";
 import Loading from "components/Loading";
 import FormItem, { Form } from "components/Formset";
@@ -10,7 +10,7 @@ import FormItem, { Form } from "components/Formset";
 import type { ComponentType } from "react";
 
 
-export const CategorySearch: ComponentType<*> = ({}) => {
+export const CategorySearch: ComponentType<*> = ({categoryValue, setCategoryValue}) => {
 
     const history = useHistory();
     let params = getParams(history.location.search);
@@ -19,19 +19,28 @@ export const CategorySearch: ComponentType<*> = ({}) => {
         null,
         {component: "titles"}
     );
-    const [title, setTitle] = useState(getParamValueFor(params, "title", ""));
+
+    const handleChange = (e) => {
+        setCategoryValue(e.target.value)
+
+        if (e.target.value === "") {
+            params = params.filter(item => item.key !== "title");
+            history.push({ search: createQuery(params) });
+        }
+    }
 
     useEffect(() => {
-        if ( title ) {
-            params.push({key: "title", sign: "=", value: title});
+        if (categoryValue) {
+            params = params.filter(item => item.key !== "title");
+            params.push({key: "title", sign: "=", value: categoryValue});
         } else {
             params = params.filter(item => item.key !== "title");
         }
-        // do not push into history stack when not searched
+
         if( params !== undefined && params.length !== 0 ) {
             history.push({ search: createQuery(params) });
         }
-    }, [title]);
+    }, [categoryValue]);
 
     if ( !options ) return <Loading/>;
 
@@ -56,8 +65,8 @@ export const CategorySearch: ComponentType<*> = ({}) => {
                     id={ "category" }
                     name={ "category" }
                     className={ "govuk-select" }
-                    onChange={ e => setTitle(e.target.value) }
-                    value={ title }
+                    onChange={ e => handleChange(e) }
+                    value={categoryValue}
                 >
                     <option value={ "" }>-------</option>
                     {
