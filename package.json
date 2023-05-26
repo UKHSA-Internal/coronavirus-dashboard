@@ -42,7 +42,7 @@
     "remark-slug": "^7.0.0",
     "remark-toc": "^8.0.0",
     "replacestream": "^4.0.3",
-    "styled-components": "^5.3.3",
+    "styled-components": "^5.3.11",
     "swagger-ui-react": "^4.1.0"
   },
   "scripts": {
