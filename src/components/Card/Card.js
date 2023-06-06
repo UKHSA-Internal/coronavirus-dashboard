@@ -22,7 +22,7 @@ import {
     Caption,
     BodySection,
     HBodySection,
-    MixedCardContainer, 
+    MixedCardContainer,
     DefaultTag,
     ShareRow
 } from './Card.styles';
@@ -247,6 +247,31 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
         }
     };
 
+    // It modifies the download URL on "Cases by specimen date age demographics" chart
+    // that depends on the active tab (All/First episodes/Reinfections)
+    const getDownloadUrl = () => {
+        if (heading === "Cases by specimen date age demographics") {
+            var metric = ""
+            switch (active) {
+            case 'All':
+                metric = ["newCasesBySpecimenDateAgeDemographics"];
+                break;
+            case 'First episodes':
+                metric = ["newFirstEpisodesBySpecimenDateAgeDemographics"];
+                break;
+            case 'Reinfections':
+                metric = ["newReinfectionsBySpecimenDateAgeDemographics"];
+                break;
+            default:
+                metric = download;
+            }
+
+            return fieldToStructure(metric, params)
+        }
+
+        return fieldToStructure(download, params)
+    }
+
     const cardProps = {
         tabs: tabs,
         cardType: cardType,
@@ -257,7 +282,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
         abstract: abstract,
         download: download,
         fullWidth: fullWidth,
-        url: fieldToStructure(download, params),
+        url: getDownloadUrl(),
         ...props,
         ...customProps?.[cardType] ?? {}
     };
