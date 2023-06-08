@@ -12,8 +12,7 @@ import { Code } from "components/Widgets/Widgets.styles";
 import type { ComponentType } from "react";
 
 
-const PythonExample = `from urllib.parse import urlencode
-from json import dumps
+const PythonExample = `from json import dumps
 from requests import get
 
 
@@ -46,9 +45,7 @@ api_params = {
     "latestBy": "newCasesByPublishDate"
 }
 
-encoded_params = urlencode(api_params)
-
-response = get(f"{ ENDPOINT }?{ encoded_params }", timeout=10)
+response = get(ENDPOINT, api_params, timeout=10)
 
 if response.status_code >= 400:
     raise RuntimeError(f'Request failed: { response.text }')
@@ -67,9 +64,9 @@ const getData = async ( queries ) => {
 
     const endpoint = 'https://api.coronavirus.data.gov.uk/v1/data';
 
-    const { data, status, statusText } = await axios.get(endpoint, { 
+    const { data, status, statusText } = await axios.get(endpoint, {
         params: queries,
-        timeout: 10000 
+        timeout: 10000
     });
 
     if ( status >= 400 )
@@ -142,13 +139,13 @@ filters <- c(
 
 # Create the structure as a list or a list of lists:
 structure <- list(
-    date  = "date", 
-    name  = "areaName", 
-    code  = "areaCode", 
+    date  = "date",
+    name  = "areaName",
+    code  = "areaCode",
     cases = list(
         daily      = "newCasesByPublishDate",
         cumulative = "cumCasesByPublishDate"
-    ), 
+    ),
     deaths = list(
         daily      = "newDeathsByDeathDate",
         cumulative = "cumDeathsByDeathDate"
@@ -213,6 +210,11 @@ const LatestBy: ComponentType<*> = () =>
             include multiple metrics in the <Code>structure</Code>, but beware that
             the response will only include data for the date on which the latest
             value for the metric defined for <Code>latestBy</Code> was published.
+        </Admonition>
+
+        <Admonition type={ "Warning" }>
+            <Code>latestBy</Code> parameter can only be used when <Code>format=json</Code> or <Code>format=xml</Code>.
+            If <Code>format</Code> is not explicitly defined, the API will default to <Code>json</Code>.
         </Admonition>
 
         <h5 id={ "latestby-example" }>Example</h5>
