@@ -468,6 +468,8 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                         "lasso2d",
                         "zoomIn2d",
                         "zoomOut2d",
+                        "zoom",
+                        "resetScale",
                         ...width === "desktop" ? []: ["zoom"]
                     ],
                     toImageButtonOptions: {
