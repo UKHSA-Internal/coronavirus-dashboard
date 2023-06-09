@@ -32,20 +32,16 @@ structure = {
     "dailyCases": "newCasesByPublishDate",
 }
 
-
 api_params = {
     "filters": str.join(";", filters),
     "structure": dumps(structure, separators=(",", ":")),
-    "latestBy": "cumCasesByPublishDate"
 }
-
 
 formats = [
     "json",
     "xml",
     "csv"
 ]
-
 
 for fmt in formats:
     api_params["format"] = fmt
@@ -71,9 +67,9 @@ const getData = async ( queries={} ) => {
 
     const endpoint = 'https://api.coronavirus.data.gov.uk/v1/data';
 
-    const { data, status, statusText } = await axios.get(endpoint, { 
+    const { data, status, statusText } = await axios.get(endpoint, {
         params: queries,
-        timeout: 10000 
+        timeout: 10000
     });
 
     if ( status >= 400 )
@@ -110,8 +106,7 @@ const main = async () => {
     const
         apiParams = {
             filters: filters.join(";"),
-            structure: JSON.stringify(structure),
-            latestBy: "newCasesByPublishDate"
+            structure: JSON.stringify(structure)
         };
 
 
@@ -154,9 +149,9 @@ filters <- c(
 )
 
 structure <- list(
-    date       = "date", 
-    name       = "areaName", 
-    code       = "areaCode", 
+    date       = "date",
+    name       = "areaName",
+    code       = "areaCode",
     dailyCases = "newCasesByPublishDate"
 )
 
@@ -170,22 +165,21 @@ for ( fmt in formats ) {
         query = list(
           filters   = paste(filters, collapse = ";"),
           structure = jsonlite::toJSON(structure, auto_unbox = TRUE),
-          latestBy  = "newCasesByPublishDate",
           format    = fmt
         ),
         timeout(10)
     ) -> response
-    
+
     if (response$status_code >= 400) {
         err_msg = httr::http_status(response)
         stop(err_msg)
     }
-    
+
     data <- content(response, "text", encoding="UTF-8")
-    
+
     print(sprintf("%s data:", fmt))
     print(data)
-    
+
 }`;
 
 
