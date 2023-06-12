@@ -58,6 +58,7 @@ export const XAxis: ComponentType<*> = ({ data, layout = {}, xaxis = {}, yaxis =
                     ...xaxis
                 },
                 yaxis: {
+                    automargin: true,
                     showgrid: false,
                     zeroline: false,
                     showline: false,

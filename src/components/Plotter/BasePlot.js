@@ -529,6 +529,7 @@ export const BasePlotter: ComponentType<*> = ({ data: payload, layout = {}, xaxi
                         fixedrange: width !== "desktop"
                     },
                     yaxis: {
+                        automargin: true,
                         tickmode: drawData?.tickmode,
                         tickvals: drawData?.tickvals,
                         ticktext: drawData?.ticktext,
