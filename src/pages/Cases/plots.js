@@ -142,6 +142,7 @@ export const Plotter = ({ data, layout={}, xaxis={}, yaxis={}, ...props }) => {
                 ...xaxis
             },
             yaxis: {
+                automargin: true,
                 tickformat: 's',
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
@@ -283,6 +284,7 @@ export const Choropleth = ({ data, layout, config, ...props }) => {
                 }
             },
             yaxis: {
+                automargin: true,
                 tickformat: 's',
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
@@ -378,6 +380,7 @@ export const ScatterPlotWithTrendLine = ({ scatterData, trendLineData, layout, c
                 }
             },
             yaxis: {
+                automargin: true,
                 tickformat: 's',
                 tickfont:{
                     family: `"GDS Transport", Arial, sans-serif`,
