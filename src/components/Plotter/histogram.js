@@ -97,6 +97,7 @@ export const Histogram = ({ data, currentLocation }) => {
                 //   ]},
             },
             yaxis: {
+                automargin: true,
                 tickslen: 5,
                 ticks: "outside",
                 tickson: "boundaries",
