@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "flow-bin": "^0.167.1",
+    "flow-bin": "^0.208.1",
     "react-snap": "^1.23.0",
     "stylelint": "^13.13.1",
     "stylelint-config-idiomatic-order": "^8.1.0",
