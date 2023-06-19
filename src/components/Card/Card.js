@@ -251,19 +251,16 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
     // that depends on the active tab (All/First episodes/Reinfections)
     const getDownloadUrl = () => {
         if (heading === "Cases by specimen date age demographics") {
-            var metric = ""
+            var metric = ["newCasesBySpecimenDateAgeDemographics"]
             switch (active) {
-            case 'All':
-                metric = ["newCasesBySpecimenDateAgeDemographics"];
-                break;
-            case 'First episodes':
-                metric = ["newFirstEpisodesBySpecimenDateAgeDemographics"];
-                break;
-            case 'Reinfections':
-                metric = ["newReinfectionsBySpecimenDateAgeDemographics"];
-                break;
-            default:
-                metric = download;
+                case 'First episodes':
+                    metric = ["newFirstEpisodesBySpecimenDateAgeDemographics"];
+                    break;
+                case 'Reinfections':
+                    metric = ["newReinfectionsBySpecimenDateAgeDemographics"];
+                    break;
+                case 'Cases':
+                default:
             }
 
             return fieldToStructure(metric, params)
