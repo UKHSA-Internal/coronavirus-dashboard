@@ -259,7 +259,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
                 case 'Reinfections':
                     metric = ["newReinfectionsBySpecimenDateAgeDemographics"];
                     break;
-                case 'Cases':
+                case 'All cases':
                 default:
             }
 
