@@ -53,7 +53,7 @@ export const DateSearch: ComponentType<*> = ({dateValue, setDateValue}) => {
                    className={ "govuk-label govuk-label--s" }>Months</label>
             <div id={"date-filter-descr"} className={ "govuk-hint govuk-!-font-size-16" }>
                 <p className={ "govuk-!-margin-top-1 govuk-!-margin-bottom-1" }>
-                    Filter data by a specific month &mdash; e.g. June 2021
+                    Filter data by a specific month &mdash; e.g. June 2021. Changes can span across multiple months.
                     <span className={ "govuk-visually-hidden" }>
                         Your selection will be applied automatically.
                     </span>
