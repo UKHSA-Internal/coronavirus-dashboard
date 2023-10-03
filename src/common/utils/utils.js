@@ -5,6 +5,7 @@ import type { ParsedParams } from "./utils.types";
 import type { RGB } from "components/MapTable/MapTable.types";
 import { generateUrl } from "hooks/useApi";
 import Path from "assets/paths.json";
+import type IsIncludedTypeProps from 'components/Card/Card.types';
 
 
 export const sort = (a, b) => {
@@ -190,6 +191,40 @@ export const getParamValueFor = (params: Array<ParsedParams>, keyName: string, d
         )
 
 };  // getParamValueFor
+
+
+export const isAreaIncluded = ({ params, locationAware={} }: IsIncludedTypeProps): boolean => {
+    if ( !Object.keys(locationAware).length )
+        return true;
+
+    const
+        areaType = getParamValueFor(
+            params,
+            "areaType",
+            "overview"
+        ).toLowerCase(),
+        areaName = getParamValueFor(
+            params,
+            "areaName",
+            "United Kingdom"
+        ).toLowerCase(),
+        includedAreaType = locationAware?.included?.areaType ?? [],
+        includedAreaName = locationAware?.included?.areaName ?? [],
+        excludedAreaType = locationAware?.excluded?.areaType ?? [],
+        excludedAreaName = locationAware?.excluded?.areaName ?? [],
+        hasExclusion = excludedAreaType.length > 0 && !(excludedAreaName.length > 0),
+        isExcluded = (
+            excludedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
+            excludedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
+        ),
+        isIncluded = (
+            includedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
+            includedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
+        );
+
+    return !hasExclusion ? isIncluded : !isExcluded
+
+};  // isAreaIncluded
 
 
 export const firstObjWithMax = ( arr: Array<{[string|number]: [string|number|null]}>, key: ([string|number]) => [string|number|null] ) => {
