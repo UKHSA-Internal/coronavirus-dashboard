@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { getParamValueFor } from "common/utils";
+import { getParamValueFor, isAreaIncluded } from "common/utils";
 
 import type { Props } from "./HeadlineNumbers.types";
 import ValueBox from "components/ValueBox";
@@ -14,22 +14,10 @@ import type { ComponentType } from "react";
 
 const HeadlineNumbers: ComponentType<Props> = ({ params, headlineNumbers=[] }) => {
 
-    const
-        areaType = getParamValueFor(
-            params,
-            "areaType",
-            "overview"
-        ).toLowerCase(),
-        areaName = getParamValueFor(
-            params,
-            "areaName",
-            "United Kingdom"
-        ).toLowerCase();
-
     const getValueBox = (item, index) => {
         return <>
             {
-                (item?.areaName == null || (item?.areaName.toLowerCase() === areaName && item?.areaType.toLowerCase() === areaType))
+                isAreaIncluded({params, ...item})
                     ? <ValueBox params={ params }
                                 key={ `headline-number-${ index }` }
                                 heading={ item.caption }

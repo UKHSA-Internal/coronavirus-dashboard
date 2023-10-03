@@ -3,7 +3,7 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Link } from "react-router-dom";
 
-import { fieldToStructure, getParamValueFor, heading2id } from "common/utils";
+import { fieldToStructure, heading2id, isAreaIncluded } from "common/utils";
 import usePrevious from "hooks/usePrevious";
 import TabLinkContainer from "components/TabLink";
 import { Radio } from "components/GovUk";
@@ -27,7 +27,6 @@ import {
     ShareRow
 } from './Card.styles';
 
-import type { IsIncludedTypeProps, Props } from './Card.types';
 import type { ComponentType } from 'react';
 
 import DownloadIcon from "assets/icon-download.svg";
@@ -152,41 +151,6 @@ const NoTabCard: ComponentType<*> = ({ cardType, ...props }) => {
 };  // NoTabCards
 
 
-const isIncluded = ({ params, locationAware={} }: IsIncludedTypeProps): boolean => {
-
-    if ( !Object.keys(locationAware).length )
-        return true;
-
-    const
-        areaType = getParamValueFor(
-            params,
-            "areaType",
-            "overview"
-        ).toLowerCase(),
-        areaName = getParamValueFor(
-            params,
-            "areaName",
-            "United Kingdom"
-        ).toLowerCase(),
-        includedAreaType = locationAware?.included?.areaType ?? [],
-        includedAreaName = locationAware?.included?.areaName ?? [],
-        excludedAreaType = locationAware?.excluded?.areaType ?? [],
-        excludedAreaName = locationAware?.excluded?.areaName ?? [],
-        hasExclusion = excludedAreaType.length > 0 && !(excludedAreaName.length > 0),
-        isExcluded = (
-            excludedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
-            excludedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
-        ),
-        isIncluded = (
-            includedAreaType.map(value => value.toLowerCase()).indexOf(areaType) > -1 ||
-            includedAreaName.map(value => value.toLowerCase()).indexOf(areaName) > -1
-        );
-
-    return !hasExclusion ? isIncluded : !isExcluded
-
-};  // isIncluded
-
-
 const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], params, options=null,
                          heading, fullWidth, abstract=null, ...props }) => {
 
@@ -284,7 +248,7 @@ const CardContent = ({ tabs: singleOptionTabs=null, cardType, download=[], param
         ...customProps?.[cardType] ?? {}
     };
 
-    if ( !isIncluded(cardProps) )
+    if ( !isAreaIncluded(cardProps) )
         return null;
 
     return <BrowserHistory>
