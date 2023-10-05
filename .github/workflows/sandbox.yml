@@ -1,6 +1,6 @@
 
 
-name: Deploy Dashboard (Static Website) to Sandbox Environment. 
+name: Deploy Dashboard (Static Website) to Sandbox Environment.
 ###
 on:
  push:
@@ -23,21 +23,20 @@ jobs:
       node-version: '14'
     env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-  
-  - name : Installs Dependancies 
+
+  - name : Installs Dependancies
     run: |
-        npm install --package-lock=false
-        yarn install --production=true --no-lockfile
+        npm ci
 
 
   - name : Build
     env:
-        CI: false    
-        BASE_URL: 'https://sandbox.coronavirus.data.gov.uk' 
-        MAIN_CDN: 'sandbox.coronavirus.data.gov.uk' 
-        DOWNLOADS_CDN: 'sandbox.coronavirus.data.gov.uk'  
-        API_ENDPOINT: 'sandbox.coronavirus.data.gov.uk/api' 
-        USER_API_ENDPOINT: 'api-sandbox.coronavirus.data.gov.uk' 
+        CI: false
+        BASE_URL: 'https://sandbox.coronavirus.data.gov.uk'
+        MAIN_CDN: 'sandbox.coronavirus.data.gov.uk'
+        DOWNLOADS_CDN: 'sandbox.coronavirus.data.gov.uk'
+        API_ENDPOINT: 'sandbox.coronavirus.data.gov.uk/api'
+        USER_API_ENDPOINT: 'api-sandbox.coronavirus.data.gov.uk'
         APPINSIGHTS_INSTRUMENTATIONKEY: '0ab69a6e-1f5f-4c00-95a4-805490645471'
         BUILD_ENV: sandbox
         NODE_ENV: sandbox
@@ -52,8 +51,8 @@ jobs:
     uses: azure/login@v1
     with:
       creds: ${{secrets.AZURE_CREDENTIALS}}
-      enable-AzPSSession: true 
-        
+      enable-AzPSSession: true
+
   - name: Copy Build Files to $web Container in Static Strorage Account
     uses: azure/powershell@v1
     with:
@@ -70,7 +69,7 @@ jobs:
 
 
 
-  
+
  test:
   runs-on: ubuntu-latest
   name: Automated Smoke Test of COVID19 Dashboard Website
@@ -103,8 +102,8 @@ jobs:
 #  {
 #    # The index.html gets a different cache setting than all the other files
 #    $cacheControl = "no-cache"
-#  } 
-#  else 
+#  }
+#  else
 #  {
 #    $cacheControl = "max-age=604800"
 #  }
@@ -125,10 +124,10 @@ jobs:
 #  {
 #    # The index.html gets a different cache setting than all the other files
 #    $cacheControl = "no-cache"
-#  } 
-#  else 
+#  }
+#  else
 #  {
-#    # Set the cache control and content type of svg image blobs 
+#    # Set the cache control and content type of svg image blobs
 #    $cacheControl = "max-age=604800"
 #    $contentType = "image/svg+xml"
 #  }
