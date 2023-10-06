@@ -49,7 +49,7 @@
     "lint": "yarn flow",
     "start": "unset HOST && react-scripts start",
     "build": "unset HOST && export NODE_OPTIONS=--max-old-space-size=8192 && react-scripts build",
-    "postbuild": "./scripts/old_space_size.sh && export NODE_OPTIONS=--max-old-space-size=8192 && node scripts/patchUrls.js",
+    "postbuild": "export NODE_OPTIONS=--max-old-space-size=8192 && node scripts/patchUrls.js",
     "ppostbuild": "react-snap",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
