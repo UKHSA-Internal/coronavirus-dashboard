@@ -97,7 +97,15 @@ const main = async () => {
             ...process.env
         };
 
+    console.log("+++ extractEnvVars():", extractEnvVars())
+    console.log("+++ process.env:", process.env)
+    console.log("+++ Number of files =", files.length)
+
+    let counter = 0;
+
     for ( const file of files ) {
+        counter += 1;
+        console.log(counter, " - ", file)
 
         const tmpFile = `${ file }.tmp`;
 
