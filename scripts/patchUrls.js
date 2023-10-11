@@ -127,14 +127,7 @@ const main = async () => {
             ...filterEnvVars()
         };
 
-    console.log("vars:", Replacements)
-    console.log("vars number:", Object.keys(Replacements).length)
-
-    let counter = 0;
-
     for ( const file of files ) {
-        counter += 1;
-        console.log(counter, " - processing file:", file)
 
         const tmpFile = `${ file }.tmp`;
 
