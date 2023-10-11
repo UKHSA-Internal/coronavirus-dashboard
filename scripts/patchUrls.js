@@ -82,6 +82,36 @@ const getFiles = (directory) =>  {
 
 
 /**
+ * The function filters environment variables and returns only the important ones.
+ *
+ * @returns {object}
+ */
+const filterEnvVars = () => {
+    const vars = process.env;
+    const valid_keys = [
+        "BASE_URL",
+        "MAIN_CDN",
+        "DOWNLOADS_CDN",
+        "API_ENDPOINT",
+        "USER_API_ENDPOINT",
+        "APPINSIGHTS_INSTRUMENTATIONKEY"
+    ]
+    const filteredVars = {}
+
+    Object.keys(vars).forEach(key => {
+        // Check if it can be one of the vars to use.
+        valid_keys.forEach(valid_key => {
+            if(vars.hasOwnProperty(key) && key.includes(valid_key)) {
+                filteredVars[key] = vars[key]
+            }
+        })
+    })
+
+    return filteredVars
+}
+
+
+/**
  * Replaces placeholders formatted as `%key%` with environment
  * variables defined using the same key.
  *
@@ -94,7 +124,7 @@ const main = async () => {
         files = getFiles(directory),
         Replacements = {
             ...extractEnvVars(),
-            ...process.env
+            ...filterEnvVars()
         };
 
     for ( const file of files ) {
