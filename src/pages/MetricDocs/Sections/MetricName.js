@@ -81,7 +81,7 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
                 ) &&
                 (
                     categories
-                        ? item.category.toLowerCase() === categories.toLowerCase()
+                        ? (item.category != null ? item.category.toLowerCase() === categories.toLowerCase() : false)
                         : true
                 ) &&
                 (
