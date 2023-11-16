@@ -70,13 +70,18 @@ const Metrics: ComponentType<*> = ({ metrics, setUri }) => {
                     userInput
                         ?  (
                             item.metric.toLowerCase().indexOf(userInput.replace(/[^a-z6028\s]/gi, "")) > -1 ||
-                            item.metric_name.toLowerCase().indexOf(userInput.replace(/[^a-z6028\s]/gi, "")) > -1
+                            // metric_name can be null, in that case don't use it in search
+                            (
+                                item.metric_name == null
+                                    ? false
+                                    : item.metric_name.toLowerCase().indexOf(userInput.replace(/[^a-z6028\s]/gi, "")) > -1
+                            )
                         )
                         : true
                 ) &&
                 (
                     categories
-                        ? item.category.toLowerCase() === categories.toLowerCase()
+                        ? (item.category != null ? item.category.toLowerCase() === categories.toLowerCase() : false)
                         : true
                 ) &&
                 (

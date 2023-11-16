@@ -32,7 +32,7 @@ const Metrics: ComponentType<*> = ({ data, filter }) => {
             <Content>
                 <Link className={ "govuk-link govuk-link--no-underline govuk-link--no-visited-state govuk-!-font-weight-bold" }
                       to={ `/metrics/doc/${metric.metric}` }
-                      dangerouslySetInnerHTML={ markedContent(metric.metric_name, filter) }/>
+                      dangerouslySetInnerHTML={ markedContent(metric.metric_name ?? metric.metric, filter) }/>
                 <HeadingLabels>
                     { metric.deprecated ? <Deprecated>DEPRECATED</Deprecated> : null }
                     <Category>{ metric.category }</Category>
